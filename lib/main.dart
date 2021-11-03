@@ -29,11 +29,17 @@ class MyApp extends StatelessWidget {
           foregroundColor: mainFontDark,
         ),
         backgroundColor: mainWhite,
+        primaryColor: mainFontDark,
         // brightness: Brightness.dark,
-        textTheme: const TextTheme(
+        primaryTextTheme: const TextTheme(
           bodyText1: TextStyle(color: mainFontDark),
           bodyText2: TextStyle(color: mainFontDark),
         ).apply(bodyColor: mainFontDark),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            primary: mainFontDark,
+          ),
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialBinding: InitBinding(),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:loopus/constant.dart';
-import 'package:loopus/widget/appbar_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -9,6 +7,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+      elevation: 0,
       title: const Text(
         'Home',
       ),
