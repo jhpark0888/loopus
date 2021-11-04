@@ -28,12 +28,18 @@ class MyApp extends StatelessWidget {
           foregroundColor: mainFontDark,
         ),
         backgroundColor: mainWhite,
+        // primaryColor: mainWhite,
         // brightness: Brightness.dark,
         textTheme: const TextTheme(
           bodyText1: TextStyle(color: mainFontDark),
           bodyText2: TextStyle(color: mainFontDark),
         ).apply(bodyColor: mainFontDark),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            primary: mainFontDark,
+          ),
+        ),
       ),
       initialBinding: InitBinding(),
       getPages: [
