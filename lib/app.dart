@@ -14,7 +14,7 @@ class App extends GetView<AppController> {
       body: Obx(() {
         switch (RouteName.values[controller.currentIndex.value]) {
           case RouteName.Home:
-            return const HomeScreen();
+            return HomeScreen();
           case RouteName.Search:
             return SearchScreen();
           case RouteName.Bookmark:

@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Loop Us",
-      color: mainWhite,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           backgroundColor: mainWhite,
