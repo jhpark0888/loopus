@@ -1,7 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:loopus/constant.dart';
+import 'package:loopus/widget/activity_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -93,35 +94,43 @@ class ProfileScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                    // color: Colors.grey[400],
-                    width: 170,
-                    height: 36,
-                    child: const Center(
-                      child: Text(
-                        '루프 요청하기',
-                        style: TextStyle(fontSize: 12),
+                  TextButton(
+                    onPressed: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[400],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+                      // color: Colors.grey[400],
+                      width: 170,
+                      height: 36,
+                      child: const Center(
+                        child: Text(
+                          '루프 요청하기',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                    // color: Colors.grey[400],
-                    width: 170,
-                    height: 36,
-                    child: const Center(
-                      child: Text(
-                        '메시지 보내기',
-                        style: TextStyle(fontSize: 12),
+                  TextButton(
+                    onPressed: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[400],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+                      // color: Colors.grey[400],
+                      width: 170,
+                      height: 36,
+                      child: const Center(
+                        child: Text(
+                          '메시지 보내기',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   )
@@ -139,7 +148,7 @@ class ProfileScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () {},
                     child: Column(
-                      children: [
+                      children: const [
                         Text(
                           '포스팅',
                           style: TextStyle(fontSize: 14),
@@ -154,7 +163,7 @@ class ProfileScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () {},
                     child: Column(
-                      children: [
+                      children: const [
                         Text(
                           '답변',
                           style: TextStyle(fontSize: 14),
@@ -169,7 +178,7 @@ class ProfileScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () {},
                     child: Column(
-                      children: [
+                      children: const [
                         Text(
                           '루프',
                           style: TextStyle(fontSize: 14),
@@ -185,6 +194,57 @@ class ProfileScreen extends StatelessWidget {
               ),
               Divider(
                 thickness: 1,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '진행중인 활동',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {},
+                      icon: Icon(Icons.add_circle_outline),
+                      constraints: BoxConstraints(),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
+                child: Column(
+                  children: [
+                    ActivityWidget(),
+                  ],
+                ),
+              ),
+              Divider(
+                indent: 25,
+                endIndent: 25,
+                thickness: 1,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '활동',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
+                child: Column(
+                  children: [
+                    ActivityWidget(),
+                    ActivityWidget(),
+                  ],
+                ),
               ),
             ],
           ),
