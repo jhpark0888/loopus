@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:loopus/screen/activity_add_name_screen.dart';
 import 'package:loopus/widget/activity_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -13,10 +16,9 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         title: const Text(
-          '박지환의 프로필',
-          style: TextStyle(fontSize: 16),
+          '프로필',
+          // style: TextStyle(fontSize: 16),
         ),
-        centerTitle: true,
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.more_horiz)),
         ],
@@ -197,21 +199,12 @@ class ProfileScreen extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '진행중인 활동',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {},
-                      icon: Icon(Icons.add_circle_outline),
-                      constraints: BoxConstraints(),
-                    )
-                  ],
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '진행중인 활동',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
               Padding(
@@ -234,6 +227,33 @@ class ProfileScreen extends StatelessWidget {
                   child: Text(
                     '활동',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(22, 0, 22, 8),
+                child: InkWell(
+                  onTap: () {
+                    Get.to(() => ActivityAddNameScreen());
+                  },
+                  child: DottedBorder(
+                    strokeWidth: 3,
+                    dashPattern: [3, 3],
+                    borderType: BorderType.RRect,
+                    radius: Radius.circular(12),
+                    padding: EdgeInsets.all(6),
+                    child: ClipRRect(
+                      child: Container(
+                        height: 180,
+                        width: 347,
+                        child: Center(
+                            child: Text(
+                          '+ 활동 추가하기',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        )),
+                      ),
+                    ),
                   ),
                 ),
               ),
