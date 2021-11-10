@@ -1,15 +1,15 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/screen/posting_detail_screen.dart';
+import 'package:loopus/screen/question_answer_screen.dart';
+import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/home_posting_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   final HomeController homecontroller = Get.put(HomeController());
-  final pagecontroller = PageController(viewportFraction: 0.9);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,8 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           elevation: 0.0,
           title: const Text(
-            'Home',
+            'LOOPUS',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           actions: [
             IconButton(
@@ -42,7 +43,9 @@ class HomeScreen extends StatelessWidget {
                 child: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(SearchTypingScreen());
+                  },
                   child: Column(
                     children: [
                       Padding(
@@ -129,37 +132,9 @@ class HomeScreen extends StatelessWidget {
               SingleChildScrollView(
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Text(
-                            "학과 포스팅",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(16),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Text(
-                              "더 보기",
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 16),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Container(
-                      // margin: const EdgeInsets.symmetric(vertical: 20.0),
-                      height: 360,
-                      child: ListView(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          children: HomeController.to.group),
+                    SizedBox(height: 20),
+                    Column(
+                      children: HomeController.to.posting,
                     ),
                     Container(
                       height: 250,
@@ -178,22 +153,11 @@ class HomeScreen extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Text(
-                            "내 관심사와 관련된 포스팅",
+                            "추천하는 정보",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.all(16),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Text(
-                              "더 보기",
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 16),
-                            ),
-                          ),
-                        )
                       ],
                     ),
                     Container(
@@ -202,13 +166,24 @@ class HomeScreen extends StatelessWidget {
                       child: ListView(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          children: HomeController.to.group),
+                          children: HomeController.to.recommend_posting),
                     ),
                   ],
                 ),
               ),
-              HomeController.to.group[0],
-              Text("data3"),
+              QuestionAnswerScreen(),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Column(
+                      children: HomeController.to.posting,
+                    ),
+                  ],
+                ),
+              ),
             ]),
           ),
         ),
