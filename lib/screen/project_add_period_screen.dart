@@ -2,23 +2,29 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/controller/activitymake_controller.dart';
-import 'package:loopus/screen/activity_add_tag_screen.dart';
+import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/screen/project_add_tag_screen.dart';
 
-class ActivityAddPeriodScreen extends StatelessWidget {
-  ActivityAddPeriodScreen({Key? key}) : super(key: key);
+class ProjectAddPeriodScreen extends StatelessWidget {
+  ProjectAddPeriodScreen({Key? key}) : super(key: key);
 
-  ActivityMakeController activitymakecontroller = Get.find();
+  ProjectMakeController projectmakecontroller = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+            Get.back();
+          },
+        ),
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(() => ActivityAddTagScreen());
+              Get.to(() => ProjectAddTagScreen());
             },
             child: Text(
               '다음',

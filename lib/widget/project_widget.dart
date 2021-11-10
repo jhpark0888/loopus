@@ -4,10 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/screen/activity_screen.dart';
+import 'package:loopus/screen/project_screen.dart';
 
-class ActivityWidget extends StatelessWidget {
-  ActivityWidget(
+class ProjectWidget extends StatelessWidget {
+  ProjectWidget(
       {Key? key,
       this.title,
       this.startday,

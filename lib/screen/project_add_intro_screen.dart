@@ -2,25 +2,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/controller/activitymake_controller.dart';
-import 'package:loopus/screen/activity_add_intro_screen.dart';
+import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/screen/project_add_period_screen.dart';
 
-class ActivityAddNameScreen extends StatelessWidget {
-  ActivityAddNameScreen({Key? key}) : super(key: key);
+class ProjectAddIntroScreen extends StatelessWidget {
+  ProjectAddIntroScreen({Key? key}) : super(key: key);
 
-  ActivityMakeController activitymakecontroller =
-      Get.put(ActivityMakeController());
+  ProjectMakeController projectmakecontroller = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: Icon(
-            Icons.close,
-          ),
+          icon: Icon(Icons.arrow_back_ios_new),
           onPressed: () {
             Get.back();
           },
@@ -28,7 +24,7 @@ class ActivityAddNameScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(() => ActivityAddIntroScreen());
+              Get.to(() => ProjectAddPeriodScreen());
             },
             child: Text(
               '다음',
@@ -50,14 +46,14 @@ class ActivityAddNameScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Text(
-                  '활동명이 무엇인가요?',
+                  '어떤 활동인지 간략하게 소개해주세요!',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Text(
-                  '어떤 활동인지 잘 드러나는 이름을 입력해주세요',
+                  '지금 적지 않아도 나중에 추가할 수 있어요',
                   style: TextStyle(
                     fontSize: 14,
                   ),
@@ -65,16 +61,16 @@ class ActivityAddNameScreen extends StatelessWidget {
               ),
               TextField(
                 cursorColor: Colors.black,
-                controller: activitymakecontroller.namecontroller,
+                maxLines: 2,
+                controller: projectmakecontroller.introcontroller,
                 decoration: InputDecoration(
-                  hintText: 'OO 스터디, OO 공모전, OO 프로젝트...',
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2),
-                  ),
-                ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 2),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 2),
+                    ),
+                    hintText: 'OO를 주제로 진행한 프로젝트이며, OO 역할을 맡았습니다.'),
               )
             ],
           ),

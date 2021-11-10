@@ -2,23 +2,31 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/controller/activitymake_controller.dart';
-import 'package:loopus/screen/activity_add_period_screen.dart';
+import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/screen/project_add_period_screen.dart';
+import 'package:loopus/screen/project_add_person_screen.dart';
+import 'package:loopus/widget/selected_tag_widget.dart';
 
-class ActivityAddTagScreen extends StatelessWidget {
-  ActivityAddTagScreen({Key? key}) : super(key: key);
+class ProjectAddTagScreen extends StatelessWidget {
+  ProjectAddTagScreen({Key? key}) : super(key: key);
 
-  ActivityMakeController activitymakecontroller = Get.find();
+  ProjectMakeController projectmakecontroller = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+            Get.back();
+          },
+        ),
         actions: [
           TextButton(
             onPressed: () {
-              // Get.to(() => ActivityAddPeriodScreen());
+              Get.to(() => ProjectAddPersonScreen());
             },
             child: Text(
               '다음',
@@ -57,24 +65,28 @@ class ActivityAddTagScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
                       '선택한 태그',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      '2 / 3',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    Obx(
+                      () => Text(
+                        '${projectmakecontroller.selectedtaglist.length} / 3',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Row(
-                  children: [],
+              Obx(
+                () => Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: Row(
+                    children: projectmakecontroller.selectedtaglist,
+                  ),
                 ),
               ),
               Padding(

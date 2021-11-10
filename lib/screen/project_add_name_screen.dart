@@ -2,23 +2,33 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/controller/activitymake_controller.dart';
-import 'package:loopus/screen/activity_add_period_screen.dart';
+import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/screen/project_add_intro_screen.dart';
 
-class ActivityAddIntroScreen extends StatelessWidget {
-  ActivityAddIntroScreen({Key? key}) : super(key: key);
+class ProjectAddNameScreen extends StatelessWidget {
+  ProjectAddNameScreen({Key? key}) : super(key: key);
 
-  ActivityMakeController activitymakecontroller = Get.find();
+  ProjectMakeController projectmakecontroller =
+      Get.put(ProjectMakeController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(
+            Icons.close,
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(() => ActivityAddPeriodScreen());
+              Get.to(() => ProjectAddIntroScreen());
             },
             child: Text(
               '다음',
@@ -40,14 +50,14 @@ class ActivityAddIntroScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Text(
-                  '어떤 활동인지 간략하게 소개해주세요!',
+                  '활동명이 무엇인가요?',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Text(
-                  '지금 적지 않아도 나중에 추가할 수 있어요',
+                  '어떤 활동인지 잘 드러나는 이름을 입력해주세요',
                   style: TextStyle(
                     fontSize: 14,
                   ),
@@ -55,16 +65,16 @@ class ActivityAddIntroScreen extends StatelessWidget {
               ),
               TextField(
                 cursorColor: Colors.black,
-                maxLines: 2,
-                controller: activitymakecontroller.introcontroller,
+                controller: projectmakecontroller.namecontroller,
                 decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black, width: 2),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black, width: 2),
-                    ),
-                    hintText: 'OO를 주제로 진행한 프로젝트이며, OO 역할을 맡았습니다.'),
+                  hintText: 'OO 스터디, OO 공모전, OO 프로젝트...',
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black, width: 2),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black, width: 2),
+                  ),
+                ),
               )
             ],
           ),
