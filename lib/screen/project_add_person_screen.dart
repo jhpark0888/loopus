@@ -3,13 +3,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
+import 'package:loopus/widget/checkboxperson_widget.dart';
 
 class ProjectAddPersonScreen extends StatelessWidget {
   ProjectAddPersonScreen({Key? key}) : super(key: key);
-
-  ProjectMakeController projectmakecontroller = Get.find();
+  ProjectAddPersonController projectaddpersoncontroller =
+      Get.put(ProjectAddPersonController());
+  ProjectMakeController projectMakeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +72,14 @@ class ProjectAddPersonScreen extends StatelessWidget {
               ),
             ),
             Obx(
-              () => Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: Row(
-                  children: projectmakecontroller.selectedpersonlist,
+              () => Flexible(
+                child: Container(
+                  height: 55,
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: projectMakeController.selectedpersontaglist,
+                  ),
                 ),
               ),
             ),
@@ -86,7 +93,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    '0명',
+                    '${projectaddpersoncontroller.looppersonlist.length}명',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -94,47 +101,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
             ),
             Expanded(
               child: ListView(
-                children: [
-                  Obx(
-                    () => Theme(
-                      data: ThemeData(
-                        unselectedWidgetColor: Colors.black,
-                      ),
-                      child: CheckboxListTile(
-                        activeColor: Colors.black,
-                        checkColor: Colors.white,
-                        value: projectmakecontroller.personselected.value,
-                        onChanged: (bool? value) {
-                          projectmakecontroller.personselected.value =
-                              value ?? false;
-                        },
-                        // shape: ShapeBorder(),
-                        secondary: ClipOval(
-                            child: CachedNetworkImage(
-                          height: 56,
-                          width: 56,
-                          imageUrl: "https://i.stack.imgur.com/l60Hf.png",
-                          placeholder: (context, url) => const CircleAvatar(
-                            child: Center(child: CircularProgressIndicator()),
-                          ),
-                          fit: BoxFit.fill,
-                        )),
-                        controlAffinity: ListTileControlAffinity.trailing,
-                        title: Text(
-                          '손승태',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          '산업경영공학과',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                children: projectaddpersoncontroller.looppersonlist,
               ),
             )
           ],

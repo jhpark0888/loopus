@@ -92,6 +92,7 @@ class ProjectAddTagScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: TextField(
+                    controller: projectmakecontroller.tagsearch,
                     style: TextStyle(color: Colors.black),
                     cursorColor: Colors.black,
                     // autofocus: true,
@@ -119,6 +120,13 @@ class ProjectAddTagScreen extends StatelessWidget {
                       ),
                     )),
               ),
+              SingleChildScrollView(
+                child: Obx(
+                  () => Column(
+                    children: projectmakecontroller.searchtaglist,
+                  ),
+                ),
+              )
             ],
           ),
         ),

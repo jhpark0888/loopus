@@ -65,7 +65,7 @@ class ProjectAddNameScreen extends StatelessWidget {
               ),
               TextField(
                 cursorColor: Colors.black,
-                controller: projectmakecontroller.namecontroller,
+                controller: projectmakecontroller.projectnamecontroller,
                 decoration: InputDecoration(
                   hintText: 'OO 스터디, OO 공모전, OO 프로젝트...',
                   enabledBorder: UnderlineInputBorder(

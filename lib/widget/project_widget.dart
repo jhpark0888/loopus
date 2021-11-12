@@ -30,7 +30,7 @@ class ProjectWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          Get.to(() => ActivityScreen());
+          Get.to(() => ProjectScreen());
         },
         child: Stack(
           children: [

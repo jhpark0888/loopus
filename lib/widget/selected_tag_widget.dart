@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:loopus/controller/project_add_person_controller.dart';
+import 'package:loopus/controller/projectmake_controller.dart';
 
 class SelectedTagWidget extends StatelessWidget {
-  SelectedTagWidget({Key? key, required this.text}) : super(key: key);
+  SelectedTagWidget({Key? key, required this.text, this.id}) : super(key: key);
+  ProjectMakeController projectMakeController = Get.find();
+  ProjectAddPersonController projectAddPersonController = Get.find();
+
   String text;
+  int? id;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +36,14 @@ class SelectedTagWidget extends StatelessWidget {
                 height: 30,
                 child: IconButton(
                     splashRadius: 10,
-                    onPressed: () {},
+                    onPressed: () {
+                      projectMakeController.selectedpersontaglist
+                          .removeWhere((element) => element.id == id);
+                      projectAddPersonController.looppersonlist
+                          .where((element) => element.id == id)
+                          .first
+                          .isselected(false);
+                    },
                     iconSize: 16,
                     icon: Icon(
                       Icons.cancel,

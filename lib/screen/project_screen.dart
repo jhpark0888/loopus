@@ -3,14 +3,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
+import 'package:loopus/screen/posting_add_screen.dart';
+import 'package:loopus/widget/project_posting_widget.dart';
 
-class ActivityScreen extends StatelessWidget {
-  const ActivityScreen({Key? key}) : super(key: key);
+class ProjectScreen extends StatelessWidget {
+  const ProjectScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: mainFontDark,
+        onPressed: () {
+          Get.to(() => PostingAddScreen());
+        },
+        child: Icon(Icons.edit),
+      ),
+      // appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,6 +229,18 @@ class ActivityScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
             ),
+            Column(
+              children: [
+                ProjectPostingWidget(
+                  title: '안녕하세요',
+                  preview: '안녕하세요 감사해요 반가워요 다시 만나요',
+                ),
+                ProjectPostingWidget(
+                  title: '안녕하세요',
+                  preview: '안녕하세요 감사해요 반가워요 다시 만나요',
+                ),
+              ],
+            )
           ],
         ),
       ),
