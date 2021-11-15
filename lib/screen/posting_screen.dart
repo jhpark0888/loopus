@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 
 class PostingScreen extends StatelessWidget {
@@ -8,65 +9,51 @@ class PostingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: lightGray,
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz))],
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: 200,
-              color: lightGray,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+            Stack(
+              children: [
+                Container(
+                  width: Get.width,
+                  height: 292,
+                  child: CachedNetworkImage(
+                      fit: BoxFit.fill,
+                      imageUrl:
+                          'https://thumb.pann.com/tc_480/http://fimg4.pann.com/new/download.jsp?FileID=45110348'),
+                ),
+                Column(
                   children: [
-                    SizedBox(
-                      height: 20,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            icon: Icon(Icons.clear)),
+                        Row(children: [
+                          IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+                          IconButton(
+                              onPressed: () {}, icon: Icon(Icons.more_horiz)),
+                        ]),
+                      ],
                     ),
-                    Text(
-                      "SK 서포터즈 활동을 하면서 느꼈던 것들이 있는데 그것은 바로...",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          ClipOval(
-                              child: CachedNetworkImage(
-                            height: 32,
-                            width: 32,
-                            imageUrl: "https://i.stack.imgur.com/l60Hf.png",
-                            placeholder: (context, url) => CircleAvatar(
-                              child: Center(child: CircularProgressIndicator()),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 100, 15, 10),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'LOOPUS 앱 개발을 하면서 느꼈던 점 3가지',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                            fit: BoxFit.fill,
-                          )),
-                          const Text(
-                            "  박도영  ",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          const Text(
-                            "기계공학과",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          SizedBox(
-                            width: 147,
-                          ),
-                          Text("21.06.30")
-                        ],
-                      ),
+                          ]),
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
             Padding(
               padding: EdgeInsets.all(20),
@@ -81,7 +68,7 @@ class PostingScreen extends StatelessWidget {
                       padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
                       child: Container(
                         height: 200,
-                        color: lightGray,
+                        color: mainlightgrey,
                       ),
                     ),
                     Text(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/screen/question_add_content_screen.dart';
 
 class QuestionAnswerScreen extends StatelessWidget {
   // const QuestionAnswerScreen({ Key? key }) : super(key: key);
@@ -14,8 +16,10 @@ class QuestionAnswerScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: mainFontDark,
-        onPressed: () {},
+        backgroundColor: mainblack,
+        onPressed: () {
+          Get.to(() => QuestionAddContnetnScreen());
+        },
         child: Icon(Icons.edit),
       ),
     );

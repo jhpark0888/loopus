@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
@@ -17,6 +18,8 @@ class App extends GetView<AppController> {
             return HomeScreen();
           case RouteName.Search:
             return SearchScreen();
+          case RouteName.Paper:
+            return SearchScreen();
           case RouteName.Bookmark:
             return BookmarkScreen();
           case RouteName.Profile:
@@ -24,63 +27,63 @@ class App extends GetView<AppController> {
         }
       }),
       bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
-          backgroundColor: mainWhite,
-          type: BottomNavigationBarType.fixed,
-          currentIndex: controller.currentIndex.value,
-          showSelectedLabels: true,
-          selectedItemColor: mainFontDark,
-          onTap: controller.changePageIndex,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  size: 23,
-                  color: lightGray,
-                ),
-                activeIcon: Icon(
-                  Icons.home,
-                  size: 23,
-                  color: mainFontDark,
-                ),
-                label: "홈"),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.search,
-                  size: 23,
-                  color: lightGray,
-                ),
-                activeIcon: Icon(
-                  Icons.search,
-                  size: 23,
-                  color: mainFontDark,
-                ),
-                label: "검색"),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.bookmark_border_outlined,
-                  size: 23,
-                  color: lightGray,
-                ),
-                activeIcon: Icon(
-                  Icons.bookmark,
-                  size: 23,
-                  color: mainFontDark,
-                ),
-                label: "북마크"),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.account_circle_rounded,
-                  size: 23,
-                  color: lightGray,
-                ),
-                activeIcon: Icon(
-                  Icons.account_circle_rounded,
-                  size: 23,
-                  color: mainFontDark,
-                ),
-                label: "프로필"),
-          ],
+        () => Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(25), topLeft: Radius.circular(25)),
+            boxShadow: [
+              BoxShadow(color: mainblack, spreadRadius: 0, blurRadius: 5),
+            ],
+          ),
+          child: ClipRRect(
+            clipBehavior: Clip.hardEdge,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+                bottomLeft: Radius.circular(0),
+                bottomRight: Radius.circular(0)),
+            child: Container(
+              child: BottomNavigationBar(
+                backgroundColor: mainWhite,
+                type: BottomNavigationBarType.fixed,
+                currentIndex: controller.currentIndex.value,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                // showSelectedLabels: false,
+                onTap: controller.changePageIndex,
+                items: [
+                  BottomNavigationBarItem(
+                      icon: SvgPicture.asset("assets/icons/Home_Inactive.svg"),
+                      activeIcon:
+                          SvgPicture.asset("assets/icons/Home_Active.svg"),
+                      label: "홈"),
+                  BottomNavigationBarItem(
+                      icon:
+                          SvgPicture.asset("assets/icons/Search_Inactive.svg"),
+                      activeIcon:
+                          SvgPicture.asset("assets/icons/Search_Active.svg"),
+                      label: "검색"),
+                  BottomNavigationBarItem(
+                      icon: SvgPicture.asset("assets/icons/Paper_Inactive.svg"),
+                      activeIcon:
+                          SvgPicture.asset("assets/icons/Paper_Active.svg"),
+                      label: "공고"),
+                  BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                          "assets/icons/Bookmark_Inactive.svg"),
+                      activeIcon:
+                          SvgPicture.asset("assets/icons/Bookmark_Active.svg"),
+                      label: "북마크"),
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset("assets/icons/Profile_Inactive.svg"),
+                    activeIcon:
+                        SvgPicture.asset("assets/icons/Profile_Active.svg"),
+                    label: "프로필",
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

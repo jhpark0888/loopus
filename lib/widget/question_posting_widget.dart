@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/screen/question_screen.dart';
 
 class QuestionPostingWidget extends StatelessWidget {
   @override
@@ -14,6 +15,7 @@ class QuestionPostingWidget extends StatelessWidget {
           color: Colors.grey[200], borderRadius: BorderRadius.circular(5)),
       child: InkWell(
         onTap: () {
+          Get.to(() => QuestionScreen());
           print("click posting");
         },
         child: Column(
@@ -34,7 +36,7 @@ class QuestionPostingWidget extends StatelessWidget {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                      color: lightGray, borderRadius: BorderRadius.circular(4)),
+                      color: mainWhite, borderRadius: BorderRadius.circular(4)),
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   height: 24,
                   child: const Text("SK 서포터즈"),
@@ -44,7 +46,7 @@ class QuestionPostingWidget extends StatelessWidget {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                      color: lightGray, borderRadius: BorderRadius.circular(4)),
+                      color: mainWhite, borderRadius: BorderRadius.circular(4)),
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   height: 24,
                   child: Text("기계공학과"),
@@ -54,7 +56,7 @@ class QuestionPostingWidget extends StatelessWidget {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                      color: lightGray, borderRadius: BorderRadius.circular(4)),
+                      color: mainWhite, borderRadius: BorderRadius.circular(4)),
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   height: 24,
                   child: Text("봉사"),

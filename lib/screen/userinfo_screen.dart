@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
 import 'package:loopus/screen/withdrawal_screen.dart';
@@ -64,7 +66,11 @@ class UserInfoScreen extends StatelessWidget {
                   )),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                FlutterSecureStorage().delete(key: 'token');
+                FlutterSecureStorage().delete(key: 'id');
+                Get.offAll(() => LogInPage());
+              },
               title: Text('로그아웃',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),

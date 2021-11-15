@@ -105,7 +105,7 @@ class RecommendPostingWidget extends StatelessWidget {
                             onTap: () {},
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: lightGray,
+                                  color: mainlightgrey,
                                   borderRadius: BorderRadius.circular(4)),
                               padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                               height: 24,

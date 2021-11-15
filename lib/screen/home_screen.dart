@@ -90,7 +90,7 @@ class HomeScreen extends StatelessWidget {
                                 child: Text(
                                   "포스팅",
                                   style: TextStyle(
-                                      color: mainFontDark,
+                                      color: mainblack,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -98,7 +98,7 @@ class HomeScreen extends StatelessWidget {
                                 child: Text(
                                   "질문과 답변",
                                   style: TextStyle(
-                                      color: mainFontDark,
+                                      color: mainblack,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -106,7 +106,7 @@ class HomeScreen extends StatelessWidget {
                                 child: Text(
                                   "루프",
                                   style: TextStyle(
-                                      color: mainFontDark,
+                                      color: mainblack,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -119,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                     Divider(
                       thickness: 0.5,
                       height: 0.3,
-                      color: lightGray,
+                      color: mainlightgrey,
                     )
                   ],
                 ),

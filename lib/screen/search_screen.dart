@@ -12,8 +12,8 @@ class SearchScreen extends StatelessWidget {
           'Search',
         ),
       ),
-      body: Column(
-        children: [],
+      body: Container(
+        color: Colors.amber,
       ),
     );
   }

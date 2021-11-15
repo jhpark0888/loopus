@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/screen/home_screen.dart';
+import 'package:loopus/screen/login_screen.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
-  // String? temptoken = await FlutterSecureStorage().read(key: 'token');
-  // print(temptoken);
-  // runApp(MyApp(token: temptoken));
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  String? temptoken = await FlutterSecureStorage().read(key: 'token');
+  print(temptoken);
+  runApp(MyApp(token: temptoken));
+  // runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final String? token;
+  const MyApp({Key? key, required this.token}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +27,26 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           backgroundColor: mainWhite,
-          foregroundColor: mainFontDark,
+          foregroundColor: mainblack,
         ),
-        backgroundColor: mainWhite,
+        canvasColor: mainWhite,
         // primaryColor: mainWhite,
         // brightness: Brightness.dark,
         textTheme: const TextTheme(
-          bodyText1: TextStyle(color: mainFontDark),
-          bodyText2: TextStyle(color: mainFontDark),
-        ).apply(bodyColor: mainFontDark),
+          bodyText1: TextStyle(color: mainblack),
+          bodyText2: TextStyle(color: mainblack),
+        ).apply(bodyColor: mainblack),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            primary: mainFontDark,
+            primary: mainblack,
           ),
         ),
       ),
       initialBinding: InitBinding(),
       getPages: [
-        GetPage(name: "/", page: () => App()),
+        GetPage(
+            name: "/", page: token != null ? () => App() : () => LogInPage()),
         //   GetPage(
         //     name: "/feed/:id",
         //     page: () => FeedPage(),

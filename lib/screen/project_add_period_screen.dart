@@ -24,7 +24,12 @@ class ProjectAddPeriodScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(() => ProjectAddTagScreen());
+              Get.to(() => ProjectAddTagScreen(
+                    content1: '활동을 대표하는 키워드가 무엇인가요?',
+                    content2: '누구나 쉽게 찾을 수 있는 태그를 입력해주세요.',
+                    textbtn: '다음',
+                    title: '활동 추가',
+                  ));
             },
             child: Text(
               '다음',

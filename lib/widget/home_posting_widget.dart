@@ -49,7 +49,7 @@ class HomePostingWidget extends StatelessWidget {
             Container(
               height: 228,
               decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: mainlightgrey,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.zero,
                       topRight: Radius.zero,
@@ -84,7 +84,7 @@ class HomePostingWidget extends StatelessWidget {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            color: lightGray,
+                            color: mainWhite,
                             borderRadius: BorderRadius.circular(4)),
                         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         height: 24,
@@ -95,7 +95,7 @@ class HomePostingWidget extends StatelessWidget {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            color: lightGray,
+                            color: mainWhite,
                             borderRadius: BorderRadius.circular(4)),
                         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         height: 24,
@@ -106,7 +106,7 @@ class HomePostingWidget extends StatelessWidget {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            color: lightGray,
+                            color: mainWhite,
                             borderRadius: BorderRadius.circular(4)),
                         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         height: 24,
