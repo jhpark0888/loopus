@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 
-class SelectedTagWidget extends StatelessWidget {
-  SelectedTagWidget({Key? key, required this.text, this.id}) : super(key: key);
+class SelectedPersonTagWidget extends StatelessWidget {
+  SelectedPersonTagWidget({Key? key, required this.text, this.id})
+      : super(key: key);
   ProjectMakeController projectMakeController = Get.find();
+  ProjectAddPersonController projectAddPersonController = Get.find();
 
   String text;
   int? id;
@@ -36,8 +38,12 @@ class SelectedTagWidget extends StatelessWidget {
                 child: IconButton(
                     splashRadius: 10,
                     onPressed: () {
-                      projectMakeController.selectedtaglist
+                      projectMakeController.selectedpersontaglist
                           .removeWhere((element) => element.id == id);
+                      projectAddPersonController.looppersonlist
+                          .where((element) => element.id == id)
+                          .first
+                          .isselected(false);
                     },
                     iconSize: 16,
                     icon: Icon(

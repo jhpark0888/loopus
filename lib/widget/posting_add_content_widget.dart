@@ -17,6 +17,7 @@ class ProstingAdd_ContentWidget extends StatelessWidget {
           maxLines: 5,
           controller: contentcontroller,
           style: TextStyle(
+            height: 1.6,
             fontSize: 12,
           ),
           decoration: InputDecoration(

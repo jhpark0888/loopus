@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
+import 'package:loopus/widget/selected_persontag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,14 +26,11 @@ class ProjectMakeController extends GetxController {
   TextEditingController finishmonthcontroller = TextEditingController();
   TextEditingController finishdaycontroller = TextEditingController();
   TextEditingController tagsearch = TextEditingController();
-  List<SelectedTagWidget> selectedtaglist = <SelectedTagWidget>[
-    // SelectedTagWidget(
-    //   text: '컴공',
-    // )
-  ].obs;
 
-  List<SearchTagWidget> searchtaglist = <SearchTagWidget>[].obs;
-  List<SelectedTagWidget> selectedpersontaglist = <SelectedTagWidget>[].obs;
+  RxList<SelectedTagWidget> selectedtaglist = <SelectedTagWidget>[].obs;
+  RxList<SearchTagWidget> searchtaglist = <SearchTagWidget>[].obs;
+  RxList<SelectedPersonTagWidget> selectedpersontaglist =
+      <SelectedPersonTagWidget>[].obs;
 
   RxBool isongoing = false.obs;
   // List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
@@ -53,16 +52,49 @@ class ProjectMakeController extends GetxController {
 
     if (response.statusCode == 200) {
       List responselist = responsebody["results"];
+      List<Tag> tagmaplist =
+          responselist.map((map) => Tag.fromJson(map)).toList();
+
       print(responselist);
-      if (responselist.isEmpty) {
+      if (tagmaplist
+          .where((element) => element.tag == tagsearch.text)
+          .isNotEmpty) {
         searchtaglist.clear();
-        searchtaglist.add(SearchTagWidget(
-          tag: "처음으로 '${tagsearch.text}' 태그 사용하기",
-        ));
+
+        searchtaglist(tagmaplist.map((element) {
+          return SearchTagWidget(
+            id: element.id,
+            tag: element.tag,
+            // count: element.count,
+          );
+        }).toList());
+
+        selectedtaglist.forEach((selectedtag) {
+          searchtaglist.removeWhere((element) => element.id == selectedtag.id);
+        });
       } else {
         searchtaglist.clear();
 
-        // responselist.forEach((map) => SearchTagWidget(tag: ,));
+        searchtaglist(tagmaplist.map((element) {
+          return SearchTagWidget(
+            id: element.id,
+            tag: element.tag,
+            // count: element.count,
+          );
+        }).toList());
+
+        if (tagsearch.text != '') {
+          searchtaglist.insert(
+              0,
+              SearchTagWidget(
+                id: 0,
+                tag: "처음으로 '${tagsearch.text}' 태그 사용하기",
+              ));
+        }
+
+        selectedtaglist.forEach((selectedtag) {
+          searchtaglist.removeWhere((element) => element.id == selectedtag.id);
+        });
       }
     } else if (response.statusCode == 401) {
       // Get.defaultDialog(
@@ -89,10 +121,13 @@ class ProjectMakeController extends GetxController {
     );
 
     print(response.statusCode);
+    Map responsebody = json.decode(utf8.decode(response.bodyBytes));
+    print(responsebody);
+    Map tagmap = responsebody["tag"];
 
-    if (response.statusCode == 200) {
-      // String token = jsonDecode(response.body)['Token'];
-      // String userid = jsonDecode(response.body)['user_id'];
+    if (response.statusCode == 201) {
+      selectedtaglist
+          .add(SelectedTagWidget(id: tagmap['id'], text: tagmap['tag']));
     } else if (response.statusCode == 401) {
       // Get.defaultDialog(
       //   title: '로그인 오류',

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/widget/selected_persontag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class CheckBoxPersonWidget extends StatelessWidget {
@@ -49,7 +50,7 @@ class CheckBoxPersonWidget extends StatelessWidget {
             isselected(value);
             if (value == true) {
               projectMakeController.selectedpersontaglist.add(
-                SelectedTagWidget(
+                SelectedPersonTagWidget(
                   key: UniqueKey(),
                   text: name,
                   id: id,

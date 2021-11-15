@@ -38,6 +38,7 @@ class ProjectWidget extends StatelessWidget {
               width: 347,
               height: 288,
               decoration: BoxDecoration(
+                  // boxShadow: [BoxShadow(blurRadius: )],
                   borderRadius: BorderRadius.circular(4),
                   image: DecorationImage(
                       image: NetworkImage(

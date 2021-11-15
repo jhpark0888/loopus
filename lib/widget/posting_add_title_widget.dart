@@ -17,6 +17,7 @@ class PostingAdd_TitleWidget extends StatelessWidget {
           cursorColor: Colors.black,
           controller: titlecontroller,
           style: TextStyle(
+            height: 1.6,
             fontSize: 15,
             fontWeight: FontWeight.bold,
           ),

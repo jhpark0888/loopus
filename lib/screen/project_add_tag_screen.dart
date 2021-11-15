@@ -40,27 +40,43 @@ class ProjectAddTagScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Text(
-                  '활동을 대표하는 키워드가 무엇인가요?',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Text(
-                  '누구나 쉽게 찾을 수 있는 태그를 입력해주세요',
-                  style: TextStyle(
-                    fontSize: 14,
+      body: NestedScrollView(
+        headerSliverBuilder: (context, value) {
+          return [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Text(
+                          '활동을 대표하는 키워드가 무엇인가요?',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Text(
+                          '누구나 쉽게 찾을 수 있는 태그를 입력해주세요',
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
+            ),
+          ];
+        },
+        body: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
@@ -120,9 +136,9 @@ class ProjectAddTagScreen extends StatelessWidget {
                       ),
                     )),
               ),
-              SingleChildScrollView(
-                child: Obx(
-                  () => Column(
+              Obx(
+                () => Expanded(
+                  child: ListView(
                     children: projectmakecontroller.searchtaglist,
                   ),
                 ),
