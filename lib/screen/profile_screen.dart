@@ -24,7 +24,9 @@ class ProfileScreen extends StatelessWidget {
           elevation: 0,
           title: const Text(
             '프로필',
-            // style: TextStyle(fontSize: 16),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           actions: [
             IconButton(

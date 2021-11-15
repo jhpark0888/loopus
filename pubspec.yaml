@@ -39,8 +39,10 @@ dependencies:
   favorite_button: ^0.0.4
   dotted_border: ^2.0.0+1
   flutter_secure_storage: ^4.2.0
-  http: ^0.13.3
   flutter_svg: ^0.23.0+1
+  image_picker: ^0.8.4+4
+  http: ^0.13.4
+
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +75,14 @@ flutter:
   assets:
     - assets/
     - assets/icons/
+
+fonts: 
+  - family: Nanum
+    fonts:
+      - asset: fonts/NanumSquareRoundL.ttf
+      - asset: fonts/NanumSquareRoundR.ttf
+      - asset: fonts/NanumSquareRoundB.ttf
+      - asset: fonts/NanumSquareRoundEB.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

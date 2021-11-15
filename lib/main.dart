@@ -25,12 +25,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Loop Us",
       theme: ThemeData(
+        fontFamily: 'Nanum',
         appBarTheme: const AppBarTheme(
           backgroundColor: mainWhite,
           foregroundColor: mainblack,
         ),
         canvasColor: mainWhite,
-        // primaryColor: mainWhite,
         // brightness: Brightness.dark,
         textTheme: const TextTheme(
           bodyText1: TextStyle(color: mainblack),

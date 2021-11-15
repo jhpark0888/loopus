@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loopus/widget/bookmark_question_widget.dart';
 
 class BookmarkScreen extends StatelessWidget {
   const BookmarkScreen({Key? key}) : super(key: key);
@@ -6,15 +7,38 @@ class BookmarkScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-      elevation: 0,
-      title: const Text(
-        'Bookmark',
+      appBar: AppBar(
+        elevation: 0,
+        title: const Text(
+          '북마크',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.notifications_none_outlined),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.sms_outlined),
+          ),
+        ],
       ),
-      actions: [
-        IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
-        IconButton(onPressed: () {}, icon: Icon(Icons.near_me)),
-      ],
-    ));
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              BookmarkQuestionWidget(),
+              BookmarkQuestionWidget(),
+              BookmarkQuestionWidget(),
+              BookmarkQuestionWidget(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

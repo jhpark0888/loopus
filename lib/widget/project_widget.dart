@@ -30,7 +30,7 @@ class ProjectWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          Get.to(() => ActivityScreen());
+          Get.to(() => ProjectScreen());
         },
         child: Stack(
           children: [
@@ -38,6 +38,7 @@ class ProjectWidget extends StatelessWidget {
               width: 347,
               height: 288,
               decoration: BoxDecoration(
+                  // boxShadow: [BoxShadow(blurRadius: )],
                   borderRadius: BorderRadius.circular(4),
                   image: DecorationImage(
                       image: NetworkImage(

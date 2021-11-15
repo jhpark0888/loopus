@@ -71,6 +71,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                   children: [
                     Container(
                       child: TextField(
+                        controller: projectmakecontroller.startmonthcontroller,
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -102,6 +103,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     ),
                     Container(
                       child: TextField(
+                        controller: projectmakecontroller.startdaycontroller,
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -138,6 +140,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                   children: [
                     Container(
                       child: TextField(
+                        controller: projectmakecontroller.finishmonthcontroller,
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -169,6 +172,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     ),
                     Container(
                       child: TextField(
+                        controller: projectmakecontroller.finishdaycontroller,
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -198,6 +202,27 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Obx(
+                      () => Checkbox(
+                          activeColor: Colors.black,
+                          checkColor: Colors.white,
+                          value: projectmakecontroller.isongoing.value,
+                          onChanged: (bool? value) {
+                            projectmakecontroller.isongoing(value);
+                          }),
+                    ),
+                    Text(
+                      '아직 진행 중이에요',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+              )
             ],
           ),
         ),

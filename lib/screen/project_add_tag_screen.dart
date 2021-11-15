@@ -60,27 +60,43 @@ class ProjectAddTagScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Text(
-                  '$content1',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Text(
-                  '$content2',
-                  style: TextStyle(
-                    fontSize: 14,
+      body: NestedScrollView(
+        headerSliverBuilder: (context, value) {
+          return [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Text(
+                          '활동을 대표하는 키워드가 무엇인가요?',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Text(
+                          '누구나 쉽게 찾을 수 있는 태그를 입력해주세요',
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
+            ),
+          ];
+        },
+        body: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
@@ -111,40 +127,43 @@ class ProjectAddTagScreen extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: () {
-                    Get.to(() => SearchTypingScreen());
-                  },
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 13,
-                              ),
-                              Icon(Icons.search),
-                              Text(
-                                "   예) 봉사, 기계공학과, 서포터즈, 동아리",
-                                style: TextStyle(color: Colors.grey[600]),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                child: TextField(
+                  controller: projectmakecontroller.tagsearch,
+                  style: TextStyle(color: Colors.black),
+                  cursorColor: Colors.black,
+                  // autofocus: true,
+                  // focusNode: searchController.detailsearchFocusnode,
+                  textAlign: TextAlign.start,
+                  // selectionHeightStyle: BoxHeightStyle.tight,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.grey[300],
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12)),
+                    // focusColor: Colors.black,
+                    // border: OutlineInputBorder(borderSide: BorderSide.none),
+                    contentPadding: EdgeInsets.all(10),
+                    isDense: true,
+                    hintText: "예) 봉사, 기계공학과, 서포터즈",
+                    prefixIcon: Icon(
+                      Icons.search,
+                      size: 20,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
+              Obx(
+                () => Expanded(
+                  child: ListView(
+                    children: projectmakecontroller.searchtaglist,
+                  ),
+                ),
+              )
             ],
           ),
         ),
