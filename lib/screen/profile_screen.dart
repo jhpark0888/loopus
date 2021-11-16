@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/project_add_name_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
@@ -115,7 +116,7 @@ class ProfileScreen extends StatelessWidget {
                           onPressed: () {},
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.grey[400],
+                              color: mainlightgrey,
                               borderRadius: BorderRadius.circular(4),
                             ),
                             margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
@@ -124,7 +125,7 @@ class ProfileScreen extends StatelessWidget {
                             height: 36,
                             child: const Center(
                               child: Text(
-                                '루프 요청하기',
+                                '관심 태그 변경하기',
                                 style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.bold),
                               ),
@@ -135,7 +136,7 @@ class ProfileScreen extends StatelessWidget {
                           onPressed: () {},
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.grey[400],
+                              color: mainblue,
                               borderRadius: BorderRadius.circular(4),
                             ),
                             margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
@@ -144,9 +145,11 @@ class ProfileScreen extends StatelessWidget {
                             height: 36,
                             child: const Center(
                               child: Text(
-                                '메시지 보내기',
+                                '내 프로필 공유하기',
                                 style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
+                                    color: mainWhite,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),

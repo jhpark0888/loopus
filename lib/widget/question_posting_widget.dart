@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/screen/question_screen.dart';
@@ -10,9 +11,9 @@ class QuestionPostingWidget extends StatelessWidget {
     return Container(
       height: 160,
       width: Get.width * 0.9,
-      margin: EdgeInsets.fromLTRB(20, 20, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: Colors.grey[200], borderRadius: BorderRadius.circular(5)),
+          color: mainlightgrey, borderRadius: BorderRadius.circular(5)),
       child: InkWell(
         onTap: () {
           Get.to(() => QuestionScreen());
@@ -85,7 +86,7 @@ class QuestionPostingWidget extends StatelessWidget {
                         fit: BoxFit.fill,
                       )),
                       const Text(
-                        "  박도영  ",
+                        "  박도영  · ",
                         style: TextStyle(
                             fontSize: 14, fontWeight: FontWeight.bold),
                       ),
@@ -98,7 +99,19 @@ class QuestionPostingWidget extends StatelessWidget {
                   Padding(
                       padding: const EdgeInsets.only(right: 15.0),
                       child: InkWell(
-                          onTap: () {}, child: Icon(Icons.sms_outlined)))
+                        onTap: () {
+                          print("답변하기");
+                        },
+                        child: Row(
+                          children: [
+                            SvgPicture.asset("assets/icons/Chat.svg"),
+                            Text(
+                              " 답변하기",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ))
                 ],
               ),
             ),

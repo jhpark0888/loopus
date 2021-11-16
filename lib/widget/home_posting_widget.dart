@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/screen/posting_screen.dart';
@@ -68,7 +69,7 @@ class HomePostingWidget extends StatelessWidget {
                   Row(
                     children: [
                       Padding(
-                        padding: EdgeInsets.fromLTRB(12, 8, 12, 20),
+                        padding: EdgeInsets.fromLTRB(15, 8, 12, 20),
                         child: Text(
                           "SK 서포터즈 활동",
                           style: TextStyle(color: Colors.grey[500]),
@@ -150,8 +151,10 @@ class HomePostingWidget extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: InkWell(
-                              onTap: () {},
-                              child: Icon(Icons.bookmark_border_outlined)),
+                            onTap: () {},
+                            child: SvgPicture.asset(
+                                "assets/icons/Bookmark_Inactive.svg"),
+                          ),
                         ),
                       ],
                     ),

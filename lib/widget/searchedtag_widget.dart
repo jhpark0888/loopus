@@ -18,12 +18,16 @@ class SearchTagWidget extends StatelessWidget {
     return ListTile(
       onTap: () {
         if (id == 0) {
-          projectMakeController.postmaketag();
+          // projectMakeController.postmaketag();
+          projectMakeController.selectedtaglist.add(SelectedTagWidget(
+              id: id, text: projectMakeController.tagsearch.text));
+          projectMakeController.tagsearch.clear();
         } else {
           projectMakeController.selectedtaglist.add(SelectedTagWidget(
             id: id,
             text: tag,
           ));
+          projectMakeController.tagsearch.clear();
         }
       },
       leading: Icon(Icons.local_offer),

@@ -5,7 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'dart:convert';
 
+import 'package:loopus/controller/projectmake_controller.dart';
+
 class QuestionApi {
+  ProjectMakeController projectMakeController =
+      Get.put(ProjectMakeController());
   static QuestionApi get to => Get.find();
 
   void questionmake(String content) async {
