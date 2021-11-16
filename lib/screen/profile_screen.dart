@@ -13,7 +13,7 @@ import 'package:loopus/widget/question_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
-  ProfileController profileController = ProfileController();
+  ProfileController profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,19 +48,20 @@ class ProfileScreen extends StatelessWidget {
                           child: CachedNetworkImage(
                         height: 92,
                         width: 92,
-                        imageUrl: "https://i.stack.imgur.com/l60Hf.png",
+                        imageUrl: profileController.user.value.profileImage ??
+                            "https://i.stack.imgur.com/l60Hf.png",
                         placeholder: (context, url) => const CircleAvatar(
                           child: Center(child: CircularProgressIndicator()),
                         ),
                         fit: BoxFit.fill,
                       )),
                     ),
-                    const Text(
-                      '박지환',
+                    Text(
+                      profileController.user.value.realName,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                     ),
-                    const Text(
+                    Text(
                       '산업경영공학과',
                       style: TextStyle(fontSize: 14),
                     ),

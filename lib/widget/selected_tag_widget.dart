@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
 
 class SelectedTagWidget extends StatelessWidget {
   SelectedTagWidget({Key? key, required this.text, this.id}) : super(key: key);
-  ProjectMakeController projectMakeController = Get.find();
+  TagController tagController = Get.find();
 
   String text;
   int? id;
@@ -36,7 +37,7 @@ class SelectedTagWidget extends StatelessWidget {
                 child: IconButton(
                     splashRadius: 10,
                     onPressed: () {
-                      projectMakeController.selectedtaglist
+                      tagController.selectedtaglist
                           .removeWhere((element) => element.id == id);
                     },
                     iconSize: 16,

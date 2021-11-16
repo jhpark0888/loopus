@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/screen/project_add_tag_screen.dart';
 
@@ -24,12 +25,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(() => ProjectAddTagScreen(
-                    content1: '활동을 대표하는 키워드가 무엇인가요?',
-                    content2: '누구나 쉽게 찾을 수 있는 태그를 입력해주세요.',
-                    textbtn: '다음',
-                    title: '활동 추가',
-                  ));
+              Get.to(() => ProjectAddTagScreen());
             },
             child: Text(
               '다음',
@@ -72,16 +68,14 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     Container(
                       child: TextField(
                         controller: projectmakecontroller.startyearcontroller,
-                        cursorColor: Colors.black,
+                        cursorColor: mainblack,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2),
+                            borderSide: BorderSide(color: mainblack, width: 2),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2),
+                            borderSide: BorderSide(color: mainblack, width: 2),
                           ),
                           hintText: '2021',
                         ),
@@ -104,16 +98,14 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     Container(
                       child: TextField(
                         controller: projectmakecontroller.startmonthcontroller,
-                        cursorColor: Colors.black,
+                        cursorColor: mainblack,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2),
+                            borderSide: BorderSide(color: mainblack, width: 2),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2),
+                            borderSide: BorderSide(color: mainblack, width: 2),
                           ),
                           hintText: '08',
                         ),
@@ -139,22 +131,26 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      child: TextField(
-                        controller: projectmakecontroller.finishyearcontroller,
-                        cursorColor: Colors.black,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2),
+                      child: Obx(
+                        () => TextField(
+                          readOnly: projectmakecontroller.isongoing.value,
+                          controller:
+                              projectmakecontroller.finishyearcontroller,
+                          cursorColor: mainblack,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: mainblack, width: 2),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: mainblack, width: 2),
+                            ),
+                            hintText: '2021',
                           ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2),
-                          ),
-                          hintText: '2021',
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                       height: 24,
                       width: 48,
@@ -171,22 +167,26 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                       width: 20,
                     ),
                     Container(
-                      child: TextField(
-                        controller: projectmakecontroller.finishmonthcontroller,
-                        cursorColor: Colors.black,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2),
+                      child: Obx(
+                        () => TextField(
+                          readOnly: projectmakecontroller.isongoing.value,
+                          controller:
+                              projectmakecontroller.finishmonthcontroller,
+                          cursorColor: mainblack,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: mainblack, width: 2),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: mainblack, width: 2),
+                            ),
+                            hintText: '11',
                           ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2),
-                          ),
-                          hintText: '11',
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                       height: 24,
                       width: 48,

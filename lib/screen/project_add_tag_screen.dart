@@ -5,25 +5,15 @@ import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/project_add_person_screen.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class ProjectAddTagScreen extends StatelessWidget {
-  QuestionController questionController = Get.put(QuestionController());
-
-  String title;
-  String content1;
-  String content2;
-  String textbtn;
-
-  ProjectAddTagScreen(
-      {required this.title,
-      required this.content1,
-      required this.content2,
-      required this.textbtn});
-  ProjectMakeController projectmakecontroller = Get.find();
+  ProjectAddTagScreen({Key? key}) : super(key: key);
+  TagController tagController = Get.put(TagController());
 
   @override
   Widget build(BuildContext context) {
@@ -39,23 +29,16 @@ class ProjectAddTagScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              if (textbtn == "다음") {
-                Get.to(() => ProjectAddPersonScreen());
-              } else {
-                QuestionApi.to
-                    .questionmake(questionController.contentcontroller.text);
-                questionController.contentcontroller.clear();
-                Get.offAllNamed("/");
-              }
+              Get.to(() => ProjectAddPersonScreen());
             },
             child: Text(
-              '$textbtn',
+              '다음',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
         ],
         title: Text(
-          "$title",
+          "활동 태그",
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -93,12 +76,12 @@ class ProjectAddTagScreen extends StatelessWidget {
             ),
           ];
         },
-        body: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -109,7 +92,7 @@ class ProjectAddTagScreen extends StatelessWidget {
                     ),
                     Obx(
                       () => Text(
-                        '${projectmakecontroller.selectedtaglist.length} / 5',
+                        '${tagController.selectedtaglist.length} / 5',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
@@ -117,58 +100,58 @@ class ProjectAddTagScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Obx(
-                () => Container(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  width: Get.width,
-                  height: 50,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: projectmakecontroller.selectedtaglist,
+            ),
+            Obx(
+              () => Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                width: Get.width,
+                height: 35,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: tagController.selectedtaglist,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: TextField(
+                controller: tagController.tagsearch,
+                style: TextStyle(color: Colors.black),
+                cursorColor: Colors.black,
+                // autofocus: true,
+                // focusNode: searchController.detailsearchFocusnode,
+                textAlign: TextAlign.start,
+                // selectionHeightStyle: BoxHeightStyle.tight,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[300],
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(12)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(12)),
+                  // focusColor: Colors.black,
+                  // border: OutlineInputBorder(borderSide: BorderSide.none),
+                  contentPadding: EdgeInsets.all(10),
+                  isDense: true,
+                  hintText: "예) 봉사, 기계공학과, 서포터즈",
+                  prefixIcon: Icon(
+                    Icons.search,
+                    size: 20,
+                    color: Colors.black,
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: TextField(
-                  controller: projectmakecontroller.tagsearch,
-                  style: TextStyle(color: Colors.black),
-                  cursorColor: Colors.black,
-                  // autofocus: true,
-                  // focusNode: searchController.detailsearchFocusnode,
-                  textAlign: TextAlign.start,
-                  // selectionHeightStyle: BoxHeightStyle.tight,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[300],
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(12)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(12)),
-                    // focusColor: Colors.black,
-                    // border: OutlineInputBorder(borderSide: BorderSide.none),
-                    contentPadding: EdgeInsets.all(10),
-                    isDense: true,
-                    hintText: "예) 봉사, 기계공학과, 서포터즈",
-                    prefixIcon: Icon(
-                      Icons.search,
-                      size: 20,
-                      color: Colors.black,
-                    ),
-                  ),
+            ),
+            Obx(
+              () => Expanded(
+                child: ListView(
+                  children: tagController.searchtaglist,
                 ),
               ),
-              Obx(
-                () => Expanded(
-                  child: ListView(
-                    children: projectmakecontroller.searchtaglist,
-                  ),
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

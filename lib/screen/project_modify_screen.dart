@@ -99,12 +99,7 @@ class ProjectModifyScreen extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                Get.to(() => ProjectAddTagScreen(
-                      title: '활동 태그',
-                      content1: '활동을 대표하는 키워드가 무엇인가요?',
-                      content2: '누구나 쉽게 찾을 수 있는 태그를 입력해주세요',
-                      textbtn: '다음',
-                    ));
+                Get.to(() => ProjectAddTagScreen());
               },
               title: Text('활동 태그',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),

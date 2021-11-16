@@ -2,12 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class SearchTagWidget extends StatelessWidget {
   SearchTagWidget({Key? key, required this.id, required this.tag, this.count})
       : super(key: key);
-  ProjectMakeController projectMakeController = Get.find();
+  TagController tagController = Get.find();
 
   int id;
   String tag;
@@ -18,13 +19,16 @@ class SearchTagWidget extends StatelessWidget {
     return ListTile(
       onTap: () {
         if (id == 0) {
-          projectMakeController.postmaketag();
+          // projectMakeController.postmaketag();
+          tagController.selectedtaglist.add(
+              SelectedTagWidget(id: id, text: tagController.tagsearch.text));
+          tagController.tagsearch.clear();
         } else {
-          projectMakeController.selectedtaglist.add(SelectedTagWidget(
+          tagController.selectedtaglist.add(SelectedTagWidget(
             id: id,
             text: tag,
           ));
-          projectMakeController.tagsearch.clear();
+          tagController.tagsearch.clear();
         }
       },
       leading: Icon(Icons.local_offer),

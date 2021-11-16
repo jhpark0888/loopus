@@ -30,12 +30,7 @@ class QuestionAddContnetnScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(() => ProjectAddTagScreen(
-                    content1: '질문 태그를 선택해주세요!',
-                    content2: '해당 태그에 관심있는 학생에게 질문을 보여드려요.',
-                    textbtn: '올리기',
-                    title: '질문 태그',
-                  ));
+              Get.to(() => ProjectAddTagScreen());
             },
             child: Text(
               '다음',
