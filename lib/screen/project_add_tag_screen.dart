@@ -109,7 +109,7 @@ class ProjectAddTagScreen extends StatelessWidget {
                     ),
                     Obx(
                       () => Text(
-                        '${projectmakecontroller.selectedtaglist.length} / 3',
+                        '${projectmakecontroller.selectedtaglist.length} / 5',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
@@ -118,9 +118,12 @@ class ProjectAddTagScreen extends StatelessWidget {
                 ),
               ),
               Obx(
-                () => Padding(
+                () => Container(
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Row(
+                  width: Get.width,
+                  height: 50,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
                     children: projectmakecontroller.selectedtaglist,
                   ),
                 ),

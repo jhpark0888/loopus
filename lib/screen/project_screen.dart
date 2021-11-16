@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
+import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 
 class ProjectScreen extends StatelessWidget {
@@ -20,7 +21,7 @@ class ProjectScreen extends StatelessWidget {
         },
         child: Icon(Icons.edit),
       ),
-      // appBar: AppBar(),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +47,11 @@ class ProjectScreen extends StatelessWidget {
                             },
                             icon: Icon(Icons.clear)),
                         Row(children: [
-                          IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+                          IconButton(
+                              onPressed: () {
+                                Get.to(() => ProjectModifyScreen());
+                              },
+                              icon: Icon(Icons.edit)),
                           IconButton(
                               onPressed: () {}, icon: Icon(Icons.more_horiz)),
                         ]),

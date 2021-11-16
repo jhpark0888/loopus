@@ -21,10 +21,10 @@ class ProjectMakeController extends GetxController {
 
   TextEditingController projectnamecontroller = TextEditingController();
   TextEditingController introcontroller = TextEditingController();
+  TextEditingController startyearcontroller = TextEditingController();
   TextEditingController startmonthcontroller = TextEditingController();
-  TextEditingController startdaycontroller = TextEditingController();
+  TextEditingController finishyearcontroller = TextEditingController();
   TextEditingController finishmonthcontroller = TextEditingController();
-  TextEditingController finishdaycontroller = TextEditingController();
   TextEditingController tagsearch = TextEditingController();
 
   RxList<SelectedTagWidget> selectedtaglist = <SelectedTagWidget>[].obs;
@@ -65,7 +65,7 @@ class ProjectMakeController extends GetxController {
           return SearchTagWidget(
             id: element.id,
             tag: element.tag,
-            // count: element.count,
+            count: element.count,
           );
         }).toList());
 
@@ -79,7 +79,7 @@ class ProjectMakeController extends GetxController {
           return SearchTagWidget(
             id: element.id,
             tag: element.tag,
-            // count: element.count,
+            count: element.count,
           );
         }).toList());
 
@@ -128,6 +128,8 @@ class ProjectMakeController extends GetxController {
     if (response.statusCode == 201) {
       selectedtaglist
           .add(SelectedTagWidget(id: tagmap['id'], text: tagmap['tag']));
+
+      tagsearch.clear();
     } else if (response.statusCode == 401) {
       // Get.defaultDialog(
       //   title: '로그인 오류',

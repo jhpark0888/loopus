@@ -24,6 +24,7 @@ class SearchTagWidget extends StatelessWidget {
             id: id,
             text: tag,
           ));
+          projectMakeController.tagsearch.clear();
         }
       },
       leading: Icon(Icons.local_offer),

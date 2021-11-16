@@ -71,7 +71,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                   children: [
                     Container(
                       child: TextField(
-                        controller: projectmakecontroller.startmonthcontroller,
+                        controller: projectmakecontroller.startyearcontroller,
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -103,7 +103,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     ),
                     Container(
                       child: TextField(
-                        controller: projectmakecontroller.startdaycontroller,
+                        controller: projectmakecontroller.startmonthcontroller,
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -140,7 +140,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                   children: [
                     Container(
                       child: TextField(
-                        controller: projectmakecontroller.finishmonthcontroller,
+                        controller: projectmakecontroller.finishyearcontroller,
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -172,7 +172,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     ),
                     Container(
                       child: TextField(
-                        controller: projectmakecontroller.finishdaycontroller,
+                        controller: projectmakecontroller.finishmonthcontroller,
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
