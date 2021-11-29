@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MessageAnswerWidget extends StatelessWidget {
+  String content;
+  String name;
+  String image;
+
+  MessageAnswerWidget(
+      {required this.content, required this.image, required this.name});
   // const MessageQuestionWidget({Key? key}) : super(key: key);
 
   @override
@@ -27,7 +33,7 @@ class MessageAnswerWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "책 안좋아하시잖아요. 읽지 마세요 그냥 도움도 안되는데",
+                "${content}",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
             ),
@@ -48,7 +54,7 @@ class MessageAnswerWidget extends StatelessWidget {
                 height: 3,
               ),
               Text(
-                "박지환",
+                "$name",
                 style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
               )
             ],

@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MessageQuestionWidget extends StatelessWidget {
-  const MessageQuestionWidget({Key? key}) : super(key: key);
+  String content;
+  String name;
+  String image;
+
+  MessageQuestionWidget(
+      {required this.content, required this.image, required this.name});
+  // const MessageQuestionWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +25,7 @@ class MessageQuestionWidget extends StatelessWidget {
                   child: CachedNetworkImage(
                 height: 37,
                 width: 37,
+                // image
                 imageUrl: "https://i.stack.imgur.com/l60Hf.png",
                 placeholder: (context, url) => CircleAvatar(
                   child: Center(child: CircularProgressIndicator()),
@@ -28,8 +35,9 @@ class MessageQuestionWidget extends StatelessWidget {
               SizedBox(
                 height: 3,
               ),
+              // name
               Text(
-                "손승태",
+                "$name",
                 style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
               )
             ],
@@ -48,7 +56,8 @@ class MessageQuestionWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "UX 디자인하는데 도움될 만한 서적 하나만 추천해주실 수 있나요?",
+                // content
+                "$content",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
             ),

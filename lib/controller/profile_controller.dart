@@ -13,6 +13,7 @@ import 'package:loopus/widget/project_widget.dart';
 
 class ProfileController extends GetxController {
   static ProfileController get to => Get.find();
+
   List<String> dropdown_qanda = ["내가 답변한 질문", "내가 한 질문"];
   var selectqanda = 0.obs;
 

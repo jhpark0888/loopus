@@ -5,34 +5,87 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'dart:convert';
 
-class QuestionApi {
-  static QuestionApi get to => Get.find();
+import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/question_model.dart';
 
-  void questionmake(String content) async {
-    String? token;
-    await FlutterSecureStorage().read(key: 'token').then((value) {
-      token = value;
-    });
+void questionmake(String content) async {
+  String? token;
+  await FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
 
-    final url =
-        Uri.parse("http://3.38.89.253:8000/question_api/raise_question/");
-    print("token");
-    print(token);
-    var data = {"content": content, "tag": ""};
-    http.Response response = await http.post(url,
-        headers: {
-          'Authorization': 'Token $token',
-          'Content-Type': 'application/json'
-        },
-        body: jsonEncode(data));
-    var responseHeaders = response.headers;
-    var responseBody = utf8.decode(response.bodyBytes);
-    List<dynamic> list = jsonDecode(responseBody);
-    print(list);
-    // if (response.statusCode != 200) {
-    //   return Future.error(response.statusCode);
-    // } else {
-    //   return HomeModel.fromJson(list);
-    // }
+  final url =
+      Uri.parse("http://3.35.253.151:8000/question_api/raise_question/");
+  print("token");
+  print(token);
+  var data = {
+    "content": content,
+    "tag":
+        TagController.to.selectedtaglist.map((element) => element.text).toList()
+  };
+  // TagController.to.selectedtaglist.clear();
+  http.Response response = await http.post(url,
+      headers: {
+        'Authorization': 'Token $token',
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode(data));
+  var responseHeaders = response.headers;
+  var responseBody = utf8.decode(response.bodyBytes);
+  // List<dynamic> list = jsonDecode(responseBody);
+  // print(list);
+  print("---------------------------");
+  print(responseBody);
+  print(response.statusCode);
+  // if (response.statusCode != 200) {
+  //   return Future.error(response.statusCode);
+  // } else {
+  //   return HomeModel.fromJson(list);
+  // }
+}
+
+Future<dynamic> questionlist(int pageNumber) async {
+  String? token;
+  await FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final url = Uri.parse(
+      "http://3.35.253.151:8000/question_api/question_list_load/?page=$pageNumber");
+  final response = await get(url, headers: {"Authorization": "Token $token"});
+  var statusCode = response.statusCode;
+  var responseHeaders = response.headers;
+  var responseBody = utf8.decode(response.bodyBytes);
+  print(statusCode);
+  Map<String, dynamic> map = jsonDecode(responseBody);
+  print(map);
+  if (response.statusCode != 200) {
+    return Future.error(response.statusCode);
+  } else {
+    return QuestionModel.fromJson(map);
+  }
+}
+
+Future<dynamic> specificquestion(int questionid) async {
+  String? token;
+  await FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final url = Uri.parse(
+      "http://3.35.253.151:8000/question_api/specific_question_load/$questionid/");
+
+  final response = await get(url, headers: {"Authorization": "Token $token"});
+  var statusCode = response.statusCode;
+  var responseHeaders = response.headers;
+  var responseBody = utf8.decode(response.bodyBytes);
+  print(statusCode);
+  Map<String, dynamic> map = jsonDecode(responseBody);
+
+  if (response.statusCode != 200) {
+    return Future.error(response.statusCode);
+  } else {
+    return QuestionModel2.fromJson(map);
   }
 }
