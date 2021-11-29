@@ -43,8 +43,8 @@ class TagController extends GetxController {
 
     if (response.statusCode == 200) {
       List responselist = responsebody["results"];
-      List<Tag> tagmaplist =
-          responselist.map((map) => Tag.fromJson(map)).toList();
+      List<SearchTag> tagmaplist =
+          responselist.map((map) => SearchTag.fromJson(map)).toList();
 
       print(responselist);
       if (tagmaplist

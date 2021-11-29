@@ -9,20 +9,20 @@ class ProjectAddPersonController extends GetxController {
   ProjectMakeController projectMakeController = Get.find();
 
   void onInit() {
-    looppersonlist.add(
-      CheckBoxPersonWidget(
-        name: '박지환',
-        department: '산업경영공학과',
-        id: 1,
-      ),
-    );
-    looppersonlist.add(
-      CheckBoxPersonWidget(
-        name: '손승태',
-        department: '산업경영공학과',
-        id: 2,
-      ),
-    );
+    // looppersonlist.add(
+    //   CheckBoxPersonWidget(
+    //     name: '박지환',
+    //     department: '산업경영공학과',
+    //     id: 1,
+    //   ),
+    // );
+    // looppersonlist.add(
+    //   CheckBoxPersonWidget(
+    //     name: '손승태',
+    //     department: '산업경영공학과',
+    //     id: 2,
+    //   ),
+    // );
     super.onInit();
   }
 

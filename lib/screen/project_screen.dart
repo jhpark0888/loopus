@@ -4,12 +4,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 
 class ProjectScreen extends StatelessWidget {
-  const ProjectScreen({Key? key}) : super(key: key);
+  ProjectScreen({Key? key, required this.project}) : super(key: key);
+
+  Project project;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +66,7 @@ class ProjectScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'LOOPUS 앱 서비스 개발',
+                              project.projectName,
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -76,7 +79,7 @@ class ProjectScreen extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text(
-                                        '2021.05 ~ 2022.01',
+                                        '${project.startDate.year}.${project.startDate.month} ~ ',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold),
@@ -162,7 +165,7 @@ class ProjectScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
-                '연구실에서 진행한 앱 개발 프로젝트 사업입니다. 해당 사업프로젝트에서 UX/UI 디자인을 담당하였습니다.',
+                project.introduction,
                 style: TextStyle(
                   fontSize: 14,
                 ),

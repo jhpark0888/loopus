@@ -2,7 +2,10 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/get_image_api.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/project_add_name_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
@@ -44,17 +47,37 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 24, 0, 8),
-                      child: ClipOval(
-                          child: CachedNetworkImage(
-                        height: 92,
-                        width: 92,
-                        imageUrl: profileController.user.value.profileImage ??
-                            "https://i.stack.imgur.com/l60Hf.png",
-                        placeholder: (context, url) => const CircleAvatar(
-                          child: Center(child: CircularProgressIndicator()),
-                        ),
-                        fit: BoxFit.fill,
-                      )),
+                      child: Stack(children: [
+                        ClipOval(
+                            child: CachedNetworkImage(
+                          height: 92,
+                          width: 92,
+                          imageUrl: profileController.user.value.profileImage ??
+                              "https://i.stack.imgur.com/l60Hf.png",
+                          placeholder: (context, url) => const CircleAvatar(
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                          fit: BoxFit.fill,
+                        )),
+                        Positioned(
+                          right: -7,
+                          bottom: -7,
+                          child: IconButton(
+                            onPressed: () async {
+                              await getcropImage("profile");
+                            },
+                            icon: Container(
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle, color: mainWhite),
+                              child: SvgPicture.asset(
+                                "assets/icons/Image.svg",
+                                width: 24,
+                                height: 24,
+                              ),
+                            ),
+                          ),
+                        )
+                      ]),
                     ),
                     Text(
                       profileController.user.value.realName,
@@ -121,7 +144,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
                             // color: Colors.grey[400],
-                            width: 170,
+                            width: Get.width * 0.35,
                             height: 36,
                             child: const Center(
                               child: Text(
@@ -141,7 +164,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
                             // color: Colors.grey[400],
-                            width: 170,
+                            width: Get.width * 0.35,
                             height: 36,
                             child: const Center(
                               child: Text(
@@ -167,7 +190,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               SliverToBoxAdapter(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     TextButton(
                       onPressed: () {},
@@ -265,7 +288,7 @@ class ProfileScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '진행중인 활동',
+                              '활동',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
@@ -273,40 +296,18 @@ class ProfileScreen extends StatelessWidget {
                                 onPressed: () {
                                   Get.to(() => ProjectAddNameScreen());
                                 },
-                                child: Text('추가하기'))
+                                child: Text(
+                                  '추가하기',
+                                  style: TextStyle(color: mainblue),
+                                ))
                           ]),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
-                      child: Column(
-                        children: [
-                          ProjectWidget(),
-                        ],
-                      ),
-                    ),
-                    Divider(
-                      indent: 25,
-                      endIndent: 25,
-                      thickness: 1,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '활동',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                    Obx(
+                      () => Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
+                        child: Column(
+                          children: profileController.projectlist,
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
-                      child: Column(
-                        children: [
-                          ProjectWidget(),
-                          ProjectWidget(),
-                        ],
                       ),
                     ),
                   ],

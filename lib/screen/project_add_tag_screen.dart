@@ -13,7 +13,7 @@ import 'package:loopus/widget/selected_tag_widget.dart';
 
 class ProjectAddTagScreen extends StatelessWidget {
   ProjectAddTagScreen({Key? key}) : super(key: key);
-  TagController tagController = Get.put(TagController());
+  TagController tagController = Get.find();
 
   @override
   Widget build(BuildContext context) {

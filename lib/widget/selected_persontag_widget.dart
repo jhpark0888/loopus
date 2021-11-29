@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
@@ -7,7 +8,7 @@ class SelectedPersonTagWidget extends StatelessWidget {
   SelectedPersonTagWidget({Key? key, required this.text, this.id})
       : super(key: key);
   ProjectMakeController projectMakeController = Get.find();
-  ProjectAddPersonController projectAddPersonController = Get.find();
+  // ProjectAddPersonController projectAddPersonController = Get.find();
 
   String text;
   int? id;
@@ -23,35 +24,32 @@ class SelectedPersonTagWidget extends StatelessWidget {
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(40),
         ),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                text,
-                style: TextStyle(fontSize: 14),
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              style: TextStyle(fontSize: 14),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 5),
+              child: InkWell(
+                onTap: () {
+                  projectMakeController.selectedpersontaglist
+                      .removeWhere((element) => element.id == id);
+                  projectMakeController.looppersonlist
+                      .where((element) => element.id == id)
+                      .first
+                      .isselected(false);
+                },
+                child: SvgPicture.asset(
+                  "assets/icons/Close_blue.svg",
+                  width: 24,
+                  height: 24,
+                ),
               ),
-              SizedBox(
-                width: 30,
-                height: 30,
-                child: IconButton(
-                    splashRadius: 10,
-                    onPressed: () {
-                      projectMakeController.selectedpersontaglist
-                          .removeWhere((element) => element.id == id);
-                      projectAddPersonController.looppersonlist
-                          .where((element) => element.id == id)
-                          .first
-                          .isselected(false);
-                    },
-                    iconSize: 16,
-                    icon: Icon(
-                      Icons.cancel,
-                    )),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

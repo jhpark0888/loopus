@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loopus/api/get_image_api.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 import 'package:loopus/widget/posting_add_content_widget.dart';
@@ -15,8 +16,8 @@ class PostingAddController extends GetxController {
 
   TextEditingController titlecontroller = TextEditingController();
   var postinglist = <Widget>[].obs;
-  Rx<XFile> image = XFile("").obs;
-  Rx<XFile> thumbnail = XFile("").obs;
+  Rx<File> image = File("").obs;
+  Rx<File> thumbnail = File("").obs;
 
   void onInit() {
     super.onInit();
@@ -24,30 +25,14 @@ class PostingAddController extends GetxController {
 
   List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
 
-  getImages() async {
-    XFile? pickimage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickimage != null) {
-      image(pickimage);
-    }
-  }
-
-  getthumbnail() async {
-    XFile? pickimage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickimage != null) {
-      thumbnail(pickimage);
-    }
-  }
-
-  void onReorder(int oldIndex, int newIndex) {
-    Widget row = postinglist.removeAt(oldIndex);
-    if (newIndex >= postinglist.length) {
-      postinglist.add(row);
-    } else {
-      postinglist.insert(newIndex, row);
-    }
-  }
+  // void onReorder(int oldIndex, int newIndex) {
+  //   Widget row = postinglist.removeAt(oldIndex);
+  //   if (newIndex >= postinglist.length) {
+  //     postinglist.add(row);
+  //   } else {
+  //     postinglist.insert(newIndex, row);
+  //   }
+  // }
 
   void choiceAction(String choice) async {
     if (choice == Constants.FirstItem) {
@@ -61,7 +46,8 @@ class PostingAddController extends GetxController {
         content: '',
       ));
     } else if (choice == Constants.ThirdItem) {
-      await getImages();
+      image(await getcropImage("posting"));
+      print(image);
       if (image.value.path != '') {
         postinglist.add(PostingAdd_FileImageWidget(
           key: UniqueKey(),

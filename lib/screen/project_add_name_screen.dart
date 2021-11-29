@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
 
 class ProjectAddNameScreen extends StatelessWidget {
@@ -10,6 +11,7 @@ class ProjectAddNameScreen extends StatelessWidget {
 
   ProjectMakeController projectmakecontroller =
       Get.put(ProjectMakeController());
+  TagController tagController = Get.put(TagController());
 
   @override
   Widget build(BuildContext context) {

@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:loopus/api/get_image_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 
@@ -49,15 +51,14 @@ class PostingAddScreen extends StatelessWidget {
                       Obx(
                         () => Container(
                           width: Get.width,
-                          height: 292,
+                          height: Get.width * 2 / 3,
                           child: postingAddController.thumbnail.value.path == ""
                               ? CachedNetworkImage(
                                   fit: BoxFit.fill,
                                   imageUrl:
                                       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpol9gKXdfW9lUlFiWuujRUhCQbw9oHVIkQ&usqp=CAU')
                               : Image.file(
-                                  File(postingAddController
-                                      .thumbnail.value.path),
+                                  postingAddController.thumbnail.value,
                                   fit: BoxFit.fill,
                                 ),
                         ),
@@ -106,12 +107,13 @@ class PostingAddScreen extends StatelessWidget {
                                 ]),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 25),
+                            padding: const EdgeInsets.only(top: 15),
                             child: Align(
                               alignment: Alignment.bottomRight,
                               child: TextButton(
-                                onPressed: () {
-                                  postingAddController.getthumbnail();
+                                onPressed: () async {
+                                  postingAddController.thumbnail(
+                                      await getcropImage("thumbnail"));
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -145,10 +147,10 @@ class PostingAddScreen extends StatelessWidget {
           ];
         },
         body: Obx(
-          () => ReorderableListView.builder(
+          () => ListView.builder(
             padding: EdgeInsets.all(20),
             itemCount: postingAddController.postinglist.length,
-            onReorder: postingAddController.onReorder,
+            // onReorder: postingAddController.onReorder,
             itemBuilder: (BuildContext context, int index) {
               Widget item = postingAddController.postinglist[index];
               return Dismissible(
