@@ -1,20 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/project_add_name_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
+import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/question_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
-  ProfileController profileController = ProfileController();
+  ProfileController profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -49,19 +49,20 @@ class ProfileScreen extends StatelessWidget {
                           child: CachedNetworkImage(
                         height: 92,
                         width: 92,
-                        imageUrl: "https://i.stack.imgur.com/l60Hf.png",
+                        imageUrl: profileController.user.value.profileImage ??
+                            "https://i.stack.imgur.com/l60Hf.png",
                         placeholder: (context, url) => const CircleAvatar(
                           child: Center(child: CircularProgressIndicator()),
                         ),
                         fit: BoxFit.fill,
                       )),
                     ),
-                    const Text(
-                      '박지환',
+                    Text(
+                      profileController.user.value.realName,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                     ),
-                    const Text(
+                    Text(
                       '산업경영공학과',
                       style: TextStyle(fontSize: 14),
                     ),
@@ -263,14 +264,20 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(16),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '진행중인 활동',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '진행중인 활동',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Get.to(() => ProjectAddNameScreen());
+                                },
+                                child: Text('추가하기'))
+                          ]),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
@@ -293,33 +300,6 @@ class ProfileScreen extends StatelessWidget {
                           '활동',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(22, 0, 22, 8),
-                      child: InkWell(
-                        onTap: () {
-                          Get.to(() => ProjectAddNameScreen());
-                        },
-                        child: DottedBorder(
-                          strokeWidth: 3,
-                          dashPattern: [3, 3],
-                          borderType: BorderType.RRect,
-                          radius: Radius.circular(12),
-                          padding: EdgeInsets.all(6),
-                          child: ClipRRect(
-                            child: Container(
-                              height: 180,
-                              width: 347,
-                              child: Center(
-                                  child: Text(
-                                '+ 활동 추가하기',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              )),
-                            ),
-                          ),
                         ),
                       ),
                     ),

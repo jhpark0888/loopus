@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/project_add_person_screen.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
@@ -12,6 +13,7 @@ import 'package:loopus/widget/selected_tag_widget.dart';
 
 class QuestionAddTagScreen extends StatelessWidget {
   QuestionController questionController = Get.put(QuestionController());
+  TagController tagController = Get.put(TagController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +29,7 @@ class QuestionAddTagScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              QuestionApi.to
-                  .questionmake(questionController.contentcontroller.text);
+              questionmake(questionController.contentcontroller.text);
               questionController.contentcontroller.clear();
               Get.offAllNamed("/");
             },
@@ -93,7 +94,7 @@ class QuestionAddTagScreen extends StatelessWidget {
                     ),
                     Obx(
                       () => Text(
-                        '',
+                        '${tagController.selectedtaglist.length} / 3',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
@@ -105,14 +106,14 @@ class QuestionAddTagScreen extends StatelessWidget {
                 () => Padding(
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: Row(
-                    children: [],
+                    children: tagController.selectedtaglist,
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: TextField(
-                  controller: questionController.tagsearch,
+                  controller: tagController.tagsearch,
                   style: TextStyle(color: Colors.black),
                   cursorColor: Colors.black,
                   // autofocus: true,
@@ -144,7 +145,7 @@ class QuestionAddTagScreen extends StatelessWidget {
               Obx(
                 () => Expanded(
                   child: ListView(
-                    children: [],
+                    children: tagController.searchtaglist,
                   ),
                 ),
               )

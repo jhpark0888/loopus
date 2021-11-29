@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
-import 'package:loopus/screen/project_add_intro_screen.dart';
-import 'package:loopus/screen/project_add_tag_screen.dart';
+import 'package:loopus/screen/question_add_tag_screen.dart';
 
 class QuestionAddContentScreen extends StatelessWidget {
   // ProjectAddNameScreen({Key? key}) : super(key: key);
@@ -30,12 +29,7 @@ class QuestionAddContentScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(() => ProjectAddTagScreen(
-                    content1: '질문 태그를 선택해주세요!',
-                    content2: '해당 태그에 관심있는 학생에게 질문을 보여드려요.',
-                    textbtn: '올리기',
-                    title: '질문 태그',
-                  ));
+              Get.to(() => QuestionAddTagScreen());
             },
             child: Text(
               '다음',

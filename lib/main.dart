@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:get/get.dart';
 import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';

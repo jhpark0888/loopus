@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -36,6 +37,7 @@ Future<http.Response> signupRequest() async {
   SignupController signupController = Get.put(SignupController());
   // Uri uri = Uri.parse('http://52.79.75.189:8000/user_api/signup/');
   Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/signup/');
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   var checkemail = {
     "email": signupController.emailidcontroller.text,
@@ -56,6 +58,12 @@ Future<http.Response> signupRequest() async {
   print(json.encode(checkemail));
   print(response.body);
   print(response.statusCode);
-
+  if (response.statusCode == 200) {
+    print(response.statusCode);
+    String token = jsonDecode(response.body)['Token'];
+    String userid = jsonDecode(response.body)['user_id'];
+    storage.write(key: 'token', value: '$token');
+    storage.write(key: 'id', value: '$userid');
+  }
   return response;
 }

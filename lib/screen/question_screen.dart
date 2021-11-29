@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/widget/message_answer_widget.dart';
 import 'package:loopus/widget/message_question_widget.dart';
 
 class QuestionScreen extends StatelessWidget {
   // const QuestionScreen({Key? key}) : super(key: key);
   final TextEditingController _textController = new TextEditingController();
+  QuestionController questionController = Get.find();
 
   void _handleSubmitted(String text) async {
     print(text);
@@ -62,7 +64,7 @@ class QuestionScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          "손승태님의 질문",
+          "${questionController.questionModel2.questions.realname}님의 질문",
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -70,11 +72,46 @@ class QuestionScreen extends StatelessWidget {
       body: Stack(
         children: [
           Column(
-            children: [
-              MessageQuestionWidget(),
-              MessageAnswerWidget(),
-            ],
-          ),
+              children: List.generate(
+                  questionController.questionModel2.questions.answers.length +
+                      1, (index) {
+            return index == 0
+                ? MessageQuestionWidget(
+                    content:
+                        questionController.questionModel2.questions.content,
+                    image: questionController
+                            .questionModel2.questions.profileimage ??
+                        "",
+                    name: questionController.questionModel2.questions.realname,
+                  )
+                : questionController.questionModel2.questions.answers[index - 1]
+                            .realname ==
+                        questionController.questionModel2.questions.realname
+                    ? MessageQuestionWidget(
+                        content: questionController.questionModel2.questions
+                            .answers[index - 1].content,
+                        image: questionController.questionModel2.questions
+                                .answers[index - 1].profileimage ??
+                            "",
+                        name: questionController.questionModel2.questions
+                                .answers[index - 1].realname ??
+                            "",
+                      )
+                    : MessageAnswerWidget(
+                        content: questionController.questionModel2.questions
+                            .answers[index - 1].content,
+                        image: questionController.questionModel2.questions
+                                .answers[index - 1].profileimage ??
+                            "",
+                        name: questionController.questionModel2.questions
+                                .answers[index - 1].realname ??
+                            "",
+                      );
+          })
+              // MessageQuestionWidget(content: '', image: '', name: questionController.questionModel2.questions.realname,),
+              // MessageAnswerWidget(),
+
+              ),
           Align(
               alignment: Alignment.bottomCenter,
               child: Stack(

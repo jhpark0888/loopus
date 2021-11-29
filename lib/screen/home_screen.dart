@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
@@ -27,14 +28,10 @@ class HomeScreen extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {},
-                icon: Icon(
-                  Icons.notifications,
-                )),
+                icon: SvgPicture.asset("assets/icons/Bell_Inactive.svg")),
             IconButton(
                 onPressed: () {},
-                icon: Icon(
-                  Icons.near_me,
-                )),
+                icon: SvgPicture.asset("assets/icons/Chat.svg")),
           ],
         ),
         body: NestedScrollView(
@@ -156,7 +153,7 @@ class HomeScreen extends StatelessWidget {
                     Divider(
                       thickness: 0.5,
                       height: 0.3,
-                      color: mainlightgrey,
+                      color: mainblack,
                     )
                   ],
                 ),

@@ -7,185 +7,157 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/screen/question_add_content_screen.dart';
 import 'package:loopus/screen/question_screen.dart';
+import 'package:loopus/widget/my_question_posting_widget.dart';
+import 'package:loopus/widget/question_posting_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class QuestionAnswerScreen extends StatelessWidget {
   // const QuestionAnswerScreen({ Key? key }) : super(key: key);
-  ProjectMakeController projectmakecontroller =
-      Get.put(ProjectMakeController());
+  // ProjectMakeController projectmakecontroller =
+  //     Get.put(ProjectMakeController());
+
+  HomeController homeController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 236,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
+      body: Obx(
+        () => SmartRefresher(
+          controller: homeController.refreshController,
+          enablePullDown: true,
+          enablePullUp: homeController.enablepullup.value,
+          header: ClassicHeader(
+              textStyle: TextStyle(color: mainblack),
+              releaseText: "새로고침",
+              completeText: "완료",
+              idleText: "",
+              releaseIcon: Icon(Icons.refresh, color: mainblack),
+              completeIcon: Icon(Icons.done, color: Colors.green),
+              idleIcon: Icon(Icons.arrow_downward, color: mainblack)),
+          footer: ClassicFooter(
+            textStyle: TextStyle(color: mainblack),
+            loadingText: "",
+            canLoadingText: "",
+            idleText: "",
+            idleIcon: CircularProgressIndicator(
+              color: mainblack,
+              strokeWidth: 3,
+            ),
+            canLoadingIcon: CircularProgressIndicator(
+              color: mainblack,
+              strokeWidth: 3,
+            ),
+          ),
+          onRefresh: homeController.onRefresh,
+          onLoading: homeController.onLoading,
+          child: CustomScrollView(
+            slivers: [
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "내가 남긴 질문",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Get.to(() => QuestionAddContentScreen());
-                          },
-                          child: Text(
-                            "질문 남기기",
-                            style: TextStyle(
-                              color: mainblue,
-                              fontSize: 16,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Container(
-                      height: 160,
-                      width: Get.width * 0.9,
-                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      decoration: BoxDecoration(
-                          color: mainlightgrey,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: InkWell(
-                        onTap: () {
-                          Get.to(() => QuestionScreen());
-                          print("click posting");
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 75,
-                              padding: EdgeInsets.all(12.0),
-                              child: Text(
-                                "SK 서포터즈 활동을 하면 좋은 점이 무엇인가요?? 헤헤",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Obx(
+                                () => DropdownButton(
+                                  underline: Container(),
+                                  icon: Icon(Icons.expand_more),
+                                  value: homeController.selectgroup.value,
+                                  items: ["모든 질문", "내가 한 질문 "].map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? value) {
+                                    homeController.selectgroup(value);
+                                    homeController.onRefresh;
+                                    print(homeController.selectgroup.value);
+                                  },
+                                ),
                               ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: mainWhite,
-                                      borderRadius: BorderRadius.circular(4)),
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                  height: 24,
-                                  child: const Text("SK 서포터즈"),
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: mainWhite,
-                                      borderRadius: BorderRadius.circular(4)),
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                  height: 24,
-                                  child: Text("기계공학과"),
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: mainWhite,
-                                      borderRadius: BorderRadius.circular(4)),
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                  height: 24,
-                                  child: Text("봉사"),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 4,
-                            ),
-                            Container(
-                              padding: EdgeInsets.fromLTRB(15, 15, 0, 0),
-                              height: 45,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      ClipOval(
-                                          child: CachedNetworkImage(
-                                        height: 32,
-                                        width: 32,
-                                        imageUrl:
-                                            "https://i.stack.imgur.com/l60Hf.png",
-                                        placeholder: (context, url) =>
-                                            CircleAvatar(
-                                          child: Center(
-                                              child:
-                                                  CircularProgressIndicator()),
-                                        ),
-                                        fit: BoxFit.fill,
-                                      )),
-                                      const Text(
-                                        "  박도영  ",
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const Text(
-                                        "기계공학과",
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                    ],
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => QuestionAddContentScreen());
+                                },
+                                child: Text(
+                                  "질문 남기기",
+                                  style: TextStyle(
+                                    color: mainblue,
+                                    fontSize: 16,
                                   ),
-                                  Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 15.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          print("답변하기");
-                                        },
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                                "assets/icons/Chat.svg"),
-                                            Text(
-                                              " 답변하기",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            )
-                                          ],
-                                        ),
-                                      ))
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
                       ),
-                    )
+                    ),
                   ],
                 ),
+              ])),
+              // SliverList(
+              //   delegate:
+              // ),
+              // SliverList(
+              //     delegate: SliverChildListDelegate([
+              //   Column(
+              //     children: [
+              //       SizedBox(
+              //         height: 20,
+              //       ),
+              //       Divider(
+              //         thickness: 4,
+              //       ),
+              //     ],
+              //   ),
+              // ])),
+              SliverList(
+                delegate: homeController.selectgroup.value == "모든 질문"
+                    ? SliverChildBuilderDelegate(
+                        (context, index) {
+                          return GestureDetector(
+                              //on tap event 발생시
+                              onTap: () async {},
+                              child: QuestionPostingWidget(
+                                item: homeController.questionResult.value
+                                    .questionitems.questions[index],
+                                index: index,
+                                key: Key(
+                                  toString(),
+                                ),
+                              ));
+                        },
+                        childCount: homeController.questionResult.value
+                            .questionitems.questions.length,
+                      )
+                    : SliverChildBuilderDelegate(
+                        (context, index) {
+                          return GestureDetector(
+                              //on tap event 발생시
+                              onTap: () async {},
+                              child: MyQuestionPostingWidget(
+                                item: homeController.questionResult.value
+                                    .questionitems.myQuestions[index],
+                                index: index,
+                                key: Key(
+                                  toString(),
+                                ),
+                              ));
+                        },
+                        childCount: homeController.questionResult.value
+                            .questionitems.myQuestions.length,
+                      ),
               ),
-            ),
-            Divider(
-              thickness: 8,
-              color: mainlightgrey,
-            ),
-            Column(
-              children: HomeController.to.qustion_posting,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

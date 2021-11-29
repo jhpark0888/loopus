@@ -8,12 +8,12 @@ import 'package:loopus/model/question_model.dart';
 import 'package:loopus/screen/question_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
-class QuestionPostingWidget extends StatelessWidget {
+class MyQuestionPostingWidget extends StatelessWidget {
   QuestionController questionController = Get.put(QuestionController());
   final Question item;
   final int index;
 
-  QuestionPostingWidget(
+  MyQuestionPostingWidget(
       {required Key key, required this.item, required this.index})
       : super(key: key);
 
@@ -22,7 +22,7 @@ class QuestionPostingWidget extends StatelessWidget {
     return item.realname == ""
         ? Container()
         : Container(
-            height: 160,
+            height: 120,
             width: Get.width * 0.9,
             margin: EdgeInsets.fromLTRB(16, 20, 16, 0),
             decoration: BoxDecoration(boxShadow: [
@@ -44,7 +44,7 @@ class QuestionPostingWidget extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    height: 75,
+                    height: 50,
                     padding: EdgeInsets.all(12.0),
                     child: Text(
                       "${item.content}",
@@ -52,42 +52,6 @@ class QuestionPostingWidget extends StatelessWidget {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  item.questionTag.length == 0
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: mainWhite,
-                                  borderRadius: BorderRadius.circular(4)),
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              height: 24,
-                              child: const Text("Tag 없는거 없애줘~"),
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            SizedBox(
-                              width: 12,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: List.generate(item.questionTag.length,
-                                  (index) {
-                                return Tagwidget(
-                                  content: item.questionTag[index].tag,
-                                );
-                              }),
-                            ),
-                          ],
-                        ),
                   SizedBox(
                     height: 4,
                   ),
@@ -111,13 +75,11 @@ class QuestionPostingWidget extends StatelessWidget {
                               fit: BoxFit.fill,
                             )),
                             Text(
-                              "  ${item.realname}  · ",
+                              "  ${item.realname}님에게 남긴 질문",
                               style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            ),
-                            const Text(
-                              "산업경영공학과",
-                              style: TextStyle(fontSize: 14),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: mainblack),
                             ),
                           ],
                         ),
@@ -131,7 +93,7 @@ class QuestionPostingWidget extends StatelessWidget {
                                 children: [
                                   SvgPicture.asset("assets/icons/Comment.svg"),
                                   Text(
-                                    " 답변하기",
+                                    " ${item.answers.length}",
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   )
