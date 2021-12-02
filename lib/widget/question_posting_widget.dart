@@ -37,7 +37,9 @@ class QuestionPostingWidget extends StatelessWidget {
             ], color: mainlightgrey, borderRadius: BorderRadius.circular(5)),
             child: InkWell(
               onTap: () async {
+                questionController.messageanswerlist.clear();
                 await questionController.loadItem(item.id);
+                await questionController.addanswer();
                 Get.to(() => QuestionScreen());
                 print("click posting");
               },

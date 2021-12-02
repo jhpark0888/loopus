@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/question_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/widget/message_answer_widget.dart';
@@ -9,9 +10,14 @@ class QuestionScreen extends StatelessWidget {
   // const QuestionScreen({Key? key}) : super(key: key);
   final TextEditingController _textController = new TextEditingController();
   QuestionController questionController = Get.find();
+  late Map data;
 
   void _handleSubmitted(String text) async {
     print(text);
+    data =
+        await answermake(text, questionController.questionModel2.questions.id);
+    questionController.messageanswerlist.add(MessageAnswerWidget(
+        content: data["content"], image: "image", name: data["answerer"]));
   }
 
   Widget _buildTextComposer() {
@@ -72,46 +78,32 @@ class QuestionScreen extends StatelessWidget {
       body: Stack(
         children: [
           Column(
-              children: List.generate(
-                  questionController.questionModel2.questions.answers.length +
-                      1, (index) {
-            return index == 0
-                ? MessageQuestionWidget(
-                    content:
-                        questionController.questionModel2.questions.content,
-                    image: questionController
-                            .questionModel2.questions.profileimage ??
-                        "",
-                    name: questionController.questionModel2.questions.realname,
-                  )
-                : questionController.questionModel2.questions.answers[index - 1]
-                            .realname ==
-                        questionController.questionModel2.questions.realname
-                    ? MessageQuestionWidget(
-                        content: questionController.questionModel2.questions
-                            .answers[index - 1].content,
-                        image: questionController.questionModel2.questions
-                                .answers[index - 1].profileimage ??
+            children: [
+              Flexible(
+                child: ListView(
+                  children: [
+                    Column(children: [
+                      MessageQuestionWidget(
+                        content:
+                            questionController.questionModel2.questions.content,
+                        image: questionController
+                                .questionModel2.questions.profileimage ??
                             "",
-                        name: questionController.questionModel2.questions
-                                .answers[index - 1].realname ??
-                            "",
-                      )
-                    : MessageAnswerWidget(
-                        content: questionController.questionModel2.questions
-                            .answers[index - 1].content,
-                        image: questionController.questionModel2.questions
-                                .answers[index - 1].profileimage ??
-                            "",
-                        name: questionController.questionModel2.questions
-                                .answers[index - 1].realname ??
-                            "",
-                      );
-          })
-              // MessageQuestionWidget(content: '', image: '', name: questionController.questionModel2.questions.realname,),
-              // MessageAnswerWidget(),
-
+                        name: questionController
+                            .questionModel2.questions.realname,
+                      ),
+                      Obx(() => Column(
+                            children: questionController.messageanswerlist,
+                          )),
+                    ]),
+                  ],
+                ),
               ),
+              SizedBox(
+                height: 50,
+              ),
+            ],
+          ),
           Align(
               alignment: Alignment.bottomCenter,
               child: Stack(

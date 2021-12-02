@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
+import 'package:loopus/controller/question_controller.dart';
 
 class MessageQuestionWidget extends StatelessWidget {
   String content;
@@ -13,57 +15,72 @@ class MessageQuestionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 90,
-      padding: EdgeInsets.fromLTRB(15, 20, 15, 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
+    return Column(
+      children: [
+        Container(
+          height: 120,
+          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+          child: Column(
             children: [
-              ClipOval(
-                  child: CachedNetworkImage(
-                height: 37,
-                width: 37,
-                // image
-                imageUrl: "https://i.stack.imgur.com/l60Hf.png",
-                placeholder: (context, url) => CircleAvatar(
-                  child: Center(child: CircularProgressIndicator()),
+              Container(
+                alignment: Alignment.centerLeft,
+                height: 38,
+                child: Text(
+                  "$content",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                fit: BoxFit.fill,
-              )),
-              SizedBox(
-                height: 3,
               ),
-              // name
-              Text(
-                "$name",
-                style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-              )
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  ClipOval(
+                      child: CachedNetworkImage(
+                    height: 37,
+                    width: 37,
+                    // image
+                    imageUrl: "https://i.stack.imgur.com/l60Hf.png",
+                    placeholder: (context, url) => CircleAvatar(
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    fit: BoxFit.fill,
+                  )),
+                  Text(
+                    "   $name · ",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "산업경영공학과",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  Expanded(
+                      child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text("1시간전")))
+                ],
+              ),
             ],
           ),
-          Container(
-            // padding: EdgeInsets.fromLTRB(80, 0, 15, 0),
-            height: 60,
-            width: Get.width * 0.77,
-            decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.zero,
-                    topRight: Radius.circular(8),
-                    bottomLeft: Radius.circular(8),
-                    bottomRight: Radius.circular(8))),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                // content
-                "$content",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
+        ),
+        Divider(
+          color: Colors.grey[200],
+          thickness: 8,
+        ),
+        Container(
+          alignment: Alignment.centerLeft,
+          height: 50,
+          padding: EdgeInsets.all(10),
+          child: Obx(
+            () => Text(
+              "답변 ${QuestionController.to.messageanswerlist.length}개",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-          )
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 }

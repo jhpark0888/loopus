@@ -89,3 +89,37 @@ Future<dynamic> specificquestion(int questionid) async {
     return QuestionModel2.fromJson(map);
   }
 }
+
+Future<Map<dynamic, dynamic>> answermake(String content, int id) async {
+  String? token;
+  await FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final url = Uri.parse("http://3.35.253.151:8000/question_api/answer/$id/");
+  print("token");
+  print(token);
+  var data = {
+    "content": content,
+  };
+  // TagController.to.selectedtaglist.clear();
+  http.Response response = await http.post(url,
+      headers: {
+        'Authorization': 'Token $token',
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode(data));
+  var responseHeaders = response.headers;
+  var responseBody = utf8.decode(response.bodyBytes);
+  // List<dynamic> list = jsonDecode(responseBody);
+  // print(list);
+  Map<String, dynamic> map = jsonDecode(responseBody);
+  print("---------------------------");
+  print(responseBody);
+  print(response.statusCode);
+  if (response.statusCode != 200) {
+    return Future.error(response.statusCode);
+  } else {
+    return map;
+  }
+}

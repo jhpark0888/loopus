@@ -38,6 +38,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
             child: InkWell(
               onTap: () async {
                 await questionController.loadItem(item.id);
+                await questionController.addanswer();
                 Get.to(() => QuestionScreen());
                 print("click posting");
               },

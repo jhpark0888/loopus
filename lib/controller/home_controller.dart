@@ -15,7 +15,19 @@ class HomeController extends GetxController {
   RxBool enablepullup = true.obs;
   var selectgroup = "모든 질문".obs;
   Rx<QuestionModel> questionResult = QuestionModel(QuestionItem(
-    myQuestions: [],
+    myQuestions: [
+      Question(
+          id: 0,
+          user: 0,
+          questioner: "",
+          content: "",
+          answers: [],
+          adopt: null,
+          date: null,
+          questionTag: [],
+          realname: "",
+          profileimage: null)
+    ].obs,
     questions: [
       Question(
           id: 0,
@@ -47,7 +59,19 @@ class HomeController extends GetxController {
   void onRefresh() async {
     enablepullup.value = true;
     questionResult(QuestionModel(QuestionItem(
-      myQuestions: [],
+      myQuestions: [
+        Question(
+            id: 0,
+            user: 0,
+            questioner: "",
+            content: "",
+            answers: [],
+            adopt: null,
+            date: null,
+            questionTag: [],
+            realname: "",
+            profileimage: null)
+      ].obs,
       questions: [
         Question(
             id: 0,

@@ -6,11 +6,11 @@ class QuestionItem {
     required this.questions,
   });
 
-  List<Question> myQuestions;
+  RxList<Question> myQuestions;
   RxList<Question> questions;
 
   factory QuestionItem.fromJson(Map<String, dynamic> json) => QuestionItem(
-        myQuestions: List<Question>.from(
+        myQuestions: RxList<Question>.from(
             json["my_questions"].map((x) => Question.fromJson(x))),
         questions: RxList<Question>.from(
             json["questions"].map((x) => Question.fromJson(x))),
@@ -156,7 +156,19 @@ class QuestionModel {
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     QuestionItem item = QuestionItem(
-        myQuestions: [],
+        myQuestions: [
+          Question(
+              id: 0,
+              user: 0,
+              questioner: "",
+              content: "",
+              answers: [],
+              adopt: null,
+              date: null,
+              questionTag: [],
+              realname: "",
+              profileimage: null)
+        ].obs,
         questions: [
           Question(
               id: 0,
