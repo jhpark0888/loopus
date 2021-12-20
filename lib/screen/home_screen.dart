@@ -9,6 +9,7 @@ import 'package:loopus/screen/question_answer_screen.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/home_posting_widget.dart';
+import 'package:underline_indicator/underline_indicator.dart';
 
 class HomeScreen extends StatelessWidget {
   final HomeController homecontroller = Get.put(HomeController());
@@ -21,17 +22,31 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          title: const Text(
-            'LOOPUS',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          title: Image.asset(
+            'assets/illustrations/Home_Logo.png',
+            width: 54,
+            height: 30,
           ),
           actions: [
             IconButton(
-                onPressed: () {},
-                icon: SvgPicture.asset("assets/icons/Bell_Inactive.svg")),
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                "assets/icons/Bell_Inactive.svg",
+                width: 28,
+                height: 28,
+              ),
+            ),
             IconButton(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
                 onPressed: () {},
-                icon: SvgPicture.asset("assets/icons/Chat.svg")),
+                icon: SvgPicture.asset(
+                  "assets/icons/Chat.svg",
+                  width: 28,
+                  height: 28,
+                )),
           ],
         ),
         body: NestedScrollView(
@@ -49,20 +64,31 @@ class HomeScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                         child: Container(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
                           decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(15),
+                            color: mainlightgrey,
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
                             children: [
-                              SizedBox(
-                                width: 13,
+                              SvgPicture.asset(
+                                'assets/icons/Search_Inactive.svg',
+                                width: 16,
+                                height: 16,
+                                color: mainblack.withOpacity(0.6),
                               ),
-                              Icon(Icons.search),
+                              SizedBox(
+                                width: 12,
+                              ),
                               Text(
-                                "   어떤 정보를 찾으시나요?",
-                                style: TextStyle(color: Colors.grey[600]),
+                                "어떤 정보를 찾으시나요?",
+                                style: TextStyle(
+                                  color: mainblack.withOpacity(0.6),
+                                  fontSize: 14,
+                                ),
                               )
                             ],
                           ),
@@ -72,88 +98,67 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // SliverToBoxAdapter(
-              //   child: AppBar(
-              //     bottom: TabBar(
-              //         indicator: UnderlineTabIndicator(
-              //             borderSide: BorderSide(width: 1.7),
-              //             insets: EdgeInsets.symmetric(horizontal: 7.0)),
-              //         isScrollable: true,
-              //         indicatorColor: Colors.black,
-              //         tabs: [
-              //           Tab(
-              //             child: Text(
-              //               "포스팅",
-              //               style: TextStyle(
-              //                   color: mainblack, fontWeight: FontWeight.bold),
-              //             ),
-              //           ),
-              //           Tab(
-              //             child: Text(
-              //               "질문과 답변",
-              //               style: TextStyle(
-              //                   color: mainblack, fontWeight: FontWeight.bold),
-              //             ),
-              //           ),
-              //           Tab(
-              //             child: Text(
-              //               "루프",
-              //               style: TextStyle(
-              //                   color: mainblack, fontWeight: FontWeight.bold),
-              //             ),
-              //           ),
-              //           // new Container(
-              //           //   width: 100,
-              //           // )
-              //         ]),
-              //   ),
-              // ),
               SliverToBoxAdapter(
                 child: Column(
                   children: [
                     Row(
-                      children: const [
-                        TabBar(
-                            indicator: UnderlineTabIndicator(
-                                borderSide: BorderSide(width: 1.7),
-                                insets: EdgeInsets.symmetric(horizontal: 7.0)),
-                            isScrollable: true,
-                            indicatorColor: Colors.black,
-                            tabs: [
-                              Tab(
-                                child: Text(
-                                  "포스팅",
-                                  style: TextStyle(
-                                      color: mainblack,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                      children: [
+                        Theme(
+                          data: ThemeData().copyWith(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                          ),
+                          child: TabBar(
+                              labelStyle: TextStyle(
+                                color: mainblack,
+                                fontSize: 14,
+                                fontFamily: 'Nanum',
+                                fontWeight: FontWeight.bold,
                               ),
-                              Tab(
-                                child: Text(
-                                  "질문과 답변",
-                                  style: TextStyle(
-                                      color: mainblack,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                              labelColor: mainblack,
+                              unselectedLabelStyle: TextStyle(
+                                color: Colors.yellow,
+                                fontSize: 14,
+                                fontFamily: 'Nanum',
+                                fontWeight: FontWeight.normal,
                               ),
-                              Tab(
-                                child: Text(
-                                  "루프",
-                                  style: TextStyle(
-                                      color: mainblack,
-                                      fontWeight: FontWeight.bold),
+                              unselectedLabelColor: mainblack.withOpacity(0.6),
+                              indicator: UnderlineIndicator(
+                                  strokeCap: StrokeCap.round,
+                                  borderSide: BorderSide(width: 2),
+                                  insets:
+                                      EdgeInsets.symmetric(horizontal: 16.0)),
+                              isScrollable: true,
+                              indicatorColor: mainblack,
+                              tabs: [
+                                Tab(
+                                  height: 40,
+                                  child: Text(
+                                    "포스팅",
+                                  ),
                                 ),
-                              ),
-                              // new Container(
-                              //   width: 100,
-                              // )
-                            ]),
+                                Tab(
+                                  height: 40,
+                                  child: Text(
+                                    "질문과 답변",
+                                  ),
+                                ),
+                                Tab(
+                                  height: 40,
+                                  child: Text(
+                                    "루프",
+                                  ),
+                                ),
+                                // new Container(
+                                //   width: 100,
+                                // )
+                              ]),
+                        ),
                       ],
                     ),
-                    Divider(
-                      thickness: 0.5,
-                      height: 0.3,
-                      color: mainblack,
+                    Container(
+                      height: 1,
+                      color: Color(0xffe7e7e7),
                     )
                   ],
                 ),
@@ -161,31 +166,36 @@ class HomeScreen extends StatelessWidget {
               // SliverToBoxAdapter(child: de\,)
             ];
           },
-          body: Container(
-            child: TabBarView(physics: PageScrollPhysics(), children: [
-              SingleChildScrollView(
+          body: TabBarView(physics: PageScrollPhysics(), children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  bottom: 80,
+                ),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 20),
-                    Column(
-                      children: HomeController.to.posting,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8),
+                      child: Column(
+                        children: HomeController.to.posting,
+                      ),
                     ),
                     Container(
-                      height: 250,
-                      color: Colors.grey,
-                      child: Center(
-                        child: Text(
-                          "채용 공고 / 활동 공고 / 기타 공고",
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                      height: 8,
+                      color: Color(0xffefefef),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(16.0),
+                          padding: EdgeInsets.only(
+                            top: 16,
+                            left: 16,
+                            right: 16,
+                          ),
                           child: Text(
                             "추천하는 정보",
                             style: TextStyle(
@@ -194,32 +204,47 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                        ),
+                        child: Row(
+                          children: HomeController.to.recommend_posting,
+                        ),
+                      ),
+                    ),
                     Container(
-                      // margin: const EdgeInsets.symmetric(vertical: 20.0),
-                      height: 360,
-                      child: ListView(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          children: HomeController.to.recommend_posting),
+                      height: 8,
+                      color: Color(0xffefefef),
                     ),
                   ],
                 ),
               ),
-              QuestionAnswerScreen(),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      children: HomeController.to.posting,
-                    ),
-                  ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 80.0),
+              child: QuestionAnswerScreen(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 16,
+                bottom: 80,
+              ),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    children: HomeController.to.posting,
+                  ),
                 ),
               ),
-            ]),
-          ),
+            ),
+          ]),
         ),
       ),
     );

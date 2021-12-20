@@ -13,7 +13,7 @@ class SearchScreen extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: Colors.amber,
+        color: Colors.black,
       ),
     );
   }

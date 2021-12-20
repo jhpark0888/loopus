@@ -22,126 +22,134 @@ class QuestionPostingWidget extends StatelessWidget {
     return item.realname == ""
         ? Container()
         : Container(
-            height: 160,
-            width: Get.width * 0.9,
-            margin: EdgeInsets.fromLTRB(16, 20, 16, 0),
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                  blurRadius: 2,
-                  offset: Offset(0.0, 1),
-                  color: mainblack.withOpacity(0.06)),
-              BoxShadow(
-                  blurRadius: 3,
-                  offset: Offset(0.0, 1),
-                  color: mainblack.withOpacity(0.1)),
-            ], color: mainlightgrey, borderRadius: BorderRadius.circular(5)),
+            margin: EdgeInsets.only(bottom: 16),
             child: InkWell(
               onTap: () async {
                 await questionController.loadItem(item.id);
                 Get.to(() => QuestionScreen());
                 print("click posting");
               },
-              child: Column(
-                children: [
-                  Container(
-                    height: 75,
-                    padding: EdgeInsets.all(12.0),
-                    child: Text(
-                      "${item.content}",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: mainWhite,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                    bottomLeft: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
                   ),
-                  item.questionTag.length == 0
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: mainWhite,
-                                  borderRadius: BorderRadius.circular(4)),
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              height: 24,
-                              child: const Text("Tag 없는거 없애줘~"),
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            SizedBox(
-                              width: 12,
-                            ),
-                            Row(
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 3,
+                      offset: Offset(0.0, 1.0),
+                      color: Colors.black.withOpacity(0.1),
+                    ),
+                    BoxShadow(
+                      blurRadius: 2,
+                      offset: Offset(0.0, 1.0),
+                      color: Colors.black.withOpacity(0.06),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 16,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        "${item.content}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          height: 1.5,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                      item.questionTag.length == 0
+                          ? Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: List.generate(item.questionTag.length,
-                                  (index) {
-                                return Tagwidget(
-                                  content: item.questionTag[index].tag,
-                                );
-                              }),
+                              children: [
+                                Container(
+                                  child: const Text("Tag 없는거 없애줘~"),
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: List.generate(
+                                      item.questionTag.length, (index) {
+                                    return Tagwidget(
+                                      content: item.questionTag[index].tag,
+                                    );
+                                  }),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(15, 15, 0, 0),
-                    height: 45,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            ClipOval(
-                                child: CachedNetworkImage(
-                              height: 32,
-                              width: 32,
-                              imageUrl: "https://i.stack.imgur.com/l60Hf.png",
-                              placeholder: (context, url) => CircleAvatar(
-                                child:
-                                    Center(child: CircularProgressIndicator()),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              ClipOval(
+                                  child: CachedNetworkImage(
+                                height: 32,
+                                width: 32,
+                                imageUrl: "https://i.stack.imgur.com/l60Hf.png",
+                                placeholder: (context, url) => CircleAvatar(
+                                  child: Center(
+                                      child: CircularProgressIndicator()),
+                                ),
+                                fit: BoxFit.cover,
+                              )),
+                              Text(
+                                "  ${item.realname}  · ",
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
                               ),
-                              fit: BoxFit.fill,
-                            )),
-                            Text(
-                              "  ${item.realname}  · ",
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            ),
-                            const Text(
-                              "산업경영공학과",
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.only(right: 15.0),
-                            child: InkWell(
-                              onTap: () {
-                                print("답변하기");
-                              },
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset("assets/icons/Comment.svg"),
-                                  Text(
-                                    " 답변하기",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
+                              const Text(
+                                "산업경영공학과",
+                                style: TextStyle(fontSize: 14),
                               ),
-                            ))
-                      ],
-                    ),
+                            ],
+                          ),
+                          InkWell(
+                            onTap: () {
+                              print("답변하기");
+                            },
+                            child: Row(
+                              children: [
+                                SvgPicture.asset("assets/icons/Comment.svg"),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  "답변하기",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           );
