@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loopus/api/get_image_api.dart';
@@ -15,6 +16,7 @@ class PostingAddController extends GetxController {
   static PostingAddController get to => Get.find();
 
   TextEditingController titlecontroller = TextEditingController();
+  QuillController postcontroller = QuillController.basic();
   var postinglist = <Widget>[].obs;
   Rx<File> image = File("").obs;
   Rx<File> thumbnail = File("").obs;
@@ -23,7 +25,7 @@ class PostingAddController extends GetxController {
     super.onInit();
   }
 
-  List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
+  // List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
 
   // void onReorder(int oldIndex, int newIndex) {
   //   Widget row = postinglist.removeAt(oldIndex);
@@ -34,40 +36,40 @@ class PostingAddController extends GetxController {
   //   }
   // }
 
-  void choiceAction(String choice) async {
-    if (choice == Constants.FirstItem) {
-      postinglist.add(PostingAdd_TitleWidget(
-        key: UniqueKey(),
-        title: '',
-      ));
-    } else if (choice == Constants.SecondItem) {
-      postinglist.add(ProstingAdd_ContentWidget(
-        key: UniqueKey(),
-        content: '',
-      ));
-    } else if (choice == Constants.ThirdItem) {
-      image(await getcropImage("posting"));
-      print(image);
-      if (image.value.path != '') {
-        postinglist.add(PostingAdd_FileImageWidget(
-          key: UniqueKey(),
-          image: image.value,
-        ));
-      }
-    } else if (choice == Constants.FourthItem) {}
-  }
+  // void choiceAction(String choice) async {
+  //   if (choice == Constants.FirstItem) {
+  //     postinglist.add(PostingAdd_TitleWidget(
+  //       key: UniqueKey(),
+  //       title: '',
+  //     ));
+  //   } else if (choice == Constants.SecondItem) {
+  //     postinglist.add(ProstingAdd_ContentWidget(
+  //       key: UniqueKey(),
+  //       content: '',
+  //     ));
+  //   } else if (choice == Constants.ThirdItem) {
+  //     image(await getcropImage("posting"));
+  //     print(image);
+  //     if (image.value.path != '') {
+  //       postinglist.add(PostingAdd_FileImageWidget(
+  //         key: UniqueKey(),
+  //         image: image.value,
+  //       ));
+  //     }
+  //   } else if (choice == Constants.FourthItem) {}
+  // }
 }
 
-class Constants {
-  static const String FirstItem = 'Title';
-  static const String SecondItem = 'Content';
-  static const String ThirdItem = 'Image';
-  static const String FourthItem = 'Feed';
+// class Constants {
+//   static const String FirstItem = 'Title';
+//   static const String SecondItem = 'Content';
+//   static const String ThirdItem = 'Image';
+//   static const String FourthItem = 'Feed';
 
-  static const List<String> choices = <String>[
-    FirstItem,
-    SecondItem,
-    ThirdItem,
-    FourthItem,
-  ];
-}
+//   static const List<String> choices = <String>[
+//     FirstItem,
+//     SecondItem,
+//     ThirdItem,
+//     FourthItem,
+//   ];
+// }

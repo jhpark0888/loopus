@@ -60,9 +60,7 @@ Future<File?> postingthumbnailcropImage(pickimage) async {
 Future<File?> postingcropImage(pickimage) async {
   File? croppedFile = await ImageCropper.cropImage(
       sourcePath: pickimage.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.ratio16x9,
-      ],
+      aspectRatio: CropAspectRatio(ratioX: 2, ratioY: 1),
       androidUiSettings: AndroidUiSettings(
           toolbarTitle: 'Cropper',
           toolbarColor: mainblue,

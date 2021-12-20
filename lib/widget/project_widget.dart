@@ -73,7 +73,7 @@ class ProjectWidget extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '${project.startDate.year}.${project.startDate.month} ~ ',
+                          '${project.startDate.substring(0, 4)}.${project.startDate.substring(5, 7)} ~ ',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
@@ -104,7 +104,7 @@ class ProjectWidget extends StatelessWidget {
                         Row(children: [
                           FavoriteButton(iconSize: 40, valueChanged: () {}),
                           Text(
-                            '999+',
+                            "${project.totallike}",
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),

@@ -47,12 +47,16 @@ class MyApp extends StatelessWidget {
           bodyText1: TextStyle(color: mainblack),
           bodyText2: TextStyle(color: mainblack),
         ).apply(bodyColor: mainblack),
+        textSelectionTheme: TextSelectionThemeData(cursorColor: mainblack),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             primary: mainblack,
+            splashFactory: NoSplash.splashFactory,
           ),
         ),
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
       ),
       initialBinding: InitBinding(),
       getPages: [
