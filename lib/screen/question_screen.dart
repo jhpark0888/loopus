@@ -25,39 +25,43 @@ class QuestionScreen extends StatelessWidget {
       data: IconThemeData(color: Colors.black),
       child: Container(
         color: mainWhite,
-        child: Row(
-          children: <Widget>[
-            Flexible(
-              child: TextField(
-                style: TextStyle(decoration: TextDecoration.none),
-                cursorColor: Color(0xFF424242),
-                controller: _textController,
-                onChanged: (text) {},
-                onSubmitted: _handleSubmitted,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "  답변 작성하기...",
-                    focusColor: mainWhite,
-                    fillColor: mainWhite),
-              ),
+        child: Stack(
+          children: [
+            Row(
+              children: <Widget>[
+                Flexible(
+                  child: TextField(
+                    style: TextStyle(decoration: TextDecoration.none),
+                    cursorColor: Color(0xFF424242),
+                    controller: _textController,
+                    onChanged: (text) {},
+                    onSubmitted: _handleSubmitted,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "  답변 작성하기...",
+                        focusColor: mainWhite,
+                        fillColor: mainWhite),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: InkWell(
+                      onTap: () => _handleSubmitted(_textController.text),
+                      child: Container(
+                          padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
+                          decoration: BoxDecoration(
+                              color: mainlightgrey,
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Text(
+                            "작성",
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[800]),
+                          ))),
+                )
+              ],
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: InkWell(
-                  onTap: () => _handleSubmitted(_textController.text),
-                  child: Container(
-                      padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
-                      decoration: BoxDecoration(
-                          color: mainlightgrey,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Text(
-                        "작성",
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[800]),
-                      ))),
-            )
           ],
         ),
       ),
