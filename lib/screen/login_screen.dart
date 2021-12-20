@@ -6,6 +6,7 @@ import 'package:loopus/app.dart';
 import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/main.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 
 class LogInPage extends StatelessWidget {
   LogInPage({Key? key}) : super(key: key);
@@ -17,9 +18,8 @@ class LogInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('로그인'),
-        centerTitle: true,
+      appBar: AppBarWidget(
+        title: '로그인',
       ),
       body: SingleChildScrollView(
         child: Container(

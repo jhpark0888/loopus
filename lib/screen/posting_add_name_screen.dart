@@ -9,6 +9,7 @@ import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/posting_add_content_screen.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 
 class PostingAddNameScreen extends StatelessWidget {
   PostingAddNameScreen({Key? key}) : super(key: key);
@@ -18,15 +19,7 @@ class PostingAddNameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: SvgPicture.asset("assets/icons/Close.svg"),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+      appBar: AppBarWidget(
         actions: [
           TextButton(
             onPressed: () {
@@ -42,11 +35,7 @@ class PostingAddNameScreen extends StatelessWidget {
             ),
           ),
         ],
-        title: const Text(
-          '포스팅 제목',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: '포스팅 제목',
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

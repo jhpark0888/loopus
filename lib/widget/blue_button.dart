@@ -6,22 +6,21 @@ import '../constant.dart';
 class BlueTextButton extends StatelessWidget {
   BlueTextButton(
       {Key? key,
-      required this.onpressed,
+      required this.onTap,
       required this.text,
       this.width,
       this.height})
       : super(key: key);
 
-  Function() onpressed;
+  Function() onTap;
   String text;
   double? width;
   double? height;
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: ButtonStyle(splashFactory: NoSplash.splashFactory),
-      onPressed: onpressed,
+    return InkWell(
+      onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
           color: mainblue,

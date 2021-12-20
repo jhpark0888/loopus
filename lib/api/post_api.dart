@@ -31,7 +31,7 @@ Future<void> postingaddRequest() async {
   List<Map> customprofile = [];
 
   List<int> imageData =
-      await File(postingAddController.image.value.path).readAsBytes();
+      await File(postingAddController.thumbnail.value.path).readAsBytes();
   var stream = http.ByteStream.fromBytes(imageData);
   var length = imageData.length;
   var multipartFile = http.MultipartFile(
@@ -41,101 +41,68 @@ Future<void> postingaddRequest() async {
   );
   request.files.add(multipartFile);
 
-  for (int i = 0; i < postingAddController.postinglist.length; i++) {
-    Widget item = postingAddController.postinglist[i];
-    Map map = {};
-    if (item is PostingAdd_TitleWidget) {
-      map['id'] = i;
-      map['type'] = 'title';
-      map['contents'] = item.titlecontroller.text;
-      customprofile.add(map);
-    } else if (item is ProstingAdd_ContentWidget) {
-      map['id'] = i;
-      map['type'] = 'content';
-      map['contents'] = item.contentcontroller.text;
-      customprofile.add(map);
-    } else if (item is PostingAdd_FileImageWidget) {
-      // for (int i = 0; i < item.images.length; i++) {
-      List<int> imageData = await File(item.image.path).readAsBytes();
-      var stream = http.ByteStream.fromBytes(imageData);
-      var length = imageData.length;
-      var multipartFile = http.MultipartFile(
-        'image',
-        stream,
-        length,
-      );
-      request.files.add(multipartFile);
-      // }
+  for (int i = 0; i < postingAddController.images.length; i++) {
+    List<int> imageData =
+        await File(postingAddController.images[i].path).readAsBytes();
+    var stream = http.ByteStream.fromBytes(imageData);
+    var length = imageData.length;
+    var multipartFile = http.MultipartFile(
+      'image',
+      stream,
+      length,
+    );
+    request.files.add(multipartFile);
+  }
 
-      map['id'] = i;
-      map['type'] = 'image file';
-      map['contents'] = "image file";
-      customprofile.add(map);
-      // } else if (item is ProfileImageWidget) {
-      //   map['id'] = i;
-      //   map['type'] = 'imageURL';
-      //   map['contents'] = item.image;
-      //   customprofile.add(map);
-      // } else if (item is Center) {
-      //   Widget? feedwidget = item.child;
-      //   if (feedwidget is ProfileFeedWidget) {
-      //     map['id'] = i;
-      //     map['type'] = 'feed';
-      //     map['contents'] = feedwidget.feed.id;
-      //   }
-      //   customprofile.add(map);
-      // }
-    }
+  request.fields['title'] =
+      json.encode(postingAddController.titlecontroller.text);
+  request.fields['content'] = json
+      .encode(postingAddController.postcontroller.document.toDelta().toJson());
 
-    request.fields['title'] =
-        json.encode(postingAddController.titlecontroller.text);
-    request.fields['posting_contents'] = json.encode(customprofile);
+  print(request.fields);
+  print(request.files);
 
-    print(request.fields);
-    print(request.files);
+  http.StreamedResponse response = await request.send();
+  if (response.statusCode == 200) {
+    print("success!");
 
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      print("success!");
+    String responsebody = await response.stream.bytesToString();
 
-      String responsebody = await response.stream.bytesToString();
+    // responsemap = jsonDecode(responsebody).cast<Map>();
+    // print(responsemap);
+    // myProfileController.customlist.clear();
+    // responsemap.forEach((map) {
+    //   if (map["type"] == "title") {
+    //     myProfileController.customlist.add(ProfileTitleWidget(
+    //       title: map["contents"],
+    //     ));
+    //   } else if (map["type"] == "content") {
+    //     myProfileController.customlist.add(ProfileContentWidget(
+    //       content: map["contents"],
+    //     ));
+    //   } else if (map["type"] == "imageURL") {
+    //     String image = map["contents"];
 
-      // responsemap = jsonDecode(responsebody).cast<Map>();
-      // print(responsemap);
-      // myProfileController.customlist.clear();
-      // responsemap.forEach((map) {
-      //   if (map["type"] == "title") {
-      //     myProfileController.customlist.add(ProfileTitleWidget(
-      //       title: map["contents"],
-      //     ));
-      //   } else if (map["type"] == "content") {
-      //     myProfileController.customlist.add(ProfileContentWidget(
-      //       content: map["contents"],
-      //     ));
-      //   } else if (map["type"] == "imageURL") {
-      //     String image = map["contents"];
+    //     myProfileController.customlist.add(ProfileImageWidget(
+    //       image: image,
+    //     ));
+    //   } else if (map["type"] == "imageFILE") {
+    //     String image = map["contents"];
 
-      //     myProfileController.customlist.add(ProfileImageWidget(
-      //       image: image,
-      //     ));
-      //   } else if (map["type"] == "imageFILE") {
-      //     String image = map["contents"];
-
-      //     myProfileController.customlist.add(ProfileImageWidget(
-      //       image: image,
-      //     ));
-      //   } else if (map["type"] == "feed") {
-      //     myProfileController.customlist.add(Center(
-      //       child: ProfileFeedWidget(
-      //         feed: FeedItem.fromJson(map["contents"]),
-      //       ),
-      //     ));
-      //   }
-      // };
-    } else if (response.statusCode == 400) {
-      print("lose");
-    } else {
-      print(response.statusCode);
-    }
+    //     myProfileController.customlist.add(ProfileImageWidget(
+    //       image: image,
+    //     ));
+    //   } else if (map["type"] == "feed") {
+    //     myProfileController.customlist.add(Center(
+    //       child: ProfileFeedWidget(
+    //         feed: FeedItem.fromJson(map["contents"]),
+    //       ),
+    //     ));
+    //   }
+    // };
+  } else if (response.statusCode == 400) {
+    print("lose");
+  } else {
+    print(response.statusCode);
   }
 }

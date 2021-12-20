@@ -9,6 +9,7 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/project_add_person_screen.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class ProjectAddTagScreen extends StatelessWidget {
@@ -18,14 +19,7 @@ class ProjectAddTagScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+      appBar: AppBarWidget(
         actions: [
           TextButton(
             onPressed: () {
@@ -37,11 +31,7 @@ class ProjectAddTagScreen extends StatelessWidget {
             ),
           ),
         ],
-        title: Text(
-          "활동 태그",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: "활동 태그",
       ),
       body: NestedScrollView(
         headerSliverBuilder: (context, value) {

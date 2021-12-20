@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/screen/question_add_tag_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 
 class QuestionAddContentScreen extends StatelessWidget {
   // ProjectAddNameScreen({Key? key}) : super(key: key);
@@ -15,17 +16,7 @@ class QuestionAddContentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: Icon(
-            Icons.close,
-          ),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+      appBar: AppBarWidget(
         actions: [
           TextButton(
             onPressed: () {
@@ -37,11 +28,7 @@ class QuestionAddContentScreen extends StatelessWidget {
             ),
           ),
         ],
-        title: const Text(
-          '질문 내용',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: '질문 내용',
       ),
       body: SingleChildScrollView(
         child: Padding(

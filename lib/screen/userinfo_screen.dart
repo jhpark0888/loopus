@@ -8,6 +8,7 @@ import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
 import 'package:loopus/screen/withdrawal_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 
 class UserInfoScreen extends StatelessWidget {
   const UserInfoScreen({Key? key}) : super(key: key);
@@ -15,14 +16,7 @@ class UserInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new),
-            onPressed: () {
-              Get.back();
-            },
-          ),
+        appBar: AppBarWidget(
           // actions: [
           //   TextButton(
           //     onPressed: () {
@@ -34,11 +28,7 @@ class UserInfoScreen extends StatelessWidget {
           //     ),
           //   ),
           // ],
-          title: const Text(
-            '계정 정보',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
+          title: '계정 정보',
         ),
         body: ListView(
           children: [

@@ -9,6 +9,7 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/screen/posting_add_content_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 
 class ProjectScreen extends StatelessWidget {
@@ -19,7 +20,20 @@ class ProjectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBarWidget(
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.to(() => ProjectModifyScreen());
+            },
+            icon: SvgPicture.asset("assets/icons/Edit.svg"),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: SvgPicture.asset("assets/icons/More.svg"),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

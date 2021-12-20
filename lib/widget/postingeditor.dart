@@ -6,20 +6,24 @@ class PostingEditor extends StatelessWidget {
   PostingEditor(
       {Key? key,
       required this.controller,
-      required this.readonly,
+      this.readonly,
+      this.showcursor,
       this.placeholder})
       : super(key: key);
 
   QuillController controller;
-  bool readonly;
+  bool? readonly;
+  bool? showcursor;
   String? placeholder;
 
   @override
   Widget build(BuildContext context) {
+    print(readonly);
     return QuillEditor(
       placeholder: placeholder ?? '',
       controller: controller,
-      readOnly: readonly,
+      readOnly: readonly ?? false,
+      showCursor: showcursor ?? true,
       focusNode: FocusNode(),
       scrollable: true,
       scrollController: ScrollController(),

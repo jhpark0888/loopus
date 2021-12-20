@@ -9,6 +9,7 @@ import 'package:loopus/screen/inquiry_screen.dart';
 import 'package:loopus/screen/privacypolicy_screen.dart';
 import 'package:loopus/screen/termsofservice_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/persontile_widget.dart';
 
 class LoopPeopleScreen extends StatelessWidget {
@@ -17,30 +18,8 @@ class LoopPeopleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new),
-            onPressed: () {
-              Get.back();
-            },
-          ),
-          // actions: [
-          //   TextButton(
-          //     onPressed: () {
-          //       // Get.to(() => ActivityAddPeriodScreen());
-          //     },
-          //     child: Text(
-          //       '다음',
-          //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          //     ),
-          //   ),
-          // ],
-          title: const Text(
-            '루프 6명',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
+        appBar: AppBarWidget(
+          title: '루프 6명',
         ),
         body: ListView(
           children: [

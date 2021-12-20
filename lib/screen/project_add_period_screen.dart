@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/screen/project_add_tag_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 
 class ProjectAddPeriodScreen extends StatelessWidget {
   ProjectAddPeriodScreen({Key? key}) : super(key: key);
@@ -14,14 +15,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+      appBar: AppBarWidget(
         actions: [
           TextButton(
             onPressed: () {
@@ -33,11 +27,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
             ),
           ),
         ],
-        title: const Text(
-          '활동 추가',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: '활동 추가',
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -185,17 +175,28 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                             cursorColor: mainblack,
                             keyboardType: TextInputType.datetime,
                             decoration: InputDecoration(
-                              counterText: '',
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: mainblack, width: 2),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: mainblack, width: 2),
-                              ),
-                              hintText: '2021',
-                            ),
+                                counterText: '',
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color:
+                                          projectmakecontroller.isongoing.value
+                                              ? mainlightgrey
+                                              : mainblack,
+                                      width: 2),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color:
+                                          projectmakecontroller.isongoing.value
+                                              ? mainlightgrey
+                                              : mainblack,
+                                      width: 2),
+                                ),
+                                hintText: '2021',
+                                hintStyle: TextStyle(
+                                    color: projectmakecontroller.isongoing.value
+                                        ? mainlightgrey
+                                        : null)),
                             textAlign: TextAlign.center,
                             maxLength: 4,
                           ),
@@ -206,10 +207,17 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        '년',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                      Obx(
+                        () => Text(
+                          '년',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: projectmakecontroller.isongoing.value
+                                ? mainlightgrey
+                                : mainblack,
+                          ),
+                        ),
                       ),
                       SizedBox(
                         width: 20,
@@ -224,17 +232,28 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                             cursorColor: mainblack,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              counterText: '',
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: mainblack, width: 2),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: mainblack, width: 2),
-                              ),
-                              hintText: '11',
-                            ),
+                                counterText: '',
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color:
+                                          projectmakecontroller.isongoing.value
+                                              ? mainlightgrey
+                                              : mainblack,
+                                      width: 2),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color:
+                                          projectmakecontroller.isongoing.value
+                                              ? mainlightgrey
+                                              : mainblack,
+                                      width: 2),
+                                ),
+                                hintText: '11',
+                                hintStyle: TextStyle(
+                                    color: projectmakecontroller.isongoing.value
+                                        ? mainlightgrey
+                                        : null)),
                             textAlign: TextAlign.center,
                             maxLength: 2,
                           ),
@@ -245,10 +264,17 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        '월',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                      Obx(
+                        () => Text(
+                          '월',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: projectmakecontroller.isongoing.value
+                                ? mainlightgrey
+                                : mainblack,
+                          ),
+                        ),
                       ),
                       SizedBox(
                         width: 20,
@@ -262,17 +288,28 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                             cursorColor: mainblack,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              counterText: '',
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: mainblack, width: 2),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: mainblack, width: 2),
-                              ),
-                              hintText: '11',
-                            ),
+                                counterText: '',
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color:
+                                          projectmakecontroller.isongoing.value
+                                              ? mainlightgrey
+                                              : mainblack,
+                                      width: 2),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color:
+                                          projectmakecontroller.isongoing.value
+                                              ? mainlightgrey
+                                              : mainblack,
+                                      width: 2),
+                                ),
+                                hintText: '11',
+                                hintStyle: TextStyle(
+                                    color: projectmakecontroller.isongoing.value
+                                        ? mainlightgrey
+                                        : null)),
                             textAlign: TextAlign.center,
                             maxLength: 2,
                           ),
@@ -283,10 +320,17 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        '일 까지',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                      Obx(
+                        () => Text(
+                          '일 까지',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: projectmakecontroller.isongoing.value
+                                ? mainlightgrey
+                                : mainblack,
+                          ),
+                        ),
                       ),
                     ],
                   ),

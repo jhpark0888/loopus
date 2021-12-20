@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_department_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 
 class SignupCampusInfoScreen extends StatelessWidget {
   // const SignupCampusInfoScreen({Key? key}) : super(key: key);
@@ -10,14 +11,7 @@ class SignupCampusInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+      appBar: AppBarWidget(
         actions: [
           TextButton(
             onPressed: () {
@@ -29,11 +23,7 @@ class SignupCampusInfoScreen extends StatelessWidget {
             ),
           ),
         ],
-        title: const Text(
-          '회원 가입',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: '회원 가입',
       ),
       body: Center(
         child: Column(

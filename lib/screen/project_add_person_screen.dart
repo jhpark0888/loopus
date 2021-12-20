@@ -7,6 +7,7 @@ import 'package:loopus/api/project_api.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 
 class ProjectAddPersonScreen extends StatelessWidget {
@@ -18,14 +19,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+      appBar: AppBarWidget(
         actions: [
           TextButton(
             onPressed: () {
@@ -37,11 +31,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
             ),
           ),
         ],
-        title: const Text(
-          '활동 추가',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: '활동 추가',
       ),
       body: Center(
         child: Column(

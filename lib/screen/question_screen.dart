@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/message_answer_widget.dart';
 import 'package:loopus/widget/message_question_widget.dart';
 
@@ -71,13 +72,8 @@ class QuestionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(
-          "${questionController.questionModel2.questions.realname}님의 질문",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+      appBar: AppBarWidget(
+        title: "${questionController.questionModel2.questions.realname}님의 질문",
       ),
       body: Stack(
         children: [

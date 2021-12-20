@@ -13,6 +13,7 @@ import 'package:loopus/api/get_image_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/screen/posting_add_image_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/customlinkstylewidget.dart';
 import 'package:loopus/widget/postingeditor.dart';
 
@@ -23,15 +24,7 @@ class PostingAddContentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          leading: IconButton(
-            icon: SvgPicture.asset("assets/icons/Arrow.svg"),
-            onPressed: () {
-              Get.back();
-            },
-          ),
+        appBar: AppBarWidget(
           actions: [
             TextButton(
               onPressed: () {
@@ -47,11 +40,7 @@ class PostingAddContentScreen extends StatelessWidget {
               ),
             ),
           ],
-          title: const Text(
-            '포스팅 내용',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
+          title: '포스팅 내용',
         ),
         body: Column(
           children: [
@@ -59,9 +48,9 @@ class PostingAddContentScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: PostingEditor(
-                    placeholder: '포스팅 내용을 작성해주세요...',
-                    controller: postingAddController.postcontroller,
-                    readonly: false),
+                  placeholder: '포스팅 내용을 작성해주세요...',
+                  controller: postingAddController.postcontroller,
+                ),
               ),
             ),
             QuillToolbar(
@@ -88,7 +77,10 @@ class PostingAddContentScreen extends StatelessWidget {
                   controller: postingAddController.postcontroller,
                   onImagePickCallback: (file) async {
                     File? image = await postingcropImage(file);
-
+                    if (image != null) {
+                      postingAddController.images.add(image);
+                      // 이미지 지웠을 때 안에 이미지 제거해야함
+                    }
                     return image != null ? image.path : null;
                   },
                   mediaPickSettingSelector: (context) async {

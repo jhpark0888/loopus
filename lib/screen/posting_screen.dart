@@ -31,8 +31,6 @@ class PostingScreen extends StatelessWidget {
             elevation: 0,
             backgroundColor: Colors.white,
             leading: IconButton(
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
               onPressed: () {
                 Get.back();
               },
@@ -40,8 +38,6 @@ class PostingScreen extends StatelessWidget {
             ),
             actions: [
               IconButton(
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
                 onPressed: () {},
                 icon: SvgPicture.asset(
                   'assets/icons/More.svg',

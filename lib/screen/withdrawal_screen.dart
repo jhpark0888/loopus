@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 
 class WithdrawalScreen extends StatelessWidget {
   const WithdrawalScreen({Key? key}) : super(key: key);
@@ -11,14 +12,7 @@ class WithdrawalScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+      appBar: AppBarWidget(
         // actions: [
         //   TextButton(
         //     onPressed: () {
@@ -30,11 +24,7 @@ class WithdrawalScreen extends StatelessWidget {
         //     ),
         //   ),
         // ],
-        title: const Text(
-          '회원탈퇴',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: '회원탈퇴',
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

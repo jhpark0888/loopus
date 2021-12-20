@@ -1,38 +1,46 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarWidget({Key? key, @required this.appbar, @required this.title})
+  AppBarWidget({Key? key, @required this.title, this.leading, this.actions})
       : super(key: key);
 
-  final AppBar? appbar;
+  final AppBar appbar = AppBar();
   final String? title;
+  Widget? leading;
+  List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
         title ?? '',
-        // style: TextStyle(color: mainFontDark),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.notifications,
+      centerTitle: true,
+      bottom: PreferredSize(
+          child: Container(
+            color: Color(0xffe7e7e7),
+            height: 1,
           ),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.near_me,
+          preferredSize: Size.fromHeight(4.0)),
+      automaticallyImplyLeading: false,
+      elevation: 0,
+      backgroundColor: Colors.white,
+      leading: leading ??
+          IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: SvgPicture.asset('assets/icons/Arrow.svg'),
           ),
-        ),
-      ],
+      actions: actions,
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(appbar!.preferredSize.height);
+  Size get preferredSize => Size.fromHeight(appbar.preferredSize.height);
 }

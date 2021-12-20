@@ -8,6 +8,7 @@ import 'package:loopus/screen/inquiry_screen.dart';
 import 'package:loopus/screen/privacypolicy_screen.dart';
 import 'package:loopus/screen/termsofservice_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 
 class SettingScreen extends StatelessWidget {
   SettingScreen({Key? key}) : super(key: key);
@@ -15,14 +16,7 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new),
-            onPressed: () {
-              Get.back();
-            },
-          ),
+        appBar: AppBarWidget(
           // actions: [
           //   TextButton(
           //     onPressed: () {
@@ -34,11 +28,7 @@ class SettingScreen extends StatelessWidget {
           //     ),
           //   ),
           // ],
-          title: const Text(
-            '설정',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
+          title: '설정',
         ),
         body: ListView(
           children: [
