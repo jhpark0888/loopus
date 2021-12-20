@@ -30,13 +30,13 @@ class ProstingAdd_ContentWidget extends StatelessWidget {
           ),
         ),
       ),
-      Container(
-        padding: EdgeInsets.only(left: 15),
-        child: Icon(
-          Icons.view_headline,
-          color: Colors.black,
-        ),
-      ),
+      // Container(
+      //   padding: EdgeInsets.only(left: 15),
+      //   child: Icon(
+      //     Icons.view_headline,
+      //     color: Colors.black,
+      //   ),
+      // ),
     ]);
   }
 }

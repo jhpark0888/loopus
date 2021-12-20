@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/screen/project_add_name_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
@@ -18,6 +19,7 @@ class ProjectModifyScreen extends StatelessWidget {
 
   ProjectMakeController projectmakecontroller =
       Get.put(ProjectMakeController());
+  TagController tagController = Get.put(TagController());
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +74,7 @@ class ProjectModifyScreen extends StatelessWidget {
               title: Text('활동 기간',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               subtitle: Text(
-                  '${projectmakecontroller.startyearcontroller.value.text}.${projectmakecontroller.startmonthcontroller.value.text} ~ ${projectmakecontroller.finishyearcontroller.value.text}.${projectmakecontroller.finishmonthcontroller.value.text}',
+                  '${projectmakecontroller.startyearcontroller.value.text}.${projectmakecontroller.startmonthcontroller.value.text} ~ ${projectmakecontroller.endyearcontroller.value.text}.${projectmakecontroller.endmonthcontroller.value.text}',
                   style: TextStyle(
                     fontSize: 16,
                   )),

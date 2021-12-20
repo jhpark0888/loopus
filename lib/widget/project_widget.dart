@@ -4,25 +4,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
 
 class ProjectWidget extends StatelessWidget {
-  ProjectWidget(
-      {Key? key,
-      this.title,
-      this.startday,
-      this.endday,
-      this.period,
-      this.posting_num,
-      this.reponse_num})
-      : super(key: key);
+  ProjectWidget({
+    Key? key,
+    required this.project,
+  }) : super(key: key);
 
-  String? title;
-  String? startday;
-  String? endday;
-  String? period;
-  int? posting_num;
-  int? reponse_num;
+  Project project;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +21,9 @@ class ProjectWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          Get.to(() => ProjectScreen());
+          Get.to(() => ProjectScreen(
+                project: project,
+              ));
         },
         child: Stack(
           children: [
@@ -73,14 +66,14 @@ class ProjectWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      '인공지능 스터디',
+                      project.projectName,
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     Row(
                       children: [
                         Text(
-                          '2020.04 ~ ',
+                          '${project.startDate.substring(0, 4)}.${project.startDate.substring(5, 7)} ~ ',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
@@ -111,7 +104,7 @@ class ProjectWidget extends StatelessWidget {
                         Row(children: [
                           FavoriteButton(iconSize: 40, valueChanged: () {}),
                           Text(
-                            '999+',
+                            "${project.totallike}",
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),

@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/projectmake_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
@@ -10,8 +11,8 @@ import 'package:loopus/widget/checkboxperson_widget.dart';
 
 class ProjectAddPersonScreen extends StatelessWidget {
   ProjectAddPersonScreen({Key? key}) : super(key: key);
-  ProjectAddPersonController projectaddpersoncontroller =
-      Get.put(ProjectAddPersonController());
+  // ProjectAddPersonController projectaddpersoncontroller =
+  //     Get.put(ProjectAddPersonController());
   ProjectMakeController projectMakeController = Get.find();
 
   @override
@@ -28,7 +29,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              // Get.to(() => ActivityAddPeriodScreen());
+              projectaddRequest();
             },
             child: Text(
               '완료',
@@ -93,7 +94,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    '${projectaddpersoncontroller.looppersonlist.length}명',
+                    '${projectMakeController.looppersonlist.length}명',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -101,7 +102,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
             ),
             Expanded(
               child: ListView(
-                children: projectaddpersoncontroller.looppersonlist,
+                children: projectMakeController.looppersonlist,
               ),
             )
           ],

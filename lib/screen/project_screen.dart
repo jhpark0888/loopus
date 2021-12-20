@@ -2,25 +2,23 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/screen/posting_add_screen.dart';
+import 'package:loopus/model/project_model.dart';
+import 'package:loopus/screen/posting_add_name_screen.dart';
+import 'package:loopus/screen/posting_add_content_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 
 class ProjectScreen extends StatelessWidget {
-  const ProjectScreen({Key? key}) : super(key: key);
+  ProjectScreen({Key? key, required this.project}) : super(key: key);
+
+  Project project;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: mainblack,
-        onPressed: () {
-          Get.to(() => PostingAddScreen());
-        },
-        child: Icon(Icons.edit),
-      ),
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
@@ -30,7 +28,7 @@ class ProjectScreen extends StatelessWidget {
               children: [
                 Container(
                   width: Get.width,
-                  height: 292,
+                  height: Get.width * 2 / 3,
                   child: CachedNetworkImage(
                       fit: BoxFit.fill,
                       imageUrl:
@@ -42,112 +40,107 @@ class ProjectScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            icon: Icon(Icons.clear)),
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: SvgPicture.asset("assets/icons/Close.svg"),
+                        ),
                         Row(children: [
                           IconButton(
-                              onPressed: () {
-                                Get.to(() => ProjectModifyScreen());
-                              },
-                              icon: Icon(Icons.edit)),
+                            onPressed: () {
+                              Get.to(() => ProjectModifyScreen());
+                            },
+                            icon: SvgPicture.asset("assets/icons/Edit.svg"),
+                          ),
                           IconButton(
-                              onPressed: () {}, icon: Icon(Icons.more_horiz)),
+                            onPressed: () {},
+                            icon: SvgPicture.asset("assets/icons/More.svg"),
+                          ),
                         ]),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 100, 15, 10),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'LOOPUS 앱 서비스 개발',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            project.projectName,
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
                                 children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '2021.05 ~ 2022.01',
+                                  Text(
+                                    '${project.startDate.substring(0, 4)}.${project.startDate.substring(5, 7)} ~ ',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: Colors.grey[400],
+                                    ),
+                                    width: 55,
+                                    height: 20,
+                                    child: Center(
+                                      child: Text(
+                                        '9개월',
                                         style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 12.0),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            color: Colors.grey[400],
-                                          ),
-                                          width: 55,
-                                          height: 20,
-                                          child: Center(
-                                            child: Text(
-                                              '9개월',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.favorite_border),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 5),
-                                        child: Text(
-                                          '24',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  )
                                 ],
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Stack(
-                                  alignment: AlignmentDirectional.center,
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: Colors.black,
-                                      child: CachedNetworkImage(
-                                        height: 28,
-                                        width: 28,
-                                        imageUrl:
-                                            "https://i.stack.imgur.com/l60Hf.png",
-                                        placeholder: (context, url) =>
-                                            const CircleAvatar(
-                                          child: Center(
-                                              child:
-                                                  CircularProgressIndicator()),
-                                        ),
-                                        fit: BoxFit.fill,
-                                      ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: SvgPicture.asset(
+                                        "assets/icons/Favorite_Inactive.svg"),
+                                    onPressed: () {},
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: Text(
+                                      '24',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ],
-                                )
-                              ],
-                            )
-                          ]),
-                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    child: CachedNetworkImage(
+                                      height: 28,
+                                      width: 28,
+                                      imageUrl:
+                                          "https://i.stack.imgur.com/l60Hf.png",
+                                      placeholder: (context, url) =>
+                                          const CircleAvatar(
+                                        child: Center(
+                                            child: CircularProgressIndicator()),
+                                      ),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          )
+                        ]),
                   ],
                 ),
               ],
@@ -162,7 +155,7 @@ class ProjectScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
-                '연구실에서 진행한 앱 개발 프로젝트 사업입니다. 해당 사업프로젝트에서 UX/UI 디자인을 담당하였습니다.',
+                project.introduction,
                 style: TextStyle(
                   fontSize: 14,
                 ),
@@ -229,9 +222,27 @@ class ProjectScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
-              child: Text(
-                '활동 포스팅',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '활동 포스팅',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  TextButton(
+                    style: ButtonStyle(splashFactory: NoSplash.splashFactory),
+                    onPressed: () {
+                      Get.to(() => PostingAddNameScreen());
+                    },
+                    child: Text(
+                      '포스팅 작성하기',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: mainblue),
+                    ),
+                  ),
+                ],
               ),
             ),
             Column(

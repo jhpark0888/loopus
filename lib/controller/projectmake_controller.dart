@@ -14,19 +14,51 @@ class ProjectMakeController extends GetxController {
 
   void onInit() {
     super.onInit();
+    startyearcontroller.addListener(() {
+      if (startyearcontroller.text.length == 4) {
+        startmonthFocusNode.requestFocus();
+      }
+    });
+    startmonthcontroller.addListener(() {
+      if (startmonthcontroller.text.length == 2) {
+        startdayFocusNode.requestFocus();
+      }
+    });
+    startdaycontroller.addListener(() {
+      if (startdaycontroller.text.length == 2) {
+        endyearFocusNode.requestFocus();
+      }
+    });
+    endyearcontroller.addListener(() {
+      if (endyearcontroller.text.length == 4) {
+        endmonthFocusNode.requestFocus();
+      }
+    });
+    endmonthcontroller.addListener(() {
+      if (endmonthcontroller.text.length == 2) {
+        enddayFocusNode.requestFocus();
+      }
+    });
   }
+
+  final startmonthFocusNode = FocusNode();
+  final startdayFocusNode = FocusNode();
+  final endyearFocusNode = FocusNode();
+  final endmonthFocusNode = FocusNode();
+  final enddayFocusNode = FocusNode();
 
   TextEditingController projectnamecontroller = TextEditingController();
   TextEditingController introcontroller = TextEditingController();
   TextEditingController startyearcontroller = TextEditingController();
   TextEditingController startmonthcontroller = TextEditingController();
-  TextEditingController finishyearcontroller = TextEditingController();
-  TextEditingController finishmonthcontroller = TextEditingController();
+  TextEditingController startdaycontroller = TextEditingController();
+  TextEditingController endyearcontroller = TextEditingController();
+  TextEditingController endmonthcontroller = TextEditingController();
+  TextEditingController enddaycontroller = TextEditingController();
 
   RxList<SelectedPersonTagWidget> selectedpersontaglist =
       <SelectedPersonTagWidget>[].obs;
 
   RxBool isongoing = false.obs;
-  // List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
-
+  List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
 }

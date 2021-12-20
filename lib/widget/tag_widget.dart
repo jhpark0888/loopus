@@ -8,12 +8,19 @@ class Tagwidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 4),
+      margin: EdgeInsets.only(
+        right: 4,
+      ),
       decoration: BoxDecoration(
-          color: mainWhite, borderRadius: BorderRadius.circular(4)),
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      height: 24,
-      child: Text("${content}"),
+          color: Color(0xffefefef), borderRadius: BorderRadius.circular(4)),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
+      child: Text(
+        "${content}",
+        style: TextStyle(
+          fontSize: 14,
+          color: Color(0xff999999),
+        ),
+      ),
     );
   }
 }

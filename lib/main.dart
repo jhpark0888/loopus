@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -12,7 +14,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   String? temptoken = await FlutterSecureStorage().read(key: 'token');
   print(temptoken);
-  runApp(MyApp(token: temptoken));
+
+  runApp(
+    // DevicePreview(
+    // enabled: !kReleaseMode,
+    // builder: (context) =>
+    MyApp(token: temptoken), // Wrap your app
+    // )
+  );
   // runApp(MyApp());
 }
 
@@ -23,6 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
       title: "Loop Us",
       theme: ThemeData(
@@ -37,12 +47,16 @@ class MyApp extends StatelessWidget {
           bodyText1: TextStyle(color: mainblack),
           bodyText2: TextStyle(color: mainblack),
         ).apply(bodyColor: mainblack),
+        textSelectionTheme: TextSelectionThemeData(cursorColor: mainblack),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             primary: mainblack,
+            splashFactory: NoSplash.splashFactory,
           ),
         ),
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
       ),
       initialBinding: InitBinding(),
       getPages: [

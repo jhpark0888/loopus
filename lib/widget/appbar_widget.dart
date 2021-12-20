@@ -17,8 +17,18 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         // style: TextStyle(color: mainFontDark),
       ),
       actions: [
-        IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
-        IconButton(onPressed: () {}, icon: Icon(Icons.near_me)),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.notifications,
+          ),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.near_me,
+          ),
+        ),
       ],
     );
   }

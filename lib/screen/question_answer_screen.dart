@@ -57,7 +57,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                       child: Column(
                         children: [
                           Row(
@@ -65,6 +65,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                             children: [
                               Obx(
                                 () => DropdownButton(
+                                  elevation: 1,
                                   underline: Container(),
                                   icon: Icon(Icons.expand_more),
                                   value: homeController.selectgroup.value,
@@ -126,12 +127,18 @@ class QuestionAnswerScreen extends StatelessWidget {
                           return GestureDetector(
                               //on tap event 발생시
                               onTap: () async {},
-                              child: QuestionPostingWidget(
-                                item: homeController.questionResult.value
-                                    .questionitems.questions[index],
-                                index: index,
-                                key: Key(
-                                  toString(),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  right: 16,
+                                  left: 16,
+                                ),
+                                child: QuestionPostingWidget(
+                                  item: homeController.questionResult.value
+                                      .questionitems.questions[index],
+                                  index: index,
+                                  key: Key(
+                                    toString(),
+                                  ),
                                 ),
                               ));
                         },
