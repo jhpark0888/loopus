@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class ProjectAddPersonController extends GetxController {
   static ProjectAddPersonController get to => Get.find();
-  ProjectMakeController projectMakeController = Get.find();
+  ProjectAddController projectMakeController = Get.find();
 
   void onInit() {
     // looppersonlist.add(

@@ -246,7 +246,9 @@ class ProjectScreen extends StatelessWidget {
                   TextButton(
                     style: ButtonStyle(splashFactory: NoSplash.splashFactory),
                     onPressed: () {
-                      Get.to(() => PostingAddNameScreen());
+                      Get.to(() => PostingAddNameScreen(
+                            project_id: project.id,
+                          ));
                     },
                     child: Text(
                       '포스팅 작성하기',

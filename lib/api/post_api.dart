@@ -11,13 +11,13 @@ import 'package:loopus/widget/posting_add_content_widget.dart';
 import 'package:loopus/widget/posting_add_fileimage_widget.dart';
 import 'package:loopus/widget/posting_add_title_widget.dart';
 
-Future<void> postingaddRequest() async {
+Future<void> postingAddRequest(int project_id) async {
   PostingAddController postingAddController = Get.find();
   String? token = await FlutterSecureStorage().read(key: 'token');
   String? user_id = await FlutterSecureStorage().read(key: 'id');
   // Uri uri = Uri.parse('http://52.79.75.189:8000/user_api/profile_update/customizing/$user_id/');
-  Uri uri =
-      Uri.parse('http://3.35.253.151:8000/post_api/posting_upload/$user_id/');
+  Uri uri = Uri.parse(
+      'http://192.168.35.13:8000/post_api/posting_upload/$project_id/');
 
   var request = new http.MultipartRequest('POST', uri);
 
@@ -27,8 +27,6 @@ Future<void> postingaddRequest() async {
   };
 
   request.headers.addAll(headers);
-
-  List<Map> customprofile = [];
 
   List<int> imageData =
       await File(postingAddController.thumbnail.value.path).readAsBytes();
@@ -56,18 +54,19 @@ Future<void> postingaddRequest() async {
 
   request.fields['title'] =
       json.encode(postingAddController.titlecontroller.text);
-  request.fields['content'] = json
+  request.fields['contents'] = json
       .encode(postingAddController.postcontroller.document.toDelta().toJson());
 
   print(request.fields);
   print(request.files);
 
   http.StreamedResponse response = await request.send();
+  print(response.statusCode);
   if (response.statusCode == 200) {
     print("success!");
 
     String responsebody = await response.stream.bytesToString();
-
+    print(responsebody);
     // responsemap = jsonDecode(responsebody).cast<Map>();
     // print(responsemap);
     // myProfileController.customlist.clear();

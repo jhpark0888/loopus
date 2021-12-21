@@ -18,8 +18,10 @@ import 'package:loopus/widget/customlinkstylewidget.dart';
 import 'package:loopus/widget/postingeditor.dart';
 
 class PostingAddContentScreen extends StatelessWidget {
-  PostingAddContentScreen({Key? key}) : super(key: key);
+  PostingAddContentScreen({Key? key, required this.project_id})
+      : super(key: key);
   PostingAddController postingAddController = Get.find();
+  int project_id;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,9 @@ class PostingAddContentScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Get.to(() => PostingAddImageScreen());
+                Get.to(() => PostingAddImageScreen(
+                      project_id: project_id,
+                    ));
               },
               child: Text(
                 '다음',

@@ -9,8 +9,8 @@ import 'package:loopus/widget/selected_persontag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:http/http.dart' as http;
 
-class ProjectMakeController extends GetxController {
-  static ProjectMakeController get to => Get.find();
+class ProjectAddController extends GetxController {
+  static ProjectAddController get to => Get.find();
 
   void onInit() {
     super.onInit();
@@ -39,6 +39,19 @@ class ProjectMakeController extends GetxController {
         enddayFocusNode.requestFocus();
       }
     });
+    projectnamecontroller.addListener(() {
+      if (projectnamecontroller.text.isEmpty) {
+        onbutton(false);
+      } else {
+        Pattern pattern = r'[\-\_\/\\\[\]\(\)\|\{\}*$@$!%*#?~^<>,.&+=]';
+        RegExp regExp = new RegExp(pattern.toString());
+        if (regExp.hasMatch(projectnamecontroller.text)) {
+          onbutton(false);
+        } else {
+          onbutton(true);
+        }
+      }
+    });
   }
 
   final startmonthFocusNode = FocusNode();
@@ -49,6 +62,7 @@ class ProjectMakeController extends GetxController {
 
   TextEditingController projectnamecontroller = TextEditingController();
   TextEditingController introcontroller = TextEditingController();
+
   TextEditingController startyearcontroller = TextEditingController();
   TextEditingController startmonthcontroller = TextEditingController();
   TextEditingController startdaycontroller = TextEditingController();
@@ -60,5 +74,6 @@ class ProjectMakeController extends GetxController {
       <SelectedPersonTagWidget>[].obs;
 
   RxBool isongoing = false.obs;
+  RxBool onbutton = false.obs;
   List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
 }

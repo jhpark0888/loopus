@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
-import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 
 class SelectedPersonTagWidget extends StatelessWidget {
   SelectedPersonTagWidget({Key? key, required this.text, this.id})
       : super(key: key);
-  ProjectMakeController projectMakeController = Get.find();
+  ProjectAddController projectMakeController = Get.find();
   // ProjectAddPersonController projectAddPersonController = Get.find();
 
   String text;

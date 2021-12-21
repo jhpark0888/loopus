@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
-import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
@@ -14,7 +14,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
   ProjectAddPersonScreen({Key? key}) : super(key: key);
   // ProjectAddPersonController projectaddpersoncontroller =
   //     Get.put(ProjectAddPersonController());
-  ProjectMakeController projectMakeController = Get.find();
+  ProjectAddController projectMakeController = Get.find();
 
   @override
   Widget build(BuildContext context) {

@@ -3,14 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/project_add_tag_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
 class ProjectAddPeriodScreen extends StatelessWidget {
   ProjectAddPeriodScreen({Key? key}) : super(key: key);
 
-  ProjectMakeController projectmakecontroller = Get.find();
+  ProjectAddController projectmakecontroller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,11 @@ class ProjectAddPeriodScreen extends StatelessWidget {
             },
             child: Text(
               '다음',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: mainblue,
+              ),
             ),
           ),
         ],
@@ -180,7 +184,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                                   borderSide: BorderSide(
                                       color:
                                           projectmakecontroller.isongoing.value
-                                              ? mainlightgrey
+                                              ? mainblack.withOpacity(0.38)
                                               : mainblack,
                                       width: 2),
                                 ),
@@ -188,14 +192,14 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                                   borderSide: BorderSide(
                                       color:
                                           projectmakecontroller.isongoing.value
-                                              ? mainlightgrey
+                                              ? mainblack.withOpacity(0.38)
                                               : mainblack,
                                       width: 2),
                                 ),
                                 hintText: '2021',
                                 hintStyle: TextStyle(
                                     color: projectmakecontroller.isongoing.value
-                                        ? mainlightgrey
+                                        ? mainblack.withOpacity(0.38)
                                         : null)),
                             textAlign: TextAlign.center,
                             maxLength: 4,
@@ -214,7 +218,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: projectmakecontroller.isongoing.value
-                                ? mainlightgrey
+                                ? mainblack.withOpacity(0.38)
                                 : mainblack,
                           ),
                         ),
@@ -237,7 +241,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                                   borderSide: BorderSide(
                                       color:
                                           projectmakecontroller.isongoing.value
-                                              ? mainlightgrey
+                                              ? mainblack.withOpacity(0.38)
                                               : mainblack,
                                       width: 2),
                                 ),
@@ -245,14 +249,14 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                                   borderSide: BorderSide(
                                       color:
                                           projectmakecontroller.isongoing.value
-                                              ? mainlightgrey
+                                              ? mainblack.withOpacity(0.38)
                                               : mainblack,
                                       width: 2),
                                 ),
                                 hintText: '11',
                                 hintStyle: TextStyle(
                                     color: projectmakecontroller.isongoing.value
-                                        ? mainlightgrey
+                                        ? mainblack.withOpacity(0.38)
                                         : null)),
                             textAlign: TextAlign.center,
                             maxLength: 2,
@@ -271,7 +275,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: projectmakecontroller.isongoing.value
-                                ? mainlightgrey
+                                ? mainblack.withOpacity(0.38)
                                 : mainblack,
                           ),
                         ),
@@ -293,7 +297,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                                   borderSide: BorderSide(
                                       color:
                                           projectmakecontroller.isongoing.value
-                                              ? mainlightgrey
+                                              ? mainblack.withOpacity(0.38)
                                               : mainblack,
                                       width: 2),
                                 ),
@@ -301,14 +305,14 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                                   borderSide: BorderSide(
                                       color:
                                           projectmakecontroller.isongoing.value
-                                              ? mainlightgrey
+                                              ? mainblack.withOpacity(0.38)
                                               : mainblack,
                                       width: 2),
                                 ),
                                 hintText: '11',
                                 hintStyle: TextStyle(
                                     color: projectmakecontroller.isongoing.value
-                                        ? mainlightgrey
+                                        ? mainblack.withOpacity(0.38)
                                         : null)),
                             textAlign: TextAlign.center,
                             maxLength: 2,
@@ -327,7 +331,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: projectmakecontroller.isongoing.value
-                                ? mainlightgrey
+                                ? mainblack.withOpacity(0.38)
                                 : mainblack,
                           ),
                         ),

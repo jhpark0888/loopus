@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/controller/tag_controller.dart';
 
 void projectaddRequest() async {
-  ProjectMakeController projectMakeController = Get.find();
+  ProjectAddController projectMakeController = Get.find();
   TagController tagController = Get.find();
 
   String? token = await FlutterSecureStorage().read(key: "token");

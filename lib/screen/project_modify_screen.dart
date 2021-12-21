@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
-import 'package:loopus/screen/project_add_name_screen.dart';
+import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/inquiry_screen.dart';
 import 'package:loopus/screen/privacypolicy_screen.dart';
@@ -18,8 +18,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 class ProjectModifyScreen extends StatelessWidget {
   ProjectModifyScreen({Key? key}) : super(key: key);
 
-  ProjectMakeController projectmakecontroller =
-      Get.put(ProjectMakeController());
+  ProjectAddController projectmakecontroller = Get.put(ProjectAddController());
   TagController tagController = Get.put(TagController());
 
   @override
@@ -43,7 +42,7 @@ class ProjectModifyScreen extends StatelessWidget {
           children: [
             ListTile(
               onTap: () {
-                Get.to(() => ProjectAddNameScreen());
+                Get.to(() => ProjectAddTitleScreen());
               },
               title: Text('활동명',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),

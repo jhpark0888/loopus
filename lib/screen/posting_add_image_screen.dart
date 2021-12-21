@@ -1,27 +1,21 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/models/documents/document.dart';
 import 'package:flutter_quill/widgets/controller.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/get_image_api.dart';
+import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/blue_button.dart';
 import 'package:loopus/widget/postingeditor.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'dart:math' as math;
 import 'package:flutter/rendering.dart';
 
 class PostingAddImageScreen extends StatelessWidget {
-  PostingAddImageScreen({Key? key}) : super(key: key);
+  PostingAddImageScreen({Key? key, required this.project_id}) : super(key: key);
   PostingAddController postingAddController = Get.find();
+  int project_id;
 
   Widget getReadEditor(PostingAddController controller) {
     QuillController readController = QuillController(
@@ -43,7 +37,9 @@ class PostingAddImageScreen extends StatelessWidget {
           title: '대표 사진 설정',
           actions: [
             TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                await postingAddRequest(project_id);
+              },
               child: Text(
                 '올리기',
                 style: TextStyle(

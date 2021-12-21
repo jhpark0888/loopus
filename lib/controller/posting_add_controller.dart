@@ -5,7 +5,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loopus/api/get_image_api.dart';
-import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 import 'package:loopus/widget/posting_add_content_widget.dart';
 import 'package:loopus/widget/posting_add_fileimage_widget.dart';

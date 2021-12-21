@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/screen/question_add_tag_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -10,8 +10,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 class QuestionAddContentScreen extends StatelessWidget {
   // ProjectAddNameScreen({Key? key}) : super(key: key);
   QuestionController questionController = Get.put(QuestionController());
-  ProjectMakeController projectmakecontroller =
-      Get.put(ProjectMakeController());
+  ProjectAddController projectmakecontroller = Get.put(ProjectAddController());
 
   @override
   Widget build(BuildContext context) {

@@ -5,16 +5,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
-import 'package:loopus/controller/projectmake_controller.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/posting_add_content_screen.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
 class PostingAddNameScreen extends StatelessWidget {
-  PostingAddNameScreen({Key? key}) : super(key: key);
+  PostingAddNameScreen({Key? key, required this.project_id}) : super(key: key);
 
   PostingAddController postingcontroller = Get.put(PostingAddController());
+  int project_id;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,9 @@ class PostingAddNameScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(() => PostingAddContentScreen());
+              Get.to(() => PostingAddContentScreen(
+                    project_id: project_id,
+                  ));
             },
             child: Text(
               '다음',

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/get_image_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/screen/project_add_name_screen.dart';
+import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
@@ -361,7 +361,7 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                               onTap: () {
-                                Get.to(() => ProjectAddNameScreen());
+                                Get.to(() => ProjectAddTitleScreen());
                               },
                               child: Text(
                                 '추가하기',
