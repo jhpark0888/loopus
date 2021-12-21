@@ -14,34 +14,7 @@ class HomeController extends GetxController {
   bool bookmark = false;
   RxBool enablepullup = true.obs;
   var selectgroup = "모든 질문".obs;
-  Rx<QuestionModel> questionResult = QuestionModel(QuestionItem(
-    myQuestions: [
-      Question(
-          id: 0,
-          user: 0,
-          questioner: "",
-          content: "",
-          answers: [],
-          adopt: null,
-          date: null,
-          questionTag: [],
-          realname: "",
-          profileimage: null)
-    ].obs,
-    questions: [
-      Question(
-          id: 0,
-          user: 0,
-          questioner: "",
-          content: "",
-          answers: [],
-          adopt: null,
-          date: null,
-          questionTag: [],
-          realname: "",
-          profileimage: null)
-    ].obs,
-  )).obs;
+  Rx<QuestionModel> questionResult = QuestionModel(questionitems: []).obs;
   RefreshController refreshController =
       new RefreshController(initialRefresh: true);
   int pageNumber = 1;
@@ -58,34 +31,7 @@ class HomeController extends GetxController {
 
   void onRefresh() async {
     enablepullup.value = true;
-    questionResult(QuestionModel(QuestionItem(
-      myQuestions: [
-        Question(
-            id: 0,
-            user: 0,
-            questioner: "",
-            content: "",
-            answers: [],
-            adopt: null,
-            date: null,
-            questionTag: [],
-            realname: "",
-            profileimage: null)
-      ].obs,
-      questions: [
-        Question(
-            id: 0,
-            user: 0,
-            questioner: "",
-            content: "",
-            answers: [],
-            adopt: null,
-            date: null,
-            questionTag: [],
-            realname: "",
-            profileimage: null)
-      ].obs,
-    )));
+    questionResult(QuestionModel(questionitems: []));
 
     pageNumber = 1;
     loadItem();
@@ -102,20 +48,44 @@ class HomeController extends GetxController {
   }
 
   void loadItem() async {
-    QuestionModel questionModel = await questionlist(pageNumber);
-    QuestionModel questionModel2 = await questionlist(pageNumber + 1);
-    if (pageNumber == 1) {
-      questionResult.value.questionitems.myQuestions
-          .addAll(questionModel.questionitems.myQuestions);
-    }
+    if (selectgroup == "모든 질문") {
+      QuestionModel questionModel = await questionlist(pageNumber, "any");
+      QuestionModel questionModel2 = await questionlist(pageNumber + 1, "any");
 
-    if (questionModel.questionitems.questions[0].id ==
-        questionModel2.questionitems.questions[0].id) {
-      enablepullup.value = false;
-    }
+      if (questionModel.questionitems[0].id ==
+          questionModel2.questionitems[0].id) {
+        enablepullup.value = false;
+      }
+      print(questionModel.questionitems);
+      // if (pageNumber == 1) {
+      //   questionResult.update((val) {
+      //     val!.questionitems.addAll(questionModel.questionitems);
+      //   });
+      // }
+      questionResult.update((val) {
+        val!.questionitems.addAll(questionModel.questionitems);
+      });
+      print(questionResult.value.questionitems.length);
+      print(questionResult.value.questionitems);
+    } else {
+      QuestionModel questionModel = await questionlist(pageNumber, "my");
+      QuestionModel questionModel2 = await questionlist(pageNumber + 1, "my");
 
-    questionResult.value.questionitems.questions
-        .addAll(questionModel.questionitems.questions);
-    print(questionResult.value.questionitems.questions.length);
+      if (questionModel.questionitems[0].id ==
+          questionModel2.questionitems[0].id) {
+        enablepullup.value = false;
+      }
+      print(questionModel.questionitems);
+      // if (pageNumber == 1) {
+      //   questionResult.update((val) {
+      //     val!.questionitems.addAll(questionModel.questionitems);
+      //   });
+      // }
+      questionResult.update((val) {
+        val!.questionitems.addAll(questionModel.questionitems);
+      });
+      print(questionResult.value.questionitems.length);
+      print(questionResult.value.questionitems);
+    }
   }
 }

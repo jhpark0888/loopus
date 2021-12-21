@@ -14,8 +14,7 @@ class QuestionScreen extends StatelessWidget {
 
   void _handleSubmitted(String text) async {
     print(text);
-    data =
-        await answermake(text, questionController.questionModel2.questions.id);
+    data = await answermake(text, 2);
     questionController.messageanswerlist.add(MessageAnswerWidget(
         content: data["content"], image: "image", name: data["answerer"]));
   }
@@ -25,44 +24,38 @@ class QuestionScreen extends StatelessWidget {
       data: IconThemeData(color: Colors.black),
       child: Container(
         color: mainWhite,
-        child: Stack(
-          children: [
-            Row(
-              children: <Widget>[
-                Flexible(
-                  child: TextField(
-                    style: TextStyle(decoration: TextDecoration.none),
-                    cursorColor: Color(0xFF424242),
-                    controller: _textController,
-                    onChanged: (text) {},
-                    onSubmitted: _handleSubmitted,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "  답변 작성하기...",
-                        focusColor: mainWhite,
-                        fillColor: mainWhite),
-                  ),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            children: [
+              Flexible(
+                child: TextField(
+                  focusNode: questionController.answerfocus,
+                  style: TextStyle(decoration: TextDecoration.none),
+                  cursorColor: Color(0xFF424242),
+                  controller: _textController,
+                  onChanged: (text) {},
+                  onSubmitted: _handleSubmitted,
+                  minLines: 1,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      hintText: " 답변 작성하기...",
+                      focusColor: mainblue,
+                      fillColor: mainlightgrey,
+                      filled: true),
                 ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: InkWell(
-                      onTap: () => _handleSubmitted(_textController.text),
-                      child: Container(
-                          padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
-                          decoration: BoxDecoration(
-                              color: mainlightgrey,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Text(
-                            "작성",
-                            style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[800]),
-                          ))),
-                )
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

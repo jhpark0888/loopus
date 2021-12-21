@@ -168,6 +168,7 @@ class HomeScreen extends StatelessWidget {
           },
           body: TabBarView(physics: PageScrollPhysics(), children: [
             SingleChildScrollView(
+              key: const PageStorageKey("key1"),
               child: Padding(
                 padding: const EdgeInsets.only(
                   top: 16,
@@ -224,7 +225,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 80.0),
+              padding: const EdgeInsets.only(bottom: 50.0),
               child: QuestionAnswerScreen(),
             ),
             Padding(
@@ -233,6 +234,7 @@ class HomeScreen extends StatelessWidget {
                 bottom: 80,
               ),
               child: SingleChildScrollView(
+                key: const PageStorageKey("key3"),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,

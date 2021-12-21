@@ -10,7 +10,7 @@ import 'package:loopus/widget/tag_widget.dart';
 
 class MyQuestionPostingWidget extends StatelessWidget {
   QuestionController questionController = Get.put(QuestionController());
-  final Question item;
+  final QuestionItem item;
   final int index;
 
   MyQuestionPostingWidget(
@@ -94,7 +94,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
                                 children: [
                                   SvgPicture.asset("assets/icons/Comment.svg"),
                                   Text(
-                                    " ${item.answers.length}",
+                                    " ${questionController.questionModel2.questions.answers.length}",
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   )

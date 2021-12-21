@@ -27,15 +27,30 @@ class QuestionAddTagScreen extends StatelessWidget {
           },
         ),
         actions: [
-          TextButton(
-            onPressed: () {
-              questionmake(questionController.contentcontroller.text);
-              questionController.contentcontroller.clear();
-              Get.offAllNamed("/");
-            },
-            child: Text(
-              '올리기',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Obx(
+            () => IgnorePointer(
+              ignoring:
+                  tagController.selectedtaglist.length == 0 ? true : false,
+              child: TextButton(
+                onPressed: () {
+                  questionmake(questionController.contentcontroller.text);
+                  questionController.contentcontroller.clear();
+                  Get.offAllNamed("/");
+                },
+                child: tagController.selectedtaglist.length == 0
+                    ? Text(
+                        '올리기',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey),
+                      )
+                    : Text(
+                        '올리기',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+              ),
             ),
           ),
         ],

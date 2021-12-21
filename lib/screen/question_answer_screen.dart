@@ -51,37 +51,46 @@ class QuestionAnswerScreen extends StatelessWidget {
           onRefresh: homeController.onRefresh,
           onLoading: homeController.onLoading,
           child: CustomScrollView(
+            key: PageStorageKey("key2"),
             slivers: [
               SliverList(
                   delegate: SliverChildListDelegate([
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      padding: const EdgeInsets.fromLTRB(8, 8, 16, 0),
                       child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Obx(
-                                () => DropdownButton(
-                                  elevation: 1,
-                                  underline: Container(),
-                                  icon: Icon(Icons.expand_more),
-                                  value: homeController.selectgroup.value,
-                                  items: ["모든 질문", "내가 한 질문 "].map((value) {
-                                    return DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? value) {
-                                    homeController.selectgroup(value);
-                                    homeController.onRefresh;
-                                    print(homeController.selectgroup.value);
-                                  },
+                                () => DropdownButtonHideUnderline(
+                                  child: ButtonTheme(
+                                    alignedDropdown: true,
+                                    child: DropdownButton(
+                                      onTap: () {},
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      elevation: 1,
+                                      underline: Container(),
+                                      icon: Icon(Icons.expand_more),
+                                      value: homeController.selectgroup.value,
+                                      items: ["모든 질문", "내가 한 질문 "].map((value) {
+                                        return DropdownMenuItem(
+                                          value: value,
+                                          child: Text(value,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? value) {
+                                        homeController.selectgroup(value);
+                                        homeController.onRefresh;
+                                        print(homeController.selectgroup.value);
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ),
                               InkWell(
@@ -134,7 +143,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                                 ),
                                 child: QuestionPostingWidget(
                                   item: homeController.questionResult.value
-                                      .questionitems.questions[index],
+                                      .questionitems[index],
                                   index: index,
                                   key: Key(
                                     toString(),
@@ -142,8 +151,8 @@ class QuestionAnswerScreen extends StatelessWidget {
                                 ),
                               ));
                         },
-                        childCount: homeController.questionResult.value
-                            .questionitems.questions.length,
+                        childCount: homeController
+                            .questionResult.value.questionitems.length,
                       )
                     : SliverChildBuilderDelegate(
                         (context, index) {
@@ -151,16 +160,16 @@ class QuestionAnswerScreen extends StatelessWidget {
                               //on tap event 발생시
                               onTap: () async {},
                               child: MyQuestionPostingWidget(
-                                item: homeController.questionResult.value
-                                    .questionitems.myQuestions[index],
+                                item: homeController
+                                    .questionResult.value.questionitems[index],
                                 index: index,
                                 key: Key(
                                   toString(),
                                 ),
                               ));
                         },
-                        childCount: homeController.questionResult.value
-                            .questionitems.myQuestions.length,
+                        childCount: homeController
+                            .questionResult.value.questionitems.length,
                       ),
               ),
             ],

@@ -9,9 +9,6 @@ class AppController extends GetxService {
   RxInt currentIndex = 0.obs;
 
   void changePageIndex(int index) {
-    // if (currentIndex.value == index && index == 0) {
-    //   HomeController.to.refreshController.requestRefresh();
-    // }
     currentIndex(index);
   }
 }
