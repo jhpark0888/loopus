@@ -10,7 +10,7 @@ import 'package:loopus/widget/tag_widget.dart';
 
 class QuestionPostingWidget extends StatelessWidget {
   QuestionController questionController = Get.put(QuestionController());
-  final Question item;
+  final QuestionItem item;
   final int index;
 
   QuestionPostingWidget(
@@ -121,8 +121,8 @@ class QuestionPostingWidget extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.bold),
                               ),
-                              const Text(
-                                "산업경영공학과",
+                              Text(
+                                "${item.department}",
                                 style: TextStyle(fontSize: 14),
                               ),
                             ],

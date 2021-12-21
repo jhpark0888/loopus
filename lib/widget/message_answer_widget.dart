@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/widget/alertdialog2_widget.dart';
 
 class MessageAnswerWidget extends StatelessWidget {
   String content;
@@ -47,7 +48,12 @@ class MessageAnswerWidget extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: InkWell(
                         onTap: () {
-                          print("click more");
+                          Get.dialog(Alertdialog2Widget(
+                            color_1: mainblack,
+                            color_2: Colors.red,
+                            text_1: "메세지 보내기",
+                            text_2: "신고하기",
+                          ));
                         },
                         child: SvgPicture.asset("assets/icons/More.svg")),
                   ))

@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/question_model.dart';
+import 'package:loopus/model/question_specific_model.dart';
 
 void questionmake(String content) async {
   String? token;
@@ -45,25 +46,26 @@ void questionmake(String content) async {
   // }
 }
 
-Future<dynamic> questionlist(int pageNumber) async {
+Future<dynamic> questionlist(int pageNumber, String type) async {
   String? token;
   await FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
   final url = Uri.parse(
-      "http://3.35.253.151:8000/question_api/question_list_load/?page=$pageNumber");
+      "http://3.35.253.151:8000/question_api/question_list_load/$type?page=$pageNumber");
+  print(url);
   final response = await get(url, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
   var responseHeaders = response.headers;
   var responseBody = utf8.decode(response.bodyBytes);
   print(statusCode);
-  Map<String, dynamic> map = jsonDecode(responseBody);
-  print(map);
+  List<dynamic> list = jsonDecode(responseBody);
+  print(list);
   if (response.statusCode != 200) {
     return Future.error(response.statusCode);
   } else {
-    return QuestionModel.fromJson(map);
+    return QuestionModel.fromJson(list);
   }
 }
 
