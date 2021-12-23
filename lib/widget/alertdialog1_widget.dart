@@ -12,12 +12,12 @@ class Alertdialog1Widget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return Dialog(
         backgroundColor: Colors.transparent,
-        contentPadding: EdgeInsets.zero,
+        // contentPadding: EdgeInsets.zero,
         elevation: 0.0,
         // title: Center(child: Text("Evaluation our APP")),
-        content: Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(

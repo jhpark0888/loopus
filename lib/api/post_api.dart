@@ -6,7 +6,10 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
+import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/question_model.dart';
 import 'package:loopus/widget/posting_add_content_widget.dart';
 import 'package:loopus/widget/posting_add_fileimage_widget.dart';
 import 'package:loopus/widget/posting_add_title_widget.dart';
@@ -103,5 +106,53 @@ Future<void> postingAddRequest(int project_id) async {
     print("lose");
   } else {
     print(response.statusCode);
+  }
+}
+
+Future<dynamic> mainpost(int pageNumber) async {
+  String? token;
+  await FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final url = Uri.parse(
+      "http://3.35.253.151:8000/post_api/main_load/?page=$pageNumber/");
+
+  final response = await get(url, headers: {"Authorization": "Token $token"});
+  var statusCode = response.statusCode;
+  var responseHeaders = response.headers;
+  var responseBody = utf8.decode(response.bodyBytes);
+  print(statusCode);
+  List<dynamic> list = jsonDecode(responseBody);
+
+  print(list);
+  if (response.statusCode != 200) {
+    return Future.error(response.statusCode);
+  } else {
+    return PostingModel.fromJson(list);
+  }
+}
+
+Future<dynamic> looppost(int pageNumber) async {
+  String? token;
+  await FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final url = Uri.parse(
+      "http://3.35.253.151:8000/post_api/loop_load/?page=$pageNumber/");
+
+  final response = await get(url, headers: {"Authorization": "Token $token"});
+  var statusCode = response.statusCode;
+  var responseHeaders = response.headers;
+  var responseBody = utf8.decode(response.bodyBytes);
+  print(statusCode);
+  List<dynamic> list = jsonDecode(responseBody);
+
+  print(list);
+  if (response.statusCode != 200) {
+    return Future.error(response.statusCode);
+  } else {
+    return QuestionModel.fromJson(list);
   }
 }

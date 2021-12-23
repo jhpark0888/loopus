@@ -1,122 +1,191 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/paper_controller.dart';
+import 'package:loopus/widget/paper_competition_widget.dart';
+import 'package:underline_indicator/underline_indicator.dart';
 
 class PaperScreen extends StatelessWidget {
   // const BookmarkScreen({Key? key}) : super(key: key);
+  PaperController paperController = Get.put(PaperController());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        bottom: PreferredSize(
-            child: Container(
-              color: Color(0xffe7e7e7),
-              height: 1,
+    return DefaultTabController(
+      length: 3,
+      initialIndex: 0,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.0,
+          title: const Text(
+            '추천 공고',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
-            preferredSize: Size.fromHeight(4.0)),
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        elevation: 0,
-        title: const Text(
-          '추천 공고',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
           ),
-        ),
-        actions: [],
-      ),
-      body: Column(
-        children: [
-          ElevatedButton(
-            child: Text("bye"),
-            onPressed: () {
-              Get.dialog(
-                AlertDialog(
-                    backgroundColor: Colors.transparent,
-                    contentPadding: EdgeInsets.zero,
-                    elevation: 0.0,
-                    // title: Center(child: Text("Evaluation our APP")),
-                    content: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          width: Get.width * 0.95,
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: const BorderRadius.all(
-                                  Radius.circular(10.0))),
-                          child: Column(
-                            children: [
-                              InkWell(
-                                  onTap: () {
-                                    print("click");
-                                  },
-                                  child: (Container(
-                                      width: Get.width * 0.95,
-                                      height: 30,
-                                      child: Center(
-                                          child: Text(
-                                        "메세지 보내기",
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                      ))))),
-                              Divider(
-                                thickness: 2,
-                                color: mainlightgrey,
-                              ),
-                              InkWell(
-                                  onTap: () {
-                                    print("click");
-                                  },
-                                  child: (Container(
-                                      width: Get.width * 0.95,
-                                      height: 30,
-                                      child: Center(
-                                          child: Text(
-                                        "신고하기",
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                      ))))),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: const BorderRadius.all(
-                                  Radius.circular(10.0))),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Get.dialog(
+                    Dialog(
+                      child: Container(
+                        height: 80,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
                           child: Center(
-                            child: InkWell(
-                                // onTap: () => Navigator.pop(context),
-                                onTap: () {
-                                  Get.back();
-                                },
-                                child: (Container(
-                                    width: Get.width * 0.95,
-                                    height: 30,
-                                    child: Center(
-                                        child: Text(
-                                      "닫기",
-                                      style: TextStyle(fontSize: 14),
-                                    ))))),
+                            child: Text(
+                              '관심 태그와 학과를 기반으로 공고를 추천해드리고 있어요.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        )
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  "어떻게 추천되나요?",
+                  style: TextStyle(
+                      color: mainblue,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold),
+                ))
+          ],
+        ),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, value) {
+            return [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Theme(
+                          data: ThemeData().copyWith(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                          ),
+                          child: TabBar(
+                              labelStyle: TextStyle(
+                                color: mainblack,
+                                fontSize: 14,
+                                fontFamily: 'Nanum',
+                                fontWeight: FontWeight.bold,
+                              ),
+                              labelColor: mainblack,
+                              unselectedLabelStyle: TextStyle(
+                                color: Colors.yellow,
+                                fontSize: 14,
+                                fontFamily: 'Nanum',
+                                fontWeight: FontWeight.normal,
+                              ),
+                              unselectedLabelColor: mainblack.withOpacity(0.6),
+                              indicator: UnderlineIndicator(
+                                  strokeCap: StrokeCap.round,
+                                  borderSide: BorderSide(width: 2),
+                                  insets:
+                                      EdgeInsets.symmetric(horizontal: 16.0)),
+                              isScrollable: true,
+                              indicatorColor: mainblack,
+                              tabs: [
+                                Tab(
+                                  height: 40,
+                                  child: Text(
+                                    "대외활동",
+                                  ),
+                                ),
+                                Tab(
+                                  height: 40,
+                                  child: Text(
+                                    "공모전",
+                                  ),
+                                ),
+                                Tab(
+                                  height: 40,
+                                  child: Text(
+                                    "인턴쉽",
+                                  ),
+                                ),
+                              ]),
+                        ),
                       ],
-                    )),
-              );
-            },
-          ),
-        ],
+                    ),
+                    Container(
+                      height: 1,
+                      color: Color(0xffe7e7e7),
+                    )
+                  ],
+                ),
+              ),
+              // SliverToBoxAdapter(child: de\,)
+            ];
+          },
+          body: TabBarView(physics: PageScrollPhysics(), children: [
+            SingleChildScrollView(
+              key: const PageStorageKey("key1"),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  bottom: 80,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8),
+                      child: Column(
+                        children: PaperController.to.posting,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SingleChildScrollView(
+              key: const PageStorageKey("key2"),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  bottom: 20,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8),
+                      child: Column(
+                        children: PaperController.to.posting,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 16,
+                bottom: 80,
+              ),
+              child: SingleChildScrollView(
+                key: const PageStorageKey("key3"),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    children: PaperController.to.posting_internship,
+                  ),
+                ),
+              ),
+            ),
+          ]),
+        ),
       ),
     );
   }

@@ -23,16 +23,16 @@ class QuestionAnswerScreen extends StatelessWidget {
     return Scaffold(
       body: Obx(
         () => SmartRefresher(
-          controller: homeController.refreshController,
+          controller: homeController.refreshController2,
           enablePullDown: true,
-          enablePullUp: homeController.enablepullup.value,
+          enablePullUp: homeController.enablepullup2.value,
           header: ClassicHeader(
               textStyle: TextStyle(color: mainblack),
               releaseText: "새로고침",
               completeText: "완료",
               idleText: "",
               releaseIcon: Icon(Icons.refresh, color: mainblack),
-              completeIcon: Icon(Icons.done, color: Colors.green),
+              completeIcon: Icon(Icons.done, color: mainblue),
               idleIcon: Icon(Icons.arrow_downward, color: mainblack)),
           footer: ClassicFooter(
             textStyle: TextStyle(color: mainblack),
@@ -48,8 +48,8 @@ class QuestionAnswerScreen extends StatelessWidget {
               strokeWidth: 3,
             ),
           ),
-          onRefresh: homeController.onRefresh,
-          onLoading: homeController.onLoading,
+          onRefresh: homeController.onRefresh2,
+          onLoading: homeController.onLoading2,
           child: CustomScrollView(
             key: PageStorageKey("key2"),
             slivers: [
@@ -86,7 +86,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                                       }).toList(),
                                       onChanged: (String? value) {
                                         homeController.selectgroup(value);
-                                        homeController.onRefresh;
+                                        homeController.onRefresh2;
                                         print(homeController.selectgroup.value);
                                       },
                                     ),

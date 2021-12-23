@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/screen/report_screen.dart';
 
 class Alertdialog2Widget extends StatelessWidget {
   var color_1;
   var color_2;
   String? text_1;
   String? text_2;
-  Alertdialog2Widget({this.color_1, this.color_2, this.text_1, this.text_2});
+  Function()? route_1;
+  Function() route_2;
+
+  Alertdialog2Widget(
+      {this.color_1,
+      this.color_2,
+      this.text_1,
+      this.text_2,
+      this.route_1,
+      required this.route_2});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +39,8 @@ class Alertdialog2Widget extends StatelessWidget {
                 children: [
                   InkWell(
                       onTap: () {
-                        print("click");
+                        route_1!();
+                        print("click1");
                       },
                       child: (Container(
                           width: Get.width * 0.95,
@@ -48,7 +59,8 @@ class Alertdialog2Widget extends StatelessWidget {
                   ),
                   InkWell(
                       onTap: () {
-                        print("click");
+                        route_2();
+                        print("click2");
                       },
                       child: (Container(
                           width: Get.width * 0.95,

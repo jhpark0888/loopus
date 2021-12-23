@@ -6,6 +6,7 @@ class QuestionItem {
       required this.user,
       required this.is_user,
       required this.content,
+      required this.answercount,
       required this.adopt,
       required this.date,
       required this.department,
@@ -16,6 +17,7 @@ class QuestionItem {
   int id;
   int user;
   int is_user;
+  int answercount;
   String? department;
   String content;
   String realname;
@@ -37,6 +39,7 @@ class QuestionItem {
         date: DateTime.parse(json["date"]),
         department: department_map[json["department"]] ?? "",
         is_user: -1,
+        answercount: json["count"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,6 +52,7 @@ class QuestionItem {
         "profile_image": profileimage == null ? null : profileimage,
         "department ": department_map[department] ?? "",
         "is_user": is_user,
+        "count": answercount,
         "date":
             "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
       };

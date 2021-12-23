@@ -94,7 +94,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
                                 children: [
                                   SvgPicture.asset("assets/icons/Comment.svg"),
                                   Text(
-                                    " ${questionController.questionModel2.questions.answers.length}",
+                                    " ${item.answercount}",
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   )

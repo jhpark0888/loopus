@@ -13,7 +13,7 @@ class QuestionController extends GetxController {
   RxList<MessageAnswerWidget> messageanswerlist = <MessageAnswerWidget>[].obs;
   FocusNode answerfocus = FocusNode();
   RxBool ignore_check_add_q = true.obs;
-  RxBool ignore_check_tag_q = true.obs;
+  RxBool check_alarm = false.obs;
   RxBool isDropdown = false.obs;
 
   @override
@@ -24,7 +24,7 @@ class QuestionController extends GetxController {
 
   QuestionModel2 questionModel2 = QuestionModel2(QuestionItem(
       adopt: null,
-      answers: [],
+      answer: [],
       content: '',
       date: null,
       department: '',
@@ -39,7 +39,7 @@ class QuestionController extends GetxController {
 
   Future<void> addanswer() async {
     messageanswerlist.clear();
-    questionModel2.questions.answers.forEach((element2) {
+    questionModel2.questions.answer.forEach((element2) {
       messageanswerlist.add(MessageAnswerWidget(
         content: element2.content,
         image: element2.profileimage ?? "",

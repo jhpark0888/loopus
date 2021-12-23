@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/screen/home_posting_screen.dart';
 import 'package:loopus/screen/posting_detail_screen.dart';
 import 'package:loopus/screen/question_answer_screen.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
@@ -167,62 +168,9 @@ class HomeScreen extends StatelessWidget {
             ];
           },
           body: TabBarView(physics: PageScrollPhysics(), children: [
-            SingleChildScrollView(
-              key: const PageStorageKey("key1"),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  bottom: 80,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8),
-                      child: Column(
-                        children: HomeController.to.posting,
-                      ),
-                    ),
-                    Container(
-                      height: 8,
-                      color: Color(0xffefefef),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 16,
-                            left: 16,
-                            right: 16,
-                          ),
-                          child: Text(
-                            "추천하는 정보",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                        ),
-                        child: Row(
-                          children: HomeController.to.recommend_posting,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 8,
-                      color: Color(0xffefefef),
-                    ),
-                  ],
-                ),
-              ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 50.0),
+              child: HomePostingScreen(),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 50.0),

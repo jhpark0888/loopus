@@ -6,7 +6,7 @@ class QuestionItem {
       required this.user,
       required this.is_user,
       required this.content,
-      required this.answers,
+      required this.answer,
       required this.adopt,
       required this.date,
       required this.department,
@@ -21,7 +21,7 @@ class QuestionItem {
   String content;
   String realname;
   String? profileimage;
-  List<Answer> answers;
+  List<Answer> answer;
   bool? adopt;
   DateTime? date;
   List<QuestionTag> questionTag;
@@ -33,8 +33,8 @@ class QuestionItem {
         profileimage:
             json["profile_image"] == null ? null : json["profile_image"],
         realname: json["real_name"],
-        answers:
-            List<Answer>.from(json["answers"].map((x) => Answer.fromJson(x))),
+        answer:
+            List<Answer>.from(json["answer"].map((x) => Answer.fromJson(x))),
         adopt: json["adopt"],
         questionTag: List<QuestionTag>.from(
             json["question_tag"].map((x) => QuestionTag.fromJson(x))),
@@ -47,7 +47,7 @@ class QuestionItem {
         "id": id,
         "user_id": user,
         "content": content,
-        "answers": List<dynamic>.from(answers.map((x) => x.toJson())),
+        "answer": List<dynamic>.from(answer.map((x) => x.toJson())),
         "adopt": adopt,
         "question_tag": List<dynamic>.from(questionTag.map((x) => x.toJson())),
         "real_name": realname,
@@ -83,7 +83,6 @@ class Answer {
   Answer(
       {required this.id,
       required this.user,
-      required this.answerer,
       required this.content,
       required this.question,
       required this.adopt,
@@ -95,7 +94,6 @@ class Answer {
 
   int id;
   int user;
-  String answerer;
   int? isuser;
   String department;
   String? realname;
@@ -108,9 +106,8 @@ class Answer {
   factory Answer.fromJson(Map<String, dynamic> json) => Answer(
         id: json["id"],
         user: json["user_id"],
-        answerer: json["answerer"],
         content: json["content"],
-        question: json["question"],
+        question: json["question_id"],
         adopt: json["adopt"],
         date: DateTime.parse(json["date"]),
         profileimage:
@@ -123,9 +120,8 @@ class Answer {
   Map<String, dynamic> toJson() => {
         "id": id,
         "user_id": user,
-        "answerer": answerer,
         "content": content,
-        "question": question,
+        "question_id": question,
         "department": department_map[department],
         "adopt": adopt,
         "is_user": isuser == null ? null : isuser,
@@ -145,7 +141,7 @@ class QuestionModel2 {
         id: 0,
         user: 0,
         content: "",
-        answers: [],
+        answer: [],
         adopt: null,
         date: null,
         questionTag: [],
