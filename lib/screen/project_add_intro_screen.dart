@@ -10,7 +10,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 class ProjectAddIntroScreen extends StatelessWidget {
   ProjectAddIntroScreen({Key? key}) : super(key: key);
 
-  ProjectAddController projectmakecontroller = Get.find();
+  ProjectAddController projectaddcontroller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ProjectAddIntroScreen extends StatelessWidget {
             ),
           ),
         ],
-        title: '활동 추가',
+        title: '활동 정보',
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -57,7 +57,7 @@ class ProjectAddIntroScreen extends StatelessWidget {
               TextField(
                 cursorColor: Colors.black,
                 maxLines: 2,
-                controller: projectmakecontroller.introcontroller,
+                controller: projectaddcontroller.introcontroller,
                 decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black, width: 2),

@@ -9,6 +9,7 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/screen/posting_add_content_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
+import 'package:loopus/screen/qurillread.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 
@@ -67,7 +68,9 @@ class ProjectScreen extends StatelessWidget {
                             icon: SvgPicture.asset("assets/icons/Edit.svg"),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(() => QuillreadScreen());
+                            },
                             icon: SvgPicture.asset("assets/icons/More.svg"),
                           ),
                         ]),
@@ -262,17 +265,13 @@ class ProjectScreen extends StatelessWidget {
               ),
             ),
             Column(
-              children: [
-                ProjectPostingWidget(
-                  title: '안녕하세요',
-                  preview: '안녕하세요 감사해요 반가워요 다시 만나요',
-                ),
-                ProjectPostingWidget(
-                  title: '안녕하세요',
-                  preview: '안녕하세요 감사해요 반가워요 다시 만나요',
-                ),
-              ],
-            )
+                children: project.post != null
+                    ? project.post!
+                        .map((post) => ProjectPostingWidget(
+                              post: post,
+                            ))
+                        .toList()
+                    : [Container()])
           ],
         ),
       ),

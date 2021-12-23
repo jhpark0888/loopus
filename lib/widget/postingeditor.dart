@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:loopus/model/post_model.dart';
 import 'package:tuple/tuple.dart';
 
 class PostingEditor extends StatelessWidget {
@@ -73,4 +74,16 @@ class PostingEditor extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget getReadEditor(List<dynamic> json) {
+  QuillController readController = QuillController(
+    document: Document.fromJson(json),
+    selection: const TextSelection.collapsed(offset: 0),
+  );
+  return PostingEditor(
+    controller: readController,
+    readonly: true,
+    showcursor: false,
+  );
 }

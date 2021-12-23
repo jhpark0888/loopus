@@ -63,8 +63,8 @@ class ProjectWidget extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpol9gKXdfW9lUlFiWuujRUhCQbw9oHVIkQ&usqp=CAU',
+                        image: AssetImage(
+                          "assets/illustrations/default_image.png",
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -161,7 +161,7 @@ class ProjectWidget extends StatelessWidget {
                               width: 4,
                             ),
                             Text(
-                              "${project.totallike}",
+                              "${project.like_count}",
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,

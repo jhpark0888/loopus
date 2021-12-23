@@ -14,7 +14,7 @@ class HomePostingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(PostingScreen());
+        // Get.to(PostingScreen());
         print("click posting");
       },
       child: Column(

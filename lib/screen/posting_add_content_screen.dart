@@ -84,6 +84,7 @@ class PostingAddContentScreen extends StatelessWidget {
                     if (image != null) {
                       postingAddController.images.add(image);
                       // 이미지 지웠을 때 안에 이미지 제거해야함
+                      postingAddController.postcontroller.document;
                     }
                     return image != null ? image.path : null;
                   },

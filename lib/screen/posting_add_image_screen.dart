@@ -17,19 +17,6 @@ class PostingAddImageScreen extends StatelessWidget {
   PostingAddController postingAddController = Get.find();
   int project_id;
 
-  Widget getReadEditor(PostingAddController controller) {
-    QuillController readController = QuillController(
-      document: Document.fromJson(
-          controller.postcontroller.document.toDelta().toJson()),
-      selection: const TextSelection.collapsed(offset: 0),
-    );
-    return PostingEditor(
-      controller: readController,
-      readonly: true,
-      showcursor: false,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +26,9 @@ class PostingAddImageScreen extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 await postingAddRequest(project_id);
+                // Get.back();
+                // Get.back();
+                // Get.back();
               },
               child: Text(
                 '올리기',
@@ -60,7 +50,10 @@ class PostingAddImageScreen extends StatelessWidget {
                   _MyAppSpace(),
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: getReadEditor(postingAddController),
+                    child: getReadEditor(postingAddController
+                        .postcontroller.document
+                        .toDelta()
+                        .toJson()),
                   ),
                 ],
               ),

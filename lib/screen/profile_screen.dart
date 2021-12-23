@@ -58,18 +58,30 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Stack(
                         children: [
-                          ClipOval(
-                              child: CachedNetworkImage(
-                            height: 92,
-                            width: 92,
-                            imageUrl:
-                                profileController.user.value.profileImage ??
-                                    "https://i.stack.imgur.com/l60Hf.png",
-                            placeholder: (context, url) => const CircleAvatar(
-                              child: Center(child: CircularProgressIndicator()),
-                            ),
-                            fit: BoxFit.cover,
-                          )),
+                          Obx(
+                            () => ClipOval(
+                                child:
+                                    profileController.user.value.profileImage !=
+                                            null
+                                        ? CachedNetworkImage(
+                                            height: 92,
+                                            width: 92,
+                                            imageUrl: profileController
+                                                .user.value.profileImage!,
+                                            placeholder: (context, url) =>
+                                                const CircleAvatar(
+                                              child: Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                            ),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.asset(
+                                            "assets/illustrations/default_profile.png",
+                                            height: 92,
+                                            width: 92,
+                                          )),
+                          ),
                           Positioned.fill(
                             child: Align(
                               alignment: Alignment.bottomRight,
