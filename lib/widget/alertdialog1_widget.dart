@@ -5,10 +5,8 @@ import 'package:loopus/constant.dart';
 class Alertdialog1Widget extends StatelessWidget {
   var color_1;
   String? text_1;
-  Alertdialog1Widget({
-    this.color_1,
-    this.text_1,
-  });
+  Function() function_1;
+  Alertdialog1Widget({this.color_1, this.text_1, required this.function_1});
 
   @override
   Widget build(BuildContext context) {

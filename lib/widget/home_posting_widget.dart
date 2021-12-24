@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
@@ -57,7 +58,12 @@ class HomePostingWidget extends StatelessWidget {
                     topRight: Radius.circular(8),
                   ),
                   child: item.thumbnail == null
-                      ? Image.asset("assets/illustrations/default_image.png")
+                      ? Image.asset(
+                          "assets/illustrations/default_image.png",
+                          height: Get.width / 2 * 1,
+                          width: Get.width,
+                          fit: BoxFit.cover,
+                        )
                       : CachedNetworkImage(
                           fadeOutDuration: Duration(milliseconds: 500),
                           height: Get.width / 2 * 1,
@@ -133,22 +139,37 @@ class HomePostingWidget extends StatelessWidget {
                                         height: 32,
                                         width: 32,
                                         child: ClipOval(
-                                            child: Image.asset(
-                                                "assets/illustrations/default_profile.png")),
+                                            child: item.profileimage == null
+                                                ? Image.asset(
+                                                    "assets/illustrations/default_profile.png")
+                                                : CachedNetworkImage(
+                                                    height: 32,
+                                                    width: 32,
+                                                    imageUrl:
+                                                        "${item.profileimage}",
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            CircleAvatar(
+                                                      child: Center(
+                                                          child:
+                                                              CircularProgressIndicator()),
+                                                    ),
+                                                    fit: BoxFit.fill,
+                                                  )),
                                       ),
                                       SizedBox(
                                         width: 8,
                                       ),
-                                      const Text(
-                                        "박도영 · ",
+                                      Text(
+                                        "${item.realname} · ",
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: mainblack,
                                         ),
                                       ),
-                                      const Text(
-                                        "기계공학과",
+                                      Text(
+                                        "${item.department}",
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
@@ -161,56 +182,43 @@ class HomePostingWidget extends StatelessWidget {
                                       children: [
                                         InkWell(
                                           onTap: () {
-                                            bookmarkController.bookmark.value ==
-                                                    false
-                                                ? bookmarkController
-                                                    .bookmark.value = true
-                                                : bookmarkController
-                                                    .bookmark.value = false;
+                                            if (item.isLiked.value == 0) {
+                                              item.isLiked.value = 1;
+                                              item.likeCount.value += 1;
+                                            } else {
+                                              item.isLiked.value = 0;
+                                              item.likeCount.value -= 1;
+                                            }
+                                            likepost(item.id);
                                           },
-                                          child: bookmarkController
-                                                      .bookmark.value ==
-                                                  false
+                                          child: item.isLiked.value == 0
                                               ? SvgPicture.asset(
                                                   "assets/icons/Favorite_Inactive.svg")
                                               : SvgPicture.asset(
                                                   "assets/icons/Favorite_Active.svg"),
                                         ),
                                         Text(
-                                          "${item.likeCount}",
+                                          "${item.likeCount.value}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        Obx(
-                                          () => InkWell(
-                                            onTap: () {
-                                              if (item.isMarked == null) {
-                                                bookmarkController
-                                                    .bookmark.value = false;
-                                              } else {
-                                                bookmarkController
-                                                    .bookmark.value = true;
-                                              }
-
-                                              bookmarkController
-                                                          .bookmark.value ==
-                                                      true
-                                                  ? bookmarkController
-                                                      .bookmark.value = false
-                                                  : bookmarkController
-                                                      .bookmark.value = true;
-                                            },
-                                            child: bookmarkController
-                                                        .bookmark.value ==
-                                                    false
-                                                ? SvgPicture.asset(
-                                                    "assets/icons/Mark_Default.svg")
-                                                : SvgPicture.asset(
-                                                    "assets/icons/Mark_Saved.svg"),
-                                          ),
+                                        InkWell(
+                                          onTap: () {
+                                            if (item.isMarked.value == 0) {
+                                              item.isMarked.value = 1;
+                                            } else {
+                                              item.isMarked.value = 0;
+                                            }
+                                            bookmarkpost(item.id);
+                                          },
+                                          child: item.isMarked.value == 0
+                                              ? SvgPicture.asset(
+                                                  "assets/icons/Mark_Default.svg")
+                                              : SvgPicture.asset(
+                                                  "assets/icons/Mark_Saved.svg"),
                                         ),
                                       ],
                                     ),

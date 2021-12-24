@@ -51,6 +51,16 @@ class HomePostingScreen extends StatelessWidget {
             key: PageStorageKey("key2"),
             slivers: [
               SliverList(
+                  delegate: SliverChildListDelegate([
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
+              ])),
+              SliverList(
                   delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   return GestureDetector(

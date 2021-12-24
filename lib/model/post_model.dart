@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class PostItem {
   PostItem({
     required this.id,
@@ -8,6 +10,9 @@ class PostItem {
     required this.project,
     required this.likeCount,
     required this.isLiked,
+    required this.realname,
+    required this.department,
+    required this.profileimage,
     required this.isMarked,
   });
 
@@ -15,11 +20,14 @@ class PostItem {
   int userId;
   var thumbnail;
   String title;
+  String realname;
+  String department;
+  String? profileimage;
   DateTime date;
   Project project;
-  int likeCount;
-  var isLiked;
-  var isMarked;
+  RxInt likeCount;
+  RxInt isLiked;
+  RxInt isMarked;
 
   factory PostItem.fromJson(Map<String, dynamic> json) => PostItem(
         id: json["id"],
@@ -28,9 +36,12 @@ class PostItem {
         title: json["title"],
         date: DateTime.parse(json["date"]),
         project: Project.fromJson(json["project"]),
-        likeCount: json["like_count"],
-        isLiked: json["is_liked"] == null ? null : json["is_liked"],
-        isMarked: json["is_marked"] == null ? null : json["is_marked"],
+        likeCount: RxInt(json["like_count"]),
+        isLiked: RxInt(json["is_liked"]),
+        isMarked: RxInt(json["is_marked"]),
+        department: json["department"],
+        profileimage: json["profile_image"],
+        realname: json["real_name"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -41,8 +52,11 @@ class PostItem {
         "date": date.toIso8601String(),
         "project": project.toJson(),
         "like_count": likeCount,
-        "is_liked": isLiked == null ? null : isLiked,
-        "is_marked": isMarked == null ? null : isMarked,
+        "is_liked": isLiked,
+        "is_marked": isMarked,
+        "real_name": realname,
+        "profile_image": profileimage,
+        "department": department,
       };
 }
 

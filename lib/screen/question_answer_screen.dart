@@ -86,7 +86,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                                       }).toList(),
                                       onChanged: (String? value) {
                                         homeController.selectgroup(value);
-                                        homeController.onRefresh2;
+                                        homeController.onRefresh2();
                                         print(homeController.selectgroup.value);
                                       },
                                     ),
@@ -113,22 +113,6 @@ class QuestionAnswerScreen extends StatelessWidget {
                   ],
                 ),
               ])),
-              // SliverList(
-              //   delegate:
-              // ),
-              // SliverList(
-              //     delegate: SliverChildListDelegate([
-              //   Column(
-              //     children: [
-              //       SizedBox(
-              //         height: 20,
-              //       ),
-              //       Divider(
-              //         thickness: 4,
-              //       ),
-              //     ],
-              //   ),
-              // ])),
               SliverList(
                 delegate: homeController.selectgroup.value == "모든 질문"
                     ? SliverChildBuilderDelegate(

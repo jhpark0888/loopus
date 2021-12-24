@@ -13,7 +13,7 @@ class HomeController extends GetxController {
   static HomeController get to => Get.find();
   List<HomePostingWidget> posting = [];
   List<RecommendPostingWidget> recommend_posting = [];
-  bool bookmark = false;
+  RxBool bookmark = false.obs;
   RxBool enablepullup1 = true.obs;
   RxBool enablepullup2 = true.obs;
   var selectgroup = "모든 질문".obs;

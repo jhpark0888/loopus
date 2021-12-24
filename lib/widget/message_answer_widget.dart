@@ -52,6 +52,18 @@ class MessageAnswerWidget extends StatelessWidget {
                           Get.dialog(Alertdialog1Widget(
                             color_1: Colors.red,
                             text_1: "이 질문 삭제하기",
+                            function_1: () {
+                              Get.dialog(
+                                Dialog(
+                                  child: Container(
+                                    height: 80,
+                                    child: Center(
+                                      child: Text('진짜 삭제 할텐가 자네.'),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ));
                         },
                         child: SvgPicture.asset("assets/icons/More.svg")),

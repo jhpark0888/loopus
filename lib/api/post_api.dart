@@ -70,38 +70,6 @@ Future<void> postingAddRequest(int project_id) async {
 
     String responsebody = await response.stream.bytesToString();
     print(responsebody);
-    // responsemap = jsonDecode(responsebody).cast<Map>();
-    // print(responsemap);
-    // myProfileController.customlist.clear();
-    // responsemap.forEach((map) {
-    //   if (map["type"] == "title") {
-    //     myProfileController.customlist.add(ProfileTitleWidget(
-    //       title: map["contents"],
-    //     ));
-    //   } else if (map["type"] == "content") {
-    //     myProfileController.customlist.add(ProfileContentWidget(
-    //       content: map["contents"],
-    //     ));
-    //   } else if (map["type"] == "imageURL") {
-    //     String image = map["contents"];
-
-    //     myProfileController.customlist.add(ProfileImageWidget(
-    //       image: image,
-    //     ));
-    //   } else if (map["type"] == "imageFILE") {
-    //     String image = map["contents"];
-
-    //     myProfileController.customlist.add(ProfileImageWidget(
-    //       image: image,
-    //     ));
-    //   } else if (map["type"] == "feed") {
-    //     myProfileController.customlist.add(Center(
-    //       child: ProfileFeedWidget(
-    //         feed: FeedItem.fromJson(map["contents"]),
-    //       ),
-    //     ));
-    //   }
-    // };
   } else if (response.statusCode == 400) {
     print("lose");
   } else {
@@ -155,4 +123,39 @@ Future<dynamic> looppost(int pageNumber) async {
   } else {
     return QuestionModel.fromJson(list);
   }
+}
+
+Future<dynamic> bookmarkpost(int posting_id) async {
+  String? token;
+  await FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final url =
+      Uri.parse("http://3.35.253.151:8000/post_api/bookmark/$posting_id/");
+
+  final response = await post(url, headers: {"Authorization": "Token $token"});
+  var statusCode = response.statusCode;
+  var responseHeaders = response.headers;
+  var responseBody = utf8.decode(response.bodyBytes);
+  print(statusCode);
+  String result = jsonDecode(responseBody);
+  print(result);
+}
+
+Future<dynamic> likepost(int posting_id) async {
+  String? token;
+  await FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final url = Uri.parse("http://3.35.253.151:8000/post_api/like/$posting_id/");
+
+  final response = await post(url, headers: {"Authorization": "Token $token"});
+  var statusCode = response.statusCode;
+  var responseHeaders = response.headers;
+  var responseBody = utf8.decode(response.bodyBytes);
+  print(statusCode);
+  String result = jsonDecode(responseBody);
+  print(result);
 }
