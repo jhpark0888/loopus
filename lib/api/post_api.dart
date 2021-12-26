@@ -38,8 +38,7 @@ Future<Post?> postingAddRequest(int project_id) async {
     request.files.add(multipartFile);
   }
 
-  request.fields['title'] =
-      json.encode(postingAddController.titlecontroller.text);
+  request.fields['title'] = postingAddController.titlecontroller.text;
   request.fields['contents'] = json
       .encode(postingAddController.postcontroller.document.toDelta().toJson());
 
@@ -54,13 +53,13 @@ Future<Post?> postingAddRequest(int project_id) async {
     String responsebody = await response.stream.bytesToString();
     print(responsebody);
     var responsemap = jsonDecode(responsebody);
-    print(responsemap['contents']);
+    // print(responsemap['contents']);
 
-    Post post = Post.fromJson(responsemap);
+    // Post post = Post.fromJson(responsemap);
     // post.contents = post.contents.replaceAll(RegExp('True'), 'true');
     // List<dynamic> json = jsonDecode(post.contents);
-    print(post.contents);
-    return post;
+    // print(post.contents);
+    // return post;
   } else if (response.statusCode == 400) {
     print("lose");
   } else {

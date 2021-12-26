@@ -20,13 +20,13 @@ class PostingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String text = '';
-    post.contents!.forEach((map) {
-      if (map['insert'] is String) {
-        text = text + map['insert'];
-      }
-    });
-    print(text.replaceAll('\n', ''));
+    // String text = '';
+    // post.contents!.forEach((map) {
+    //   if (map['insert'] is String) {
+    //     text = text + map['insert'];
+    //   }
+    // });
+    // print(text.replaceAll('\n', ''));
     return Scaffold(
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),
@@ -211,12 +211,16 @@ class _MyAppSpace extends StatelessWidget {
       width: Get.width,
       height: Get.height,
       child: Opacity(
-        opacity: 0.25,
-        child: CachedNetworkImage(
-          fit: BoxFit.cover,
-          imageUrl: post.thumbnail ??
-              'https://thumb.pann.com/tc_480/http://fimg4.pann.com/new/download.jsp?FileID=45110348',
-        ),
+        opacity: thumbnail != null ? 0.25 : 1,
+        child: thumbnail != null
+            ? CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: thumbnail,
+              )
+            : Image.asset(
+                "assets/illustrations/default_image.png",
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }

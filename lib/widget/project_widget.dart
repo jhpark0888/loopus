@@ -1,11 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -16,6 +20,7 @@ class ProjectWidget extends StatelessWidget {
     required this.project,
   }) : super(key: key);
 
+  BookmarkController bookmarkController = Get.put(BookmarkController());
   Project project;
 
   @override
@@ -25,10 +30,14 @@ class ProjectWidget extends StatelessWidget {
         bottom: 16,
       ),
       child: GestureDetector(
-        onTap: () {
-          Get.to(() => ProjectScreen(
-                project: project,
-              ));
+        onTap: () async {
+          await getproject(project.id).then((response) {
+            var responseBody = json.decode(utf8.decode(response.bodyBytes));
+            project = Project.fromJson(responseBody);
+            Get.to(() => ProjectScreen(
+                  project: project,
+                ));
+          });
         },
         child: Container(
           decoration: BoxDecoration(
@@ -155,8 +164,22 @@ class ProjectWidget extends StatelessWidget {
                             ],
                           ),
                           Row(children: [
-                            SvgPicture.asset(
-                                'assets/icons/Favorite_Active.svg'),
+                            Obx(
+                              () => InkWell(
+                                  onTap: () {
+                                    bookmarkController.bookmark.value == false
+                                        ? bookmarkController.bookmark.value =
+                                            true
+                                        : bookmarkController.bookmark.value =
+                                            false;
+                                  },
+                                  child: bookmarkController.bookmark.value ==
+                                          false
+                                      ? SvgPicture.asset(
+                                          "assets/icons/Favorite_Inactive.svg")
+                                      : SvgPicture.asset(
+                                          "assets/icons/Favorite_Active.svg")),
+                            ),
                             SizedBox(
                               width: 4,
                             ),

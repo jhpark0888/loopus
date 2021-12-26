@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
+import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/posting_screen.dart';
 
@@ -11,11 +14,11 @@ class ProjectPostingWidget extends StatelessWidget {
     required this.post,
   }) : super(key: key);
 
+  BookmarkController bookmarkController = Get.put(BookmarkController());
   Post post;
 
   @override
   Widget build(BuildContext context) {
-    print(post.title);
     return Padding(
       padding: const EdgeInsets.all(20),
       child: InkWell(
@@ -27,14 +30,16 @@ class ProjectPostingWidget extends StatelessWidget {
           children: [
             Center(
               child: Container(
-                width: 347,
-                height: 190,
+                width: 343,
+                height: 171.5,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     image: DecorationImage(
-                        image: NetworkImage(
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpol9gKXdfW9lUlFiWuujRUhCQbw9oHVIkQ&usqp=CAU',
-                        ),
+                        image: post.thumbnail != null
+                            ? NetworkImage(post.thumbnail!)
+                            : const AssetImage(
+                                "assets/illustrations/default_image.png",
+                              ) as ImageProvider,
                         fit: BoxFit.cover)),
               ),
             ),
@@ -42,18 +47,18 @@ class ProjectPostingWidget extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
               child: Text(
                 post.title,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: kSubTitle1Style,
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
-            //   child: Text(
-            //     post.id,
-            //     style: TextStyle(
-            //       fontSize: 14,
-            //     ),
-            //   ),
-            // ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
+              child: Text(
+                post.content_summary ?? '',
+                style: kBody2Style,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
               child: Row(
@@ -61,20 +66,39 @@ class ProjectPostingWidget extends StatelessWidget {
                 children: [
                   Text(
                     '${post.date.year}.${post.date.month}.${post.date.day}',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
+                    style: kButtonStyle,
                   ),
                   Row(
                     children: [
-                      FavoriteButton(iconSize: 40, valueChanged: () {}),
-                      Text(
-                        '999+',
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold),
+                      Obx(() => InkWell(
+                          onTap: () {
+                            bookmarkController.bookmark.value == false
+                                ? bookmarkController.bookmark.value = true
+                                : bookmarkController.bookmark.value = false;
+                          },
+                          child: bookmarkController.bookmark.value == false
+                              ? SvgPicture.asset(
+                                  "assets/icons/Favorite_Inactive.svg")
+                              : SvgPicture.asset(
+                                  "assets/icons/Favorite_Active.svg"))),
+                      SizedBox(
+                        width: 4,
                       ),
-                      IconButton(
-                          onPressed: () {}, icon: Icon(Icons.bookmark_outline))
+                      Text(post.like_count.toString(), style: kButtonStyle),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Obx(() => InkWell(
+                          onTap: () {
+                            bookmarkController.bookmark.value == false
+                                ? bookmarkController.bookmark.value = true
+                                : bookmarkController.bookmark.value = false;
+                          },
+                          child: bookmarkController.bookmark.value == false
+                              ? SvgPicture.asset(
+                                  "assets/icons/Mark_Default.svg")
+                              : SvgPicture.asset(
+                                  "assets/icons/Mark_Saved.svg")))
                     ],
                   )
                 ],
