@@ -44,7 +44,7 @@ dependencies:
   device_preview: ^0.8.0
   flutter_markdown: ^0.6.8
   pull_to_refresh: ^2.0.0
-  flutter_quill: ^2.0.20
+  flutter_quill: ^2.5.1
   tuple: ^2.0.0  
 
   underline_indicator: ^0.0.4
