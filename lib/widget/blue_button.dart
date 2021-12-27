@@ -26,14 +26,11 @@ class BlueTextButton extends StatelessWidget {
           color: mainblue,
           borderRadius: BorderRadius.circular(4),
         ),
-        margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-        width: width ?? 72,
-        height: height ?? 36,
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-                color: mainWhite, fontSize: 12, fontWeight: FontWeight.bold),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: Text(
+          text,
+          style: kButtonStyle.copyWith(
+            color: mainWhite,
           ),
         ),
       ),

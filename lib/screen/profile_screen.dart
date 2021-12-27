@@ -250,31 +250,6 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(() => LoopPeopleScreen());
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: Column(
-                            children: const [
-                              Text(
-                                '오퍼',
-                                style: kBody1Style,
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                '-',
-                                style: kSubTitle2Style,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -315,14 +290,12 @@ class ProfileScreen extends StatelessWidget {
                         height: 40,
                         child: Text(
                           "활동",
-                          style: kButtonStyle,
                         ),
                       ),
                       Tab(
                         height: 40,
                         child: Text(
                           "질문과 답변",
-                          style: kButtonStyle,
                         ),
                       )
                     ],
@@ -365,36 +338,39 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: Column(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Obx(
-                        () => DropdownButton(
-                            style: kSubTitle2Style,
+              child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Obx(
+                      () => DropdownButtonHideUnderline(
+                        child: ButtonTheme(
+                          alignedDropdown: true,
+                          child: DropdownButton(
+                            onChanged: (value) {},
+                            onTap: () {},
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            elevation: 1,
+                            underline: Container(),
                             icon: Icon(Icons.expand_more),
                             value: profileController.selectqanda.value,
-                            onChanged: (int? value) {
-                              profileController.selectqanda(value);
-                            },
-                            underline: Container(),
                             items: profileController.dropdown_qanda
                                 .map((value) => DropdownMenuItem(
                                     value: profileController.dropdown_qanda
                                         .indexOf("$value"),
                                     child: Text("$value")))
-                                .toList()),
+                                .toList(),
+                          ),
+                        ),
                       ),
                     ),
-                    QuestionWidget(),
-                    QuestionWidget(),
-                    QuestionWidget(),
-                    QuestionWidget(),
-                  ],
-                ),
+                  ),
+                  QuestionWidget(),
+                  QuestionWidget(),
+                  QuestionWidget(),
+                  QuestionWidget(),
+                ],
               ),
             )
           ]),

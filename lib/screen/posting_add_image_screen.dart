@@ -90,23 +90,19 @@ class _MyAppSpace extends StatelessWidget {
                         height: 16,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
+                        padding: const EdgeInsets.only(
+                          bottom: 16,
+                          right: 16,
                         ),
                         child: Align(
                             alignment: Alignment.bottomRight,
                             child: BlueTextButton(
-                              width: 104,
-                              height: 30,
                               onTap: () async {
                                 postingAddController
                                     .thumbnail(await getcropImage("thumbnail"));
                               },
                               text: '대표 사진 변경',
                             )),
-                      ),
-                      SizedBox(
-                        height: 16,
                       ),
                     ],
                   ),
@@ -130,7 +126,7 @@ class _MyAppSpace extends StatelessWidget {
               ? CachedNetworkImage(
                   fit: BoxFit.cover,
                   imageUrl:
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpol9gKXdfW9lUlFiWuujRUhCQbw9oHVIkQ&usqp=CAU')
+                      'https://cdn.pixabay.com/photo/2021/12/20/15/01/christmas-tree-6883263_1280.jpg')
               : Image.file(
                   controller.thumbnail.value,
                   fit: BoxFit.cover,

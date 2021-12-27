@@ -29,7 +29,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           preferredSize: Size.fromHeight(4.0)),
       automaticallyImplyLeading: false,
       elevation: 0,
-      backgroundColor: Colors.white,
+      backgroundColor: mainWhite,
       leading: leading ??
           IconButton(
             onPressed: () {

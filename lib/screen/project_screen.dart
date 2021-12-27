@@ -38,7 +38,9 @@ class ProjectScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.to(ProjectModifyScreen());
+            },
             icon: SvgPicture.asset('assets/icons/Edit.svg'),
           ),
           IconButton(
@@ -329,6 +331,9 @@ class ProjectScreen extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 16,
                   ),
                   Column(
                       children: project.post != null

@@ -21,21 +21,27 @@ class LoopPeopleScreen extends StatelessWidget {
         appBar: AppBarWidget(
           title: '루프 6명',
         ),
-        body: ListView(
-          children: [
-            PersonTileWidget(
-              name: '손승태',
-              department: '산업경영공학과',
-            ),
-            PersonTileWidget(
-              name: '용길한',
-              department: '산업경영공학과',
-            ),
-            PersonTileWidget(
-              name: '조연성',
-              department: '산업경영공학과',
-            ),
-          ],
+        body: Padding(
+          padding: const EdgeInsets.only(
+            top: 16,
+            bottom: 32,
+          ),
+          child: ListView(
+            children: [
+              PersonTileWidget(
+                name: '손승태',
+                department: '산업경영공학과',
+              ),
+              PersonTileWidget(
+                name: '용길한',
+                department: '산업경영공학과',
+              ),
+              PersonTileWidget(
+                name: '조연성',
+                department: '산업경영공학과',
+              ),
+            ],
+          ),
         ));
   }
 }

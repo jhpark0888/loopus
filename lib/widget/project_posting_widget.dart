@@ -14,95 +14,115 @@ class ProjectPostingWidget extends StatelessWidget {
     required this.post,
   }) : super(key: key);
 
+  // BookmarkController bookmarkController = Get.put(BookmarkController());
   Post post;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: InkWell(
-        onTap: () {
-          Get.to(() => PostingScreen(post: post));
-        },
+    return InkWell(
+      onTap: () {
+        Get.to(() => PostingScreen(post: post));
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(
+          bottom: 16,
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Container(
-                width: 343,
-                height: 171.5,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(
-                        image: post.thumbnail != null
-                            ? NetworkImage(post.thumbnail!)
-                            : const AssetImage(
-                                "assets/illustrations/default_image.png",
-                              ) as ImageProvider,
-                        fit: BoxFit.cover)),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
-              child: Text(
-                post.title,
-                style: kSubTitle1Style,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
-              child: Text(
-                post.content_summary ?? '',
-                style: kBody2Style,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '${post.date.year}.${post.date.month}.${post.date.day}',
-                    style: kButtonStyle,
-                  ),
-                  Row(
-                    children: [
-                      Obx(() => InkWell(
-                          onTap: () {
-                            post.isliked.value == false
-                                ? post.isliked.value = true
-                                : post.isliked.value = false;
-                          },
-                          child: post.isliked.value == false
-                              ? SvgPicture.asset(
-                                  "assets/icons/Favorite_Inactive.svg")
-                              : SvgPicture.asset(
-                                  "assets/icons/Favorite_Active.svg"))),
-                      SizedBox(
-                        width: 4,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  width: Get.width,
+                  height: Get.width / 2,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                          image: post.thumbnail != null
+                              ? NetworkImage(post.thumbnail!)
+                              : const AssetImage(
+                                  "assets/illustrations/default_image.png",
+                                ) as ImageProvider,
+                          fit: BoxFit.cover)),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  post.title,
+                  style: kSubTitle1Style,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  post.content_summary ?? '',
+                  style: kBody1Style,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${post.date.year}.${post.date.month}.${post.date.day}',
+                      style: kBody2Style.copyWith(
+                        color: mainblack.withOpacity(
+                          0.6,
+                        ),
                       ),
-                      Text(post.like_count.toString(), style: kButtonStyle),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Obx(() => InkWell(
-                          onTap: () {
-                            post.ismarked.value == false
-                                ? post.ismarked.value = true
-                                : post.ismarked.value = false;
-                          },
-                          child: post.ismarked.value == false
-                              ? SvgPicture.asset(
-                                  "assets/icons/Mark_Default.svg")
-                              : SvgPicture.asset(
-                                  "assets/icons/Mark_Saved.svg")))
-                    ],
-                  )
-                ],
-              ),
-            )
+                    ),
+                    Row(
+                      children: [
+                        Obx(() => InkWell(
+                            onTap: () {
+                              post.isliked.value == false
+                                  ? post.isliked.value = true
+                                  : post.isliked.value = false;
+                            },
+                            child: post.isliked.value == false
+                                ? SvgPicture.asset(
+                                    "assets/icons/Favorite_Inactive.svg")
+                                : SvgPicture.asset(
+                                    "assets/icons/Favorite_Active.svg"))),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          post.like_count.toString(),
+                          style: kButtonStyle,
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Obx(() => InkWell(
+                            onTap: () {
+                              post.ismarked.value == false
+                                  ? post.ismarked.value = true
+                                  : post.ismarked.value = false;
+                            },
+                            child: post.ismarked.value == false
+                                ? SvgPicture.asset(
+                                    "assets/icons/Mark_Default.svg")
+                                : SvgPicture.asset(
+                                    "assets/icons/Mark_Saved.svg")))
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Container(
+              height: 1,
+              color: Color(0xffefefef),
+            ),
           ],
         ),
       ),
