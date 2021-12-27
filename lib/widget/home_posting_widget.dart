@@ -13,7 +13,7 @@ import 'package:loopus/widget/tag_widget.dart';
 class HomePostingWidget extends StatelessWidget {
   // PostItem item; required this.item,
   final int index;
-  PostItem item;
+  Post item;
 
   HomePostingWidget({required Key key, required this.item, required this.index})
       : super(key: key);

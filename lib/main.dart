@@ -62,42 +62,6 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
             name: "/", page: token != null ? () => App() : () => LogInPage()),
-        //   GetPage(
-        //     name: "/feed/:id",
-        //     page: () => FeedPage(),
-        //     binding: BindingsBuilder(
-        //       () => Get.lazyPut<FeedController>(() => FeedController()),
-        //     ),
-        //   ),
-        //   GetPage(
-        //     name: "/noimagefeed/:id",
-        //     page: () => NoimageFeedPage(),
-        //     binding: BindingsBuilder(
-        //       () => Get.lazyPut<FeedController>(() => FeedController(),
-        //           fenix: true),
-        //     ),
-        //   ),
-        //   GetPage(
-        //     name: "/noticedetail",
-        //     page: () => NoticeDetailPage(),
-        //     // binding: BindingsBuilder(
-        //     //   () => Get.lazyPut<NoticeController>(() => NoticeController()),
-        //     // ),
-        //   ),
-        //   GetPage(name: "/detailnotice", page: () => DetailNoticePage()),
-        //   GetPage(name: "/message", page: () => MessagePage()),
-        //   // GetPage(name: "/myprofilecustom", page: () => MyProfileCustomPage()),
-        //   GetPage(name: "/searchpersonal", page: () => SearchPersonalPage()),
-        //   GetPage(name: "/searchpost", page: () => SearchPostPage()),
-        //   GetPage(name: "/touchwithlistpage", page: () => TouchWithListPage()),
-        //   GetPage(name: "/uploadcheck", page: () => UploadCheckPage()),
-        //   GetPage(name: "/upload", page: () => UploadPage()),
-        //   GetPage(name: "/pushalarm", page: () => PushAlarmPage()),
-        //   GetPage(name: "/edit", page: () => EditPage()),
-        //   GetPage(name: "/searchdetail", page: () => SearchDetailPage()),
-        //   GetPage(name: "/group", page: () => GroupPage()),
-        //   GetPage(name: "/likelist", page: () => LikeListPage()),
-        //   GetPage(name: "/profile", page: () => ProfilePage()),
       ],
     );
   }

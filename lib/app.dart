@@ -8,7 +8,6 @@ import 'package:loopus/screen/home_screen.dart';
 import 'package:loopus/screen/paper_screen.dart';
 import 'package:loopus/screen/profile_screen.dart';
 import 'package:loopus/screen/search_screen.dart';
-import 'package:loopus/screen/search_typing_screen.dart';
 
 class App extends GetView<AppController> {
   @override
@@ -20,7 +19,7 @@ class App extends GetView<AppController> {
           case RouteName.Home:
             return HomeScreen();
           case RouteName.Search:
-            return SearchTypingScreen();
+            return SearchScreen();
           case RouteName.Paper:
             return PaperScreen();
           case RouteName.Bookmark:

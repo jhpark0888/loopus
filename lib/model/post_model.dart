@@ -1,13 +1,15 @@
 import 'package:get/get.dart';
+import 'package:loopus/model/project_model.dart';
 
-class PostItem {
-  PostItem({
+class Post {
+  Post({
     required this.id,
     required this.userId,
     required this.thumbnail,
     required this.title,
     required this.date,
     required this.project,
+    required this.project_id,
     required this.likeCount,
     required this.isLiked,
     required this.realname,
@@ -19,6 +21,7 @@ class PostItem {
   int id;
   int userId;
   var thumbnail;
+  int? project_id;
   String title;
   String realname;
   String department;
@@ -29,7 +32,8 @@ class PostItem {
   RxInt isLiked;
   RxInt isMarked;
 
-  factory PostItem.fromJson(Map<String, dynamic> json) => PostItem(
+  factory Post.fromJson(Map<String, dynamic> json) => Post(
+        project_id: json["project_id"],
         id: json["id"],
         userId: json["user_id"],
         thumbnail: json["thumbnail"] == null ? null : json["thumbnail"],
@@ -60,31 +64,6 @@ class PostItem {
       };
 }
 
-class Project {
-  Project({
-    required this.id,
-    required this.projectName,
-    required this.projectTag,
-  });
-
-  int id;
-  String projectName;
-  List<ProjectTag> projectTag;
-
-  factory Project.fromJson(Map<String, dynamic> json) => Project(
-        id: json["id"],
-        projectName: json["project_name"],
-        projectTag: List<ProjectTag>.from(
-            json["project_tag"].map((x) => ProjectTag.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "project_name": projectName,
-        "project_tag": List<dynamic>.from(projectTag.map((x) => x.toJson())),
-      };
-}
-
 class ProjectTag {
   ProjectTag({
     required this.tagId,
@@ -106,12 +85,12 @@ class ProjectTag {
 }
 
 class PostingModel {
-  List<PostItem> postingitems;
+  List<Post> postingitems;
   PostingModel({required this.postingitems});
 
   factory PostingModel.fromJson(List<dynamic> json) {
-    List<PostItem>? items = [];
-    items = json.map((e) => PostItem.fromJson(e)).toList();
+    List<Post>? items = [];
+    items = json.map((e) => Post.fromJson(e)).toList();
     return PostingModel(postingitems: items);
   }
 }

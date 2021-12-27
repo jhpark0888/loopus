@@ -100,7 +100,7 @@ class ProjectWidget extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '${project.startDate.substring(0, 4)}.${project.startDate.substring(5, 7)} ~',
+                            '${project.startDate!.substring(0, 4)}.${project.startDate!.substring(5, 7)} ~',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -161,7 +161,7 @@ class ProjectWidget extends StatelessWidget {
                               width: 4,
                             ),
                             Text(
-                              "${project.totallike}",
+                              "${project.like_count}",
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,

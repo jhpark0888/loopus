@@ -87,7 +87,7 @@ class ProjectScreen extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    '${project.startDate.substring(0, 4)}.${project.startDate.substring(5, 7)} ~ ',
+                                    '${project.startDate!.substring(0, 4)}.${project.startDate!.substring(5, 7)} ~ ',
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
@@ -169,7 +169,7 @@ class ProjectScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
-                project.introduction,
+                project.introduction!,
                 style: TextStyle(
                   fontSize: 14,
                 ),
