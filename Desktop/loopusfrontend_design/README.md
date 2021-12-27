@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# my_time
-=======
 # LoopUsFrontend
 # loopus
 
@@ -18,4 +15,3 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
->>>>>>> 861d95d4a8fd97ffb9c0dbf89bc15ff014ea502b
