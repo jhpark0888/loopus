@@ -10,17 +10,14 @@ import 'package:http/http.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/question_model.dart';
-import 'package:loopus/widget/posting_add_content_widget.dart';
-import 'package:loopus/widget/posting_add_fileimage_widget.dart';
-import 'package:loopus/widget/posting_add_title_widget.dart';
 
-Future<void> postingAddRequest(int project_id) async {
+Future<Post?> postingAddRequest(int project_id) async {
   PostingAddController postingAddController = Get.find();
   String? token = await FlutterSecureStorage().read(key: 'token');
   String? user_id = await FlutterSecureStorage().read(key: 'id');
   // Uri uri = Uri.parse('http://52.79.75.189:8000/user_api/profile_update/customizing/$user_id/');
   Uri uri = Uri.parse(
-      'http://192.168.35.13:8000/post_api/posting_upload/$project_id/');
+      'http://3.35.253.151:8000/post_api/posting_upload/$project_id/');
 
   var request = new http.MultipartRequest('POST', uri);
 
@@ -31,27 +28,73 @@ Future<void> postingAddRequest(int project_id) async {
 
   request.headers.addAll(headers);
 
-  List<int> imageData =
-      await File(postingAddController.thumbnail.value.path).readAsBytes();
-  var stream = http.ByteStream.fromBytes(imageData);
-  var length = imageData.length;
-  var multipartFile = http.MultipartFile(
-    'thumbnail',
-    stream,
-    length,
-  );
-  request.files.add(multipartFile);
+  if (postingAddController.thumbnail.value.path != '') {
+    var multipartFile = await http.MultipartFile.fromPath(
+        'thumbnail', postingAddController.thumbnail.value.path);
+    request.files.add(multipartFile);
+  }
 
   for (int i = 0; i < postingAddController.images.length; i++) {
-    List<int> imageData =
-        await File(postingAddController.images[i].path).readAsBytes();
-    var stream = http.ByteStream.fromBytes(imageData);
-    var length = imageData.length;
-    var multipartFile = http.MultipartFile(
-      'image',
-      stream,
-      length,
-    );
+    var multipartFile = await http.MultipartFile.fromPath(
+        'image', postingAddController.images[i].path);
+    request.files.add(multipartFile);
+  }
+
+  request.fields['title'] = postingAddController.titlecontroller.text;
+  request.fields['contents'] = json
+      .encode(postingAddController.postcontroller.document.toDelta().toJson());
+
+  print(request.fields);
+  print(request.files);
+
+  http.StreamedResponse response = await request.send();
+  print(response.statusCode);
+  if (response.statusCode == 200) {
+    print("success!");
+
+    String responsebody = await response.stream.bytesToString();
+    print(responsebody);
+    var responsemap = jsonDecode(responsebody);
+    // print(responsemap['contents']);
+
+    // Post post = Post.fromJson(responsemap);
+    // post.contents = post.contents.replaceAll(RegExp('True'), 'true');
+    // List<dynamic> json = jsonDecode(post.contents);
+    // print(post.contents);
+    // return post;
+  } else if (response.statusCode == 400) {
+    print("lose");
+  } else {
+    print(response.statusCode);
+  }
+}
+
+Future<Post?> getposting(int project_id) async {
+  PostingAddController postingAddController = Get.find();
+  String? token = await FlutterSecureStorage().read(key: 'token');
+  String? user_id = await FlutterSecureStorage().read(key: 'id');
+  // Uri uri = Uri.parse('http://52.79.75.189:8000/user_api/profile_update/customizing/$user_id/');
+  Uri uri = Uri.parse(
+      'http://3.35.253.151:8000/post_api/posting_upload/$project_id/');
+
+  var request = new http.MultipartRequest('POST', uri);
+
+  final headers = {
+    'Authorization': 'Token $token',
+    'Content-Type': 'multipart/form-data',
+  };
+
+  request.headers.addAll(headers);
+
+  if (postingAddController.thumbnail.value.path != '') {
+    var multipartFile = await http.MultipartFile.fromPath(
+        'thumbnail', postingAddController.thumbnail.value.path);
+    request.files.add(multipartFile);
+  }
+
+  for (int i = 0; i < postingAddController.images.length; i++) {
+    var multipartFile = await http.MultipartFile.fromPath(
+        'image', postingAddController.images[i].path);
     request.files.add(multipartFile);
   }
 
@@ -70,6 +113,14 @@ Future<void> postingAddRequest(int project_id) async {
 
     String responsebody = await response.stream.bytesToString();
     print(responsebody);
+    var responsemap = jsonDecode(responsebody);
+    print(responsemap['contents']);
+
+    Post post = Post.fromJson(responsemap);
+    // post.contents = post.contents.replaceAll(RegExp('True'), 'true');
+    // List<dynamic> json = jsonDecode(post.contents);
+    // print(post.contents);
+    return post;
   } else if (response.statusCode == 400) {
     print("lose");
   } else {

@@ -10,9 +10,11 @@ class Post {
     required this.date,
     required this.project,
     required this.project_id,
+    required this.contents,
     required this.likeCount,
     required this.isLiked,
     required this.realname,
+    this.content_summary,
     required this.department,
     required this.profileimage,
     required this.isMarked,
@@ -24,10 +26,12 @@ class Post {
   int? project_id;
   String title;
   String realname;
+  List<Map<String, dynamic>>? contents;
   String department;
   String? profileimage;
   DateTime date;
   Project project;
+  String? content_summary;
   RxInt likeCount;
   RxInt isLiked;
   RxInt isMarked;
@@ -42,7 +46,14 @@ class Post {
         project: Project.fromJson(json["project"]),
         likeCount: RxInt(json["like_count"]),
         isLiked: RxInt(json["is_liked"]),
+        contents: json["contents"] != null
+            ? List<Map<String, dynamic>>.from(json["contents"].map((x) => x))
+            : null,
         isMarked: RxInt(json["is_marked"]),
+        content_summary: json["contents"] != null
+            ? contentsummary(
+                List<Map<String, dynamic>>.from(json["contents"].map((x) => x)))
+            : null,
         department: json["department"],
         profileimage: json["profile_image"],
         realname: json["real_name"],
@@ -62,6 +73,17 @@ class Post {
         "profile_image": profileimage,
         "department": department,
       };
+}
+
+String contentsummary(List<Map<String, dynamic>> json) {
+  String summary = '';
+  json.forEach((map) {
+    if (map['insert'] is String) {
+      summary = summary + map['insert'];
+    }
+  });
+  summary.replaceAll('\n', '');
+  return summary;
 }
 
 class ProjectTag {

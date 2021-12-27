@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:math' as math;
 
@@ -7,14 +9,24 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/model/post_model.dart';
+import 'package:loopus/widget/postingeditor.dart';
 
 class PostingScreen extends StatelessWidget {
-  PostingScreen({Key? key}) : super(key: key);
+  PostingScreen({Key? key, required this.post}) : super(key: key);
 
   ScrollController _controller = ScrollController();
+  Post post;
 
   @override
   Widget build(BuildContext context) {
+    // String text = '';
+    // post.contents!.forEach((map) {
+    //   if (map['insert'] is String) {
+    //     text = text + map['insert'];
+    //   }
+    // });
+    // print(text.replaceAll('\n', ''));
     return Scaffold(
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),
@@ -45,7 +57,9 @@ class PostingScreen extends StatelessWidget {
               ),
             ],
             pinned: true,
-            flexibleSpace: _MyAppSpace(),
+            flexibleSpace: _MyAppSpace(
+              post: post,
+            ),
             expandedHeight: Get.width / 3 * 2,
           ),
           SliverList(
@@ -55,52 +69,9 @@ class PostingScreen extends StatelessWidget {
                   horizontal: 16,
                   vertical: 24,
                 ),
-                child: Column(
-                  children: [
-                    Text(
-                      "속의 별 멀듯이, 있습니다. 흙으로 그리고 가슴속에 피어나듯이 동경과 잔디가 프랑시스 보고, 버리었습니다. 하나의 릴케 그리고 하나에 딴은 이름자 위에 까닭이요, 봅니다. 애기 라이너 풀이 겨울이 까닭이요, 아침이 무덤 봅니다.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        height: 1.6,
-                      ),
-                    ),
-                    Text(
-                      "속의 별 멀듯이, 있습니다. 흙으로 그리고 가슴속에 피어나듯이 동경과 잔디가 프랑시스 보고, 버리었습니다. 하나의 릴케 그리고 하나에 딴은 이름자 위에 까닭이요, 봅니다. 애기 라이너 풀이 겨울이 까닭이요, 아침이 무덤 봅니다.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        height: 1.6,
-                      ),
-                    ),
-                    Text(
-                      "속의 별 멀듯이, 있습니다. 흙으로 그리고 가슴속에 피어나듯이 동경과 잔디가 프랑시스 보고, 버리었습니다. 하나의 릴케 그리고 하나에 딴은 이름자 위에 까닭이요, 봅니다. 애기 라이너 풀이 겨울이 까닭이요, 아침이 무덤 봅니다.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        height: 1.6,
-                      ),
-                    ),
-                    Text(
-                      "속의 별 멀듯이, 있습니다. 흙으로 그리고 가슴속에 피어나듯이 동경과 잔디가 프랑시스 보고, 버리었습니다. 하나의 릴케 그리고 하나에 딴은 이름자 위에 까닭이요, 봅니다. 애기 라이너 풀이 겨울이 까닭이요, 아침이 무덤 봅니다.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        height: 1.6,
-                      ),
-                    ),
-                    Text(
-                      "속의 별 멀듯이, 있습니다. 흙으로 그리고 가슴속에 피어나듯이 동경과 잔디가 프랑시스 보고, 버리었습니다. 하나의 릴케 그리고 하나에 딴은 이름자 위에 까닭이요, 봅니다. 애기 라이너 풀이 겨울이 까닭이요, 아침이 무덤 봅니다.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        height: 1.6,
-                      ),
-                    ),
-                    Text(
-                      "속의 별 멀듯이, 있습니다. 흙으로 그리고 가슴속에 피어나듯이 동경과 잔디가 프랑시스 보고, 버리었습니다. 하나의 릴케 그리고 하나에 딴은 이름자 위에 까닭이요, 봅니다. 애기 라이너 풀이 겨울이 까닭이요, 아침이 무덤 봅니다.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        height: 1.6,
-                      ),
-                    ),
-                  ],
-                ),
+                child: post.contents != null
+                    ? getReadEditor(post.contents!)
+                    : Container(),
               ),
             ]),
           ),
@@ -111,10 +82,14 @@ class PostingScreen extends StatelessWidget {
 }
 
 class _MyAppSpace extends StatelessWidget {
+  _MyAppSpace({Key? key, required this.post}) : super(key: key);
+
+  Post post;
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
-    print('빌드');
     return LayoutBuilder(
       builder: (context, c) {
         var top = c.biggest.height;
@@ -137,7 +112,7 @@ class _MyAppSpace extends StatelessWidget {
                 child: Opacity(
                   opacity: 1 - opacity2,
                   child: getCollapseTitle(
-                    'LOOPUS 앱 개발 프로젝트askdlaskdlaasdasdd',
+                    post.title,
                   ),
                 ),
               ),
@@ -147,7 +122,7 @@ class _MyAppSpace extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
-                  getImage(),
+                  getImage(post.thumbnail),
                   SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -157,7 +132,7 @@ class _MyAppSpace extends StatelessWidget {
                           height: 32,
                         ),
                         getExpendTitle(
-                          'LOOPUS 앱 개발을 하면서 느낀 점 3가지가 있습니다.',
+                          post.title,
                         ),
                         SizedBox(
                           height: 16,
@@ -207,7 +182,7 @@ class _MyAppSpace extends StatelessWidget {
                                 ],
                               ),
                               Text(
-                                '21. 08. 21',
+                                '${post.date.year}.${post.date.month}.${post.date.day}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: mainblack.withOpacity(0.6),
@@ -231,17 +206,21 @@ class _MyAppSpace extends StatelessWidget {
     );
   }
 
-  Widget getImage() {
+  Widget getImage(String? thumbnail) {
     return Container(
       width: Get.width,
       height: Get.height,
       child: Opacity(
-        opacity: 0.25,
-        child: CachedNetworkImage(
-          fit: BoxFit.cover,
-          imageUrl:
-              'https://thumb.pann.com/tc_480/http://fimg4.pann.com/new/download.jsp?FileID=45110348',
-        ),
+        opacity: thumbnail != null ? 0.25 : 1,
+        child: thumbnail != null
+            ? CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: thumbnail,
+              )
+            : Image.asset(
+                "assets/illustrations/default_image.png",
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }

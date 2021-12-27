@@ -1,81 +1,128 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
+import 'package:loopus/controller/bookmark_controller.dart';
+import 'package:loopus/model/post_model.dart';
+import 'package:loopus/screen/posting_screen.dart';
 
 class ProjectPostingWidget extends StatelessWidget {
   ProjectPostingWidget({
     Key? key,
-    required this.title,
-    required this.preview,
+    required this.post,
   }) : super(key: key);
 
-  String title;
-  String preview;
+  // BookmarkController bookmarkController = Get.put(BookmarkController());
+  Post post;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: InkWell(
-        onTap: () {},
+    return InkWell(
+      onTap: () {
+        Get.to(() => PostingScreen(post: post));
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(
+          bottom: 16,
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Container(
-                width: 347,
-                height: 190,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(
-                        image: NetworkImage(
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpol9gKXdfW9lUlFiWuujRUhCQbw9oHVIkQ&usqp=CAU',
-                        ),
-                        fit: BoxFit.cover)),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
-              child: Text(
-                '$title',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
-              child: Text(
-                '$preview',
-                style: TextStyle(
-                  fontSize: 14,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  width: Get.width,
+                  height: Get.width / 2,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                          image: post.thumbnail != null
+                              ? NetworkImage(post.thumbnail!)
+                              : const AssetImage(
+                                  "assets/illustrations/default_image.png",
+                                ) as ImageProvider,
+                          fit: BoxFit.cover)),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(2, 10, 2, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '21.08.16',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      FavoriteButton(iconSize: 40, valueChanged: () {}),
-                      Text(
-                        '999+',
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold),
+                SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  post.title,
+                  style: kSubTitle1Style,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  post.content_summary ?? '',
+                  style: kBody1Style,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${post.date.year}.${post.date.month}.${post.date.day}',
+                      style: kBody2Style.copyWith(
+                        color: mainblack.withOpacity(
+                          0.6,
+                        ),
                       ),
-                      IconButton(
-                          onPressed: () {}, icon: Icon(Icons.bookmark_outline))
-                    ],
-                  )
-                ],
-              ),
-            )
+                    ),
+                    Row(
+                      children: [
+                        Obx(() => InkWell(
+                            onTap: () {
+                              post.isLiked.value == 0
+                                  ? post.isLiked.value = 1
+                                  : post.isLiked.value = 0;
+                            },
+                            child: post.isLiked.value == 0
+                                ? SvgPicture.asset(
+                                    "assets/icons/Favorite_Inactive.svg")
+                                : SvgPicture.asset(
+                                    "assets/icons/Favorite_Active.svg"))),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          post.likeCount.toString(),
+                          style: kButtonStyle,
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Obx(() => InkWell(
+                            onTap: () {
+                              post.isMarked.value == 0
+                                  ? post.isMarked.value = 1
+                                  : post.isMarked.value = 0;
+                            },
+                            child: post.isMarked.value == 0
+                                ? SvgPicture.asset(
+                                    "assets/icons/Mark_Default.svg")
+                                : SvgPicture.asset(
+                                    "assets/icons/Mark_Saved.svg")))
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Container(
+              height: 1,
+              color: Color(0xffefefef),
+            ),
           ],
         ),
       ),

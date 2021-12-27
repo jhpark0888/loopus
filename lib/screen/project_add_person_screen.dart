@@ -14,7 +14,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
   ProjectAddPersonScreen({Key? key}) : super(key: key);
   // ProjectAddPersonController projectaddpersoncontroller =
   //     Get.put(ProjectAddPersonController());
-  ProjectAddController projectMakeController = Get.find();
+  ProjectAddController projectaddcontroller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
             ),
           ),
         ],
-        title: '활동 추가',
+        title: '함께 활동한 사람',
       ),
       body: Center(
         child: Column(
@@ -69,7 +69,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: projectMakeController.selectedpersontaglist,
+                    children: projectaddcontroller.selectedpersontaglist,
                   ),
                 ),
               ),
@@ -84,7 +84,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    '${projectMakeController.looppersonlist.length}명',
+                    '${projectaddcontroller.looppersonlist.length}명',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -92,7 +92,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
             ),
             Expanded(
               child: ListView(
-                children: projectMakeController.looppersonlist,
+                children: projectaddcontroller.looppersonlist,
               ),
             )
           ],

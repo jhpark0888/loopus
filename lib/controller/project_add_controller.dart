@@ -14,41 +14,22 @@ class ProjectAddController extends GetxController {
 
   void onInit() {
     super.onInit();
-    startyearcontroller.addListener(() {
-      if (startyearcontroller.text.length == 4) {
-        startmonthFocusNode.requestFocus();
-      }
-    });
-    startmonthcontroller.addListener(() {
-      if (startmonthcontroller.text.length == 2) {
-        startdayFocusNode.requestFocus();
-      }
-    });
-    startdaycontroller.addListener(() {
-      if (startdaycontroller.text.length == 2) {
-        endyearFocusNode.requestFocus();
-      }
-    });
-    endyearcontroller.addListener(() {
-      if (endyearcontroller.text.length == 4) {
-        endmonthFocusNode.requestFocus();
-      }
-    });
-    endmonthcontroller.addListener(() {
-      if (endmonthcontroller.text.length == 2) {
-        enddayFocusNode.requestFocus();
-      }
-    });
+    periodNextFocus(startyearcontroller, startmonthFocusNode, 4);
+    periodNextFocus(startmonthcontroller, startdayFocusNode, 2);
+    periodNextFocus(startdaycontroller, endyearFocusNode, 2);
+    periodNextFocus(endyearcontroller, endmonthFocusNode, 4);
+    periodNextFocus(endmonthcontroller, enddayFocusNode, 2);
+
     projectnamecontroller.addListener(() {
       if (projectnamecontroller.text.isEmpty) {
-        onbutton(false);
+        ontitlebutton(false);
       } else {
         Pattern pattern = r'[\-\_\/\\\[\]\(\)\|\{\}*$@$!%*#?~^<>,.&+=]';
         RegExp regExp = new RegExp(pattern.toString());
         if (regExp.hasMatch(projectnamecontroller.text)) {
-          onbutton(false);
+          ontitlebutton(false);
         } else {
-          onbutton(true);
+          ontitlebutton(true);
         }
       }
     });
@@ -74,6 +55,16 @@ class ProjectAddController extends GetxController {
       <SelectedPersonTagWidget>[].obs;
 
   RxBool isongoing = false.obs;
-  RxBool onbutton = false.obs;
+  RxBool ontitlebutton = false.obs;
+  RxBool ondatebutton = false.obs;
   List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
+}
+
+periodNextFocus(
+    TextEditingController controller, FocusNode nextfocusnode, int textlength) {
+  controller.addListener(() {
+    if (controller.text.length == textlength) {
+      nextfocusnode.requestFocus();
+    }
+  });
 }

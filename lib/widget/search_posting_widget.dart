@@ -31,7 +31,7 @@ class SearchPostingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(PostingScreen());
+        // Get.to(PostingScreen(post: Post(),));
         print("click posting");
       },
       child: Padding(

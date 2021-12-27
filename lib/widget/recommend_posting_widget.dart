@@ -17,7 +17,7 @@ class RecommendPostingWidget extends StatelessWidget {
       width: Get.width * 0.9,
       child: InkWell(
         onTap: () {
-          Get.to(PostingScreen());
+          // Get.to(PostingScreen());
           print("click posting");
         },
         child: Container(

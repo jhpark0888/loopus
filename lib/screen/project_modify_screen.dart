@@ -18,7 +18,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 class ProjectModifyScreen extends StatelessWidget {
   ProjectModifyScreen({Key? key}) : super(key: key);
 
-  ProjectAddController projectmakecontroller = Get.put(ProjectAddController());
+  ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
   TagController tagController = Get.put(TagController());
 
   @override
@@ -47,7 +47,7 @@ class ProjectModifyScreen extends StatelessWidget {
               title: Text('활동명',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               subtitle:
-                  Text(projectmakecontroller.projectnamecontroller.value.text,
+                  Text(projectaddcontroller.projectnamecontroller.value.text,
                       style: TextStyle(
                         fontSize: 16,
                       )),
@@ -63,7 +63,7 @@ class ProjectModifyScreen extends StatelessWidget {
               title: Text('활동 기간',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               subtitle: Text(
-                  '${projectmakecontroller.startyearcontroller.value.text}.${projectmakecontroller.startmonthcontroller.value.text} ~ ${projectmakecontroller.endyearcontroller.value.text}.${projectmakecontroller.endmonthcontroller.value.text}',
+                  '${projectaddcontroller.startyearcontroller.value.text}.${projectaddcontroller.startmonthcontroller.value.text} ~ ${projectaddcontroller.endyearcontroller.value.text}.${projectaddcontroller.endmonthcontroller.value.text}',
                   style: TextStyle(
                     fontSize: 16,
                   )),
@@ -79,7 +79,7 @@ class ProjectModifyScreen extends StatelessWidget {
               title: Text('활동 정보',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               subtitle:
-                  Text(projectmakecontroller.projectnamecontroller.value.text,
+                  Text(projectaddcontroller.projectnamecontroller.value.text,
                       style: TextStyle(
                         fontSize: 16,
                       )),
@@ -95,7 +95,7 @@ class ProjectModifyScreen extends StatelessWidget {
               title: Text('활동 태그',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               subtitle:
-                  Text(projectmakecontroller.projectnamecontroller.value.text,
+                  Text(projectaddcontroller.projectnamecontroller.value.text,
                       style: TextStyle(
                         fontSize: 16,
                       )),
@@ -111,7 +111,7 @@ class ProjectModifyScreen extends StatelessWidget {
               title: Text('함께 활동한 사람',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               subtitle:
-                  Text(projectmakecontroller.projectnamecontroller.value.text,
+                  Text(projectaddcontroller.projectnamecontroller.value.text,
                       style: TextStyle(
                         fontSize: 16,
                       )),

@@ -11,16 +11,19 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loopus/api/get_image_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/screen/posting_add_image_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/customlinkstylewidget.dart';
+import 'package:loopus/widget/editortoolbar.dart';
 import 'package:loopus/widget/postingeditor.dart';
 
 class PostingAddContentScreen extends StatelessWidget {
   PostingAddContentScreen({Key? key, required this.project_id})
       : super(key: key);
-  PostingAddController postingAddController = Get.find();
+  // PostingAddController postingAddController = Get.find();
+  EditorController editorController = Get.put(EditorController());
   int project_id;
 
   @override
@@ -48,56 +51,70 @@ class PostingAddContentScreen extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: PostingEditor(
-                  placeholder: '포스팅 내용을 작성해주세요...',
-                  controller: postingAddController.postcontroller,
-                ),
-              ),
+            Obx(
+              () => Expanded(
+                  child: ListView(
+                children: editorController.smarttextfieldlist,
+              )),
             ),
-            QuillToolbar(
-              children: [
-                SelectHeaderStyleButton(
-                  controller: postingAddController.postcontroller,
-                  iconSize: 25,
-                ),
-                ToggleStyleButton(
-                  attribute: Attribute.bold,
-                  icon: Icons.format_bold,
-                  iconSize: 25,
-                  controller: postingAddController.postcontroller,
-                ),
-                ToggleStyleButton(
-                  attribute: Attribute.underline,
-                  icon: Icons.format_underline,
-                  iconSize: 25,
-                  controller: postingAddController.postcontroller,
-                ),
-                ImageButton(
-                  icon: Icons.image,
-                  iconSize: 25,
-                  controller: postingAddController.postcontroller,
-                  onImagePickCallback: (file) async {
-                    File? image = await postingcropImage(file);
-                    if (image != null) {
-                      postingAddController.images.add(image);
-                      // 이미지 지웠을 때 안에 이미지 제거해야함
-                    }
-                    return image != null ? image.path : null;
-                  },
-                  mediaPickSettingSelector: (context) async {
-                    return MediaPickSetting.Gallery;
-                  },
-                ),
-                CustomLinkStyleButton(
-                  controller: postingAddController.postcontroller,
-                  iconSize: 25,
-                ),
-              ],
-            ),
+            Obx(
+              () => EditorToolbar(
+                  selectedType: editorController.selectedType.value,
+                  onSelected: editorController.setType),
+            )
           ],
+          // children: [
+          //   Expanded(
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(10),
+          //       child: PostingEditor(
+          //         placeholder: '포스팅 내용을 작성해주세요...',
+          //         controller: postingAddController.postcontroller,
+          //       ),
+          //     ),
+          //   ),
+          //   QuillToolbar(
+          //     children: [
+          //       SelectHeaderStyleButton(
+          //         controller: postingAddController.postcontroller,
+          //         iconSize: 25,
+          //       ),
+          //       ToggleStyleButton(
+          //         attribute: Attribute.bold,
+          //         icon: Icons.format_bold,
+          //         iconSize: 25,
+          //         controller: postingAddController.postcontroller,
+          //       ),
+          //       ToggleStyleButton(
+          //         attribute: Attribute.underline,
+          //         icon: Icons.format_underline,
+          //         iconSize: 25,
+          //         controller: postingAddController.postcontroller,
+          //       ),
+          //       ImageButton(
+          //         icon: Icons.image,
+          //         iconSize: 25,
+          //         controller: postingAddController.postcontroller,
+          //         onImagePickCallback: (file) async {
+          //           File? image = await postingcropImage(file);
+          //           if (image != null) {
+          //             postingAddController.images.add(image);
+          //             // 이미지 지웠을 때 안에 이미지 제거해야함
+          //             postingAddController.postcontroller.document;
+          //           }
+          //           return image != null ? image.path : null;
+          //         },
+          //         mediaPickSettingSelector: (context) async {
+          //           return MediaPickSetting.Gallery;
+          //         },
+          //       ),
+          //       CustomLinkStyleButton(
+          //         controller: postingAddController.postcontroller,
+          //         iconSize: 25,
+          //       ),
+          //     ],
+          //   ),
+          // ],
         ));
   }
 }

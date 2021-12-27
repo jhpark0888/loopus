@@ -11,7 +11,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 class QuestionAddContentScreen extends StatelessWidget {
   // ProjectAddNameScreen({Key? key}) : super(key: key);
   QuestionController questionController = Get.put(QuestionController());
-  ProjectAddController projectmakecontroller = Get.put(ProjectAddController());
+  ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
 
   @override
   Widget build(BuildContext context) {

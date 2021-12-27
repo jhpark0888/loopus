@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -28,5 +30,50 @@ Future<http.Response> getProfile() async {
     return response;
   } else {
     return Future.error(response.statusCode);
+  }
+}
+
+Future<http.StreamedResponse?> updateProfile(User user, File image) async {
+  String? token = await FlutterSecureStorage().read(key: "token");
+  String? userid = await FlutterSecureStorage().read(key: "id");
+
+  print(token);
+  print(userid);
+  final uri =
+      Uri.parse("http://3.35.253.151:8000/user_api/update_profile/$userid");
+
+  var request = new http.MultipartRequest('POST', uri);
+
+  final headers = {
+    'Authorization': 'Token $token',
+    'Content-Type': 'multipart/form-data',
+  };
+
+  request.headers.addAll(headers);
+
+  var multipartFile = await http.MultipartFile.fromPath('image', image.path);
+  request.files.add(multipartFile);
+
+  request.fields['type'] = json.encode(user.type);
+  request.fields['real_name'] = user.realName;
+  request.fields['class_num'] = user.classNum;
+  request.fields['tag'] = json.encode(user.profileTag);
+
+  print(request.fields);
+  print(request.files);
+
+  http.StreamedResponse response = await request.send();
+  print(response.statusCode);
+  if (response.statusCode == 200) {
+    print("success!");
+
+    String responsebody = await response.stream.bytesToString();
+    var responsemap = jsonDecode(responsebody);
+
+    return response;
+  } else if (response.statusCode == 400) {
+    print("lose");
+  } else {
+    print(response.statusCode);
   }
 }

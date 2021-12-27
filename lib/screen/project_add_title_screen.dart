@@ -13,7 +13,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
   ProjectAddTitleScreen({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
-  ProjectAddController projectmakecontroller = Get.put(ProjectAddController());
+  ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
   TagController tagController = Get.put(TagController());
 
   @override
@@ -33,7 +33,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: projectmakecontroller.onbutton.value
+                  color: projectaddcontroller.ontitlebutton.value
                       ? mainblue
                       : mainblack.withOpacity(0.38),
                 ),
@@ -86,7 +86,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                     height: 1.5,
                   ),
                   cursorColor: mainblack,
-                  controller: projectmakecontroller.projectnamecontroller,
+                  controller: projectaddcontroller.projectnamecontroller,
                   decoration: InputDecoration(
                     hintText: 'OO 스터디, OO 공모전, OO 프로젝트...',
                     hintStyle: TextStyle(
@@ -107,7 +107,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                       borderSide: BorderSide(color: mainpink, width: 1),
                     ),
                   ),
-                  validator: (value) => CheckValidate().validatename(value!))
+                  validator: (value) => CheckValidate().validateName(value!))
             ],
           ),
         ),
@@ -117,7 +117,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
 }
 
 class CheckValidate {
-  String? validatename(String value) {
+  String? validateName(String value) {
     if (value.isEmpty) {
       return '제목을 입력해주세요.';
     } else {
