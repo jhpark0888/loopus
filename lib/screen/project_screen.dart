@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/project_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/screen/posting_add_content_screen.dart';
@@ -20,7 +21,7 @@ class ProjectScreen extends StatelessWidget {
 
   ModalController modalController = Get.put(ModalController());
 
-  // ProjectController projectController = Get.put(ProjectController());
+  ProjectController projectController = Get.put(ProjectController());
   Project project;
 
   @override
@@ -298,12 +299,9 @@ class ProjectScreen extends StatelessWidget {
                     height: 12,
                   ),
                   Row(
-                    children: [
-                      Tagwidget(content: '디자인'),
-                      Tagwidget(content: '창업'),
-                      Tagwidget(content: '기획'),
-                    ],
-                  ),
+                      children: project.projectTag
+                          .map((tag) => Tagwidget(content: tag.tag))
+                          .toList()),
                   SizedBox(
                     height: 24,
                   ),

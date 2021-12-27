@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:loopus/constant.dart';
 
 class Tagwidget extends StatelessWidget {
-  // Tagwidget({Key? key, required String content}) : super(key: key);
+  Tagwidget({Key? key, required this.content}) : super(key: key);
+
   String content;
-  Tagwidget({required this.content});
   @override
   Widget build(BuildContext context) {
     return Container(

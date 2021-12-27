@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/get_image_api.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
@@ -30,10 +33,7 @@ class ProfileScreen extends StatelessWidget {
           elevation: 0,
           title: const Text(
             '프로필',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+            style: kHeaderH1Style,
           ),
           actions: [
             IconButton(
@@ -87,7 +87,11 @@ class ProfileScreen extends StatelessWidget {
                               alignment: Alignment.bottomRight,
                               child: GestureDetector(
                                 onTap: () async {
-                                  await getcropImage("profile");
+                                  File? image = await getcropImage("profile");
+                                  if (image != null) {
+                                    await updateProfile(
+                                        profileController.user.value, image);
+                                  }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -108,31 +112,23 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       Text(
                         profileController.user.value.realName,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                        style: kSubTitle2Style,
                       ),
                       SizedBox(
                         height: 8,
                       ),
                       Text(
                         '산업경영공학과',
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
+                        style: kBody1Style,
                       ),
                       SizedBox(
                         height: 16,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Tagwidget(content: '관심태그1'),
-                          Tagwidget(content: '관심태그2'),
-                          Tagwidget(content: '관심태그3'),
-                        ],
-                      ),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: profileController.user.value.profileTag
+                              .map((tag) => Tagwidget(content: tag.tag))
+                              .toList()),
                       SizedBox(
                         height: 32,
                       ),
@@ -153,11 +149,7 @@ class ProfileScreen extends StatelessWidget {
                                   child: const Center(
                                     child: Text(
                                       '관심 태그 변경하기',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: mainblack,
-                                      ),
+                                      style: kButtonStyle,
                                     ),
                                   ),
                                 ),
@@ -181,14 +173,10 @@ class ProfileScreen extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 8.0,
                                   ),
-                                  child: const Center(
-                                    child: Text(
-                                      '내 프로필 공유하기',
-                                      style: TextStyle(
-                                          color: mainWhite,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                  child: Center(
+                                    child: Text('내 프로필 공유하기',
+                                        style: kButtonStyle.copyWith(
+                                            color: mainWhite)),
                                   ),
                                 ),
                               ),
@@ -223,17 +211,14 @@ class ProfileScreen extends StatelessWidget {
                             children: const [
                               Text(
                                 '포스팅',
-                                style: TextStyle(fontSize: 14),
+                                style: kBody1Style,
                               ),
                               SizedBox(
                                 height: 8,
                               ),
                               Text(
                                 '36',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: kSubTitle2Style,
                               )
                             ],
                           ),
@@ -251,17 +236,14 @@ class ProfileScreen extends StatelessWidget {
                             children: const [
                               Text(
                                 '루프',
-                                style: TextStyle(fontSize: 14),
+                                style: kBody1Style,
                               ),
                               SizedBox(
                                 height: 8,
                               ),
                               Text(
                                 '112',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: kSubTitle2Style,
                               )
                             ],
                           ),
@@ -279,17 +261,14 @@ class ProfileScreen extends StatelessWidget {
                             children: const [
                               Text(
                                 '오퍼',
-                                style: TextStyle(fontSize: 14),
+                                style: kBody1Style,
                               ),
                               SizedBox(
                                 height: 8,
                               ),
                               Text(
                                 '-',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: kSubTitle2Style,
                               )
                             ],
                           ),
@@ -336,18 +315,14 @@ class ProfileScreen extends StatelessWidget {
                         height: 40,
                         child: Text(
                           "활동",
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
+                          style: kButtonStyle,
                         ),
                       ),
                       Tab(
                         height: 40,
                         child: Text(
                           "질문과 답변",
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
+                          style: kButtonStyle,
                         ),
                       )
                     ],
@@ -366,22 +341,15 @@ class ProfileScreen extends StatelessWidget {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            '활동',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
+                          Text('활동', style: kSubTitle2Style),
                           GestureDetector(
                               onTap: () {
                                 Get.to(() => ProjectAddTitleScreen());
                               },
                               child: Text(
                                 '추가하기',
-                                style: TextStyle(
-                                  color: mainblue,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style:
+                                    kSubTitle2Style.copyWith(color: mainblue),
                               ))
                         ]),
                   ),
@@ -397,36 +365,36 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             SingleChildScrollView(
-              child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Obx(
-                      () => DropdownButton(
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.black),
-                          icon: Icon(Icons.expand_more),
-                          value: profileController.selectqanda.value,
-                          onChanged: (int? value) {
-                            profileController.selectqanda(value);
-                          },
-                          underline: Container(),
-                          items: profileController.dropdown_qanda
-                              .map((value) => DropdownMenuItem(
-                                  value: profileController.dropdown_qanda
-                                      .indexOf("$value"),
-                                  child: Text("$value")))
-                              .toList()),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Column(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Obx(
+                        () => DropdownButton(
+                            style: kSubTitle2Style,
+                            icon: Icon(Icons.expand_more),
+                            value: profileController.selectqanda.value,
+                            onChanged: (int? value) {
+                              profileController.selectqanda(value);
+                            },
+                            underline: Container(),
+                            items: profileController.dropdown_qanda
+                                .map((value) => DropdownMenuItem(
+                                    value: profileController.dropdown_qanda
+                                        .indexOf("$value"),
+                                    child: Text("$value")))
+                                .toList()),
+                      ),
                     ),
-                  ),
-                  QuestionWidget(),
-                  QuestionWidget(),
-                  QuestionWidget(),
-                  QuestionWidget(),
-                ],
+                    QuestionWidget(),
+                    QuestionWidget(),
+                    QuestionWidget(),
+                    QuestionWidget(),
+                  ],
+                ),
               ),
             )
           ]),
