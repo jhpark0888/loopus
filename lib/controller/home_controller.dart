@@ -9,7 +9,7 @@ import 'package:loopus/widget/question_posting_widget.dart';
 import 'package:loopus/widget/recommend_posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with SingleGetTickerProviderMixin {
   static HomeController get to => Get.find();
   List<HomePostingWidget> posting = [];
   List<RecommendPostingWidget> recommend_posting = [];
@@ -20,9 +20,11 @@ class HomeController extends GetxController {
   Rx<QuestionModel> questionResult = QuestionModel(questionitems: []).obs;
   Rx<PostingModel> postingResult = PostingModel(postingitems: []).obs;
   RefreshController refreshController1 =
-      new RefreshController(initialRefresh: true);
+      new RefreshController(initialRefresh: false);
   RefreshController refreshController2 =
-      new RefreshController(initialRefresh: true);
+      new RefreshController(initialRefresh: false);
+  late TabController hometabcontroller;
+
   int pageNumber = 1;
 
   @override
@@ -31,6 +33,9 @@ class HomeController extends GetxController {
       // qustion_posting.add(QuestionPostingWidget());
       recommend_posting.add(RecommendPostingWidget());
     }
+    onRefresh1();
+    onRefresh2();
+    hometabcontroller = TabController(length: 3, vsync: this);
     super.onInit();
   }
 

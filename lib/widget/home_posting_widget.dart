@@ -100,7 +100,7 @@ class HomePostingWidget extends StatelessWidget {
                                 height: 24,
                               ),
                               Text(
-                                "${item.project.projectName}",
+                                "${item.project!.projectName}",
                                 style: TextStyle(
                                   color: mainblack.withOpacity(0.6),
                                   fontSize: 14,
@@ -116,11 +116,11 @@ class HomePostingWidget extends StatelessWidget {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: List.generate(
-                                        item.project.projectTag.length,
+                                        item.project!.projectTag.length,
                                         (index) {
                                       return Tagwidget(
                                         content:
-                                            item.project.projectTag[index].tag,
+                                            item.project!.projectTag[index].tag,
                                       );
                                     }),
                                   ),

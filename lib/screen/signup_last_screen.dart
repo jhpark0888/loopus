@@ -21,7 +21,7 @@ class SignupLastScreen extends StatelessWidget {
                   null) {
                 if (signupController.passwordcontroller.text ==
                     signupController.passwordcheckcontroller.text) {
-                  Get.to(() => LogInPage());
+                  Get.to(() => LogInScreen());
                   signupRequest();
                   signupController.campusnamecontroller.clear();
                   signupController.classnumcontroller.clear();

@@ -76,7 +76,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
                               fit: BoxFit.fill,
                             )),
                             Text(
-                              "  ${item.realname}님에게 남긴 질문",
+                              "  ${item.realname}님이 남긴 질문",
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -86,20 +86,14 @@ class MyQuestionPostingWidget extends StatelessWidget {
                         ),
                         Padding(
                             padding: const EdgeInsets.only(right: 15.0),
-                            child: InkWell(
-                              onTap: () {
-                                print("답변하기");
-                              },
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset("assets/icons/Comment.svg"),
-                                  Text(
-                                    " ${item.answercount}",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset("assets/icons/Comment.svg"),
+                                Text(
+                                  " ${item.answercount}",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              ],
                             ))
                       ],
                     ),

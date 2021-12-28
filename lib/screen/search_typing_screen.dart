@@ -200,9 +200,12 @@ class SearchTypingScreen extends StatelessWidget {
                     SingleChildScrollView(
                       child: Obx(
                           () => searchController.checknonesearch.value == false
-                              ? Column(
-                                  children: searchController.searchpostinglist,
-                                )
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: Column(
+                                    children:
+                                        searchController.searchpostinglist,
+                                  ))
                               : Container(
                                   height: 80,
                                   child: Center(
@@ -213,23 +216,38 @@ class SearchTypingScreen extends StatelessWidget {
                     ),
                     SingleChildScrollView(
                       child: Obx(
-                        () => Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Column(
-                            children: searchController.searchprofilelist,
-                          ),
-                        ),
-                      ),
+                          () => searchController.checknonesearch.value == false
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: Column(
+                                    children:
+                                        searchController.searchprofilelist,
+                                  ))
+                              : Container(
+                                  height: 80,
+                                  child: Center(
+                                      child: Text(
+                                    "검색 결과가 존재하지 않습니다.",
+                                    style: kSubTitle2Style,
+                                  )))),
                     ),
                     SingleChildScrollView(
                       child: Obx(
-                        () => Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Column(
-                            children: searchController.searchquestionlist,
-                          ),
-                        ),
-                      ),
+                          () => searchController.checknonesearch.value == false
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: Column(
+                                    children:
+                                        searchController.searchquestionlist,
+                                  ),
+                                )
+                              : Container(
+                                  height: 80,
+                                  child: Center(
+                                      child: Text(
+                                    "검색 결과가 존재하지 않습니다.",
+                                    style: kSubTitle2Style,
+                                  )))),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 50.0),

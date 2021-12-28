@@ -3,9 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
+import 'package:loopus/app.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/screen/home_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/project_add_person_screen.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
@@ -29,7 +32,9 @@ class QuestionAddTagScreen extends StatelessWidget {
                 onPressed: () {
                   questionmake(questionController.contentcontroller.text);
                   questionController.contentcontroller.clear();
-                  Get.offAllNamed("/");
+                  Get.back();
+                  Get.back();
+                  HomeController.to.onRefresh2();
                 },
                 child: tagController.selectedtaglist.length == 0
                     ? Text(
