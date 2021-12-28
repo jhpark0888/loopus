@@ -127,25 +127,20 @@ class QuestionPostingWidget extends StatelessWidget {
                               ),
                             ],
                           ),
-                          InkWell(
-                            onTap: () {
-                              print("답변하기");
-                            },
-                            child: Row(
-                              children: [
-                                SvgPicture.asset("assets/icons/Comment.svg"),
-                                SizedBox(
-                                  width: 4,
+                          Row(
+                            children: [
+                              SvgPicture.asset("assets/icons/Comment.svg"),
+                              SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                "답변하기",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
                                 ),
-                                Text(
-                                  "답변하기",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                )
-                              ],
-                            ),
+                              )
+                            ],
                           )
                         ],
                       ),

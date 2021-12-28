@@ -10,8 +10,8 @@ import 'package:loopus/screen/signup_campus_info_screen.dart';
 import 'package:loopus/screen/signup_user_info_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
-class LogInPage extends StatelessWidget {
-  LogInPage({Key? key}) : super(key: key);
+class LogInScreen extends StatelessWidget {
+  LogInScreen({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
   final LogInController _loginController = Get.put(LogInController());

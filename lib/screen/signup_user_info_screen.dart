@@ -96,7 +96,7 @@ class SignupUserInfoScreen extends StatelessWidget {
             },
             child: Text(
               '다음',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: kSubTitle2Style.copyWith(color: mainblue),
             ),
           ),
         ],

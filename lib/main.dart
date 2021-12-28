@@ -9,6 +9,7 @@ import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/screen/home_screen.dart';
 import 'package:loopus/screen/login_screen.dart';
+import 'package:loopus/screen/start_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      home: WelcomeScreen(token: token),
       locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
       title: "Loop Us",
@@ -61,8 +63,46 @@ class MyApp extends StatelessWidget {
       initialBinding: InitBinding(),
       getPages: [
         GetPage(
-            name: "/", page: token != null ? () => App() : () => LogInPage()),
+            name: "/", page: token != null ? () => App() : () => StartScreen()),
       ],
+    );
+  }
+}
+
+class WelcomeScreen extends StatefulWidget {
+  String? token;
+  WelcomeScreen({this.token});
+  @override
+  _WelcomeScreenStete createState() => _WelcomeScreenStete(token: token);
+}
+
+class _WelcomeScreenStete extends State<WelcomeScreen> {
+  String? token;
+  _WelcomeScreenStete({this.token});
+  @override
+  void initState() {
+    super.initState();
+    new Future.delayed(
+        const Duration(seconds: 4),
+        () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: token == null
+                      ? (context) => StartScreen()
+                      : (context) => App()),
+            ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: mainWhite,
+      body: Container(
+        height: Get.height,
+        width: Get.width,
+        child: Image.asset("assets/illustrations/splash_animation.gif",
+            gaplessPlayback: true),
+      ),
     );
   }
 }

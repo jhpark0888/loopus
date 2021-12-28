@@ -32,7 +32,7 @@ class SignupTagScreen extends StatelessWidget {
             onPressed: () {
               if (tagController.selectedtaglist.length == 3) {
                 signupRequest();
-                Get.to(() => LogInPage());
+                Get.to(() => LogInScreen());
               }
             },
             child: Obx(
