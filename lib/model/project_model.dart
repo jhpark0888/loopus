@@ -28,7 +28,7 @@ class Project {
   int? like_count;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
-        id: json["project_id"],
+        id: json["project_id"] ?? json["id"],
         projectName: json["project_name"],
         introduction: json["introduction"],
         startDate: json["start_date"],

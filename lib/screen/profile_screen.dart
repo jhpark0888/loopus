@@ -110,9 +110,11 @@ class ProfileScreen extends StatelessWidget {
                       SizedBox(
                         height: 8,
                       ),
-                      Text(
-                        profileController.user.value.realName,
-                        style: kSubTitle2Style,
+                      Obx(
+                        () => Text(
+                          profileController.user.value.realName,
+                          style: kSubTitle2Style,
+                        ),
                       ),
                       SizedBox(
                         height: 8,

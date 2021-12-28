@@ -42,5 +42,9 @@ void loginRequest() async {
     );
   } else {
     print(response.statusCode);
+    Get.defaultDialog(
+      title: '${response.statusCode}',
+      content: Text('${response.statusCode}'),
+    );
   }
 }

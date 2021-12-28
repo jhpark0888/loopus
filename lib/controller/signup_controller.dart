@@ -10,7 +10,7 @@ class SignupController extends GetxController {
   late TextEditingController namecontroller;
   late TextEditingController passwordcontroller;
   late TextEditingController passwordcheckcontroller;
-  bool emailcheck = false;
+  RxBool emailcheck = false.obs;
 
   static final FlutterSecureStorage storage = new FlutterSecureStorage();
 

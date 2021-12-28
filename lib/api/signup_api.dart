@@ -29,7 +29,7 @@ void emailRequest() async {
   print(response.statusCode);
   if (response.statusCode == 200) {
     print(response.statusCode);
-    signupController.emailcheck = true;
+    signupController.emailcheck(true);
   }
 }
 
