@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/paper_controller.dart';
 import 'package:loopus/widget/paper_competition_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
@@ -8,6 +9,7 @@ import 'package:underline_indicator/underline_indicator.dart';
 class PaperScreen extends StatelessWidget {
   // const BookmarkScreen({Key? key}) : super(key: key);
   PaperController paperController = Get.put(PaperController());
+  ModalController _modalController = Get.put(ModalController());
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +18,7 @@ class PaperScreen extends StatelessWidget {
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: false,
           elevation: 0.0,
           title: const Text(
             '추천 공고',
@@ -25,33 +28,24 @@ class PaperScreen extends StatelessWidget {
             ),
           ),
           actions: [
-            TextButton(
-                onPressed: () {
-                  Get.dialog(
-                    Dialog(
-                      child: Container(
-                        height: 80,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Center(
-                            child: Text(
-                              '관심 태그와 학과를 기반으로 공고를 추천해드리고 있어요.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
+            GestureDetector(
+                onTap: () {
+                  _modalController.showCustomDialog(
+                      '관심 태그와 학과를 기반으로 공고를 추천해드리고 있어요', 2);
                 },
-                child: Text(
-                  "어떻게 추천되나요?",
-                  style: TextStyle(
-                      color: mainblue,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 16,
+                  ),
+                  child: Center(
+                    child: Text(
+                      "어떻게 추천되나요?",
+                      style: TextStyle(
+                          color: mainblue,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ))
           ],
         ),
@@ -134,12 +128,8 @@ class PaperScreen extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8),
-                      child: Column(
-                        children: PaperController.to.posting,
-                      ),
+                    Column(
+                      children: PaperController.to.posting,
                     ),
                   ],
                 ),
@@ -150,17 +140,13 @@ class PaperScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(
                   top: 16,
-                  bottom: 20,
+                  bottom: 80,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8),
-                      child: Column(
-                        children: PaperController.to.posting,
-                      ),
+                    Column(
+                      children: PaperController.to.posting,
                     ),
                   ],
                 ),
@@ -173,14 +159,8 @@ class PaperScreen extends StatelessWidget {
               ),
               child: SingleChildScrollView(
                 key: const PageStorageKey("key3"),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Column(
-                    children: PaperController.to.posting_internship,
-                  ),
+                child: Column(
+                  children: PaperController.to.posting_internship,
                 ),
               ),
             ),

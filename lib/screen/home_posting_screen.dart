@@ -24,13 +24,15 @@ class HomePostingScreen extends StatelessWidget {
           enablePullDown: true,
           enablePullUp: homeController.enablepullup1.value,
           header: ClassicHeader(
-              textStyle: TextStyle(color: mainblack),
-              releaseText: "새로고침",
-              completeText: "완료",
-              idleText: "",
-              releaseIcon: Icon(Icons.refresh, color: mainblack),
-              completeIcon: Icon(Icons.done, color: mainblue),
-              idleIcon: Icon(Icons.arrow_downward, color: mainblack)),
+            textStyle: TextStyle(color: mainblack),
+            refreshingText: '',
+            releaseText: "",
+            completeText: "",
+            idleText: "",
+            releaseIcon: Icon(Icons.refresh_rounded, color: mainblack),
+            completeIcon: Icon(Icons.done_rounded, color: mainblue),
+            idleIcon: Icon(Icons.arrow_downward_rounded, color: mainblack),
+          ),
           footer: ClassicFooter(
             textStyle: TextStyle(color: mainblack),
             loadingText: "",
@@ -38,16 +40,17 @@ class HomePostingScreen extends StatelessWidget {
             idleText: "",
             idleIcon: CircularProgressIndicator(
               color: mainblack,
-              strokeWidth: 3,
+              strokeWidth: 1.2,
             ),
             canLoadingIcon: CircularProgressIndicator(
               color: mainblack,
-              strokeWidth: 3,
+              strokeWidth: 1.2,
             ),
           ),
           onRefresh: homeController.onRefresh1,
           onLoading: homeController.onLoading1,
           child: CustomScrollView(
+            physics: BouncingScrollPhysics(),
             key: PageStorageKey("key1"),
             slivers: [
               SliverList(

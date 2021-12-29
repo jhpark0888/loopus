@@ -197,13 +197,16 @@ class HomePostingWidget extends StatelessWidget {
                                               : SvgPicture.asset(
                                                   "assets/icons/Favorite_Active.svg"),
                                         ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
                                         Text(
                                           "${item.likeCount.value}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
                                         SizedBox(
-                                          width: 10,
+                                          width: 16,
                                         ),
                                         InkWell(
                                           onTap: () {
@@ -216,7 +219,9 @@ class HomePostingWidget extends StatelessWidget {
                                           },
                                           child: item.isMarked.value == 0
                                               ? SvgPicture.asset(
-                                                  "assets/icons/Mark_Default.svg")
+                                                  "assets/icons/Mark_Default.svg",
+                                                  color: mainblack,
+                                                )
                                               : SvgPicture.asset(
                                                   "assets/icons/Mark_Saved.svg"),
                                         ),

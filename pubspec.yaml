@@ -36,17 +36,17 @@ dependencies:
   get: ^4.1.4
   cached_network_image: ^3.1.0
   favorite_button: ^0.0.4
-  flutter_secure_storage: ^4.2.0
-  flutter_svg: ^0.23.0+1
+  flutter_secure_storage: ^5.0.2
+  flutter_svg: ^1.0.0
   image_picker: ^0.8.4+4
-  smooth_page_indicator: ^0.3.0-nullsafety.0
+  smooth_page_indicator: ^1.0.0+2
   http: ^0.13.4
   image_cropper: ^1.4.1
-  device_preview: ^0.8.0
+  device_preview: ^1.0.0
   flutter_markdown: ^0.6.8
   pull_to_refresh: ^2.0.0
   flutter_native_splash: ^1.3.2
-  flutter_quill: ^2.5.1
+  flutter_quill: ^3.0.3
   tuple: ^2.0.0
   splashscreen: ^1.3.5
 
@@ -81,7 +81,6 @@ flutter:
     - assets/fonts/
     - assets/icons/
     - assets/illustrations/
-    - assets/illustrations/splash_animation.gif
 
   fonts:
     - family: Nanum
@@ -93,11 +92,6 @@ flutter:
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-flutter_native_splash:
-
-  image: assets/illustrations/splash_animation.gif
-  color: "fcfcfc"
-  android_disable_fullscreen: true
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
 

@@ -7,34 +7,59 @@ class SearchStudentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return GestureDetector(
       onTap: () {},
-      leading: ClipOval(
-        child: Image.asset("assets/illustrations/default_profile.png"),
-      ),
-      //     CachedNetworkImage(
-      //   height: 56,
-      //   width: 56,
-      //   imageUrl: image ?? "https://i.stack.imgur.com/l60Hf.png",
-      //   placeholder: (context, url) => const CircleAvatar(
-      //     child: Center(child: CircularProgressIndicator()),
-      //   ),
-      //   fit: BoxFit.fill,
-      // )),
-      title: Text(
-        '손승태',
-        style: kSubTitle2Style,
-      ),
-      subtitle: Text(
-        '산업경영공학과',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: mainblack.withOpacity(0.6),
-          fontFamily: 'Nanum',
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipOval(
+                  child: CachedNetworkImage(
+                    height: 56,
+                    width: 56,
+                    imageUrl: "https://i.stack.imgur.com/l60Hf.png",
+                    placeholder: (context, url) => const CircleAvatar(
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(
+                  width: 12,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '손승태',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      '산업경영공학과',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: mainblack.withOpacity(0.6),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            Text(
+              '1,420점',
+              style: kSubTitle3Style,
+            ),
+          ],
         ),
       ),
-      trailing: Text('1,420점', style: kSubTitle2Style),
     );
   }
 }

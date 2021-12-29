@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class StartScreen extends StatelessWidget {
   PageController pageController = PageController(viewportFraction: 0.96);
@@ -55,17 +54,17 @@ class StartScreen extends StatelessWidget {
                           )),
                 ),
               ),
-              Container(
-                child: SmoothPageIndicator(
-                  controller: pageController,
-                  count: 5,
-                  effect: WormEffect(
-                      dotHeight: 10,
-                      dotWidth: 10,
-                      dotColor: Colors.grey,
-                      activeDotColor: mainblue),
-                ),
-              ),
+              // Container(
+              //   child: SmoothPageIndicator(
+              //     controller: pageController,
+              //     count: 5,
+              //     effect: WormEffect(
+              //         dotHeight: 10,
+              //         dotWidth: 10,
+              //         dotColor: Colors.grey,
+              //         activeDotColor: mainblue),
+              //   ),
+              // ),
               SizedBox(
                 height: 30,
               ),

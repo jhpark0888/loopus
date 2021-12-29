@@ -13,11 +13,11 @@ class Tagwidget extends StatelessWidget {
       ),
       decoration: BoxDecoration(
           color: Color(0xffefefef), borderRadius: BorderRadius.circular(4)),
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
+      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Text(
         "${content}",
         style: TextStyle(
-          fontSize: 14,
+          fontSize: 12,
           color: Color(0xff999999),
         ),
       ),

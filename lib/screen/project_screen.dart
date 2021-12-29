@@ -11,7 +11,6 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/screen/posting_add_content_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
-import 'package:loopus/screen/qurillread.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -130,7 +129,7 @@ class ProjectScreen extends StatelessWidget {
                         children: [
                           GestureDetector(
                             child: SvgPicture.asset(
-                              "assets/icons/Favorite_Inactive.svg",
+                              "assets/icons/Favorite_Active.svg",
                             ),
                             onTap: () {},
                           ),
