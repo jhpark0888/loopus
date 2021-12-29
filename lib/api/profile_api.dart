@@ -9,9 +9,8 @@ import 'dart:convert';
 
 import 'package:loopus/model/user_model.dart';
 
-Future<http.Response> getProfile() async {
+Future<http.Response> getProfile(var userid) async {
   String? token = await FlutterSecureStorage().read(key: "token");
-  String? userid = await FlutterSecureStorage().read(key: "id");
 
   print(token);
   print(userid);

@@ -46,9 +46,11 @@ class MyQuestionPostingWidget extends StatelessWidget {
                 children: [
                   Container(
                     height: 50,
-                    padding: EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(15.0),
                     child: Text(
                       "${item.content}",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),

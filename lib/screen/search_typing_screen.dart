@@ -14,7 +14,15 @@ class SearchTypingScreen extends StatelessWidget {
     return DefaultTabController(
       length: 5,
       initialIndex: 0,
-      child: Scaffold(
+      child: WillPopScope(
+        onWillPop: () async {
+          searchController.searchpostinglist.clear();
+          searchController.searchprofilelist.clear();
+          searchController.searchquestionlist.clear();
+          Get.back();
+          return false;
+        },
+        child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
             toolbarHeight: 52,
@@ -33,6 +41,9 @@ class SearchTypingScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
+                    searchController.searchpostinglist.clear();
+                    searchController.searchprofilelist.clear();
+                    searchController.searchquestionlist.clear();
                     Get.back();
                     print(searchController.tabController.index);
                   },
@@ -259,7 +270,9 @@ class SearchTypingScreen extends StatelessWidget {
                     ),
                   ]),
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -48,6 +48,7 @@ class LoopScreen extends StatelessWidget {
           onRefresh: homeController.onRefresh3,
           onLoading: homeController.onLoading3,
           child: CustomScrollView(
+            physics: BouncingScrollPhysics(),
             key: PageStorageKey("key3"),
             slivers: [
               SliverList(

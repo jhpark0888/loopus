@@ -14,6 +14,7 @@ import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -28,24 +29,27 @@ class ProfileScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          elevation: 0,
-          title: const Text(
-            '프로필',
-            style: kHeaderH1Style,
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Get.to(() => SettingScreen());
-              },
-              icon: SvgPicture.asset(
-                'assets/icons/Setting.svg',
-              ),
-            ),
-          ],
-        ),
+        appBar: profileController.user.value.isuser == 1
+            ? AppBar(
+                centerTitle: false,
+                elevation: 0,
+                title: const Text(
+                  '프로필',
+                  style: kHeaderH1Style,
+                ),
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      Get.to(() => SettingScreen());
+                    },
+                    icon: SvgPicture.asset(
+                      'assets/icons/Setting.svg',
+                    ),
+                  ),
+                ],
+              )
+            : AppBarWidget(
+                title: '${profileController.user.value.realName}의 프로필'),
         body: NestedScrollView(
           headerSliverBuilder: (context, value) {
             return [
@@ -56,6 +60,9 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
+                      SizedBox(
+                        height: 20,
+                      ),
                       Stack(
                         children: [
                           Obx(
@@ -86,23 +93,26 @@ class ProfileScreen extends StatelessWidget {
                             child: Align(
                               alignment: Alignment.bottomRight,
                               child: GestureDetector(
-                                onTap: () async {
-                                  File? image = await getcropImage("profile");
-                                  if (image != null) {
-                                    await updateProfile(
-                                        profileController.user.value, image);
-                                  }
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle, color: mainWhite),
-                                  child: SvgPicture.asset(
-                                    "assets/icons/Image.svg",
-                                    width: 24,
-                                    height: 24,
-                                  ),
-                                ),
-                              ),
+                                  onTap: () async {
+                                    File? image = await getcropImage("profile");
+                                    if (image != null) {
+                                      await updateProfile(
+                                          profileController.user.value, image);
+                                    }
+                                  },
+                                  child:
+                                      profileController.user.value.isuser == 1
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: mainWhite),
+                                              child: SvgPicture.asset(
+                                                "assets/icons/Image.svg",
+                                                width: 24,
+                                                height: 24,
+                                              ),
+                                            )
+                                          : Container()),
                             ),
                           ),
                         ],
@@ -146,15 +156,20 @@ class ProfileScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: const Center(
-                                    child: Text(
-                                      '관심 태그 변경하기',
-                                      style: kButtonStyle,
-                                    ),
-                                  ),
-                                ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child:
+                                        profileController.user.value.isuser == 1
+                                            ? const Center(
+                                                child: Text(
+                                                '관심 태그 변경하기',
+                                                style: kButtonStyle,
+                                              ))
+                                            : const Center(
+                                                child: Text(
+                                                '메세지 보내기',
+                                                style: kButtonStyle,
+                                              ))),
                               ),
                             ),
                           ),
@@ -163,7 +178,9 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                if (profileController.user.value.isuser == 1) {}
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: mainblue,
@@ -175,11 +192,18 @@ class ProfileScreen extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 8.0,
                                   ),
-                                  child: Center(
-                                    child: Text('내 프로필 공유하기',
-                                        style: kButtonStyle.copyWith(
-                                            color: mainWhite)),
-                                  ),
+                                  child:
+                                      profileController.user.value.isuser == 1
+                                          ? Center(
+                                              child: Text('내 프로필 공유하기',
+                                                  style: kButtonStyle.copyWith(
+                                                      color: mainWhite)),
+                                            )
+                                          : Center(
+                                              child: Text('루프 맺기',
+                                                  style: kButtonStyle.copyWith(
+                                                      color: mainWhite)),
+                                            ),
                                 ),
                               ),
                             ),
@@ -252,6 +276,34 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    profileController.user.value.isuser == 1
+                        ? Container()
+                        : Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.to(() => LoopPeopleScreen());
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16.0),
+                                child: Column(
+                                  children: const [
+                                    Text(
+                                      '오퍼',
+                                      style: kBody1Style,
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Text(
+                                      '-',
+                                      style: kSubTitle2Style,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -321,10 +373,13 @@ class ProfileScreen extends StatelessWidget {
                               onTap: () {
                                 Get.to(() => ProjectAddTitleScreen());
                               },
-                              child: Text(
-                                '추가하기',
-                                style: kButtonStyle.copyWith(color: mainblue),
-                              ))
+                              child: profileController.user.value.isuser == 1
+                                  ? Text(
+                                      '추가하기',
+                                      style: kButtonStyle.copyWith(
+                                          color: mainblue),
+                                    )
+                                  : Container())
                         ]),
                   ),
                   Obx(
@@ -343,44 +398,69 @@ class ProfileScreen extends StatelessWidget {
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Align(
-                    alignment: Alignment.centerLeft,
-                    child: Obx(
-                      () => DropdownButtonHideUnderline(
-                        child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButton(
-                            onChanged: (value) {},
-                            onTap: () {},
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            elevation: 1,
-                            underline: Container(),
-                            icon: Icon(
-                              Icons.expand_more_rounded,
-                              color: mainblack,
-                            ),
-                            value: profileController.selectqanda.value,
-                            items: profileController.dropdown_qanda
-                                .map((value) => DropdownMenuItem(
-                                    value: profileController.dropdown_qanda
-                                        .indexOf("$value"),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        right: 4,
-                                      ),
-                                      child: Text(
-                                        "$value",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    )))
-                                .toList(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                      alignment: Alignment.centerLeft,
+                      child: profileController.user.value.isuser == 1
+                          ? Obx(
+                              () => DropdownButtonHideUnderline(
+                                child: ButtonTheme(
+                                  alignedDropdown: true,
+                                  child: DropdownButton(
+                                    onChanged: (value) {},
+                                    onTap: () {},
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                    elevation: 1,
+                                    underline: Container(),
+                                    icon: Icon(
+                                      Icons.expand_more_rounded,
+                                      color: mainblack,
+                                    ),
+                                    value: profileController.selectqanda.value,
+                                    items: profileController.dropdown_qanda
+                                        .map((value) => DropdownMenuItem(
+                                            value: profileController
+                                                .dropdown_qanda
+                                                .indexOf("$value"),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                right: 4,
+                                              ),
+                                              child: Text(
+                                                "$value",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            )))
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "답변한 질문",
+                                    style: kSubTitle2Style,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      print("hihi");
+                                    },
+                                    child: Text(
+                                      "질문 남기기",
+                                      style: kSubTitle2Style.copyWith(
+                                          color: mainblue),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
                   QuestionWidget(),
                   QuestionWidget(),
                   QuestionWidget(),

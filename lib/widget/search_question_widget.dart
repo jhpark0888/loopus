@@ -10,6 +10,7 @@ import 'package:loopus/widget/tag_widget.dart';
 class SearchQuestionWidget extends StatelessWidget {
   String content;
   int answercount;
+  var profileimage;
   var tag;
   int id;
   QuestionController questionController = Get.put(QuestionController());
@@ -17,6 +18,7 @@ class SearchQuestionWidget extends StatelessWidget {
       {required this.content,
       required this.id,
       required this.answercount,
+      required this.profileimage,
       required this.tag});
 
   @override
@@ -106,15 +108,26 @@ class SearchQuestionWidget extends StatelessWidget {
                     Row(
                       children: [
                         ClipOval(
-                            child: CachedNetworkImage(
-                          height: 32,
-                          width: 32,
-                          imageUrl: "https://i.stack.imgur.com/l60Hf.png",
-                          placeholder: (context, url) => CircleAvatar(
-                            child: Center(child: CircularProgressIndicator()),
-                          ),
-                          fit: BoxFit.cover,
-                        )),
+                          child: profileimage == null
+                              ? ClipOval(
+                                  child: Image.asset(
+                                    "assets/illustrations/default_profile.png",
+                                    height: 32,
+                                    width: 32,
+                                  ),
+                                )
+                              : CachedNetworkImage(
+                                  height: 32,
+                                  width: 32,
+                                  imageUrl: profileimage,
+                                  placeholder: (context, url) =>
+                                      const CircleAvatar(
+                                    child: Center(
+                                        child: CircularProgressIndicator()),
+                                  ),
+                                  fit: BoxFit.fill,
+                                ),
+                        ),
                         Text(
                           "  손승태  · ",
                           style: TextStyle(
