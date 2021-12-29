@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:http/http.dart';
 import 'package:loopus/controller/signup_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
 
 void emailRequest() async {
   SignupController signupController = Get.put(SignupController());
@@ -34,7 +35,8 @@ void emailRequest() async {
 }
 
 Future<http.Response> signupRequest() async {
-  SignupController signupController = Get.put(SignupController());
+  SignupController signupController = Get.find();
+  TagController tagController = Get.find();
   // Uri uri = Uri.parse('http://52.79.75.189:8000/user_api/signup/');
   Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/signup/');
   final FlutterSecureStorage storage = const FlutterSecureStorage();
@@ -46,7 +48,7 @@ Future<http.Response> signupRequest() async {
     "class_num": signupController.classnumcontroller.text,
     "real_name": signupController.namecontroller.text,
     "department": signupController.departmentcontroller.text,
-    "tag": null
+    "tag": tagController.selectedtaglist.map((tag) => tag.text).toList()
   };
 
   http.Response response = await http.post(

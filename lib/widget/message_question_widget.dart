@@ -18,38 +18,39 @@ class MessageQuestionWidget extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 120,
-          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+          padding: EdgeInsets.fromLTRB(16, 24, 16, 12),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                height: 38,
-                child: Text(
-                  "$content",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              Text(
+                "$content",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  height: 1.5,
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 24,
               ),
               Row(
                 children: [
                   ClipOval(
                       child: CachedNetworkImage(
-                    height: 37,
-                    width: 37,
+                    height: 32,
+                    width: 32,
                     // image
                     imageUrl: "https://i.stack.imgur.com/l60Hf.png",
                     placeholder: (context, url) => CircleAvatar(
                       child: Center(child: CircularProgressIndicator()),
                     ),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   )),
+                  SizedBox(
+                    width: 8,
+                  ),
                   Text(
-                    "   $name · ",
+                    "$name · ",
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   Text(
@@ -57,22 +58,33 @@ class MessageQuestionWidget extends StatelessWidget {
                     style: TextStyle(fontSize: 14),
                   ),
                   Expanded(
-                      child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text("1시간전")))
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "1시간전",
+                        style: TextStyle(
+                          color: mainblack.withOpacity(0.6),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ],
           ),
         ),
-        Divider(
-          color: Colors.grey[200],
-          thickness: 8,
+        Container(
+          color: Color(0xffe7e7e7),
+          height: 8,
         ),
         Container(
           alignment: Alignment.centerLeft,
-          height: 50,
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.only(
+            right: 16,
+            left: 16,
+            top: 20,
+          ),
           child: Obx(
             () => Text(
               "답변 ${QuestionController.to.messageanswerlist.length}개",

@@ -59,14 +59,14 @@ class EndDateTextFormField extends StatelessWidget {
                         : mainpink,
                     width: 2),
               ),
-              // focusedErrorBorder: UnderlineInputBorder(
-              //   borderRadius: BorderRadius.circular(2),
-              //   borderSide: BorderSide(
-              //     color: projectaddcontroller.isongoing.value
-              //         ? mainblack.withOpacity(0.38)
-              //         : ,
-              //   ),
-              // ),
+              focusedErrorBorder: projectaddcontroller.isongoing.value
+                  ? UnderlineInputBorder(
+                      borderRadius: BorderRadius.circular(2),
+                      borderSide: BorderSide(
+                        color: mainblack.withOpacity(0.38),
+                      ),
+                    )
+                  : null,
               hintText: hinttext ?? '',
               hintStyle: TextStyle(
                   color: projectaddcontroller.isongoing.value

@@ -21,23 +21,26 @@ class MessageAnswerWidget extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ClipOval(
                       child: CachedNetworkImage(
-                    height: 37,
-                    width: 37,
+                    height: 32,
+                    width: 32,
                     imageUrl: "https://i.stack.imgur.com/l60Hf.png",
                     placeholder: (context, url) => CircleAvatar(
                       child: Center(child: CircularProgressIndicator()),
                     ),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   )),
+                  SizedBox(
+                    width: 8,
+                  ),
                   Text(
-                    "   $name · ",
+                    "$name · ",
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   Text(

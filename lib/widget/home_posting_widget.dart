@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,8 +9,10 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
+import 'package:http/http.dart' as http;
 
 class HomePostingWidget extends StatelessWidget {
   // PostItem item; required this.item,
@@ -24,8 +28,18 @@ class HomePostingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        Post? post = await getposting(item.id);
-        Get.to(() => PostingScreen(post: post!));
+        http.Response? response = await getposting(item.id);
+        var responseBody = json.decode(utf8.decode(response!.bodyBytes));
+        Post post = Post.fromJson(responseBody['posting_info']);
+        User user = User(
+            type: 0,
+            user: responseBody['user_id'],
+            realName: responseBody['real_name'],
+            profileImage: responseBody['profile_image'],
+            profileTag: [],
+            classNum: responseBody['department']);
+
+        Get.to(() => PostingScreen(post: post, user: user));
         print("click posting");
       },
       child: Column(
@@ -198,13 +212,16 @@ class HomePostingWidget extends StatelessWidget {
                                               : SvgPicture.asset(
                                                   "assets/icons/Favorite_Active.svg"),
                                         ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
                                         Text(
                                           "${item.likeCount.value}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
                                         SizedBox(
-                                          width: 10,
+                                          width: 16,
                                         ),
                                         InkWell(
                                           onTap: () {
@@ -217,7 +234,9 @@ class HomePostingWidget extends StatelessWidget {
                                           },
                                           child: item.isMarked.value == 0
                                               ? SvgPicture.asset(
-                                                  "assets/icons/Mark_Default.svg")
+                                                  "assets/icons/Mark_Default.svg",
+                                                  color: mainblack,
+                                                )
                                               : SvgPicture.asset(
                                                   "assets/icons/Mark_Saved.svg"),
                                         ),

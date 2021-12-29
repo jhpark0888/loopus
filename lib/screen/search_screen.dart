@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/search_student_widget.dart';
+import 'package:loopus/widget/tag_widget.dart';
 
 class SearchScreen extends StatelessWidget {
   // const SearchScreen({Key? key}) : super(key: key);
@@ -59,144 +60,92 @@ class SearchScreen extends StatelessWidget {
           ),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 24,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
                   "인기 태그",
                   style: kSubTitle2Style,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 0, 16),
-                child: SingleChildScrollView(
+                SizedBox(
+                  height: 16,
+                ),
+                SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(
-                          right: 4,
-                        ),
-                        decoration: BoxDecoration(
-                            color: Color(0xffefefef),
-                            borderRadius: BorderRadius.circular(4)),
-                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
-                        child: Text(
-                          "공모전",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xff999999),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(
-                          right: 4,
-                        ),
-                        decoration: BoxDecoration(
-                            color: Color(0xffefefef),
-                            borderRadius: BorderRadius.circular(4)),
-                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
-                        child: Text(
-                          "창업",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xff999999),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(
-                          right: 4,
-                        ),
-                        decoration: BoxDecoration(
-                            color: Color(0xffefefef),
-                            borderRadius: BorderRadius.circular(4)),
-                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
-                        child: Text(
-                          "sk하이닉스",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xff999999),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(
-                          right: 4,
-                        ),
-                        decoration: BoxDecoration(
-                            color: Color(0xffefefef),
-                            borderRadius: BorderRadius.circular(4)),
-                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
-                        child: Text(
-                          "카카오 라이언배 공모전",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xff999999),
-                          ),
-                        ),
-                      ),
+                      Tagwidget(content: '공모전'),
+                      Tagwidget(content: '창업'),
+                      Tagwidget(content: 'SK하이닉스'),
+                      Tagwidget(content: '디자인'),
+                      Tagwidget(content: '개발'),
+                      Tagwidget(content: '삼성'),
+                      Tagwidget(content: '디자인'),
+                      Tagwidget(content: '디자인'),
                     ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(16, 16, 8, 0),
-                child: Row(
+                SizedBox(
+                  height: 28,
+                ),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       "이 주의 학생",
                       style: kSubTitle2Style,
                     ),
-                    TextButton(
-                        onPressed: () {
-                          Get.dialog(AlertDialog(
-                            content: Container(
-                              height: 30,
-                              child: Center(
-                                  child: Text(
-                                "이 주의 활동 수, 포스팅 수, 답변 수 등을 점수로 환상해 매긴 순위입니다.",
-                                textAlign: TextAlign.center,
-                                style: kCaptionStyle,
-                              )),
-                            ),
-                          ));
-                        },
-                        child: Text(
-                          "선정 기준이 뭔가요?",
-                          style: TextStyle(
-                              color: mainblue,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
-                        ))
+                    GestureDetector(
+                      onTap: () {
+                        Get.dialog(AlertDialog(
+                          content: Container(
+                            height: 30,
+                            child: Center(
+                                child: Text(
+                              "이 주의 활동 수, 포스팅 수, 답변 수 등을 점수로 환상해 매긴 순위입니다.",
+                              textAlign: TextAlign.center,
+                              style: kCaptionStyle,
+                            )),
+                          ),
+                        ));
+                      },
+                      child: Text(
+                        "선정 기준이 뭔가요?",
+                        style: kButtonStyle.copyWith(color: mainblue),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    SearchStudentWidget(),
-                    SearchStudentWidget(),
-                    SearchStudentWidget(),
-                    SearchStudentWidget(),
-                    SearchStudentWidget(),
-                    SearchStudentWidget(),
-                    SearchStudentWidget(),
-                    SearchStudentWidget(),
-                    SearchStudentWidget(),
-                    SearchStudentWidget(),
-                    SizedBox(
-                      height: 55,
-                    )
-                  ],
+                SizedBox(
+                  height: 16,
                 ),
-              )
-            ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      SearchStudentWidget(),
+                      SearchStudentWidget(),
+                      SearchStudentWidget(),
+                      SearchStudentWidget(),
+                      SearchStudentWidget(),
+                      SearchStudentWidget(),
+                      SearchStudentWidget(),
+                      SearchStudentWidget(),
+                      SearchStudentWidget(),
+                      SearchStudentWidget(),
+                      SizedBox(
+                        height: 55,
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ));
   }

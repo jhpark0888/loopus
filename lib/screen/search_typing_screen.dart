@@ -41,7 +41,7 @@ class SearchTypingScreen extends StatelessWidget {
                       '취소',
                       style: TextStyle(
                         fontSize: 14,
-                        color: mainblue,
+                        color: mainblack,
                       ),
                     ),
                   ),

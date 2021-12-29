@@ -27,13 +27,15 @@ class QuestionAnswerScreen extends StatelessWidget {
           enablePullDown: true,
           enablePullUp: homeController.enablepullup2.value,
           header: ClassicHeader(
-              textStyle: TextStyle(color: mainblack),
-              releaseText: "새로고침",
-              completeText: "완료",
-              idleText: "",
-              releaseIcon: Icon(Icons.refresh, color: mainblack),
-              completeIcon: Icon(Icons.done, color: mainblue),
-              idleIcon: Icon(Icons.arrow_downward, color: mainblack)),
+            textStyle: TextStyle(color: mainblack),
+            refreshingText: '',
+            releaseText: "",
+            completeText: "",
+            idleText: "",
+            releaseIcon: Icon(Icons.refresh_rounded, color: mainblack),
+            completeIcon: Icon(Icons.done_rounded, color: mainblue),
+            idleIcon: Icon(Icons.arrow_downward_rounded, color: mainblack),
+          ),
           footer: ClassicFooter(
             textStyle: TextStyle(color: mainblack),
             loadingText: "",
@@ -41,16 +43,17 @@ class QuestionAnswerScreen extends StatelessWidget {
             idleText: "",
             idleIcon: CircularProgressIndicator(
               color: mainblack,
-              strokeWidth: 3,
+              strokeWidth: 1,
             ),
             canLoadingIcon: CircularProgressIndicator(
               color: mainblack,
-              strokeWidth: 3,
+              strokeWidth: 1,
             ),
           ),
           onRefresh: homeController.onRefresh2,
           onLoading: homeController.onLoading2,
           child: CustomScrollView(
+            physics: BouncingScrollPhysics(),
             key: PageStorageKey("key2"),
             slivers: [
               SliverList(
@@ -58,7 +61,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 8, 16, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
                       child: Column(
                         children: [
                           Row(
@@ -69,19 +72,30 @@ class QuestionAnswerScreen extends StatelessWidget {
                                   child: ButtonTheme(
                                     alignedDropdown: true,
                                     child: DropdownButton(
+                                      itemHeight: 48,
                                       onTap: () {},
                                       borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
+                                          BorderRadius.all(Radius.circular(8)),
                                       elevation: 1,
                                       underline: Container(),
-                                      icon: Icon(Icons.expand_more),
+                                      icon: Icon(
+                                        Icons.expand_more_rounded,
+                                        color: mainblack,
+                                      ),
                                       value: homeController.selectgroup.value,
-                                      items: ["모든 질문", "내가 한 질문 "].map((value) {
+                                      items: ["모든 질문", "나의 질문"].map((value) {
                                         return DropdownMenuItem(
                                           value: value,
-                                          child: Text(value,
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 4),
+                                            child: Text(
+                                              value,
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16),
+                                            ),
+                                          ),
                                         );
                                       }).toList(),
                                       onChanged: (String? value) {
@@ -97,13 +111,9 @@ class QuestionAnswerScreen extends StatelessWidget {
                                 onTap: () {
                                   Get.to(() => QuestionAddContentScreen());
                                 },
-                                child: Text(
-                                  "질문 남기기",
-                                  style: TextStyle(
-                                    color: mainblue,
-                                    fontSize: 16,
-                                  ),
-                                ),
+                                child: Text("질문 남기기",
+                                    style:
+                                        kButtonStyle.copyWith(color: mainblue)),
                               )
                             ],
                           ),
@@ -124,6 +134,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                                 padding: const EdgeInsets.only(
                                   right: 16,
                                   left: 16,
+                                  top: 8,
                                 ),
                                 child: QuestionPostingWidget(
                                   item: homeController.questionResult.value
