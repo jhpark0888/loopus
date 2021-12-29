@@ -170,7 +170,8 @@ class QuestionScreen extends StatelessWidget {
                           height: 20,
                         ),
                         Obx(() => Column(
-                              children: questionController.messageanswerlist,
+                              children:
+                                  questionController.messageanswerlist.value,
                             )),
                       ]),
                     ],

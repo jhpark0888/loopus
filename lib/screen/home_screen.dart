@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/screen/home_posting_screen.dart';
 import 'package:loopus/screen/posting_detail_screen.dart';
 import 'package:loopus/screen/question_answer_screen.dart';
@@ -14,12 +16,13 @@ import 'package:underline_indicator/underline_indicator.dart';
 
 class HomeScreen extends StatelessWidget {
   final HomeController homecontroller = Get.put(HomeController());
+  final ModalController _modalController = Get.put(ModalController());
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      initialIndex: 0,
+      initialIndex: homecontroller.hometabcontroller.index,
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -102,6 +105,211 @@ class HomeScreen extends StatelessWidget {
               SliverToBoxAdapter(
                 child: Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        right: 16,
+                        left: 16,
+                        top: 12,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            "활동중인 공식 계정 ",
+                            style: kButtonStyle.copyWith(
+                              color: mainblack.withOpacity(0.6),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _modalController.showCustomDialog(
+                                  '최근 한 달 내에 학생 프로필을 열람한 기업들입니다 ', 2);
+                            },
+                            child: SvgPicture.asset(
+                              'assets/icons/Question.svg',
+                              width: 20,
+                              height: 20,
+                              color: mainblack.withOpacity(0.6),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                      ),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(
+                                left: 16,
+                              ),
+                              padding: EdgeInsets.all(8),
+                              width: Get.width * 0.37,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Color(0xffe7e7e7),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        width: 1,
+                                        color: Color(0xffe7e7e7),
+                                      ),
+                                    ),
+                                    child: ClipOval(
+                                      child: CachedNetworkImage(
+                                        width: 32,
+                                        height: 32,
+                                        imageUrl:
+                                            "http://www.lg.co.kr/images/common/default_og_image_new.jpg",
+                                        placeholder: (context, url) =>
+                                            const CircleAvatar(
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator()),
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      "LG 디스플레이",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: kCaptionStyle.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                left: 4,
+                              ),
+                              padding: EdgeInsets.all(8),
+                              width: Get.width * 0.37,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Color(0xffe7e7e7),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        width: 1,
+                                        color: Color(0xffe7e7e7),
+                                      ),
+                                    ),
+                                    child: ClipOval(
+                                      child: CachedNetworkImage(
+                                        width: 32,
+                                        height: 32,
+                                        imageUrl:
+                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3KEuCtQgm3AS4bd8RbO9kWyE0xpP--1e-hQ&usqp=CAU",
+                                        placeholder: (context, url) =>
+                                            const CircleAvatar(
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator()),
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                    "KaKao Brain",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: kCaptionStyle.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                left: 4,
+                                right: 16,
+                              ),
+                              padding: EdgeInsets.all(8),
+                              width: Get.width * 0.37,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Color(0xffe7e7e7),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        width: 1,
+                                        color: Color(0xffe7e7e7),
+                                      ),
+                                    ),
+                                    child: ClipOval(
+                                      child: CachedNetworkImage(
+                                        width: 32,
+                                        height: 32,
+                                        imageUrl:
+                                            "https://ww.namu.la/s/fa7510d2897ae3fce73ba629a3b51ebc4035e9737d916adb03e6d38e139b2a61e2a29e7e5cfd845e01c7d69889c719edce83330202c0161d9373a960b3dede25c1ed31bc52da585c154fe035e29a92dd",
+                                        placeholder: (context, url) =>
+                                            const CircleAvatar(
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator()),
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                    "삼성전자",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: kCaptionStyle.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
                     Row(
                       children: [
                         Theme(
@@ -110,6 +318,7 @@ class HomeScreen extends StatelessWidget {
                             highlightColor: Colors.transparent,
                           ),
                           child: TabBar(
+                              controller: homecontroller.hometabcontroller,
                               labelStyle: TextStyle(
                                 color: mainblack,
                                 fontSize: 14,
@@ -167,34 +376,37 @@ class HomeScreen extends StatelessWidget {
               // SliverToBoxAdapter(child: de\,)
             ];
           },
-          body: TabBarView(physics: PageScrollPhysics(), children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 50.0),
-              child: HomePostingScreen(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 50.0),
-              child: QuestionAnswerScreen(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 16,
-                bottom: 80,
-              ),
-              child: SingleChildScrollView(
-                key: const PageStorageKey("key3"),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
+          body: TabBarView(
+              physics: PageScrollPhysics(),
+              controller: homecontroller.hometabcontroller,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 50.0),
+                  child: HomePostingScreen(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 50.0),
+                  child: QuestionAnswerScreen(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    bottom: 80,
                   ),
-                  child: Column(
-                    children: HomeController.to.posting,
+                  child: SingleChildScrollView(
+                    key: const PageStorageKey("key3"),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: Column(
+                        children: HomeController.to.posting,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ]),
+              ]),
         ),
       ),
     );

@@ -18,7 +18,6 @@ void loginRequest() async {
     'username': logInController.idcontroller.text,
     'password': logInController.passwordcontroller.text,
   };
-
   http.Response response = await http.post(
     uri,
     headers: <String, String>{
@@ -42,5 +41,9 @@ void loginRequest() async {
     );
   } else {
     print(response.statusCode);
+    Get.defaultDialog(
+      title: '${response.statusCode}',
+      content: Text('${response.statusCode}'),
+    );
   }
 }

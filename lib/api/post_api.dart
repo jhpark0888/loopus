@@ -135,7 +135,7 @@ Future<dynamic> mainpost(int pageNumber) async {
   });
 
   final url = Uri.parse(
-      "http://3.35.253.151:8000/post_api/main_load/?page=$pageNumber/");
+      "http://3.35.253.151:8000/post_api/main_load/?page=$pageNumber");
 
   final response = await get(url, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;

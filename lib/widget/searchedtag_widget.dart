@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
@@ -18,30 +20,57 @@ class SearchTagWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        if (id == 0) {
-          // projectMakeController.postmaketag();
-          tagController.selectedtaglist.add(
-              SelectedTagWidget(id: id, text: tagController.tagsearch.text));
-          tagController.tagsearch.clear();
+        if (tagController.selectedtaglist.length < 3) {
+          if (id == 0) {
+            // projectMakeController.postmaketag();
+            tagController.selectedtaglist.add(
+                SelectedTagWidget(id: id, text: tagController.tagsearch.text));
+            tagController.tagsearch.clear();
+            tagController.gettagsearch();
+          } else {
+            tagController.selectedtaglist.add(SelectedTagWidget(
+              id: id,
+              text: tag,
+            ));
+            tagController.tagsearch.clear();
+            tagController.gettagsearch();
+          }
         } else {
-          tagController.selectedtaglist.add(SelectedTagWidget(
-            id: id,
-            text: tag,
-          ));
-          tagController.tagsearch.clear();
+          Get.dialog(Dialog(
+              child: Container(
+                  height: Get.height * 0.15,
+                  width: Get.width * 0.7,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
+                          "태그는 최대 3개까지 가능합니다",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ))));
         }
       },
-      leading: Icon(Icons.local_offer),
+      dense: true,
+      leading: SvgPicture.asset(
+        'assets/icons/Tag.svg',
+        width: 30,
+        height: 30,
+      ),
       title: Text(
-        '$tag',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        tag,
+        style: kButtonStyle,
       ),
-      subtitle: Text(
-        count != null ? '관심도 $count' : '',
-        style: TextStyle(
-          fontSize: 16,
-        ),
-      ),
+      subtitle: count != null
+          ? Text(
+              '관심도 $count',
+              style: kBody1Style,
+            )
+          : null,
     );
   }
 }

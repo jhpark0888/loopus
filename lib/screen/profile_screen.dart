@@ -110,9 +110,11 @@ class ProfileScreen extends StatelessWidget {
                       SizedBox(
                         height: 8,
                       ),
-                      Text(
-                        profileController.user.value.realName,
-                        style: kSubTitle2Style,
+                      Obx(
+                        () => Text(
+                          profileController.user.value.realName,
+                          style: kSubTitle2Style,
+                        ),
                       ),
                       SizedBox(
                         height: 8,
@@ -329,7 +331,7 @@ class ProfileScreen extends StatelessWidget {
                     () => Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
                       child: Column(
-                        children: profileController.projectlist,
+                        children: profileController.projectlist.value,
                       ),
                     ),
                   ),
@@ -349,16 +351,30 @@ class ProfileScreen extends StatelessWidget {
                           child: DropdownButton(
                             onChanged: (value) {},
                             onTap: () {},
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                             elevation: 1,
                             underline: Container(),
-                            icon: Icon(Icons.expand_more),
+                            icon: Icon(
+                              Icons.expand_more_rounded,
+                              color: mainblack,
+                            ),
                             value: profileController.selectqanda.value,
                             items: profileController.dropdown_qanda
                                 .map((value) => DropdownMenuItem(
                                     value: profileController.dropdown_qanda
                                         .indexOf("$value"),
-                                    child: Text("$value")))
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 4,
+                                      ),
+                                      child: Text(
+                                        "$value",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )))
                                 .toList(),
                           ),
                         ),

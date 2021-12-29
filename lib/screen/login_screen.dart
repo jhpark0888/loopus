@@ -3,13 +3,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/login_api.dart';
 import 'package:loopus/app.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/main.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
+import 'package:loopus/screen/signup_user_info_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
-class LogInPage extends StatelessWidget {
-  LogInPage({Key? key}) : super(key: key);
+class LogInScreen extends StatelessWidget {
+  LogInScreen({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
   final LogInController _loginController = Get.put(LogInController());
@@ -22,8 +24,13 @@ class LogInPage extends StatelessWidget {
         title: '로그인',
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            32,
+            24,
+            32,
+            40,
+          ),
           child: Form(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             key: _formKey,
@@ -31,123 +38,122 @@ class LogInPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
+                Align(
+                  alignment: Alignment.centerLeft,
                   child: Text(
-                    "캠퍼스 구성원 모두와 소통하는 공간",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  height: Get.height * 0.05,
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(5, 0, 0, 10),
-                  child: Text(
-                    "이메일",
-                    style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+                    '이메일 주소',
+                    style: kButtonStyle,
                   ),
                 ),
                 TextFormField(
-                  controller: _loginController.idcontroller,
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.5),
-                        borderRadius: BorderRadius.circular(3)),
-                    focusColor: Colors.black,
-                    contentPadding: EdgeInsets.all(10),
-                    border:
-                        OutlineInputBorder(borderSide: BorderSide(width: 2)),
-                  ),
-                  // validator: (value) => CheckValidate().validateEmail(value!)
-                ),
+                    autocorrect: false,
+                    minLines: 1,
+                    maxLines: 2,
+                    autofocus: true,
+                    style: kSubTitle1Style,
+                    cursorColor: mainblack,
+                    cursorWidth: 1.5,
+                    cursorRadius: Radius.circular(2),
+                    controller: _loginController.idcontroller,
+                    decoration: InputDecoration(
+                      hintText: 'loopus@inu.ac.kr',
+                      hintStyle: kSubTitle1Style.copyWith(
+                        color: mainblack.withOpacity(0.38),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderRadius: BorderRadius.circular(2),
+                        borderSide: BorderSide(
+                            color: mainblack.withOpacity(
+                              0.6,
+                            ),
+                            width: 1),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: mainblack, width: 1),
+                      ),
+                    ),
+                    validator: (value) =>
+                        CheckValidate().validateEmail(value!)),
                 SizedBox(
-                  height: Get.height * 0.02,
+                  height: 32,
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(5, 0, 0, 10),
+                Align(
+                  alignment: Alignment.centerLeft,
                   child: Text(
-                    "비밀번호",
-                    style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+                    '비밀번호',
+                    style: kButtonStyle,
                   ),
                 ),
                 TextFormField(
+                  autocorrect: false,
+                  obscureText: true,
+                  minLines: 1,
+                  autofocus: true,
+                  style: kSubTitle1Style,
+                  cursorColor: mainblack,
+                  cursorWidth: 1.5,
+                  cursorRadius: Radius.circular(2),
                   controller: _loginController.passwordcontroller,
-                  cursorColor: Colors.black,
                   decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.5),
-                        borderRadius: BorderRadius.circular(2)),
-                    focusColor: Colors.black,
-                    contentPadding: EdgeInsets.all(10),
-                    border:
-                        OutlineInputBorder(borderSide: BorderSide(width: 2)),
+                    hintText: '영문, 숫자, 특수문자 포함 8자리 이상',
+                    hintStyle: kSubTitle1Style.copyWith(
+                      color: mainblack.withOpacity(0.38),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.circular(2),
+                      borderSide: BorderSide(
+                          color: mainblack.withOpacity(
+                            0.6,
+                          ),
+                          width: 1),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: mainblack, width: 1),
+                    ),
                   ),
-                  // validator: (value) => CheckValidate().validateEmail(value!)
+                  validator: (value) =>
+                      CheckValidate().validatePassword(value!),
                 ),
                 SizedBox(
-                  height: Get.height * 0.04,
+                  height: 32,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 2),
-                      borderRadius: BorderRadius.circular(20)),
-                  width: Get.width * 0.95,
-                  height: 45,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
                   child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Center(
-                      child: Text("로그인",
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.bold)),
-                    ),
-                    onTap: () {
-                      loginRequest();
-                      if (_formKey.currentState!.validate()) {
-                        // _loginController.loginRequest();
-                      }
-                    },
-                  ),
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          loginRequest();
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: mainblue,
+                            borderRadius: BorderRadius.circular(4)),
+                        height: 40,
+                        width: Get.width * 0.96,
+                        child: Center(
+                            child: Text("로그인하기",
+                                style:
+                                    kButtonStyle.copyWith(color: mainWhite))),
+                      )),
                 ),
-                SizedBox(height: Get.height * 0.03),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 2),
-                      borderRadius: BorderRadius.circular(20)),
-                  width: Get.width * 0.95,
-                  height: 45,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 1.0),
                   child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Center(
-                      child: Text("회원가입",
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.bold)),
-                    ),
-                    onTap: () {
-                      Get.to(() => SignupCampusInfoScreen());
-                    },
-                  ),
+                      onTap: () {
+                        // Get.to(() => )
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: mainlightgrey,
+                            borderRadius: BorderRadius.circular(4)),
+                        height: 40,
+                        width: Get.width * 0.96,
+                        child: Center(
+                          child: Text("비밀번호 찾기", style: kButtonStyle),
+                        ),
+                      )),
                 ),
-                // Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                //   ElevatedButton(
-                //     onPressed: () {
-                //       if (_formKey.currentState!.validate()) {
-                //         _loginController.loginRequest();
-                //       }
-                //     },
-                //     child: Text("로그인"),
-                //   ),
-                //   ElevatedButton(
-                //     onPressed: () async {
-                //       Get.to(() => SignUpPage());
-                //     },
-                //     child: Text("회원가입"),
-                //   ),
-                // ]),
               ],
             ),
           ),
