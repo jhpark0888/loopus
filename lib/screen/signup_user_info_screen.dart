@@ -11,6 +11,7 @@ class SignupUserInfoScreen extends StatelessWidget {
   // const SignupDepartmentScreen({Key? key}) : super(key: key);
   SignupController signupController = Get.find();
   final _formKey = GlobalKey<FormState>();
+  RxBool isbutton = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -19,80 +20,10 @@ class SignupUserInfoScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(() => SignupEmailcheckScreen());
-              // if (CheckValidate().validatePassword(
-              //         signupController.passwordcontroller.text) ==
-              //     null) {
-              //   if (signupController.passwordcontroller.text ==
-              //       signupController.passwordcheckcontroller.text) {
-              //     Get.to(() => LogInPage());
-              //     signupRequest();
-              //     signupController.campusnamecontroller.clear();
-              //     signupController.classnumcontroller.clear();
-              //     signupController.departmentcontroller.clear();
-              //     signupController.emailidcontroller.clear();
-              //     signupController.namecontroller.clear();
-              //     signupController.passwordcontroller.clear();
-              //     signupController.passwordcheckcontroller.clear();
-              //     Get.dialog(Dialog(
-              //         child: Container(
-              //             height: Get.height * 0.15,
-              //             width: Get.width * 0.7,
-              //             child: Column(
-              //               mainAxisAlignment: MainAxisAlignment.center,
-              //               children: [
-              //                 Padding(
-              //                   padding: const EdgeInsets.all(12.0),
-              //                   child: Text(
-              //                     "축하합니다. 회원가입이 완료되었습니다. 로그인해주세요!",
-              //                     style: TextStyle(
-              //                         fontSize: 16,
-              //                         fontWeight: FontWeight.bold),
-              //                   ),
-              //                 ),
-              //               ],
-              //             ))));
-              //   } else {
-              //     Get.dialog(Dialog(
-              //         child: Container(
-              //             height: Get.height * 0.15,
-              //             width: Get.width * 0.7,
-              //             child: Column(
-              //               mainAxisAlignment: MainAxisAlignment.center,
-              //               children: [
-              //                 Padding(
-              //                   padding: const EdgeInsets.all(12.0),
-              //                   child: Text(
-              //                     "비밀번호와 비밀번호 확인이 동일하지 않습니다.",
-              //                     style: TextStyle(
-              //                         fontSize: 16,
-              //                         fontWeight: FontWeight.bold),
-              //                   ),
-              //                 ),
-              //               ],
-              //             ))));
-              //   }
-              // } else {
-              //   Get.dialog(Dialog(
-              //       child: Container(
-              //           height: Get.height * 0.15,
-              //           width: Get.width * 0.7,
-              //           child: Column(
-              //             mainAxisAlignment: MainAxisAlignment.center,
-              //             children: [
-              //               Padding(
-              //                 padding: const EdgeInsets.all(12.0),
-              //                 child: Text(
-              //                   "${CheckValidate().validatePassword(signupController.passwordcontroller.text)}",
-              //                   style: TextStyle(
-              //                       fontSize: 16, fontWeight: FontWeight.bold),
-              //                 ),
-              //               ),
-              //             ],
-              //           ))));
-              // }
-              // print(CheckValidate()
-              //     .validatePassword(signupController.passwordcontroller.text));
+              if (_formKey.currentState!.validate()) {
+                emailRequest();
+                Get.to(() => SignupEmailcheckScreen());
+              }
             },
             child: Text(
               '다음',

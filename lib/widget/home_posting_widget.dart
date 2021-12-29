@@ -17,6 +17,7 @@ import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/profile_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
+import 'package:http/http.dart' as http;
 
 class HomePostingWidget extends StatelessWidget {
   // PostItem item; required this.item,
@@ -32,8 +33,21 @@ class HomePostingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Get.to(PostingScreen());
+      onTap: () async {
+        http.Response? response = await getposting(item.id);
+        var responseBody = json.decode(utf8.decode(response!.bodyBytes));
+        Post post = Post.fromJson(responseBody['posting_info']);
+        User user = User(
+            type: 0,
+            user: responseBody['user_id'],
+            realName: responseBody['real_name'],
+            profileImage: responseBody['profile_image'],
+            profileTag: [],
+            classNum: responseBody['department'],
+            department: '',
+            isuser: -1);
+
+        Get.to(() => PostingScreen(post: post, user: user));
         print("click posting");
       },
       child: Column(

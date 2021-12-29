@@ -10,13 +10,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/postingeditor.dart';
 
 class PostingScreen extends StatelessWidget {
-  PostingScreen({Key? key, required this.post}) : super(key: key);
+  PostingScreen({Key? key, required this.post, this.user}) : super(key: key);
 
   ScrollController _controller = ScrollController();
   Post post;
+  User? user;
 
   @override
   Widget build(BuildContext context) {

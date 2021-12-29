@@ -20,14 +20,14 @@ class ProjectAddPeriodScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBarWidget(
         actions: [
-          TextButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                Get.to(() => ProjectAddTagScreen());
-              }
-            },
-            child: Obx(
-              () => Text(
+          Obx(
+            () => TextButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  Get.to(() => ProjectAddTagScreen());
+                }
+              },
+              child: Text(
                 '다음',
                 style: TextStyle(
                   fontSize: 16,
@@ -226,8 +226,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                       ),
                       Text(
                         '아직 진행 중이에요',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: mainblack),
+                        style: kCaptionStyle,
                       )
                     ],
                   ),

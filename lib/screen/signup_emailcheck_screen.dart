@@ -51,21 +51,20 @@ class SignupEmailcheckScreen extends StatelessWidget {
             SizedBox(
               height: 32,
             ),
-            TextFormField(
-                autocorrect: false,
-                minLines: 1,
-                maxLines: 2,
-                autofocus: true,
+            // Row(
+            //   children: [
+            //     Text(
+            //       signupController.emailidcontroller.text,
+            //       style: kSubTitle1Style,
+            //     )
+            //   ],
+            // ),
+            Obx(
+              () => TextFormField(
+                readOnly: true,
                 style: kSubTitle1Style,
-                cursorColor: mainblack,
-                cursorWidth: 1.5,
-                cursorRadius: Radius.circular(2),
                 controller: signupController.emailidcontroller,
                 decoration: InputDecoration(
-                    hintText: 'loopus@inu.ac.kr',
-                    hintStyle: kSubTitle1Style.copyWith(
-                      color: mainblack.withOpacity(0.38),
-                    ),
                     enabledBorder: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(2),
                       borderSide: BorderSide(
@@ -75,7 +74,12 @@ class SignupEmailcheckScreen extends StatelessWidget {
                           width: 1),
                     ),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: mainblack, width: 1),
+                      borderRadius: BorderRadius.circular(2),
+                      borderSide: BorderSide(
+                          color: mainblack.withOpacity(
+                            0.6,
+                          ),
+                          width: 1),
                     ),
                     suffix: signupController.emailcheck.value != true
                         ? Text(
@@ -85,7 +89,8 @@ class SignupEmailcheckScreen extends StatelessWidget {
                           )
                         : SvgPicture.asset(
                             'assets/icons/Check_Active_blue.svg')),
-                validator: (value) => CheckValidate().validateEmail(value!)),
+              ),
+            ),
             // Container(
             //   height: 40,
             //   child: TextFormField(

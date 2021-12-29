@@ -23,6 +23,7 @@ import 'package:underline_indicator/underline_indicator.dart';
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
   ProfileController profileController = Get.put(ProfileController());
+  RxBool isLoop = false.obs;
 
   @override
   Widget build(BuildContext context) {
