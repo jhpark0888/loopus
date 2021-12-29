@@ -328,14 +328,13 @@ class ProfileScreen extends StatelessWidget {
                               ))
                         ]),
                   ),
-                  Obx(
-                    () => Padding(
+                  Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
-                      child: Column(
-                        children: profileController.projectlist,
-                      ),
-                    ),
-                  ),
+                      child: Obx(
+                        () => Column(
+                          children: profileController.projectlist.value,
+                        ),
+                      )),
                 ],
               ),
             ),

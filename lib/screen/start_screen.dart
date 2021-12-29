@@ -71,7 +71,7 @@ class StartScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: InkWell(
-                    onTap: () => Get.to(SignupCampusInfoScreen()),
+                    onTap: () => Get.to(() => SignupCampusInfoScreen()),
                     child: Container(
                       decoration: BoxDecoration(
                           color: mainblue,
@@ -89,7 +89,7 @@ class StartScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 1.0),
                 child: InkWell(
-                    onTap: () => Get.to(LogInScreen()),
+                    onTap: () => Get.to(() => LogInScreen()),
                     child: Container(
                       decoration: BoxDecoration(
                           color: mainlightgrey,

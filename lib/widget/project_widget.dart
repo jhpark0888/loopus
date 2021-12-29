@@ -163,19 +163,8 @@ class ProjectWidget extends StatelessWidget {
                             ],
                           ),
                           Row(children: [
-                            Obx(
-                              () => InkWell(
-                                  onTap: () {
-                                    project.isliked!.value == false
-                                        ? project.isliked!.value = true
-                                        : project.isliked!.value = false;
-                                  },
-                                  child: project.isliked!.value == false
-                                      ? SvgPicture.asset(
-                                          "assets/icons/Favorite_Inactive.svg")
-                                      : SvgPicture.asset(
-                                          "assets/icons/Favorite_Active.svg")),
-                            ),
+                            SvgPicture.asset(
+                                "assets/icons/Favorite_Active.svg"),
                             SizedBox(
                               width: 4,
                             ),

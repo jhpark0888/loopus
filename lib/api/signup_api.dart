@@ -45,6 +45,7 @@ Future<http.Response> signupRequest() async {
     "type": 0,
     "class_num": signupController.classnumcontroller.text,
     "real_name": signupController.namecontroller.text,
+    "department": signupController.departmentcontroller.text,
     "tag": null
   };
 

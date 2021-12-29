@@ -11,6 +11,7 @@ class SignupUserInfoScreen extends StatelessWidget {
   // const SignupDepartmentScreen({Key? key}) : super(key: key);
   SignupController signupController = Get.find();
   final _formKey = GlobalKey<FormState>();
+  RxBool isbutton = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,10 @@ class SignupUserInfoScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(() => SignupEmailcheckScreen());
+              if (_formKey.currentState!.validate()) {
+                emailRequest();
+                Get.to(() => SignupEmailcheckScreen());
+              }
               // if (CheckValidate().validatePassword(
               //         signupController.passwordcontroller.text) ==
               //     null) {

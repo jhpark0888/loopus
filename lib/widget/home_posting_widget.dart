@@ -23,8 +23,9 @@ class HomePostingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Get.to(PostingScreen());
+      onTap: () async {
+        Post? post = await getposting(item.id);
+        Get.to(() => PostingScreen(post: post!));
         print("click posting");
       },
       child: Column(

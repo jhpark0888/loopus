@@ -12,7 +12,6 @@ class Project {
     this.post,
     required this.projectTag,
     this.looper,
-    this.isliked,
     this.like_count,
   });
 
@@ -24,7 +23,6 @@ class Project {
   List<Post>? post;
   List<Tag> projectTag;
   List<dynamic>? looper;
-  RxBool? isliked;
   int? like_count;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
@@ -39,7 +37,6 @@ class Project {
         projectTag:
             List<Tag>.from(json["project_tag"].map((x) => Tag.fromJson(x))),
         looper: json["looper"],
-        isliked: false.obs,
         like_count: json["like_count"],
       );
 
