@@ -53,6 +53,7 @@ class QuestionAnswerScreen extends StatelessWidget {
           onRefresh: homeController.onRefresh2,
           onLoading: homeController.onLoading2,
           child: CustomScrollView(
+            physics: BouncingScrollPhysics(),
             key: PageStorageKey("key2"),
             slivers: [
               SliverList(

@@ -22,8 +22,8 @@ class SearchProfileWidget extends StatelessWidget {
               child: Image.asset("assets/illustrations/default_profile.png"),
             )
           : CachedNetworkImage(
-              height: 56,
-              width: 56,
+              height: 50,
+              width: 50,
               imageUrl: profileimage,
               placeholder: (context, url) => const CircleAvatar(
                 child: Center(child: CircularProgressIndicator()),

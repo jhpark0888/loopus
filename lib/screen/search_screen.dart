@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/search_student_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -18,7 +19,7 @@ class SearchScreen extends StatelessWidget {
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: () {
-              Get.to(SearchTypingScreen());
+              Get.to(() => SearchTypingScreen());
             },
             child: Column(
               children: [

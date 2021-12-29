@@ -18,24 +18,19 @@ class ProfileController extends GetxController {
   var selectqanda = 0.obs;
 
   RxList<ProjectWidget> projectlist = <ProjectWidget>[].obs;
-  Rx<User> user =
-      User(user: 0, type: 0, realName: '', classNum: '', profileTag: []).obs;
+  Rx<User> user = User(
+          user: 0,
+          type: 0,
+          realName: '',
+          classNum: '',
+          profileTag: [],
+          department: '',
+          isuser: -1)
+      .obs;
   Rx<File> profileimage = File('').obs;
 
   @override
   void onInit() async {
-    await getProfile().then((response) {
-      var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      user(User.fromJson(responseBody));
-
-      List projectmaplist = responseBody['project'];
-      projectlist(projectmaplist
-          .map((project) => Project.fromJson(project))
-          .map((project) => ProjectWidget(
-                project: project,
-              ))
-          .toList());
-    });
     super.onInit();
   }
 }

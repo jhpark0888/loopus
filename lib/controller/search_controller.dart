@@ -93,6 +93,7 @@ class SearchController extends GetxController
             content: element["content"],
             id: element["id"],
             tag: element["question_tag"],
+            profileimage: null,
           ));
         });
       }

@@ -12,7 +12,7 @@ import 'package:loopus/widget/my_question_posting_widget.dart';
 import 'package:loopus/widget/question_posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class HomePostingScreen extends StatelessWidget {
+class LoopScreen extends StatelessWidget {
   HomeController homeController = Get.find();
 
   @override
@@ -20,19 +20,17 @@ class HomePostingScreen extends StatelessWidget {
     return Scaffold(
       body: Obx(
         () => SmartRefresher(
-          controller: homeController.refreshController1,
+          controller: homeController.refreshController3,
           enablePullDown: true,
-          enablePullUp: homeController.enablepullup1.value,
+          enablePullUp: homeController.enablepullup3.value,
           header: ClassicHeader(
-            textStyle: TextStyle(color: mainblack),
-            refreshingText: '',
-            releaseText: "",
-            completeText: "",
-            idleText: "",
-            releaseIcon: Icon(Icons.refresh_rounded, color: mainblack),
-            completeIcon: Icon(Icons.done_rounded, color: mainblue),
-            idleIcon: Icon(Icons.arrow_downward_rounded, color: mainblack),
-          ),
+              textStyle: TextStyle(color: mainblack),
+              releaseText: "새로고침",
+              completeText: "완료",
+              idleText: "",
+              releaseIcon: Icon(Icons.refresh, color: mainblack),
+              completeIcon: Icon(Icons.done, color: mainblue),
+              idleIcon: Icon(Icons.arrow_downward, color: mainblack)),
           footer: ClassicFooter(
             textStyle: TextStyle(color: mainblack),
             loadingText: "",
@@ -40,18 +38,18 @@ class HomePostingScreen extends StatelessWidget {
             idleText: "",
             idleIcon: CircularProgressIndicator(
               color: mainblack,
-              strokeWidth: 1.2,
+              strokeWidth: 3,
             ),
             canLoadingIcon: CircularProgressIndicator(
               color: mainblack,
-              strokeWidth: 1.2,
+              strokeWidth: 3,
             ),
           ),
-          onRefresh: homeController.onRefresh1,
-          onLoading: homeController.onLoading1,
+          onRefresh: homeController.onRefresh3,
+          onLoading: homeController.onLoading3,
           child: CustomScrollView(
             physics: BouncingScrollPhysics(),
-            key: PageStorageKey("key1"),
+            key: PageStorageKey("key3"),
             slivers: [
               SliverList(
                   delegate: SliverChildListDelegate([
@@ -79,14 +77,13 @@ class HomePostingScreen extends StatelessWidget {
                         key: Key(
                           toString(),
                         ),
-                        item: homeController
-                            .postingResult.value.postingitems[index],
+                        item:
+                            homeController.loopResult.value.postingitems[index],
                       ),
                     ),
                   );
                 },
-                childCount:
-                    homeController.postingResult.value.postingitems.length,
+                childCount: homeController.loopResult.value.postingitems.length,
               )),
             ],
           ),

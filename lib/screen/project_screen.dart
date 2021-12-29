@@ -336,11 +336,12 @@ class ProjectScreen extends StatelessWidget {
                   ),
                   Column(
                       children: project.post != null
-                          ? project.post!
+                          ? List.from(project.post!
                               .map((post) => ProjectPostingWidget(
                                     post: post,
                                   ))
                               .toList()
+                              .reversed)
                           : [Container()]
                       //     [
                       //   ProjectPostingWidget(
