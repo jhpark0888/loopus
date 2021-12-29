@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/screen/home_posting_screen.dart';
+import 'package:loopus/screen/loop_screen.dart';
 import 'package:loopus/screen/posting_detail_screen.dart';
 import 'package:loopus/screen/question_answer_screen.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
@@ -331,22 +332,20 @@ class HomeScreen extends StatelessWidget {
                   child: QuestionAnswerScreen(),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                    top: 16,
-                    bottom: 80,
-                  ),
-                  child: SingleChildScrollView(
-                    key: const PageStorageKey("key3"),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      child: Column(
-                        children: HomeController.to.posting,
-                      ),
-                    ),
-                  ),
+                  padding: const EdgeInsets.only(bottom: 50.0),
+                  child: homecontroller.isempty.value == false
+                      ? LoopScreen()
+                      : Column(
+                          children: [
+                            SizedBox(
+                              height: 50,
+                            ),
+                            Text(
+                              "아직 루프를 맺은 사람이 없어요",
+                              style: kSubTitle2Style,
+                            ),
+                          ],
+                        ),
                 ),
               ]),
         ),

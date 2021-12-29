@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/question_model.dart';
@@ -135,7 +136,7 @@ Future<dynamic> mainpost(int pageNumber) async {
   });
 
   final url = Uri.parse(
-      "http://3.35.253.151:8000/post_api/main_load/?page=$pageNumber/");
+      "http://3.35.253.151:8000/post_api/main_load/?page=$pageNumber");
 
   final response = await get(url, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
@@ -167,12 +168,14 @@ Future<dynamic> looppost(int pageNumber) async {
   var responseBody = utf8.decode(response.bodyBytes);
   print(statusCode);
   List<dynamic> list = jsonDecode(responseBody);
-
+  if (list.isEmpty) {
+    HomeController.to.enablepullup3.value = false;
+  }
   print(list);
   if (response.statusCode != 200) {
     return Future.error(response.statusCode);
   } else {
-    return QuestionModel.fromJson(list);
+    return PostingModel.fromJson(list);
   }
 }
 

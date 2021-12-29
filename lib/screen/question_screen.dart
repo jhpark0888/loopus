@@ -11,7 +11,6 @@ import 'package:loopus/widget/message_answer_widget.dart';
 import 'package:loopus/widget/message_question_widget.dart';
 
 class QuestionScreen extends StatelessWidget {
-  // const QuestionScreen({Key? key}) : super(key: key);
   final TextEditingController _textController = new TextEditingController();
   QuestionController questionController = Get.find();
   late Map data;

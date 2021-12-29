@@ -83,7 +83,7 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
   void initState() {
     super.initState();
     new Future.delayed(
-        const Duration(seconds: 4),
+        const Duration(seconds: 3),
         () => Navigator.pushReplacement(
               context,
               MaterialPageRoute(

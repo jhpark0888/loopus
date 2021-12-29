@@ -14,15 +14,21 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   List<HomePostingWidget> posting = [];
   List<RecommendPostingWidget> recommend_posting = [];
   RxBool bookmark = false.obs;
+  RxBool isempty = false.obs;
   RxBool enablepullup1 = true.obs;
   RxBool enablepullup2 = true.obs;
+  RxBool enablepullup3 = true.obs;
   var selectgroup = "모든 질문".obs;
   Rx<QuestionModel> questionResult = QuestionModel(questionitems: []).obs;
   Rx<PostingModel> postingResult = PostingModel(postingitems: []).obs;
+  Rx<PostingModel> loopResult = PostingModel(postingitems: []).obs;
   RefreshController refreshController1 =
       new RefreshController(initialRefresh: false);
   RefreshController refreshController2 =
       new RefreshController(initialRefresh: false);
+  RefreshController refreshController3 =
+      new RefreshController(initialRefresh: false);
+
   late TabController hometabcontroller;
 
   int pageNumber = 1;
@@ -35,6 +41,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
     onRefresh1();
     onRefresh2();
+    onRefresh3();
     hometabcontroller = TabController(length: 3, vsync: this);
     super.onInit();
   }
@@ -73,6 +80,24 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     //페이지 처리
     loadItem();
     refreshController2.loadComplete();
+  }
+
+  void onRefresh3() async {
+    enablepullup3.value = true;
+    loopResult(PostingModel(postingitems: []));
+
+    pageNumber = 1;
+    looploadItem();
+    await Future.delayed(Duration(microseconds: 500));
+    refreshController3.refreshCompleted();
+  }
+
+  void onLoading3() async {
+    pageNumber += 1;
+    await Future.delayed(Duration(microseconds: 500));
+    //페이지 처리
+    looploadItem();
+    refreshController3.loadComplete();
   }
 
   void loadItem() async {
@@ -132,6 +157,28 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     // }
     postingResult.update((val) {
       val!.postingitems.addAll(postingModel.postingitems);
+    });
+  }
+
+  void looploadItem() async {
+    PostingModel loopModel = await looppost(pageNumber);
+    PostingModel loopModel2 = await looppost(pageNumber + 1);
+    if (loopModel.postingitems.isEmpty) {
+      isempty.value = true;
+    } else {
+      if (loopModel.postingitems[0].id == loopModel2.postingitems[0].id) {
+        enablepullup3.value = false;
+      }
+    }
+
+    print(loopModel.postingitems);
+    // if (pageNumber == 1) {
+    //   questionResult.update((val) {
+    //     val!.questionitems.addAll(questionModel.questionitems);
+    //   });
+    // }
+    loopResult.update((val) {
+      val!.postingitems.addAll(loopModel.postingitems);
     });
   }
 }

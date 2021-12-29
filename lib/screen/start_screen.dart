@@ -28,6 +28,7 @@ class StartScreen extends StatelessWidget {
               Container(
                 height: 485,
                 child: PageView(
+                  physics: BouncingScrollPhysics(),
                   controller: pageController,
                   children: List.generate(
                       5,
