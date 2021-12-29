@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 class EditorToolbar extends StatelessWidget {
@@ -13,9 +14,13 @@ class EditorToolbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return PreferredSize(
       preferredSize: Size.fromHeight(56),
-      child: Material(
-          elevation: 4.0,
-          color: Colors.white,
+      child: Container(
+          decoration: BoxDecoration(
+            color: mainWhite,
+            border: Border(
+              top: BorderSide(color: Color(0xffe7e7e7), width: 1),
+            ),
+          ),
           child: Row(children: <Widget>[
             IconButton(
                 icon: Icon(Icons.format_size,

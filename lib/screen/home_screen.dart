@@ -102,6 +102,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
+
               SliverToBoxAdapter(
                 child: Column(
                   children: [
@@ -135,8 +136,9 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
+                      padding: const EdgeInsets.only(
+                        top: 12,
+                        bottom: 12,
                       ),
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -307,8 +309,14 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SliverToBoxAdapter(
-                child: Column(
+              SliverAppBar(
+                toolbarHeight: 43,
+                floating: false,
+                automaticallyImplyLeading: false,
+                elevation: 0,
+                pinned: true,
+                backgroundColor: Colors.white,
+                flexibleSpace: Column(
                   children: [
                     Row(
                       children: [
@@ -373,7 +381,72 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              // SliverToBoxAdapter(child: de\,)
+              // SliverToBoxAdapter(
+              //   child: Column(
+              //     children: [
+              //       Row(
+              //         children: [
+              //           Theme(
+              //             data: ThemeData().copyWith(
+              //               splashColor: Colors.transparent,
+              //               highlightColor: Colors.transparent,
+              //             ),
+              //             child: TabBar(
+              //                 controller: homecontroller.hometabcontroller,
+              //                 labelStyle: TextStyle(
+              //                   color: mainblack,
+              //                   fontSize: 14,
+              //                   fontFamily: 'Nanum',
+              //                   fontWeight: FontWeight.bold,
+              //                 ),
+              //                 labelColor: mainblack,
+              //                 unselectedLabelStyle: TextStyle(
+              //                   color: Colors.yellow,
+              //                   fontSize: 14,
+              //                   fontFamily: 'Nanum',
+              //                   fontWeight: FontWeight.normal,
+              //                 ),
+              //                 unselectedLabelColor: mainblack.withOpacity(0.6),
+              //                 indicator: UnderlineIndicator(
+              //                     strokeCap: StrokeCap.round,
+              //                     borderSide: BorderSide(width: 2),
+              //                     insets:
+              //                         EdgeInsets.symmetric(horizontal: 16.0)),
+              //                 isScrollable: true,
+              //                 indicatorColor: mainblack,
+              //                 tabs: [
+              //                   Tab(
+              //                     height: 40,
+              //                     child: Text(
+              //                       "포스팅",
+              //                     ),
+              //                   ),
+              //                   Tab(
+              //                     height: 40,
+              //                     child: Text(
+              //                       "질문과 답변",
+              //                     ),
+              //                   ),
+              //                   Tab(
+              //                     height: 40,
+              //                     child: Text(
+              //                       "루프",
+              //                     ),
+              //                   ),
+              //                   // new Container(
+              //                   //   width: 100,
+              //                   // )
+              //                 ]),
+              //           ),
+              //         ],
+              //       ),
+              //       Container(
+              //         height: 1,
+              //         color: Color(0xffe7e7e7),
+              //       )
+              //     ],
+              //   ),
+              // ),
             ];
           },
           body: TabBarView(

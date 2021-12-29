@@ -261,8 +261,11 @@ class ProfileScreen extends StatelessWidget {
                   color: Color(0xfff2f3f5),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: Theme(
+              SliverAppBar(
+                toolbarHeight: 43,
+                elevation: 0,
+                pinned: true,
+                flexibleSpace: Theme(
                   data: ThemeData().copyWith(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,

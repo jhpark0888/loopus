@@ -1,32 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 
-enum SmartTextType { H1, T, QUOTE, BULLET }
+enum SmartTextType { H1, H2, T, QUOTE, BULLET }
 
 extension SmartTextStyle on SmartTextType {
   TextStyle get textStyle {
     switch (this) {
       case SmartTextType.QUOTE:
         return TextStyle(
-            fontSize: 16.0, fontStyle: FontStyle.italic, color: Colors.black);
+          fontSize: 16.0,
+          fontStyle: FontStyle.italic,
+          color: mainblack,
+          height: 1.5,
+        );
       case SmartTextType.H1:
-        return TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold);
+        return TextStyle(
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          height: 1.6,
+          color: mainblack,
+        );
+      case SmartTextType.H2:
+        return TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
+          height: 1.6,
+          color: mainblack,
+        );
         break;
       default:
-        return TextStyle(fontSize: 16.0);
+        return TextStyle(fontSize: 16.0, height: 1.6, color: mainblack);
     }
   }
 
   EdgeInsets get padding {
     switch (this) {
       case SmartTextType.H1:
-        return EdgeInsets.fromLTRB(16, 24, 16, 8);
+        return EdgeInsets.fromLTRB(16, 8, 16, 0);
+      case SmartTextType.H2:
+        return EdgeInsets.fromLTRB(16, 8, 16, 0);
         break;
       case SmartTextType.BULLET:
-        return EdgeInsets.fromLTRB(24, 8, 16, 8);
+        return EdgeInsets.fromLTRB(24, 8, 16, 0);
       default:
-        return EdgeInsets.fromLTRB(16, 8, 16, 8);
+        return EdgeInsets.fromLTRB(16, 8, 16, 0);
     }
   }
 
@@ -64,12 +83,13 @@ class SmartTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => TextField(
+          autocorrect: false,
           controller: controller,
           focusNode: focusNode,
           autofocus: true,
           keyboardType: TextInputType.multiline,
           maxLines: null,
-          cursorColor: Colors.teal,
+          cursorColor: mainblue,
           textAlign: type.value.align,
           decoration: InputDecoration(
               border: InputBorder.none,

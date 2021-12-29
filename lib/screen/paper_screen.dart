@@ -52,8 +52,12 @@ class PaperScreen extends StatelessWidget {
         body: NestedScrollView(
           headerSliverBuilder: (context, value) {
             return [
-              SliverToBoxAdapter(
-                child: Column(
+              SliverAppBar(
+                elevation: 0,
+                toolbarHeight: 43,
+                automaticallyImplyLeading: false,
+                pinned: true,
+                flexibleSpace: Column(
                   children: [
                     Row(
                       children: [

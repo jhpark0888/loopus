@@ -119,8 +119,12 @@ class SearchTypingScreen extends StatelessWidget {
             child: NestedScrollView(
               headerSliverBuilder: (context, value) {
                 return [
-                  SliverToBoxAdapter(
-                    child: Column(
+                  SliverAppBar(
+                    toolbarHeight: 43,
+                    pinned: true,
+                    elevation: 0,
+                    automaticallyImplyLeading: false,
+                    flexibleSpace: Column(
                       children: [
                         Theme(
                           data: ThemeData().copyWith(
