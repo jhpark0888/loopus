@@ -23,6 +23,7 @@ class SearchTypingScreen extends StatelessWidget {
           searchController.searchprofilelist.clear();
           searchController.searchquestionlist.clear();
           searchController.pagenumber = 1;
+          searchController.tabController.index = 0;
 
           return false;
         },
@@ -44,6 +45,7 @@ class SearchTypingScreen extends StatelessWidget {
                   searchController.searchpostinglist.clear();
                   searchController.searchprofilelist.clear();
                   searchController.searchquestionlist.clear();
+                  searchController.tabController.index = 0;
                   Get.back();
                   print(searchController.tabController.index);
                 },

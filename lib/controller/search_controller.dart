@@ -104,7 +104,7 @@ class SearchController extends GetxController
       } else if (tab_index == 2) {
         searchlist.forEach((element) {
           searchquestionlist.add(SearchQuestionWidget(
-            answercount: element["answer"].length,
+            answercount: element["count"],
             content: element["content"],
             id: element["id"],
             tag: element["question_tag"],
