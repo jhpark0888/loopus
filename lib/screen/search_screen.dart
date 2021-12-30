@@ -70,14 +70,19 @@ class SearchScreen extends StatelessWidget {
                 autocorrect: false,
                 controller: _searchController.searchtextcontroller,
                 onTap: () {
-                  _searchController.checknonesearch.value = false;
+                  _searchController.isnosearch1.value = false;
+                  _searchController.isnosearch2.value = false;
+
+                  _searchController.isnosearch3.value = false;
                 },
                 onSubmitted: (value) async {
                   _searchController.searchpostinglist.clear();
                   _searchController.searchprofilelist.clear();
                   _searchController.searchquestionlist.clear();
                   await _searchController.search(
-                      _searchController.tabController.index, value);
+                      _searchController.tabController.index,
+                      value,
+                      _searchController.pagenumber);
                   print(value);
                   _searchController.searchtextcontroller.clear();
                 },
@@ -348,7 +353,7 @@ class SearchScreen extends StatelessWidget {
                               children: [
                                 SingleChildScrollView(
                                   child: Obx(() => _searchController
-                                              .checknonesearch.value ==
+                                              .isnosearch1.value ==
                                           false
                                       ? Padding(
                                           padding:
@@ -367,7 +372,7 @@ class SearchScreen extends StatelessWidget {
                                 ),
                                 SingleChildScrollView(
                                   child: Obx(() => _searchController
-                                              .checknonesearch.value ==
+                                              .isnosearch2.value ==
                                           false
                                       ? Padding(
                                           padding:
@@ -386,7 +391,7 @@ class SearchScreen extends StatelessWidget {
                                 ),
                                 SingleChildScrollView(
                                   child: Obx(() => _searchController
-                                              .checknonesearch.value ==
+                                              .isnosearch3.value ==
                                           false
                                       ? Padding(
                                           padding:

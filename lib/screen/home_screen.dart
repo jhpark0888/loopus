@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/screen/home_posting_screen.dart';
 import 'package:loopus/screen/loop_screen.dart';
 import 'package:loopus/screen/posting_detail_screen.dart';
@@ -18,6 +19,7 @@ import 'package:underline_indicator/underline_indicator.dart';
 class HomeScreen extends StatelessWidget {
   final HomeController homecontroller = Get.put(HomeController());
   final ModalController _modalController = Get.put(ModalController());
+  final SearchController _searchController = Get.put(SearchController());
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +65,9 @@ class HomeScreen extends StatelessWidget {
                   highlightColor: Colors.transparent,
                   onTap: () {
                     Get.toNamed('/search');
+                    _searchController.searchpostinglist.clear();
+                    _searchController.searchprofilelist.clear();
+                    _searchController.searchquestionlist.clear();
                   },
                   child: Column(
                     children: [
