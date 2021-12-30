@@ -11,6 +11,7 @@ class Post {
     required this.project,
     required this.project_id,
     required this.contents,
+    required this.projectname,
     required this.likeCount,
     required this.isLiked,
     required this.realname,
@@ -25,6 +26,7 @@ class Post {
   var thumbnail;
   int? project_id;
   String title;
+  String? projectname;
   String realname;
   List<Map<String, dynamic>>? contents;
   String department;
@@ -59,6 +61,7 @@ class Post {
         department: json["department"] ?? '',
         profileimage: json["profile_image"],
         realname: json["real_name"] ?? '',
+        projectname: json["project_name"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

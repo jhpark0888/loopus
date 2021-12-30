@@ -17,7 +17,10 @@ class SearchController extends GetxController
   RxList<SearchProfileWidget> searchprofilelist = <SearchProfileWidget>[].obs;
   RxList<SearchQuestionWidget> searchquestionlist =
       <SearchQuestionWidget>[].obs;
-  RxBool checknonesearch = false.obs;
+  RxBool isnosearch1 = false.obs;
+  RxBool isnosearch2 = false.obs;
+  RxBool isnosearch3 = false.obs;
+  int pagenumber = 1;
 
   RxBool isFocused = false.obs;
   RxInt tabpage = 0.obs;
@@ -48,7 +51,7 @@ class SearchController extends GetxController
     });
   }
 
-  Future<void> search(int tab_index, String search) async {
+  Future<void> search(int tab_index, String search, int pagenumber) async {
     String? token;
     await FlutterSecureStorage().read(key: 'token').then((value) {
       token = value;
@@ -57,7 +60,7 @@ class SearchController extends GetxController
     List tab_list = ["post", "profile", "question", "project", "project"];
 
     final url = Uri.parse(
-        "http://3.35.253.151:8000/search_api/search_log/${tab_list[tab_index]}/?query=${search}");
+        "http://3.35.253.151:8000/search_api/search/${tab_list[tab_index]}/?query=${search}&page=${pagenumber}");
 
     final response = await get(url, headers: {"Authorization": "Token $token"});
     var statusCode = response.statusCode;
@@ -68,18 +71,27 @@ class SearchController extends GetxController
     print(searchlist);
 
     if (searchlist.isEmpty) {
-      print("hihi");
-      checknonesearch.value = true;
-      print(checknonesearch.value);
+      if (tab_index == 0) {
+        isnosearch1.value = true;
+      } else if (tab_index == 1) {
+        isnosearch2.value = true;
+      } else if (tab_index == 2) {
+        isnosearch3.value = true;
+      }
     } else {
+      pagenumber += 1;
       if (tab_index == 0) {
         searchlist.forEach((element) {
           searchpostinglist.add(SearchPostingWidget(
-              id: element["id"],
-              postingtitle: element["title"],
-              profileimage: element["thubnail"],
-              projecttitle: element["title"],
-              likecount: element["like_count"]));
+            id: element["id"],
+            postingtitle: element["title"],
+            profileimage: element["thubnail"],
+            projecttitle: element["title"],
+            is_liked: RxInt(element["is_liked"]),
+            is_marked: RxInt(element["is_marked"]),
+            like_count: RxInt(element["like_count"]),
+            user_id: element["user_id"],
+          ));
         });
       } else if (tab_index == 1) {
         searchlist.forEach((element) {

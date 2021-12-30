@@ -19,6 +19,7 @@ class SearchTypingScreen extends StatelessWidget {
           searchController.searchpostinglist.clear();
           searchController.searchprofilelist.clear();
           searchController.searchquestionlist.clear();
+          searchController.pagenumber = 1;
           Get.back();
           return false;
         },
@@ -68,14 +69,20 @@ class SearchTypingScreen extends StatelessWidget {
                     autocorrect: false,
                     controller: searchController.searchtextcontroller,
                     onTap: () {
-                      searchController.checknonesearch.value = false;
+                      searchController.isnosearch1.value = false;
+                      searchController.isnosearch2.value = false;
+                      searchController.isnosearch3.value = false;
                     },
                     onSubmitted: (value) async {
-                      searchController.searchpostinglist.clear();
-                      searchController.searchprofilelist.clear();
-                      searchController.searchquestionlist.clear();
+                      if (searchController.pagenumber == 1) {
+                        searchController.searchpostinglist.clear();
+                        searchController.searchprofilelist.clear();
+                        searchController.searchquestionlist.clear();
+                      }
                       await searchController.search(
-                          searchController.tabController.index, value);
+                          searchController.tabController.index,
+                          value,
+                          searchController.pagenumber);
                       print(value);
                       searchController.searchtextcontroller.clear();
                     },
@@ -211,8 +218,8 @@ class SearchTypingScreen extends StatelessWidget {
                   controller: searchController.tabController,
                   children: [
                     SingleChildScrollView(
-                      child: Obx(
-                          () => searchController.checknonesearch.value == false
+                      child:
+                          Obx(() => searchController.isnosearch1.value == false
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Column(
@@ -228,8 +235,8 @@ class SearchTypingScreen extends StatelessWidget {
                                   )))),
                     ),
                     SingleChildScrollView(
-                      child: Obx(
-                          () => searchController.checknonesearch.value == false
+                      child:
+                          Obx(() => searchController.isnosearch2.value == false
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Column(
@@ -245,8 +252,8 @@ class SearchTypingScreen extends StatelessWidget {
                                   )))),
                     ),
                     SingleChildScrollView(
-                      child: Obx(
-                          () => searchController.checknonesearch.value == false
+                      child:
+                          Obx(() => searchController.isnosearch3.value == false
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Column(

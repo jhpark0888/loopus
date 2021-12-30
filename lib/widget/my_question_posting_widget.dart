@@ -43,6 +43,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
                 print("click posting");
               },
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     height: 50,
