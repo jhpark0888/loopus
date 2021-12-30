@@ -12,29 +12,6 @@ import 'package:http/http.dart' as http;
 class ProjectAddController extends GetxController {
   static ProjectAddController get to => Get.find();
 
-  void onInit() {
-    super.onInit();
-    periodNextFocus(startyearcontroller, startmonthFocusNode, 4);
-    periodNextFocus(startmonthcontroller, startdayFocusNode, 2);
-    periodNextFocus(startdaycontroller, endyearFocusNode, 2);
-    periodNextFocus(endyearcontroller, endmonthFocusNode, 4);
-    periodNextFocus(endmonthcontroller, enddayFocusNode, 2);
-
-    projectnamecontroller.addListener(() {
-      if (projectnamecontroller.text.isEmpty) {
-        ontitlebutton(false);
-      } else {
-        Pattern pattern = r'[\-\_\/\\\[\]\(\)\|\{\}*$@$!%*#?~^<>,.&+=]';
-        RegExp regExp = new RegExp(pattern.toString());
-        if (regExp.hasMatch(projectnamecontroller.text)) {
-          ontitlebutton(false);
-        } else {
-          ontitlebutton(true);
-        }
-      }
-    });
-  }
-
   final startmonthFocusNode = FocusNode();
   final startdayFocusNode = FocusNode();
   final endyearFocusNode = FocusNode();
@@ -54,17 +31,82 @@ class ProjectAddController extends GetxController {
   RxList<SelectedPersonTagWidget> selectedpersontaglist =
       <SelectedPersonTagWidget>[].obs;
 
+  Rx<GlobalKey<FormState>> formKeystart = GlobalKey<FormState>().obs;
+  RxBool isvaildstartdate = false.obs;
+
+  Rx<GlobalKey<FormState>> formKeyend = GlobalKey<FormState>().obs;
+  RxBool isvaildenddate = false.obs;
+
   RxBool isongoing = false.obs;
   RxBool ontitlebutton = false.obs;
-  RxBool ondatebutton = false.obs;
-  List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
-}
 
-periodNextFocus(
-    TextEditingController controller, FocusNode nextfocusnode, int textlength) {
-  controller.addListener(() {
-    if (controller.text.length == textlength) {
-      nextfocusnode.requestFocus();
+  List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    periodaddListener(startyearcontroller, startmonthFocusNode, 4);
+    periodaddListener(startmonthcontroller, startdayFocusNode, 2);
+    periodaddListener(startdaycontroller, endyearFocusNode, 2);
+    periodaddListener(endyearcontroller, endmonthFocusNode, 4);
+    periodaddListener(endmonthcontroller, enddayFocusNode, 2);
+    periodaddListener(enddaycontroller, null, 2);
+
+    projectnamecontroller.addListener(() {
+      if (projectnamecontroller.text.isEmpty) {
+        ontitlebutton(false);
+      } else {
+        Pattern pattern = r'[\-\_\/\\\[\]\(\)\|\{\}*$@$!%*#?~^<>,.&+=]';
+        RegExp regExp = new RegExp(pattern.toString());
+        if (regExp.hasMatch(projectnamecontroller.text)) {
+          ontitlebutton(false);
+        } else {
+          ontitlebutton(true);
+        }
+      }
+    });
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    projectnamecontroller.dispose();
+    introcontroller.dispose();
+    startyearcontroller.dispose();
+    startmonthcontroller.dispose();
+    startdaycontroller.dispose();
+    endyearcontroller.dispose();
+    endmonthcontroller.dispose();
+    enddaycontroller.dispose();
+  }
+
+  periodaddListener(TextEditingController controller, FocusNode? nextfocusnode,
+      int textlength) {
+    controller.addListener(() {
+      if (controller.text.length == textlength && nextfocusnode != null) {
+        nextfocusnode.requestFocus();
+      }
+    });
+  }
+
+  String? validateDate(String value, int maxlenght) {
+    if (value.isEmpty) {
+      return '';
+    } else {
+      Pattern pattern = r'[\-\_\/\\\[\]\(\)\|\{\}*$@$!%*#?~^<>,.&+=]';
+      RegExp regExp = new RegExp(pattern.toString());
+      if (regExp.hasMatch(value) || value.length != maxlenght) {
+        return '';
+      } else {
+        // formKey.currentState!.validate()
+        //     ? ondatebutton(true)
+        //     : ondatebutton(false);
+        return null;
+      }
     }
-  });
+  }
 }

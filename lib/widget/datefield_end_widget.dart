@@ -27,7 +27,9 @@ class EndDateTextFormField extends StatelessWidget {
     return Container(
       child: Obx(
         () => TextFormField(
-          validator: projectaddcontroller.isongoing.value ? null : validator,
+          validator: projectaddcontroller.isongoing.value
+              ? null
+              : (value) => projectaddcontroller.validateDate(value!, maxLenght),
           focusNode: focusNode,
           readOnly: isongoing.value,
           controller: controller,

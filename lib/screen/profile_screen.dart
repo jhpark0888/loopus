@@ -11,6 +11,7 @@ import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
@@ -101,8 +102,11 @@ class ProfileScreen extends StatelessWidget {
                                   onTap: () async {
                                     File? image = await getcropImage("profile");
                                     if (image != null) {
-                                      await updateProfile(
+                                      User? user = await updateProfile(
                                           profileController.user.value, image);
+                                      if (user != null) {
+                                        profileController.user(user);
+                                      }
                                     }
                                   },
                                   child:
@@ -400,7 +404,9 @@ class ProfileScreen extends StatelessWidget {
                                 child: ButtonTheme(
                                   alignedDropdown: true,
                                   child: DropdownButton(
-                                    onChanged: (value) {},
+                                    onChanged: (int? value) {
+                                      profileController.selectqanda(value);
+                                    },
                                     onTap: () {},
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8)),
