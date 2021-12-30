@@ -6,6 +6,7 @@ import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -28,272 +29,166 @@ class BookmarkWidget extends StatelessWidget {
       onTap: () {
         print("click posting");
       },
-      child: Container(
-        width: Get.width * 0.94,
-        margin: EdgeInsets.symmetric(vertical: 8),
-        padding: EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 16,
-        ),
-        decoration: BoxDecoration(
-          color: mainWhite,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(8),
-            topRight: Radius.circular(8),
-            bottomLeft: Radius.circular(8),
-            bottomRight: Radius.circular(8),
-          ),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 3,
-              offset: Offset(0.0, 1.0),
-              color: Colors.black.withOpacity(0.1),
+      child: Column(
+        children: [
+          Container(
+            width: Get.width * 0.94,
+            padding: EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 16,
             ),
-            BoxShadow(
-              blurRadius: 2,
-              offset: Offset(0.0, 1.0),
-              color: Colors.black.withOpacity(0.06),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              child: Text(
-                "${post.title}",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  height: 1.5,
+            decoration: BoxDecoration(
+              color: mainWhite,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+                bottomLeft: Radius.circular(8),
+                bottomRight: Radius.circular(8),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 3,
+                  offset: Offset(0.0, 1.0),
+                  color: Colors.black.withOpacity(0.1),
                 ),
-              ),
+                BoxShadow(
+                  blurRadius: 2,
+                  offset: Offset(0.0, 1.0),
+                  color: Colors.black.withOpacity(0.06),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              "${post.projectname}",
-              style: TextStyle(
-                fontSize: 14,
-                color: mainblack.withOpacity(0.6),
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  child: Text(
+                    "${post.title}",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "${post.projectname}",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: mainblack.withOpacity(0.6),
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ClipOval(
-                          child: post.profileimage == null
-                              ? Image.asset(
-                                  "assets/illustrations/default_profile.png",
-                                  height: 32,
-                                  width: 32,
-                                )
-                              : CachedNetworkImage(
-                                  height: 32,
-                                  width: 32,
-                                  imageUrl: "${post.profileimage}",
-                                  placeholder: (context, url) => CircleAvatar(
-                                    child: Center(
-                                        child: CircularProgressIndicator()),
-                                  ),
-                                  fit: BoxFit.fill,
-                                )),
-                      SizedBox(
-                        width: 8,
+                      Row(
+                        children: [
+                          ClipOval(
+                              child: post.profileimage == null
+                                  ? Image.asset(
+                                      "assets/illustrations/default_profile.png",
+                                      height: 32,
+                                      width: 32,
+                                    )
+                                  : CachedNetworkImage(
+                                      height: 32,
+                                      width: 32,
+                                      imageUrl: "${post.profileimage}",
+                                      placeholder: (context, url) =>
+                                          CircleAvatar(
+                                        child: Center(
+                                            child: CircularProgressIndicator()),
+                                      ),
+                                      fit: BoxFit.fill,
+                                    )),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          const Text(
+                            "박도영 · ",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                          const Text(
+                            "기계공학과",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ],
                       ),
-                      const Text(
-                        "박도영 · ",
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold),
-                      ),
-                      const Text(
-                        "기계공학과",
-                        style: TextStyle(fontSize: 14),
+                      Obx(
+                        () => Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                if (post.isLiked.value == 0) {
+                                  post.isLiked.value = 1;
+                                  post.likeCount.value += 1;
+                                } else {
+                                  post.isLiked.value = 0;
+                                  post.likeCount.value -= 1;
+                                }
+                                likepost(post.id);
+                              },
+                              child: post.isLiked.value == 0
+                                  ? SvgPicture.asset(
+                                      "assets/icons/Favorite_Inactive.svg")
+                                  : SvgPicture.asset(
+                                      "assets/icons/Favorite_Active.svg"),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Text(
+                              "${post.likeCount.value}",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 16,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                if (post.isMarked.value == 0) {
+                                  post.isMarked.value = 1;
+                                } else {
+                                  bookmarkController
+                                      .bookmarkResult.value.postingitems
+                                      .removeAt(index);
+                                  ModalController.to
+                                      .showCustomDialog("북마크 탭에서 삭제했어요.", 1);
+                                  post.isMarked.value = 0;
+                                }
+                                bookmarkpost(post.id);
+                              },
+                              child: post.isMarked.value == 0
+                                  ? SvgPicture.asset(
+                                      "assets/icons/Mark_Default.svg",
+                                      color: mainblack,
+                                    )
+                                  : SvgPicture.asset(
+                                      "assets/icons/Mark_Saved.svg"),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                  Obx(
-                    () => Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            if (post.isLiked.value == 0) {
-                              post.isLiked.value = 1;
-                              post.likeCount.value += 1;
-                            } else {
-                              post.isLiked.value = 0;
-                              post.likeCount.value -= 1;
-                            }
-                            likepost(post.id);
-                          },
-                          child: post.isLiked.value == 0
-                              ? SvgPicture.asset(
-                                  "assets/icons/Favorite_Inactive.svg")
-                              : SvgPicture.asset(
-                                  "assets/icons/Favorite_Active.svg"),
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          "${post.likeCount.value}",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            if (post.isMarked.value == 0) {
-                              post.isMarked.value = 1;
-                            } else {
-                              post.isMarked.value = 0;
-                            }
-                            bookmarkpost(post.id);
-                          },
-                          child: post.isMarked.value == 0
-                              ? SvgPicture.asset(
-                                  "assets/icons/Mark_Default.svg",
-                                  color: mainblack,
-                                )
-                              : SvgPicture.asset("assets/icons/Mark_Saved.svg"),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: 16,
+          ),
+        ],
       ),
     );
-    // GestureDetector(
-    //   onTap: () {
-    //     // Get.to(PostingScreen(post: Post(),));
-    //     print("click posting");
-    //   },
-    //   child: Padding(
-    //     padding: const EdgeInsets.fromLTRB(16.0, 8, 16.0, 0),
-    //     child: Column(
-    //       children: [
-    //         Container(
-    //           decoration: BoxDecoration(
-    //             borderRadius: BorderRadius.only(
-    //               topLeft: Radius.circular(8),
-    //               topRight: Radius.circular(8),
-    //               bottomLeft: Radius.circular(8),
-    //               bottomRight: Radius.circular(8),
-    //             ),
-    //             boxShadow: [
-    //               BoxShadow(
-    //                 blurRadius: 3,
-    //                 offset: Offset(0.0, 1.0),
-    //                 color: Colors.black.withOpacity(0.1),
-    //               ),
-    //               BoxShadow(
-    //                 blurRadius: 2,
-    //                 offset: Offset(0.0, 1.0),
-    //                 color: Colors.black.withOpacity(0.06),
-    //               ),
-    //             ],
-    //           ),
-    //           child: Column(
-    //             children: [
-    //               Column(
-    //                 children: [
-    //                   ClipRRect(
-    //                     borderRadius: BorderRadius.only(
-    //                       bottomLeft: Radius.circular(8),
-    //                       bottomRight: Radius.circular(8),
-    //                     ),
-    //                     child: Container(
-    //                       color: mainWhite,
-    //                       child: Padding(
-    //                         padding: const EdgeInsets.symmetric(
-    //                           horizontal: 12,
-    //                           vertical: 16,
-    //                         ),
-    //                         child: Column(
-    //                           crossAxisAlignment: CrossAxisAlignment.stretch,
-    //                           children: [
-    //                             Text(
-    //                               "${postingtitle}",
-    //                               style: kHeaderH2Style,
-    //                             ),
-    //                             SizedBox(
-    //                               height: 24,
-    //                             ),
-    //                             Text(
-    //                               "${projecttitle}",
-    //                               style: TextStyle(
-    //                                 color: mainblack.withOpacity(0.6),
-    //                                 fontSize: 14,
-    //                                 fontWeight: FontWeight.bold,
-    //                               ),
-    //                             ),
-    //                             SizedBox(
-    //                               height: 24,
-    //                             ),
-    //                             Row(
-    //                               mainAxisAlignment:
-    //                                   MainAxisAlignment.spaceBetween,
-    //                               children: [
-    //                                 Row(
-    //                                   children: [
-    //                                     Container(
-    //                                       height: 32,
-    //                                       width: 32,
-    //                                       child: ClipOval(
-    //                                           child: profileimage == null
-    //                                               ? Image.asset(
-    //                                                   "assets/illustrations/default_profile.png")
-    //                                               : CachedNetworkImage(
-    //                                                   height: 32,
-    //                                                   width: 32,
-    //                                                   imageUrl:
-    //                                                       "${profileimage}",
-    //                                                   placeholder:
-    //                                                       (context, url) =>
-    //                                                           CircleAvatar(
-    //                                                     child: Center(
-    //                                                         child:
-    //                                                             CircularProgressIndicator()),
-    //                                                   ),
-    //                                                   fit: BoxFit.fill,
-    //                                                 )),
-    //                                     ),
-    //                                     SizedBox(
-    //                                       width: 8,
-    //                                     ),
-    //                                   ],
-    //                                 ),
-    //                               ],
-    //                             ),
-    //                           ],
-    //                         ),
-    //                       ),
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //         SizedBox(
-    //           height: 16,
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }

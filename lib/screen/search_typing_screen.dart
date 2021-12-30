@@ -3,11 +3,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/home_screen.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 class SearchTypingScreen extends StatelessWidget {
   SearchController searchController = Get.put(SearchController());
+  TagController tagController = Get.put(TagController());
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +18,12 @@ class SearchTypingScreen extends StatelessWidget {
       initialIndex: 0,
       child: WillPopScope(
         onWillPop: () async {
+          Get.back();
           searchController.searchpostinglist.clear();
           searchController.searchprofilelist.clear();
           searchController.searchquestionlist.clear();
           searchController.pagenumber = 1;
-          Get.back();
+
           return false;
         },
         child: Scaffold(
@@ -67,7 +70,9 @@ class SearchTypingScreen extends StatelessWidget {
                 height: 36,
                 child: TextField(
                     autocorrect: false,
-                    controller: searchController.searchtextcontroller,
+                    controller: searchController.tabController.index != 3
+                        ? searchController.searchtextcontroller
+                        : tagController.tagsearch,
                     onTap: () {
                       searchController.isnosearch1.value = false;
                       searchController.isnosearch2.value = false;
@@ -223,8 +228,8 @@ class SearchTypingScreen extends StatelessWidget {
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Column(
-                                    children:
-                                        searchController.searchpostinglist,
+                                    children: searchController
+                                        .searchpostinglist.value,
                                   ))
                               : Container(
                                   height: 80,
@@ -240,8 +245,8 @@ class SearchTypingScreen extends StatelessWidget {
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Column(
-                                    children:
-                                        searchController.searchprofilelist,
+                                    children: searchController
+                                        .searchprofilelist.value,
                                   ))
                               : Container(
                                   height: 80,
@@ -257,8 +262,8 @@ class SearchTypingScreen extends StatelessWidget {
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Column(
-                                    children:
-                                        searchController.searchquestionlist,
+                                    children: searchController
+                                        .searchquestionlist.value,
                                   ),
                                 )
                               : Container(
@@ -269,9 +274,10 @@ class SearchTypingScreen extends StatelessWidget {
                                     style: kSubTitle2Style,
                                   )))),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 50.0),
-                      child: Center(child: Text("태그")),
+                    Obx(
+                      () => ListView(
+                        children: tagController.searchtaglist,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 50.0),
