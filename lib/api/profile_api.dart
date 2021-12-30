@@ -55,7 +55,6 @@ Future<http.StreamedResponse?> updateProfile(User user, File image) async {
 
   request.fields['type'] = json.encode(user.type);
   request.fields['real_name'] = user.realName;
-  request.fields['class_num'] = user.classNum;
   request.fields['tag'] = json.encode(user.profileTag);
 
   print(request.fields);

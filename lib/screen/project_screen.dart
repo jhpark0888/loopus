@@ -300,8 +300,20 @@ class ProjectScreen extends StatelessWidget {
                     height: 12,
                   ),
                   Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: project.projectTag
-                          .map((tag) => Tagwidget(content: tag.tag))
+                          .map((tag) => Row(children: [
+                                Tagwidget(
+                                  content: tag.tag,
+                                  fontSize: 14,
+                                ),
+                                project.projectTag.indexOf(tag) !=
+                                        project.projectTag.length - 1
+                                    ? SizedBox(
+                                        width: 8,
+                                      )
+                                    : Container()
+                              ]))
                           .toList()),
                   SizedBox(
                     height: 24,

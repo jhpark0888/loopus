@@ -53,6 +53,7 @@ class PaperScreen extends StatelessWidget {
           headerSliverBuilder: (context, value) {
             return [
               SliverAppBar(
+                backgroundColor: mainWhite,
                 elevation: 0,
                 toolbarHeight: 43,
                 automaticallyImplyLeading: false,

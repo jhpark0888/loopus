@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/model/post_model.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class PapercompetitionWidget extends StatelessWidget {
@@ -87,11 +88,13 @@ class PapercompetitionWidget extends StatelessWidget {
                                     ),
                                     Row(
                                       children: [
-                                        Tagwidget(content: '봉사'),
-                                        Tagwidget(content: 'KB라스쿨'),
-                                        Tagwidget(content: '대외활동'),
+                                        Tagwidget(content: '공모전', fontSize: 12),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Tagwidget(content: '공모전', fontSize: 12),
                                       ],
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),

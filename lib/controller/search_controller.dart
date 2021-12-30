@@ -19,7 +19,7 @@ class SearchController extends GetxController
       <SearchQuestionWidget>[].obs;
   RxBool checknonesearch = false.obs;
 
-  RxBool isFocused = true.obs;
+  RxBool isFocused = false.obs;
   RxInt tabpage = 0.obs;
   late TabController tabController;
 
@@ -32,14 +32,17 @@ class SearchController extends GetxController
       initialIndex: 0,
       vsync: this,
     );
+
     super.onInit();
+  }
+
+  void focusChange() {
+    isFocused.value = false;
   }
 
   void _focusListen() {
     focusNode.addListener(() {
-      if (!focusNode.hasFocus) {
-        isFocused.value = false;
-      } else if (focusNode.hasFocus) {
+      if (focusNode.hasFocus) {
         isFocused.value = true;
       }
     });

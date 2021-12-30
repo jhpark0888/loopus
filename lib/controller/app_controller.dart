@@ -13,11 +13,12 @@ enum RouteName { Home, Search, Paper, Bookmark, Profile }
 
 class AppController extends GetxService {
   static AppController get to => Get.find();
-
+  RxBool ismyprofile = false.obs;
   RxInt currentIndex = 0.obs;
 
   Future<void> changePageIndex(int index) async {
     if (index == 4) {
+      ismyprofile.value = true;
       String? user_id = await FlutterSecureStorage().read(key: "id");
       await getProfile(user_id).then((response) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));

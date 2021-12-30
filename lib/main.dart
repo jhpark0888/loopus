@@ -9,6 +9,7 @@ import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/screen/home_screen.dart';
 import 'package:loopus/screen/login_screen.dart';
+import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 
 void main() async {
@@ -63,7 +64,14 @@ class MyApp extends StatelessWidget {
       initialBinding: InitBinding(),
       getPages: [
         GetPage(
-            name: "/", page: token != null ? () => App() : () => StartScreen()),
+          name: "/",
+          page: token != null ? () => App() : () => StartScreen(),
+        ),
+        GetPage(
+          name: '/search',
+          page: () => SearchTypingScreen(),
+          transition: Transition.fadeIn,
+        ),
       ],
     );
   }

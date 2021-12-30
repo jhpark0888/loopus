@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () {
-                    Get.to(SearchTypingScreen());
+                    Get.toNamed('/search');
                   },
                   child: Column(
                     children: [
@@ -103,7 +103,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
               SliverToBoxAdapter(
                 child: Column(
                   children: [
@@ -312,11 +311,10 @@ class HomeScreen extends StatelessWidget {
               ),
               SliverAppBar(
                 toolbarHeight: 43,
-                floating: false,
                 automaticallyImplyLeading: false,
                 elevation: 0,
                 pinned: true,
-                backgroundColor: Colors.white,
+                backgroundColor: mainWhite,
                 flexibleSpace: Column(
                   children: [
                     Row(
@@ -382,72 +380,6 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              // SliverToBoxAdapter(
-              //   child: Column(
-              //     children: [
-              //       Row(
-              //         children: [
-              //           Theme(
-              //             data: ThemeData().copyWith(
-              //               splashColor: Colors.transparent,
-              //               highlightColor: Colors.transparent,
-              //             ),
-              //             child: TabBar(
-              //                 controller: homecontroller.hometabcontroller,
-              //                 labelStyle: TextStyle(
-              //                   color: mainblack,
-              //                   fontSize: 14,
-              //                   fontFamily: 'Nanum',
-              //                   fontWeight: FontWeight.bold,
-              //                 ),
-              //                 labelColor: mainblack,
-              //                 unselectedLabelStyle: TextStyle(
-              //                   color: Colors.yellow,
-              //                   fontSize: 14,
-              //                   fontFamily: 'Nanum',
-              //                   fontWeight: FontWeight.normal,
-              //                 ),
-              //                 unselectedLabelColor: mainblack.withOpacity(0.6),
-              //                 indicator: UnderlineIndicator(
-              //                     strokeCap: StrokeCap.round,
-              //                     borderSide: BorderSide(width: 2),
-              //                     insets:
-              //                         EdgeInsets.symmetric(horizontal: 16.0)),
-              //                 isScrollable: true,
-              //                 indicatorColor: mainblack,
-              //                 tabs: [
-              //                   Tab(
-              //                     height: 40,
-              //                     child: Text(
-              //                       "포스팅",
-              //                     ),
-              //                   ),
-              //                   Tab(
-              //                     height: 40,
-              //                     child: Text(
-              //                       "질문과 답변",
-              //                     ),
-              //                   ),
-              //                   Tab(
-              //                     height: 40,
-              //                     child: Text(
-              //                       "루프",
-              //                     ),
-              //                   ),
-              //                   // new Container(
-              //                   //   width: 100,
-              //                   // )
-              //                 ]),
-              //           ),
-              //         ],
-              //       ),
-              //       Container(
-              //         height: 1,
-              //         color: Color(0xffe7e7e7),
-              //       )
-              //     ],
-              //   ),
-              // ),
             ];
           },
           body: TabBarView(
@@ -467,13 +399,13 @@ class HomeScreen extends StatelessWidget {
                   child: homecontroller.isempty.value == false
                       ? LoopScreen()
                       : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              height: 50,
-                            ),
-                            Text(
-                              "아직 루프를 맺은 사람이 없어요",
-                              style: kSubTitle2Style,
+                            Center(
+                              child: Text(
+                                "아직 루프를 맺은 사람이 없어요",
+                                style: kSubTitle2Style,
+                              ),
                             ),
                           ],
                         ),

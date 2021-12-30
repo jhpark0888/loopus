@@ -94,6 +94,7 @@ class SearchQuestionWidget extends StatelessWidget {
                             children: List.generate(tag.length, (index) {
                               return Tagwidget(
                                 content: tag[index]["tag"],
+                                fontSize: 12,
                               );
                             }),
                           ),

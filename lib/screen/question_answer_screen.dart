@@ -12,10 +12,6 @@ import 'package:loopus/widget/question_posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class QuestionAnswerScreen extends StatelessWidget {
-  // const QuestionAnswerScreen({ Key? key }) : super(key: key);
-  // ProjectMakeController projectmakecontroller =
-  //     Get.put(ProjectMakeController());
-
   HomeController homeController = Get.find();
 
   @override
@@ -74,8 +70,8 @@ class QuestionAnswerScreen extends StatelessWidget {
                                     child: DropdownButton(
                                       itemHeight: 48,
                                       onTap: () {},
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(8)),
                                       elevation: 1,
                                       underline: Container(),
                                       icon: Icon(
@@ -91,7 +87,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                                                 const EdgeInsets.only(right: 4),
                                             child: Text(
                                               value,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16),
                                             ),
@@ -111,9 +107,10 @@ class QuestionAnswerScreen extends StatelessWidget {
                                 onTap: () {
                                   Get.to(() => QuestionAddContentScreen());
                                 },
-                                child: Text("질문 남기기",
-                                    style:
-                                        kButtonStyle.copyWith(color: mainblue)),
+                                child: Text(
+                                  "질문 남기기",
+                                  style: kButtonStyle.copyWith(color: mainblue),
+                                ),
                               )
                             ],
                           ),

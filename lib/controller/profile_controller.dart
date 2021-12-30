@@ -22,7 +22,6 @@ class ProfileController extends GetxController {
           user: 0,
           type: 0,
           realName: '',
-          classNum: '',
           profileTag: [],
           department: '',
           isuser: -1)

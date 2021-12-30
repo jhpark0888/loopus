@@ -72,31 +72,23 @@ class QuestionPostingWidget extends StatelessWidget {
                       SizedBox(
                         height: 32,
                       ),
-                      item.questionTag.length == 0
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  child: const Text("Tag 없는거 없애줘~"),
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: List.generate(
-                                      item.questionTag.length, (index) {
-                                    return Tagwidget(
-                                      content: item.questionTag[index].tag,
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: item.questionTag
+                            .map((tag) => Row(children: [
+                                  Tagwidget(
+                                    content: tag.tag,
+                                    fontSize: 12,
+                                  ),
+                                  item.questionTag.indexOf(tag) !=
+                                          item.questionTag.length - 1
+                                      ? SizedBox(
+                                          width: 4,
+                                        )
+                                      : Container()
+                                ]))
+                            .toList(),
+                      ),
                       SizedBox(
                         height: 20,
                       ),

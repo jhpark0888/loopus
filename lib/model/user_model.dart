@@ -5,7 +5,6 @@ class User {
     required this.user,
     required this.realName,
     required this.type,
-    required this.classNum,
     required this.department,
     required this.isuser,
     this.profileImage,
@@ -15,7 +14,6 @@ class User {
   int user;
   String realName;
   int type;
-  String classNum;
   String department;
   int isuser;
   String? profileImage;
@@ -25,7 +23,6 @@ class User {
         user: json["user"],
         realName: json["real_name"],
         type: json["type"],
-        classNum: json["class_num"],
         profileImage: json["profile_image"],
         profileTag:
             List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x))),
@@ -37,7 +34,6 @@ class User {
         "user": user,
         "real_name": realName,
         "type": type,
-        "class_num": classNum,
         "profile_image": profileImage,
         "project_tag": List<dynamic>.from(profileTag.map((x) => x.toJson())),
       };

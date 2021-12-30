@@ -127,8 +127,11 @@ class PaperinternshipWidget extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  Tagwidget(content: '기획'),
-                                  Tagwidget(content: '전략'),
+                                  Tagwidget(content: '공모전', fontSize: 12),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Tagwidget(content: '공모전', fontSize: 12),
                                 ],
                               ),
                               Text(

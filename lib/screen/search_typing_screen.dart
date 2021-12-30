@@ -33,34 +33,28 @@ class SearchTypingScreen extends StatelessWidget {
             leading: Text(''),
             leadingWidth: 16,
             actions: [
-              if (searchController.isFocused.value == true)
-                TextButton(
-                  style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(
-                      Colors.transparent,
-                    ),
-                  ),
-                  onPressed: () {
-                    searchController.searchpostinglist.clear();
-                    searchController.searchprofilelist.clear();
-                    searchController.searchquestionlist.clear();
-                    Get.back();
-                    print(searchController.tabController.index);
-                  },
-                  child: Center(
-                    child: Text(
-                      '취소',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: mainblack,
-                      ),
+              TextButton(
+                onPressed: () {
+                  searchController.searchpostinglist.clear();
+                  searchController.searchprofilelist.clear();
+                  searchController.searchquestionlist.clear();
+                  Get.back();
+                  print(searchController.tabController.index);
+                },
+                child: Center(
+                  child: Text(
+                    '닫기',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: mainblue,
                     ),
                   ),
                 ),
-              if (searchController.isFocused.value == false)
-                SizedBox(
-                  width: 16,
-                ),
+              ),
+              // if (searchController.isFocused.value == false)
+              //   SizedBox(
+              //     width: 16,
+              //   ),
             ],
             title: Obx(
               () => AnimatedContainer(
@@ -71,6 +65,7 @@ class SearchTypingScreen extends StatelessWidget {
                 curve: Curves.easeOut,
                 height: 36,
                 child: TextField(
+                    autocorrect: false,
                     controller: searchController.searchtextcontroller,
                     onTap: () {
                       searchController.checknonesearch.value = false;
@@ -126,11 +121,14 @@ class SearchTypingScreen extends StatelessWidget {
             ),
           ),
           body: GestureDetector(
-            onTap: () => searchController.focusNode.unfocus(),
+            onTap: () {
+              searchController.focusNode.unfocus();
+            },
             child: NestedScrollView(
               headerSliverBuilder: (context, value) {
                 return [
                   SliverAppBar(
+                    backgroundColor: mainWhite,
                     toolbarHeight: 43,
                     pinned: true,
                     elevation: 0,

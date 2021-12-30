@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/get_image_api.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
@@ -31,24 +32,27 @@ class ProfileScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: profileController.user.value.isuser == 1
-            ? AppBar(
-                centerTitle: false,
-                elevation: 0,
-                title: const Text(
-                  '프로필',
-                  style: kHeaderH1Style,
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      Get.to(() => SettingScreen());
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/icons/Setting.svg',
+            ? (AppController.to.ismyprofile.value == true)
+                ? AppBar(
+                    elevation: 0,
+                    centerTitle: false,
+                    title: Text(
+                      '프로필',
+                      style: kHeaderH1Style,
                     ),
-                  ),
-                ],
-              )
+                    actions: [
+                      IconButton(
+                        onPressed: () {
+                          Get.to(() => SettingScreen());
+                        },
+                        icon: SvgPicture.asset(
+                          'assets/icons/Setting.svg',
+                        ),
+                      ),
+                    ],
+                  )
+                : AppBarWidget(
+                    title: '${profileController.user.value.realName}의 프로필')
             : AppBarWidget(
                 title: '${profileController.user.value.realName}의 프로필'),
         body: NestedScrollView(
@@ -140,7 +144,21 @@ class ProfileScreen extends StatelessWidget {
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: profileController.user.value.profileTag
-                              .map((tag) => Tagwidget(content: tag.tag))
+                              .map((tag) => Row(children: [
+                                    Tagwidget(
+                                      content: tag.tag,
+                                      fontSize: 14,
+                                    ),
+                                    profileController.user.value.profileTag
+                                                .indexOf(tag) !=
+                                            profileController.user.value
+                                                    .profileTag.length -
+                                                1
+                                        ? SizedBox(
+                                            width: 8,
+                                          )
+                                        : Container()
+                                  ]))
                               .toList()),
                       SizedBox(
                         height: 32,
@@ -277,34 +295,6 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    profileController.user.value.isuser == 1
-                        ? Container()
-                        : Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                Get.to(() => LoopPeopleScreen());
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16.0),
-                                child: Column(
-                                  children: const [
-                                    Text(
-                                      '오퍼',
-                                      style: kBody1Style,
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      '-',
-                                      style: kSubTitle2Style,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
                   ],
                 ),
               ),

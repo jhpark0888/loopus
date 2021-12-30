@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -43,7 +44,6 @@ class HomePostingWidget extends StatelessWidget {
             realName: responseBody['real_name'],
             profileImage: responseBody['profile_image'],
             profileTag: [],
-            classNum: responseBody['department'],
             department: '',
             isuser: -1);
 
@@ -135,19 +135,23 @@ class HomePostingWidget extends StatelessWidget {
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: List.generate(
-                                        item.project!.projectTag.length,
-                                        (index) {
-                                      return Tagwidget(
-                                        content:
-                                            item.project!.projectTag[index].tag,
-                                      );
-                                    }),
-                                  ),
-                                ],
+                                children: item.project!.projectTag
+                                    .map((tag) => Row(children: [
+                                          Tagwidget(
+                                            content: tag.tag,
+                                            fontSize: 12,
+                                          ),
+                                          item.project!.projectTag
+                                                      .indexOf(tag) !=
+                                                  item.project!.projectTag
+                                                          .length -
+                                                      1
+                                              ? SizedBox(
+                                                  width: 4,
+                                                )
+                                              : Container()
+                                        ]))
+                                    .toList(),
                               ),
                               SizedBox(
                                 height: 20,
@@ -180,6 +184,10 @@ class HomePostingWidget extends StatelessWidget {
                                                         ))
                                                     .toList());
                                           });
+                                          AppController.to.ismyprofile.value =
+                                              false;
+                                          print(AppController
+                                              .to.ismyprofile.value);
                                           Get.to(() => ProfileScreen());
                                         },
                                         child: Row(
