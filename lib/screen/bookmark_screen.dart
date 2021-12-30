@@ -29,76 +29,78 @@ class BookmarkScreen extends StatelessWidget {
             fontFamily: 'Nanum',
           ),
         ),
-        actions: [],
       ),
-      body: Obx(
-        () => SmartRefresher(
-          controller: bookmarkController.refreshController,
-          enablePullDown: true,
-          enablePullUp: bookmarkController.enablepullup.value,
-          header: ClassicHeader(
-            textStyle: TextStyle(color: mainblack),
-            refreshingText: '',
-            releaseText: "",
-            completeText: "",
-            idleText: "",
-            releaseIcon: Icon(Icons.refresh_rounded, color: mainblack),
-            completeIcon: Icon(Icons.done_rounded, color: mainblue),
-            idleIcon: Icon(Icons.arrow_downward_rounded, color: mainblack),
-          ),
-          footer: ClassicFooter(
-            textStyle: TextStyle(color: mainblack),
-            loadingText: "",
-            canLoadingText: "",
-            idleText: "",
-            idleIcon: CircularProgressIndicator(
-              color: mainblack,
-              strokeWidth: 1.2,
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 54.0),
+        child: Obx(
+          () => SmartRefresher(
+            controller: bookmarkController.refreshController,
+            enablePullDown: true,
+            enablePullUp: bookmarkController.enablepullup.value,
+            header: ClassicHeader(
+              textStyle: TextStyle(color: mainblack),
+              refreshingText: '',
+              releaseText: "",
+              completeText: "",
+              idleText: "",
+              releaseIcon: Icon(Icons.refresh_rounded, color: mainblack),
+              completeIcon: Icon(Icons.done_rounded, color: mainblue),
+              idleIcon: Icon(Icons.arrow_downward_rounded, color: mainblack),
             ),
-            canLoadingIcon: CircularProgressIndicator(
-              color: mainblack,
-              strokeWidth: 1.2,
+            footer: ClassicFooter(
+              textStyle: TextStyle(color: mainblack),
+              loadingText: "",
+              canLoadingText: "",
+              idleText: "",
+              idleIcon: CircularProgressIndicator(
+                color: mainblack,
+                strokeWidth: 1.2,
+              ),
+              canLoadingIcon: CircularProgressIndicator(
+                color: mainblack,
+                strokeWidth: 1.2,
+              ),
             ),
-          ),
-          onRefresh: bookmarkController.onRefresh1,
-          onLoading: bookmarkController.onLoading1,
-          child: CustomScrollView(
-            physics: BouncingScrollPhysics(),
-            key: PageStorageKey("key1"),
-            slivers: [
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              ])),
-              SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return GestureDetector(
-                    //on tap event 발생시
-                    onTap: () async {},
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 16,
-                        left: 16,
+            onRefresh: bookmarkController.onRefresh1,
+            onLoading: bookmarkController.onLoading1,
+            child: CustomScrollView(
+              physics: BouncingScrollPhysics(),
+              key: PageStorageKey("key1"),
+              slivers: [
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 15,
                       ),
-                      child: BookmarkWidget(
-                        index: index,
-                        post: bookmarkController
-                            .bookmarkResult.value.postingitems[index],
+                    ],
+                  ),
+                ])),
+                SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return GestureDetector(
+                      //on tap event 발생시
+                      onTap: () async {},
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          right: 16,
+                          left: 16,
+                        ),
+                        child: BookmarkWidget(
+                          index: index,
+                          post: bookmarkController
+                              .bookmarkResult.value.postingitems[index],
+                        ),
                       ),
-                    ),
-                  );
-                },
-                childCount:
-                    bookmarkController.bookmarkResult.value.postingitems.length,
-              )),
-            ],
+                    );
+                  },
+                  childCount: bookmarkController
+                      .bookmarkResult.value.postingitems.length,
+                )),
+              ],
+            ),
           ),
         ),
       ),

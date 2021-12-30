@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
@@ -23,6 +24,7 @@ class TagController extends GetxController {
 
   RxList<SelectedTagWidget> selectedtaglist = <SelectedTagWidget>[].obs;
   RxList<SearchTagWidget> searchtaglist = <SearchTagWidget>[].obs;
+  RxList<SearchTagWidget> searchpagetag = <SearchTagWidget>[].obs;
   RxList<SelectedPersonTagWidget> selectedpersontaglist =
       <SelectedPersonTagWidget>[].obs;
 
@@ -73,14 +75,24 @@ class TagController extends GetxController {
             count: element.count,
           );
         }).toList());
-
-        if (tagsearch.text != '') {
-          searchtaglist.insert(
-              0,
-              SearchTagWidget(
-                id: 0,
-                tag: "처음으로 '${tagsearch.text}' 태그 사용하기",
-              ));
+        if (SearchController.to.tabController.index != 3) {
+          if (tagsearch.text != '') {
+            searchtaglist.insert(
+                0,
+                SearchTagWidget(
+                  id: 0,
+                  tag: "처음으로 '${tagsearch.text}' 태그 사용하기",
+                ));
+          }
+        } else {
+          if (tagsearch.text != '') {
+            searchtaglist.insert(
+                0,
+                SearchTagWidget(
+                  id: -1,
+                  tag: "'${tagsearch.text}'태그의 검색결과가 없습니다.",
+                ));
+          }
         }
 
         selectedtaglist.forEach((selectedtag) {

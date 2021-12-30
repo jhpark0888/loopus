@@ -112,12 +112,12 @@ class ProjectTag {
 }
 
 class PostingModel {
-  List<Post> postingitems;
+  RxList<Post> postingitems;
   PostingModel({required this.postingitems});
 
   factory PostingModel.fromJson(List<dynamic> json) {
-    List<Post>? items = [];
-    items = json.map((e) => Post.fromJson(e)).toList();
+    RxList<Post>? items = <Post>[].obs;
+    items.value = json.map((e) => Post.fromJson(e)).toList();
     return PostingModel(postingitems: items);
   }
 }

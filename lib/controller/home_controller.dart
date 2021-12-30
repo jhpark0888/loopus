@@ -20,8 +20,8 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   RxBool enablepullup3 = true.obs;
   var selectgroup = "모든 질문".obs;
   Rx<QuestionModel> questionResult = QuestionModel(questionitems: []).obs;
-  Rx<PostingModel> postingResult = PostingModel(postingitems: []).obs;
-  Rx<PostingModel> loopResult = PostingModel(postingitems: []).obs;
+  Rx<PostingModel> postingResult = PostingModel(postingitems: <Post>[].obs).obs;
+  Rx<PostingModel> loopResult = PostingModel(postingitems: <Post>[].obs).obs;
   RefreshController refreshController1 =
       new RefreshController(initialRefresh: false);
   RefreshController refreshController2 =
@@ -48,7 +48,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   void onRefresh1() async {
     enablepullup1.value = true;
-    postingResult(PostingModel(postingitems: []));
+    postingResult(PostingModel(postingitems: <Post>[].obs));
 
     pageNumber = 1;
     postloadItem();
@@ -84,7 +84,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   void onRefresh3() async {
     enablepullup3.value = true;
-    loopResult(PostingModel(postingitems: []));
+    loopResult(PostingModel(postingitems: <Post>[].obs));
 
     pageNumber = 1;
     looploadItem();

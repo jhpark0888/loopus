@@ -8,19 +8,21 @@ class BookmarkController extends GetxController {
   RxBool enablepullup = true.obs;
   int pageNumber = 1;
 
-  Rx<PostingModel> bookmarkResult = PostingModel(postingitems: []).obs;
+  Rx<PostingModel> bookmarkResult =
+      PostingModel(postingitems: <Post>[].obs).obs;
 
   RefreshController refreshController =
       new RefreshController(initialRefresh: false);
 
   @override
   void onInit() {
+    onRefresh1();
     super.onInit();
   }
 
   void onRefresh1() async {
     enablepullup.value = true;
-    bookmarkResult(PostingModel(postingitems: []));
+    bookmarkResult(PostingModel(postingitems: <Post>[].obs));
 
     pageNumber = 1;
     bookmarkloadItem();
@@ -40,7 +42,7 @@ class BookmarkController extends GetxController {
     PostingModel bookmarkModel = await bookmarklist(pageNumber);
     PostingModel bookmarkModel2 = await bookmarklist(pageNumber + 1);
 
-    if (bookmarkModel.postingitems[0].id == bookmarkModel.postingitems[0].id) {
+    if (bookmarkModel.postingitems[0].id == bookmarkModel2.postingitems[0].id) {
       enablepullup.value = false;
     }
     print(bookmarkModel.postingitems);
