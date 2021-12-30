@@ -96,7 +96,7 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mainWhite,
+      backgroundColor: Color(0xFFFFFFFF),
       body: Container(
         height: Get.height,
         width: Get.width,

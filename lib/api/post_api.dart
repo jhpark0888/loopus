@@ -118,6 +118,30 @@ Future<dynamic> mainpost(int pageNumber) async {
   }
 }
 
+Future<dynamic> bookmarklist(int pageNumber) async {
+  String? token;
+  await FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final url = Uri.parse(
+      "http://3.35.253.151:8000/post_api/bookmark_list/?page=$pageNumber");
+
+  final response = await get(url, headers: {"Authorization": "Token $token"});
+  var statusCode = response.statusCode;
+  var responseHeaders = response.headers;
+  var responseBody = utf8.decode(response.bodyBytes);
+  print(statusCode);
+  List<dynamic> list = jsonDecode(responseBody);
+
+  print(list);
+  if (response.statusCode != 200) {
+    return Future.error(response.statusCode);
+  } else {
+    return PostingModel.fromJson(list);
+  }
+}
+
 Future<dynamic> looppost(int pageNumber) async {
   String? token;
   await FlutterSecureStorage().read(key: 'token').then((value) {
