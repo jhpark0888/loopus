@@ -36,6 +36,8 @@ class SearchTypingScreen extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () {
+                  searchController.focusNode.unfocus();
+                  searchController.focusChange();
                   searchController.searchpostinglist.clear();
                   searchController.searchprofilelist.clear();
                   searchController.searchquestionlist.clear();

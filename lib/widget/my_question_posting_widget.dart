@@ -19,91 +19,109 @@ class MyQuestionPostingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return item.realname == ""
-        ? Container()
-        : Container(
-            height: 120,
-            width: Get.width * 0.9,
-            margin: EdgeInsets.fromLTRB(16, 20, 16, 0),
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                  blurRadius: 2,
-                  offset: Offset(0.0, 1),
-                  color: mainblack.withOpacity(0.06)),
-              BoxShadow(
-                  blurRadius: 3,
-                  offset: Offset(0.0, 1),
-                  color: mainblack.withOpacity(0.1)),
-            ], color: mainlightgrey, borderRadius: BorderRadius.circular(5)),
-            child: InkWell(
-              onTap: () async {
-                await questionController.loadItem(item.id);
-                await questionController.addanswer();
-                Get.to(() => QuestionScreen());
-                print("click posting");
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      decoration: BoxDecoration(
+        color: mainWhite,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8),
+          topRight: Radius.circular(8),
+          bottomLeft: Radius.circular(8),
+          bottomRight: Radius.circular(8),
+        ),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 3,
+            offset: Offset(0.0, 1.0),
+            color: Colors.black.withOpacity(0.1),
+          ),
+          BoxShadow(
+            blurRadius: 2,
+            offset: Offset(0.0, 1.0),
+            color: Colors.black.withOpacity(0.06),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: () async {
+          await questionController.loadItem(item.id);
+          await questionController.addanswer();
+          Get.to(() => QuestionScreen());
+          print("click posting");
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 16,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+                child: Container(
+                  height: 48,
+                  child: Text(
+                    "${item.content} askdjklasjfjasdklfasjflasdkfjsjfhsajfsjhasdmfaksldfjklaskldjfkllasdjfkjsdaklj",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: kSubTitle1Style,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    height: 50,
-                    padding: EdgeInsets.all(15.0),
-                    child: Text(
-                      "${item.content}",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(15, 15, 0, 0),
-                    height: 45,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            ClipOval(
-                                child: CachedNetworkImage(
-                              height: 32,
-                              width: 32,
-                              imageUrl: "https://i.stack.imgur.com/l60Hf.png",
-                              placeholder: (context, url) => CircleAvatar(
-                                child:
-                                    Center(child: CircularProgressIndicator()),
-                              ),
-                              fit: BoxFit.fill,
-                            )),
-                            Text(
-                              "  ${item.realname}님이 남긴 질문",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: mainblack),
-                            ),
-                          ],
+                  Row(
+                    children: [
+                      ClipOval(
+                        child: CachedNetworkImage(
+                          height: 32,
+                          width: 32,
+                          imageUrl: "https://i.stack.imgur.com/l60Hf.png",
+                          placeholder: (context, url) => CircleAvatar(
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                          fit: BoxFit.cover,
                         ),
-                        Padding(
-                            padding: const EdgeInsets.only(right: 15.0),
-                            child: Row(
-                              children: [
-                                SvgPicture.asset("assets/icons/Comment.svg"),
-                                Text(
-                                  " ${item.answercount}",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ))
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        "${item.realname}님에게 남긴 질문",
+                        style: kButtonStyle.copyWith(
+                          color: mainblack.withOpacity(0.6),
+                        ),
+                      ),
+                    ],
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SvgPicture.asset("assets/icons/Comment.svg"),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        " ${item.answercount}",
+                        style: kButtonStyle,
+                      )
+                    ],
+                  )
                 ],
               ),
-            ),
-          );
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

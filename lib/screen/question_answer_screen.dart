@@ -17,6 +17,7 @@ class QuestionAnswerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Obx(
         () => SmartRefresher(
           controller: homeController.refreshController2,
@@ -151,12 +152,16 @@ class QuestionAnswerScreen extends StatelessWidget {
                           return GestureDetector(
                               //on tap event 발생시
                               onTap: () async {},
-                              child: MyQuestionPostingWidget(
-                                item: homeController
-                                    .questionResult.value.questionitems[index],
-                                index: index,
-                                key: Key(
-                                  toString(),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                                child: MyQuestionPostingWidget(
+                                  item: homeController.questionResult.value
+                                      .questionitems[index],
+                                  index: index,
+                                  key: Key(
+                                    toString(),
+                                  ),
                                 ),
                               ));
                         },

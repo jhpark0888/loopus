@@ -150,58 +150,63 @@ class HomeScreen extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            Container(
-                              margin: EdgeInsets.only(
-                                left: 16,
-                              ),
-                              padding: EdgeInsets.all(8),
-                              width: Get.width * 0.37,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Color(0xffe7e7e7),
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(
-                                        width: 1,
-                                        color: Color(0xffe7e7e7),
-                                      ),
+                            GestureDetector(
+                              onTap: () {
+                                ModalController.to.showCustomDialog(
+                                  '해당 기업들로부터 오퍼를 받을 수도 있어요 (추후 업데이트 예정)',
+                                  2,
+                                );
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                  left: 16,
+                                ),
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Color(0xffe7e7e7),
+                                      width: 1,
                                     ),
-                                    child: ClipOval(
-                                      child: CachedNetworkImage(
-                                        width: 32,
-                                        height: 32,
-                                        imageUrl:
-                                            "http://www.lg.co.kr/images/common/default_og_image_new.jpg",
-                                        placeholder: (context, url) =>
-                                            const CircleAvatar(
-                                          child: Center(
-                                              child:
-                                                  CircularProgressIndicator()),
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(
+                                          width: 1,
+                                          color: Color(0xffe7e7e7),
                                         ),
-                                        fit: BoxFit.cover,
+                                      ),
+                                      child: ClipOval(
+                                        child: CachedNetworkImage(
+                                          width: 32,
+                                          height: 32,
+                                          imageUrl:
+                                              "http://www.lg.co.kr/images/common/default_og_image_new.jpg",
+                                          placeholder: (context, url) =>
+                                              const CircleAvatar(
+                                            child: Center(
+                                                child:
+                                                    CircularProgressIndicator()),
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Container(
-                                    child: Text(
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
                                       "LG 디스플레이",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: kCaptionStyle.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),
-                                    ),
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                             Container(
@@ -209,7 +214,6 @@ class HomeScreen extends StatelessWidget {
                                 left: 4,
                               ),
                               padding: EdgeInsets.all(8),
-                              width: Get.width * 0.37,
                               decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Color(0xffe7e7e7),
@@ -261,7 +265,6 @@ class HomeScreen extends StatelessWidget {
                                 right: 16,
                               ),
                               padding: EdgeInsets.all(8),
-                              width: Get.width * 0.37,
                               decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Color(0xffe7e7e7),
