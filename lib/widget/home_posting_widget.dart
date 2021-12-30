@@ -43,7 +43,6 @@ class HomePostingWidget extends StatelessWidget {
             realName: responseBody['real_name'],
             profileImage: responseBody['profile_image'],
             profileTag: [],
-            classNum: responseBody['department'],
             department: '',
             isuser: -1);
 
