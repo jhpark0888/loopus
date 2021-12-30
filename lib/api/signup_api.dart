@@ -12,7 +12,7 @@ void emailRequest() async {
 
   Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/check_email/');
 
-  var user = {
+  var checkemail = {
     "email": signupController.emailidcontroller.text,
     "password": signupController.passwordcontroller.text,
   };
@@ -22,7 +22,7 @@ void emailRequest() async {
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
-    body: jsonEncode(user),
+    body: jsonEncode(checkemail),
   );
   print(response.body);
   // storage.write(key: 'token', value: json.decode(response.body)['token']);
@@ -41,7 +41,7 @@ Future<http.Response> signupRequest() async {
   Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/signup/');
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 
-  var checkemail = {
+  var user = {
     "email": signupController.emailidcontroller.text,
     "image": null,
     "type": 0,
@@ -56,9 +56,9 @@ Future<http.Response> signupRequest() async {
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
-    body: json.encode(checkemail),
+    body: json.encode(user),
   );
-  print(json.encode(checkemail));
+  print(json.encode(user));
   print(response.body);
   print(response.statusCode);
   if (response.statusCode == 200) {
