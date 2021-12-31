@@ -31,6 +31,12 @@ class SearchTagWidget extends StatelessWidget {
                   tagController.gettagsearch();
                 } else {
                   if (SearchController.to.tabController.index == 3) {
+                    tagController.selectedtaglist.add(SelectedTagWidget(
+                      id: id,
+                      text: tag,
+                    ));
+                    tagController.tagsearch.clear();
+                    tagController.gettagsearch();
                   } else {
                     tagController.selectedtaglist.add(SelectedTagWidget(
                       id: id,
@@ -39,12 +45,6 @@ class SearchTagWidget extends StatelessWidget {
                     tagController.tagsearch.clear();
                     tagController.gettagsearch();
                   }
-                  tagController.selectedtaglist.add(SelectedTagWidget(
-                    id: id,
-                    text: tag,
-                  ));
-                  tagController.tagsearch.clear();
-                  tagController.gettagsearch();
                 }
               } else {
                 Get.dialog(Dialog(

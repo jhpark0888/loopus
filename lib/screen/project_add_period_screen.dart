@@ -65,7 +65,12 @@ class ProjectAddPeriodScreen extends StatelessWidget {
         title: '활동 기간',
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.fromLTRB(
+          32,
+          24,
+          32,
+          40,
+        ),
         child: Center(
           child: Column(
             children: [
@@ -73,16 +78,14 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Text(
                   '언제부터 언제까지 진행하셨나요?',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: kSubTitle1Style,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Text(
                   '아직 종료되지 않은 활동이어도 괜찮아요',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
+                  style: kBody2Style,
                 ),
               ),
               Padding(

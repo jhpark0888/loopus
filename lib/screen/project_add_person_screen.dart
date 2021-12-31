@@ -4,9 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/project_api.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
+import 'package:loopus/screen/project_add_thumbnail_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 
@@ -23,33 +25,41 @@ class ProjectAddPersonScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              projectaddRequest();
+              Get.to(() => ProjectAddThumbnailScreen());
+              // projectaddRequest();
             },
-            child: Text(
-              '완료',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            child: Obx(
+              () => Text(
+                projectaddcontroller.selectedpersontaglist.isEmpty
+                    ? '건너뛰기'
+                    : '다음',
+                style: kSubTitle2Style.copyWith(
+                  color: projectaddcontroller.selectedpersontaglist.isEmpty
+                      ? mainblack
+                      : mainblue,
+                ),
+              ),
             ),
           ),
         ],
         title: '함께 활동한 사람',
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
               child: Text(
                 '이 활동을 함께 진행한 학생이 있나요?',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: kSubTitle1Style,
               ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
               child: Text(
                 '루프 중인 학생만 추가할 수 있어요',
-                style: TextStyle(
-                  fontSize: 14,
-                ),
+                style: kBody2Style,
               ),
             ),
             Padding(

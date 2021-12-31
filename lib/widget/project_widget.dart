@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:favorite_button/favorite_button.dart';
@@ -10,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -18,9 +20,11 @@ class ProjectWidget extends StatelessWidget {
   ProjectWidget({
     Key? key,
     required this.project,
+    // this.image
   }) : super(key: key);
 
   Project project;
+  // Rx<File?> image = null.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +34,15 @@ class ProjectWidget extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () async {
-          await getproject(project.id).then((response) {
-            var responseBody = json.decode(utf8.decode(response.bodyBytes));
-            project = Project.fromJson(responseBody);
-            Get.to(() => ProjectScreen(
-                  project: project,
-                ));
-          });
+          if (project.id != 0) {
+            await getproject(project.id).then((response) {
+              var responseBody = json.decode(utf8.decode(response.bodyBytes));
+              project = Project.fromJson(responseBody);
+              Get.to(() => ProjectScreen(
+                    project: project,
+                  ));
+            });
+          }
         },
         child: Container(
           decoration: BoxDecoration(
@@ -71,9 +77,13 @@ class ProjectWidget extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(
+                        image:
+                            // image.value == null ?
+                            AssetImage(
                           "assets/illustrations/default_image.png",
                         ),
+                        // : FileImage(ProjectAddController
+                        //     .to.projectimage.value!) as ImageProvider,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -96,11 +106,7 @@ class ProjectWidget extends StatelessWidget {
                     children: [
                       Text(
                         project.projectName,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          height: 1.5,
-                        ),
+                        style: kHeaderH2Style,
                       ),
                       SizedBox(
                         height: 16,
@@ -108,12 +114,18 @@ class ProjectWidget extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '${project.startDate!.substring(0, 4)}.${project.startDate!.substring(5, 7)} ~',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            '${project.startDate!.substring(0, 4)}.${project.startDate!.substring(5, 7)}  ~',
+                            style: kSubTitle2Style,
                           ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          project.endDate != null
+                              ? Text(
+                                  '${project.endDate!.substring(0, 4)}.${project.endDate!.substring(5, 7)}',
+                                  style: kSubTitle2Style,
+                                )
+                              : Container(),
                           SizedBox(
                             width: 8,
                           ),
@@ -128,11 +140,8 @@ class ProjectWidget extends StatelessWidget {
                             ),
                             child: Center(
                               child: Text(
-                                '진행중',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
+                                project.endDate != null ? '9개월' : '진행중',
+                                style: kBody1Style,
                               ),
                             ),
                           )
@@ -157,8 +166,7 @@ class ProjectWidget extends StatelessWidget {
                               ),
                               Text(
                                 '33',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
+                                style: kButtonStyle,
                               ),
                             ],
                           ),
@@ -170,10 +178,7 @@ class ProjectWidget extends StatelessWidget {
                             ),
                             Text(
                               "${project.like_count}",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: kButtonStyle,
                             ),
                           ])
                         ],

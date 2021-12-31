@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,6 +42,8 @@ class ProjectAddController extends GetxController {
   RxBool ontitlebutton = false.obs;
 
   List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
+
+  Rx<File?> projectimage = null.obs;
 
   @override
   void onInit() {

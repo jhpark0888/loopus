@@ -32,13 +32,13 @@ Future<http.Response> getProfile(var userid) async {
   }
 }
 
-Future<User?> updateProfile(User user, File image) async {
+Future<User?> updateProfile(User user, File? image, List? taglist) async {
   String? token = await FlutterSecureStorage().read(key: "token");
   // String? userid = await FlutterSecureStorage().read(key: "id");
 
   print(token);
   // print(userid);
-  final uri = Uri.parse("http://192.168.35.13:8000/user_api/update_profile/");
+  final uri = Uri.parse("http://3.35.253.151:8000/user_api/update_profile/");
 
   var request = new http.MultipartRequest('POST', uri);
 
@@ -49,24 +49,29 @@ Future<User?> updateProfile(User user, File image) async {
 
   request.headers.addAll(headers);
 
-  var multipartFile = await http.MultipartFile.fromPath('image', image.path);
-  request.files.add(multipartFile);
+  if (image != null) {
+    var multipartFile = await http.MultipartFile.fromPath('image', image.path);
+    request.files.add(multipartFile);
+  } else {
+    request.fields['image'] = user.profileImage ?? json.encode(null);
+  }
 
   request.fields['department'] = user.department;
   request.fields['tag'] =
-      json.encode(user.profileTag.map((tag) => tag.tag).toList());
+      json.encode(taglist ?? user.profileTag.map((tag) => tag.tag).toList());
 
   print(request.fields);
   print(request.files);
 
   http.StreamedResponse response = await request.send();
+
   print(response.statusCode);
   if (response.statusCode == 200) {
     print("success!");
 
     String responsebody = await response.stream.bytesToString();
     var responsemap = jsonDecode(responsebody);
-
+    print(responsemap);
     User edituser = User.fromJson(responsemap);
 
     return edituser;

@@ -34,7 +34,12 @@ class ProjectAddIntroScreen extends StatelessWidget {
         title: '활동 정보',
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.fromLTRB(
+          32,
+          24,
+          32,
+          40,
+        ),
         child: Center(
           child: Column(
             children: [
@@ -42,28 +47,40 @@ class ProjectAddIntroScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Text(
                   '어떤 활동인지 간략하게 소개해주세요!',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: kSubTitle1Style,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Text(
                   '지금 적지 않아도 나중에 추가할 수 있어요',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
+                  style: kBody2Style,
                 ),
               ),
               TextField(
-                cursorColor: Colors.black,
                 maxLines: 2,
                 controller: projectaddcontroller.introcontroller,
+                cursorWidth: 1.5,
+                cursorRadius: Radius.circular(2),
+                cursorColor: mainblack,
+                style: TextStyle(
+                  color: mainblack,
+                  fontWeight: FontWeight.bold,
+                  height: 1.5,
+                ),
                 decoration: InputDecoration(
+                    hintStyle: TextStyle(
+                      color: mainblack.withOpacity(0.38),
+                      fontWeight: FontWeight.bold,
+                      height: 1.5,
+                    ),
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black, width: 2),
+                      borderRadius: BorderRadius.circular(2),
+                      borderSide: BorderSide(color: mainblack, width: 1),
                     ),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black, width: 2),
+                      borderRadius: BorderRadius.circular(2),
+                      borderSide: BorderSide(color: mainblack, width: 1),
                     ),
                     hintText: 'OO를 주제로 진행한 프로젝트이며, OO 역할을 맡았습니다.'),
               )

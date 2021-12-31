@@ -57,18 +57,14 @@ class ProjectAddTitleScreen extends StatelessWidget {
             children: [
               Text(
                 '활동명이 무엇인가요?',
-                style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold, height: 1.5),
+                style: kSubTitle1Style,
               ),
               SizedBox(
                 height: 16,
               ),
               Text(
                 '어떤 활동인지 잘 드러나는 이름을 입력해주세요',
-                style: TextStyle(
-                  fontSize: 14,
-                  height: 1.5,
-                ),
+                style: kBody2Style,
               ),
               SizedBox(
                 height: 32,

@@ -12,6 +12,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
@@ -103,7 +104,9 @@ class ProfileScreen extends StatelessWidget {
                                     File? image = await getcropImage("profile");
                                     if (image != null) {
                                       User? user = await updateProfile(
-                                          profileController.user.value, image);
+                                          profileController.user.value,
+                                          image,
+                                          null);
                                       if (user != null) {
                                         profileController.user(user);
                                       }
@@ -145,25 +148,27 @@ class ProfileScreen extends StatelessWidget {
                       SizedBox(
                         height: 16,
                       ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: profileController.user.value.profileTag
-                              .map((tag) => Row(children: [
-                                    Tagwidget(
-                                      content: tag.tag,
-                                      fontSize: 14,
-                                    ),
-                                    profileController.user.value.profileTag
-                                                .indexOf(tag) !=
-                                            profileController.user.value
-                                                    .profileTag.length -
-                                                1
-                                        ? SizedBox(
-                                            width: 8,
-                                          )
-                                        : Container()
-                                  ]))
-                              .toList()),
+                      Obx(
+                        () => Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: profileController.user.value.profileTag
+                                .map((tag) => Row(children: [
+                                      Tagwidget(
+                                        content: tag.tag,
+                                        fontSize: 14,
+                                      ),
+                                      profileController.user.value.profileTag
+                                                  .indexOf(tag) !=
+                                              profileController.user.value
+                                                      .profileTag.length -
+                                                  1
+                                          ? SizedBox(
+                                              width: 8,
+                                            )
+                                          : Container()
+                                    ]))
+                                .toList()),
+                      ),
                       SizedBox(
                         height: 32,
                       ),
@@ -172,7 +177,11 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: profileController.user.value.isuser == 1
+                                  ? () {
+                                      Get.to(() => ProfileTagChangeScreen());
+                                    }
+                                  : () {},
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: mainlightgrey,
