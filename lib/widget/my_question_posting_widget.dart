@@ -66,7 +66,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
                 child: Container(
                   height: 48,
                   child: Text(
-                    "${item.content} askdjklasjfjasdklfasjflasdkfjsjfhsajfsjhasdmfaksldfjklaskldjfkllasdjfkjsdaklj",
+                    "${item.content}",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: kSubTitle1Style,
@@ -107,9 +107,6 @@ class MyQuestionPostingWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SvgPicture.asset("assets/icons/Comment.svg"),
-                      SizedBox(
-                        width: 4,
-                      ),
                       Text(
                         " ${item.answercount}",
                         style: kButtonStyle,

@@ -64,7 +64,7 @@ class SearchTypingScreen extends StatelessWidget {
             ],
             title: Obx(
               () => AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 300),
                 width: searchController.isFocused.value
                     ? MediaQuery.of(context).size.width - 70
                     : MediaQuery.of(context).size.width,
@@ -224,22 +224,25 @@ class SearchTypingScreen extends StatelessWidget {
                   physics: PageScrollPhysics().parent,
                   controller: searchController.tabController,
                   children: [
-                    SingleChildScrollView(
-                      child:
-                          Obx(() => searchController.isnosearch1.value == false
-                              ? Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Column(
-                                    children: searchController
-                                        .searchpostinglist.value,
-                                  ))
-                              : Container(
-                                  height: 80,
-                                  child: Center(
-                                      child: Text(
-                                    "검색 결과가 존재하지 않습니다.",
-                                    style: kSubTitle2Style,
-                                  )))),
+                    Container(
+                      color: Colors.white,
+                      child: SingleChildScrollView(
+                        child: Obx(
+                            () => searchController.isnosearch1.value == false
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: Column(
+                                      children: searchController
+                                          .searchpostinglist.value,
+                                    ))
+                                : Container(
+                                    height: 80,
+                                    child: Center(
+                                        child: Text(
+                                      "검색 결과가 존재하지 않습니다.",
+                                      style: kSubTitle2Style,
+                                    )))),
+                      ),
                     ),
                     SingleChildScrollView(
                       child:

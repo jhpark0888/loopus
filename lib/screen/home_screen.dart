@@ -406,16 +406,19 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: homecontroller.isempty.value == false
                       ? LoopScreen()
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                "아직 루프를 맺은 사람이 없어요",
-                                style: kSubTitle2Style,
+                      : Container(
+                          color: Colors.white,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Text(
+                                  "아직 루프를 맺은 사람이 없어요",
+                                  style: kSubTitle2Style,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                 ),
               ]),
