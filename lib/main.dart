@@ -71,6 +71,8 @@ class MyApp extends StatelessWidget {
           name: '/search',
           page: () => SearchTypingScreen(),
           transition: Transition.fadeIn,
+          transitionDuration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
         ),
       ],
     );

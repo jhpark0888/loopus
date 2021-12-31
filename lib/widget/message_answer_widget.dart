@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/widget/alertdialog1_widget.dart';
 import 'package:loopus/widget/alertdialog2_widget.dart';
@@ -12,20 +13,29 @@ class MessageAnswerWidget extends StatelessWidget {
   String name;
   String image;
 
-  MessageAnswerWidget(
-      {required this.content, required this.image, required this.name});
-  // const MessageQuestionWidget({Key? key}) : super(key: key);
+  MessageAnswerWidget({
+    required this.content,
+    required this.image,
+    required this.name,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          child: Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Column(
                 children: [
+                  SizedBox(height: 4),
                   ClipOval(
                       child: CachedNetworkImage(
                     height: 32,
@@ -36,103 +46,76 @@ class MessageAnswerWidget extends StatelessWidget {
                     ),
                     fit: BoxFit.cover,
                   )),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    "$name · ",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "1시간 전",
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  Expanded(
-                      child: Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                        onTap: () {
-                          Get.dialog(Alertdialog1Widget(
-                            color_1: Colors.red,
-                            text_1: "이 질문 삭제하기",
-                            function_1: () {
-                              Get.dialog(
-                                Dialog(
-                                  child: Container(
-                                    height: 80,
-                                    child: Center(
-                                      child: Text('진짜 삭제 할텐가 자네.'),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ));
-                        },
-                        child: SvgPicture.asset("assets/icons/More.svg")),
-                  ))
                 ],
               ),
               SizedBox(
-                height: 5,
+                width: 8,
               ),
-              Row(
-                children: [
-                  Container(
-                    width: Get.width * 0.9,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 47),
-                      child: Text("$content"),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "$name",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              children: [
+                                Text(
+                                  '소속 학과',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: mainblack.withOpacity(0.6),
+                                  ),
+                                ),
+                                Text(
+                                  " · 게시 시간",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: mainblack.withOpacity(0.6),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                        InkWell(
+                          onTap: () {
+                            ModalController.to.showModalIOS(context,
+                                func1: () {},
+                                func2: () {},
+                                value1: '답글 삭제하기',
+                                value2: 'value2',
+                                isValue1Red: true,
+                                isValue2Red: true,
+                                isOne: true);
+                          },
+                          child: SvgPicture.asset("assets/icons/More.svg"),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              )
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      "$content",
+                      style: kBody1Style,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Container(
-          //       // padding: EdgeInsets.fromLTRB(80, 0, 15, 0),
-          //       height: 60,
-          //       width: Get.width * 0.77,
-          //       decoration: BoxDecoration(
-          //           color: Colors.grey[200],
-          //           borderRadius: BorderRadius.only(
-          //               topLeft: Radius.circular(8),
-          //               topRight: Radius.zero,
-          //               bottomLeft: Radius.circular(8),
-          //               bottomRight: Radius.circular(8))),
-          //       child: Padding(
-          //         padding: const EdgeInsets.all(8.0),
-          //         child: Text(
-          //           "${content}",
-          //           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          //         ),
-          //       ),
-          //     ),
-          //     Column(
-          //       children: [
-          //         ClipOval(
-          //             child: CachedNetworkImage(
-          //           height: 37,
-          //           width: 37,
-          //           imageUrl: "https://i.stack.imgur.com/l60Hf.png",
-          //           placeholder: (context, url) => CircleAvatar(
-          //             child: Center(child: CircularProgressIndicator()),
-          //           ),
-          //           fit: BoxFit.fill,
-          //         )),
-          //         SizedBox(
-          //           height: 3,
-          //         ),
-          //
-          //       ],
-          //     ),
-          //   ],
-          // ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

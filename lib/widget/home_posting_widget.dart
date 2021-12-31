@@ -10,6 +10,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
@@ -273,8 +274,14 @@ class HomePostingWidget extends StatelessWidget {
                                           onTap: () {
                                             if (item.isMarked.value == 0) {
                                               item.isMarked.value = 1;
+                                              ModalController.to
+                                                  .showCustomDialog(
+                                                      '북마크 탭에 저장했어요', 1);
                                             } else {
                                               item.isMarked.value = 0;
+                                              ModalController.to
+                                                  .showCustomDialog(
+                                                      '북마크 탭에서 삭제했어요', 1);
                                             }
                                             bookmarkpost(item.id);
                                           },
