@@ -38,6 +38,7 @@ class SearchScreen extends StatelessWidget {
                       _searchController.searchpostinglist.clear();
                       _searchController.searchprofilelist.clear();
                       _searchController.searchquestionlist.clear();
+                      _searchController.searchtextcontroller.clear();
                       Get.back();
                     },
                     child: Center(
@@ -80,15 +81,30 @@ class SearchScreen extends StatelessWidget {
                   _searchController.isnosearch3.value = false;
                 },
                 onSubmitted: (value) async {
-                  _searchController.searchpostinglist.clear();
-                  _searchController.searchprofilelist.clear();
-                  _searchController.searchquestionlist.clear();
-                  await _searchController.search(
-                      _searchController.tabController.index,
-                      value,
-                      _searchController.pagenumber);
+                  if (_searchController.pagenumber1 == 1) {
+                    _searchController.searchpostinglist.clear();
+                  } else if (_searchController.pagenumber2 == 1) {
+                    _searchController.searchprofilelist.clear();
+                  } else if (_searchController.pagenumber3 == 1) {
+                    _searchController.searchquestionlist.clear();
+                  }
+                  if (_searchController.tabController.index == 0) {
+                    await _searchController.search(
+                        _searchController.tabController.index,
+                        value,
+                        _searchController.pagenumber1);
+                  } else if (_searchController.tabController.index == 1) {
+                    await _searchController.search(
+                        _searchController.tabController.index,
+                        value,
+                        _searchController.pagenumber2);
+                  } else if (_searchController.tabController.index == 2) {
+                    await _searchController.search(
+                        _searchController.tabController.index,
+                        value,
+                        _searchController.pagenumber3);
+                  }
                   print(value);
-                  _searchController.searchtextcontroller.clear();
                 },
                 focusNode: _searchController.focusNode,
                 style: TextStyle(color: mainblack, fontSize: 14),
@@ -260,7 +276,9 @@ class SearchScreen extends StatelessWidget {
                           _searchController.searchpostinglist.clear();
                           _searchController.searchprofilelist.clear();
                           _searchController.searchquestionlist.clear();
-                          _searchController.pagenumber = 1;
+                          _searchController.pagenumber1 = 1;
+                          _searchController.pagenumber2 = 1;
+                          _searchController.pagenumber3 = 1;
                           _searchController.tabController.index = 0;
 
                           return false;

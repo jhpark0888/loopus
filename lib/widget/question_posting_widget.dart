@@ -1,15 +1,25 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
+import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/profile_screen.dart';
 import 'package:loopus/screen/question_screen.dart';
+import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class QuestionPostingWidget extends StatelessWidget {
   QuestionController questionController = Get.put(QuestionController());
+  ProfileController profileController = Get.find();
   final QuestionItem item;
   final int index;
 
@@ -97,21 +107,58 @@ class QuestionPostingWidget extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              ClipOval(
-                                  child: CachedNetworkImage(
-                                height: 32,
-                                width: 32,
-                                imageUrl: "https://i.stack.imgur.com/l60Hf.png",
-                                placeholder: (context, url) => CircleAvatar(
-                                  child: Center(
-                                      child: CircularProgressIndicator()),
+                              InkWell(
+                                onTap: () async {
+                                  await getProfile(item.user).then((response) {
+                                    var responseBody = json.decode(
+                                        utf8.decode(response.bodyBytes));
+                                    profileController
+                                        .user(User.fromJson(responseBody));
+
+                                    List projectmaplist =
+                                        responseBody['project'];
+                                    profileController.projectlist(projectmaplist
+                                        .map((project) =>
+                                            Project.fromJson(project))
+                                        .map((project) => ProjectWidget(
+                                              project: project,
+                                            ))
+                                        .toList());
+                                  });
+                                  AppController.to.ismyprofile.value = false;
+                                  print(AppController.to.ismyprofile.value);
+                                  Get.to(() => ProfileScreen());
+                                },
+                                child: Row(
+                                  children: [
+                                    ClipOval(
+                                        child: item.profileimage == null
+                                            ? Image.asset(
+                                                "assets/illustrations/default_profile.png",
+                                                height: 32,
+                                                width: 32,
+                                              )
+                                            : CachedNetworkImage(
+                                                height: 32,
+                                                width: 32,
+                                                imageUrl:
+                                                    item.profileimage ?? "",
+                                                placeholder: (context, url) =>
+                                                    CircleAvatar(
+                                                  child: Center(
+                                                      child:
+                                                          CircularProgressIndicator()),
+                                                ),
+                                                fit: BoxFit.cover,
+                                              )),
+                                    Text(
+                                      "  ${item.realname}  · ",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 ),
-                                fit: BoxFit.cover,
-                              )),
-                              Text(
-                                "  ${item.realname}  · ",
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 "${item.department}",
