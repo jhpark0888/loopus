@@ -192,6 +192,7 @@ class EditorController extends GetxController {
         Get.defaultDialog(
             content: TextField(
               controller: linkcontroller,
+              decoration: InputDecoration(hintText: "http//www."),
             ),
             title: '링크를 넣어주세요',
             textCancel: '취소',

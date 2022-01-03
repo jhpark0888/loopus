@@ -67,8 +67,9 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () async {
-                image(await getcropImage(imagetype.thumnail));
-                projectAddController.projectimage = image;
+                projectAddController
+                    .projectimage(await getcropImage(imagetype.thumnail));
+                // projectAddController.projectimage = image;
               },
               child: Container(
                 width: 141,
@@ -99,21 +100,22 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            ProjectWidget(
-              project: Project(
-                id: 0,
-                projectName: projectAddController.projectnamecontroller.text,
-                projectTag: tagController.selectedtaglist
-                    .map((tag) => Tag(tagId: tag.id ?? 0, tag: tag.text))
-                    .toList(),
-                startDate:
-                    '${projectAddController.startyearcontroller.text}-${projectAddController.startmonthcontroller.text}-${projectAddController.startdaycontroller.text}',
-                endDate: projectAddController.isongoing.value
-                    ? null
-                    : '${projectAddController.endyearcontroller.text}-${projectAddController.endmonthcontroller.text}-${projectAddController.enddaycontroller.text}',
-                like_count: 0,
+            Obx(
+              () => ProjectWidget(
+                project: Project(
+                  id: 0,
+                  projectName: projectAddController.projectnamecontroller.text,
+                  projectTag: tagController.selectedtaglist
+                      .map((tag) => Tag(tagId: tag.id ?? 0, tag: tag.text))
+                      .toList(),
+                  startDate:
+                      '${projectAddController.startyearcontroller.text}-${projectAddController.startmonthcontroller.text}-${projectAddController.startdaycontroller.text}',
+                  endDate: projectAddController.isongoing.value
+                      ? null
+                      : '${projectAddController.endyearcontroller.text}-${projectAddController.endmonthcontroller.text}-${projectAddController.enddaycontroller.text}',
+                  like_count: 0,
+                ),
               ),
-              // image: image,
             ),
           ],
         ),
