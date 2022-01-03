@@ -83,10 +83,11 @@ class ProfileScreen extends StatelessWidget {
                                             imageUrl: profileController
                                                 .user.value.profileImage!,
                                             placeholder: (context, url) =>
-                                                const CircleAvatar(
+                                                CircleAvatar(
                                               child: Center(
-                                                  child:
-                                                      CircularProgressIndicator()),
+                                                child: SvgPicture.asset(
+                                                    'assets/illustrations/loading.svg'),
+                                              ),
                                             ),
                                             fit: BoxFit.cover,
                                           )
