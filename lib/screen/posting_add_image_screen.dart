@@ -98,8 +98,8 @@ class _MyAppSpace extends StatelessWidget {
                             alignment: Alignment.bottomRight,
                             child: BlueTextButton(
                               onTap: () async {
-                                postingAddController
-                                    .thumbnail(await getcropImage("thumbnail"));
+                                postingAddController.thumbnail(
+                                    await getcropImage(imagetype.thumnail));
                               },
                               text: '대표 사진 변경',
                             )),

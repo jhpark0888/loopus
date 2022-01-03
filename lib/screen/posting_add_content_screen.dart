@@ -15,6 +15,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/customlinkstylewidget.dart';
 import 'package:loopus/widget/editortoolbar.dart';
 import 'package:loopus/widget/postingeditor.dart';
+import 'package:loopus/widget/smarttextfield.dart';
 
 class PostingAddContentScreen extends StatelessWidget {
   PostingAddContentScreen({Key? key, required this.project_id})
@@ -50,8 +51,19 @@ class PostingAddContentScreen extends StatelessWidget {
           children: [
             Obx(
               () => Expanded(
-                  child: ListView(
-                children: editorController.smarttextfieldlist,
+                  child: GestureDetector(
+                onTap: () {
+                  if (editorController.types.last == SmartTextType.IMAGE) {
+                    editorController.insert(
+                        index: editorController.types.length);
+                    editorController.setFocus(SmartTextType.T);
+                  } else {
+                    editorController.nodes.last.requestFocus();
+                  }
+                },
+                child: ListView(
+                  children: editorController.smarttextfieldlist,
+                ),
               )),
             ),
             Obx(

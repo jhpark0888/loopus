@@ -43,7 +43,7 @@ class ProjectAddController extends GetxController {
 
   List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
 
-  Rx<File?> projectimage = null.obs;
+  Rx<File?> projectimage = File('').obs;
 
   @override
   void onInit() {
