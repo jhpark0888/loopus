@@ -34,28 +34,38 @@ class QuestionScreen extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: mainWhite,
+        border: Border(
+          top: BorderSide(
+            width: 1,
+            color: Color(0xffe7e7e7),
+          ),
+        ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Form(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      child: Obx(
+        () => Form(
           key: _formKey,
+          onChanged: () {
+            print(questionController.answertextController.value.text);
+            questionController.textBoxSize.value = questionController
+                .getSize(questionController.textFieldBoxKey.value);
+
+            print(questionController.textBoxSize.value.height);
+          },
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Row(
             children: [
               Flexible(
                 child: TextFormField(
+                  key: questionController.textFieldBoxKey.value,
+                  cursorWidth: 1.2,
                   focusNode: questionController.answerfocus,
                   style: TextStyle(decoration: TextDecoration.none),
-                  cursorColor: Color(0xFF424242),
+                  cursorColor: mainblack.withOpacity(0.6),
                   controller: questionController.answertextController,
-                  // onChanged: (text) {
-                  //   if (questionController.answertextController.text == "") {
-                  //     questionController.isemptytext.value = true;
-                  //   } else {
-                  //     questionController.isemptytext.value = false;
-                  //   }
-                  //   print(questionController.answertextController.text);
-                  // },
                   onFieldSubmitted: _handleSubmitted,
                   validator: (value) {
                     if (value!.trim().isEmpty) {
@@ -67,31 +77,39 @@ class QuestionScreen extends StatelessWidget {
                   minLines: 1,
                   maxLines: 5,
                   decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
-                      isDense: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(
-                          width: 0,
-                          style: BorderStyle.none,
-                        ),
+                    suffix: Text('작성'),
+                    contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(
+                        width: 0,
+                        style: BorderStyle.none,
                       ),
-                      hintText: " 답변 남기기...",
-                      hintStyle: TextStyle(fontSize: 14),
-                      focusColor: mainblue,
-                      fillColor: mainlightgrey,
-                      filled: true),
+                    ),
+                    hintText: "답변 남기기...",
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      color: mainblack.withOpacity(0.38),
+                    ),
+                    fillColor: mainlightgrey,
+                    filled: true,
+                  ),
                 ),
               ),
-              SizedBox(
-                width: 10,
+              const SizedBox(
+                width: 12,
               ),
-              Container(
-                width: 30,
-                height: 20,
-                child: Center(
-                  child: Obx(
-                    () => IgnorePointer(
+              Obx(
+                () => SizedBox(
+                  height: questionController.textBoxSize.value.height > 36
+                      ? questionController.textBoxSize.value.height - 16
+                      : questionController.textBoxSize.value.height,
+                  child: Align(
+                    alignment: questionController.textBoxSize.value.height > 36
+                        ? Alignment.bottomRight
+                        : Alignment.center,
+                    child: IgnorePointer(
                       ignoring: questionController.isemptytext.value,
                       child: questionController.answertextController.text == ""
                           ? InkWell(
@@ -99,7 +117,7 @@ class QuestionScreen extends StatelessWidget {
                               child: Text(
                                 "작성",
                                 style: TextStyle(
-                                  color: mainblack.withOpacity(0.6),
+                                  color: mainblack.withOpacity(0.38),
                                 ),
                               ),
                             )

@@ -17,11 +17,25 @@ class QuestionController extends GetxController {
   RxBool ignore_check_add_q = true.obs;
   RxBool check_alarm = false.obs;
   RxBool isDropdown = false.obs;
+  RxDouble textFormHeight = 36.0.obs;
+  Rx<GlobalKey> textFieldBoxKey = GlobalKey().obs;
+  Rx<Size> textBoxSize = Size(Get.width, 36).obs;
 
   @override
   void onInit() {
-    // ignore_check_add_q.value = false;
+    answertextController.addListener(() {
+      textBoxSize.value = getSize(textFieldBoxKey.value);
+    });
     super.onInit();
+  }
+
+  getSize(GlobalKey key) {
+    if (key.currentContext != null) {
+      RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
+      Size size = renderBox.size;
+      return size;
+    }
+    return Size(Get.width, 36);
   }
 
   QuestionModel2 questionModel2 = QuestionModel2(QuestionItem(
