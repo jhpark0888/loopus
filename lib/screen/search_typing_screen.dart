@@ -22,9 +22,11 @@ class SearchTypingScreen extends StatelessWidget {
           searchController.searchpostinglist.clear();
           searchController.searchprofilelist.clear();
           searchController.searchquestionlist.clear();
-          searchController.pagenumber = 1;
+          searchController.pagenumber1 = 1;
+          searchController.pagenumber2 = 1;
+          searchController.pagenumber3 = 1;
           searchController.tabController.index = 0;
-
+          searchController.searchtextcontroller.clear();
           return false;
         },
         child: Scaffold(
@@ -46,6 +48,7 @@ class SearchTypingScreen extends StatelessWidget {
                   searchController.searchprofilelist.clear();
                   searchController.searchquestionlist.clear();
                   searchController.tabController.index = 0;
+                  searchController.searchtextcontroller.clear();
                   Get.back();
                   print(searchController.tabController.index);
                 },
@@ -83,17 +86,37 @@ class SearchTypingScreen extends StatelessWidget {
                       searchController.isnosearch3.value = false;
                     },
                     onSubmitted: (value) async {
-                      if (searchController.pagenumber == 1) {
+                      // if (searchController.pagenumber == 1) {
+                      //   searchController.searchpostinglist.clear();
+                      //   searchController.searchprofilelist.clear();
+                      //   searchController.searchquestionlist.clear();
+                      // }
+                      if (searchController.pagenumber1 == 1) {
                         searchController.searchpostinglist.clear();
+                      } else if (searchController.pagenumber2 == 1) {
                         searchController.searchprofilelist.clear();
+                      } else if (searchController.pagenumber3 == 1) {
                         searchController.searchquestionlist.clear();
                       }
-                      await searchController.search(
-                          searchController.tabController.index,
-                          value,
-                          searchController.pagenumber);
+                      if (searchController.tabController.index == 0) {
+                        await searchController.search(
+                            searchController.tabController.index,
+                            value,
+                            searchController.pagenumber1);
+                      } else if (searchController.tabController.index == 1) {
+                        await searchController.search(
+                            searchController.tabController.index,
+                            value,
+                            searchController.pagenumber2);
+                      } else if (searchController.tabController.index == 2) {
+                        await searchController.search(
+                            searchController.tabController.index,
+                            value,
+                            searchController.pagenumber3);
+                      }
+
                       print(value);
-                      searchController.searchtextcontroller.clear();
+                      // searchController.searchtextcontroller.clear();
                     },
                     focusNode: searchController.focusNode,
                     style: TextStyle(color: mainblack, fontSize: 14),

@@ -82,16 +82,22 @@ class MyQuestionPostingWidget extends StatelessWidget {
                   Row(
                     children: [
                       ClipOval(
-                        child: CachedNetworkImage(
-                          height: 32,
-                          width: 32,
-                          imageUrl: "https://i.stack.imgur.com/l60Hf.png",
-                          placeholder: (context, url) => CircleAvatar(
-                            child: Center(child: CircularProgressIndicator()),
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          child: item.profileimage == null
+                              ? Image.asset(
+                                  "assets/illustrations/default_profile.png",
+                                  height: 32,
+                                  width: 32,
+                                )
+                              : CachedNetworkImage(
+                                  height: 32,
+                                  width: 32,
+                                  imageUrl: item.profileimage ?? "",
+                                  placeholder: (context, url) => CircleAvatar(
+                                    child: Center(
+                                        child: CircularProgressIndicator()),
+                                  ),
+                                  fit: BoxFit.cover,
+                                )),
                       SizedBox(
                         width: 8,
                       ),

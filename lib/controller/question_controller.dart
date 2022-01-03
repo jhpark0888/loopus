@@ -46,6 +46,7 @@ class QuestionController extends GetxController {
         content: element2.content,
         image: element2.profileimage ?? "",
         name: element2.realname ?? "",
+        user: element2.user,
       ));
     });
   }

@@ -1,15 +1,24 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/project_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/posting_detail_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
+import 'package:loopus/screen/profile_screen.dart';
+import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class BookmarkWidget extends StatelessWidget {
@@ -21,6 +30,7 @@ class BookmarkWidget extends StatelessWidget {
     required this.index,
     required this.post,
   });
+  ProfileController profileController = Get.find();
   BookmarkController bookmarkController = Get.put(BookmarkController());
   HomeController homeController = Get.find();
 
@@ -94,31 +104,58 @@ class BookmarkWidget extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          ClipOval(
-                              child: post.profileimage == null
-                                  ? Image.asset(
-                                      "assets/illustrations/default_profile.png",
-                                      height: 32,
-                                      width: 32,
-                                    )
-                                  : CachedNetworkImage(
-                                      height: 32,
-                                      width: 32,
-                                      imageUrl: "${post.profileimage}",
-                                      placeholder: (context, url) =>
-                                          CircleAvatar(
-                                        child: Center(
-                                            child: CircularProgressIndicator()),
-                                      ),
-                                      fit: BoxFit.fill,
-                                    )),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            "${post.realname} · ",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
+                          InkWell(
+                            onTap: () async {
+                              await getProfile(post.userId).then((response) {
+                                var responseBody = json
+                                    .decode(utf8.decode(response.bodyBytes));
+                                profileController
+                                    .user(User.fromJson(responseBody));
+
+                                List projectmaplist = responseBody['project'];
+                                profileController.projectlist(projectmaplist
+                                    .map((project) => Project.fromJson(project))
+                                    .map((project) => ProjectWidget(
+                                          project: project,
+                                        ))
+                                    .toList());
+                              });
+                              AppController.to.ismyprofile.value = false;
+                              print(AppController.to.ismyprofile.value);
+                              Get.to(() => ProfileScreen());
+                            },
+                            child: Row(
+                              children: [
+                                ClipOval(
+                                    child: post.profileimage == null
+                                        ? Image.asset(
+                                            "assets/illustrations/default_profile.png",
+                                            height: 32,
+                                            width: 32,
+                                          )
+                                        : CachedNetworkImage(
+                                            height: 32,
+                                            width: 32,
+                                            imageUrl: "${post.profileimage}",
+                                            placeholder: (context, url) =>
+                                                CircleAvatar(
+                                              child: Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                            ),
+                                            fit: BoxFit.fill,
+                                          )),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  "${post.realname} · ",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ),
                           Text(
                             "${post.department}",

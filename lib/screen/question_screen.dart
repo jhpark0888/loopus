@@ -25,7 +25,11 @@ class QuestionScreen extends StatelessWidget {
     data =
         await answermake(text, questionController.questionModel2.questions.id);
     questionController.messageanswerlist.add(MessageAnswerWidget(
-        content: data["content"], image: "image", name: data["real_name"]));
+      content: data["content"],
+      image: "image",
+      name: data["real_name"],
+      user: data["user_id"],
+    ));
     questionController.answerfocus.unfocus();
     questionController.answertextController.clear();
   }
@@ -201,6 +205,8 @@ class QuestionScreen extends StatelessWidget {
                               "",
                           name: questionController
                               .questionModel2.questions.realname,
+                          user:
+                              questionController.questionModel2.questions.user,
                         ),
                         Obx(() => Column(
                               children:

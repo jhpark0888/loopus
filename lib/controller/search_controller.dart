@@ -21,7 +21,9 @@ class SearchController extends GetxController
   RxBool isnosearch2 = false.obs;
   RxBool isnosearch3 = false.obs;
   RxBool istag = false.obs;
-  int pagenumber = 1;
+  int pagenumber1 = 1;
+  int pagenumber2 = 1;
+  int pagenumber3 = 1;
 
   RxBool isFocused = false.obs;
   RxInt tabpage = 0.obs;
@@ -37,6 +39,22 @@ class SearchController extends GetxController
       vsync: this,
     );
     tabController.addListener(() {
+      if (searchtextcontroller.text.isEmpty == false) {
+        if (tabController.indexIsChanging == true) {
+          if (tabController.index != 3) {
+            if (tabController.index == 0) {
+              search(
+                  tabController.index, searchtextcontroller.text, pagenumber1);
+            } else if (tabController.index == 1) {
+              search(
+                  tabController.index, searchtextcontroller.text, pagenumber2);
+            } else if (tabController.index == 2) {
+              search(
+                  tabController.index, searchtextcontroller.text, pagenumber3);
+            }
+          }
+        }
+      }
       if (tabController.index == 3) {
         istag.value = true;
       } else {
@@ -76,6 +94,28 @@ class SearchController extends GetxController
     var responseBody = utf8.decode(response.bodyBytes);
     print(statusCode);
     List searchlist = jsonDecode(responseBody);
+    print("pagenumber$pagenumber");
+    if (pagenumber >= 2) {
+      print(searchlist);
+      print(searchquestionlist.value);
+      print(searchprofilelist.value);
+      if (tab_index == 0 && searchlist.isEmpty == false) {
+        if (searchlist[0]["id"] == searchpostinglist.value[0].id) {
+          return;
+        }
+      }
+      if (tab_index == 1 && searchlist.isEmpty == false) {
+        if (searchlist[0]["user"] == searchprofilelist.value[0].id) {
+          return;
+        }
+      }
+      if (tab_index == 2 && searchlist.isEmpty == false) {
+        if (searchlist[0]["id"] == searchquestionlist.value[0].id) {
+          return;
+        }
+      }
+    }
+
     print(searchlist);
 
     if (searchlist.isEmpty) {
@@ -87,10 +127,19 @@ class SearchController extends GetxController
         isnosearch3.value = true;
       }
     } else {
-      pagenumber += 1;
+      if (tab_index == 0) {
+        SearchController.to.pagenumber1 += 1;
+      } else if (tab_index == 1) {
+        SearchController.to.pagenumber2 += 1;
+      } else if (tab_index == 2) {
+        SearchController.to.pagenumber3 += 1;
+      }
+
       if (tab_index == 0) {
         searchlist.forEach((element) {
           searchpostinglist.add(SearchPostingWidget(
+            department: element["department"],
+            name: element["real_name"],
             id: element["id"],
             postingtitle: element["title"],
             profileimage: element["thubnail"],
@@ -115,8 +164,11 @@ class SearchController extends GetxController
             answercount: element["count"],
             content: element["content"],
             id: element["id"],
+            user: element["user_id"],
+            real_name: element["real_name"],
+            department: element["department"],
             tag: element["question_tag"],
-            profileimage: null,
+            profileimage: element["profile_image"],
           ));
         });
       }
