@@ -67,7 +67,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () async {
-                image(await getcropImage('thumbnail'));
+                image(await getcropImage(imagetype.thumnail));
                 projectAddController.projectimage = image;
               },
               child: Container(

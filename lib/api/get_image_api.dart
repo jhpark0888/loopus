@@ -4,14 +4,16 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loopus/constant.dart';
 
-Future<File?> getcropImage(String type) async {
+enum imagetype { profile, thumnail, post }
+
+Future<File?> getcropImage(imagetype type) async {
   XFile? pickimage = await ImagePicker().pickImage(source: ImageSource.gallery);
   if (pickimage != null) {
-    if (type == "profile") {
+    if (type == imagetype.profile) {
       return await profilecropImage(pickimage);
-    } else if (type == "thumbnail") {
+    } else if (type == imagetype.thumnail) {
       return await postingthumbnailcropImage(pickimage);
-    } else {
+    } else if (type == imagetype.post) {
       return await postingcropImage(pickimage);
     }
   }

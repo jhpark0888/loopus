@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:loopus/constant.dart';
+import 'package:get/get.dart';
+import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 class EditorToolbar extends StatelessWidget {
   EditorToolbar(
       {Key? key, required this.onSelected, required this.selectedType})
       : super(key: key);
+
+  EditorController editorController = Get.find();
 
   final SmartTextType selectedType;
   final ValueChanged<SmartTextType> onSelected;
@@ -14,20 +17,14 @@ class EditorToolbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return PreferredSize(
       preferredSize: Size.fromHeight(56),
-      child: Container(
-          decoration: BoxDecoration(
-            color: mainWhite,
-            border: Border(
-              top: BorderSide(color: Color(0xffe7e7e7), width: 1),
-            ),
-          ),
+      child: Material(
+          elevation: 4.0,
+          color: Colors.white,
           child: Row(children: <Widget>[
             IconButton(
-                icon: Icon(Icons.format_size,
-                    color: selectedType == SmartTextType.H1
-                        ? Colors.teal
-                        : Colors.black),
-                onPressed: () => onSelected(SmartTextType.H1)),
+                icon: editorController.setFontSizeIcon(selectedType),
+                onPressed: () =>
+                    editorController.setFontSizeType(selectedType)),
             IconButton(
                 icon: Icon(Icons.format_quote,
                     color: selectedType == SmartTextType.QUOTE
@@ -39,7 +36,20 @@ class EditorToolbar extends StatelessWidget {
                     color: selectedType == SmartTextType.BULLET
                         ? Colors.teal
                         : Colors.black),
-                onPressed: () => onSelected(SmartTextType.BULLET))
+                onPressed: () => onSelected(SmartTextType.BULLET)),
+            IconButton(
+                icon: Icon(Icons.image, color: Colors.black),
+                onPressed: () async {
+                  await editorController.insertimage(editorController.focus);
+                }),
+            IconButton(
+                icon: Icon(Icons.link,
+                    color: selectedType == SmartTextType.LINK
+                        ? Colors.teal
+                        : Colors.black),
+                onPressed: () {
+                  editorController.linkonbutton(editorController.focus);
+                }),
           ])),
     );
   }
