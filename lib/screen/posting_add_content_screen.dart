@@ -1,8 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/models/documents/attribute.dart';
 import 'package:flutter_quill/widgets/toolbar.dart';

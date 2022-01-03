@@ -8,6 +8,7 @@ import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/screen/posting_detail_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
@@ -27,7 +28,9 @@ class BookmarkWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("click posting");
+        Get.to(() => PostingScreen(
+              post: post,
+            ));
       },
       child: Column(
         children: [
@@ -112,13 +115,13 @@ class BookmarkWidget extends StatelessWidget {
                           SizedBox(
                             width: 8,
                           ),
-                          const Text(
-                            "박도영 · ",
+                          Text(
+                            "${post.realname} · ",
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),
-                          const Text(
-                            "기계공학과",
+                          Text(
+                            "${post.department}",
                             style: TextStyle(fontSize: 14),
                           ),
                         ],

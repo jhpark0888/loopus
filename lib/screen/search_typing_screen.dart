@@ -23,6 +23,7 @@ class SearchTypingScreen extends StatelessWidget {
           searchController.searchprofilelist.clear();
           searchController.searchquestionlist.clear();
           searchController.pagenumber = 1;
+          searchController.tabController.index = 0;
 
           return false;
         },
@@ -44,6 +45,7 @@ class SearchTypingScreen extends StatelessWidget {
                   searchController.searchpostinglist.clear();
                   searchController.searchprofilelist.clear();
                   searchController.searchquestionlist.clear();
+                  searchController.tabController.index = 0;
                   Get.back();
                   print(searchController.tabController.index);
                 },
@@ -72,9 +74,9 @@ class SearchTypingScreen extends StatelessWidget {
                 height: 36,
                 child: TextField(
                     autocorrect: false,
-                    controller: searchController.tabController.index != 3
-                        ? searchController.searchtextcontroller
-                        : tagController.tagsearch,
+                    controller: searchController.istag.value
+                        ? tagController.tagsearch
+                        : searchController.searchtextcontroller,
                     onTap: () {
                       searchController.isnosearch1.value = false;
                       searchController.isnosearch2.value = false;

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/search_student_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -13,6 +14,7 @@ class SearchScreen extends StatelessWidget {
   // const SearchScreen({Key? key}) : super(key: key);
   SearchController _searchController = Get.put(SearchController());
   ModalController _modalController = Get.put(ModalController());
+  TagController tagController = Get.put(TagController());
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +70,13 @@ class SearchScreen extends StatelessWidget {
             height: 36,
             child: TextField(
                 autocorrect: false,
-                controller: _searchController.searchtextcontroller,
+                controller: _searchController.istag.value
+                    ? tagController.tagsearch
+                    : _searchController.searchtextcontroller,
                 onTap: () {
+                  print(_searchController.tabController.index);
                   _searchController.isnosearch1.value = false;
                   _searchController.isnosearch2.value = false;
-
                   _searchController.isnosearch3.value = false;
                 },
                 onSubmitted: (value) async {
@@ -252,10 +256,13 @@ class SearchScreen extends StatelessWidget {
                       initialIndex: 0,
                       child: WillPopScope(
                         onWillPop: () async {
+                          Get.back();
                           _searchController.searchpostinglist.clear();
                           _searchController.searchprofilelist.clear();
                           _searchController.searchquestionlist.clear();
-                          Get.back();
+                          _searchController.pagenumber = 1;
+                          _searchController.tabController.index = 0;
+
                           return false;
                         },
                         child: GestureDetector(
@@ -409,10 +416,10 @@ class SearchScreen extends StatelessWidget {
                                                   style: kSubTitle2Style,
                                                 )))),
                                   ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 50.0),
-                                    child: Center(child: Text("태그")),
+                                  Obx(
+                                    () => ListView(
+                                      children: tagController.searchtaglist,
+                                    ),
                                   ),
                                   Padding(
                                     padding:

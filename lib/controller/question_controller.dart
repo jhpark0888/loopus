@@ -9,6 +9,8 @@ class QuestionController extends GetxController {
   static QuestionController get to => Get.find();
   TextEditingController contentcontroller = TextEditingController();
   RxList<SelectedTagWidget> selectedtaglist = <SelectedTagWidget>[].obs;
+  TextEditingController answertextController = TextEditingController();
+  RxBool isemptytext = true.obs;
   TextEditingController tagsearch = TextEditingController();
   RxList<MessageAnswerWidget> messageanswerlist = <MessageAnswerWidget>[].obs;
   FocusNode answerfocus = FocusNode();
