@@ -13,9 +13,10 @@ import 'package:loopus/widget/message_question_widget.dart';
 
 class QuestionScreen extends StatelessWidget {
   ModalController modalController = Get.put(ModalController());
+  final _formKey = GlobalKey<FormState>();
 
   // const QuestionScreen({Key? key}) : super(key: key);
-  final TextEditingController _textController = new TextEditingController();
+
   QuestionController questionController = Get.find();
   late Map data;
 
@@ -26,7 +27,7 @@ class QuestionScreen extends StatelessWidget {
     questionController.messageanswerlist.add(MessageAnswerWidget(
         content: data["content"], image: "image", name: data["real_name"]));
     questionController.answerfocus.unfocus();
-    _textController.clear();
+    questionController.answertextController.clear();
   }
 
   Widget _buildTextComposer() {
@@ -36,56 +37,91 @@ class QuestionScreen extends StatelessWidget {
         color: mainWhite,
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Row(
-            children: [
-              Flexible(
-                child: TextField(
-                  focusNode: questionController.answerfocus,
-                  style: TextStyle(decoration: TextDecoration.none),
-                  cursorColor: Color(0xFF424242),
-                  controller: _textController,
-                  onChanged: (text) {},
-                  onSubmitted: _handleSubmitted,
-                  minLines: 1,
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
-                      isDense: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(
-                          width: 0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      hintText: " 답변 남기기...",
-                      hintStyle: TextStyle(fontSize: 14),
-                      focusColor: mainblue,
-                      fillColor: mainlightgrey,
-                      filled: true),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                width: 30,
-                height: 20,
-                child: Center(
-                  child: InkWell(
-                    onTap: () {
-                      _handleSubmitted(_textController.text);
+          child: Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Row(
+              children: [
+                Flexible(
+                  child: TextFormField(
+                    focusNode: questionController.answerfocus,
+                    style: TextStyle(decoration: TextDecoration.none),
+                    cursorColor: Color(0xFF424242),
+                    controller: questionController.answertextController,
+                    // onChanged: (text) {
+                    //   if (questionController.answertextController.text == "") {
+                    //     questionController.isemptytext.value = true;
+                    //   } else {
+                    //     questionController.isemptytext.value = false;
+                    //   }
+                    //   print(questionController.answertextController.text);
+                    // },
+                    onFieldSubmitted: _handleSubmitted,
+                    validator: (value) {
+                      if (value!.trim().isEmpty) {
+                        questionController.isemptytext.value = true;
+                      } else {
+                        questionController.isemptytext.value = false;
+                      }
                     },
-                    child: Text(
-                      "작성",
-                      style: TextStyle(
-                        color: mainblue,
+                    minLines: 1,
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+                        isDense: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        hintText: " 답변 남기기...",
+                        hintStyle: TextStyle(fontSize: 14),
+                        focusColor: mainblue,
+                        fillColor: mainlightgrey,
+                        filled: true),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  width: 30,
+                  height: 20,
+                  child: Center(
+                    child: Obx(
+                      () => IgnorePointer(
+                        ignoring: questionController.isemptytext.value,
+                        child:
+                            questionController.answertextController.text == ""
+                                ? InkWell(
+                                    onTap: () {},
+                                    child: Text(
+                                      "작성",
+                                      style: TextStyle(
+                                        color: mainblack.withOpacity(0.6),
+                                      ),
+                                    ),
+                                  )
+                                : InkWell(
+                                    onTap: () {
+                                      _handleSubmitted(questionController
+                                          .answertextController.text);
+                                    },
+                                    child: Text(
+                                      "작성",
+                                      style: TextStyle(
+                                        color: mainblue,
+                                      ),
+                                    ),
+                                  ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
