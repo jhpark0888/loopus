@@ -20,6 +20,7 @@ class SearchController extends GetxController
   RxBool isnosearch1 = false.obs;
   RxBool isnosearch2 = false.obs;
   RxBool isnosearch3 = false.obs;
+  RxBool istag = false.obs;
   int pagenumber = 1;
 
   RxBool isFocused = false.obs;
@@ -35,6 +36,13 @@ class SearchController extends GetxController
       initialIndex: 0,
       vsync: this,
     );
+    tabController.addListener(() {
+      if (tabController.index == 3) {
+        istag.value = true;
+      } else {
+        istag.value = false;
+      }
+    });
 
     super.onInit();
   }
@@ -104,7 +112,7 @@ class SearchController extends GetxController
       } else if (tab_index == 2) {
         searchlist.forEach((element) {
           searchquestionlist.add(SearchQuestionWidget(
-            answercount: element["answer"].length,
+            answercount: element["count"],
             content: element["content"],
             id: element["id"],
             tag: element["question_tag"],

@@ -23,6 +23,7 @@ class SearchTypingScreen extends StatelessWidget {
           searchController.searchprofilelist.clear();
           searchController.searchquestionlist.clear();
           searchController.pagenumber = 1;
+          searchController.tabController.index = 0;
 
           return false;
         },
@@ -44,6 +45,7 @@ class SearchTypingScreen extends StatelessWidget {
                   searchController.searchpostinglist.clear();
                   searchController.searchprofilelist.clear();
                   searchController.searchquestionlist.clear();
+                  searchController.tabController.index = 0;
                   Get.back();
                   print(searchController.tabController.index);
                 },
@@ -72,9 +74,9 @@ class SearchTypingScreen extends StatelessWidget {
                 height: 36,
                 child: TextField(
                     autocorrect: false,
-                    controller: searchController.tabController.index != 3
-                        ? searchController.searchtextcontroller
-                        : tagController.tagsearch,
+                    controller: searchController.istag.value
+                        ? tagController.tagsearch
+                        : searchController.searchtextcontroller,
                     onTap: () {
                       searchController.isnosearch1.value = false;
                       searchController.isnosearch2.value = false;
@@ -224,25 +226,22 @@ class SearchTypingScreen extends StatelessWidget {
                   physics: PageScrollPhysics().parent,
                   controller: searchController.tabController,
                   children: [
-                    Container(
-                      color: Colors.white,
-                      child: SingleChildScrollView(
-                        child: Obx(
-                            () => searchController.isnosearch1.value == false
-                                ? Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: Column(
-                                      children: searchController
-                                          .searchpostinglist.value,
-                                    ))
-                                : Container(
-                                    height: 80,
-                                    child: Center(
-                                        child: Text(
-                                      "검색 결과가 존재하지 않습니다.",
-                                      style: kSubTitle2Style,
-                                    )))),
-                      ),
+                    SingleChildScrollView(
+                      child:
+                          Obx(() => searchController.isnosearch1.value == false
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: Column(
+                                    children: searchController
+                                        .searchpostinglist.value,
+                                  ))
+                              : Container(
+                                  height: 80,
+                                  child: Center(
+                                      child: Text(
+                                    "검색 결과가 존재하지 않습니다.",
+                                    style: kSubTitle2Style,
+                                  )))),
                     ),
                     SingleChildScrollView(
                       child:

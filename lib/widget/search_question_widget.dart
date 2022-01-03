@@ -75,31 +75,19 @@ class SearchQuestionWidget extends StatelessWidget {
                 SizedBox(
                   height: 32,
                 ),
-                tag.length == 0
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: const Text("Tag 없음"),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                        ],
-                      )
-                    : Row(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: List.generate(tag.length, (index) {
-                              return Tagwidget(
-                                content: tag[index]["tag"],
-                                fontSize: 12,
-                              );
-                            }),
-                          ),
-                        ],
-                      ),
+                Row(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: List.generate(tag.length, (index) {
+                        return Tagwidget(
+                          content: tag[index]["tag"],
+                          fontSize: 12,
+                        );
+                      }),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: 20,
                 ),
