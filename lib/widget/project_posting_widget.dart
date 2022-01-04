@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/posting_screen.dart';
+import 'package:http/http.dart' as http;
 
 class ProjectPostingWidget extends StatelessWidget {
   ProjectPostingWidget({
@@ -16,12 +21,21 @@ class ProjectPostingWidget extends StatelessWidget {
 
   // BookmarkController bookmarkController = Get.put(BookmarkController());
   Post post;
-
+  User? user;
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Get.to(() => PostingScreen(post: post));
+      onTap: () async {
+        http.Response? response = await getposting(post.id);
+        if (response != null) {
+          var responseBody = json.decode(utf8.decode(response.bodyBytes));
+          user = User.fromJson(responseBody);
+          post = Post.fromJson(responseBody['posting_info']);
+        }
+        Get.to(() => PostingScreen(
+              post: post,
+              user: user!,
+            ));
       },
       child: Padding(
         padding: const EdgeInsets.only(

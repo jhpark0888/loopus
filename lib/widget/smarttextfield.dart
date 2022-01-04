@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 
-enum SmartTextType { H1, H2, H3, T, QUOTE, BULLET, IMAGE, LINK }
+enum SmartTextType { T, H1, H2, H3, QUOTE, BULLET, IMAGE, LINK }
 
 extension SmartTextStyle on SmartTextType {
   TextStyle get textStyle {

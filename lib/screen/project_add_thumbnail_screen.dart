@@ -21,7 +21,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   ProjectAddController projectAddController = Get.put(ProjectAddController());
   TagController tagController = Get.put(TagController());
-  Rx<File?> image = null.obs;
+  var image = null;
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +67,10 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () async {
-                projectAddController
-                    .projectimage(await getcropImage(imagetype.thumnail));
-                // projectAddController.projectimage = image;
+                image = await getcropImage(imagetype.thumnail);
+                if (image != null) {
+                  projectAddController.projectimage(image);
+                }
               },
               child: Container(
                 width: 141,
@@ -115,6 +116,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                       : '${projectAddController.endyearcontroller.text}-${projectAddController.endmonthcontroller.text}-${projectAddController.enddaycontroller.text}',
                   like_count: 0,
                 ),
+                // image: projectAddController.projectimage
               ),
             ),
           ],

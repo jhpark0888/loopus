@@ -16,7 +16,7 @@ class PostingAddController extends GetxController {
   static PostingAddController get to => Get.find();
 
   TextEditingController titlecontroller = TextEditingController();
-  QuillController postcontroller = QuillController.basic();
+  // QuillController postcontroller = QuillController.basic();
   List<File> images = [];
   Rx<File> thumbnail = File("").obs;
 

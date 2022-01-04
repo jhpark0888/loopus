@@ -6,19 +6,26 @@ import 'package:get/get.dart';
 import 'package:loopus/api/get_image_api.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/blue_button.dart';
-import 'package:loopus/widget/postingeditor.dart';
+import 'package:loopus/widget/post_add_content_widget.dart';
 import 'package:flutter/rendering.dart';
 
 class PostingAddImageScreen extends StatelessWidget {
   PostingAddImageScreen({Key? key, required this.project_id}) : super(key: key);
   PostingAddController postingAddController = Get.find();
+  EditorController editorController = Get.find();
   int project_id;
+  List<PostAddContentWidget> contentlist = [];
 
   @override
   Widget build(BuildContext context) {
+    contentlist.clear();
+    for (int i = 0; i < editorController.types.length; i++) {
+      contentlist.add(PostAddContentWidget(index: i));
+    }
     return Scaffold(
         appBar: AppBarWidget(
           title: '대표 사진 설정',
@@ -49,12 +56,11 @@ class PostingAddImageScreen extends StatelessWidget {
                 children: [
                   _MyAppSpace(),
                   Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: getReadEditor(postingAddController
-                        .postcontroller.document
-                        .toDelta()
-                        .toJson()),
-                  ),
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: contentlist),
+                  )
                 ],
               ),
             ],

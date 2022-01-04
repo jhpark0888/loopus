@@ -28,7 +28,7 @@ class Post {
   String title;
   String? projectname;
   String realname;
-  List<Map<String, dynamic>>? contents;
+  List<PostContent>? contents;
   String department;
   String? profileimage;
   DateTime date;
@@ -50,7 +50,9 @@ class Post {
         likeCount: RxInt(json["like_count"]),
         isLiked: json["is_liked"] != null ? RxInt(json["is_liked"]) : RxInt(0),
         contents: json["contents"] != null
-            ? List<Map<String, dynamic>>.from(json["contents"].map((x) => x))
+            ? List<Map<String, dynamic>>.from(json["contents"])
+                .map((content) => PostContent.fromJson(content))
+                .toList()
             : null,
         isMarked:
             json["is_marked"] != null ? RxInt(json["is_marked"]) : RxInt(0),
@@ -89,6 +91,30 @@ String contentsummary(List<Map<String, dynamic>> json) {
   });
   summary.replaceAll('\n', '');
   return summary;
+}
+
+class PostContent {
+  PostContent({
+    required this.type,
+    required this.content,
+    this.url,
+  });
+
+  int type;
+  String content;
+  String? url;
+
+  factory PostContent.fromJson(Map<String, dynamic> json) => PostContent(
+        type: json["type"],
+        content: json["content"],
+        url: json["url"] ?? null,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "type": type,
+        "content": content,
+        "url": url ?? null,
+      };
 }
 
 class ProjectTag {

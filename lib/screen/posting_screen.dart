@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/widget/postingeditor.dart';
+import 'package:loopus/widget/post_content_widget.dart';
 
 class PostingScreen extends StatelessWidget {
   PostingScreen({Key? key, required this.post, this.user}) : super(key: key);
@@ -61,6 +61,7 @@ class PostingScreen extends StatelessWidget {
             pinned: true,
             flexibleSpace: _MyAppSpace(
               post: post,
+              user: user!,
             ),
             expandedHeight: Get.width / 3 * 2,
           ),
@@ -72,7 +73,12 @@ class PostingScreen extends StatelessWidget {
                   vertical: 24,
                 ),
                 child: post.contents != null
-                    ? getReadEditor(post.contents!)
+                    ? Column(
+                        children: post.contents!
+                            .map((content) =>
+                                PostContentWidget(content: content))
+                            .toList(),
+                      )
                     : Container(),
               ),
             ]),
@@ -84,9 +90,11 @@ class PostingScreen extends StatelessWidget {
 }
 
 class _MyAppSpace extends StatelessWidget {
-  _MyAppSpace({Key? key, required this.post}) : super(key: key);
+  _MyAppSpace({Key? key, required this.post, required this.user})
+      : super(key: key);
 
   Post post;
+  User user;
   @override
   Widget build(
     BuildContext context,
@@ -153,7 +161,7 @@ class _MyAppSpace extends StatelessWidget {
                                     child: CachedNetworkImage(
                                       height: 32,
                                       width: 32,
-                                      imageUrl:
+                                      imageUrl: user.profileImage ??
                                           "https://i.stack.imgur.com/l60Hf.png",
                                       placeholder: (context, url) =>
                                           CircleAvatar(
@@ -166,16 +174,16 @@ class _MyAppSpace extends StatelessWidget {
                                   SizedBox(
                                     width: 8,
                                   ),
-                                  const Text(
-                                    "박도영 · ",
+                                  Text(
+                                    "${user.realName} · ",
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                       color: mainblack,
                                     ),
                                   ),
-                                  const Text(
-                                    "기계공학과",
+                                  Text(
+                                    user.department,
                                     style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.normal,

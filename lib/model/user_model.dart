@@ -20,12 +20,13 @@ class User {
   List<Tag> profileTag;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        user: json["user"],
+        user: json["user_id"],
         realName: json["real_name"],
-        type: json["type"],
+        type: json["type"] ?? 0,
         profileImage: json["profile_image"],
-        profileTag:
-            List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x))),
+        profileTag: json["profile_tag"] != null
+            ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
+            : [],
         department: json["department"],
         isuser: json["is_user"] ?? 1,
       );

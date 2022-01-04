@@ -14,7 +14,6 @@ import 'package:loopus/screen/posting_add_image_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/customlinkstylewidget.dart';
 import 'package:loopus/widget/editortoolbar.dart';
-import 'package:loopus/widget/postingeditor.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 class PostingAddContentScreen extends StatelessWidget {
@@ -72,58 +71,6 @@ class PostingAddContentScreen extends StatelessWidget {
                   onSelected: editorController.setType),
             )
           ],
-          // children: [
-          //   Expanded(
-          //     child: Padding(
-          //       padding: const EdgeInsets.all(10),
-          //       child: PostingEditor(
-          //         placeholder: '포스팅 내용을 작성해주세요...',
-          //         controller: postingAddController.postcontroller,
-          //       ),
-          //     ),
-          //   ),
-          //   QuillToolbar(
-          //     children: [
-          //       SelectHeaderStyleButton(
-          //         controller: postingAddController.postcontroller,
-          //         iconSize: 25,
-          //       ),
-          //       ToggleStyleButton(
-          //         attribute: Attribute.bold,
-          //         icon: Icons.format_bold,
-          //         iconSize: 25,
-          //         controller: postingAddController.postcontroller,
-          //       ),
-          //       ToggleStyleButton(
-          //         attribute: Attribute.underline,
-          //         icon: Icons.format_underline,
-          //         iconSize: 25,
-          //         controller: postingAddController.postcontroller,
-          //       ),
-          //       ImageButton(
-          //         icon: Icons.image,
-          //         iconSize: 25,
-          //         controller: postingAddController.postcontroller,
-          //         onImagePickCallback: (file) async {
-          //           File? image = await postingcropImage(file);
-          //           if (image != null) {
-          //             postingAddController.images.add(image);
-          //             // 이미지 지웠을 때 안에 이미지 제거해야함
-          //             postingAddController.postcontroller.document;
-          //           }
-          //           return image != null ? image.path : null;
-          //         },
-          //         mediaPickSettingSelector: (context) async {
-          //           return MediaPickSetting.Gallery;
-          //         },
-          //       ),
-          //       CustomLinkStyleButton(
-          //         controller: postingAddController.postcontroller,
-          //         iconSize: 25,
-          //       ),
-          //     ],
-          //   ),
-          // ],
         ));
   }
 }

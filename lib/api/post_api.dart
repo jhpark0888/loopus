@@ -7,13 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/question_model.dart';
+import 'package:loopus/widget/smarttextfield.dart';
 
 Future<Post?> postingAddRequest(int project_id) async {
   PostingAddController postingAddController = Get.find();
+  EditorController editorController = Get.find();
   String? token = await FlutterSecureStorage().read(key: 'token');
   String? user_id = await FlutterSecureStorage().read(key: 'id');
   // Uri uri = Uri.parse('http://52.79.75.189:8000/user_api/profile_update/customizing/$user_id/');
@@ -35,15 +38,64 @@ Future<Post?> postingAddRequest(int project_id) async {
     request.files.add(multipartFile);
   }
 
-  for (int i = 0; i < postingAddController.images.length; i++) {
-    var multipartFile = await http.MultipartFile.fromPath(
-        'image', postingAddController.images[i].path);
-    request.files.add(multipartFile);
-  }
+  // for (File? image in editorController.imageindex) {
+  //   if (image != null) {
+  //     var multipartFile =
+  //         await http.MultipartFile.fromPath('image', image.path);
+  //     request.files.add(multipartFile);
+  //   }
+  // }
+  // for (int i = 0; i < postingAddController.images.length; i++) {
+  //   var multipartFile = await http.MultipartFile.fromPath(
+  //       'image', postingAddController.images[i].path);
+  //   request.files.add(multipartFile);
+  // }
 
+  List<Map> postcontent = [];
+
+  for (int i = 0; i < editorController.types.length; i++) {
+    SmartTextType type = editorController.types[i];
+    Map map = {};
+    if (type == SmartTextType.T) {
+      map['type'] = 0;
+      map['content'] = editorController.textcontrollers[i].text;
+      postcontent.add(map);
+    } else if (type == SmartTextType.H1) {
+      map['type'] = 1;
+      map['content'] = editorController.textcontrollers[i].text;
+      postcontent.add(map);
+    } else if (type == SmartTextType.H2) {
+      map['type'] = 2;
+      map['content'] = editorController.textcontrollers[i].text;
+      postcontent.add(map);
+    } else if (type == SmartTextType.H3) {
+      map['type'] = 3;
+      map['content'] = editorController.textcontrollers[i].text;
+      postcontent.add(map);
+    } else if (type == SmartTextType.QUOTE) {
+      map['type'] = 4;
+      map['content'] = editorController.textcontrollers[i].text;
+      postcontent.add(map);
+    } else if (type == SmartTextType.BULLET) {
+      map['type'] = 5;
+      map['content'] = editorController.textcontrollers[i].text;
+      postcontent.add(map);
+    } else if (type == SmartTextType.IMAGE) {
+      map['type'] = 6;
+      map['content'] = 'image';
+      var multipartFile = await http.MultipartFile.fromPath(
+          'image', editorController.imageindex[i]!.path);
+      request.files.add(multipartFile);
+      postcontent.add(map);
+    } else if (type == SmartTextType.LINK) {
+      map['type'] = 7;
+      map['content'] = editorController.textcontrollers[i].text;
+      map['url'] = editorController.linkindex[i];
+      postcontent.add(map);
+    }
+  }
   request.fields['title'] = postingAddController.titlecontroller.text;
-  request.fields['contents'] = json
-      .encode(postingAddController.postcontroller.document.toDelta().toJson());
+  request.fields['contents'] = json.encode(postcontent);
 
   print(request.fields);
   print(request.files);
@@ -56,6 +108,7 @@ Future<Post?> postingAddRequest(int project_id) async {
     String responsebody = await response.stream.bytesToString();
     print(responsebody);
     var responsemap = jsonDecode(responsebody);
+    print(responsemap);
     // print(responsemap['contents']);
 
     // Post post = Post.fromJson(responsemap);
