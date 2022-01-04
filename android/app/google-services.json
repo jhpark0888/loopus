@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "840100932483",
+    "project_id": "loopus-bb12f",
+    "storage_bucket": "loopus-bb12f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840100932483:android:0fc60b47f27be6e8a0a4b6",
+        "android_client_info": {
+          "package_name": "com.example.loopus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840100932483-sn022mnuljf6fqihbnqfm1rt1celap4g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8IN4PV6DCK3zQ2Kxl-D0qS8K3rxRuOBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840100932483-sn022mnuljf6fqihbnqfm1rt1celap4g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "840100932483-3u6t2jni3k6qmn4u49v3tg6cmtp97f1l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.loopusfrontend"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
