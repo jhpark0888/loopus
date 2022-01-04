@@ -28,7 +28,7 @@ void loginRequest() async {
 
   print(response.statusCode);
 
-  if (response.statusCode == 200) {
+  if (response.statusCode == 202) {
     String token = jsonDecode(response.body)['Token'];
     String userid = jsonDecode(response.body)['user_id'];
     storage.write(key: 'token', value: '$token');

@@ -72,7 +72,7 @@ class StartScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 12,
+                        height: 20,
                       ),
                       InkWell(
                         onTap: () => Get.to(() => SignupCampusInfoScreen()),
