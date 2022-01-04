@@ -20,6 +20,7 @@ class NotificationController extends GetxController {
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
     });
+
     super.onInit();
   }
 
@@ -41,5 +42,15 @@ class NotificationController extends GetxController {
       alert: true,
       provisional: true,
     );
+  }
+
+  //특정 질문 등에 알림을 설정한 사람들 그룹 지정
+  void fcmSubscribe(String id) {
+    messaging.subscribeToTopic(id);
+  }
+
+  //특정 질문 등에 알림을 해제한 사람들 또는 만료된 그룹 해제
+  void fcmUnSubscribe(String id) {
+    messaging.unsubscribeFromTopic(id);
   }
 }
