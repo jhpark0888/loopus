@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -21,6 +22,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseFunctions.instanceFor(region: 'asia-northeast3')
+      .useFunctionsEmulator('localhost', 5001);
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   String? temptoken = await FlutterSecureStorage().read(key: 'token');
