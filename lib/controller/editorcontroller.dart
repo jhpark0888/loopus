@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loopus/api/get_image_api.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 class EditorController extends GetxController {
@@ -32,13 +33,41 @@ class EditorController extends GetxController {
   Widget setFontSizeIcon(SmartTextType type) {
     switch (type) {
       case SmartTextType.H1:
-        return Icon(Icons.plus_one, color: Colors.teal);
+        return Text(
+          '큰 제목',
+          style: TextStyle(
+            color: mainblue,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        );
       case SmartTextType.H2:
-        return Icon(Icons.exposure_plus_2, color: Colors.teal);
-      case SmartTextType.H3:
-        return Icon(Icons.timer_3_select, color: Colors.teal);
+        return Text(
+          '작은 제목',
+          style: TextStyle(
+            color: mainblue,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        );
+      // case SmartTextType.H3:
+      //   return Text(
+      //     '본문',
+      //     style: TextStyle(
+      //       color: mainblue,
+      //       fontWeight: FontWeight.bold,
+      //       fontSize: 16,
+      //     ),
+      //   );
       default:
-        return Icon(Icons.format_size, color: Colors.black);
+        return Text(
+          '본문',
+          style: TextStyle(
+            color: mainblack,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        );
     }
   }
 
@@ -50,15 +79,15 @@ class EditorController extends GetxController {
         types.insert(focus, selectedType.value);
         break;
       case SmartTextType.H2:
-        selectedType(SmartTextType.H3);
-        types.removeAt(focus);
-        types.insert(focus, selectedType.value);
-        break;
-      case SmartTextType.H3:
         selectedType(SmartTextType.T);
         types.removeAt(focus);
         types.insert(focus, selectedType.value);
         break;
+      // case SmartTextType.H3:
+      //   selectedType(SmartTextType.T);
+      //   types.removeAt(focus);
+      //   types.insert(focus, selectedType.value);
+      //   break;
       default:
         selectedType(SmartTextType.H1);
         types.removeAt(focus);
@@ -208,28 +237,3 @@ class EditorController extends GetxController {
     }
   }
 }
-
-// Future<File?> getcropImage() async {
-//   XFile? pickimage = await ImagePicker().pickImage(source: ImageSource.gallery);
-//   if (pickimage != null) {
-//     return await postingcropImage(pickimage);
-//   }
-// }
-
-// Future<File?> postingcropImage(pickimage) async {
-//   File? croppedFile = await ImageCropper.cropImage(
-//       sourcePath: pickimage.path,
-//       aspectRatio: CropAspectRatio(ratioX: 2, ratioY: 1),
-//       androidUiSettings: AndroidUiSettings(
-//           toolbarTitle: 'Cropper',
-//           toolbarColor: Colors.blue,
-//           toolbarWidgetColor: Colors.white,
-//           initAspectRatio: CropAspectRatioPreset.ratio16x9,
-//           lockAspectRatio: true),
-//       iosUiSettings: IOSUiSettings(
-//         minimumAspectRatio: 1.0,
-//       ));
-//   if (croppedFile != null) {
-//     return croppedFile;
-//   }
-// }

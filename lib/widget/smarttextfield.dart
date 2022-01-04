@@ -1,56 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 
-enum SmartTextType { T, H1, H2, H3, QUOTE, BULLET, IMAGE, LINK }
+enum SmartTextType { T, H1, H2, QUOTE, BULLET, IMAGE, LINK }
 
 extension SmartTextStyle on SmartTextType {
   TextStyle get textStyle {
     switch (this) {
       case SmartTextType.QUOTE:
         return TextStyle(
-          fontSize: 16.0,
+          fontSize: 14,
           fontStyle: FontStyle.italic,
-          color: Colors.black,
+          color: mainblack,
+          height: 1.2,
         );
       case SmartTextType.H1:
         return TextStyle(
           fontSize: 20,
-          color: Colors.black,
+          color: mainblack,
           fontWeight: FontWeight.bold,
           height: 1.6,
         );
       case SmartTextType.H2:
         return TextStyle(
           fontSize: 16,
-          color: Colors.black,
+          color: mainblack,
           fontWeight: FontWeight.bold,
           height: 1.6,
         );
-      case SmartTextType.H3:
-        return TextStyle(
-          fontSize: 16,
-          color: Colors.black,
-          height: 1.6,
-        );
+
       case SmartTextType.LINK:
         return TextStyle(
-            fontSize: 16.0,
-            color: Colors.blue,
-            decoration: TextDecoration.underline);
+          fontSize: 16,
+          color: mainblue,
+          decoration: TextDecoration.underline,
+        );
       default:
-        return TextStyle(fontSize: 16.0);
+        return TextStyle(
+          fontSize: 16.0,
+          color: mainblack,
+          height: 1.6,
+        );
     }
   }
 
   EdgeInsets get padding {
     switch (this) {
       case SmartTextType.H1:
-        return EdgeInsets.fromLTRB(16, 24, 16, 8);
-        break;
+        return EdgeInsets.fromLTRB(16, 12, 16, 8);
       case SmartTextType.BULLET:
-        return EdgeInsets.fromLTRB(24, 8, 16, 8);
+        return EdgeInsets.fromLTRB(24, 4, 16, 4);
       default:
         return EdgeInsets.fromLTRB(16, 8, 16, 8);
     }
@@ -60,7 +61,6 @@ extension SmartTextStyle on SmartTextType {
     switch (this) {
       case SmartTextType.QUOTE:
         return TextAlign.center;
-        break;
       default:
         return TextAlign.start;
     }
@@ -70,7 +70,6 @@ extension SmartTextStyle on SmartTextType {
     switch (this) {
       case SmartTextType.BULLET:
         return '\u2022 ';
-        break;
       default:
         return null;
     }
@@ -106,32 +105,33 @@ class SmartTextField extends StatelessWidget {
               }
             },
             child: TextField(
-                inputFormatters: [
-                  // TextInputFormatter
-                ],
-                controller: controller,
-                focusNode: focusNode,
-                autofocus: true,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                cursorColor: Colors.teal,
-                textAlign: type.value.align,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    prefixText: type.value.prefix,
-                    prefixStyle: type.value.textStyle,
-                    isDense: true,
-                    contentPadding: type.value.padding),
-                style: type.value.textStyle,
-                toolbarOptions: ToolbarOptions(copy: true, paste: true)),
+              inputFormatters: [
+                // TextInputFormatter
+              ],
+              autocorrect: false,
+              controller: controller,
+              focusNode: focusNode,
+              autofocus: true,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              cursorColor: mainblue,
+              cursorWidth: 1.3,
+              cursorRadius: Radius.circular(500),
+              textAlign: type.value.align,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  prefixText: type.value.prefix,
+                  prefixStyle: type.value.textStyle,
+                  isDense: true,
+                  contentPadding: type.value.padding),
+              style: type.value.textStyle,
+              toolbarOptions: ToolbarOptions(
+                cut: true,
+                copy: true,
+                paste: true,
+                selectAll: true,
+              ),
+            ),
           );
   }
 }
-
-// class CaseFormatting extends TextInputFormatter {
-//   @override
-//   TextEditingValue formatEditUpdate(
-//       TextEditingValue oldValue, TextEditingValue newValue) {
-//     return TextEditingValue(text: newValue.text, selection: newValue.selection);
-//   }
-// }

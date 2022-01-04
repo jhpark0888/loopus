@@ -68,10 +68,6 @@ Future<Post?> postingAddRequest(int project_id) async {
       map['type'] = 2;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
-    } else if (type == SmartTextType.H3) {
-      map['type'] = 3;
-      map['content'] = editorController.textcontrollers[i].text;
-      postcontent.add(map);
     } else if (type == SmartTextType.QUOTE) {
       map['type'] = 4;
       map['content'] = editorController.textcontrollers[i].text;
