@@ -6,6 +6,7 @@ class Project {
   Project({
     required this.id,
     required this.projectName,
+    this.thumbnail,
     this.introduction,
     this.startDate,
     this.endDate,
@@ -17,6 +18,7 @@ class Project {
 
   int id;
   String projectName;
+  String? thumbnail;
   String? introduction;
   String? startDate;
   String? endDate;
@@ -28,6 +30,7 @@ class Project {
   factory Project.fromJson(Map<String, dynamic> json) => Project(
         id: json["project_id"] ?? json["id"],
         projectName: json["project_name"],
+        thumbnail: json["pj_thumbnail"],
         introduction: json["introduction"],
         startDate: json["start_date"],
         endDate: json["end_date"],
@@ -43,6 +46,7 @@ class Project {
   Map<String, dynamic> toJson() => {
         "id": id,
         "project_name": projectName,
+        "thumbnail": thumbnail,
         "introduction": introduction,
         "start_date": startDate,
         "end_date": endDate,

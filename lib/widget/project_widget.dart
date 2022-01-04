@@ -20,11 +20,9 @@ class ProjectWidget extends StatelessWidget {
   ProjectWidget({
     Key? key,
     required this.project,
-    // this.image,
   }) : super(key: key);
 
   Project project;
-  // Rx<File>? image = File('').obs;
 
   @override
   Widget build(BuildContext context) {
@@ -77,12 +75,13 @@ class ProjectWidget extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image:
-                            // image!.value == null ?
-                            AssetImage(
-                          "assets/illustrations/default_image.png",
-                        ),
-                        // : FileImage(image!.value) as ImageProvider,
+                        image: project.thumbnail != null
+                            ? NetworkImage(
+                                project.thumbnail!,
+                              ) as ImageProvider
+                            : AssetImage(
+                                "assets/illustrations/default_image.png",
+                              ),
                         fit: BoxFit.cover,
                       ),
                     ),

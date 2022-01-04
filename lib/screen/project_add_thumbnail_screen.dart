@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/get_image_api.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
@@ -21,7 +22,6 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   ProjectAddController projectAddController = Get.put(ProjectAddController());
   TagController tagController = Get.put(TagController());
-  var image = null;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +29,8 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
       appBar: AppBarWidget(
         actions: [
           TextButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                Get.to(() => ProjectAddIntroScreen());
-              }
+            onPressed: () async {
+              await addproject();
             },
             child: Text(
               '저장',
@@ -67,10 +65,8 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () async {
-                image = await getcropImage(imagetype.thumnail);
-                if (image != null) {
-                  projectAddController.projectimage(image);
-                }
+                projectAddController
+                    .projectimage(await getcropImage(imagetype.thumnail));
               },
               child: Container(
                 width: 141,
@@ -101,22 +97,163 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            Obx(
-              () => ProjectWidget(
-                project: Project(
-                  id: 0,
-                  projectName: projectAddController.projectnamecontroller.text,
-                  projectTag: tagController.selectedtaglist
-                      .map((tag) => Tag(tagId: tag.id ?? 0, tag: tag.text))
-                      .toList(),
-                  startDate:
-                      '${projectAddController.startyearcontroller.text}-${projectAddController.startmonthcontroller.text}-${projectAddController.startdaycontroller.text}',
-                  endDate: projectAddController.isongoing.value
-                      ? null
-                      : '${projectAddController.endyearcontroller.text}-${projectAddController.endmonthcontroller.text}-${projectAddController.enddaycontroller.text}',
-                  like_count: 0,
+            Padding(
+              padding: const EdgeInsets.only(
+                bottom: 16,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                    bottomLeft: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 3,
+                      offset: Offset(0.0, 1.0),
+                      color: Colors.black.withOpacity(0.1),
+                    ),
+                    BoxShadow(
+                      blurRadius: 2,
+                      offset: Offset(0.0, 1.0),
+                      color: Colors.black.withOpacity(0.06),
+                    ),
+                  ],
                 ),
-                // image: projectAddController.projectimage
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8),
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 2 / 1,
+                        child: Obx(
+                          () => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: projectAddController
+                                            .projectimage.value!.path !=
+                                        ''
+                                    ? FileImage(
+                                        projectAddController
+                                            .projectimage.value!,
+                                      ) as ImageProvider
+                                    : AssetImage(
+                                        "assets/illustrations/default_image.png",
+                                      ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(8),
+                        bottomRight: Radius.circular(8),
+                      ),
+                      child: Container(
+                        color: mainWhite,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              projectAddController.projectnamecontroller.text,
+                              style: kHeaderH2Style,
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '${projectAddController.startyearcontroller.text}.${projectAddController.startmonthcontroller.text}  ~',
+                                  style: kSubTitle2Style,
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                projectAddController.isongoing.value == false
+                                    ? Text(
+                                        '${projectAddController.endyearcontroller.text}.${projectAddController.endmonthcontroller.text}',
+                                        style: kSubTitle2Style,
+                                      )
+                                    : Container(),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: mainlightgrey,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      projectAddController.isongoing.value ==
+                                              false
+                                          ? '9개월'
+                                          : '진행중',
+                                      style: kBody1Style,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      '포스팅',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      '33',
+                                      style: kButtonStyle,
+                                    ),
+                                  ],
+                                ),
+                                Row(children: [
+                                  SvgPicture.asset(
+                                      "assets/icons/Favorite_Active.svg"),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    "33",
+                                    style: kButtonStyle,
+                                  ),
+                                ])
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ],
