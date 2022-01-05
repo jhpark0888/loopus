@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/screen/report_screen.dart';
 import 'package:loopus/widget/alertdialog2_widget.dart';
@@ -170,9 +171,16 @@ class QuestionScreen extends StatelessWidget {
                   if (questionController.check_alarm.value) {
                     questionController.check_alarm.value = false;
                     modalController.showCustomDialog('알림이 취소되었어요', 1);
+                    NotificationController.to.fcmUnSubscribe(questionController
+                        .questionModel2.questions.id
+                        .toString());
                   } else {
                     questionController.check_alarm.value = true;
                     modalController.showCustomDialog('답글이 달리면 알림을 보내드려요', 1);
+                    print(questionController.questionModel2.questions.id);
+                    NotificationController.to.fcmSubscribe(questionController
+                        .questionModel2.questions.id
+                        .toString());
                   }
                 },
                 icon: questionController.check_alarm.value == false

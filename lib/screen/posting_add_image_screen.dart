@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/models/documents/document.dart';
@@ -5,9 +7,13 @@ import 'package:flutter_quill/widgets/controller.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/get_image_api.dart';
 import 'package:loopus/api/post_api.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
+import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/project_model.dart';
+import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/blue_button.dart';
 import 'package:loopus/widget/post_add_content_widget.dart';
@@ -16,14 +22,15 @@ import 'package:flutter/rendering.dart';
 class PostingAddImageScreen extends StatelessWidget {
   PostingAddImageScreen({Key? key, required this.project_id}) : super(key: key);
   PostingAddController postingAddController = Get.find();
-  EditorController editorController = Get.find();
   int project_id;
   List<PostAddContentWidget> contentlist = [];
 
   @override
   Widget build(BuildContext context) {
     contentlist.clear();
-    for (int i = 0; i < editorController.types.length; i++) {
+    for (int i = 0;
+        i < postingAddController.editorController.types.length;
+        i++) {
       contentlist.add(PostAddContentWidget(index: i));
     }
     return Scaffold(
@@ -33,9 +40,6 @@ class PostingAddImageScreen extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 await postingAddRequest(project_id);
-                // Get.back();
-                // Get.back();
-                // Get.back();
               },
               child: Text(
                 '올리기',

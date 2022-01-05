@@ -19,8 +19,8 @@ import 'package:loopus/widget/smarttextfield.dart';
 class PostingAddContentScreen extends StatelessWidget {
   PostingAddContentScreen({Key? key, required this.project_id})
       : super(key: key);
-  // PostingAddController postingAddController = Get.find();
-  EditorController editorController = Get.put(EditorController());
+  PostingAddController postingAddController = Get.find();
+  // EditorController editorController = Get.put(EditorController());
   int project_id;
 
   @override
@@ -30,6 +30,9 @@ class PostingAddContentScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
+                // postingAddController.editorController
+                //     .nodeAt(postingAddController.editorController.focus)
+                //     .unfocus();
                 Get.to(() => PostingAddImageScreen(
                       project_id: project_id,
                     ));
@@ -52,23 +55,29 @@ class PostingAddContentScreen extends StatelessWidget {
               () => Expanded(
                   child: GestureDetector(
                 onTap: () {
-                  if (editorController.types.last == SmartTextType.IMAGE) {
-                    editorController.insert(
-                        index: editorController.types.length);
-                    editorController.setFocus(SmartTextType.T);
+                  if (postingAddController.editorController.types.last ==
+                      SmartTextType.IMAGE) {
+                    postingAddController.editorController.insert(
+                        index:
+                            postingAddController.editorController.types.length);
+                    postingAddController.editorController
+                        .setFocus(SmartTextType.T);
                   } else {
-                    editorController.nodes.last.requestFocus();
+                    postingAddController.editorController.nodes.last
+                        .requestFocus();
                   }
                 },
                 child: ListView(
-                  children: editorController.smarttextfieldlist,
+                  children:
+                      postingAddController.editorController.smarttextfieldlist,
                 ),
               )),
             ),
             Obx(
               () => EditorToolbar(
-                  selectedType: editorController.selectedType.value,
-                  onSelected: editorController.setType),
+                  selectedType:
+                      postingAddController.editorController.selectedType.value,
+                  onSelected: postingAddController.editorController.setType),
             )
           ],
         ));

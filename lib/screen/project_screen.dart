@@ -38,7 +38,9 @@ class ProjectScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Get.to(ProjectModifyScreen());
+              Get.to(() => ProjectModifyScreen(
+                    project: project,
+                  ));
             },
             icon: SvgPicture.asset('assets/icons/Edit.svg'),
           ),
@@ -101,6 +103,15 @@ class ProjectScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                          project.endDate == null
+                              ? Container()
+                              : Text(
+                                  ' ${project.endDate!.substring(0, 4)}.${project.endDate!.substring(5, 7)}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                           SizedBox(
                             width: 8,
                           ),
@@ -115,7 +126,7 @@ class ProjectScreen extends StatelessWidget {
                             ),
                             child: Center(
                               child: Text(
-                                '진행중',
+                                project.endDate == null ? '진행중' : '9개월',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: mainblack.withOpacity(0.6),
