@@ -147,7 +147,6 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - Firebase/Messaging
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
@@ -244,6 +243,6 @@ SPEC CHECKSUMS:
   video_player: ecd305f42e9044793efd34846e1ce64c31ea6fcb
   webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
-PODFILE CHECKSUM: 5ee90184a1be5c9dece948f8bc19f8e278f31f5e
+PODFILE CHECKSUM: 817ddb089f8745757d53abee09f4bbbeff894607
 
 COCOAPODS: 1.11.2

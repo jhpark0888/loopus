@@ -37,7 +37,7 @@ class NotificationController extends GetxController {
       String? userMessageToken = await messaging.getToken();
       // messaging.deleteToken();
       print('token : $userMessageToken');
-      return userMessageToken;
+      return await userMessageToken ?? '';
     } catch (e) {
       print(e);
     }
@@ -74,14 +74,5 @@ class NotificationController extends GetxController {
   //특정 질문에 알림을 해제한 사람들 또는 만료된 그룹 해제
   void fcmQuestionUnSubscribe(String id) async {
     await messaging.unsubscribeFromTopic('question$id');
-  }
-
-  void fcmSubscribe(String id) async {
-    await messaging.subscribeToTopic(id);
-  }
-
-  //특정 질문 등에 알림을 해제한 사람들 또는 만료된 그룹 해제
-  void fcmUnSubscribe(String id) async {
-    await messaging.unsubscribeFromTopic(id);
   }
 }
