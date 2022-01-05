@@ -9,6 +9,7 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/screen/home_posting_screen.dart';
 import 'package:loopus/screen/loop_screen.dart';
+import 'package:loopus/screen/message_screen.dart';
 import 'package:loopus/screen/posting_detail_screen.dart';
 import 'package:loopus/screen/question_answer_screen.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
@@ -48,7 +49,9 @@ class HomeScreen extends StatelessWidget {
             IconButton(
                 highlightColor: Colors.transparent,
                 splashColor: Colors.transparent,
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() => MessageScreen());
+                },
                 icon: SvgPicture.asset(
                   "assets/icons/Chat.svg",
                   width: 28,
