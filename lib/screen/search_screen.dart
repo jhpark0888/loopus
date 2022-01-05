@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
-import 'package:loopus/controller/tag_controller.dart';
-import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/search_student_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
@@ -14,7 +12,6 @@ class SearchScreen extends StatelessWidget {
   // const SearchScreen({Key? key}) : super(key: key);
   SearchController _searchController = Get.put(SearchController());
   ModalController _modalController = Get.put(ModalController());
-  TagController tagController = Get.put(TagController());
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +30,18 @@ class SearchScreen extends StatelessWidget {
             () => (_searchController.isFocused.value == true)
                 ? TextButton(
                     onPressed: () {
-                      _searchController.focusChange();
                       _searchController.focusNode.unfocus();
+                      Get.back();
                       _searchController.searchpostinglist.clear();
                       _searchController.searchprofilelist.clear();
                       _searchController.searchquestionlist.clear();
                       _searchController.searchtextcontroller.clear();
-                      Get.back();
+                      _searchController.pagenumber1 = 1;
+                      _searchController.pagenumber2 = 1;
+                      _searchController.pagenumber3 = 1;
+                      _searchController.pagenumber4 = 1;
+                      _searchController.pagenumber5 = 1;
+                      _searchController.focusChange();
                     },
                     child: Center(
                       child: Text(
@@ -71,14 +73,15 @@ class SearchScreen extends StatelessWidget {
             height: 36,
             child: TextField(
                 autocorrect: false,
-                controller: _searchController.istag.value
-                    ? tagController.tagsearch
-                    : _searchController.searchtextcontroller,
+                controller: _searchController.searchtextcontroller,
                 onTap: () {
                   print(_searchController.tabController.index);
                   _searchController.isnosearch1.value = false;
                   _searchController.isnosearch2.value = false;
                   _searchController.isnosearch3.value = false;
+                  _searchController.searchpostinglist.clear();
+                  _searchController.searchprofilelist.clear();
+                  _searchController.searchquestionlist.clear();
                 },
                 onSubmitted: (value) async {
                   if (_searchController.pagenumber1 == 1) {
@@ -280,7 +283,7 @@ class SearchScreen extends StatelessWidget {
                           _searchController.pagenumber2 = 1;
                           _searchController.pagenumber3 = 1;
                           _searchController.tabController.index = 0;
-
+                          _searchController.searchtextcontroller.clear();
                           return false;
                         },
                         child: GestureDetector(
@@ -436,7 +439,7 @@ class SearchScreen extends StatelessWidget {
                                   ),
                                   Obx(
                                     () => ListView(
-                                      children: tagController.searchtaglist,
+                                      children: _searchController.searchtaglist,
                                     ),
                                   ),
                                   Padding(

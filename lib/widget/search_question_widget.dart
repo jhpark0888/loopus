@@ -27,10 +27,13 @@ class SearchQuestionWidget extends StatelessWidget {
   int user;
   String department;
   String real_name;
+  int istag;
+
   QuestionController questionController = Get.put(QuestionController());
   SearchQuestionWidget({
     required this.content,
     required this.id,
+    required this.istag,
     required this.user,
     required this.department,
     required this.real_name,
@@ -93,19 +96,21 @@ class SearchQuestionWidget extends StatelessWidget {
                 SizedBox(
                   height: 32,
                 ),
-                Row(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: List.generate(tag.length, (index) {
-                        return Tagwidget(
-                          content: tag[index]["tag"],
-                          fontSize: 12,
-                        );
-                      }),
-                    ),
-                  ],
-                ),
+                istag == 0
+                    ? Row(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: List.generate(tag.length, (index) {
+                              return Tagwidget(
+                                content: tag[index]["tag"],
+                                fontSize: 12,
+                              );
+                            }),
+                          ),
+                        ],
+                      )
+                    : Container(),
                 SizedBox(
                   height: 20,
                 ),

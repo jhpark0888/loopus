@@ -13,6 +13,7 @@ class Project {
     this.post,
     required this.projectTag,
     this.looper,
+    this.post_count,
     this.like_count,
   });
 
@@ -25,6 +26,7 @@ class Project {
   List<Post>? post;
   List<Tag> projectTag;
   List<dynamic>? looper;
+  int? post_count;
   int? like_count;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
@@ -40,7 +42,12 @@ class Project {
         projectTag:
             List<Tag>.from(json["project_tag"].map((x) => Tag.fromJson(x))),
         looper: json["looper"],
-        like_count: json["like_count"],
+        post_count: json["project_post"] != null
+            ? json["project_post"]["post_count"]
+            : 0,
+        like_count: json["project_post"] != null
+            ? json["project_post"]["like_count"]
+            : 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -54,6 +61,7 @@ class Project {
             ? List<dynamic>.from(post!.map((x) => x.toJson()))
             : null,
         "project_tag": List<dynamic>.from(projectTag.map((x) => x.toJson())),
+        "post_count": post_count,
         "like_count": like_count,
       };
 }

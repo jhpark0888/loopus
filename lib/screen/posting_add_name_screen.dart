@@ -14,6 +14,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 class PostingAddNameScreen extends StatelessWidget {
   PostingAddNameScreen({Key? key, required this.project_id}) : super(key: key);
   PostingAddController postingcontroller = Get.put(PostingAddController());
+  FocusNode _focusNode = FocusNode();
   int project_id;
 
   @override
@@ -27,6 +28,7 @@ class PostingAddNameScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
+                _focusNode.unfocus();
                 Get.to(() => PostingAddContentScreen(
                       project_id: project_id,
                     ));
@@ -70,6 +72,7 @@ class PostingAddNameScreen extends StatelessWidget {
                 height: 32,
               ),
               TextField(
+                focusNode: _focusNode,
                 autocorrect: false,
                 maxLength: 40,
                 minLines: 1,

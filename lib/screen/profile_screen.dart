@@ -381,7 +381,9 @@ class ProfileScreen extends StatelessWidget {
                           Text('활동', style: kSubTitle2Style),
                           GestureDetector(
                               onTap: () {
-                                Get.to(() => ProjectAddTitleScreen());
+                                Get.to(() => ProjectAddTitleScreen(
+                                      screenType: Screentype.add,
+                                    ));
                               },
                               child: profileController.user.value.isuser == 1
                                   ? Text(

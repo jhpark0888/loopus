@@ -18,6 +18,7 @@ void loginRequest() async {
   var user = {
     'username': logInController.idcontroller.text,
     'password': logInController.passwordcontroller.text,
+    'fcm_token': NotificationController.to.getToken(),
   };
   http.Response response = await http.post(
     uri,

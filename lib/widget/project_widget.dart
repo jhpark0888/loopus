@@ -32,15 +32,10 @@ class ProjectWidget extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () async {
-          if (project.id != 0) {
-            await getproject(project.id).then((response) {
-              var responseBody = json.decode(utf8.decode(response.bodyBytes));
-              project = Project.fromJson(responseBody);
-              Get.to(() => ProjectScreen(
-                    project: project,
-                  ));
-            });
-          }
+          project = await getproject(project.id);
+          Get.to(() => ProjectScreen(
+                project: project,
+              ));
         },
         child: Container(
           decoration: BoxDecoration(
@@ -163,7 +158,7 @@ class ProjectWidget extends StatelessWidget {
                                 width: 4,
                               ),
                               Text(
-                                '33',
+                                '${project.post_count ?? 0}',
                                 style: kButtonStyle,
                               ),
                             ],
@@ -175,7 +170,7 @@ class ProjectWidget extends StatelessWidget {
                               width: 4,
                             ),
                             Text(
-                              "${project.like_count}",
+                              "${project.like_count ?? 0}",
                               style: kButtonStyle,
                             ),
                           ])

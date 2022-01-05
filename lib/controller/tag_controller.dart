@@ -59,6 +59,7 @@ class TagController extends GetxController {
             id: element.id,
             tag: element.tag,
             count: element.count,
+            isSearch: 0,
           );
         }).toList());
 
@@ -73,26 +74,17 @@ class TagController extends GetxController {
             id: element.id,
             tag: element.tag,
             count: element.count,
+            isSearch: 0,
           );
         }).toList());
-        if (SearchController.to.tabController.index != 3) {
-          if (tagsearch.text != '') {
-            searchtaglist.insert(
-                0,
-                SearchTagWidget(
-                  id: 0,
-                  tag: "처음으로 '${tagsearch.text}' 태그 사용하기",
-                ));
-          }
-        } else {
-          if (tagsearch.text != '') {
-            searchtaglist.insert(
-                0,
-                SearchTagWidget(
-                  id: -1,
-                  tag: "'${tagsearch.text}'태그의 검색결과가 없습니다.",
-                ));
-          }
+        if (tagsearch.text != '') {
+          searchtaglist.insert(
+              0,
+              SearchTagWidget(
+                id: 0,
+                tag: "처음으로 '${tagsearch.text}' 태그 사용하기",
+                isSearch: 0,
+              ));
         }
 
         selectedtaglist.forEach((selectedtag) {
