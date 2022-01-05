@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -21,6 +23,11 @@ class NotificationController extends GetxController {
       print('Message clicked!');
     });
 
+    // FirebaseMessaging.onBackgroundMessage((message) {
+    //   print('a');
+    //   return
+    // });
+
     super.onInit();
   }
 
@@ -28,6 +35,7 @@ class NotificationController extends GetxController {
   Future<void> _getToken() async {
     try {
       String? userMessageToken = await messaging.getToken();
+      // messaging.deleteToken();
       print('token : $userMessageToken');
     } catch (e) {
       print(e);
@@ -35,22 +43,35 @@ class NotificationController extends GetxController {
   }
 
   //알림 권한 요청
-  void _initNotification() {
-    messaging.requestPermission(
+  void _initNotification() async {
+    NotificationSettings settings = await messaging.requestPermission(
       sound: true,
       badge: true,
       alert: true,
       provisional: true,
     );
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+      if (Platform.isIOS) {
+        await messaging.setForegroundNotificationPresentationOptions(
+          alert: true, // Required to display a heads up notification
+        );
+      }
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
   }
 
-  //특정 질문 등에 알림을 설정한 사람들 그룹 지정
-  void fcmSubscribe(String id) {
-    messaging.subscribeToTopic(id);
+  //특정 질문에 알림을 설정한 사람들 그룹 지정
+  void fcmQuestionSubscribe(String id) async {
+    await messaging.subscribeToTopic('question$id');
   }
 
-  //특정 질문 등에 알림을 해제한 사람들 또는 만료된 그룹 해제
-  void fcmUnSubscribe(String id) {
-    messaging.unsubscribeFromTopic(id);
+  //특정 질문에 알림을 해제한 사람들 또는 만료된 그룹 해제
+  void fcmQuestionUnSubscribe(String id) async {
+    await messaging.unsubscribeFromTopic('question$id');
   }
 }
