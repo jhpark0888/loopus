@@ -84,12 +84,12 @@ class Post {
 
 String contentsummary(List<Map<String, dynamic>> json) {
   String summary = '';
-  json.forEach((map) {
-    if (map['insert'] is String) {
-      summary = summary + map['insert'];
+  for (var map in json) {
+    if ([0, 1, 2, 3, 4].contains(map['type'])) {
+      summary = summary + map['content'];
     }
-  });
-  summary.replaceAll('\n', '');
+  }
+  // summary.replaceAll('\n', '');
   return summary;
 }
 

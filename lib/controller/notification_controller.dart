@@ -10,7 +10,7 @@ class NotificationController extends GetxController {
   @override
   void onInit() {
     _initNotification();
-    _getToken();
+    getToken();
     //Foreground 상태에서 알림을 받았을 때
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message recieved");
@@ -24,10 +24,11 @@ class NotificationController extends GetxController {
   }
 
   //사용자 고유의 알림 토근 가져오기
-  Future<void> _getToken() async {
+  Future<String?> getToken() async {
     try {
       String? userMessageToken = await messaging.getToken();
       print('token : $userMessageToken');
+      return userMessageToken;
     } catch (e) {
       print(e);
     }
@@ -41,5 +42,14 @@ class NotificationController extends GetxController {
       alert: true,
       provisional: true,
     );
+  }
+
+  void fcmSubscribe(String id) async {
+    await messaging.subscribeToTopic(id);
+  }
+
+  //특정 질문 등에 알림을 해제한 사람들 또는 만료된 그룹 해제
+  void fcmUnSubscribe(String id) async {
+    await messaging.unsubscribeFromTopic(id);
   }
 }

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -10,9 +8,10 @@ import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
 class ProjectAddTitleScreen extends StatelessWidget {
-  ProjectAddTitleScreen({Key? key}) : super(key: key);
+  ProjectAddTitleScreen({Key? key, required this.screenType}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
+  Screentype screenType;
   ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
   TagController tagController = Get.put(TagController());
 
@@ -24,15 +23,15 @@ class ProjectAddTitleScreen extends StatelessWidget {
           TextButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                Get.to(() => ProjectAddIntroScreen());
+                if (screenType == Screentype.add) {
+                  Get.to(() => ProjectAddIntroScreen());
+                } else {}
               }
             },
             child: Obx(
               () => Text(
-                '다음',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                screenType == Screentype.add ? '다음' : '저장',
+                style: kSubTitle2Style.copyWith(
                   color: projectaddcontroller.ontitlebutton.value
                       ? mainblue
                       : mainblack.withOpacity(0.38),

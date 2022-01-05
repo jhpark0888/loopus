@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:loopus/app.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/project_model.dart';
 
 Future addproject() async {
   ProjectAddController projectAddController = Get.find();
@@ -36,8 +39,12 @@ Future addproject() async {
   request.fields['end_date'] = projectAddController.isongoing.value
       ? ""
       : '${projectAddController.endyearcontroller.text}-${projectAddController.endmonthcontroller.text}-${projectAddController.enddaycontroller.text}';
-  request.fields['tag'] = json.encode(
-      tagController.selectedtaglist.map((element) => element.text).toList());
+  request.fields['looper'] = json.encode(projectAddController
+      .selectedpersontaglist
+      .map((person) => person.id)
+      .toList());
+  request.fields['tag'] = json
+      .encode(tagController.selectedtaglist.map((tag) => tag.text).toList());
 
   http.StreamedResponse response = await request.send();
 
@@ -46,12 +53,19 @@ Future addproject() async {
   // storage.write(key: 'token', value: json.decode(response.body)['token']);
   // print(storage.read(key: 'token'));
   print(response.statusCode);
-  if (response.statusCode == 200) {
+  if (response.statusCode == 201) {
     print(response.statusCode);
+    Get.back();
+    Get.back();
+    Get.back();
+    Get.back();
+    Get.back();
+    Get.back();
+    AppController.to.changePageIndex(4);
   }
 }
 
-Future<http.Response> getproject(int project_id) async {
+Future<Project> getproject(int project_id) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   // String? userid = await FlutterSecureStorage().read(key: "id");
 
@@ -69,8 +83,72 @@ Future<http.Response> getproject(int project_id) async {
 
   // print(response.statusCode);
   if (response.statusCode == 200) {
-    return response;
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+    Project project = Project.fromJson(responseBody);
+    return project;
   } else {
     return Future.error(response.statusCode);
+  }
+}
+
+Future updateproject(Project project) async {
+  ProjectAddController projectAddController = Get.find();
+  TagController tagController = Get.find();
+
+  String? token = await const FlutterSecureStorage().read(key: "token");
+  Uri uri = Uri.parse(
+      'http://3.35.253.151:8000/project_api/update_project/${project.id}');
+
+  var request = new http.MultipartRequest('POST', uri);
+
+  final headers = {
+    'Authorization': 'Token $token',
+    'Content-Type': 'multipart/form-data',
+  };
+
+  if (projectAddController.projectimage.value!.path != '') {
+    var multipartFile = await http.MultipartFile.fromPath(
+        'thumbnail', projectAddController.projectimage.value!.path);
+    request.files.add(multipartFile);
+  }
+
+  request.headers.addAll(headers);
+
+  request.fields['project_name'] =
+      projectAddController.projectnamecontroller.text.isEmpty
+          ? project.projectName
+          : projectAddController.projectnamecontroller.text;
+  request.fields['introduction'] =
+      projectAddController.introcontroller.text.isEmpty
+          ? project.projectName
+          : projectAddController.introcontroller.text;
+  request.fields['start_date'] =
+      '${projectAddController.startyearcontroller.text}-${projectAddController.startmonthcontroller.text}-${projectAddController.startdaycontroller.text}';
+  request.fields['end_date'] = projectAddController.isongoing.value
+      ? ""
+      : '${projectAddController.endyearcontroller.text}-${projectAddController.endmonthcontroller.text}-${projectAddController.enddaycontroller.text}';
+  request.fields['looper'] = json.encode(projectAddController
+      .selectedpersontaglist
+      .map((person) => person.id)
+      .toList());
+  request.fields['tag'] = json
+      .encode(tagController.selectedtaglist.map((tag) => tag.text).toList());
+
+  http.StreamedResponse response = await request.send();
+
+  String responsebody = await response.stream.bytesToString();
+  // print(responseBody);
+  // storage.write(key: 'token', value: json.decode(response.body)['token']);
+  // print(storage.read(key: 'token'));
+  print(response.statusCode);
+  if (response.statusCode == 201) {
+    print(response.statusCode);
+    Get.back();
+    Get.back();
+    Get.back();
+    Get.back();
+    Get.back();
+    Get.back();
+    AppController.to.changePageIndex(4);
   }
 }

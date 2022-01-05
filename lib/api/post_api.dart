@@ -7,14 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
+import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
-Future<Post?> postingAddRequest(int project_id) async {
+Future<void> postingAddRequest(int project_id) async {
   PostingAddController postingAddController = Get.find();
   EditorController editorController = Get.find();
   String? token = await FlutterSecureStorage().read(key: 'token');
@@ -69,22 +72,22 @@ Future<Post?> postingAddRequest(int project_id) async {
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     } else if (type == SmartTextType.QUOTE) {
-      map['type'] = 4;
+      map['type'] = 3;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     } else if (type == SmartTextType.BULLET) {
-      map['type'] = 5;
+      map['type'] = 4;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     } else if (type == SmartTextType.IMAGE) {
-      map['type'] = 6;
+      map['type'] = 5;
       map['content'] = 'image';
       var multipartFile = await http.MultipartFile.fromPath(
           'image', editorController.imageindex[i]!.path);
       request.files.add(multipartFile);
       postcontent.add(map);
     } else if (type == SmartTextType.LINK) {
-      map['type'] = 7;
+      map['type'] = 6;
       map['content'] = editorController.textcontrollers[i].text;
       map['url'] = editorController.linkindex[i];
       postcontent.add(map);
@@ -101,21 +104,21 @@ Future<Post?> postingAddRequest(int project_id) async {
   if (response.statusCode == 200) {
     print("success!");
 
-    String responsebody = await response.stream.bytesToString();
-    print(responsebody);
-    var responsemap = jsonDecode(responsebody);
-    print(responsemap);
-    // print(responsemap['contents']);
-
-    // Post post = Post.fromJson(responsemap);
-    // post.contents = post.contents.replaceAll(RegExp('True'), 'true');
-    // List<dynamic> json = jsonDecode(post.contents);
-    // print(post.contents);
-    // return post;
+    // String responsebody = await response.stream.bytesToString();
+    // print(responsebody);
+    // var responsemap = jsonDecode(responsebody);
+    // print(responsemap);
+    Project project = await getproject(project_id);
+    Get.back();
+    Get.back();
+    Get.back();
+    Get.back();
+    Get.to(() => ProjectScreen(project: project));
   } else if (response.statusCode == 400) {
     print("lose");
   } else {
     print(response.statusCode);
+    return Future.error(response.statusCode);
   }
 }
 

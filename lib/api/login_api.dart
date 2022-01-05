@@ -6,6 +6,7 @@ import 'package:loopus/controller/login_controller.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:loopus/controller/notification_controller.dart';
 
 void loginRequest() async {
   LogInController logInController = Get.put(LogInController());
@@ -17,6 +18,7 @@ void loginRequest() async {
   var user = {
     'username': logInController.idcontroller.text,
     'password': logInController.passwordcontroller.text,
+    'fcm_token': NotificationController.to.getToken(),
   };
   http.Response response = await http.post(
     uri,
