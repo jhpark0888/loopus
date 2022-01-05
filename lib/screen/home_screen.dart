@@ -185,10 +185,17 @@ class HomeScreen extends StatelessWidget {
                                           imageUrl:
                                               "http://www.lg.co.kr/images/common/default_og_image_new.jpg",
                                           placeholder: (context, url) =>
-                                              const CircleAvatar(
+                                              CircleAvatar(
+                                            backgroundColor: mainWhite,
                                             child: Center(
-                                                child:
-                                                    CircularProgressIndicator()),
+                                                child: Container(
+                                              width: 16,
+                                              height: 16,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color: mainblack,
+                                              ),
+                                            )),
                                           ),
                                           fit: BoxFit.cover,
                                         ),

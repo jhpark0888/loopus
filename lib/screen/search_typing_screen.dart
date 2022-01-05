@@ -43,14 +43,18 @@ class SearchTypingScreen extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   searchController.focusNode.unfocus();
-                  searchController.focusChange();
+                  Get.back();
+                  searchController.pagenumber1 = 1;
+                  searchController.pagenumber2 = 1;
+                  searchController.pagenumber3 = 1;
+                  searchController.pagenumber4 = 1;
+                  searchController.pagenumber5 = 1;
                   searchController.searchpostinglist.clear();
                   searchController.searchprofilelist.clear();
                   searchController.searchquestionlist.clear();
                   searchController.tabController.index = 0;
                   searchController.searchtextcontroller.clear();
-                  Get.back();
-                  print(searchController.tabController.index);
+                  searchController.focusChange();
                 },
                 child: Center(
                   child: Text(
@@ -84,6 +88,9 @@ class SearchTypingScreen extends StatelessWidget {
                       searchController.isnosearch1.value = false;
                       searchController.isnosearch2.value = false;
                       searchController.isnosearch3.value = false;
+                      searchController.searchpostinglist.clear();
+                      searchController.searchprofilelist.clear();
+                      searchController.searchquestionlist.clear();
                     },
                     onSubmitted: (value) async {
                       // if (searchController.pagenumber == 1) {

@@ -41,10 +41,13 @@ class BookmarkController extends GetxController {
   void bookmarkloadItem() async {
     PostingModel bookmarkModel = await bookmarklist(pageNumber);
     PostingModel bookmarkModel2 = await bookmarklist(pageNumber + 1);
-
-    if (bookmarkModel.postingitems[0].id == bookmarkModel2.postingitems[0].id) {
-      enablepullup.value = false;
+    if (bookmarkModel.postingitems.isEmpty == false) {
+      if (bookmarkModel.postingitems[0].id ==
+          bookmarkModel2.postingitems[0].id) {
+        enablepullup.value = false;
+      }
     }
+
     print(bookmarkModel.postingitems);
     // if (pageNumber == 1) {
     //   questionResult.update((val) {

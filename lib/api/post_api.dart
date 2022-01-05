@@ -69,22 +69,22 @@ Future<Post?> postingAddRequest(int project_id) async {
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     } else if (type == SmartTextType.QUOTE) {
-      map['type'] = 4;
+      map['type'] = 3;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     } else if (type == SmartTextType.BULLET) {
-      map['type'] = 5;
+      map['type'] = 4;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     } else if (type == SmartTextType.IMAGE) {
-      map['type'] = 6;
+      map['type'] = 5;
       map['content'] = 'image';
       var multipartFile = await http.MultipartFile.fromPath(
           'image', editorController.imageindex[i]!.path);
       request.files.add(multipartFile);
       postcontent.add(map);
     } else if (type == SmartTextType.LINK) {
-      map['type'] = 7;
+      map['type'] = 6;
       map['content'] = editorController.textcontrollers[i].text;
       map['url'] = editorController.linkindex[i];
       postcontent.add(map);
