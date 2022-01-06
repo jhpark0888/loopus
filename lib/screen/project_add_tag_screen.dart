@@ -3,11 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/project_add_person_screen.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
@@ -15,8 +17,11 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class ProjectAddTagScreen extends StatelessWidget {
-  ProjectAddTagScreen({Key? key}) : super(key: key);
+  ProjectAddTagScreen({Key? key, required this.screenType, this.project})
+      : super(key: key);
   TagController tagController = Get.find();
+  Screentype screenType;
+  Project? project;
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +29,21 @@ class ProjectAddTagScreen extends StatelessWidget {
       appBar: AppBarWidget(
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (tagController.selectedtaglist.length == 3) {
-                Get.to(() => ProjectAddPersonScreen());
+                if (screenType == Screentype.add) {
+                  Get.to(() => ProjectAddPersonScreen(
+                        screenType: Screentype.add,
+                      ));
+                } else {
+                  project = await updateproject(project!.id);
+                  Get.back(result: project);
+                }
               }
             },
             child: Obx(
               () => Text(
-                '다음',
+                screenType == Screentype.add ? '다음' : '저장',
                 style: kSubTitle2Style.copyWith(
                   color: tagController.selectedtaglist.length == 3
                       ? mainblue

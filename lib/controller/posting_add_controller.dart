@@ -8,9 +8,6 @@ import 'package:loopus/api/get_image_api.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
-import 'package:loopus/widget/posting_add_content_widget.dart';
-import 'package:loopus/widget/posting_add_fileimage_widget.dart';
-import 'package:loopus/widget/posting_add_title_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class PostingAddController extends GetxController {

@@ -7,16 +7,20 @@ import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/project_add_thumbnail_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 
 class ProjectAddPersonScreen extends StatelessWidget {
-  ProjectAddPersonScreen({Key? key}) : super(key: key);
+  ProjectAddPersonScreen({Key? key, required this.screenType, this.project})
+      : super(key: key);
   // ProjectAddPersonController projectaddpersoncontroller =
   //     Get.put(ProjectAddPersonController());
   ProjectAddController projectaddcontroller = Get.find();
+  Screentype screenType;
+  Project? project;
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +28,23 @@ class ProjectAddPersonScreen extends StatelessWidget {
       appBar: AppBarWidget(
         actions: [
           TextButton(
-            onPressed: () {
-              Get.to(() => ProjectAddThumbnailScreen());
-              // projectaddRequest();
+            onPressed: () async {
+              if (screenType == Screentype.add) {
+                Get.to(() => ProjectAddThumbnailScreen(
+                      screenType: Screentype.add,
+                    ));
+              } else {
+                project = await updateproject(project!.id);
+                Get.back(result: project);
+              }
             },
             child: Obx(
               () => Text(
-                projectaddcontroller.selectedpersontaglist.isEmpty
-                    ? '건너뛰기'
-                    : '다음',
+                screenType == Screentype.add
+                    ? projectaddcontroller.selectedpersontaglist.isEmpty
+                        ? '건너뛰기'
+                        : '다음'
+                    : '저장',
                 style: kSubTitle2Style.copyWith(
                   color: projectaddcontroller.selectedpersontaglist.isEmpty
                       ? mainblack

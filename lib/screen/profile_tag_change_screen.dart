@@ -31,6 +31,13 @@ class ProfileTagChangeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    tagController.selectedtaglist.clear();
+    for (var tag in profileController.user.value.profileTag) {
+      tagController.selectedtaglist.add(SelectedTagWidget(
+        id: tag.tagId,
+        text: tag.tag,
+      ));
+    }
     return Scaffold(
       appBar: AppBarWidget(
         actions: [

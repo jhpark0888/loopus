@@ -2,17 +2,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_tag_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/datefield_end_widget.dart';
 import 'package:loopus/widget/datefield_start_widget.dart';
 
 class ProjectAddPeriodScreen extends StatelessWidget {
-  ProjectAddPeriodScreen({Key? key}) : super(key: key);
+  ProjectAddPeriodScreen({Key? key, required this.screenType, this.project})
+      : super(key: key);
 
   ProjectAddController projectaddcontroller = Get.find();
+  Screentype screenType;
+  Project? project;
   // final _formKey = GlobalKey<FormState>();
 
   Color? buttoncolor() {
@@ -38,21 +43,35 @@ class ProjectAddPeriodScreen extends StatelessWidget {
       appBar: AppBarWidget(
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (projectaddcontroller.isongoing.value == true) {
                 if (projectaddcontroller.isvaildstartdate.value) {
-                  Get.to(() => ProjectAddTagScreen());
+                  if (screenType == Screentype.add) {
+                    Get.to(() => ProjectAddTagScreen(
+                          screenType: Screentype.add,
+                        ));
+                  } else {
+                    project = await updateproject(project!.id);
+                    Get.back(result: project);
+                  }
                 }
               } else {
                 if (projectaddcontroller.isvaildstartdate.value &&
                     projectaddcontroller.isvaildenddate.value) {
-                  Get.to(() => ProjectAddTagScreen());
+                  if (screenType == Screentype.add) {
+                    Get.to(() => ProjectAddTagScreen(
+                          screenType: Screentype.add,
+                        ));
+                  } else {
+                    project = await updateproject(project!.id);
+                    Get.back(result: project);
+                  }
                 }
               }
             },
             child: Obx(
               () => Text(
-                '다음',
+                screenType == Screentype.add ? '다음' : '저장',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

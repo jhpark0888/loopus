@@ -17,20 +17,24 @@ class PostContentWidget extends StatelessWidget {
     if (SmartTextType.values[content.type] == SmartTextType.IMAGE) {
       return Container(child: Image.network(content.content));
     } else if (SmartTextType.values[content.type] == SmartTextType.LINK) {
-      return Align(
-        alignment: Alignment.centerLeft,
-        child: InkWell(
-            onTap: () {
-              Get.to(() => WebViewScreen(url: content.url));
-            },
-            child: Text(
-              '${SmartTextType.values[content.type].prefix ?? ''}${content.content}',
-              textAlign: SmartTextType.values[content.type].align,
-              style: SmartTextType.values[content.type].textStyle,
-            )),
+      return Padding(
+        padding: SmartTextType.values[content.type].padding,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: InkWell(
+              onTap: () {
+                Get.to(() => WebViewScreen(url: content.url));
+              },
+              child: Text(
+                '${SmartTextType.values[content.type].prefix ?? ''}${content.content}',
+                textAlign: SmartTextType.values[content.type].align,
+                style: SmartTextType.values[content.type].textStyle,
+              )),
+        ),
       );
     } else {
-      return SizedBox(
+      return Container(
+        padding: SmartTextType.values[content.type].padding,
         width: Get.width,
         child: Text(
           '${SmartTextType.values[content.type].prefix ?? ''}${content.content}',

@@ -17,11 +17,14 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
 
 class ProjectAddThumbnailScreen extends StatelessWidget {
-  ProjectAddThumbnailScreen({Key? key}) : super(key: key);
+  ProjectAddThumbnailScreen({Key? key, required this.screenType, this.project})
+      : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
   ProjectAddController projectAddController = Get.put(ProjectAddController());
   TagController tagController = Get.put(TagController());
+  Screentype screenType;
+  Project? project;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,12 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () async {
-              await addproject();
+              if (screenType == Screentype.add) {
+                await addproject();
+              } else {
+                project = await updateproject(project!.id);
+                Get.back(result: project);
+              }
             },
             child: Text(
               '저장',

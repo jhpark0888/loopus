@@ -15,6 +15,7 @@ import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
+import 'package:intl/intl.dart';
 
 class ProjectWidget extends StatelessWidget {
   ProjectWidget({
@@ -22,7 +23,8 @@ class ProjectWidget extends StatelessWidget {
     required this.project,
   }) : super(key: key);
 
-  Project project;
+  Rx<Project> project;
+  Project? exproject;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +34,13 @@ class ProjectWidget extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () async {
-          project = await getproject(project.id);
-          Get.to(() => ProjectScreen(
+          project.value = await getproject(project.value.id);
+          exproject = await Get.to(() => ProjectScreen(
                 project: project,
               ));
+          if (exproject != null) {
+            project(exproject);
+          }
         },
         child: Container(
           decoration: BoxDecoration(
@@ -67,17 +72,19 @@ class ProjectWidget extends StatelessWidget {
                 ),
                 child: AspectRatio(
                   aspectRatio: 2 / 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: project.thumbnail != null
-                            ? NetworkImage(
-                                project.thumbnail!,
-                              ) as ImageProvider
-                            : AssetImage(
-                                "assets/illustrations/default_image.png",
-                              ),
-                        fit: BoxFit.cover,
+                  child: Obx(
+                    () => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: project.value.thumbnail != null
+                              ? NetworkImage(
+                                  project.value.thumbnail!,
+                                ) as ImageProvider
+                              : AssetImage(
+                                  "assets/illustrations/default_image.png",
+                                ),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -97,28 +104,23 @@ class ProjectWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
-                        project.projectName,
-                        style: kHeaderH2Style,
+                      Obx(
+                        () => Text(
+                          project.value.projectName,
+                          style: kHeaderH2Style,
+                        ),
                       ),
                       SizedBox(
                         height: 16,
                       ),
                       Row(
                         children: [
-                          Text(
-                            '${project.startDate!.substring(0, 4)}.${project.startDate!.substring(5, 7)}  ~',
-                            style: kSubTitle2Style,
+                          Obx(
+                            () => Text(
+                              '${DateFormat("yyyy.MM").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yyyy.MM").format(project.value.endDate!) : ''}',
+                              style: kSubTitle2Style,
+                            ),
                           ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          project.endDate != null
-                              ? Text(
-                                  '${project.endDate!.substring(0, 4)}.${project.endDate!.substring(5, 7)}',
-                                  style: kSubTitle2Style,
-                                )
-                              : Container(),
                           SizedBox(
                             width: 8,
                           ),
@@ -132,9 +134,11 @@ class ProjectWidget extends StatelessWidget {
                               color: mainlightgrey,
                             ),
                             child: Center(
-                              child: Text(
-                                project.endDate != null ? '9개월' : '진행중',
-                                style: kBody1Style,
+                              child: Obx(
+                                () => Text(
+                                  project.value.endDate != null ? '9개월' : '진행중',
+                                  style: kBody1Style,
+                                ),
                               ),
                             ),
                           )
@@ -157,9 +161,11 @@ class ProjectWidget extends StatelessWidget {
                               SizedBox(
                                 width: 4,
                               ),
-                              Text(
-                                '${project.post_count ?? 0}',
-                                style: kButtonStyle,
+                              Obx(
+                                () => Text(
+                                  '${project.value.post_count ?? 0}',
+                                  style: kButtonStyle,
+                                ),
                               ),
                             ],
                           ),
@@ -169,9 +175,11 @@ class ProjectWidget extends StatelessWidget {
                             SizedBox(
                               width: 4,
                             ),
-                            Text(
-                              "${project.like_count ?? 0}",
-                              style: kButtonStyle,
+                            Obx(
+                              () => Text(
+                                "${project.value.like_count ?? 0}",
+                                style: kButtonStyle,
+                              ),
                             ),
                           ])
                         ],
