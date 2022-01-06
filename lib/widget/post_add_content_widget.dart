@@ -16,7 +16,8 @@ class PostAddContentWidget extends StatelessWidget {
     if (editorController.types[index] == SmartTextType.IMAGE) {
       return Image.file(editorController.imageindex[index]!);
     } else {
-      return SizedBox(
+      return Container(
+        padding: editorController.types[index].padding,
         width: Get.width,
         child: Text(
           '${editorController.types[index].prefix ?? ''}${editorController.textcontrollers[index].text}',

@@ -181,7 +181,7 @@ class HomePostingWidget extends StatelessWidget {
                                                             project))
                                                     .map((project) =>
                                                         ProjectWidget(
-                                                          project: project,
+                                                          project: project.obs,
                                                         ))
                                                     .toList());
                                           });

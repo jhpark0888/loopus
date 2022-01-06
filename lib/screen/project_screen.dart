@@ -14,6 +14,7 @@ import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
+import 'package:intl/intl.dart';
 
 class ProjectScreen extends StatelessWidget {
   ProjectScreen({Key? key, required this.project}) : super(key: key);
@@ -21,7 +22,8 @@ class ProjectScreen extends StatelessWidget {
   ModalController modalController = Get.put(ModalController());
 
   ProjectController projectController = Get.put(ProjectController());
-  Project project;
+  Rx<Project> project;
+  Project? exproject;
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +33,19 @@ class ProjectScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Get.back();
+            Get.back(result: project.value);
           },
           icon: SvgPicture.asset('assets/icons/Arrow.svg'),
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Get.to(() => ProjectModifyScreen(
+            onPressed: () async {
+              exproject = await Get.to(() => ProjectModifyScreen(
                     project: project,
                   ));
+              if (exproject != null) {
+                project(exproject);
+              }
             },
             icon: SvgPicture.asset('assets/icons/Edit.svg'),
           ),
@@ -80,83 +85,78 @@ class ProjectScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    project.projectName,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      height: 1.5,
+                  Obx(
+                    () => Text(
+                      project.value.projectName,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        height: 1.5,
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 16,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            '${project.startDate!.substring(0, 4)}.${project.startDate!.substring(5, 7)} ~',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                  Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '${DateFormat("yyyy.MM").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yyyy.MM").format(project.value.endDate!) : ''}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          project.endDate == null
-                              ? Container()
-                              : Text(
-                                  ' ${project.endDate!.substring(0, 4)}.${project.endDate!.substring(5, 7)}',
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                color: Color(0xffefefef),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  project.value.endDate == null ? '진행중' : '9개월',
                                   style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: mainblack.withOpacity(0.6),
                                   ),
-                                ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Color(0xffefefef),
-                            ),
-                            child: Center(
-                              child: Text(
-                                project.endDate == null ? '진행중' : '9개월',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: mainblack.withOpacity(0.6),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            child: SvgPicture.asset(
-                              "assets/icons/Favorite_Active.svg",
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              child: SvgPicture.asset(
+                                "assets/icons/Favorite_Active.svg",
+                              ),
+                              onTap: () {},
                             ),
-                            onTap: () {},
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                            '24',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                            SizedBox(
+                              width: 4,
                             ),
-                          ),
-                        ],
-                      )
-                    ],
+                            Text(
+                              '${project.value.like_count}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 20,
@@ -290,11 +290,13 @@ class ProjectScreen extends StatelessWidget {
                   SizedBox(
                     height: 12,
                   ),
-                  Text(
-                    project.introduction!,
-                    style: TextStyle(
-                      fontSize: 14,
-                      height: 1.5,
+                  Obx(
+                    () => Text(
+                      project.value.introduction!,
+                      style: TextStyle(
+                        fontSize: 14,
+                        height: 1.5,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -310,22 +312,24 @@ class ProjectScreen extends StatelessWidget {
                   SizedBox(
                     height: 12,
                   ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: project.projectTag
-                          .map((tag) => Row(children: [
-                                Tagwidget(
-                                  content: tag.tag,
-                                  fontSize: 14,
-                                ),
-                                project.projectTag.indexOf(tag) !=
-                                        project.projectTag.length - 1
-                                    ? SizedBox(
-                                        width: 8,
-                                      )
-                                    : Container()
-                              ]))
-                          .toList()),
+                  Obx(
+                    () => Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: project.value.projectTag
+                            .map((tag) => Row(children: [
+                                  Tagwidget(
+                                    content: tag.tag,
+                                    fontSize: 14,
+                                  ),
+                                  project.value.projectTag.indexOf(tag) !=
+                                          project.value.projectTag.length - 1
+                                      ? SizedBox(
+                                          width: 8,
+                                        )
+                                      : Container()
+                                ]))
+                            .toList()),
+                  ),
                   SizedBox(
                     height: 24,
                   ),
@@ -340,7 +344,7 @@ class ProjectScreen extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Get.to(() => PostingAddNameScreen(
-                                project_id: project.id,
+                                project_id: project.value.id,
                               ));
                         },
                         child: Text(
@@ -357,26 +361,28 @@ class ProjectScreen extends StatelessWidget {
                   SizedBox(
                     height: 16,
                   ),
-                  Column(
-                      children: project.post != null
-                          ? List.from(project.post!
-                              .map((post) => ProjectPostingWidget(
-                                    post: post,
-                                  ))
-                              .toList()
-                              .reversed)
-                          : [Container()]
-                      //     [
-                      //   ProjectPostingWidget(
-                      //     title: '안녕하세요',
-                      //     preview: '안녕하세요 감사해요 반가워요 다시 만나요',
-                      //   ),
-                      //   ProjectPostingWidget(
-                      //     title: '안녕하세요',
-                      //     preview: '안녕하세요 감사해요 반가워요 다시 만나요',
-                      //   ),
-                      // ],
-                      )
+                  Obx(
+                    () => Column(
+                        children: project.value.post != null
+                            ? List.from(project.value.post!
+                                .map((post) => ProjectPostingWidget(
+                                      post: post,
+                                    ))
+                                .toList()
+                                .reversed)
+                            : [Container()]
+                        //     [
+                        //   ProjectPostingWidget(
+                        //     title: '안녕하세요',
+                        //     preview: '안녕하세요 감사해요 반가워요 다시 만나요',
+                        //   ),
+                        //   ProjectPostingWidget(
+                        //     title: '안녕하세요',
+                        //     preview: '안녕하세요 감사해요 반가워요 다시 만나요',
+                        //   ),
+                        // ],
+                        ),
+                  )
                 ],
               ),
             ),

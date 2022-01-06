@@ -135,7 +135,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                             profileController.projectlist(projectmaplist
                                 .map((project) => Project.fromJson(project))
                                 .map((project) => ProjectWidget(
-                                      project: project,
+                                      project: project.obs,
                                     ))
                                 .toList());
                           });

@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
 class ProjectAddTitleScreen extends StatelessWidget {
-  ProjectAddTitleScreen({Key? key, required this.screenType}) : super(key: key);
+  ProjectAddTitleScreen({Key? key, required this.screenType, this.project})
+      : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
   Screentype screenType;
   ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
   TagController tagController = Get.put(TagController());
+  Project? project;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +25,16 @@ class ProjectAddTitleScreen extends StatelessWidget {
       appBar: AppBarWidget(
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 if (screenType == Screentype.add) {
-                  Get.to(() => ProjectAddIntroScreen());
-                } else {}
+                  Get.to(() => ProjectAddIntroScreen(
+                        screenType: Screentype.add,
+                      ));
+                } else {
+                  project = await updateproject(project!.id);
+                  Get.back(result: project);
+                }
               }
             },
             child: Obx(
