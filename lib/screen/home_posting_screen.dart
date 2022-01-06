@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/screen/question_add_content_screen.dart';
 import 'package:loopus/screen/question_screen.dart';
 import 'package:loopus/widget/home_posting_widget.dart';
@@ -25,45 +26,106 @@ class HomePostingScreen extends StatelessWidget {
           enablePullDown: true,
           enablePullUp: homeController.enablepullup1.value,
           header: ClassicHeader(
+            spacing: 0.0,
+            height: 60,
+            completeDuration: Duration(milliseconds: 600),
             textStyle: TextStyle(color: mainblack),
             refreshingText: '',
             releaseText: "",
             completeText: "",
             idleText: "",
-            releaseIcon: Icon(Icons.refresh_rounded, color: mainblack),
-            completeIcon: Icon(Icons.done_rounded, color: mainblue),
-            idleIcon: Icon(Icons.arrow_downward_rounded, color: mainblack),
+            releaseIcon: Column(
+              children: [
+                Image.asset(
+                  'assets/icons/loading.gif',
+                  scale: 4.5,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '새로운 포스팅 받는 중...',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: mainblue.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
+            completeIcon: Column(
+              children: [
+                Icon(
+                  Icons.check_rounded,
+                  color: mainblue,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '완료!',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: mainblue.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
+            idleIcon: Column(
+              children: [
+                Image.asset(
+                  'assets/icons/loading.png',
+                  scale: 9,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  '당겨주세요',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: mainblue.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
           ),
           footer: ClassicFooter(
-            textStyle: TextStyle(color: mainblack),
+            completeDuration: Duration.zero,
             loadingText: "",
             canLoadingText: "",
             idleText: "",
-            idleIcon: CircularProgressIndicator(
-              color: mainblack,
-              strokeWidth: 1.2,
-            ),
-            canLoadingIcon: CircularProgressIndicator(
-              color: mainblack,
-              strokeWidth: 1.2,
+            idleIcon: Container(),
+            canLoadingIcon: Column(
+              children: [
+                Text(
+                  '또 다른 포스팅 찾는 중...',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: mainblue.withOpacity(0.6),
+                  ),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Image.asset(
+                  'assets/icons/loading.gif',
+                  scale: 4.5,
+                ),
+              ],
             ),
           ),
           onRefresh: homeController.onRefresh1,
           onLoading: homeController.onLoading1,
           child: CustomScrollView(
+            // controller:
+            //     CustomScrollController.to.customScrollController.value,
             physics: BouncingScrollPhysics(),
             key: PageStorageKey("key1"),
             slivers: [
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              ])),
               SliverList(
                   delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -74,6 +136,8 @@ class HomePostingScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(
                         right: 16,
                         left: 16,
+                        bottom: 8,
+                        top: 8,
                       ),
                       child: HomePostingWidget(
                         index: index,

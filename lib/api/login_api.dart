@@ -9,7 +9,6 @@ import 'package:http/http.dart';
 import 'package:loopus/controller/notification_controller.dart';
 
 void loginRequest() async {
-  print(NotificationController.to.getToken());
   LogInController logInController = Get.put(LogInController());
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 

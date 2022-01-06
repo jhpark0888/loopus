@@ -170,13 +170,13 @@ class QuestionScreen extends StatelessWidget {
                 onPressed: () {
                   if (questionController.check_alarm.value) {
                     questionController.check_alarm.value = false;
-                    modalController.showCustomDialog('알림이 취소되었어요', 1);
+                    modalController.showCustomDialog('알림이 취소되었어요', 1000);
                     NotificationController.to.fcmQuestionUnSubscribe(
                         questionController.questionModel2.questions.id
                             .toString());
                   } else {
                     questionController.check_alarm.value = true;
-                    modalController.showCustomDialog('답글이 달리면 알림을 보내드려요', 1);
+                    modalController.showCustomDialog('답글이 달리면 알림을 보내드려요', 1000);
                     print(questionController.questionModel2.questions.id);
                     NotificationController.to.fcmQuestionSubscribe(
                         questionController.questionModel2.questions.id

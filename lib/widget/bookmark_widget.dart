@@ -202,7 +202,7 @@ class BookmarkWidget extends StatelessWidget {
                                       .bookmarkResult.value.postingitems
                                       .removeAt(index);
                                   ModalController.to
-                                      .showCustomDialog("북마크 탭에서 삭제했어요.", 1);
+                                      .showCustomDialog("북마크 탭에서 삭제했어요.", 1000);
                                   post.isMarked.value = 0;
                                 }
                                 bookmarkpost(post.id);

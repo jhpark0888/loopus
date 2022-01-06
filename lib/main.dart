@@ -76,6 +76,7 @@ class MyApp extends StatelessWidget {
             splashFactory: NoSplash.splashFactory,
           ),
         ),
+
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),

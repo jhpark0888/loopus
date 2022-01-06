@@ -52,13 +52,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     pageNumber = 1;
     postloadItem();
-    await Future.delayed(Duration(microseconds: 500));
+    await Future.delayed(Duration.zero);
     refreshController1.refreshCompleted();
   }
 
   void onLoading1() async {
     pageNumber += 1;
-    await Future.delayed(Duration(microseconds: 500));
+    await Future.delayed(Duration.zero);
     //페이지 처리
     postloadItem();
     refreshController1.loadComplete();
@@ -70,13 +70,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     pageNumber = 1;
     loadItem();
-    await Future.delayed(Duration(microseconds: 500));
+    await Future.delayed(Duration.zero);
     refreshController2.refreshCompleted();
   }
 
   void onLoading2() async {
     pageNumber += 1;
-    await Future.delayed(Duration(microseconds: 500));
+    await Future.delayed(Duration.zero);
     //페이지 처리
     loadItem();
     refreshController2.loadComplete();
@@ -88,13 +88,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     pageNumber = 1;
     looploadItem();
-    await Future.delayed(Duration(microseconds: 500));
+    await Future.delayed(Duration.zero);
     refreshController3.refreshCompleted();
   }
 
   void onLoading3() async {
     pageNumber += 1;
-    await Future.delayed(Duration(microseconds: 500));
+    await Future.delayed(Duration.zero);
     //페이지 처리
     looploadItem();
     refreshController3.loadComplete();

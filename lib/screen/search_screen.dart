@@ -9,7 +9,6 @@ import 'package:loopus/widget/tag_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 class SearchScreen extends StatelessWidget {
-  // const SearchScreen({Key? key}) : super(key: key);
   SearchController _searchController = Get.put(SearchController());
   ModalController _modalController = Get.put(ModalController());
 
@@ -221,8 +220,8 @@ class SearchScreen extends StatelessWidget {
                                   GestureDetector(
                                     onTap: () {
                                       _modalController.showCustomDialog(
-                                        '이 주의 활동 수, 포스팅 수, 답변 수 등을 점수로 환산해 매긴 순위입니다',
-                                        2,
+                                        '이 주의 활동 수, 포스팅 수, 답변 수 등을 점수로 환산해 매긴 순위입니다 (매 주 금요일마다 갱신됩니다)',
+                                        1500,
                                       );
                                     },
                                     child: Text(
