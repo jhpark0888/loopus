@@ -64,6 +64,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         body: NestedScrollView(
+          controller: CustomScrollController.to.customScrollController.value,
           headerSliverBuilder: (context, value) {
             return [
               //홈 검색 탭

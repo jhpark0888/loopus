@@ -74,28 +74,27 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Obx(
                             () => ClipOval(
-                                child:
-                                    profileController.user.value.profileImage !=
-                                            null
-                                        ? CachedNetworkImage(
-                                            height: 92,
-                                            width: 92,
-                                            imageUrl: profileController
-                                                .user.value.profileImage!,
-                                            placeholder: (context, url) =>
-                                                CircleAvatar(
-                                              child: Center(
-                                                child: SvgPicture.asset(
-                                                    'assets/illustrations/loading.svg'),
-                                              ),
-                                            ),
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image.asset(
-                                            "assets/illustrations/default_profile.png",
-                                            height: 92,
-                                            width: 92,
-                                          )),
+                                child: profileController
+                                            .user.value.profileImage !=
+                                        null
+                                    ? CachedNetworkImage(
+                                        height: 92,
+                                        width: 92,
+                                        imageUrl: profileController
+                                            .user.value.profileImage!,
+                                        placeholder: (context, url) =>
+                                            CircleAvatar(
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        ),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        "assets/illustrations/default_profile.png",
+                                        height: 92,
+                                        width: 92,
+                                      )),
                           ),
                           Positioned.fill(
                             child: Align(
