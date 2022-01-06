@@ -12,6 +12,7 @@ import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class ProjectPostingWidget extends StatelessWidget {
   ProjectPostingWidget({
@@ -83,7 +84,7 @@ class ProjectPostingWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      '${post.date.year}.${post.date.month}.${post.date.day}',
+                      '${DateFormat('yy.MM.dd').format(post.date)}',
                       style: kBody2Style.copyWith(
                         color: mainblack.withOpacity(
                           0.6,

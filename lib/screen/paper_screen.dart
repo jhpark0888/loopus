@@ -31,7 +31,7 @@ class PaperScreen extends StatelessWidget {
             GestureDetector(
                 onTap: () {
                   _modalController.showCustomDialog(
-                      '관심 태그와 학과를 기반으로 공고를 추천해드리고 있어요', 2);
+                      '관심 태그와 학과를 기반으로 공고를 추천해드리고 있어요', 1400);
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(

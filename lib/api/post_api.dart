@@ -113,7 +113,7 @@ Future<void> postingAddRequest(int project_id) async {
     Get.back();
     Get.back();
     Get.back();
-    Get.to(() => ProjectScreen(project: project));
+    Get.to(() => ProjectScreen(project: project.obs));
   } else if (response.statusCode == 400) {
     print("lose");
   } else {

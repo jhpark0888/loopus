@@ -52,7 +52,7 @@ class SearchTagDetailScreen extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {
                                   _modalController.showCustomDialog(
-                                      '관심도는 어찌어찌 된 것이요.', 1);
+                                      '관심도는 어찌어찌 된 것이요.', 1400);
                                 },
                                 child: SvgPicture.asset(
                                   'assets/icons/Question.svg',

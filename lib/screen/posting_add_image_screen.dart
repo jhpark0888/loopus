@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -59,12 +60,9 @@ class PostingAddImageScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _MyAppSpace(),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: contentlist),
-                  )
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: contentlist)
                 ],
               ),
             ],
@@ -125,23 +123,32 @@ class _MyAppSpace extends StatelessWidget {
     );
   }
 
-  Widget getImage(controller) {
+  Widget getImage(PostingAddController controller) {
     return Container(
       width: Get.width,
       height: Get.width * 2 / 3,
       child: Opacity(
         opacity: 0.25,
-        child: Obx(
-          () => controller.thumbnail.value.path == ""
-              ? CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl:
-                      'https://cdn.pixabay.com/photo/2021/12/20/15/01/christmas-tree-6883263_1280.jpg')
-              : Image.file(
-                  controller.thumbnail.value,
-                  fit: BoxFit.cover,
-                ),
-        ),
+        child: Obx(() {
+          if (controller.thumbnail.value.path != "") {
+            return Image.file(
+              controller.thumbnail.value,
+              fit: BoxFit.cover,
+            );
+          } else if (controller.editorController.imageindex
+              .whereType<File>()
+              .isNotEmpty) {
+            return Image.file(
+              controller.editorController.imageindex.whereType<File>().first,
+              fit: BoxFit.cover,
+            );
+          } else {
+            return CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl:
+                    'https://cdn.pixabay.com/photo/2021/12/20/15/01/christmas-tree-6883263_1280.jpg');
+          }
+        }),
       ),
     );
   }

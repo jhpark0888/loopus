@@ -2,15 +2,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
 class ProjectAddIntroScreen extends StatelessWidget {
-  ProjectAddIntroScreen({Key? key}) : super(key: key);
+  ProjectAddIntroScreen({Key? key, required this.screenType, this.project})
+      : super(key: key);
 
   ProjectAddController projectaddcontroller = Get.find();
+  Screentype screenType;
+  Project? project;
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +23,18 @@ class ProjectAddIntroScreen extends StatelessWidget {
       appBar: AppBarWidget(
         actions: [
           TextButton(
-            onPressed: () {
-              Get.to(() => ProjectAddPeriodScreen());
+            onPressed: () async {
+              if (screenType == Screentype.add) {
+                Get.to(() => ProjectAddPeriodScreen(
+                      screenType: Screentype.add,
+                    ));
+              } else {
+                project = await updateproject(project!.id);
+                Get.back(result: project);
+              }
             },
             child: Text(
-              '다음',
+              screenType == Screentype.add ? '다음' : '저장',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

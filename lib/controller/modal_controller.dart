@@ -95,7 +95,7 @@ class ModalController extends GetxController {
       transitionCurve: Curves.easeInOut,
       transitionDuration: Duration(milliseconds: 300),
     );
-    Future.delayed(Duration(seconds: duration), () {
+    Future.delayed(Duration(milliseconds: duration), () {
       Get.back();
     });
   }

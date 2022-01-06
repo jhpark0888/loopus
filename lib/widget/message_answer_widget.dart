@@ -36,7 +36,7 @@ class MessageAnswerWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
-        vertical: 8,
+        vertical: 12,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +93,7 @@ class MessageAnswerWidget extends StatelessWidget {
                                       .map((project) =>
                                           Project.fromJson(project))
                                       .map((project) => ProjectWidget(
-                                            project: project,
+                                            project: project.obs,
                                           ))
                                       .toList());
                                 });

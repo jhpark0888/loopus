@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>840100932483-3u6t2jni3k6qmn4u49v3tg6cmtp97f1l.apps.googleusercontent.com</string>
+	<string>840100932483-36nr8c2to55qnmc1fb5iifh4qeuf96or.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.840100932483-3u6t2jni3k6qmn4u49v3tg6cmtp97f1l</string>
+	<string>com.googleusercontent.apps.840100932483-36nr8c2to55qnmc1fb5iifh4qeuf96or</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBnyY0H6mpqq3yLUWD7hJ-EsSfUN7pbv3g</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.loopusfrontend</string>
+	<string>com.loopus.loopusfrontend</string>
 	<key>PROJECT_ID</key>
 	<string>loopus-bb12f</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:840100932483:ios:747558d7710a94b5a0a4b6</string>
+	<string>1:840100932483:ios:d7daa39ecd1a1352a0a4b6</string>
+	<key>DATABASE_URL</key>
+	<string>https://loopus-bb12f-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

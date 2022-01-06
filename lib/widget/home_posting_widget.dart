@@ -181,7 +181,7 @@ class HomePostingWidget extends StatelessWidget {
                                                             project))
                                                     .map((project) =>
                                                         ProjectWidget(
-                                                          project: project,
+                                                          project: project.obs,
                                                         ))
                                                     .toList());
                                           });
@@ -276,12 +276,12 @@ class HomePostingWidget extends StatelessWidget {
                                               item.isMarked.value = 1;
                                               ModalController.to
                                                   .showCustomDialog(
-                                                      '북마크 탭에 저장했어요', 1);
+                                                      '북마크 탭에 저장했어요', 1000);
                                             } else {
                                               item.isMarked.value = 0;
                                               ModalController.to
                                                   .showCustomDialog(
-                                                      '북마크 탭에서 삭제했어요', 1);
+                                                      '북마크 탭에서 삭제했어요', 1000);
                                             }
                                             bookmarkpost(item.id);
                                           },
@@ -307,9 +307,6 @@ class HomePostingWidget extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          SizedBox(
-            height: 16,
           ),
         ],
       ),

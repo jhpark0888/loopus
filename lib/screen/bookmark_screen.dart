@@ -43,9 +43,63 @@ class BookmarkScreen extends StatelessWidget {
               releaseText: "",
               completeText: "",
               idleText: "",
-              releaseIcon: Icon(Icons.refresh_rounded, color: mainblack),
-              completeIcon: Icon(Icons.done_rounded, color: mainblue),
-              idleIcon: Icon(Icons.arrow_downward_rounded, color: mainblack),
+              releaseIcon: Column(
+                children: [
+                  Image.asset(
+                    'assets/icons/loading.gif',
+                    scale: 4.5,
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    '북마크 새로고침 중...',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: mainblue.withOpacity(0.6),
+                    ),
+                  ),
+                ],
+              ),
+              completeIcon: Column(
+                children: [
+                  Icon(
+                    Icons.check_rounded,
+                    color: mainblue,
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    '완료!',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: mainblue.withOpacity(0.6),
+                    ),
+                  ),
+                ],
+              ),
+              idleIcon: Column(
+                children: [
+                  Image.asset(
+                    'assets/icons/loading.png',
+                    scale: 9,
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    '당겨주세요',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: mainblue.withOpacity(0.6),
+                    ),
+                  ),
+                ],
+              ),
             ),
             footer: ClassicFooter(
               textStyle: TextStyle(color: mainblack),

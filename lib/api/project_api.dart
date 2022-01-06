@@ -23,13 +23,15 @@ Future addproject() async {
     'Content-Type': 'multipart/form-data',
   };
 
+  request.headers.addAll(headers);
+
   if (projectAddController.projectimage.value!.path != '') {
     var multipartFile = await http.MultipartFile.fromPath(
         'thumbnail', projectAddController.projectimage.value!.path);
     request.files.add(multipartFile);
   }
 
-  request.headers.addAll(headers);
+  // DateTime startdate = DateTime(int.parse(projectAddController.startyearcontroller.text),)
 
   request.fields['project_name'] =
       projectAddController.projectnamecontroller.text;
@@ -91,13 +93,13 @@ Future<Project> getproject(int project_id) async {
   }
 }
 
-Future updateproject(Project project) async {
+Future updateproject(int project_id) async {
   ProjectAddController projectAddController = Get.find();
   TagController tagController = Get.find();
 
   String? token = await const FlutterSecureStorage().read(key: "token");
   Uri uri = Uri.parse(
-      'http://3.35.253.151:8000/project_api/update_project/${project.id}');
+      'http://3.35.253.151:8000/project_api/update_project/${project_id}');
 
   var request = new http.MultipartRequest('POST', uri);
 
@@ -106,22 +108,17 @@ Future updateproject(Project project) async {
     'Content-Type': 'multipart/form-data',
   };
 
+  request.headers.addAll(headers);
+
   if (projectAddController.projectimage.value!.path != '') {
     var multipartFile = await http.MultipartFile.fromPath(
         'thumbnail', projectAddController.projectimage.value!.path);
     request.files.add(multipartFile);
   }
 
-  request.headers.addAll(headers);
-
   request.fields['project_name'] =
-      projectAddController.projectnamecontroller.text.isEmpty
-          ? project.projectName
-          : projectAddController.projectnamecontroller.text;
-  request.fields['introduction'] =
-      projectAddController.introcontroller.text.isEmpty
-          ? project.projectName
-          : projectAddController.introcontroller.text;
+      projectAddController.projectnamecontroller.text;
+  request.fields['introduction'] = projectAddController.introcontroller.text;
   request.fields['start_date'] =
       '${projectAddController.startyearcontroller.text}-${projectAddController.startmonthcontroller.text}-${projectAddController.startdaycontroller.text}';
   request.fields['end_date'] = projectAddController.isongoing.value
@@ -141,14 +138,11 @@ Future updateproject(Project project) async {
   // storage.write(key: 'token', value: json.decode(response.body)['token']);
   // print(storage.read(key: 'token'));
   print(response.statusCode);
-  if (response.statusCode == 201) {
-    print(response.statusCode);
-    Get.back();
-    Get.back();
-    Get.back();
-    Get.back();
-    Get.back();
-    Get.back();
-    AppController.to.changePageIndex(4);
+  if (response.statusCode == 200) {
+    var responsemap = json.decode(responsebody);
+    Project project = Project.fromJson(responsemap);
+    return project;
+  } else {
+    return Future.error(response.statusCode);
   }
 }

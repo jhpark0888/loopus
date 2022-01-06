@@ -98,28 +98,30 @@ class SearchTypingScreen extends StatelessWidget {
                       //   searchController.searchprofilelist.clear();
                       //   searchController.searchquestionlist.clear();
                       // }
-                      if (searchController.pagenumber1 == 1) {
-                        searchController.searchpostinglist.clear();
-                      } else if (searchController.pagenumber2 == 1) {
-                        searchController.searchprofilelist.clear();
-                      } else if (searchController.pagenumber3 == 1) {
-                        searchController.searchquestionlist.clear();
-                      }
-                      if (searchController.tabController.index == 0) {
-                        await searchController.search(
-                            searchController.tabController.index,
-                            value,
-                            searchController.pagenumber1);
-                      } else if (searchController.tabController.index == 1) {
-                        await searchController.search(
-                            searchController.tabController.index,
-                            value,
-                            searchController.pagenumber2);
-                      } else if (searchController.tabController.index == 2) {
-                        await searchController.search(
-                            searchController.tabController.index,
-                            value,
-                            searchController.pagenumber3);
+                      if (value.trim() != '') {
+                        if (searchController.pagenumber1 == 1) {
+                          searchController.searchpostinglist.clear();
+                        } else if (searchController.pagenumber2 == 1) {
+                          searchController.searchprofilelist.clear();
+                        } else if (searchController.pagenumber3 == 1) {
+                          searchController.searchquestionlist.clear();
+                        }
+                        if (searchController.tabController.index == 0) {
+                          await searchController.search(
+                              searchController.tabController.index,
+                              value,
+                              searchController.pagenumber1);
+                        } else if (searchController.tabController.index == 1) {
+                          await searchController.search(
+                              searchController.tabController.index,
+                              value,
+                              searchController.pagenumber2);
+                        } else if (searchController.tabController.index == 2) {
+                          await searchController.search(
+                              searchController.tabController.index,
+                              value,
+                              searchController.pagenumber3);
+                        }
                       }
 
                       print(value);
@@ -260,16 +262,18 @@ class SearchTypingScreen extends StatelessWidget {
                       child:
                           Obx(() => searchController.isnosearch1.value == false
                               ? Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
+                                  padding: const EdgeInsets.only(top: 8.0),
                                   child: Column(
                                     children: searchController
                                         .searchpostinglist.value,
                                   ))
-                              : Container(
-                                  height: 80,
+                              : Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 32,
+                                  ),
                                   child: Center(
                                       child: Text(
-                                    "검색 결과가 존재하지 않습니다.",
+                                    "검색어와 일치하는 포스팅이 아직 없어요",
                                     style: kSubTitle2Style,
                                   )))),
                     ),
@@ -277,16 +281,18 @@ class SearchTypingScreen extends StatelessWidget {
                       child:
                           Obx(() => searchController.isnosearch2.value == false
                               ? Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
+                                  padding: const EdgeInsets.only(top: 8.0),
                                   child: Column(
                                     children: searchController
                                         .searchprofilelist.value,
                                   ))
-                              : Container(
-                                  height: 80,
+                              : Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 32,
+                                  ),
                                   child: Center(
                                       child: Text(
-                                    "검색 결과가 존재하지 않습니다.",
+                                    "검색어와 일치하는 학생이 아직 없어요",
                                     style: kSubTitle2Style,
                                   )))),
                     ),
@@ -294,17 +300,19 @@ class SearchTypingScreen extends StatelessWidget {
                       child:
                           Obx(() => searchController.isnosearch3.value == false
                               ? Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
+                                  padding: const EdgeInsets.only(top: 8.0),
                                   child: Column(
                                     children: searchController
                                         .searchquestionlist.value,
                                   ),
                                 )
-                              : Container(
-                                  height: 80,
+                              : Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 32,
+                                  ),
                                   child: Center(
                                       child: Text(
-                                    "검색 결과가 존재하지 않습니다.",
+                                    "검색어와 일치하는 질문이 아직 없어요",
                                     style: kSubTitle2Style,
                                   )))),
                     ),

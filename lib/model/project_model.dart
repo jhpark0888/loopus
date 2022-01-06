@@ -21,8 +21,8 @@ class Project {
   String projectName;
   String? thumbnail;
   String? introduction;
-  String? startDate;
-  String? endDate;
+  DateTime? startDate;
+  DateTime? endDate;
   List<Post>? post;
   List<Tag> projectTag;
   List<dynamic>? looper;
@@ -34,8 +34,11 @@ class Project {
         projectName: json["project_name"],
         thumbnail: json["pj_thumbnail"],
         introduction: json["introduction"],
-        startDate: json["start_date"],
-        endDate: json["end_date"],
+        startDate: json["start_date"] != null
+            ? DateTime.parse(json["start_date"])
+            : null,
+        endDate:
+            json["end_date"] != null ? DateTime.parse(json["end_date"]) : null,
         post: json["post"] != null
             ? List<Post>.from(json["post"].map((x) => Post.fromJson(x)))
             : null,

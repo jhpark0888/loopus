@@ -21,6 +21,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   String? temptoken = await FlutterSecureStorage().read(key: 'token');
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
             splashFactory: NoSplash.splashFactory,
           ),
         ),
+
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
