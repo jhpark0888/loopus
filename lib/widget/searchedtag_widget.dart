@@ -2,10 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/search_tag_detail_screen.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
@@ -29,21 +31,23 @@ class SearchTagWidget extends StatelessWidget {
     return id != -1
         ? 0 == isSearch
             ? ListTile(
-                onTap: () {
+                onTap: () async {
                   if (tagController.selectedtaglist.length < 3) {
                     if (id == 0) {
-                      // projectMakeController.postmaketag();
-                      tagController.selectedtaglist.add(SelectedTagWidget(
-                          id: id, text: tagController.tagsearch.text));
-                      tagController.tagsearch.clear();
-                      tagController.gettagsearch();
+                      SearchTag? searchTag = await postmaketag();
+                      if (searchTag != null) {
+                        tagController.selectedtaglist.add(SelectedTagWidget(
+                            id: searchTag.id, text: searchTag.tag));
+                        tagController.tagsearch.clear();
+                        gettagsearch();
+                      }
                     } else {
                       tagController.selectedtaglist.add(SelectedTagWidget(
                         id: id,
                         text: tag,
                       ));
                       tagController.tagsearch.clear();
-                      tagController.gettagsearch();
+                      gettagsearch();
                     }
                   } else {
                     Get.dialog(Dialog(
