@@ -7,6 +7,7 @@ import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/project_widget.dart';
@@ -20,7 +21,9 @@ class AppController extends GetxService {
 
   Future<void> changePageIndex(int index) async {
     if (index == 0) {
-      HomeController.to.onRefresh1();
+      if (currentIndex.value == 0) {
+        CustomScrollController.to.scrollToTop();
+      }
     }
     if (index == 3) {
       BookmarkController.to.onRefresh1();

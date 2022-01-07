@@ -19,7 +19,6 @@ class HomePostingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Obx(
         () => SmartRefresher(
           controller: homeController.refreshController1,
@@ -34,6 +33,25 @@ class HomePostingScreen extends StatelessWidget {
             releaseText: "",
             completeText: "",
             idleText: "",
+            refreshingIcon: Column(
+              children: [
+                Image.asset(
+                  'assets/icons/loading.gif',
+                  scale: 4.5,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '새로운 포스팅 받는 중...',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: mainblue.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
             releaseIcon: Column(
               children: [
                 Image.asset(
@@ -98,24 +116,13 @@ class HomePostingScreen extends StatelessWidget {
             canLoadingText: "",
             idleText: "",
             idleIcon: Container(),
-            canLoadingIcon: Column(
-              children: [
-                Text(
-                  '또 다른 포스팅 찾는 중...',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
-                  ),
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Image.asset(
-                  'assets/icons/loading.gif',
-                  scale: 4.5,
-                ),
-              ],
+            loadingIcon: Image.asset(
+              'assets/icons/loading.gif',
+              scale: 4.5,
+            ),
+            canLoadingIcon: Image.asset(
+              'assets/icons/loading.gif',
+              scale: 4.5,
             ),
           ),
           onRefresh: homeController.onRefresh1,

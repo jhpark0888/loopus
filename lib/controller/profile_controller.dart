@@ -24,7 +24,7 @@ class ProfileController extends GetxController {
           realName: '',
           profileTag: [],
           department: '',
-          isuser: -1)
+          isuser: 1)
       .obs;
   Rx<File> profileimage = File('').obs;
 

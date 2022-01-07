@@ -74,7 +74,10 @@ class SearchScreen extends StatelessWidget {
                 autocorrect: false,
                 controller: _searchController.searchtextcontroller,
                 onTap: () {
-                  print(_searchController.tabController.index);
+                  print(
+                      '_searchController.tabController.index : ${_searchController.tabController.index}');
+                  print(
+                      '_searchController.isFocused.value : ${_searchController.isFocused.value}');
                   _searchController.isnosearch1.value = false;
                   _searchController.isnosearch2.value = false;
                   _searchController.isnosearch3.value = false;

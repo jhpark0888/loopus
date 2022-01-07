@@ -17,7 +17,6 @@ class QuestionAnswerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Obx(
         () => SmartRefresher(
           controller: homeController.refreshController2,
@@ -29,6 +28,25 @@ class QuestionAnswerScreen extends StatelessWidget {
             releaseText: "",
             completeText: "",
             idleText: "",
+            refreshingIcon: Column(
+              children: [
+                Image.asset(
+                  'assets/icons/loading.gif',
+                  scale: 4.5,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '새로운 질문 받는 중...',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: mainblue.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
             releaseIcon: Column(
               children: [
                 Image.asset(

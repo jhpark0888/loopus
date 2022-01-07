@@ -51,16 +51,14 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     postingResult(PostingModel(postingitems: <Post>[].obs));
 
     pageNumber = 1;
-    postloadItem();
-    await Future.delayed(Duration.zero);
+    await postloadItem();
     refreshController1.refreshCompleted();
   }
 
   void onLoading1() async {
     pageNumber += 1;
-    await Future.delayed(Duration.zero);
     //페이지 처리
-    postloadItem();
+    await postloadItem();
     refreshController1.loadComplete();
   }
 
@@ -69,8 +67,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     questionResult(QuestionModel(questionitems: []));
 
     pageNumber = 1;
-    loadItem();
-    await Future.delayed(Duration.zero);
+    await loadItem();
     refreshController2.refreshCompleted();
   }
 
@@ -100,7 +97,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     refreshController3.loadComplete();
   }
 
-  void loadItem() async {
+  Future<void> loadItem() async {
     if (selectgroup == "모든 질문") {
       QuestionModel questionModel = await questionlist(pageNumber, "any");
       QuestionModel questionModel2 = await questionlist(pageNumber + 1, "any");
@@ -142,7 +139,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  void postloadItem() async {
+  Future<void> postloadItem() async {
     PostingModel postingModel = await mainpost(pageNumber);
     PostingModel postingModel2 = await mainpost(pageNumber + 1);
 

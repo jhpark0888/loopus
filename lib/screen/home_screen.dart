@@ -73,6 +73,8 @@ class HomeScreen extends StatelessWidget {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () {
+                    print(
+                        '_searchController.isFocused.value : ${SearchController.to.isFocused.value}');
                     Get.toNamed('/search');
                     _searchController.searchpostinglist.clear();
                     _searchController.searchprofilelist.clear();
@@ -430,37 +432,23 @@ class HomeScreen extends StatelessWidget {
               physics: PageScrollPhysics(),
               controller: homecontroller.hometabcontroller,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: kBottomNavigationBarHeight,
-                  ),
-                  child: HomePostingScreen(),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
-                  child: QuestionAnswerScreen(),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
-                  child: homecontroller.isempty.value == false
-                      ? LoopScreen()
-                      : Container(
-                          color: Colors.white,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: Text(
-                                  "아직 루프를 맺은 사람이 없어요",
-                                  style: kSubTitle2Style,
-                                ),
+                HomePostingScreen(),
+                QuestionAnswerScreen(),
+                homecontroller.isempty.value == false
+                    ? LoopScreen()
+                    : Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Text(
+                                "아직 루프를 맺은 사람이 없어요",
+                                style: kSubTitle2Style,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                ),
+                      ),
               ]),
         ),
       ),

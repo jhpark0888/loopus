@@ -10,24 +10,36 @@ import 'package:loopus/screen/profile_screen.dart';
 import 'package:loopus/screen/search_screen.dart';
 
 class App extends GetView<AppController> {
+  static List<Widget> _screens = [
+    HomeScreen(),
+    SearchScreen(),
+    PaperScreen(),
+    BookmarkScreen(),
+    ProfileScreen(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
-      body: Obx(() {
-        switch (RouteName.values[controller.currentIndex.value]) {
-          case RouteName.Home:
-            return HomeScreen();
-          case RouteName.Search:
-            return SearchScreen();
-          case RouteName.Paper:
-            return PaperScreen();
-          case RouteName.Bookmark:
-            return BookmarkScreen();
-          case RouteName.Profile:
-            return ProfileScreen();
-        }
-      }),
+      extendBody: false,
+      body: Obx(
+        () => IndexedStack(
+          index: controller.currentIndex.value,
+          children: _screens,
+        ),
+        // switch (RouteName.values[controller.currentIndex.value]) {
+        //   case RouteName.Home:
+        //     return HomeScreen();
+        //   case RouteName.Search:
+        //     return SearchScreen();
+        //   case RouteName.Paper:
+        //     return PaperScreen();
+        //   case RouteName.Bookmark:
+        //     return BookmarkScreen();
+        //   case RouteName.Profile:
+        //     return ProfileScreen();
+        // }
+      ),
       bottomNavigationBar: Obx(
         () => Container(
           decoration: BoxDecoration(

@@ -42,6 +42,8 @@ class SearchTypingScreen extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () {
+                  print(
+                      '_searchController.isFocused.value : ${SearchController.to.isFocused.value}');
                   searchController.focusNode.unfocus();
                   Get.back();
                   searchController.pagenumber1 = 1;
@@ -127,7 +129,6 @@ class SearchTypingScreen extends StatelessWidget {
                       print(value);
                       // searchController.searchtextcontroller.clear();
                     },
-                    focusNode: searchController.focusNode,
                     style: TextStyle(color: mainblack, fontSize: 14),
                     cursorColor: Colors.grey,
                     cursorWidth: 1.5,
