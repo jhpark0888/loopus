@@ -95,9 +95,15 @@ class ProjectPostingWidget extends StatelessWidget {
                       children: [
                         Obx(() => InkWell(
                             onTap: () {
-                              post.isLiked.value == 0
-                                  ? post.isLiked.value = 1
-                                  : post.isLiked.value = 0;
+                              if (post.isLiked.value == 0) {
+                                likepost(post.id);
+                                post.likeCount += 1;
+                                post.isLiked.value = 1;
+                              } else {
+                                likepost(post.id);
+                                post.likeCount -= 1;
+                                post.isLiked.value = 0;
+                              }
                             },
                             child: post.isLiked.value == 0
                                 ? SvgPicture.asset(
@@ -107,18 +113,24 @@ class ProjectPostingWidget extends StatelessWidget {
                         SizedBox(
                           width: 4,
                         ),
-                        Text(
-                          post.likeCount.toString(),
-                          style: kButtonStyle,
+                        Obx(
+                          () => Text(
+                            post.likeCount.toString(),
+                            style: kButtonStyle,
+                          ),
                         ),
                         SizedBox(
                           width: 16,
                         ),
                         Obx(() => InkWell(
                             onTap: () {
-                              post.isMarked.value == 0
-                                  ? post.isMarked.value = 1
-                                  : post.isMarked.value = 0;
+                              if (post.isMarked.value == 0) {
+                                bookmarkpost(post.id);
+                                post.isMarked(1);
+                              } else {
+                                bookmarkpost(post.id);
+                                post.isMarked(0);
+                              }
                             },
                             child: post.isMarked.value == 0
                                 ? SvgPicture.asset(
