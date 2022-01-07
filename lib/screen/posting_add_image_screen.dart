@@ -40,7 +40,7 @@ class PostingAddImageScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () async {
-                await postingAddRequest(project_id);
+                await addposting(project_id);
               },
               child: Text(
                 '올리기',

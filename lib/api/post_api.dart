@@ -17,7 +17,7 @@ import 'package:loopus/model/question_model.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
-Future<void> postingAddRequest(int project_id) async {
+Future<void> addposting(int project_id) async {
   PostingAddController postingAddController = Get.find();
   EditorController editorController = Get.find();
   String? token = await FlutterSecureStorage().read(key: 'token');

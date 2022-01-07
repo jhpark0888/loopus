@@ -76,19 +76,9 @@ class SearchTagDetailScreen extends StatelessWidget {
                             ),
                             child: TabBar(
                               controller: searchController.tagtabController,
-                              labelStyle: TextStyle(
-                                color: mainblack,
-                                fontSize: 14,
-                                fontFamily: 'Nanum',
-                                fontWeight: FontWeight.bold,
-                              ),
+                              labelStyle: kButtonStyle,
                               labelColor: mainblack,
-                              unselectedLabelStyle: TextStyle(
-                                color: Colors.yellow,
-                                fontSize: 14,
-                                fontFamily: 'Nanum',
-                                fontWeight: FontWeight.normal,
-                              ),
+                              unselectedLabelStyle: kBody1Style,
                               unselectedLabelColor: mainblack.withOpacity(0.6),
                               indicator: UnderlineIndicator(
                                 strokeCap: StrokeCap.round,

@@ -196,17 +196,17 @@ class SearchController extends GetxController
       print(searchlist);
       print(searchquestionlist.value);
       print(searchprofilelist.value);
-      if (tab_index == 0 && searchlist.isEmpty == false) {
+      if (tab_index == 0 && searchlist.isNotEmpty) {
         if (searchlist[0]["id"] == searchpostinglist.value[0].id) {
           return;
         }
       }
-      if (tab_index == 1 && searchlist.isEmpty == false) {
+      if (tab_index == 1 && searchlist.isNotEmpty) {
         if (searchlist[0]["user"] == searchprofilelist.value[0].id) {
           return;
         }
       }
-      if (tab_index == 2 && searchlist.isEmpty == false) {
+      if (tab_index == 2 && searchlist.isNotEmpty) {
         if (searchlist[0]["id"] == searchquestionlist.value[0].id) {
           return;
         }
