@@ -49,7 +49,6 @@ class HomePostingWidget extends StatelessWidget {
             isuser: -1);
 
         Get.to(() => PostingScreen(post: post, user: user));
-        print("click posting");
       },
       child: Column(
         children: [
@@ -162,6 +161,8 @@ class HomePostingWidget extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       InkWell(
                                         onTap: () async {
@@ -233,9 +234,9 @@ class HomePostingWidget extends StatelessWidget {
                                       Text(
                                         "${item.department}",
                                         style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal,
-                                            color: mainblack),
+                                          fontSize: 14,
+                                          color: mainblack,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -271,7 +272,7 @@ class HomePostingWidget extends StatelessWidget {
                                           width: 16,
                                         ),
                                         InkWell(
-                                          onTap: () {
+                                          onTap: () async {
                                             if (item.isMarked.value == 0) {
                                               item.isMarked.value = 1;
                                               ModalController.to
@@ -283,9 +284,9 @@ class HomePostingWidget extends StatelessWidget {
                                                   .showCustomDialog(
                                                       '북마크 탭에서 삭제했어요', 1000);
                                             }
-                                            bookmarkpost(item.id);
+                                            await bookmarkpost(item.id);
                                           },
-                                          child: item.isMarked.value == 0
+                                          child: (item.isMarked.value == 0)
                                               ? SvgPicture.asset(
                                                   "assets/icons/Mark_Default.svg",
                                                   color: mainblack,

@@ -143,14 +143,14 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            height: 8,
+                            height: 4,
                           ),
                           Text(
                             '산업경영공학과',
                             style: kBody1Style,
                           ),
                           SizedBox(
-                            height: 16,
+                            height: 12,
                           ),
                           Obx(
                             () => Row(
@@ -179,7 +179,7 @@ class ProfileScreen extends StatelessWidget {
                                         .toList()),
                           ),
                           SizedBox(
-                            height: 32,
+                            height: 20,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -257,7 +257,7 @@ class ProfileScreen extends StatelessWidget {
                             ],
                           ),
                           SizedBox(
-                            height: 24,
+                            height: 16,
                           ),
                         ],
                       ),
@@ -276,8 +276,8 @@ class ProfileScreen extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () {},
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 16.0,
+                              padding: EdgeInsets.symmetric(
+                                vertical: 12.0,
                               ),
                               child: Column(
                                 children: const [
@@ -304,7 +304,7 @@ class ProfileScreen extends StatelessWidget {
                             },
                             child: Padding(
                               padding:
-                                  const EdgeInsets.symmetric(vertical: 16.0),
+                                  const EdgeInsets.symmetric(vertical: 12.0),
                               child: Column(
                                 children: const [
                                   Text(
@@ -332,50 +332,59 @@ class ProfileScreen extends StatelessWidget {
                       color: Color(0xfff2f3f5),
                     ),
                   ),
-                  SliverAppBar(
-                    automaticallyImplyLeading: false,
-                    toolbarHeight: 43,
-                    elevation: 0,
-                    pinned: true,
-                    flexibleSpace: Theme(
-                      data: ThemeData().copyWith(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                      ),
-                      child: TabBar(
-                        labelStyle: TextStyle(
-                          color: mainblack,
-                          fontSize: 14,
-                          fontFamily: 'Nanum',
-                          fontWeight: FontWeight.bold,
-                        ),
-                        labelColor: mainblack,
-                        unselectedLabelStyle: TextStyle(
-                          color: Colors.yellow,
-                          fontSize: 14,
-                          fontFamily: 'Nanum',
-                          fontWeight: FontWeight.normal,
-                        ),
-                        unselectedLabelColor: mainblack.withOpacity(0.6),
-                        indicator: UnderlineIndicator(
-                          strokeCap: StrokeCap.round,
-                          borderSide: BorderSide(width: 2),
-                        ),
-                        indicatorColor: mainblack,
-                        tabs: [
-                          Tab(
-                            height: 40,
-                            child: Text(
-                              "활동",
-                            ),
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                    sliver: SliverSafeArea(
+                      top: false,
+                      sliver: SliverAppBar(
+                        expandedHeight: 43,
+                        toolbarHeight: 43,
+                        automaticallyImplyLeading: false,
+                        elevation: 0,
+                        pinned: true,
+                        floating: false,
+                        flexibleSpace: Theme(
+                          data: ThemeData().copyWith(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                           ),
-                          Tab(
-                            height: 40,
-                            child: Text(
-                              "질문과 답변",
+                          child: TabBar(
+                            labelStyle: TextStyle(
+                              color: mainblack,
+                              fontSize: 14,
+                              fontFamily: 'Nanum',
+                              fontWeight: FontWeight.bold,
                             ),
-                          )
-                        ],
+                            labelColor: mainblack,
+                            unselectedLabelStyle: TextStyle(
+                              color: Colors.yellow,
+                              fontSize: 14,
+                              fontFamily: 'Nanum',
+                              fontWeight: FontWeight.normal,
+                            ),
+                            unselectedLabelColor: mainblack.withOpacity(0.6),
+                            indicator: UnderlineIndicator(
+                              strokeCap: StrokeCap.round,
+                              borderSide: BorderSide(width: 2),
+                            ),
+                            indicatorColor: mainblack,
+                            tabs: [
+                              Tab(
+                                height: 40,
+                                child: Text(
+                                  "활동",
+                                ),
+                              ),
+                              Tab(
+                                height: 40,
+                                child: Text(
+                                  "질문과 답변",
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -402,7 +411,7 @@ class ProfileScreen extends StatelessWidget {
                                       profileController.user.value.isuser == 1
                                           ? Text(
                                               '추가하기',
-                                              style: kButtonStyle.copyWith(
+                                              style: kSubTitle2Style.copyWith(
                                                   color: mainblue),
                                             )
                                           : Container())
@@ -410,7 +419,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       Obx(
                         () => Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                           child: Column(
                             children: profileController.projectlist.value,
                           ),

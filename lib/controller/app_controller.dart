@@ -38,7 +38,7 @@ class AppController extends GetxService {
     if (index == 4) {
       ismyprofile.value = true;
       String? user_id = await const FlutterSecureStorage().read(key: "id");
-      getProfile(user_id).then((response) {
+      await getProfile(user_id).then((response) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         ProfileController.to.user(User.fromJson(responseBody));
 

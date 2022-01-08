@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
@@ -16,14 +17,11 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/screen/posting_detail_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/profile_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
-import 'package:loopus/widget/tag_widget.dart';
 
 class BookmarkWidget extends StatelessWidget {
-  // PostItem item; required this.item,
   final int index;
   Post post;
 
@@ -38,23 +36,7 @@ class BookmarkWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        http.Response? response = await getposting(post.id);
-        var responseBody = json.decode(utf8.decode(response!.bodyBytes));
-        Get.to(() => PostingScreen(
-              user: User(
-                  type: 0,
-                  user: responseBody['user_id'],
-                  realName: responseBody['real_name'],
-                  profileImage: responseBody['profile_image'],
-                  profileTag: [],
-                  department: '',
-                  isuser: -1),
-              post: Post.fromJson(
-                responseBody['posting_info'],
-              ),
-            ));
-      },
+      onTap: tapPosting,
       child: Column(
         children: [
           Container(
@@ -118,22 +100,8 @@ class BookmarkWidget extends StatelessWidget {
                         children: [
                           InkWell(
                             onTap: () async {
-                              await getProfile(post.userId).then((response) {
-                                var responseBody = json
-                                    .decode(utf8.decode(response.bodyBytes));
-                                profileController
-                                    .user(User.fromJson(responseBody));
-
-                                List projectmaplist = responseBody['project'];
-                                profileController.projectlist(projectmaplist
-                                    .map((project) => Project.fromJson(project))
-                                    .map((project) => ProjectWidget(
-                                          project: project.obs,
-                                        ))
-                                    .toList());
-                              });
+                              await tapProfile();
                               AppController.to.ismyprofile.value = false;
-                              print(AppController.to.ismyprofile.value);
                               Get.to(() => ProfileScreen());
                             },
                             child: Row(
@@ -179,16 +147,7 @@ class BookmarkWidget extends StatelessWidget {
                         () => Row(
                           children: [
                             InkWell(
-                              onTap: () {
-                                if (post.isLiked.value == 0) {
-                                  post.isLiked.value = 1;
-                                  post.likeCount.value += 1;
-                                } else {
-                                  post.isLiked.value = 0;
-                                  post.likeCount.value -= 1;
-                                }
-                                likepost(post.id);
-                              },
+                              onTap: tapLike,
                               child: post.isLiked.value == 0
                                   ? SvgPicture.asset(
                                       "assets/icons/Favorite_Inactive.svg")
@@ -206,25 +165,8 @@ class BookmarkWidget extends StatelessWidget {
                               width: 16,
                             ),
                             InkWell(
-                              onTap: () {
-                                if (post.isMarked.value == 0) {
-                                  post.isMarked.value = 1;
-                                } else {
-                                  bookmarkController
-                                      .bookmarkResult.value.postingitems
-                                      .removeAt(index);
-                                  ModalController.to
-                                      .showCustomDialog("북마크 탭에서 삭제했어요.", 1000);
-                                  if (bookmarkController.bookmarkResult.value
-                                      .postingitems.isEmpty) {
-                                    bookmarkController.isBookmarkEmpty.value =
-                                        true;
-                                  }
-                                  post.isMarked.value = 0;
-                                }
-                                bookmarkpost(post.id);
-                              },
-                              child: post.isMarked.value == 0
+                              onTap: tapBookmark,
+                              child: post.isMarked.value == 0 //0: 비활성 1: 활성
                                   ? SvgPicture.asset(
                                       "assets/icons/Mark_Default.svg",
                                       color: mainblack,
@@ -244,5 +186,64 @@ class BookmarkWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void tapBookmark() async {
+    if (post.isMarked.value == 0) {
+      post.isMarked.value = 1;
+    } else {
+      bookmarkController.bookmarkResult.value.postingitems.removeAt(index);
+
+      ModalController.to.showCustomDialog("북마크 탭에서 삭제했어요.", 1000);
+      if (bookmarkController.bookmarkResult.value.postingitems.isEmpty) {
+        bookmarkController.isBookmarkEmpty.value = true;
+      }
+      post.isMarked.value = 0;
+    }
+    await bookmarkpost(post.id);
+  }
+
+  void tapLike() {
+    if (post.isLiked.value == 0) {
+      post.isLiked.value = 1;
+      post.likeCount.value += 1;
+    } else {
+      post.isLiked.value = 0;
+      post.likeCount.value -= 1;
+    }
+    likepost(post.id);
+  }
+
+  Future<void> tapProfile() async {
+    await getProfile(post.userId).then((response) {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      profileController.user(User.fromJson(responseBody));
+
+      List projectmaplist = responseBody['project'];
+      profileController.projectlist(projectmaplist
+          .map((project) => Project.fromJson(project))
+          .map((project) => ProjectWidget(
+                project: project.obs,
+              ))
+          .toList());
+    });
+  }
+
+  Future<void> tapPosting() async {
+    http.Response? response = await getposting(post.id);
+    var responseBody = json.decode(utf8.decode(response!.bodyBytes));
+    Get.to(() => PostingScreen(
+          user: User(
+              type: 0,
+              user: responseBody['user_id'],
+              realName: responseBody['real_name'],
+              profileImage: responseBody['profile_image'],
+              profileTag: [],
+              department: '',
+              isuser: -1),
+          post: Post.fromJson(
+            responseBody['posting_info'],
+          ),
+        ));
   }
 }
