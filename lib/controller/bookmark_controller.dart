@@ -5,55 +5,54 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class BookmarkController extends GetxController {
   static BookmarkController get to => Get.find();
-  RxBool enablepullup = true.obs;
+  RxBool enableBookmarkPullup = true.obs;
+  RxBool isBookmarkEmpty = false.obs;
+  RxBool isBookmarkLoading = true.obs;
   int pageNumber = 1;
 
   Rx<PostingModel> bookmarkResult =
       PostingModel(postingitems: <Post>[].obs).obs;
 
   RefreshController refreshController =
-      new RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
   @override
   void onInit() {
-    onRefresh1();
+    onBookmarkRefresh();
     super.onInit();
   }
 
-  void onRefresh1() async {
-    enablepullup.value = true;
+  void onBookmarkRefresh() async {
+    enableBookmarkPullup.value = true;
     bookmarkResult(PostingModel(postingitems: <Post>[].obs));
 
     pageNumber = 1;
-    bookmarkloadItem();
-    await Future.delayed(Duration(microseconds: 500));
+    await bookmarkLoadItem().then((value) => isBookmarkLoading.value = false);
     refreshController.refreshCompleted();
   }
 
-  void onLoading1() async {
+  void onBookmarkLoading() async {
     pageNumber += 1;
-    await Future.delayed(Duration(microseconds: 500));
     //페이지 처리
-    bookmarkloadItem();
+    await bookmarkLoadItem();
     refreshController.loadComplete();
   }
 
-  void bookmarkloadItem() async {
+  Future<void> bookmarkLoadItem() async {
     PostingModel bookmarkModel = await bookmarklist(pageNumber);
-    PostingModel bookmarkModel2 = await bookmarklist(pageNumber + 1);
-    if (bookmarkModel.postingitems.isEmpty == false) {
+    PostingModel nextBookmarkModel = await bookmarklist(pageNumber + 1);
+    if (bookmarkModel.postingitems.isEmpty) {
+      isBookmarkEmpty.value = true;
+    } else {
+      isBookmarkEmpty.value = false;
+
       if (bookmarkModel.postingitems[0].id ==
-          bookmarkModel2.postingitems[0].id) {
-        enablepullup.value = false;
+          nextBookmarkModel.postingitems[0].id) {
+        enableBookmarkPullup.value = false;
       }
     }
 
-    print(bookmarkModel.postingitems);
-    // if (pageNumber == 1) {
-    //   questionResult.update((val) {
-    //     val!.questionitems.addAll(questionModel.questionitems);
-    //   });
-    // }
+    print('bookmark length : ${bookmarkModel.postingitems.length}');
     bookmarkResult.update((val) {
       val!.postingitems.addAll(bookmarkModel.postingitems);
     });

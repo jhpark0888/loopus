@@ -3,7 +3,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:http/http.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 
@@ -24,12 +23,8 @@ void emailRequest() async {
     },
     body: jsonEncode(checkemail),
   );
-  print(response.body);
-  // storage.write(key: 'token', value: json.decode(response.body)['token']);
-  // print(storage.read(key: 'token'));
-  print(response.statusCode);
+
   if (response.statusCode == 200) {
-    print(response.statusCode);
     signupController.emailcheck(true);
   }
 }
@@ -37,9 +32,8 @@ void emailRequest() async {
 Future<http.Response> signupRequest() async {
   SignupController signupController = Get.find();
   TagController tagController = Get.find();
-  // Uri uri = Uri.parse('http://52.79.75.189:8000/user_api/signup/');
   Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/signup/');
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
+  const FlutterSecureStorage storage = FlutterSecureStorage();
 
   var user = {
     "email": signupController.emailidcontroller.text,
@@ -58,15 +52,13 @@ Future<http.Response> signupRequest() async {
     },
     body: json.encode(user),
   );
-  print(json.encode(user));
-  print(response.body);
-  print(response.statusCode);
+
   if (response.statusCode == 200) {
-    print(response.statusCode);
     String token = jsonDecode(response.body)['Token'];
     String userid = jsonDecode(response.body)['user_id'];
-    storage.write(key: 'token', value: '$token');
-    storage.write(key: 'id', value: '$userid');
+
+    storage.write(key: 'token', value: token);
+    storage.write(key: 'id', value: userid);
   }
   return response;
 }

@@ -1,7 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -11,19 +7,17 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
-import 'package:loopus/model/tag_model.dart';
-import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/project_widget.dart';
 
 class ProjectAddThumbnailScreen extends StatelessWidget {
   ProjectAddThumbnailScreen({Key? key, required this.screenType, this.project})
       : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
-  ProjectAddController projectAddController = Get.put(ProjectAddController());
-  TagController tagController = Get.put(TagController());
-  Screentype screenType;
+  final ProjectAddController projectAddController =
+      Get.put(ProjectAddController());
+  final TagController tagController = Get.put(TagController());
+  final Screentype screenType;
   Project? project;
 
   @override
@@ -74,7 +68,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
             GestureDetector(
               onTap: () async {
                 projectAddController
-                    .projectimage(await getcropImage(imagetype.thumnail));
+                    .projectimage(await getcropImage(ImageType.thumnail));
               },
               child: Container(
                 width: 141,

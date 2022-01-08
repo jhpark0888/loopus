@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -37,15 +38,26 @@ class BookmarkWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        http.Response? response = await getposting(post.id);
+        var responseBody = json.decode(utf8.decode(response!.bodyBytes));
         Get.to(() => PostingScreen(
-              post: post,
+              user: User(
+                  type: 0,
+                  user: responseBody['user_id'],
+                  realName: responseBody['real_name'],
+                  profileImage: responseBody['profile_image'],
+                  profileTag: [],
+                  department: '',
+                  isuser: -1),
+              post: Post.fromJson(
+                responseBody['posting_info'],
+              ),
             ));
       },
       child: Column(
         children: [
           Container(
-            width: Get.width * 0.94,
             padding: EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 16,
@@ -203,6 +215,11 @@ class BookmarkWidget extends StatelessWidget {
                                       .removeAt(index);
                                   ModalController.to
                                       .showCustomDialog("북마크 탭에서 삭제했어요.", 1000);
+                                  if (bookmarkController.bookmarkResult.value
+                                      .postingitems.isEmpty) {
+                                    bookmarkController.isBookmarkEmpty.value =
+                                        true;
+                                  }
                                   post.isMarked.value = 0;
                                 }
                                 bookmarkpost(post.id);
@@ -223,9 +240,6 @@ class BookmarkWidget extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          SizedBox(
-            height: 16,
           ),
         ],
       ),

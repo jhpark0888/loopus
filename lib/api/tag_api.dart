@@ -6,7 +6,6 @@ import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
 
 void gettagsearch() async {
-  // Uri uri = Uri.parse('http://52.79.75.189:8000/user_api/login/');
   TagController tagController = Get.find();
   Uri uri = Uri.parse(
       'http://3.35.253.151:8000/tag_api/search?query=${tagController.tagsearch.text}');
@@ -18,7 +17,6 @@ void gettagsearch() async {
     },
   );
 
-  print(response.statusCode);
   var responsebody = json.decode(utf8.decode(response.bodyBytes));
 
   if (response.statusCode == 200) {
@@ -26,7 +24,6 @@ void gettagsearch() async {
     List<SearchTag> tagmaplist =
         responselist.map((map) => SearchTag.fromJson(map)).toList();
 
-    print(responselist);
     if (tagmaplist
         .where((element) => element.tag == tagController.tagsearch.text)
         .isNotEmpty) {
@@ -72,19 +69,14 @@ void gettagsearch() async {
       });
     }
   } else if (response.statusCode == 401) {
-    // Get.defaultDialog(
-    //   title: '로그인 오류',
-    //   content: Text('아이디 또는 비밀번호가 틀렸습니다'),
-    // );
   } else {
-    print(response.statusCode);
+    print('tag status code :${response.statusCode}');
   }
 }
 
 Future<SearchTag?> postmaketag() async {
   TagController tagController = Get.find();
 
-  // Uri uri = Uri.parse('http://52.79.75.189:8000/user_api/login/');
   Uri uri = Uri.parse('http://3.35.253.151:8000/tag_api/create/');
 
   var tag = {"tag": tagController.tagsearch.text};
@@ -97,20 +89,11 @@ Future<SearchTag?> postmaketag() async {
     body: jsonEncode(tag),
   );
 
-  print(response.statusCode);
-
   if (response.statusCode == 201) {
     tagController.tagsearch.clear();
     Map responsebody = json.decode(utf8.decode(response.bodyBytes));
-    print(responsebody);
     SearchTag searchtag = SearchTag.fromJson(responsebody["tag"]);
     return searchtag;
   } else if (response.statusCode == 401) {
-    // Get.defaultDialog(
-    //   title: '로그인 오류',
-    //   content: Text('아이디 또는 비밀번호가 틀렸습니다'),
-    // );
-  } else {
-    print(response.statusCode);
-  }
+  } else {}
 }

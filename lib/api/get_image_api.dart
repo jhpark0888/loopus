@@ -4,16 +4,20 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loopus/constant.dart';
 
-enum imagetype { profile, thumnail, post }
+enum ImageType {
+  profile,
+  thumnail,
+  post,
+}
 
-Future<File?> getcropImage(imagetype type) async {
+Future<File?> getcropImage(ImageType type) async {
   XFile? pickimage = await ImagePicker().pickImage(source: ImageSource.gallery);
   if (pickimage != null) {
-    if (type == imagetype.profile) {
+    if (type == ImageType.profile) {
       return await profilecropImage(pickimage);
-    } else if (type == imagetype.thumnail) {
+    } else if (type == ImageType.thumnail) {
       return await postingthumbnailcropImage(pickimage);
-    } else if (type == imagetype.post) {
+    } else if (type == ImageType.post) {
       return await postingcropImage(pickimage);
     }
   }
@@ -25,13 +29,13 @@ Future<File?> profilecropImage(pickimage) async {
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
       ],
-      androidUiSettings: AndroidUiSettings(
+      androidUiSettings: const AndroidUiSettings(
           toolbarTitle: 'Cropper',
           toolbarColor: mainblue,
           toolbarWidgetColor: mainWhite,
           initAspectRatio: CropAspectRatioPreset.square,
           lockAspectRatio: true),
-      iosUiSettings: IOSUiSettings(
+      iosUiSettings: const IOSUiSettings(
         minimumAspectRatio: 1.0,
       ));
   if (croppedFile != null) {
@@ -45,13 +49,13 @@ Future<File?> postingthumbnailcropImage(pickimage) async {
       aspectRatioPresets: [
         CropAspectRatioPreset.ratio3x2,
       ],
-      androidUiSettings: AndroidUiSettings(
+      androidUiSettings: const AndroidUiSettings(
           toolbarTitle: 'Cropper',
           toolbarColor: mainblue,
           toolbarWidgetColor: mainWhite,
           initAspectRatio: CropAspectRatioPreset.ratio3x2,
           lockAspectRatio: true),
-      iosUiSettings: IOSUiSettings(
+      iosUiSettings: const IOSUiSettings(
         minimumAspectRatio: 1.0,
       ));
   if (croppedFile != null) {
@@ -62,14 +66,14 @@ Future<File?> postingthumbnailcropImage(pickimage) async {
 Future<File?> postingcropImage(pickimage) async {
   File? croppedFile = await ImageCropper.cropImage(
       sourcePath: pickimage.path,
-      aspectRatio: CropAspectRatio(ratioX: 2, ratioY: 1),
-      androidUiSettings: AndroidUiSettings(
+      aspectRatio: const CropAspectRatio(ratioX: 2, ratioY: 1),
+      androidUiSettings: const AndroidUiSettings(
           toolbarTitle: 'Cropper',
           toolbarColor: mainblue,
           toolbarWidgetColor: mainWhite,
           initAspectRatio: CropAspectRatioPreset.ratio16x9,
           lockAspectRatio: true),
-      iosUiSettings: IOSUiSettings(
+      iosUiSettings: const IOSUiSettings(
         minimumAspectRatio: 1.0,
       ));
   if (croppedFile != null) {

@@ -13,7 +13,7 @@ class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static HomeController get to => Get.find();
   List<HomePostingWidget> posting = [];
-  List<RecommendPostingWidget> recommend_posting = [];
+  // List<RecommendPostingWidget> recommend_posting = [];
   RxBool bookmark = false.obs;
   RxBool isLoopEmpty = false.obs;
   RxBool isPostingEmpty = false.obs;
@@ -29,15 +29,16 @@ class HomeController extends GetxController
   RxBool enableQuestionPullup = true.obs;
   RxBool enableLoopPullup = true.obs;
   RxString selectgroup = '모든 질문'.obs;
+
   Rx<QuestionModel> questionResult = QuestionModel(questionitems: []).obs;
   Rx<PostingModel> postingResult = PostingModel(postingitems: <Post>[].obs).obs;
   Rx<PostingModel> loopResult = PostingModel(postingitems: <Post>[].obs).obs;
   RefreshController postingRefreshController =
-      new RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
   RefreshController questionRefreshController =
-      new RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
   RefreshController loopRefreshController =
-      new RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
   late TabController hometabcontroller;
 

@@ -180,7 +180,7 @@ class EditorController extends GetxController {
   }
 
   Future<void> insertimage(int index) async {
-    File? image = await getcropImage(imagetype.post);
+    File? image = await getcropImage(ImageType.post);
     print(image);
     if (image != null) {
       textcontrollers.insert(index + 1, TextEditingController());

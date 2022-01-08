@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:loopus/app.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
-import 'package:http/http.dart' as http;
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 
@@ -16,7 +16,7 @@ Future addproject() async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   Uri uri = Uri.parse('http://3.35.253.151:8000/project_api/create_project/');
 
-  var request = new http.MultipartRequest('POST', uri);
+  var request = http.MultipartRequest('POST', uri);
 
   final headers = {
     'Authorization': 'Token $token',
@@ -30,8 +30,6 @@ Future addproject() async {
         'thumbnail', projectAddController.projectimage.value!.path);
     request.files.add(multipartFile);
   }
-
-  // DateTime startdate = DateTime(int.parse(projectAddController.startyearcontroller.text),)
 
   request.fields['project_name'] =
       projectAddController.projectnamecontroller.text;
@@ -51,12 +49,8 @@ Future addproject() async {
   http.StreamedResponse response = await request.send();
 
   String responsebody = await response.stream.bytesToString();
-  // print(responseBody);
-  // storage.write(key: 'token', value: json.decode(response.body)['token']);
-  // print(storage.read(key: 'token'));
-  print(response.statusCode);
+
   if (response.statusCode == 201) {
-    print(response.statusCode);
     Get.back();
     Get.back();
     Get.back();
@@ -67,23 +61,15 @@ Future addproject() async {
   }
 }
 
-Future<Project> getproject(int project_id) async {
+Future<Project> getproject(int projectId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
-  // String? userid = await FlutterSecureStorage().read(key: "id");
 
-  print(token);
-  // print(userid);
-  final uri = Uri.parse(
-      "http://3.35.253.151:8000/project_api/load_project/$project_id");
+  final uri =
+      Uri.parse("http://3.35.253.151:8000/project_api/load_project/$projectId");
 
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
 
-  print(response.statusCode);
-  // var responseBody = json.decode(utf8.decode(response.bodyBytes));
-  // print(responseBody);
-
-  // print(response.statusCode);
   if (response.statusCode == 200) {
     var responseBody = json.decode(utf8.decode(response.bodyBytes));
     Project project = Project.fromJson(responseBody);
@@ -93,15 +79,15 @@ Future<Project> getproject(int project_id) async {
   }
 }
 
-Future updateproject(int project_id) async {
+Future updateproject(int projectId) async {
   ProjectAddController projectAddController = Get.find();
   TagController tagController = Get.find();
 
   String? token = await const FlutterSecureStorage().read(key: "token");
   Uri uri = Uri.parse(
-      'http://3.35.253.151:8000/project_api/update_project/${project_id}');
+      'http://3.35.253.151:8000/project_api/update_project/$projectId');
 
-  var request = new http.MultipartRequest('POST', uri);
+  var request = http.MultipartRequest('POST', uri);
 
   final headers = {
     'Authorization': 'Token $token',
@@ -134,10 +120,7 @@ Future updateproject(int project_id) async {
   http.StreamedResponse response = await request.send();
 
   String responsebody = await response.stream.bytesToString();
-  // print(responseBody);
-  // storage.write(key: 'token', value: json.decode(response.body)['token']);
-  // print(storage.read(key: 'token'));
-  print(response.statusCode);
+
   if (response.statusCode == 200) {
     var responsemap = json.decode(responsebody);
     Project project = Project.fromJson(responsemap);

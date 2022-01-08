@@ -1,30 +1,28 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
-import 'package:loopus/model/question_model.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
-Future<void> addposting(int project_id) async {
+Future<void> addposting(int projectId) async {
   final PostingAddController postingAddController = Get.find();
   final EditorController editorController = Get.find();
 
   final String? token = await const FlutterSecureStorage().read(key: 'token');
 
-  Uri postingUploadUri = Uri.parse(
-      'http://3.35.253.151:8000/post_api/posting_upload/$project_id/');
+  Uri postingUploadUri =
+      Uri.parse('http://3.35.253.151:8000/post_api/posting_upload/$projectId/');
 
   var request = http.MultipartRequest('POST', postingUploadUri);
 
@@ -85,40 +83,43 @@ Future<void> addposting(int project_id) async {
 
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
-    print("status code : ${response.statusCode} 포스팅 업로드 완료");
+    if (kDebugMode) {
+      print("status code : ${response.statusCode} 포스팅 업로드 완료");
+    }
 
-    Project project = await getproject(project_id);
+    Project project = await getproject(projectId);
     Get.back();
     Get.back();
     Get.back();
     Get.back();
     Get.to(() => ProjectScreen(project: project.obs));
   } else if (response.statusCode == 400) {
-    print("status code : ${response.statusCode} 포스팅 업로드 실패");
+    if (kDebugMode) {
+      print("status code : ${response.statusCode} 포스팅 업로드 실패");
+    }
   } else {
-    print("status code : ${response.statusCode} 포스팅 업로드 실패");
+    if (kDebugMode) {
+      print("status code : ${response.statusCode} 포스팅 업로드 실패");
+    }
     return Future.error(response.statusCode);
   }
 }
 
-Future<http.Response?> getposting(int posting_id) async {
+Future<http.Response?> getposting(int postingId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
-  // String? userid = await FlutterSecureStorage().read(key: "id");
+  String? userid = await FlutterSecureStorage().read(key: "id");
 
-  print(token);
   // print(userid);
   final specificPostingLoadUri = Uri.parse(
-      "http://3.35.253.151:8000/post_api/specific_posting_load/$posting_id");
+      "http://3.35.253.151:8000/post_api/specific_posting_load/$postingId");
 
   http.Response response = await http
       .get(specificPostingLoadUri, headers: {"Authorization": "Token $token"});
 
-  print(response.statusCode);
-  // var responseBody = json.decode(utf8.decode(response.bodyBytes));
+  var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-  print(response.statusCode);
   if (response.statusCode == 200) {
-    // Post post = Post.fromJson(responseBody['posting_info']);
+    Post post = Post.fromJson(responseBody['posting_info']);
     return response;
   } else {
     return Future.error(response.statusCode);
@@ -127,7 +128,7 @@ Future<http.Response?> getposting(int posting_id) async {
 
 Future<dynamic> mainpost(int pageNumber) async {
   String? token;
-  await FlutterSecureStorage().read(key: 'token').then((value) {
+  await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
@@ -136,12 +137,12 @@ Future<dynamic> mainpost(int pageNumber) async {
 
   final response =
       await get(mainloadUri, headers: {"Authorization": "Token $token"});
-  var statusCode = response.statusCode;
   var responseBody = utf8.decode(response.bodyBytes);
-  print(statusCode);
   List<dynamic> list = jsonDecode(responseBody);
 
-  print('posting list : $list');
+  if (kDebugMode) {
+    print('posting list : $list');
+  }
   if (response.statusCode != 200) {
     return Future.error(response.statusCode);
   } else {
@@ -151,7 +152,7 @@ Future<dynamic> mainpost(int pageNumber) async {
 
 Future<dynamic> bookmarklist(int pageNumber) async {
   String? token;
-  await FlutterSecureStorage().read(key: 'token').then((value) {
+  await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
@@ -160,12 +161,9 @@ Future<dynamic> bookmarklist(int pageNumber) async {
 
   final response =
       await get(bookmarkListUri, headers: {"Authorization": "Token $token"});
-  var statusCode = response.statusCode;
   var responseBody = utf8.decode(response.bodyBytes);
-  print(statusCode);
   List<dynamic> list = jsonDecode(responseBody);
 
-  print(list);
   if (response.statusCode != 200) {
     return Future.error(response.statusCode);
   } else {
@@ -175,7 +173,7 @@ Future<dynamic> bookmarklist(int pageNumber) async {
 
 Future<dynamic> looppost(int pageNumber) async {
   String? token;
-  await FlutterSecureStorage().read(key: 'token').then((value) {
+  await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
@@ -184,15 +182,11 @@ Future<dynamic> looppost(int pageNumber) async {
 
   final response =
       await get(loopUri, headers: {"Authorization": "Token $token"});
-  var statusCode = response.statusCode;
-  var responseHeaders = response.headers;
   var responseBody = utf8.decode(response.bodyBytes);
-  print(statusCode);
   List<dynamic> list = jsonDecode(responseBody);
   if (list.isEmpty) {
     HomeController.to.enableLoopPullup.value = false;
   }
-  print(list);
   if (response.statusCode != 200) {
     return Future.error(response.statusCode);
   } else {
@@ -200,40 +194,35 @@ Future<dynamic> looppost(int pageNumber) async {
   }
 }
 
-Future<dynamic> bookmarkpost(int posting_id) async {
+Future<dynamic> bookmarkpost(int postingId) async {
   String? token;
-  await FlutterSecureStorage().read(key: 'token').then((value) {
+  await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
   final bookmarkUri =
-      Uri.parse("http://3.35.253.151:8000/post_api/bookmark/$posting_id/");
+      Uri.parse("http://3.35.253.151:8000/post_api/bookmark/$postingId/");
 
   final response =
       await post(bookmarkUri, headers: {"Authorization": "Token $token"});
-  var statusCode = response.statusCode;
-  var responseHeaders = response.headers;
+
   var responseBody = utf8.decode(response.bodyBytes);
-  print(statusCode);
   String result = jsonDecode(responseBody);
-  print(result);
 }
 
-Future<dynamic> likepost(int posting_id) async {
+Future<dynamic> likepost(int postingId) async {
   String? token;
-  await FlutterSecureStorage().read(key: 'token').then((value) {
+  await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
   final likeUri =
-      Uri.parse("http://3.35.253.151:8000/post_api/like/$posting_id/");
+      Uri.parse("http://3.35.253.151:8000/post_api/like/$postingId/");
 
   final response =
       await post(likeUri, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
   var responseHeaders = response.headers;
   var responseBody = utf8.decode(response.bodyBytes);
-  print(statusCode);
   String result = jsonDecode(responseBody);
-  print(result);
 }

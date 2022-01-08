@@ -12,14 +12,12 @@ import 'package:loopus/widget/question_posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class QuestionAnswerScreen extends StatelessWidget {
-  HomeController homeController = Get.find();
+  QuestionAnswerScreen({Key? key}) : super(key: key);
+
+  final HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    print('all : ${homeController.isAllQuestionLoading.value}');
-    print('my :${homeController.isMyQuestionLoading.value}');
-    print('selectgroup :${homeController.selectgroup.value}');
-
     return Scaffold(
       body: Obx(
         () => SmartRefresher(
@@ -167,7 +165,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                                               Radius.circular(8)),
                                           elevation: 1,
                                           underline: Container(),
-                                          icon: Icon(
+                                          icon: const Icon(
                                             Icons.expand_more_rounded,
                                             color: mainblack,
                                           ),
@@ -369,6 +367,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 24),
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       '아직 남긴 질문이 없어요',

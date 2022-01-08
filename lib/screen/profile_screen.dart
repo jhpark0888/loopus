@@ -104,7 +104,7 @@ class ProfileScreen extends StatelessWidget {
                                   child: GestureDetector(
                                       onTap: () async {
                                         File? image = await getcropImage(
-                                            imagetype.profile);
+                                            ImageType.profile);
                                         if (image != null) {
                                           User? user = await updateProfile(
                                               profileController.user.value,
