@@ -16,18 +16,28 @@ class QuestionAnswerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('all : ${homeController.isAllQuestionLoading.value}');
+    print('my :${homeController.isMyQuestionLoading.value}');
+    print('selectgroup :${homeController.selectgroup.value}');
+
     return Scaffold(
       body: Obx(
         () => SmartRefresher(
           controller: homeController.questionRefreshController,
-          enablePullDown: (homeController.isAllQuestionEmpty.value == true &&
-                  homeController.isMyQuestionEmpty.value == true)
-              ? false
-              : true,
-          enablePullUp: (homeController.isAllQuestionEmpty.value == true &&
-                  homeController.isMyQuestionEmpty.value == true)
-              ? false
-              : homeController.enableQuestionPullup.value,
+          enablePullDown: (homeController.selectgroup.value == '모든 질문')
+              ? (homeController.isAllQuestionLoading.value == false)
+                  ? true
+                  : false
+              : (homeController.isMyQuestionLoading.value == false)
+                  ? true
+                  : false,
+          enablePullUp: (homeController.selectgroup.value == '모든 질문')
+              ? (homeController.isAllQuestionLoading.value == false)
+                  ? homeController.enableQuestionPullup.value
+                  : false
+              : (homeController.isMyQuestionLoading.value == false)
+                  ? homeController.enableQuestionPullup.value
+                  : false,
           header: ClassicHeader(
             textStyle: TextStyle(color: mainblack),
             refreshingText: '',
@@ -134,173 +144,295 @@ class QuestionAnswerScreen extends StatelessWidget {
             key: PageStorageKey("key2"),
             slivers: [
               SliverList(
-                  delegate: SliverChildListDelegate([
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                delegate: SliverChildListDelegate(
+                  [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                          child: Column(
                             children: [
-                              Obx(
-                                () => DropdownButtonHideUnderline(
-                                  child: ButtonTheme(
-                                    alignedDropdown: true,
-                                    child: DropdownButton(
-                                      itemHeight: 48,
-                                      onTap: () {},
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(8)),
-                                      elevation: 1,
-                                      underline: Container(),
-                                      icon: Icon(
-                                        Icons.expand_more_rounded,
-                                        color: mainblack,
-                                      ),
-                                      value: homeController.selectgroup.value,
-                                      items: ["모든 질문", "나의 질문"].map((value) {
-                                        return DropdownMenuItem(
-                                          value: value,
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 4),
-                                            child: Text(
-                                              value,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16),
-                                            ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Obx(
+                                    () => DropdownButtonHideUnderline(
+                                      child: ButtonTheme(
+                                        alignedDropdown: true,
+                                        child: DropdownButton(
+                                          itemHeight: 48,
+                                          onTap: () {},
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(8)),
+                                          elevation: 1,
+                                          underline: Container(),
+                                          icon: Icon(
+                                            Icons.expand_more_rounded,
+                                            color: mainblack,
                                           ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (String? value) {
-                                        homeController.selectgroup(value);
+                                          value:
+                                              homeController.selectgroup.value,
+                                          items:
+                                              ["모든 질문", "나의 질문"].map((value) {
+                                            return DropdownMenuItem(
+                                              value: value,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 4),
+                                                child: Text(
+                                                  value,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
+                                          onChanged: (String? value) {
+                                            homeController.selectgroup(value);
 
-                                        homeController
-                                            .onQuestionRefresh()
-                                            .then((_) {
-                                          if (value == '모든 질문') {
                                             homeController
-                                                .isMyQuestionEmpty.value = true;
-                                          } else {
-                                            homeController.isAllQuestionEmpty
-                                                .value = true;
-                                          }
-                                        });
-                                        print(homeController.selectgroup.value);
-                                      },
+                                                .onQuestionRefresh()
+                                                .then((_) {
+                                              if (value == '모든 질문') {
+                                                homeController
+                                                    .isMyQuestionLoading
+                                                    .value = true;
+                                              } else {
+                                                homeController
+                                                    .isAllQuestionLoading
+                                                    .value = true;
+                                              }
+                                            });
+                                            print(homeController
+                                                .selectgroup.value);
+                                          },
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  (homeController.selectgroup.value == '모든 질문')
+                                      ? (homeController
+                                                  .isAllQuestionEmpty.value ==
+                                              false)
+                                          ? InkWell(
+                                              onTap: () {
+                                                Get.to(() =>
+                                                    QuestionAddContentScreen());
+                                              },
+                                              child: Text(
+                                                "질문 남기기",
+                                                style: kSubTitle2Style.copyWith(
+                                                    color: mainblue),
+                                              ),
+                                            )
+                                          : Container()
+                                      : Container(),
+                                ],
                               ),
-                              InkWell(
-                                onTap: () {
-                                  Get.to(() => QuestionAddContentScreen());
-                                },
-                                child: Text(
-                                  "질문 남기기",
-                                  style:
-                                      kSubTitle2Style.copyWith(color: mainblue),
-                                ),
-                              )
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ])),
-              SliverList(
-                delegate: homeController.selectgroup.value == "모든 질문"
-                    ? SliverChildBuilderDelegate(
-                        (context, index) {
-                          return GestureDetector(
-                              //on tap event 발생시
-                              onTap: () async {},
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 16,
-                                  left: 16,
-                                  top: 8,
-                                ),
-                                child:
-                                    (homeController.isAllQuestionEmpty.value ==
-                                            false)
-                                        ? QuestionPostingWidget(
-                                            item: homeController.questionResult
-                                                .value.questionitems[index],
-                                            index: index,
-                                            key: Key(
-                                              toString(),
-                                            ),
-                                          )
-                                        : Column(
-                                            children: [
-                                              Image.asset(
-                                                'assets/icons/loading.gif',
-                                                scale: 6,
-                                              ),
-                                              Text(
-                                                '모든 질문 받아오는 중...',
-                                                style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: mainblue),
-                                              )
-                                            ],
-                                          ),
-                              ));
-                        },
-                        childCount:
-                            (homeController.isAllQuestionEmpty.value == false)
-                                ? homeController
-                                    .questionResult.value.questionitems.length
-                                : 1,
-                      )
-                    : SliverChildBuilderDelegate(
-                        (context, index) {
-                          return GestureDetector(
-                              //on tap event 발생시
-                              onTap: () async {},
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                                child:
-                                    (homeController.isMyQuestionEmpty.value ==
-                                            false)
-                                        ? MyQuestionPostingWidget(
-                                            item: homeController.questionResult
-                                                .value.questionitems[index],
-                                            index: index,
-                                            key: Key(
-                                              toString(),
-                                            ),
-                                          )
-                                        : Column(
-                                            children: [
-                                              Image.asset(
-                                                'assets/icons/loading.gif',
-                                                scale: 6,
-                                              ),
-                                              Text(
-                                                '나의 질문 받아오는 중...',
-                                                style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: mainblue),
-                                              )
-                                            ],
-                                          ),
-                              ));
-                        },
-                        childCount:
-                            (homeController.isMyQuestionEmpty.value == false)
-                                ? homeController
-                                    .questionResult.value.questionitems.length
-                                : 1,
-                      ),
               ),
+              (homeController.selectgroup.value == "모든 질문")
+                  ? (homeController.isAllQuestionEmpty.value == false)
+                      ? SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return GestureDetector(
+                                //on tap event 발생시
+                                onTap: () async {},
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 16,
+                                    left: 16,
+                                    top: 8,
+                                  ),
+                                  child: (homeController
+                                              .isAllQuestionLoading.value ==
+                                          false)
+                                      ? QuestionPostingWidget(
+                                          item: homeController.questionResult
+                                              .value.questionitems[index],
+                                          index: index,
+                                          key: Key(
+                                            toString(),
+                                          ),
+                                        )
+                                      : Column(
+                                          children: [
+                                            Image.asset(
+                                              'assets/icons/loading.gif',
+                                              scale: 6,
+                                            ),
+                                            Text(
+                                              '모든 질문 받아오는 중...',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: mainblue),
+                                            )
+                                          ],
+                                        ),
+                                ),
+                              );
+                            },
+                            childCount:
+                                (homeController.isAllQuestionLoading.value ==
+                                        false)
+                                    ? homeController.questionResult.value
+                                        .questionitems.length
+                                    : 1,
+                          ),
+                        )
+                      : SliverList(
+                          delegate:
+                              SliverChildBuilderDelegate((context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 24),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '아직 관심사와 관련된 질문이 없어요',
+                                    style: kSubTitle2Style,
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.to(() => QuestionAddContentScreen());
+                                    },
+                                    child: Text(
+                                      '질문 남기기',
+                                      style: kSubTitle2Style.copyWith(
+                                        color: mainblue,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }, childCount: 1),
+                        )
+                  : (homeController.isMyQuestionEmpty.value == false)
+                      ? SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return GestureDetector(
+                                //on tap event 발생시
+                                onTap: () async {},
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                                  child: (homeController
+                                              .isMyQuestionLoading.value ==
+                                          false)
+                                      ? MyQuestionPostingWidget(
+                                          item: homeController.questionResult
+                                              .value.questionitems[index],
+                                          index: index,
+                                          key: Key(
+                                            toString(),
+                                          ),
+                                        )
+                                      : Column(
+                                          children: [
+                                            Image.asset(
+                                              'assets/icons/loading.gif',
+                                              scale: 6,
+                                            ),
+                                            Text(
+                                              '나의 질문 받아오는 중...',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: mainblue),
+                                            )
+                                          ],
+                                        ),
+                                ),
+                              );
+                            },
+                            childCount:
+                                (homeController.isMyQuestionLoading.value ==
+                                        false)
+                                    ? homeController.questionResult.value
+                                        .questionitems.length
+                                    : 1,
+                          ),
+                        )
+                      : SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 24),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      '아직 남긴 질문이 없어요',
+                                      style: kSubTitle2Style,
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Get.to(
+                                            () => QuestionAddContentScreen());
+                                      },
+                                      child: Text(
+                                        '질문 남기기',
+                                        style: kSubTitle2Style.copyWith(
+                                          color: mainblue,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            childCount: 1,
+                          ),
+                        ),
+              if (homeController.enableQuestionPullup.value == false)
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return Container(
+                        height: 120,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Text(
+                                '질문을 모두 보여드렸어요',
+                                style: kSubTitle2Style.copyWith(
+                                  color: mainblack,
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // homeController.hometabcontroller.animateTo(
+                                //   2,
+                                //   curve: Curves.easeInOut,
+                                //   duration: Duration(milliseconds: 300),
+                                // );
+                              },
+                              child: Text(
+                                '루프한 학생들의 포스팅 읽기',
+                                style: kButtonStyle.copyWith(
+                                  color: mainblue,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    childCount: 1,
+                  ),
+                ),
             ],
           ),
         ),

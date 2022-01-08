@@ -23,12 +23,12 @@ class LoopScreen extends StatelessWidget {
       body: Obx(
         () => SmartRefresher(
           controller: homeController.loopRefreshController,
-          enablePullDown: !homeController.isempty.value
-              ? (homeController.isLoopEmpty == true)
+          enablePullDown: !homeController.isLoopEmpty.value
+              ? (homeController.isLoopLoading == true)
                   ? false
                   : true
               : false,
-          enablePullUp: (homeController.isLoopEmpty.value == true)
+          enablePullUp: (homeController.isLoopLoading.value == true)
               ? false
               : homeController.enableLoopPullup.value,
           header: ClassicHeader(
@@ -136,7 +136,7 @@ class LoopScreen extends StatelessWidget {
               physics: BouncingScrollPhysics(),
               key: PageStorageKey("key3"),
               slivers: [
-                (homeController.isempty.value == false)
+                (homeController.isLoopEmpty.value == false)
                     ? SliverList(
                         delegate: SliverChildBuilderDelegate(
                         (context, index) {
@@ -148,28 +148,30 @@ class LoopScreen extends StatelessWidget {
                                 right: 16,
                                 left: 16,
                               ),
-                              child: (homeController.isLoopEmpty.value == false)
-                                  ? HomePostingWidget(
-                                      index: index,
-                                      key: Key(
-                                        toString(),
-                                      ),
-                                      item: homeController
-                                          .loopResult.value.postingitems[index],
-                                    )
-                                  : Column(
-                                      children: [
-                                        Image.asset(
-                                          'assets/icons/loading.gif',
-                                          scale: 6,
-                                        ),
-                                        Text(
-                                          '포스팅 받아오는 중...',
-                                          style: TextStyle(
-                                              fontSize: 10, color: mainblue),
+                              child:
+                                  (homeController.isLoopLoading.value == false)
+                                      ? HomePostingWidget(
+                                          index: index,
+                                          key: Key(
+                                            toString(),
+                                          ),
+                                          item: homeController.loopResult.value
+                                              .postingitems[index],
                                         )
-                                      ],
-                                    ),
+                                      : Column(
+                                          children: [
+                                            Image.asset(
+                                              'assets/icons/loading.gif',
+                                              scale: 6,
+                                            ),
+                                            Text(
+                                              '포스팅 받아오는 중...',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: mainblue),
+                                            )
+                                          ],
+                                        ),
                             ),
                           );
                         },

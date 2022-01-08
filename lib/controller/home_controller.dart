@@ -15,16 +15,20 @@ class HomeController extends GetxController
   List<HomePostingWidget> posting = [];
   List<RecommendPostingWidget> recommend_posting = [];
   RxBool bookmark = false.obs;
-  RxBool isempty = false.obs;
-  RxBool isPostingEmpty = true.obs;
-  RxBool isAllQuestionEmpty = true.obs;
-  RxBool isMyQuestionEmpty = true.obs;
-  RxBool isLoopEmpty = true.obs;
+  RxBool isLoopEmpty = false.obs;
+  RxBool isPostingEmpty = false.obs;
+  RxBool isAllQuestionEmpty = false.obs;
+  RxBool isMyQuestionEmpty = false.obs;
+
+  RxBool isPostingLoading = true.obs;
+  RxBool isAllQuestionLoading = true.obs;
+  RxBool isMyQuestionLoading = true.obs;
+  RxBool isLoopLoading = true.obs;
 
   RxBool enablePostingPullup = true.obs;
   RxBool enableQuestionPullup = true.obs;
   RxBool enableLoopPullup = true.obs;
-  var selectgroup = "모든 질문".obs;
+  RxString selectgroup = '모든 질문'.obs;
   Rx<QuestionModel> questionResult = QuestionModel(questionitems: []).obs;
   Rx<PostingModel> postingResult = PostingModel(postingitems: <Post>[].obs).obs;
   Rx<PostingModel> loopResult = PostingModel(postingitems: <Post>[].obs).obs;
@@ -57,7 +61,7 @@ class HomeController extends GetxController
     postingResult(PostingModel(postingitems: <Post>[].obs));
 
     pageNumber = 1;
-    await postloadItem().then((value) => isPostingEmpty.value = false);
+    await postloadItem().then((value) => isPostingLoading.value = false);
     postingRefreshController.refreshCompleted();
   }
 
@@ -74,8 +78,13 @@ class HomeController extends GetxController
 
     pageNumber = 1;
     await questionLoadItem().then((value) {
-      isAllQuestionEmpty.value = false;
-      isMyQuestionEmpty.value = false;
+      if (selectgroup.value == '모든 질문') {
+        isAllQuestionLoading.value = false;
+      } else {
+        isMyQuestionLoading.value = false;
+      }
+      print('isallquestionLoading : ${isAllQuestionLoading.value}');
+      print('ismyquestionLoading : ${isMyQuestionLoading.value}');
     });
     questionRefreshController.refreshCompleted();
   }
@@ -92,7 +101,7 @@ class HomeController extends GetxController
     loopResult(PostingModel(postingitems: <Post>[].obs));
 
     pageNumber = 1;
-    await looploadItem().then((value) => isLoopEmpty.value = false);
+    await looploadItem().then((value) => isLoopLoading.value = false);
     loopRefreshController.refreshCompleted();
   }
 
@@ -106,27 +115,35 @@ class HomeController extends GetxController
   Future<void> questionLoadItem() async {
     if (selectgroup == "모든 질문") {
       QuestionModel questionModel = await questionlist(pageNumber, "any");
-      QuestionModel questionModel2 = await questionlist(pageNumber + 1, "any");
+      QuestionModel nextMyQuestionModel =
+          await questionlist(pageNumber + 1, "any");
+      if (questionModel.questionitems.isEmpty) {
+        isAllQuestionEmpty.value = true;
+      } else {
+        if (questionModel.questionitems[0].id ==
+            nextMyQuestionModel.questionitems[0].id) {
+          enableQuestionPullup.value = false;
 
-      if (questionModel.questionitems[0].id ==
-          questionModel2.questionitems[0].id) {
-        enableQuestionPullup.value = false;
+          print("questionitems : ${questionModel.questionitems}");
+        }
       }
-      print("questionitems : ${questionModel.questionitems}");
-
       questionResult.update((val) {
         val!.questionitems.addAll(questionModel.questionitems);
       });
     } else {
       QuestionModel questionModel = await questionlist(pageNumber, "my");
-      QuestionModel questionModel2 = await questionlist(pageNumber + 1, "my");
+      QuestionModel nextMyQuestionModel =
+          await questionlist(pageNumber + 1, "my");
+      if (questionModel.questionitems.isEmpty) {
+        isMyQuestionEmpty.value = true;
+      } else {
+        if (questionModel.questionitems[0].id ==
+            nextMyQuestionModel.questionitems[0].id) {
+          enableQuestionPullup.value = false;
 
-      if (questionModel.questionitems[0].id ==
-          questionModel2.questionitems[0].id) {
-        enableQuestionPullup.value = false;
+          print("questionitems : ${questionModel.questionitems}");
+        }
       }
-      print("questionitems : ${questionModel.questionitems}");
-
       questionResult.update((val) {
         val!.questionitems.addAll(questionModel.questionitems);
       });
@@ -135,13 +152,18 @@ class HomeController extends GetxController
 
   Future<void> postloadItem() async {
     PostingModel postingModel = await mainpost(pageNumber);
-    PostingModel postingModel2 = await mainpost(pageNumber + 1);
+    PostingModel nextPostingModel = await mainpost(pageNumber + 1);
 
-    if (postingModel.postingitems[0].id == postingModel2.postingitems[0].id) {
-      enablePostingPullup.value = false;
+    if (postingModel.postingitems.isEmpty) {
+      isPostingEmpty.value = true;
+    } else {
+      if (postingModel.postingitems[0].id ==
+          nextPostingModel.postingitems[0].id) {
+        enablePostingPullup.value = false;
+
+        print("postingitems : ${postingModel.postingitems}");
+      }
     }
-    print("postingitems : ${postingModel.postingitems}");
-
     postingResult.update((val) {
       val!.postingitems.addAll(postingModel.postingitems);
     });
@@ -149,15 +171,16 @@ class HomeController extends GetxController
 
   Future<void> looploadItem() async {
     PostingModel loopModel = await looppost(pageNumber);
-    PostingModel loopModel2 = await looppost(pageNumber + 1);
+    PostingModel nextLoopModel = await looppost(pageNumber + 1);
     if (loopModel.postingitems.isEmpty) {
-      isempty.value = true;
+      isLoopEmpty.value = true;
     } else {
-      if (loopModel.postingitems[0].id == loopModel2.postingitems[0].id) {
+      if (loopModel.postingitems[0].id == nextLoopModel.postingitems[0].id) {
         enableLoopPullup.value = false;
+
+        print('loopitems : ${loopModel.postingitems}');
       }
     }
-
     loopResult.update((val) {
       val!.postingitems.addAll(loopModel.postingitems);
     });

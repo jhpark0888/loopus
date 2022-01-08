@@ -24,8 +24,8 @@ class HomePostingScreen extends StatelessWidget {
         () => SmartRefresher(
           controller: homeController.postingRefreshController,
           enablePullDown:
-              (homeController.isPostingEmpty.value == true) ? false : true,
-          enablePullUp: (homeController.isPostingEmpty.value == true)
+              (homeController.isPostingLoading.value == true) ? false : true,
+          enablePullUp: (homeController.isPostingLoading.value == true)
               ? false
               : homeController.enablePostingPullup.value,
           header: ClassicHeader(
@@ -140,46 +140,98 @@ class HomePostingScreen extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             key: PageStorageKey("key1"),
             slivers: [
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                        right: 16,
-                        left: 16,
-                        bottom: 8,
-                        top: 8,
-                      ),
-                      child: (homeController.isPostingEmpty.value == false)
-                          ? HomePostingWidget(
-                              index: index,
-                              key: Key(toString()),
-                              item: homeController
-                                  .postingResult.value.postingitems[index],
-                            )
-                          : Padding(
-                              padding: EdgeInsets.zero,
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/icons/loading.gif',
-                                    scale: 6,
-                                  ),
-                                  Text(
-                                    '포스팅 받아오는 중...',
-                                    style: TextStyle(
-                                        fontSize: 10, color: mainblue),
-                                  )
-                                ],
-                              ),
+              (homeController.isPostingEmpty.value == false)
+                  ? SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              right: 16,
+                              left: 16,
+                              bottom: 8,
+                              top: 8,
                             ),
-                    );
-                  },
-                  childCount: (homeController.isPostingEmpty.value == false)
-                      ? homeController.postingResult.value.postingitems.length
-                      : 1,
-                ),
-              ),
+                            child:
+                                (homeController.isPostingLoading.value == false)
+                                    ? HomePostingWidget(
+                                        index: index,
+                                        key: Key(toString()),
+                                        item: homeController.postingResult.value
+                                            .postingitems[index],
+                                      )
+                                    : Padding(
+                                        padding: EdgeInsets.zero,
+                                        child: Column(
+                                          children: [
+                                            Image.asset(
+                                              'assets/icons/loading.gif',
+                                              scale: 6,
+                                            ),
+                                            Text(
+                                              '포스팅 받아오는 중...',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: mainblue),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                          );
+                        },
+                        childCount:
+                            (homeController.isPostingLoading.value == false)
+                                ? homeController
+                                    .postingResult.value.postingitems.length
+                                : 1,
+                      ),
+                    )
+                  : SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            top: 24,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Center(
+                                child: Text('더 많은 관심을 받는 태그를 알려드릴게요',
+                                    style: kSubTitle2Style),
+                              ),
+                              SizedBox(
+                                height: 24,
+                              ),
+                              Container(
+                                height: 200,
+                                child: PageView(
+                                  controller: PageController(
+                                    viewportFraction: 0.9,
+                                    initialPage: 0,
+                                  ),
+                                  children: [
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 8),
+                                      color: Colors.red,
+                                    ),
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 8),
+                                      color: Colors.yellow,
+                                    ),
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 8),
+                                      color: Colors.green,
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }, childCount: 1),
+                    ),
               if (homeController.enablePostingPullup.value == false)
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
@@ -200,11 +252,11 @@ class HomePostingScreen extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                homeController.hometabcontroller.animateTo(
-                                  2,
-                                  curve: Curves.easeInOut,
-                                  duration: Duration(milliseconds: 300),
-                                );
+                                // homeController.hometabcontroller.animateTo(
+                                //   2,
+                                //   curve: Curves.easeInOut,
+                                //   duration: Duration(milliseconds: 300),
+                                // );
                               },
                               child: Text(
                                 '루프한 학생들의 포스팅 읽기',
