@@ -252,9 +252,6 @@ class SearchScreen extends StatelessWidget {
                                     SearchStudentWidget(),
                                     SearchStudentWidget(),
                                     SearchStudentWidget(),
-                                    SizedBox(
-                                      height: 55,
-                                    )
                                   ],
                                 ),
                               )

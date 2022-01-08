@@ -128,7 +128,7 @@ class PaperScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(
                   top: 16,
-                  bottom: 80,
+                  bottom: 16,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -145,7 +145,7 @@ class PaperScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(
                   top: 16,
-                  bottom: 80,
+                  bottom: 16,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -160,7 +160,7 @@ class PaperScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(
                 top: 16,
-                bottom: 80,
+                bottom: 16,
               ),
               child: SingleChildScrollView(
                 key: const PageStorageKey("key3"),
