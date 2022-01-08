@@ -19,9 +19,15 @@ class QuestionAnswerScreen extends StatelessWidget {
     return Scaffold(
       body: Obx(
         () => SmartRefresher(
-          controller: homeController.refreshController2,
-          enablePullDown: true,
-          enablePullUp: homeController.enablepullup2.value,
+          controller: homeController.questionRefreshController,
+          enablePullDown: (homeController.isAllQuestionEmpty.value == true &&
+                  homeController.isMyQuestionEmpty.value == true)
+              ? false
+              : true,
+          enablePullUp: (homeController.isAllQuestionEmpty.value == true &&
+                  homeController.isMyQuestionEmpty.value == true)
+              ? false
+              : homeController.enableQuestionPullup.value,
           header: ClassicHeader(
             textStyle: TextStyle(color: mainblack),
             refreshingText: '',
@@ -32,7 +38,7 @@ class QuestionAnswerScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/icons/loading.gif',
-                  scale: 4.5,
+                  scale: 6,
                 ),
                 SizedBox(
                   height: 4,
@@ -51,7 +57,7 @@ class QuestionAnswerScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/icons/loading.gif',
-                  scale: 4.5,
+                  scale: 6,
                 ),
                 SizedBox(
                   height: 4,
@@ -89,7 +95,7 @@ class QuestionAnswerScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/icons/loading.png',
-                  scale: 9,
+                  scale: 12,
                 ),
                 SizedBox(
                   height: 8,
@@ -112,28 +118,17 @@ class QuestionAnswerScreen extends StatelessWidget {
             canLoadingText: "",
             idleText: "",
             idleIcon: Container(),
-            canLoadingIcon: Column(
-              children: [
-                Text(
-                  '또 다른 질문 찾는 중...',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
-                  ),
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Image.asset(
-                  'assets/icons/loading.gif',
-                  scale: 4.5,
-                ),
-              ],
+            loadingIcon: Image.asset(
+              'assets/icons/loading.gif',
+              scale: 6,
+            ),
+            canLoadingIcon: Image.asset(
+              'assets/icons/loading.gif',
+              scale: 6,
             ),
           ),
-          onRefresh: homeController.onRefresh2,
-          onLoading: homeController.onLoading2,
+          onRefresh: homeController.onQuestionRefresh,
+          onLoading: homeController.onQuestionLoading,
           child: CustomScrollView(
             physics: BouncingScrollPhysics(),
             key: PageStorageKey("key2"),
@@ -182,7 +177,18 @@ class QuestionAnswerScreen extends StatelessWidget {
                                       }).toList(),
                                       onChanged: (String? value) {
                                         homeController.selectgroup(value);
-                                        homeController.onRefresh2();
+
+                                        homeController
+                                            .onQuestionRefresh()
+                                            .then((_) {
+                                          if (value == '모든 질문') {
+                                            homeController
+                                                .isMyQuestionEmpty.value = true;
+                                          } else {
+                                            homeController.isAllQuestionEmpty
+                                                .value = true;
+                                          }
+                                        });
                                         print(homeController.selectgroup.value);
                                       },
                                     ),
@@ -220,18 +226,38 @@ class QuestionAnswerScreen extends StatelessWidget {
                                   left: 16,
                                   top: 8,
                                 ),
-                                child: QuestionPostingWidget(
-                                  item: homeController.questionResult.value
-                                      .questionitems[index],
-                                  index: index,
-                                  key: Key(
-                                    toString(),
-                                  ),
-                                ),
+                                child:
+                                    (homeController.isAllQuestionEmpty.value ==
+                                            false)
+                                        ? QuestionPostingWidget(
+                                            item: homeController.questionResult
+                                                .value.questionitems[index],
+                                            index: index,
+                                            key: Key(
+                                              toString(),
+                                            ),
+                                          )
+                                        : Column(
+                                            children: [
+                                              Image.asset(
+                                                'assets/icons/loading.gif',
+                                                scale: 6,
+                                              ),
+                                              Text(
+                                                '모든 질문 받아오는 중...',
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: mainblue),
+                                              )
+                                            ],
+                                          ),
                               ));
                         },
-                        childCount: homeController
-                            .questionResult.value.questionitems.length,
+                        childCount:
+                            (homeController.isAllQuestionEmpty.value == false)
+                                ? homeController
+                                    .questionResult.value.questionitems.length
+                                : 1,
                       )
                     : SliverChildBuilderDelegate(
                         (context, index) {
@@ -241,18 +267,38 @@ class QuestionAnswerScreen extends StatelessWidget {
                               child: Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                                child: MyQuestionPostingWidget(
-                                  item: homeController.questionResult.value
-                                      .questionitems[index],
-                                  index: index,
-                                  key: Key(
-                                    toString(),
-                                  ),
-                                ),
+                                child:
+                                    (homeController.isMyQuestionEmpty.value ==
+                                            false)
+                                        ? MyQuestionPostingWidget(
+                                            item: homeController.questionResult
+                                                .value.questionitems[index],
+                                            index: index,
+                                            key: Key(
+                                              toString(),
+                                            ),
+                                          )
+                                        : Column(
+                                            children: [
+                                              Image.asset(
+                                                'assets/icons/loading.gif',
+                                                scale: 6,
+                                              ),
+                                              Text(
+                                                '나의 질문 받아오는 중...',
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: mainblue),
+                                              )
+                                            ],
+                                          ),
                               ));
                         },
-                        childCount: homeController
-                            .questionResult.value.questionitems.length,
+                        childCount:
+                            (homeController.isMyQuestionEmpty.value == false)
+                                ? homeController
+                                    .questionResult.value.questionitems.length
+                                : 1,
                       ),
               ),
             ],

@@ -354,16 +354,21 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              //홈 탭 바
-              SliverAppBar(
-                toolbarHeight: 43,
-                automaticallyImplyLeading: false,
-                elevation: 0,
-                pinned: true,
-                backgroundColor: mainWhite,
-                flexibleSpace: Column(
-                  children: [
-                    Row(
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverSafeArea(
+                  top: false,
+                  sliver: SliverAppBar(
+                    expandedHeight: 43,
+                    toolbarHeight: 43,
+                    automaticallyImplyLeading: false,
+                    elevation: 0,
+                    pinned: true,
+                    floating: false,
+                    backgroundColor: mainWhite,
+                    flexibleSpace: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Theme(
                           data: ThemeData().copyWith(
@@ -417,38 +422,24 @@ class HomeScreen extends StatelessWidget {
                                 // )
                               ]),
                         ),
+                        Container(
+                          height: 1,
+                          color: Color(0xffe7e7e7),
+                        )
                       ],
                     ),
-                    Container(
-                      height: 1,
-                      color: Color(0xffe7e7e7),
-                    )
-                  ],
+                  ),
                 ),
               ),
             ];
           },
           body: TabBarView(
-              physics: PageScrollPhysics(),
+              physics: const PageScrollPhysics(),
               controller: homecontroller.hometabcontroller,
               children: [
                 HomePostingScreen(),
                 QuestionAnswerScreen(),
-                homecontroller.isempty.value == false
-                    ? LoopScreen()
-                    : Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                "아직 루프를 맺은 사람이 없어요",
-                                style: kSubTitle2Style,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                LoopScreen(),
               ]),
         ),
       ),

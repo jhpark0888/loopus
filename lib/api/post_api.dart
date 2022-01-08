@@ -18,15 +18,15 @@ import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 Future<void> addposting(int project_id) async {
-  PostingAddController postingAddController = Get.find();
-  EditorController editorController = Get.find();
-  String? token = await FlutterSecureStorage().read(key: 'token');
-  String? user_id = await FlutterSecureStorage().read(key: 'id');
-  // Uri uri = Uri.parse('http://52.79.75.189:8000/user_api/profile_update/customizing/$user_id/');
-  Uri uri = Uri.parse(
+  final PostingAddController postingAddController = Get.find();
+  final EditorController editorController = Get.find();
+
+  final String? token = await const FlutterSecureStorage().read(key: 'token');
+
+  Uri postingUploadUri = Uri.parse(
       'http://3.35.253.151:8000/post_api/posting_upload/$project_id/');
 
-  var request = new http.MultipartRequest('POST', uri);
+  var request = http.MultipartRequest('POST', postingUploadUri);
 
   final headers = {
     'Authorization': 'Token $token',
@@ -40,19 +40,6 @@ Future<void> addposting(int project_id) async {
         'thumbnail', postingAddController.thumbnail.value.path);
     request.files.add(multipartFile);
   }
-
-  // for (File? image in editorController.imageindex) {
-  //   if (image != null) {
-  //     var multipartFile =
-  //         await http.MultipartFile.fromPath('image', image.path);
-  //     request.files.add(multipartFile);
-  //   }
-  // }
-  // for (int i = 0; i < postingAddController.images.length; i++) {
-  //   var multipartFile = await http.MultipartFile.fromPath(
-  //       'image', postingAddController.images[i].path);
-  //   request.files.add(multipartFile);
-  // }
 
   List<Map> postcontent = [];
 
@@ -96,18 +83,10 @@ Future<void> addposting(int project_id) async {
   request.fields['title'] = postingAddController.titlecontroller.text;
   request.fields['contents'] = json.encode(postcontent);
 
-  print(request.fields);
-  print(request.files);
-
   http.StreamedResponse response = await request.send();
-  print(response.statusCode);
   if (response.statusCode == 200) {
-    print("success!");
+    print("status code : ${response.statusCode} 포스팅 업로드 완료");
 
-    // String responsebody = await response.stream.bytesToString();
-    // print(responsebody);
-    // var responsemap = jsonDecode(responsebody);
-    // print(responsemap);
     Project project = await getproject(project_id);
     Get.back();
     Get.back();
@@ -115,9 +94,9 @@ Future<void> addposting(int project_id) async {
     Get.back();
     Get.to(() => ProjectScreen(project: project.obs));
   } else if (response.statusCode == 400) {
-    print("lose");
+    print("status code : ${response.statusCode} 포스팅 업로드 실패");
   } else {
-    print(response.statusCode);
+    print("status code : ${response.statusCode} 포스팅 업로드 실패");
     return Future.error(response.statusCode);
   }
 }
@@ -128,11 +107,11 @@ Future<http.Response?> getposting(int posting_id) async {
 
   print(token);
   // print(userid);
-  final uri = Uri.parse(
+  final specificPostingLoadUri = Uri.parse(
       "http://3.35.253.151:8000/post_api/specific_posting_load/$posting_id");
 
-  http.Response response =
-      await http.get(uri, headers: {"Authorization": "Token $token"});
+  http.Response response = await http
+      .get(specificPostingLoadUri, headers: {"Authorization": "Token $token"});
 
   print(response.statusCode);
   // var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -152,17 +131,17 @@ Future<dynamic> mainpost(int pageNumber) async {
     token = value;
   });
 
-  final url = Uri.parse(
+  final mainloadUri = Uri.parse(
       "http://3.35.253.151:8000/post_api/main_load/?page=$pageNumber");
 
-  final response = await get(url, headers: {"Authorization": "Token $token"});
+  final response =
+      await get(mainloadUri, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
-  var responseHeaders = response.headers;
   var responseBody = utf8.decode(response.bodyBytes);
   print(statusCode);
   List<dynamic> list = jsonDecode(responseBody);
 
-  print(list);
+  print('posting list : $list');
   if (response.statusCode != 200) {
     return Future.error(response.statusCode);
   } else {
@@ -176,12 +155,12 @@ Future<dynamic> bookmarklist(int pageNumber) async {
     token = value;
   });
 
-  final url = Uri.parse(
+  final bookmarkListUri = Uri.parse(
       "http://3.35.253.151:8000/post_api/bookmark_list/?page=$pageNumber");
 
-  final response = await get(url, headers: {"Authorization": "Token $token"});
+  final response =
+      await get(bookmarkListUri, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
-  var responseHeaders = response.headers;
   var responseBody = utf8.decode(response.bodyBytes);
   print(statusCode);
   List<dynamic> list = jsonDecode(responseBody);
@@ -200,17 +179,18 @@ Future<dynamic> looppost(int pageNumber) async {
     token = value;
   });
 
-  final url = Uri.parse(
+  final loopUri = Uri.parse(
       "http://3.35.253.151:8000/post_api/loop_load/?page=$pageNumber/");
 
-  final response = await get(url, headers: {"Authorization": "Token $token"});
+  final response =
+      await get(loopUri, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
   var responseHeaders = response.headers;
   var responseBody = utf8.decode(response.bodyBytes);
   print(statusCode);
   List<dynamic> list = jsonDecode(responseBody);
   if (list.isEmpty) {
-    HomeController.to.enablepullup3.value = false;
+    HomeController.to.enableLoopPullup.value = false;
   }
   print(list);
   if (response.statusCode != 200) {
@@ -226,10 +206,11 @@ Future<dynamic> bookmarkpost(int posting_id) async {
     token = value;
   });
 
-  final url =
+  final bookmarkUri =
       Uri.parse("http://3.35.253.151:8000/post_api/bookmark/$posting_id/");
 
-  final response = await post(url, headers: {"Authorization": "Token $token"});
+  final response =
+      await post(bookmarkUri, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
   var responseHeaders = response.headers;
   var responseBody = utf8.decode(response.bodyBytes);
@@ -244,9 +225,11 @@ Future<dynamic> likepost(int posting_id) async {
     token = value;
   });
 
-  final url = Uri.parse("http://3.35.253.151:8000/post_api/like/$posting_id/");
+  final likeUri =
+      Uri.parse("http://3.35.253.151:8000/post_api/like/$posting_id/");
 
-  final response = await post(url, headers: {"Authorization": "Token $token"});
+  final response =
+      await post(likeUri, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
   var responseHeaders = response.headers;
   var responseBody = utf8.decode(response.bodyBytes);

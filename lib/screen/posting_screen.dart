@@ -31,10 +31,11 @@ class PostingScreen extends StatelessWidget {
     // print(text.replaceAll('\n', ''));
     return Scaffold(
       body: CustomScrollView(
-        physics: ClampingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         controller: _controller,
         slivers: [
           SliverAppBar(
+            stretch: true,
             bottom: PreferredSize(
                 child: Container(
                   color: Color(0xffe7e7e7),

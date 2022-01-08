@@ -34,7 +34,7 @@ class QuestionAddTagScreen extends StatelessWidget {
                   questionController.contentcontroller.clear();
                   Get.back();
                   Get.back();
-                  HomeController.to.onRefresh2();
+                  HomeController.to.onQuestionRefresh();
                 },
                 child: tagController.selectedtaglist.length == 0
                     ? Text(

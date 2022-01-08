@@ -7,6 +7,8 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/question_add_content_screen.dart';
 import 'package:loopus/screen/question_screen.dart';
+import 'package:loopus/screen/search_screen.dart';
+import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/home_posting_widget.dart';
 import 'package:loopus/widget/my_question_posting_widget.dart';
 import 'package:loopus/widget/question_posting_widget.dart';
@@ -20,17 +22,98 @@ class LoopScreen extends StatelessWidget {
     return Scaffold(
       body: Obx(
         () => SmartRefresher(
-          controller: homeController.refreshController3,
-          enablePullDown: true,
-          enablePullUp: homeController.enablepullup3.value,
+          controller: homeController.loopRefreshController,
+          enablePullDown: !homeController.isempty.value
+              ? (homeController.isLoopEmpty == true)
+                  ? false
+                  : true
+              : false,
+          enablePullUp: (homeController.isLoopEmpty.value == true)
+              ? false
+              : homeController.enableLoopPullup.value,
           header: ClassicHeader(
-              textStyle: TextStyle(color: mainblack),
-              releaseText: "새로고침",
-              completeText: "완료",
-              idleText: "",
-              releaseIcon: Icon(Icons.refresh, color: mainblack),
-              completeIcon: Icon(Icons.done, color: mainblue),
-              idleIcon: Icon(Icons.arrow_downward, color: mainblack)),
+            textStyle: TextStyle(color: mainblack),
+            releaseText: "",
+            completeText: "",
+            idleText: "",
+            refreshingText: "",
+            refreshingIcon: Column(
+              children: [
+                Image.asset(
+                  'assets/icons/loading.gif',
+                  scale: 6,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '새로운 포스팅 받는 중...',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: mainblue.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
+            releaseIcon: Column(
+              children: [
+                Image.asset(
+                  'assets/icons/loading.gif',
+                  scale: 6,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '새로운 포스팅 받는 중...',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: mainblue.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
+            completeIcon: Column(
+              children: [
+                Icon(
+                  Icons.check_rounded,
+                  color: mainblue,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '완료!',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: mainblue.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
+            idleIcon: Column(
+              children: [
+                Image.asset(
+                  'assets/icons/loading.png',
+                  scale: 12,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  '당겨주세요',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: mainblue.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
+          ),
           footer: ClassicFooter(
             textStyle: TextStyle(color: mainblack),
             loadingText: "",
@@ -45,47 +128,82 @@ class LoopScreen extends StatelessWidget {
               strokeWidth: 3,
             ),
           ),
-          onRefresh: homeController.onRefresh3,
-          onLoading: homeController.onLoading3,
-          child: CustomScrollView(
-            physics: BouncingScrollPhysics(),
-            key: PageStorageKey("key3"),
-            slivers: [
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              ])),
-              SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return GestureDetector(
-                    //on tap event 발생시
-                    onTap: () async {},
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 16,
-                        left: 16,
+          onRefresh: homeController.onLoopRefresh,
+          onLoading: homeController.onLoopLoading,
+          child: Obx(
+            () => CustomScrollView(
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              key: PageStorageKey("key3"),
+              slivers: [
+                (homeController.isempty.value == false)
+                    ? SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return GestureDetector(
+                            //on tap event 발생시
+                            onTap: () async {},
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 16,
+                                left: 16,
+                              ),
+                              child: (homeController.isLoopEmpty.value == false)
+                                  ? HomePostingWidget(
+                                      index: index,
+                                      key: Key(
+                                        toString(),
+                                      ),
+                                      item: homeController
+                                          .loopResult.value.postingitems[index],
+                                    )
+                                  : Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/icons/loading.gif',
+                                          scale: 6,
+                                        ),
+                                        Text(
+                                          '포스팅 받아오는 중...',
+                                          style: TextStyle(
+                                              fontSize: 10, color: mainblue),
+                                        )
+                                      ],
+                                    ),
+                            ),
+                          );
+                        },
+                        childCount:
+                            homeController.loopResult.value.postingitems.length,
+                      ))
+                    : SliverList(
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 24),
+                            child: Column(
+                              children: [
+                                Text(
+                                  '아직 루프를 한 학생이 없어요',
+                                  style: kSubTitle2Style,
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Get.to(SearchTypingScreen());
+                                  },
+                                  child: Text(
+                                    '관심사가 비슷한 학생 찾아보기',
+                                    style: kButtonStyle.copyWith(
+                                      color: mainblue,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }, childCount: 1),
                       ),
-                      child: HomePostingWidget(
-                        index: index,
-                        key: Key(
-                          toString(),
-                        ),
-                        item:
-                            homeController.loopResult.value.postingitems[index],
-                      ),
-                    ),
-                  );
-                },
-                childCount: homeController.loopResult.value.postingitems.length,
-              )),
-            ],
+              ],
+            ),
           ),
         ),
       ),

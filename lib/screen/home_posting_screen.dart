@@ -6,6 +6,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
+import 'package:loopus/screen/loop_screen.dart';
 import 'package:loopus/screen/question_add_content_screen.dart';
 import 'package:loopus/screen/question_screen.dart';
 import 'package:loopus/widget/home_posting_widget.dart';
@@ -21,9 +22,12 @@ class HomePostingScreen extends StatelessWidget {
     return Scaffold(
       body: Obx(
         () => SmartRefresher(
-          controller: homeController.refreshController1,
-          enablePullDown: true,
-          enablePullUp: homeController.enablepullup1.value,
+          controller: homeController.postingRefreshController,
+          enablePullDown:
+              (homeController.isPostingEmpty.value == true) ? false : true,
+          enablePullUp: (homeController.isPostingEmpty.value == true)
+              ? false
+              : homeController.enablePostingPullup.value,
           header: ClassicHeader(
             spacing: 0.0,
             height: 60,
@@ -37,7 +41,7 @@ class HomePostingScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/icons/loading.gif',
-                  scale: 4.5,
+                  scale: 6,
                 ),
                 SizedBox(
                   height: 4,
@@ -56,7 +60,7 @@ class HomePostingScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/icons/loading.gif',
-                  scale: 4.5,
+                  scale: 6,
                 ),
                 SizedBox(
                   height: 4,
@@ -94,7 +98,7 @@ class HomePostingScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/icons/loading.png',
-                  scale: 9,
+                  scale: 12,
                 ),
                 SizedBox(
                   height: 8,
@@ -116,17 +120,20 @@ class HomePostingScreen extends StatelessWidget {
             canLoadingText: "",
             idleText: "",
             idleIcon: Container(),
+            noMoreIcon: Container(
+              child: Text('as'),
+            ),
             loadingIcon: Image.asset(
               'assets/icons/loading.gif',
-              scale: 4.5,
+              scale: 6,
             ),
             canLoadingIcon: Image.asset(
               'assets/icons/loading.gif',
-              scale: 4.5,
+              scale: 6,
             ),
           ),
-          onRefresh: homeController.onRefresh1,
-          onLoading: homeController.onLoading1,
+          onRefresh: homeController.onPostingRefresh,
+          onLoading: homeController.onPostingLoading,
           child: CustomScrollView(
             // controller:
             //     CustomScrollController.to.customScrollController.value,
@@ -134,32 +141,85 @@ class HomePostingScreen extends StatelessWidget {
             key: PageStorageKey("key1"),
             slivers: [
               SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return GestureDetector(
-                    //on tap event 발생시
-                    onTap: () async {},
-                    child: Padding(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return Padding(
                       padding: const EdgeInsets.only(
                         right: 16,
                         left: 16,
                         bottom: 8,
                         top: 8,
                       ),
-                      child: HomePostingWidget(
-                        index: index,
-                        key: Key(
-                          toString(),
+                      child: (homeController.isPostingEmpty.value == false)
+                          ? HomePostingWidget(
+                              index: index,
+                              key: Key(toString()),
+                              item: homeController
+                                  .postingResult.value.postingitems[index],
+                            )
+                          : Padding(
+                              padding: EdgeInsets.zero,
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'assets/icons/loading.gif',
+                                    scale: 6,
+                                  ),
+                                  Text(
+                                    '포스팅 받아오는 중...',
+                                    style: TextStyle(
+                                        fontSize: 10, color: mainblue),
+                                  )
+                                ],
+                              ),
+                            ),
+                    );
+                  },
+                  childCount: (homeController.isPostingEmpty.value == false)
+                      ? homeController.postingResult.value.postingitems.length
+                      : 1,
+                ),
+              ),
+              if (homeController.enablePostingPullup.value == false)
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return Container(
+                        height: 120,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Text(
+                                '포스팅을 모두 보여드렸어요',
+                                style: kSubTitle2Style.copyWith(
+                                  color: mainblack,
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                homeController.hometabcontroller.animateTo(
+                                  2,
+                                  curve: Curves.easeInOut,
+                                  duration: Duration(milliseconds: 300),
+                                );
+                              },
+                              child: Text(
+                                '루프한 학생들의 포스팅 읽기',
+                                style: kButtonStyle.copyWith(
+                                  color: mainblue,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        item: homeController
-                            .postingResult.value.postingitems[index],
-                      ),
-                    ),
-                  );
-                },
-                childCount:
-                    homeController.postingResult.value.postingitems.length,
-              )),
+                      );
+                    },
+                    childCount: 1,
+                  ),
+                ),
             ],
           ),
         ),
