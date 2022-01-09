@@ -82,20 +82,19 @@ class ProfileScreen extends StatelessWidget {
                                     isValue2Red: false,
                                     isOne: false),
                                 child: ClipOval(
-                                    child: profileController
-                                                .user.value.profileImage !=
-                                            null
+                                    child: (profileController
+                                                .isProfileLoading.value ==
+                                            false)
                                         ? CachedNetworkImage(
                                             height: 92,
                                             width: 92,
                                             imageUrl: profileController
                                                 .user.value.profileImage!,
                                             placeholder: (context, url) =>
-                                                CircleAvatar(
-                                              child: Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              ),
+                                                Image.asset(
+                                              "assets/illustrations/default_profile.png",
+                                              height: 92,
+                                              width: 92,
                                             ),
                                             fit: BoxFit.cover,
                                           )
@@ -419,9 +418,28 @@ class ProfileScreen extends StatelessWidget {
                         Obx(
                           () => Padding(
                             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                            child: Column(
-                              children: profileController.projectlist.value,
-                            ),
+                            child: (profileController.isProfileLoading.value ==
+                                    false)
+                                ? Column(
+                                    children:
+                                        profileController.projectlist.value,
+                                  )
+                                : Padding(
+                                    padding: EdgeInsets.zero,
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/icons/loading.gif',
+                                          scale: 6,
+                                        ),
+                                        Text(
+                                          '활동 받아오는 중...',
+                                          style: TextStyle(
+                                              fontSize: 10, color: mainblue),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                           ),
                         ),
                       ],

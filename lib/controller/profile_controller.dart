@@ -50,6 +50,7 @@ class ProfileController extends GetxController
                 project: project.obs,
               ))
           .toList());
+      isProfileLoading.value = false;
     });
   }
 
