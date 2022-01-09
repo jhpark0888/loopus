@@ -84,8 +84,6 @@ class HomeController extends GetxController
       } else {
         isMyQuestionLoading.value = false;
       }
-      print('isallquestionLoading : ${isAllQuestionLoading.value}');
-      print('ismyquestionLoading : ${isMyQuestionLoading.value}');
     });
     questionRefreshController.refreshCompleted();
   }

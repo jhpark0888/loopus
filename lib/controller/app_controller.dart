@@ -37,19 +37,6 @@ class AppController extends GetxService {
     }
     if (index == 4) {
       ismyprofile.value = true;
-      String? user_id = await const FlutterSecureStorage().read(key: "id");
-      await getProfile(user_id).then((response) {
-        var responseBody = json.decode(utf8.decode(response.bodyBytes));
-        ProfileController.to.user(User.fromJson(responseBody));
-
-        List projectmaplist = responseBody['project'];
-        ProfileController.to.projectlist(projectmaplist
-            .map((project) => Project.fromJson(project))
-            .map((project) => ProjectWidget(
-                  project: project.obs,
-                ))
-            .toList());
-      });
     }
     currentIndex(index);
   }
