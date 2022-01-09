@@ -10,6 +10,7 @@ import 'package:loopus/api/get_image_api.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
@@ -74,47 +75,54 @@ class ProfileScreen extends StatelessWidget {
                           Stack(
                             children: [
                               Obx(
-                                () => ClipOval(
-                                    child: profileController
-                                                .user.value.profileImage !=
-                                            null
-                                        ? CachedNetworkImage(
-                                            height: 92,
-                                            width: 92,
-                                            imageUrl: profileController
-                                                .user.value.profileImage!,
-                                            placeholder: (context, url) =>
-                                                CircleAvatar(
-                                              child: Center(
-                                                child:
-                                                    CircularProgressIndicator(),
+                                () => GestureDetector(
+                                  onTap: () => ModalController.to.showModalIOS(
+                                      context,
+                                      func1: changeProfileImage,
+                                      func2: () {},
+                                      value1: '라이브러리에서 변경',
+                                      value2: '기본 이미지로 변경',
+                                      isValue1Red: false,
+                                      isValue2Red: false,
+                                      isOne: false),
+                                  child: ClipOval(
+                                      child: profileController
+                                                  .user.value.profileImage !=
+                                              null
+                                          ? CachedNetworkImage(
+                                              height: 92,
+                                              width: 92,
+                                              imageUrl: profileController
+                                                  .user.value.profileImage!,
+                                              placeholder: (context, url) =>
+                                                  CircleAvatar(
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
                                               ),
-                                            ),
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image.asset(
-                                            "assets/illustrations/default_profile.png",
-                                            height: 92,
-                                            width: 92,
-                                          )),
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.asset(
+                                              "assets/illustrations/default_profile.png",
+                                              height: 92,
+                                              width: 92,
+                                            )),
+                                ),
                               ),
                               Positioned.fill(
                                 child: Align(
                                   alignment: Alignment.bottomRight,
                                   child: GestureDetector(
-                                      onTap: () async {
-                                        File? image = await getcropImage(
-                                            ImageType.profile);
-                                        if (image != null) {
-                                          User? user = await updateProfile(
-                                              profileController.user.value,
-                                              image,
-                                              null);
-                                          if (user != null) {
-                                            profileController.user(user);
-                                          }
-                                        }
-                                      },
+                                      onTap: () => ModalController.to
+                                          .showModalIOS(context,
+                                              func1: changeProfileImage,
+                                              func2: () {},
+                                              value1: '라이브러리에서 변경',
+                                              value2: '기본 이미지로 변경',
+                                              isValue1Red: false,
+                                              isValue2Red: false,
+                                              isOne: false),
                                       child:
                                           profileController.user.value.isuser ==
                                                   1
@@ -195,7 +203,7 @@ class ProfileScreen extends StatelessWidget {
                                       : () {},
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: mainlightgrey,
+                                      color: Color(0xffefefef),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: Padding(
@@ -512,5 +520,16 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  void changeProfileImage() async {
+    File? image = await getcropImage(ImageType.profile);
+    if (image != null) {
+      User? user =
+          await updateProfile(profileController.user.value, image, null);
+      if (user != null) {
+        profileController.user(user);
+      }
+    }
   }
 }

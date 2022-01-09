@@ -127,17 +127,18 @@ class ProjectWidget extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.symmetric(
                               horizontal: 8,
-                              vertical: 2,
+                              vertical: 4,
                             ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
-                              color: mainlightgrey,
+                              color: Color(0xffefefef),
                             ),
                             child: Center(
                               child: Obx(
                                 () => Text(
                                   project.value.endDate != null ? '9개월' : '진행중',
-                                  style: kBody1Style,
+                                  style: kBody2Style.copyWith(
+                                      color: mainblack.withOpacity(0.6)),
                                 ),
                               ),
                             ),

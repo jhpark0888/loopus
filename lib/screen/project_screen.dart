@@ -275,7 +275,7 @@ class ProjectScreen extends StatelessWidget {
                 16,
                 16,
                 16,
-                40,
+                16,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
