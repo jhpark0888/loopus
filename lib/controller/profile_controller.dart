@@ -36,9 +36,9 @@ class ProfileController extends GetxController
   var selectqanda = 0.obs;
 
   void loadProfile() async {
-    String? user_id = await const FlutterSecureStorage().read(key: "id");
+    String? userId = await const FlutterSecureStorage().read(key: "id");
 
-    await getProfile(user_id).then((response) {
+    await getProfile(userId).then((response) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
       user(User.fromJson(responseBody));
