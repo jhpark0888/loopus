@@ -6,17 +6,19 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
-import 'package:loopus/widget/appbar_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 import 'dart:math' as math;
 
-class SearchTagDetailScreen extends StatelessWidget {
-  TagController _tagController = Get.put(TagController());
-  ModalController _modalController = Get.find();
-  SearchController searchController = Get.find();
+class TagDetailScreen extends StatelessWidget {
+  final TagController _tagController = Get.put(TagController());
+  final SearchController searchController = Get.find();
   String title;
   var count;
-  SearchTagDetailScreen({required this.title, required this.count});
+
+  TagDetailScreen({
+    required this.title,
+    required this.count,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,10 @@ class SearchTagDetailScreen extends StatelessWidget {
           headerSliverBuilder: (context, value) {
             return [
               SliverAppBar(
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(0),
+                  child: Container(),
+                ),
                 pinned: true,
                 elevation: 0,
                 leading: IconButton(
@@ -40,16 +46,17 @@ class SearchTagDetailScreen extends StatelessWidget {
                 automaticallyImplyLeading: false,
                 centerTitle: true,
                 flexibleSpace: _CustomSpace(title, count.toString()),
-                expandedHeight: Get.height * 0.2,
+                expandedHeight: Get.height * 0.18,
               ),
               SliverOverlapAbsorber(
                 handle:
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverSafeArea(
-                  top: false,
+                  bottom: false,
                   sliver: SliverAppBar(
                     pinned: true,
                     automaticallyImplyLeading: false,
+                    expandedHeight: 43,
                     toolbarHeight: 43,
                     elevation: 0,
                     flexibleSpace: Column(
@@ -100,13 +107,21 @@ class SearchTagDetailScreen extends StatelessWidget {
           body: TabBarView(
             controller: searchController.tagtabController,
             children: [
-              ListView(
-                shrinkWrap: true,
-                children: searchController.searchtagprojectlist.value,
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Column(
+                    children: searchController.searchtagprojectlist.value,
+                  ),
+                ),
               ),
-              ListView(
-                shrinkWrap: true,
-                children: searchController.searchtagquestionlist.value,
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Column(
+                    children: searchController.searchtagquestionlist.value,
+                  ),
+                ),
               ),
             ],
           ),
@@ -198,9 +213,6 @@ class _CustomSpace extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 16,
-                        ),
                       ],
                     ),
                   )
@@ -223,13 +235,13 @@ class _CustomSpace extends StatelessWidget {
 
   Widget getExpendTitle(String text) {
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 16,
       ),
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: const TextStyle(
           height: 1.5,
           color: mainblack,
           fontSize: 20.0,
@@ -241,13 +253,13 @@ class _CustomSpace extends StatelessWidget {
 
   Widget getCollapseTitle(String text) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 60),
+      padding: const EdgeInsets.symmetric(horizontal: 60),
       child: Text(
         text,
         textAlign: TextAlign.center,
         softWrap: false,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
+        style: const TextStyle(
           color: mainblack,
           fontSize: 16.0,
           fontWeight: FontWeight.normal,

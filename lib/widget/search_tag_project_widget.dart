@@ -55,8 +55,10 @@ class SearchTagProjectWidget extends StatelessWidget {
         print("click posting");
       },
       child: Container(
-        width: Get.width * 0.94,
-        margin: EdgeInsets.symmetric(vertical: 8),
+        margin: EdgeInsets.symmetric(
+          vertical: 8,
+          horizontal: 16,
+        ),
         padding: EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 16,
@@ -130,10 +132,10 @@ class SearchTagProjectWidget extends StatelessWidget {
                             var responseBody =
                                 json.decode(utf8.decode(response.bodyBytes));
                             profileController
-                                .myUserInfo(User.fromJson(responseBody));
+                                .otherUser(User.fromJson(responseBody));
 
                             List projectmaplist = responseBody['project'];
-                            profileController.myProjectList(projectmaplist
+                            profileController.otherProjectList(projectmaplist
                                 .map((project) => Project.fromJson(project))
                                 .map((project) => ProjectWidget(
                                       project: project.obs,
@@ -141,7 +143,6 @@ class SearchTagProjectWidget extends StatelessWidget {
                                 .toList());
                           });
                           AppController.to.ismyprofile.value = false;
-                          print(AppController.to.ismyprofile.value);
                           Get.to(() => OtherProfileScreen());
                         },
                         child: Row(

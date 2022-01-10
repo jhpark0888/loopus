@@ -12,6 +12,7 @@ import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -132,14 +133,27 @@ class ProjectWidget extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
-                              color: Color(0xffefefef),
+                              color: (project.value.endDate == null)
+                                  ? Color(0xffefefef)
+                                  : mainblue,
                             ),
                             child: Center(
                               child: Obx(
                                 () => Text(
-                                  project.value.endDate != null ? '9개월' : '진행중',
+                                  (project.value.endDate == null)
+                                      ? '진행중'
+                                      : DurationCaculate().durationCaculate(
+                                          startDate: project.value.startDate!,
+                                          endDate: project.value.endDate!,
+                                        ),
                                   style: kBody2Style.copyWith(
-                                      color: mainblack.withOpacity(0.6)),
+                                      fontWeight:
+                                          (project.value.endDate == null)
+                                              ? FontWeight.normal
+                                              : FontWeight.bold,
+                                      color: (project.value.endDate == null)
+                                          ? mainblack.withOpacity(0.6)
+                                          : mainWhite),
                                 ),
                               ),
                             ),

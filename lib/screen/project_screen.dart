@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_controller.dart';
+import 'package:loopus/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/screen/posting_add_content_screen.dart';
@@ -107,7 +108,7 @@ class ProjectScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              '${DateFormat("yyyy.MM").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yyyy.MM").format(project.value.endDate!) : ''}',
+                              '${DateFormat("yy.MM.dd").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''}',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -123,39 +124,55 @@ class ProjectScreen extends StatelessWidget {
                               ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(4),
-                                color: Color(0xffefefef),
+                                color: (project.value.endDate == null)
+                                    ? Color(0xffefefef)
+                                    : mainblue,
                               ),
                               child: Center(
                                 child: Text(
-                                  project.value.endDate == null ? '진행중' : '9개월',
+                                  project.value.endDate == null
+                                      ? '진행중'
+                                      : DurationCaculate().durationCaculate(
+                                          startDate: project.value.startDate!,
+                                          endDate: project.value.endDate!),
                                   style: TextStyle(
+                                    fontWeight: (project.value.endDate == null)
+                                        ? FontWeight.normal
+                                        : FontWeight.bold,
                                     fontSize: 14,
-                                    color: mainblack.withOpacity(0.6),
+                                    color: (project.value.endDate == null)
+                                        ? mainblack.withOpacity(0.6)
+                                        : mainWhite,
                                   ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              child: SvgPicture.asset(
+                        GestureDetector(
+                          onTap: () {
+                            //좋아요 한 사람 리스트
+                            print(DurationCaculate().durationCaculate(
+                                startDate: project.value.startDate!,
+                                endDate: project.value.endDate!));
+                          },
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
                                 "assets/icons/Favorite_Active.svg",
                               ),
-                              onTap: () {},
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Text(
-                              '${project.value.like_count}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                              SizedBox(
+                                width: 4,
                               ),
-                            ),
-                          ],
+                              Text(
+                                '${project.value.like_count}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -353,7 +370,7 @@ class ProjectScreen extends StatelessWidget {
                               child: Text(
                                 '포스팅 작성하기',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: mainblue,
                                 ),
@@ -376,15 +393,6 @@ class ProjectScreen extends StatelessWidget {
                                 .reversed)
                             : [Container()]
                         //     [
-                        //   ProjectPostingWidget(
-                        //     title: '안녕하세요',
-                        //     preview: '안녕하세요 감사해요 반가워요 다시 만나요',
-                        //   ),
-                        //   ProjectPostingWidget(
-                        //     title: '안녕하세요',
-                        //     preview: '안녕하세요 감사해요 반가워요 다시 만나요',
-                        //   ),
-                        // ],
                         ),
                   )
                 ],

@@ -4,11 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/tag_model.dart';
-import 'package:loopus/screen/search_tag_detail_screen.dart';
+import 'package:loopus/screen/tag_detail_screen.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class SearchTagWidget extends StatelessWidget {
@@ -19,6 +20,7 @@ class SearchTagWidget extends StatelessWidget {
       this.count,
       required this.isSearch})
       : super(key: key);
+
   TagController tagController = Get.put(TagController());
   SearchController searchController = Get.find();
   int id;
@@ -30,64 +32,50 @@ class SearchTagWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return id != -1
         ? 0 == isSearch
-            ? ListTile(
-                onTap: () async {
-                  if (tagController.selectedtaglist.length < 3) {
-                    if (id == 0) {
-                      SearchTag? searchTag = await postmaketag();
-                      if (searchTag != null) {
-                        tagController.selectedtaglist.add(SelectedTagWidget(
-                            id: searchTag.id, text: searchTag.tag));
-                        tagController.tagsearch.clear();
-                        gettagsearch();
-                      }
-                    } else {
-                      tagController.selectedtaglist.add(SelectedTagWidget(
-                        id: id,
-                        text: tag,
-                      ));
-                      tagController.tagsearch.clear();
-                      gettagsearch();
-                    }
-                  } else {
-                    Get.dialog(Dialog(
-                        child: Container(
-                            height: Get.height * 0.15,
-                            width: Get.width * 0.7,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Text(
-                                    "태그는 최대 3개까지 가능합니다",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
+            ? GestureDetector(
+                onTap: _selectTag,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/Tag.svg',
+                        width: 30,
+                        height: 30,
+                      ),
+                      const SizedBox(
+                        width: 24,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              tag,
+                              style: kButtonStyle,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            (count != null)
+                                ? Text(
+                                    '관심도 ${count.toString()}',
+                                    style: kBody1Style,
+                                  )
+                                : Text(
+                                    '관심도 표시 불가',
                                   ),
-                                ),
-                              ],
-                            ))));
-                  }
-                },
-                dense: true,
-                leading: SvgPicture.asset(
-                  'assets/icons/Tag.svg',
-                  width: 30,
-                  height: 30,
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                title: Text(
-                  tag,
-                  style: kButtonStyle,
-                ),
-                subtitle: count != null
-                    ? Text(
-                        '관심도 $count',
-                        style: kBody1Style,
-                      )
-                    : null,
               )
-            : ListTile(
+            : GestureDetector(
                 onTap: () async {
                   searchController.searchtagprojectlist.clear();
                   searchController.searchtagquestionlist.clear();
@@ -95,31 +83,53 @@ class SearchTagWidget extends StatelessWidget {
                       searchController.tagpagenumber);
                   await searchController.search(
                       SearchType.tag_question, id, searchController.pagenumber);
-                  Get.to(() => SearchTagDetailScreen(
+                  Get.to(() => TagDetailScreen(
                         title: tag,
                         count: count,
                       ));
                 },
-                dense: true,
-                leading: SvgPicture.asset(
-                  'assets/icons/Tag.svg',
-                  width: 30,
-                  height: 30,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/Tag.svg',
+                        width: 30,
+                        height: 30,
+                      ),
+                      SizedBox(
+                        width: 24,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              tag,
+                              style: kButtonStyle,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            (count != null)
+                                ? Text(
+                                    '관심도 ${count}',
+                                    style: kBody1Style,
+                                  )
+                                : Text(
+                                    '관심도 표시 불가',
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                title: Text(
-                  tag,
-                  style: kButtonStyle,
-                ),
-                subtitle: count != null
-                    ? Text(
-                        '관심도 $count',
-                        style: kBody1Style,
-                      )
-                    : null,
               )
         : Container(
-            height: 80,
-            width: Get.width * 0.94,
             child: Center(
               child: Text(
                 tag,
@@ -127,5 +137,28 @@ class SearchTagWidget extends StatelessWidget {
               ),
             ),
           );
+  }
+
+  void _selectTag() async {
+    if (tagController.selectedtaglist.length < 3) {
+      if (id == 0) {
+        SearchTag? searchTag = await postmaketag();
+        if (searchTag != null) {
+          tagController.selectedtaglist
+              .add(SelectedTagWidget(id: searchTag.id, text: searchTag.tag));
+          tagController.tagsearch.clear();
+          gettagsearch();
+        }
+      } else {
+        tagController.selectedtaglist.add(SelectedTagWidget(
+          id: id,
+          text: tag,
+        ));
+        tagController.tagsearch.clear();
+        gettagsearch();
+      }
+    } else {
+      ModalController.to.showCustomDialog('최대 3개까지 선택할 수 있어요', 1000);
+    }
   }
 }

@@ -172,80 +172,88 @@ class SearchTypingScreen extends StatelessWidget {
             child: NestedScrollView(
               headerSliverBuilder: (context, value) {
                 return [
-                  SliverAppBar(
-                    backgroundColor: mainWhite,
-                    toolbarHeight: 43,
-                    pinned: true,
-                    elevation: 0,
-                    automaticallyImplyLeading: false,
-                    flexibleSpace: Column(
-                      children: [
-                        Theme(
-                          data: ThemeData().copyWith(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                          ),
-                          child: TabBar(
-                              controller: searchController.tabController,
-                              labelStyle: TextStyle(
-                                color: mainblack,
-                                fontSize: 14,
-                                fontFamily: 'Nanum',
-                                fontWeight: FontWeight.bold,
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                    sliver: SliverSafeArea(
+                      top: false,
+                      sliver: SliverAppBar(
+                        backgroundColor: mainWhite,
+                        toolbarHeight: 43,
+                        pinned: true,
+                        elevation: 0,
+                        automaticallyImplyLeading: false,
+                        flexibleSpace: Column(
+                          children: [
+                            Theme(
+                              data: ThemeData().copyWith(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
                               ),
-                              labelColor: mainblack,
-                              unselectedLabelStyle: TextStyle(
-                                color: Colors.yellow,
-                                fontSize: 14,
-                                fontFamily: 'Nanum',
-                                fontWeight: FontWeight.normal,
-                              ),
-                              unselectedLabelColor: mainblack.withOpacity(0.6),
-                              indicator: UnderlineIndicator(
-                                  strokeCap: StrokeCap.round,
-                                  borderSide: BorderSide(width: 2),
-                                  insets:
-                                      EdgeInsets.symmetric(horizontal: 10.0)),
-                              isScrollable: false,
-                              indicatorColor: mainblack,
-                              tabs: [
-                                Tab(
-                                  height: 40,
-                                  child: Text(
-                                    "포스팅",
+                              child: TabBar(
+                                  controller: searchController.tabController,
+                                  labelStyle: TextStyle(
+                                    color: mainblack,
+                                    fontSize: 14,
+                                    fontFamily: 'Nanum',
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                                Tab(
-                                  height: 40,
-                                  child: Text(
-                                    "프로필",
+                                  labelColor: mainblack,
+                                  unselectedLabelStyle: TextStyle(
+                                    color: Colors.yellow,
+                                    fontSize: 14,
+                                    fontFamily: 'Nanum',
+                                    fontWeight: FontWeight.normal,
                                   ),
-                                ),
-                                Tab(
-                                  height: 40,
-                                  child: Text(
-                                    "질문",
-                                  ),
-                                ),
-                                Tab(
-                                  height: 40,
-                                  child: Text(
-                                    "태그",
-                                  ),
-                                ),
-                                Tab(
-                                  height: 40,
-                                  child: Text(
-                                    "공고",
-                                  ),
-                                ),
-                              ]),
+                                  unselectedLabelColor:
+                                      mainblack.withOpacity(0.6),
+                                  indicator: UnderlineIndicator(
+                                      strokeCap: StrokeCap.round,
+                                      borderSide: BorderSide(width: 2),
+                                      insets: EdgeInsets.symmetric(
+                                          horizontal: 10.0)),
+                                  isScrollable: false,
+                                  indicatorColor: mainblack,
+                                  tabs: [
+                                    Tab(
+                                      height: 40,
+                                      child: Text(
+                                        "포스팅",
+                                      ),
+                                    ),
+                                    Tab(
+                                      height: 40,
+                                      child: Text(
+                                        "프로필",
+                                      ),
+                                    ),
+                                    Tab(
+                                      height: 40,
+                                      child: Text(
+                                        "질문",
+                                      ),
+                                    ),
+                                    Tab(
+                                      height: 40,
+                                      child: Text(
+                                        "태그",
+                                      ),
+                                    ),
+                                    Tab(
+                                      height: 40,
+                                      child: Text(
+                                        "공고",
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+                            Container(
+                              height: 1,
+                              color: Color(0xffe7e7e7),
+                            )
+                          ],
                         ),
-                        Container(
-                          height: 1,
-                          color: Color(0xffe7e7e7),
-                        )
-                      ],
+                      ),
                     ),
                   ),
                   // SliverToBoxAdapter(child: de\,)
@@ -270,7 +278,7 @@ class SearchTypingScreen extends StatelessWidget {
                                   ),
                                   child: Center(
                                       child: Text(
-                                    "검색어와 일치하는 포스팅이 아직 없어요",
+                                    "아직 검색어와 일치하는 포스팅이 없어요",
                                     style: kSubTitle2Style,
                                   )))),
                     ),
@@ -289,7 +297,7 @@ class SearchTypingScreen extends StatelessWidget {
                                   ),
                                   child: Center(
                                       child: Text(
-                                    "검색어와 일치하는 학생이 아직 없어요",
+                                    "아직 검색어와 일치하는 학생이 없어요",
                                     style: kSubTitle2Style,
                                   )))),
                     ),
@@ -309,7 +317,7 @@ class SearchTypingScreen extends StatelessWidget {
                                   ),
                                   child: Center(
                                       child: Text(
-                                    "검색어와 일치하는 질문이 아직 없어요",
+                                    "아직 검색어와 일치하는 질문이 없어요",
                                     style: kSubTitle2Style,
                                   )))),
                     ),
@@ -329,7 +337,7 @@ class SearchTypingScreen extends StatelessWidget {
                                   ),
                                   child: Center(
                                       child: Text(
-                                    "검색어와 일치하는 질문이 아직 없어요",
+                                    "아직 검색어와 일치하는 질문이 없어요",
                                     style: kSubTitle2Style,
                                   )))),
                     ),

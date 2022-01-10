@@ -295,66 +295,74 @@ class SearchScreen extends StatelessWidget {
                           child: NestedScrollView(
                             headerSliverBuilder: (context, value) {
                               return [
-                                SliverAppBar(
-                                  backgroundColor: mainWhite,
-                                  toolbarHeight: 43,
-                                  pinned: true,
-                                  elevation: 0,
-                                  automaticallyImplyLeading: false,
-                                  flexibleSpace: Column(
-                                    children: [
-                                      TabBar(
-                                          controller:
-                                              _searchController.tabController,
-                                          labelStyle: kButtonStyle,
-                                          labelColor: mainblack,
-                                          unselectedLabelStyle: kBody1Style,
-                                          unselectedLabelColor:
-                                              mainblack.withOpacity(0.6),
-                                          indicator: UnderlineIndicator(
-                                              strokeCap: StrokeCap.round,
-                                              borderSide: BorderSide(width: 2),
-                                              insets: EdgeInsets.symmetric(
-                                                  horizontal: 10.0)),
-                                          isScrollable: false,
-                                          indicatorColor: mainblack,
-                                          tabs: [
-                                            Tab(
-                                              height: 40,
-                                              child: Text(
-                                                "포스팅",
-                                              ),
-                                            ),
-                                            Tab(
-                                              height: 40,
-                                              child: Text(
-                                                "프로필",
-                                              ),
-                                            ),
-                                            Tab(
-                                              height: 40,
-                                              child: Text(
-                                                "질문",
-                                              ),
-                                            ),
-                                            Tab(
-                                              height: 40,
-                                              child: Text(
-                                                "태그",
-                                              ),
-                                            ),
-                                            Tab(
-                                              height: 40,
-                                              child: Text(
-                                                "공고",
-                                              ),
-                                            ),
-                                          ]),
-                                      Container(
-                                        height: 1,
-                                        color: Color(0xffe7e7e7),
-                                      )
-                                    ],
+                                SliverOverlapAbsorber(
+                                  handle: NestedScrollView
+                                      .sliverOverlapAbsorberHandleFor(context),
+                                  sliver: SliverSafeArea(
+                                    top: false,
+                                    sliver: SliverAppBar(
+                                      backgroundColor: mainWhite,
+                                      toolbarHeight: 43,
+                                      pinned: true,
+                                      elevation: 0,
+                                      automaticallyImplyLeading: false,
+                                      flexibleSpace: Column(
+                                        children: [
+                                          TabBar(
+                                              controller: _searchController
+                                                  .tabController,
+                                              labelStyle: kButtonStyle,
+                                              labelColor: mainblack,
+                                              unselectedLabelStyle: kBody1Style,
+                                              unselectedLabelColor:
+                                                  mainblack.withOpacity(0.6),
+                                              indicator: UnderlineIndicator(
+                                                  strokeCap: StrokeCap.round,
+                                                  borderSide:
+                                                      BorderSide(width: 2),
+                                                  insets: EdgeInsets.symmetric(
+                                                      horizontal: 10.0)),
+                                              isScrollable: false,
+                                              indicatorColor: mainblack,
+                                              tabs: [
+                                                Tab(
+                                                  height: 40,
+                                                  child: Text(
+                                                    "포스팅",
+                                                  ),
+                                                ),
+                                                Tab(
+                                                  height: 40,
+                                                  child: Text(
+                                                    "프로필",
+                                                  ),
+                                                ),
+                                                Tab(
+                                                  height: 40,
+                                                  child: Text(
+                                                    "질문",
+                                                  ),
+                                                ),
+                                                Tab(
+                                                  height: 40,
+                                                  child: Text(
+                                                    "태그",
+                                                  ),
+                                                ),
+                                                Tab(
+                                                  height: 40,
+                                                  child: Text(
+                                                    "공고",
+                                                  ),
+                                                ),
+                                              ]),
+                                          Container(
+                                            height: 1,
+                                            color: Color(0xffe7e7e7),
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 // SliverToBoxAdapter(child: de\,)
@@ -379,7 +387,7 @@ class SearchScreen extends StatelessWidget {
                                             height: 80,
                                             child: Center(
                                                 child: Text(
-                                              "검색 결과가 존재하지 않습니다.",
+                                              "아직 검색어와 일치하는 포스팅이 없어요",
                                               style: kSubTitle2Style,
                                             )))),
                                   ),
@@ -398,7 +406,7 @@ class SearchScreen extends StatelessWidget {
                                             height: 80,
                                             child: Center(
                                                 child: Text(
-                                              "검색 결과가 존재하지 않습니다.",
+                                              "아직 검색어와 일치하는 학생이 없어요",
                                               style: kSubTitle2Style,
                                             )))),
                                   ),
@@ -418,29 +426,33 @@ class SearchScreen extends StatelessWidget {
                                             height: 80,
                                             child: Center(
                                                 child: Text(
-                                              "검색 결과가 존재하지 않습니다.",
+                                              "아직 검색어와 일치하는 질문이 없어요",
                                               style: kSubTitle2Style,
                                             )))),
                                   ),
                                   SingleChildScrollView(
-                                    child: Obx(() =>
-                                        _searchController.isnosearchtag.value ==
-                                                false
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10.0),
-                                                child: Column(
-                                                  children: _searchController
-                                                      .searchtaglist,
-                                                ),
-                                              )
-                                            : Container(
-                                                height: 80,
-                                                child: Center(
-                                                    child: Text(
+                                    child: Obx(
+                                      () => _searchController
+                                                  .isnosearchtag.value ==
+                                              false
+                                          ? Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 10.0),
+                                              child: Column(
+                                                children: _searchController
+                                                    .searchtaglist,
+                                              ),
+                                            )
+                                          : Container(
+                                              height: 80,
+                                              child: Center(
+                                                child: Text(
                                                   "검색 결과가 존재하지 않습니다.",
                                                   style: kSubTitle2Style,
-                                                )))),
+                                                ),
+                                              ),
+                                            ),
+                                    ),
                                   ),
                                   Padding(
                                     padding:

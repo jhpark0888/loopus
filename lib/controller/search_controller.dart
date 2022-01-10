@@ -157,7 +157,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
               0,
               SearchTagWidget(
                 id: -1,
-                tag: "'${searchtextcontroller.text}'태그의 검색결과가 없습니다.",
+                tag: "아직 검색어와 일치하는 태그가 없어요",
                 isSearch: 1,
               ));
         }
@@ -235,7 +235,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
             name: element["real_name"],
             id: element["id"],
             postingtitle: element["title"],
-            profileimage: element["thubnail"],
+            profileimage: element["profile_image"],
             projecttitle: element["project_name"],
             is_liked: RxInt(element["is_liked"]),
             is_marked: RxInt(element["is_marked"]),

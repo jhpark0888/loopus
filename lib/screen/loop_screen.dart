@@ -148,6 +148,8 @@ class LoopScreen extends StatelessWidget {
                               padding: const EdgeInsets.only(
                                 right: 16,
                                 left: 16,
+                                top: 8,
+                                bottom: 8,
                               ),
                               child:
                                   (homeController.isLoopLoading.value == false)

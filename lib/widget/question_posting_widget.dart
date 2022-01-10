@@ -39,7 +39,6 @@ class QuestionPostingWidget extends StatelessWidget {
                 await questionController.loadItem(item.id);
                 await questionController.addanswer();
                 Get.to(() => QuestionScreen());
-                print("click posting");
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -112,12 +111,12 @@ class QuestionPostingWidget extends StatelessWidget {
                                   await getProfile(item.user).then((response) {
                                     var responseBody = json.decode(
                                         utf8.decode(response.bodyBytes));
-                                    profileController.myUserInfo(
-                                        User.fromJson(responseBody));
+                                    profileController
+                                        .otherUser(User.fromJson(responseBody));
 
                                     List projectmaplist =
                                         responseBody['project'];
-                                    profileController.myProjectList(
+                                    profileController.otherProjectList(
                                         projectmaplist
                                             .map((project) =>
                                                 Project.fromJson(project))

@@ -21,47 +21,30 @@ class SearchQuestionWidget extends StatelessWidget {
   ProfileController profileController = Get.find();
 
   QuestionItem question;
-  // String content;
-  // int answercount;
-  // var profileimage;
-  // List<Tag> tag;
-  // int id;
-  // int user;
-  // String department;
-  // String real_name;
-  // int istag;
 
   QuestionController questionController = Get.put(QuestionController());
   SearchQuestionWidget({
     required this.question,
-    // required this.content,
-    // required this.id,
-    // required this.istag,
-    // required this.user,
-    // required this.department,
-    // required this.real_name,
-    // required this.answercount,
-    // required this.profileimage,
-    // required this.tag,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16, 4, 16, 0),
-      margin: EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.symmetric(
+        vertical: 8,
+        horizontal: 16,
+      ),
       child: InkWell(
         onTap: () async {
           questionController.messageanswerlist.clear();
           await questionController.loadItem(question.id);
           await questionController.addanswer();
           Get.to(() => QuestionScreen());
-          print("click posting");
         },
         child: Container(
           decoration: BoxDecoration(
             color: mainWhite,
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(8),
               topRight: Radius.circular(8),
               bottomLeft: Radius.circular(8),
@@ -70,12 +53,12 @@ class SearchQuestionWidget extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 blurRadius: 3,
-                offset: Offset(0.0, 1.0),
+                offset: const Offset(0.0, 1.0),
                 color: Colors.black.withOpacity(0.1),
               ),
               BoxShadow(
                 blurRadius: 2,
-                offset: Offset(0.0, 1.0),
+                offset: const Offset(0.0, 1.0),
                 color: Colors.black.withOpacity(0.06),
               ),
             ],
@@ -91,13 +74,14 @@ class SearchQuestionWidget extends StatelessWidget {
                 Text(
                   "${question.content}",
                   style: TextStyle(
+                    overflow: TextOverflow.ellipsis,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     height: 1.5,
                   ),
                 ),
                 SizedBox(
-                  height: 32,
+                  height: 24,
                 ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -105,7 +89,7 @@ class SearchQuestionWidget extends StatelessWidget {
                         .map((tag) => Row(children: [
                               Tagwidget(
                                 tag: tag,
-                                fontSize: 14,
+                                fontSize: 12,
                               ),
                               question.questionTag.indexOf(tag) !=
                                       question.questionTag.length - 1
@@ -115,8 +99,8 @@ class SearchQuestionWidget extends StatelessWidget {
                                   : Container()
                             ]))
                         .toList()),
-                SizedBox(
-                  height: 20,
+                const SizedBox(
+                  height: 16,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,10 +113,10 @@ class SearchQuestionWidget extends StatelessWidget {
                               var responseBody =
                                   json.decode(utf8.decode(response.bodyBytes));
                               profileController
-                                  .myUserInfo(User.fromJson(responseBody));
+                                  .otherUser(User.fromJson(responseBody));
 
                               List projectmaplist = responseBody['project'];
-                              profileController.myProjectList(projectmaplist
+                              profileController.otherProjectList(projectmaplist
                                   .map((project) => Project.fromJson(project))
                                   .map((project) => ProjectWidget(
                                         project: project.obs,
@@ -140,7 +124,6 @@ class SearchQuestionWidget extends StatelessWidget {
                                   .toList());
                             });
                             AppController.to.ismyprofile.value = false;
-                            print(AppController.to.ismyprofile.value);
                             Get.to(() => OtherProfileScreen());
                           },
                           child: Row(
@@ -164,11 +147,14 @@ class SearchQuestionWidget extends StatelessWidget {
                                               child:
                                                   CircularProgressIndicator()),
                                         ),
-                                        fit: BoxFit.fill,
+                                        fit: BoxFit.cover,
                                       ),
                               ),
+                              SizedBox(
+                                width: 8,
+                              ),
                               Text(
-                                "  ${question.realname}  · ",
+                                "${question.realname} · ",
                                 style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.bold),
                               ),
@@ -182,18 +168,16 @@ class SearchQuestionWidget extends StatelessWidget {
                       ],
                     ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SvgPicture.asset("assets/icons/Comment.svg"),
-                        SizedBox(
+                        const SizedBox(
                           width: 4,
                         ),
                         Text(
                           "${question.answercount}",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        )
+                          style: kBody2Style,
+                        ),
                       ],
                     )
                   ],

@@ -52,71 +52,79 @@ class PaperScreen extends StatelessWidget {
         body: NestedScrollView(
           headerSliverBuilder: (context, value) {
             return [
-              SliverAppBar(
-                backgroundColor: mainWhite,
-                elevation: 0,
-                toolbarHeight: 43,
-                automaticallyImplyLeading: false,
-                pinned: true,
-                flexibleSpace: Column(
-                  children: [
-                    Row(
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverSafeArea(
+                  top: false,
+                  sliver: SliverAppBar(
+                    backgroundColor: mainWhite,
+                    elevation: 0,
+                    toolbarHeight: 43,
+                    automaticallyImplyLeading: false,
+                    pinned: true,
+                    flexibleSpace: Column(
                       children: [
-                        Theme(
-                          data: ThemeData().copyWith(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                          ),
-                          child: TabBar(
-                              labelStyle: TextStyle(
-                                color: mainblack,
-                                fontSize: 14,
-                                fontFamily: 'Nanum',
-                                fontWeight: FontWeight.bold,
+                        Row(
+                          children: [
+                            Theme(
+                              data: ThemeData().copyWith(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
                               ),
-                              labelColor: mainblack,
-                              unselectedLabelStyle: TextStyle(
-                                color: Colors.yellow,
-                                fontSize: 14,
-                                fontFamily: 'Nanum',
-                                fontWeight: FontWeight.normal,
-                              ),
-                              unselectedLabelColor: mainblack.withOpacity(0.6),
-                              indicator: UnderlineIndicator(
-                                  strokeCap: StrokeCap.round,
-                                  borderSide: BorderSide(width: 2),
-                                  insets:
-                                      EdgeInsets.symmetric(horizontal: 16.0)),
-                              isScrollable: true,
-                              indicatorColor: mainblack,
-                              tabs: [
-                                Tab(
-                                  height: 40,
-                                  child: Text(
-                                    "대외활동",
+                              child: TabBar(
+                                  labelStyle: TextStyle(
+                                    color: mainblack,
+                                    fontSize: 14,
+                                    fontFamily: 'Nanum',
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                                Tab(
-                                  height: 40,
-                                  child: Text(
-                                    "공모전",
+                                  labelColor: mainblack,
+                                  unselectedLabelStyle: TextStyle(
+                                    color: Colors.yellow,
+                                    fontSize: 14,
+                                    fontFamily: 'Nanum',
+                                    fontWeight: FontWeight.normal,
                                   ),
-                                ),
-                                Tab(
-                                  height: 40,
-                                  child: Text(
-                                    "인턴쉽",
-                                  ),
-                                ),
-                              ]),
+                                  unselectedLabelColor:
+                                      mainblack.withOpacity(0.6),
+                                  indicator: UnderlineIndicator(
+                                      strokeCap: StrokeCap.round,
+                                      borderSide: BorderSide(width: 2),
+                                      insets: EdgeInsets.symmetric(
+                                          horizontal: 16.0)),
+                                  isScrollable: true,
+                                  indicatorColor: mainblack,
+                                  tabs: [
+                                    Tab(
+                                      height: 40,
+                                      child: Text(
+                                        "대외활동",
+                                      ),
+                                    ),
+                                    Tab(
+                                      height: 40,
+                                      child: Text(
+                                        "공모전",
+                                      ),
+                                    ),
+                                    Tab(
+                                      height: 40,
+                                      child: Text(
+                                        "인턴쉽",
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+                          ],
                         ),
+                        Container(
+                          height: 1,
+                          color: Color(0xffe7e7e7),
+                        )
                       ],
                     ),
-                    Container(
-                      height: 1,
-                      color: Color(0xffe7e7e7),
-                    )
-                  ],
+                  ),
                 ),
               ),
               // SliverToBoxAdapter(child: de\,)

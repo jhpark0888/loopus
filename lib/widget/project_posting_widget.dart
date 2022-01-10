@@ -148,7 +148,7 @@ class ProjectPostingWidget extends StatelessWidget {
             ),
             Container(
               height: 1,
-              color: Color(0xffefefef),
+              color: Color(0xffe7e7e7),
             ),
           ],
         ),

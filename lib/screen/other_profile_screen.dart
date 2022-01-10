@@ -55,9 +55,11 @@ class OtherProfileScreen extends StatelessWidget {
                       ],
                     )
                   : AppBarWidget(
+                      bottomBorder: false,
                       title:
                           '${profileController.otherUser.value.realName}님의 프로필')
               : AppBarWidget(
+                  bottomBorder: false,
                   title: '${profileController.otherUser.value.realName}님의 프로필'),
           body: NestedScrollView(
             headerSliverBuilder: (context, value) {

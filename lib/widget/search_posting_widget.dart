@@ -51,12 +51,12 @@ class SearchPostingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        print("click posting");
-      },
+      onTap: () {},
       child: Container(
-        width: Get.width * 0.94,
-        margin: EdgeInsets.symmetric(vertical: 8),
+        margin: EdgeInsets.symmetric(
+          vertical: 8,
+          horizontal: 16,
+        ),
         padding: EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 16,
@@ -121,10 +121,10 @@ class SearchPostingWidget extends StatelessWidget {
                             var responseBody =
                                 json.decode(utf8.decode(response.bodyBytes));
                             profileController
-                                .myUserInfo(User.fromJson(responseBody));
+                                .otherUser(User.fromJson(responseBody));
 
                             List projectmaplist = responseBody['project'];
-                            profileController.myProjectList(projectmaplist
+                            profileController.otherProjectList(projectmaplist
                                 .map((project) => Project.fromJson(project))
                                 .map((project) => ProjectWidget(
                                       project: project.obs,
@@ -229,124 +229,5 @@ class SearchPostingWidget extends StatelessWidget {
         ),
       ),
     );
-    // GestureDetector(
-    //   onTap: () {
-    //     // Get.to(PostingScreen(post: Post(),));
-    //     print("click posting");
-    //   },
-    //   child: Padding(
-    //     padding: const EdgeInsets.fromLTRB(16.0, 8, 16.0, 0),
-    //     child: Column(
-    //       children: [
-    //         Container(
-    //           decoration: BoxDecoration(
-    //             borderRadius: BorderRadius.only(
-    //               topLeft: Radius.circular(8),
-    //               topRight: Radius.circular(8),
-    //               bottomLeft: Radius.circular(8),
-    //               bottomRight: Radius.circular(8),
-    //             ),
-    //             boxShadow: [
-    //               BoxShadow(
-    //                 blurRadius: 3,
-    //                 offset: Offset(0.0, 1.0),
-    //                 color: Colors.black.withOpacity(0.1),
-    //               ),
-    //               BoxShadow(
-    //                 blurRadius: 2,
-    //                 offset: Offset(0.0, 1.0),
-    //                 color: Colors.black.withOpacity(0.06),
-    //               ),
-    //             ],
-    //           ),
-    //           child: Column(
-    //             children: [
-    //               Column(
-    //                 children: [
-    //                   ClipRRect(
-    //                     borderRadius: BorderRadius.only(
-    //                       bottomLeft: Radius.circular(8),
-    //                       bottomRight: Radius.circular(8),
-    //                     ),
-    //                     child: Container(
-    //                       color: mainWhite,
-    //                       child: Padding(
-    //                         padding: const EdgeInsets.symmetric(
-    //                           horizontal: 12,
-    //                           vertical: 16,
-    //                         ),
-    //                         child: Column(
-    //                           crossAxisAlignment: CrossAxisAlignment.stretch,
-    //                           children: [
-    //                             Text(
-    //                               "${postingtitle}",
-    //                               style: kHeaderH2Style,
-    //                             ),
-    //                             SizedBox(
-    //                               height: 24,
-    //                             ),
-    //                             Text(
-    //                               "${projecttitle}",
-    //                               style: TextStyle(
-    //                                 color: mainblack.withOpacity(0.6),
-    //                                 fontSize: 14,
-    //                                 fontWeight: FontWeight.bold,
-    //                               ),
-    //                             ),
-    //                             SizedBox(
-    //                               height: 24,
-    //                             ),
-    //                             Row(
-    //                               mainAxisAlignment:
-    //                                   MainAxisAlignment.spaceBetween,
-    //                               children: [
-    //                                 Row(
-    //                                   children: [
-    //                                     Container(
-    //                                       height: 32,
-    //                                       width: 32,
-    //                                       child: ClipOval(
-    //                                           child: profileimage == null
-    //                                               ? Image.asset(
-    //                                                   "assets/illustrations/default_profile.png")
-    //                                               : CachedNetworkImage(
-    //                                                   height: 32,
-    //                                                   width: 32,
-    //                                                   imageUrl:
-    //                                                       "${profileimage}",
-    //                                                   placeholder:
-    //                                                       (context, url) =>
-    //                                                           CircleAvatar(
-    //                                                     child: Center(
-    //                                                         child:
-    //                                                             CircularProgressIndicator()),
-    //                                                   ),
-    //                                                   fit: BoxFit.fill,
-    //                                                 )),
-    //                                     ),
-    //                                     SizedBox(
-    //                                       width: 8,
-    //                                     ),
-    //                                   ],
-    //                                 ),
-    //                               ],
-    //                             ),
-    //                           ],
-    //                         ),
-    //                       ),
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //         SizedBox(
-    //           height: 16,
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }

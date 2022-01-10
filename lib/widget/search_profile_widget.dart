@@ -18,60 +18,80 @@ class SearchProfileWidget extends StatelessWidget {
   String name;
   String department;
   var profileimage;
-  SearchProfileWidget(
-      {required this.name,
-      required this.id,
-      required this.department,
-      required this.profileimage});
+  SearchProfileWidget({
+    required this.name,
+    required this.id,
+    required this.department,
+    required this.profileimage,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () async {
-        await getProfile(id).then((response) {
-          var responseBody = json.decode(utf8.decode(response.bodyBytes));
-          profileController.myUserInfo(User.fromJson(responseBody));
+    return GestureDetector(
+        onTap: () async {
+          await getProfile(id).then((response) {
+            var responseBody = json.decode(utf8.decode(response.bodyBytes));
+            profileController.otherUser(User.fromJson(responseBody));
 
-          List projectmaplist = responseBody['project'];
-          profileController.myProjectList(projectmaplist
-              .map((project) => Project.fromJson(project))
-              .map((project) => ProjectWidget(
-                    project: project.obs,
-                  ))
-              .toList());
-        });
-        AppController.to.ismyprofile.value = false;
-        print(AppController.to.ismyprofile.value);
-        Get.to(() => OtherProfileScreen());
-      },
-      leading: profileimage == null
-          ? ClipOval(
-              child: Image.asset("assets/illustrations/default_profile.png"),
-            )
-          : ClipOval(
-              child: CachedNetworkImage(
-                height: 50,
-                width: 50,
-                imageUrl: profileimage,
-                placeholder: (context, url) => const CircleAvatar(
-                  child: Center(child: CircularProgressIndicator()),
-                ),
-                fit: BoxFit.fill,
+            List projectmaplist = responseBody['project'];
+            profileController.otherProjectList(projectmaplist
+                .map((project) => Project.fromJson(project))
+                .map((project) => ProjectWidget(
+                      project: project.obs,
+                    ))
+                .toList());
+          });
+          AppController.to.ismyprofile.value = false;
+          Get.to(() => OtherProfileScreen());
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+          child: Row(
+            children: [
+              (profileimage == null)
+                  ? ClipOval(
+                      child: Image.asset(
+                          "assets/illustrations/default_profile.png"),
+                    )
+                  : ClipOval(
+                      child: CachedNetworkImage(
+                        height: 50,
+                        width: 50,
+                        imageUrl: profileimage,
+                        placeholder: (context, url) => const CircleAvatar(
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+              SizedBox(
+                width: 12,
               ),
-            ),
-      title: Text(
-        '$name',
-        style: kSubTitle2Style,
-      ),
-      subtitle: Text(
-        '$department',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: mainblack.withOpacity(0.6),
-          fontFamily: 'Nanum',
-        ),
-      ),
-    );
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$name',
+                      style: kSubTitle2Style,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      '$department',
+                      style: kSubTitle3Style.copyWith(
+                        color: mainblack.withOpacity(0.6),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }

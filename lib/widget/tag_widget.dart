@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/model/tag_model.dart';
-import 'package:loopus/screen/search_tag_detail_screen.dart';
+import 'package:loopus/screen/tag_detail_screen.dart';
 
 class Tagwidget extends StatelessWidget {
   Tagwidget({
@@ -23,7 +23,7 @@ class Tagwidget extends StatelessWidget {
         SearchController.to.searchtagquestionlist.clear();
         await SearchController.to.search(SearchType.tag_project, tag.tagId, 1);
         await SearchController.to.search(SearchType.tag_question, tag.tagId, 1);
-        Get.to(() => SearchTagDetailScreen(
+        Get.to(() => TagDetailScreen(
               title: tag.tag,
               count: 0,
             ));
