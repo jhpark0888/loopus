@@ -1,4 +1,4 @@
-class DurationCaculate {
+class DurationCaculator {
   String durationCaculate({
     required DateTime startDate,
     required DateTime endDate,

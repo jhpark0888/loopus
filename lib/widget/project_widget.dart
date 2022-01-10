@@ -135,14 +135,14 @@ class ProjectWidget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4),
                               color: (project.value.endDate == null)
                                   ? Color(0xffefefef)
-                                  : mainblue,
+                                  : Color(0xff888B8C),
                             ),
                             child: Center(
                               child: Obx(
                                 () => Text(
                                   (project.value.endDate == null)
                                       ? '진행중'
-                                      : DurationCaculate().durationCaculate(
+                                      : DurationCaculator().durationCaculate(
                                           startDate: project.value.startDate!,
                                           endDate: project.value.endDate!,
                                         ),

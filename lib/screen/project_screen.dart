@@ -126,13 +126,13 @@ class ProjectScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(4),
                                 color: (project.value.endDate == null)
                                     ? Color(0xffefefef)
-                                    : mainblue,
+                                    : Color(0xff888B8C),
                               ),
                               child: Center(
                                 child: Text(
                                   project.value.endDate == null
                                       ? '진행중'
-                                      : DurationCaculate().durationCaculate(
+                                      : DurationCaculator().durationCaculate(
                                           startDate: project.value.startDate!,
                                           endDate: project.value.endDate!),
                                   style: TextStyle(
@@ -152,7 +152,7 @@ class ProjectScreen extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             //좋아요 한 사람 리스트
-                            print(DurationCaculate().durationCaculate(
+                            print(DurationCaculator().durationCaculate(
                                 startDate: project.value.startDate!,
                                 endDate: project.value.endDate!));
                           },
