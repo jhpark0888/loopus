@@ -119,12 +119,12 @@ class ProjectWidget extends StatelessWidget {
                         children: [
                           Obx(
                             () => Text(
-                              '${DateFormat("yyyy.MM").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yyyy.MM").format(project.value.endDate!) : ''}',
+                              '${DateFormat("yy.MM.dd").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''}',
                               style: kSubTitle2Style,
                             ),
                           ),
                           SizedBox(
-                            width: 8,
+                            width: (project.value.endDate == null) ? 4 : 8,
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(
