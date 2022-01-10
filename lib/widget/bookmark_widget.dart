@@ -100,8 +100,9 @@ class BookmarkWidget extends StatelessWidget {
                         children: [
                           InkWell(
                             onTap: () async {
-                              await tapProfile();
                               AppController.to.ismyprofile.value = false;
+                              await tapProfile();
+
                               Get.to(() => ProfileScreen());
                             },
                             child: Row(

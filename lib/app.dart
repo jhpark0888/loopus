@@ -5,8 +5,8 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
 import 'package:loopus/screen/home_screen.dart';
+import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/paper_screen.dart';
-import 'package:loopus/screen/profile_screen.dart';
 import 'package:loopus/screen/search_screen.dart';
 
 class App extends GetView<AppController> {
@@ -15,7 +15,7 @@ class App extends GetView<AppController> {
     SearchScreen(),
     PaperScreen(),
     BookmarkScreen(),
-    ProfileScreen(),
+    MyProfileScreen(),
   ];
 
   @override

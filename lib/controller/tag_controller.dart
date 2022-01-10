@@ -13,11 +13,19 @@ import 'package:http/http.dart' as http;
 
 class TagController extends GetxController {
   static TagController get to => Get.find();
+  ScrollController _tagScrollController = ScrollController();
+  final maxExtent = Get.height * 0.25;
+  RxDouble currentExtent = 0.0.obs;
 
   void onInit() {
     super.onInit();
     tagsearch.addListener(() {
       gettagsearch();
+    });
+    _tagScrollController.addListener(() {
+      currentExtent.value = maxExtent - _tagScrollController.offset;
+      if (currentExtent.value < 0) currentExtent.value = 0.0;
+      if (currentExtent.value > maxExtent) currentExtent.value = maxExtent;
     });
   }
 

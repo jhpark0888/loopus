@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:loopus/api/profile_api.dart';
@@ -17,13 +18,25 @@ class ProfileController extends GetxController
 
   RxList<ProjectWidget> projectlist = <ProjectWidget>[].obs;
   Rx<File> profileimage = File('').obs;
-  Rx<User> user = User(
+  Rx<User> myUserInfo = User(
+    //id
+    user: 0,
+    //0 : 학생, 1: 기업
+    type: 0,
+    realName: '',
+    profileTag: [],
+    department: '',
+    //0 : 다른 프로필, 1 : 내 프로필
+    isuser: 1,
+  ).obs;
+
+  Rx<User> otherUser = User(
     user: 0,
     type: 0,
     realName: '',
     profileTag: [],
     department: '',
-    isuser: 1,
+    isuser: 0,
   ).obs;
 
   late TabController profileTabController;
@@ -41,7 +54,7 @@ class ProfileController extends GetxController
     await getProfile(userId).then((response) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-      user(User.fromJson(responseBody));
+      myUserInfo(User.fromJson(responseBody));
 
       List projectmaplist = responseBody['project'];
       projectlist(projectmaplist

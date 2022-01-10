@@ -22,8 +22,8 @@ import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
-class ProfileScreen extends StatelessWidget {
-  ProfileScreen({Key? key}) : super(key: key);
+class OtherProfileScreen extends StatelessWidget {
+  OtherProfileScreen({Key? key}) : super(key: key);
   ProfileController profileController = Get.put(ProfileController());
   RxBool isLoop = false.obs;
 

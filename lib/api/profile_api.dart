@@ -7,11 +7,10 @@ import 'package:http/http.dart' as http;
 
 import 'package:loopus/model/user_model.dart';
 
-Future<http.Response> getProfile(var userid) async {
+Future<http.Response> getProfile(var userId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri =
-      Uri.parse("http://3.35.253.151:8000/user_api/profile_load/$userid");
+  var uri = Uri.parse("http://3.35.253.151:8000/user_api/profile_load/$userId");
 
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
