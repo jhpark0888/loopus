@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/screen/paper_competition_detail_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class PapercompetitionWidget extends StatelessWidget {
@@ -13,8 +14,7 @@ class PapercompetitionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Get.to(PostingScreen());
-        print("click posting");
+        Get.to(PaperCompetitionDetailScreen());
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(

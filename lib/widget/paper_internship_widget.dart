@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/screen/paper_internship_detail_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class PaperinternshipWidget extends StatelessWidget {
@@ -12,8 +13,7 @@ class PaperinternshipWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Get.to(PostingScreen());
-        print("click posting");
+        Get.to(PaperInternshipDetailScreen());
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(

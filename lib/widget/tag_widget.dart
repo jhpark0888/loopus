@@ -30,7 +30,9 @@ class Tagwidget extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-            color: Color(0xffefefef), borderRadius: BorderRadius.circular(4)),
+          color: Color(0xffefefef),
+          borderRadius: BorderRadius.circular(4),
+        ),
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
         child: Text(
           "${tag.tag}",
