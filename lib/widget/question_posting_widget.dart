@@ -117,13 +117,14 @@ class QuestionPostingWidget extends StatelessWidget {
 
                                     List projectmaplist =
                                         responseBody['project'];
-                                    profileController.projectlist(projectmaplist
-                                        .map((project) =>
-                                            Project.fromJson(project))
-                                        .map((project) => ProjectWidget(
-                                              project: project.obs,
-                                            ))
-                                        .toList());
+                                    profileController.myProjectList(
+                                        projectmaplist
+                                            .map((project) =>
+                                                Project.fromJson(project))
+                                            .map((project) => ProjectWidget(
+                                                  project: project.obs,
+                                                ))
+                                            .toList());
                                   });
                                   AppController.to.ismyprofile.value = false;
                                   print(AppController.to.ismyprofile.value);

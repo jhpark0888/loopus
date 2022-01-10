@@ -133,7 +133,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                                 .myUserInfo(User.fromJson(responseBody));
 
                             List projectmaplist = responseBody['project'];
-                            profileController.projectlist(projectmaplist
+                            profileController.myProjectList(projectmaplist
                                 .map((project) => Project.fromJson(project))
                                 .map((project) => ProjectWidget(
                                       project: project.obs,

@@ -170,12 +170,12 @@ class HomePostingWidget extends StatelessWidget {
                                               .then((response) {
                                             var responseBody = json.decode(utf8
                                                 .decode(response.bodyBytes));
-                                            profileController.myUserInfo(
+                                            profileController.otherUser(
                                                 User.fromJson(responseBody));
 
                                             List projectmaplist =
                                                 responseBody['project'];
-                                            profileController.projectlist(
+                                            profileController.otherProjectList(
                                                 projectmaplist
                                                     .map((project) =>
                                                         Project.fromJson(

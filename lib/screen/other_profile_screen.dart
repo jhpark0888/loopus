@@ -34,7 +34,7 @@ class OtherProfileScreen extends StatelessWidget {
       length: 2,
       child: Obx(
         () => Scaffold(
-          appBar: profileController.myUserInfo.value.isuser == 1
+          appBar: profileController.otherUser.value.isuser == 1
               ? (AppController.to.ismyprofile.value == true)
                   ? AppBar(
                       elevation: 0,
@@ -56,10 +56,9 @@ class OtherProfileScreen extends StatelessWidget {
                     )
                   : AppBarWidget(
                       title:
-                          '${profileController.myUserInfo.value.realName}님의 프로필')
+                          '${profileController.otherUser.value.realName}님의 프로필')
               : AppBarWidget(
-                  title:
-                      '${profileController.myUserInfo.value.realName}님의 프로필'),
+                  title: '${profileController.otherUser.value.realName}님의 프로필'),
           body: NestedScrollView(
             headerSliverBuilder: (context, value) {
               return [
@@ -91,7 +90,7 @@ class OtherProfileScreen extends StatelessWidget {
                                             height: 92,
                                             width: 92,
                                             imageUrl: profileController
-                                                .myUserInfo.value.profileImage!,
+                                                .otherUser.value.profileImage!,
                                             placeholder: (context, url) =>
                                                 Image.asset(
                                               "assets/illustrations/default_profile.png",
@@ -121,7 +120,7 @@ class OtherProfileScreen extends StatelessWidget {
                                             isValue2Red: false,
                                             isOne: false),
                                     child: profileController
-                                                .myUserInfo.value.isuser ==
+                                                .otherUser.value.isuser ==
                                             1
                                         ? Container(
                                             decoration: BoxDecoration(
@@ -143,7 +142,7 @@ class OtherProfileScreen extends StatelessWidget {
                         ),
                         Obx(
                           () => Text(
-                            profileController.myUserInfo.value.realName,
+                            profileController.otherUser.value.realName,
                             style: kSubTitle2Style,
                           ),
                         ),
@@ -152,7 +151,7 @@ class OtherProfileScreen extends StatelessWidget {
                         ),
                         Obx(
                           () => Text(
-                            profileController.myUserInfo.value.department,
+                            profileController.otherUser.value.department,
                             style: kBody1Style,
                           ),
                         ),
@@ -163,17 +162,17 @@ class OtherProfileScreen extends StatelessWidget {
                           () => Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children:
-                                  profileController.myUserInfo.value.profileTag
+                                  profileController.otherUser.value.profileTag
                                       .map((tag) => Row(children: [
                                             Tagwidget(
                                               tag: tag,
                                               fontSize: 14,
                                             ),
-                                            profileController.myUserInfo.value
+                                            profileController.otherUser.value
                                                         .profileTag
                                                         .indexOf(tag) !=
                                                     profileController
-                                                            .myUserInfo
+                                                            .otherUser
                                                             .value
                                                             .profileTag
                                                             .length -
@@ -194,7 +193,7 @@ class OtherProfileScreen extends StatelessWidget {
                             Expanded(
                               child: GestureDetector(
                                 onTap: profileController
-                                            .myUserInfo.value.isuser ==
+                                            .otherUser.value.isuser ==
                                         1
                                     ? () {
                                         Get.to(() => ProfileTagChangeScreen());
@@ -209,7 +208,7 @@ class OtherProfileScreen extends StatelessWidget {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8.0),
                                       child: profileController
-                                                  .myUserInfo.value.isuser ==
+                                                  .otherUser.value.isuser ==
                                               1
                                           ? const Center(
                                               child: Text(
@@ -231,7 +230,7 @@ class OtherProfileScreen extends StatelessWidget {
                               child: GestureDetector(
                                 onTap: () {
                                   if (profileController
-                                          .myUserInfo.value.isuser ==
+                                          .otherUser.value.isuser ==
                                       1) {}
                                 },
                                 child: Container(
@@ -246,7 +245,7 @@ class OtherProfileScreen extends StatelessWidget {
                                       vertical: 8.0,
                                     ),
                                     child: profileController
-                                                .myUserInfo.value.isuser ==
+                                                .otherUser.value.isuser ==
                                             1
                                         ? Center(
                                             child: Text('내 프로필 공유하기',
@@ -416,7 +415,7 @@ class OtherProfileScreen extends StatelessWidget {
                                           ));
                                     },
                                     child: profileController
-                                                .myUserInfo.value.isuser ==
+                                                .otherUser.value.isuser ==
                                             1
                                         ? Text(
                                             '추가하기',
@@ -432,8 +431,8 @@ class OtherProfileScreen extends StatelessWidget {
                             child: (profileController.isProfileLoading.value ==
                                     false)
                                 ? Column(
-                                    children:
-                                        profileController.projectlist.value,
+                                    children: profileController
+                                        .otherProjectList.value,
                                   )
                                 : Padding(
                                     padding: EdgeInsets.zero,
@@ -462,8 +461,7 @@ class OtherProfileScreen extends StatelessWidget {
                       children: [
                         Align(
                             alignment: Alignment.centerLeft,
-                            child: profileController.myUserInfo.value.isuser ==
-                                    1
+                            child: profileController.otherUser.value.isuser == 1
                                 ? Obx(
                                     () => DropdownButtonHideUnderline(
                                       child: ButtonTheme(

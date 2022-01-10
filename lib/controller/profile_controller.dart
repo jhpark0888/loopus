@@ -25,19 +25,21 @@ class ProfileController extends GetxController
   ScrollController questionscrollController = ScrollController();
 
   RefreshController profilerefreshController =
-      new RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
-  Future<void> onRefresh() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    profilerefreshController.refreshCompleted();
-  }
+  // Future<void> onRefresh() async {
+  //   await Future.delayed(Duration(milliseconds: 1000));
+  //   profilerefreshController.refreshCompleted();
+  // }
 
-  void onLoding() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    profilerefreshController.loadComplete();
-  }
+  // void onLoding() async {
+  //   await Future.delayed(Duration(milliseconds: 1000));
+  //   profilerefreshController.loadComplete();
+  // }
 
-  RxList<ProjectWidget> projectlist = <ProjectWidget>[].obs;
+  RxList<ProjectWidget> myProjectList = <ProjectWidget>[].obs;
+  RxList<ProjectWidget> otherProjectList = <ProjectWidget>[].obs;
+
   Rx<File> profileimage = File('').obs;
   Rx<User> myUserInfo = User(
     //id
@@ -57,7 +59,7 @@ class ProfileController extends GetxController
     realName: '',
     profileTag: [],
     department: '',
-    isuser: 0,
+    isuser: 1,
   ).obs;
 
   late TabController profileTabController;
@@ -75,7 +77,7 @@ class ProfileController extends GetxController
       myUserInfo(User.fromJson(responseBody));
 
       List projectmaplist = responseBody['project'];
-      projectlist(projectmaplist
+      myProjectList(projectmaplist
           .map((project) => Project.fromJson(project))
           .map((project) => ProjectWidget(
                 project: project.obs,
@@ -88,6 +90,7 @@ class ProfileController extends GetxController
   @override
   void onInit() {
     profileTabController = TabController(length: 2, vsync: this);
+    // isProfileLoading.value = true;
     loadProfile();
     super.onInit();
   }
