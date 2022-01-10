@@ -15,7 +15,7 @@ import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/posting_screen.dart';
-import 'package:loopus/screen/profile_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
@@ -129,7 +129,8 @@ class SearchTagProjectWidget extends StatelessWidget {
                           await getProfile(user_id).then((response) {
                             var responseBody =
                                 json.decode(utf8.decode(response.bodyBytes));
-                            profileController.user(User.fromJson(responseBody));
+                            profileController
+                                .myUserInfo(User.fromJson(responseBody));
 
                             List projectmaplist = responseBody['project'];
                             profileController.projectlist(projectmaplist
@@ -141,7 +142,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                           });
                           AppController.to.ismyprofile.value = false;
                           print(AppController.to.ismyprofile.value);
-                          Get.to(() => ProfileScreen());
+                          Get.to(() => OtherProfileScreen());
                         },
                         child: Row(
                           children: [

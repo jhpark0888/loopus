@@ -38,17 +38,19 @@ class ProjectScreen extends StatelessWidget {
           icon: SvgPicture.asset('assets/icons/Arrow.svg'),
         ),
         actions: [
-          IconButton(
-            onPressed: () async {
-              exproject = await Get.to(() => ProjectModifyScreen(
-                    project: project,
-                  ));
-              if (exproject != null) {
-                project(exproject);
-              }
-            },
-            icon: SvgPicture.asset('assets/icons/Edit.svg'),
-          ),
+          project.value.is_user == true
+              ? IconButton(
+                  onPressed: () async {
+                    exproject = await Get.to(() => ProjectModifyScreen(
+                          project: project,
+                        ));
+                    if (exproject != null) {
+                      project(exproject);
+                    }
+                  },
+                  icon: SvgPicture.asset('assets/icons/Edit.svg'),
+                )
+              : Container(),
           IconButton(
             onPressed: () {
               modalController.showModalIOS(
@@ -318,7 +320,7 @@ class ProjectScreen extends StatelessWidget {
                         children: project.value.projectTag
                             .map((tag) => Row(children: [
                                   Tagwidget(
-                                    content: tag.tag,
+                                    tag: tag,
                                     fontSize: 14,
                                   ),
                                   project.value.projectTag.indexOf(tag) !=
@@ -341,21 +343,23 @@ class ProjectScreen extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(() => PostingAddNameScreen(
-                                project_id: project.value.id,
-                              ));
-                        },
-                        child: Text(
-                          '포스팅 작성하기',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: mainblue,
-                          ),
-                        ),
-                      ),
+                      project.value.is_user == true
+                          ? GestureDetector(
+                              onTap: () {
+                                Get.to(() => PostingAddNameScreen(
+                                      project_id: project.value.id,
+                                    ));
+                              },
+                              child: Text(
+                                '포스팅 작성하기',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: mainblue,
+                                ),
+                              ),
+                            )
+                          : Container(),
                     ],
                   ),
                   SizedBox(

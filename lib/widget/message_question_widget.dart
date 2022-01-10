@@ -10,7 +10,7 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/screen/profile_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 
 class MessageQuestionWidget extends StatelessWidget {
@@ -57,7 +57,8 @@ class MessageQuestionWidget extends StatelessWidget {
                           await getProfile(user).then((response) {
                             var responseBody =
                                 json.decode(utf8.decode(response.bodyBytes));
-                            profileController.user(User.fromJson(responseBody));
+                            profileController
+                                .myUserInfo(User.fromJson(responseBody));
 
                             List projectmaplist = responseBody['project'];
                             profileController.projectlist(projectmaplist
@@ -69,7 +70,7 @@ class MessageQuestionWidget extends StatelessWidget {
                           });
                           AppController.to.ismyprofile.value = false;
                           print(AppController.to.ismyprofile.value);
-                          Get.to(() => ProfileScreen());
+                          Get.to(() => OtherProfileScreen());
                         },
                         child: Row(
                           children: [

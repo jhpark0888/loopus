@@ -12,7 +12,7 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/screen/profile_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/widget/alertdialog1_widget.dart';
 import 'package:loopus/widget/alertdialog2_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
@@ -86,7 +86,7 @@ class MessageAnswerWidget extends StatelessWidget {
                                   var responseBody = json
                                       .decode(utf8.decode(response.bodyBytes));
                                   profileController
-                                      .user(User.fromJson(responseBody));
+                                      .myUserInfo(User.fromJson(responseBody));
 
                                   List projectmaplist = responseBody['project'];
                                   profileController.projectlist(projectmaplist
@@ -99,7 +99,7 @@ class MessageAnswerWidget extends StatelessWidget {
                                 });
                                 AppController.to.ismyprofile.value = false;
                                 print(AppController.to.ismyprofile.value);
-                                Get.to(() => ProfileScreen());
+                                Get.to(() => OtherProfileScreen());
                               },
                               child: Text(
                                 "$name",

@@ -16,7 +16,7 @@ import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/posting_screen.dart';
-import 'package:loopus/screen/profile_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:http/http.dart' as http;
@@ -138,7 +138,7 @@ class HomePostingWidget extends StatelessWidget {
                                 children: item.project!.projectTag
                                     .map((tag) => Row(children: [
                                           Tagwidget(
-                                            content: tag.tag,
+                                            tag: tag,
                                             fontSize: 12,
                                           ),
                                           item.project!.projectTag
@@ -170,7 +170,7 @@ class HomePostingWidget extends StatelessWidget {
                                               .then((response) {
                                             var responseBody = json.decode(utf8
                                                 .decode(response.bodyBytes));
-                                            profileController.user(
+                                            profileController.myUserInfo(
                                                 User.fromJson(responseBody));
 
                                             List projectmaplist =
@@ -190,7 +190,7 @@ class HomePostingWidget extends StatelessWidget {
                                               false;
                                           print(AppController
                                               .to.ismyprofile.value);
-                                          Get.to(() => ProfileScreen());
+                                          Get.to(() => OtherProfileScreen());
                                         },
                                         child: Row(
                                           children: [

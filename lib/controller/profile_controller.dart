@@ -11,10 +11,31 @@ import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/project_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProfileController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static ProfileController get to => Get.find();
+
+  List<String> dropdownQanda = ["내가 답변한 질문", "내가 한 질문"];
+  var selectqanda = 0.obs;
+  RxBool profileenablepullup = true.obs;
+  ScrollController userscrollController = ScrollController();
+  ScrollController projectscrollController = ScrollController();
+  ScrollController questionscrollController = ScrollController();
+
+  RefreshController profilerefreshController =
+      new RefreshController(initialRefresh: false);
+
+  Future<void> onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    profilerefreshController.refreshCompleted();
+  }
+
+  void onLoding() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    profilerefreshController.loadComplete();
+  }
 
   RxList<ProjectWidget> projectlist = <ProjectWidget>[].obs;
   Rx<File> profileimage = File('').obs;
@@ -44,9 +65,6 @@ class ProfileController extends GetxController
   RxBool isProfileLoading = true.obs;
   RefreshController profileRefreshController =
       RefreshController(initialRefresh: false);
-
-  List<String> dropdownQanda = ["내가 답변한 질문", "내가 한 질문"];
-  var selectqanda = 0.obs;
 
   void loadProfile() async {
     String? userId = await const FlutterSecureStorage().read(key: "id");

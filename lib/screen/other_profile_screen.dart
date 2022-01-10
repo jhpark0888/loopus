@@ -34,7 +34,7 @@ class OtherProfileScreen extends StatelessWidget {
       length: 2,
       child: Obx(
         () => Scaffold(
-          appBar: profileController.user.value.isuser == 1
+          appBar: profileController.myUserInfo.value.isuser == 1
               ? (AppController.to.ismyprofile.value == true)
                   ? AppBar(
                       elevation: 0,
@@ -55,9 +55,11 @@ class OtherProfileScreen extends StatelessWidget {
                       ],
                     )
                   : AppBarWidget(
-                      title: '${profileController.user.value.realName}님의 프로필')
+                      title:
+                          '${profileController.myUserInfo.value.realName}님의 프로필')
               : AppBarWidget(
-                  title: '${profileController.user.value.realName}님의 프로필'),
+                  title:
+                      '${profileController.myUserInfo.value.realName}님의 프로필'),
           body: NestedScrollView(
             headerSliverBuilder: (context, value) {
               return [
@@ -89,7 +91,7 @@ class OtherProfileScreen extends StatelessWidget {
                                             height: 92,
                                             width: 92,
                                             imageUrl: profileController
-                                                .user.value.profileImage!,
+                                                .myUserInfo.value.profileImage!,
                                             placeholder: (context, url) =>
                                                 Image.asset(
                                               "assets/illustrations/default_profile.png",
@@ -118,19 +120,20 @@ class OtherProfileScreen extends StatelessWidget {
                                             isValue1Red: false,
                                             isValue2Red: false,
                                             isOne: false),
-                                    child:
-                                        profileController.user.value.isuser == 1
-                                            ? Container(
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: mainWhite),
-                                                child: SvgPicture.asset(
-                                                  "assets/icons/Image.svg",
-                                                  width: 24,
-                                                  height: 24,
-                                                ),
-                                              )
-                                            : Container()),
+                                    child: profileController
+                                                .myUserInfo.value.isuser ==
+                                            1
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: mainWhite),
+                                            child: SvgPicture.asset(
+                                              "assets/icons/Image.svg",
+                                              width: 24,
+                                              height: 24,
+                                            ),
+                                          )
+                                        : Container()),
                               ),
                             ),
                           ],
@@ -140,7 +143,7 @@ class OtherProfileScreen extends StatelessWidget {
                         ),
                         Obx(
                           () => Text(
-                            profileController.user.value.realName,
+                            profileController.myUserInfo.value.realName,
                             style: kSubTitle2Style,
                           ),
                         ),
@@ -149,7 +152,7 @@ class OtherProfileScreen extends StatelessWidget {
                         ),
                         Obx(
                           () => Text(
-                            profileController.user.value.department,
+                            profileController.myUserInfo.value.department,
                             style: kBody1Style,
                           ),
                         ),
@@ -159,23 +162,28 @@ class OtherProfileScreen extends StatelessWidget {
                         Obx(
                           () => Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: profileController.user.value.profileTag
-                                  .map((tag) => Row(children: [
-                                        Tagwidget(
-                                          content: tag.tag,
-                                          fontSize: 14,
-                                        ),
-                                        profileController.user.value.profileTag
-                                                    .indexOf(tag) !=
-                                                profileController.user.value
-                                                        .profileTag.length -
-                                                    1
-                                            ? SizedBox(
-                                                width: 8,
-                                              )
-                                            : Container()
-                                      ]))
-                                  .toList()),
+                              children:
+                                  profileController.myUserInfo.value.profileTag
+                                      .map((tag) => Row(children: [
+                                            Tagwidget(
+                                              tag: tag,
+                                              fontSize: 14,
+                                            ),
+                                            profileController.myUserInfo.value
+                                                        .profileTag
+                                                        .indexOf(tag) !=
+                                                    profileController
+                                                            .myUserInfo
+                                                            .value
+                                                            .profileTag
+                                                            .length -
+                                                        1
+                                                ? SizedBox(
+                                                    width: 8,
+                                                  )
+                                                : Container()
+                                          ]))
+                                      .toList()),
                         ),
                         SizedBox(
                           height: 16,
@@ -185,7 +193,9 @@ class OtherProfileScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: GestureDetector(
-                                onTap: profileController.user.value.isuser == 1
+                                onTap: profileController
+                                            .myUserInfo.value.isuser ==
+                                        1
                                     ? () {
                                         Get.to(() => ProfileTagChangeScreen());
                                       }
@@ -198,19 +208,19 @@ class OtherProfileScreen extends StatelessWidget {
                                   child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8.0),
-                                      child:
-                                          profileController.user.value.isuser ==
-                                                  1
-                                              ? const Center(
-                                                  child: Text(
-                                                  '관심 태그 변경하기',
-                                                  style: kButtonStyle,
-                                                ))
-                                              : const Center(
-                                                  child: Text(
-                                                  '메세지 보내기',
-                                                  style: kButtonStyle,
-                                                ))),
+                                      child: profileController
+                                                  .myUserInfo.value.isuser ==
+                                              1
+                                          ? const Center(
+                                              child: Text(
+                                              '관심 태그 변경하기',
+                                              style: kButtonStyle,
+                                            ))
+                                          : const Center(
+                                              child: Text(
+                                              '메세지 보내기',
+                                              style: kButtonStyle,
+                                            ))),
                                 ),
                               ),
                             ),
@@ -220,7 +230,8 @@ class OtherProfileScreen extends StatelessWidget {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                  if (profileController.user.value.isuser ==
+                                  if (profileController
+                                          .myUserInfo.value.isuser ==
                                       1) {}
                                 },
                                 child: Container(
@@ -234,20 +245,19 @@ class OtherProfileScreen extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                       vertical: 8.0,
                                     ),
-                                    child:
-                                        profileController.user.value.isuser == 1
-                                            ? Center(
-                                                child: Text('내 프로필 공유하기',
-                                                    style:
-                                                        kButtonStyle.copyWith(
-                                                            color: mainWhite)),
-                                              )
-                                            : Center(
-                                                child: Text('루프 맺기',
-                                                    style:
-                                                        kButtonStyle.copyWith(
-                                                            color: mainWhite)),
-                                              ),
+                                    child: profileController
+                                                .myUserInfo.value.isuser ==
+                                            1
+                                        ? Center(
+                                            child: Text('내 프로필 공유하기',
+                                                style: kButtonStyle.copyWith(
+                                                    color: mainWhite)),
+                                          )
+                                        : Center(
+                                            child: Text('루프 맺기',
+                                                style: kButtonStyle.copyWith(
+                                                    color: mainWhite)),
+                                          ),
                                   ),
                                 ),
                               ),
@@ -405,14 +415,15 @@ class OtherProfileScreen extends StatelessWidget {
                                             screenType: Screentype.add,
                                           ));
                                     },
-                                    child:
-                                        profileController.user.value.isuser == 1
-                                            ? Text(
-                                                '추가하기',
-                                                style: kButtonStyle.copyWith(
-                                                    color: mainblue),
-                                              )
-                                            : Container())
+                                    child: profileController
+                                                .myUserInfo.value.isuser ==
+                                            1
+                                        ? Text(
+                                            '추가하기',
+                                            style: kButtonStyle.copyWith(
+                                                color: mainblue),
+                                          )
+                                        : Container())
                               ]),
                         ),
                         Obx(
@@ -451,7 +462,8 @@ class OtherProfileScreen extends StatelessWidget {
                       children: [
                         Align(
                             alignment: Alignment.centerLeft,
-                            child: profileController.user.value.isuser == 1
+                            child: profileController.myUserInfo.value.isuser ==
+                                    1
                                 ? Obx(
                                     () => DropdownButtonHideUnderline(
                                       child: ButtonTheme(
@@ -537,9 +549,9 @@ class OtherProfileScreen extends StatelessWidget {
     File? image = await getcropImage(ImageType.profile);
     if (image != null) {
       User? user =
-          await updateProfile(profileController.user.value, image, null);
+          await updateProfile(profileController.myUserInfo.value, image, null);
       if (user != null) {
-        profileController.user(user);
+        profileController.myUserInfo(user);
       }
     }
   }

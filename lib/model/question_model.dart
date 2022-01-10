@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:loopus/model/tag_model.dart';
 
 class QuestionItem {
   QuestionItem(
@@ -24,7 +25,7 @@ class QuestionItem {
   String? profileimage;
   bool? adopt;
   DateTime? date;
-  List<QuestionTag> questionTag;
+  List<Tag> questionTag;
 
   factory QuestionItem.fromJson(Map<String, dynamic> json) => QuestionItem(
         id: json["id"],
@@ -34,8 +35,8 @@ class QuestionItem {
             json["profile_image"] == null ? null : json["profile_image"],
         realname: json["real_name"],
         adopt: json["adopt"],
-        questionTag: List<QuestionTag>.from(
-            json["question_tag"].map((x) => QuestionTag.fromJson(x))),
+        questionTag:
+            List<Tag>.from(json["question_tag"].map((x) => Tag.fromJson(x))),
         date: DateTime.parse(json["date"]),
         department: json["department"],
         is_user: -1,
@@ -55,26 +56,6 @@ class QuestionItem {
         "count": answercount,
         "date":
             "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
-      };
-}
-
-class QuestionTag {
-  QuestionTag({
-    required this.tagId,
-    required this.tag,
-  });
-
-  int tagId;
-  String tag;
-
-  factory QuestionTag.fromJson(Map<String, dynamic> json) => QuestionTag(
-        tagId: json["tag_id"],
-        tag: json["tag"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "tag_id": tagId,
-        "tag": tag,
       };
 }
 

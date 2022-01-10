@@ -10,8 +10,9 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/model/project_model.dart';
+import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/screen/profile_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/question_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -19,27 +20,29 @@ import 'package:loopus/widget/tag_widget.dart';
 class SearchQuestionWidget extends StatelessWidget {
   ProfileController profileController = Get.find();
 
-  String content;
-  int answercount;
-  var profileimage;
-  var tag;
-  int id;
-  int user;
-  String department;
-  String real_name;
-  int istag;
+  QuestionItem question;
+  // String content;
+  // int answercount;
+  // var profileimage;
+  // List<Tag> tag;
+  // int id;
+  // int user;
+  // String department;
+  // String real_name;
+  // int istag;
 
   QuestionController questionController = Get.put(QuestionController());
   SearchQuestionWidget({
-    required this.content,
-    required this.id,
-    required this.istag,
-    required this.user,
-    required this.department,
-    required this.real_name,
-    required this.answercount,
-    required this.profileimage,
-    required this.tag,
+    required this.question,
+    // required this.content,
+    // required this.id,
+    // required this.istag,
+    // required this.user,
+    // required this.department,
+    // required this.real_name,
+    // required this.answercount,
+    // required this.profileimage,
+    // required this.tag,
   });
 
   @override
@@ -50,7 +53,7 @@ class SearchQuestionWidget extends StatelessWidget {
       child: InkWell(
         onTap: () async {
           questionController.messageanswerlist.clear();
-          await questionController.loadItem(id);
+          await questionController.loadItem(question.id);
           await questionController.addanswer();
           Get.to(() => QuestionScreen());
           print("click posting");
@@ -86,7 +89,7 @@ class SearchQuestionWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "${content}",
+                  "${question.content}",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -96,21 +99,22 @@ class SearchQuestionWidget extends StatelessWidget {
                 SizedBox(
                   height: 32,
                 ),
-                istag == 0
-                    ? Row(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: List.generate(tag.length, (index) {
-                              return Tagwidget(
-                                content: tag[index]["tag"],
-                                fontSize: 12,
-                              );
-                            }),
-                          ),
-                        ],
-                      )
-                    : Container(),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: question.questionTag
+                        .map((tag) => Row(children: [
+                              Tagwidget(
+                                tag: tag,
+                                fontSize: 14,
+                              ),
+                              question.questionTag.indexOf(tag) !=
+                                      question.questionTag.length - 1
+                                  ? SizedBox(
+                                      width: 8,
+                                    )
+                                  : Container()
+                            ]))
+                        .toList()),
                 SizedBox(
                   height: 20,
                 ),
@@ -121,11 +125,11 @@ class SearchQuestionWidget extends StatelessWidget {
                       children: [
                         InkWell(
                           onTap: () async {
-                            await getProfile(user).then((response) {
+                            await getProfile(question.user).then((response) {
                               var responseBody =
                                   json.decode(utf8.decode(response.bodyBytes));
                               profileController
-                                  .user(User.fromJson(responseBody));
+                                  .myUserInfo(User.fromJson(responseBody));
 
                               List projectmaplist = responseBody['project'];
                               profileController.projectlist(projectmaplist
@@ -137,12 +141,12 @@ class SearchQuestionWidget extends StatelessWidget {
                             });
                             AppController.to.ismyprofile.value = false;
                             print(AppController.to.ismyprofile.value);
-                            Get.to(() => ProfileScreen());
+                            Get.to(() => OtherProfileScreen());
                           },
                           child: Row(
                             children: [
                               ClipOval(
-                                child: profileimage == null
+                                child: question.profileimage == null
                                     ? ClipOval(
                                         child: Image.asset(
                                           "assets/illustrations/default_profile.png",
@@ -153,7 +157,7 @@ class SearchQuestionWidget extends StatelessWidget {
                                     : CachedNetworkImage(
                                         height: 32,
                                         width: 32,
-                                        imageUrl: profileimage,
+                                        imageUrl: question.profileimage!,
                                         placeholder: (context, url) =>
                                             const CircleAvatar(
                                           child: Center(
@@ -164,7 +168,7 @@ class SearchQuestionWidget extends StatelessWidget {
                                       ),
                               ),
                               Text(
-                                "  $real_name  · ",
+                                "  ${question.realname}  · ",
                                 style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.bold),
                               ),
@@ -172,7 +176,7 @@ class SearchQuestionWidget extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "$department",
+                          "${question.department}",
                           style: TextStyle(fontSize: 14),
                         ),
                       ],
@@ -184,7 +188,7 @@ class SearchQuestionWidget extends StatelessWidget {
                           width: 4,
                         ),
                         Text(
-                          "${answercount}",
+                          "${question.answercount}",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,

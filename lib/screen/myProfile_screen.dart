@@ -83,7 +83,7 @@ class MyProfileScreen extends StatelessWidget {
                                             height: 92,
                                             width: 92,
                                             imageUrl: profileController
-                                                .user.value.profileImage!,
+                                                .myUserInfo.value.profileImage!,
                                             placeholder: (context, url) =>
                                                 Image.asset(
                                               "assets/illustrations/default_profile.png",
@@ -132,7 +132,7 @@ class MyProfileScreen extends StatelessWidget {
                         ),
                         Obx(
                           () => Text(
-                            profileController.user.value.realName,
+                            profileController.myUserInfo.value.realName,
                             style: kSubTitle2Style,
                           ),
                         ),
@@ -141,7 +141,7 @@ class MyProfileScreen extends StatelessWidget {
                         ),
                         Obx(
                           () => Text(
-                            profileController.user.value.department,
+                            profileController.myUserInfo.value.department,
                             style: kBody1Style,
                           ),
                         ),
@@ -151,23 +151,28 @@ class MyProfileScreen extends StatelessWidget {
                         Obx(
                           () => Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: profileController.user.value.profileTag
-                                  .map((tag) => Row(children: [
-                                        Tagwidget(
-                                          content: tag.tag,
-                                          fontSize: 14,
-                                        ),
-                                        profileController.user.value.profileTag
-                                                    .indexOf(tag) !=
-                                                profileController.user.value
-                                                        .profileTag.length -
-                                                    1
-                                            ? SizedBox(
-                                                width: 8,
-                                              )
-                                            : Container()
-                                      ]))
-                                  .toList()),
+                              children:
+                                  profileController.myUserInfo.value.profileTag
+                                      .map((tag) => Row(children: [
+                                            Tagwidget(
+                                              tag: tag,
+                                              fontSize: 14,
+                                            ),
+                                            profileController.myUserInfo.value
+                                                        .profileTag
+                                                        .indexOf(tag) !=
+                                                    profileController
+                                                            .myUserInfo
+                                                            .value
+                                                            .profileTag
+                                                            .length -
+                                                        1
+                                                ? SizedBox(
+                                                    width: 8,
+                                                  )
+                                                : Container()
+                                          ]))
+                                      .toList()),
                         ),
                         SizedBox(
                           height: 16,
@@ -475,9 +480,9 @@ class MyProfileScreen extends StatelessWidget {
     File? image = await getcropImage(ImageType.profile);
     if (image != null) {
       User? user =
-          await updateProfile(profileController.user.value, image, null);
+          await updateProfile(profileController.myUserInfo.value, image, null);
       if (user != null) {
-        profileController.user(user);
+        profileController.myUserInfo(user);
       }
     }
   }

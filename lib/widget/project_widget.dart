@@ -34,7 +34,8 @@ class ProjectWidget extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () async {
-          project.value = await getproject(project.value.id);
+          project.value = await getproject(
+              project.value.id); // getproject에서 총 포스팅수와 총 like수 안줌
           exproject = await Get.to(() => ProjectScreen(
                 project: project,
               ));
@@ -164,7 +165,7 @@ class ProjectWidget extends StatelessWidget {
                               ),
                               Obx(
                                 () => Text(
-                                  '${project.value.post_count ?? 0}',
+                                  '${project.value.post_count}',
                                   style: kButtonStyle,
                                 ),
                               ),
@@ -178,7 +179,7 @@ class ProjectWidget extends StatelessWidget {
                             ),
                             Obx(
                               () => Text(
-                                "${project.value.like_count ?? 0}",
+                                "${project.value.like_count}",
                                 style: kButtonStyle,
                               ),
                             ),

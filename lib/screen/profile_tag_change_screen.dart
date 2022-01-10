@@ -32,7 +32,7 @@ class ProfileTagChangeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     tagController.selectedtaglist.clear();
-    for (var tag in profileController.user.value.profileTag) {
+    for (var tag in profileController.myUserInfo.value.profileTag) {
       tagController.selectedtaglist.add(SelectedTagWidget(
         id: tag.tagId,
         text: tag.tag,
@@ -45,7 +45,7 @@ class ProfileTagChangeScreen extends StatelessWidget {
             onPressed: () async {
               if (tagController.selectedtaglist.length == 3) {
                 user = await updateProfile(
-                    profileController.user.value,
+                    profileController.myUserInfo.value,
                     null,
                     tagController.selectedtaglist
                         .map((tag) => tag.text)
@@ -53,7 +53,7 @@ class ProfileTagChangeScreen extends StatelessWidget {
                 print(user!.profileTag);
               }
               if (user != null) {
-                profileController.user(user);
+                profileController.myUserInfo(user);
               }
               Get.back();
             },
