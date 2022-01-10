@@ -4,8 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
@@ -16,6 +18,7 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/profile_screen.dart';
+import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
@@ -30,7 +33,7 @@ class SearchTagProjectWidget extends StatelessWidget {
   int like_count;
   int post_count;
   DateTime start_date;
-  var end_date;
+  DateTime? end_date;
   int user_id;
 
   SearchTagProjectWidget({
@@ -51,7 +54,9 @@ class SearchTagProjectWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        Project project = await getproject(id);
+        Get.to(() => ProjectScreen(project: project.obs));
         print("click posting");
       },
       child: Container(
@@ -100,7 +105,7 @@ class SearchTagProjectWidget extends StatelessWidget {
             ),
             end_date == null
                 ? Text(
-                    "${start_date.year}.${start_date.month} ~  진행중",
+                    "${DateFormat("yyyy.MM").format(start_date)} ~  진행중",
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -108,7 +113,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    "${start_date.year}.${start_date.month} ~ ${DateTime.parse(end_date).year}.${DateTime.parse(end_date).month}",
+                    "${DateFormat("yyyy.MM").format(start_date)} ~ ${DateFormat("yyyy.MM").format(end_date!)}",
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,

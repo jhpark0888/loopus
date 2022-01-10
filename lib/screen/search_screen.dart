@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/search_student_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
@@ -35,11 +36,11 @@ class SearchScreen extends StatelessWidget {
                       _searchController.searchprofilelist.clear();
                       _searchController.searchquestionlist.clear();
                       _searchController.searchtextcontroller.clear();
-                      _searchController.pagenumber1 = 1;
-                      _searchController.pagenumber2 = 1;
-                      _searchController.pagenumber3 = 1;
-                      _searchController.pagenumber4 = 1;
-                      _searchController.pagenumber5 = 1;
+                      _searchController.postpagenumber = 1;
+                      _searchController.profilepagenumber = 1;
+                      _searchController.questionpagenumber = 1;
+                      _searchController.tagpagenumber = 1;
+                      _searchController.pagenumber = 1;
                       _searchController.focusChange();
                     },
                     child: Center(
@@ -78,36 +79,38 @@ class SearchScreen extends StatelessWidget {
                       '_searchController.tabController.index : ${_searchController.tabController.index}');
                   print(
                       '_searchController.isFocused.value : ${_searchController.isFocused.value}');
-                  _searchController.isnosearch1.value = false;
-                  _searchController.isnosearch2.value = false;
-                  _searchController.isnosearch3.value = false;
+                  _searchController.isnosearchpost(false);
+                  _searchController.isnosearchprofile(false);
+                  _searchController.isnosearchquestion(false);
+                  _searchController.isnosearchtag(false);
+
                   _searchController.searchpostinglist.clear();
                   _searchController.searchprofilelist.clear();
                   _searchController.searchquestionlist.clear();
+                  _searchController.searchtaglist.clear();
                 },
                 onSubmitted: (value) async {
-                  if (_searchController.pagenumber1 == 1) {
+                  if (_searchController.postpagenumber == 1) {
                     _searchController.searchpostinglist.clear();
-                  } else if (_searchController.pagenumber2 == 1) {
+                  } else if (_searchController.profilepagenumber == 1) {
                     _searchController.searchprofilelist.clear();
-                  } else if (_searchController.pagenumber3 == 1) {
+                  } else if (_searchController.questionpagenumber == 1) {
                     _searchController.searchquestionlist.clear();
+                  } else if (_searchController.tagpagenumber == 1) {
+                    _searchController.searchtaglist.clear();
                   }
+
                   if (_searchController.tabController.index == 0) {
-                    await _searchController.search(
-                        _searchController.tabController.index,
-                        value,
-                        _searchController.pagenumber1);
+                    await _searchController.search(SearchType.post, value,
+                        _searchController.postpagenumber);
                   } else if (_searchController.tabController.index == 1) {
-                    await _searchController.search(
-                        _searchController.tabController.index,
-                        value,
-                        _searchController.pagenumber2);
+                    await _searchController.search(SearchType.profile, value,
+                        _searchController.profilepagenumber);
                   } else if (_searchController.tabController.index == 2) {
-                    await _searchController.search(
-                        _searchController.tabController.index,
-                        value,
-                        _searchController.pagenumber3);
+                    await _searchController.search(SearchType.question, value,
+                        _searchController.questionpagenumber);
+                  } else if (_searchController.tabController.index == 3) {
+                    await _searchController.tagsearch();
                   }
                   print(value);
                 },
@@ -190,7 +193,7 @@ class SearchScreen extends StatelessWidget {
                                   child: Row(
                                     children: [
                                       Tagwidget(
-                                        content: '공모전',
+                                        tag: Tag(tagId: 0, tag: '공모전'),
                                         fontSize: 14,
                                       ),
                                       index != 6
@@ -281,9 +284,9 @@ class SearchScreen extends StatelessWidget {
                           _searchController.searchpostinglist.clear();
                           _searchController.searchprofilelist.clear();
                           _searchController.searchquestionlist.clear();
-                          _searchController.pagenumber1 = 1;
-                          _searchController.pagenumber2 = 1;
-                          _searchController.pagenumber3 = 1;
+                          _searchController.postpagenumber = 1;
+                          _searchController.profilepagenumber = 1;
+                          _searchController.questionpagenumber = 1;
                           _searchController.tabController.index = 0;
                           _searchController.searchtextcontroller.clear();
                           return false;
@@ -303,70 +306,53 @@ class SearchScreen extends StatelessWidget {
                                   automaticallyImplyLeading: false,
                                   flexibleSpace: Column(
                                     children: [
-                                      Theme(
-                                        data: ThemeData().copyWith(
-                                          splashColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                        ),
-                                        child: TabBar(
-                                            controller:
-                                                _searchController.tabController,
-                                            labelStyle: TextStyle(
-                                              color: mainblack,
-                                              fontSize: 14,
-                                              fontFamily: 'Nanum',
-                                              fontWeight: FontWeight.bold,
+                                      TabBar(
+                                          controller:
+                                              _searchController.tabController,
+                                          labelStyle: kButtonStyle,
+                                          labelColor: mainblack,
+                                          unselectedLabelStyle: kBody1Style,
+                                          unselectedLabelColor:
+                                              mainblack.withOpacity(0.6),
+                                          indicator: UnderlineIndicator(
+                                              strokeCap: StrokeCap.round,
+                                              borderSide: BorderSide(width: 2),
+                                              insets: EdgeInsets.symmetric(
+                                                  horizontal: 10.0)),
+                                          isScrollable: false,
+                                          indicatorColor: mainblack,
+                                          tabs: [
+                                            Tab(
+                                              height: 40,
+                                              child: Text(
+                                                "포스팅",
+                                              ),
                                             ),
-                                            labelColor: mainblack,
-                                            unselectedLabelStyle: TextStyle(
-                                              color: Colors.yellow,
-                                              fontSize: 14,
-                                              fontFamily: 'Nanum',
-                                              fontWeight: FontWeight.normal,
+                                            Tab(
+                                              height: 40,
+                                              child: Text(
+                                                "프로필",
+                                              ),
                                             ),
-                                            unselectedLabelColor:
-                                                mainblack.withOpacity(0.6),
-                                            indicator: UnderlineIndicator(
-                                                strokeCap: StrokeCap.round,
-                                                borderSide:
-                                                    BorderSide(width: 2),
-                                                insets: EdgeInsets.symmetric(
-                                                    horizontal: 10.0)),
-                                            isScrollable: false,
-                                            indicatorColor: mainblack,
-                                            tabs: [
-                                              Tab(
-                                                height: 40,
-                                                child: Text(
-                                                  "포스팅",
-                                                ),
+                                            Tab(
+                                              height: 40,
+                                              child: Text(
+                                                "질문",
                                               ),
-                                              Tab(
-                                                height: 40,
-                                                child: Text(
-                                                  "프로필",
-                                                ),
+                                            ),
+                                            Tab(
+                                              height: 40,
+                                              child: Text(
+                                                "태그",
                                               ),
-                                              Tab(
-                                                height: 40,
-                                                child: Text(
-                                                  "질문",
-                                                ),
+                                            ),
+                                            Tab(
+                                              height: 40,
+                                              child: Text(
+                                                "공고",
                                               ),
-                                              Tab(
-                                                height: 40,
-                                                child: Text(
-                                                  "태그",
-                                                ),
-                                              ),
-                                              Tab(
-                                                height: 40,
-                                                child: Text(
-                                                  "공고",
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
+                                            ),
+                                          ]),
                                       Container(
                                         height: 1,
                                         color: Color(0xffe7e7e7),
@@ -382,53 +368,73 @@ class SearchScreen extends StatelessWidget {
                                 controller: _searchController.tabController,
                                 children: [
                                   SingleChildScrollView(
-                                    child: Obx(() =>
-                                        _searchController.isnosearch1.value ==
-                                                false
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10.0),
-                                                child: Column(
-                                                  children: _searchController
-                                                      .searchpostinglist,
-                                                ))
-                                            : Container(
-                                                height: 80,
-                                                child: Center(
-                                                    child: Text(
-                                                  "검색 결과가 존재하지 않습니다.",
-                                                  style: kSubTitle2Style,
-                                                )))),
+                                    child: Obx(() => _searchController
+                                                .isnosearchpost.value ==
+                                            false
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 10.0),
+                                            child: Column(
+                                              children: _searchController
+                                                  .searchpostinglist,
+                                            ))
+                                        : Container(
+                                            height: 80,
+                                            child: Center(
+                                                child: Text(
+                                              "검색 결과가 존재하지 않습니다.",
+                                              style: kSubTitle2Style,
+                                            )))),
+                                  ),
+                                  SingleChildScrollView(
+                                    child: Obx(() => _searchController
+                                                .isnosearchprofile.value ==
+                                            false
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 10.0),
+                                            child: Column(
+                                              children: _searchController
+                                                  .searchprofilelist,
+                                            ))
+                                        : Container(
+                                            height: 80,
+                                            child: Center(
+                                                child: Text(
+                                              "검색 결과가 존재하지 않습니다.",
+                                              style: kSubTitle2Style,
+                                            )))),
+                                  ),
+                                  SingleChildScrollView(
+                                    child: Obx(() => _searchController
+                                                .isnosearchquestion.value ==
+                                            false
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 10.0),
+                                            child: Column(
+                                              children: _searchController
+                                                  .searchquestionlist,
+                                            ),
+                                          )
+                                        : Container(
+                                            height: 80,
+                                            child: Center(
+                                                child: Text(
+                                              "검색 결과가 존재하지 않습니다.",
+                                              style: kSubTitle2Style,
+                                            )))),
                                   ),
                                   SingleChildScrollView(
                                     child: Obx(() =>
-                                        _searchController.isnosearch2.value ==
+                                        _searchController.isnosearchtag.value ==
                                                 false
                                             ? Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 10.0),
                                                 child: Column(
                                                   children: _searchController
-                                                      .searchprofilelist,
-                                                ))
-                                            : Container(
-                                                height: 80,
-                                                child: Center(
-                                                    child: Text(
-                                                  "검색 결과가 존재하지 않습니다.",
-                                                  style: kSubTitle2Style,
-                                                )))),
-                                  ),
-                                  SingleChildScrollView(
-                                    child: Obx(() =>
-                                        _searchController.isnosearch3.value ==
-                                                false
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10.0),
-                                                child: Column(
-                                                  children: _searchController
-                                                      .searchquestionlist,
+                                                      .searchtaglist,
                                                 ),
                                               )
                                             : Container(
@@ -438,11 +444,6 @@ class SearchScreen extends StatelessWidget {
                                                   "검색 결과가 존재하지 않습니다.",
                                                   style: kSubTitle2Style,
                                                 )))),
-                                  ),
-                                  Obx(
-                                    () => ListView(
-                                      children: _searchController.searchtaglist,
-                                    ),
                                   ),
                                   Padding(
                                     padding:

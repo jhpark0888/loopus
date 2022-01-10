@@ -3,19 +3,19 @@ import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
 
 class Project {
-  Project({
-    required this.id,
-    required this.projectName,
-    this.thumbnail,
-    this.introduction,
-    this.startDate,
-    this.endDate,
-    this.post,
-    required this.projectTag,
-    this.looper,
-    this.post_count,
-    this.like_count,
-  });
+  Project(
+      {required this.id,
+      required this.projectName,
+      this.thumbnail,
+      this.introduction,
+      this.startDate,
+      this.endDate,
+      this.post,
+      required this.projectTag,
+      this.looper,
+      this.post_count,
+      this.like_count,
+      this.is_user});
 
   int id;
   String projectName;
@@ -28,6 +28,7 @@ class Project {
   List<dynamic>? looper;
   int? post_count;
   int? like_count;
+  bool? is_user;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
         id: json["project_id"] ?? json["id"],
@@ -51,6 +52,7 @@ class Project {
         like_count: json["project_post"] != null
             ? json["project_post"]["like_count"]
             : 0,
+        is_user: json['is_user'] == 1 ? true : false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -66,5 +68,6 @@ class Project {
         "project_tag": List<dynamic>.from(projectTag.map((x) => x.toJson())),
         "post_count": post_count,
         "like_count": like_count,
+        "is_user": is_user,
       };
 }

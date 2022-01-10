@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
             IconButton(
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
-              onPressed: () => Get.to(NotificationScreen()),
+              onPressed: () => Get.to(() => NotificationScreen()),
               icon: SvgPicture.asset(
                 "assets/icons/Bell_Inactive.svg",
                 width: 28,

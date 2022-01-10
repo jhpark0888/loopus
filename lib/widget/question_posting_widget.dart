@@ -87,7 +87,7 @@ class QuestionPostingWidget extends StatelessWidget {
                         children: item.questionTag
                             .map((tag) => Row(children: [
                                   Tagwidget(
-                                    content: tag.tag,
+                                    tag: tag,
                                     fontSize: 12,
                                   ),
                                   item.questionTag.indexOf(tag) !=

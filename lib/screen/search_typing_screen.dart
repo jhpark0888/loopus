@@ -22,9 +22,9 @@ class SearchTypingScreen extends StatelessWidget {
           searchController.searchpostinglist.clear();
           searchController.searchprofilelist.clear();
           searchController.searchquestionlist.clear();
-          searchController.pagenumber1 = 1;
-          searchController.pagenumber2 = 1;
-          searchController.pagenumber3 = 1;
+          searchController.postpagenumber = 1;
+          searchController.profilepagenumber = 1;
+          searchController.questionpagenumber = 1;
           searchController.tabController.index = 0;
           searchController.searchtextcontroller.clear();
           return false;
@@ -46,11 +46,11 @@ class SearchTypingScreen extends StatelessWidget {
                       '_searchController.isFocused.value : ${SearchController.to.isFocused.value}');
                   searchController.focusNode.unfocus();
                   Get.back();
-                  searchController.pagenumber1 = 1;
-                  searchController.pagenumber2 = 1;
-                  searchController.pagenumber3 = 1;
-                  searchController.pagenumber4 = 1;
-                  searchController.pagenumber5 = 1;
+                  searchController.postpagenumber = 1;
+                  searchController.profilepagenumber = 1;
+                  searchController.questionpagenumber = 1;
+                  searchController.tagpagenumber = 1;
+                  searchController.pagenumber = 1;
                   searchController.searchpostinglist.clear();
                   searchController.searchprofilelist.clear();
                   searchController.searchquestionlist.clear();
@@ -87,9 +87,11 @@ class SearchTypingScreen extends StatelessWidget {
                         ? tagController.tagsearch
                         : searchController.searchtextcontroller,
                     onTap: () {
-                      searchController.isnosearch1.value = false;
-                      searchController.isnosearch2.value = false;
-                      searchController.isnosearch3.value = false;
+                      searchController.isnosearchpost(false);
+                      searchController.isnosearchprofile(false);
+                      searchController.isnosearchquestion(false);
+                      searchController.isnosearchtag(false);
+
                       searchController.searchpostinglist.clear();
                       searchController.searchprofilelist.clear();
                       searchController.searchquestionlist.clear();
@@ -101,28 +103,22 @@ class SearchTypingScreen extends StatelessWidget {
                       //   searchController.searchquestionlist.clear();
                       // }
                       if (value.trim() != '') {
-                        if (searchController.pagenumber1 == 1) {
+                        if (searchController.postpagenumber == 1) {
                           searchController.searchpostinglist.clear();
-                        } else if (searchController.pagenumber2 == 1) {
+                        } else if (searchController.profilepagenumber == 1) {
                           searchController.searchprofilelist.clear();
-                        } else if (searchController.pagenumber3 == 1) {
+                        } else if (searchController.questionpagenumber == 1) {
                           searchController.searchquestionlist.clear();
                         }
                         if (searchController.tabController.index == 0) {
-                          await searchController.search(
-                              searchController.tabController.index,
-                              value,
-                              searchController.pagenumber1);
+                          await searchController.search(SearchType.post, value,
+                              searchController.postpagenumber);
                         } else if (searchController.tabController.index == 1) {
-                          await searchController.search(
-                              searchController.tabController.index,
-                              value,
-                              searchController.pagenumber2);
+                          await searchController.search(SearchType.profile,
+                              value, searchController.profilepagenumber);
                         } else if (searchController.tabController.index == 2) {
-                          await searchController.search(
-                              searchController.tabController.index,
-                              value,
-                              searchController.pagenumber3);
+                          await searchController.search(SearchType.question,
+                              value, searchController.questionpagenumber);
                         }
                       }
 
@@ -260,8 +256,8 @@ class SearchTypingScreen extends StatelessWidget {
                   controller: searchController.tabController,
                   children: [
                     SingleChildScrollView(
-                      child:
-                          Obx(() => searchController.isnosearch1.value == false
+                      child: Obx(
+                          () => searchController.isnosearchpost.value == false
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Column(
@@ -279,8 +275,8 @@ class SearchTypingScreen extends StatelessWidget {
                                   )))),
                     ),
                     SingleChildScrollView(
-                      child:
-                          Obx(() => searchController.isnosearch2.value == false
+                      child: Obx(() =>
+                          searchController.isnosearchprofile.value == false
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Column(
@@ -298,8 +294,8 @@ class SearchTypingScreen extends StatelessWidget {
                                   )))),
                     ),
                     SingleChildScrollView(
-                      child:
-                          Obx(() => searchController.isnosearch3.value == false
+                      child: Obx(() =>
+                          searchController.isnosearchquestion.value == false
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Column(
@@ -317,10 +313,25 @@ class SearchTypingScreen extends StatelessWidget {
                                     style: kSubTitle2Style,
                                   )))),
                     ),
-                    Obx(
-                      () => ListView(
-                        children: tagController.searchtaglist,
-                      ),
+                    SingleChildScrollView(
+                      child: Obx(
+                          () => searchController.isnosearchtag.value == false
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Column(
+                                    children:
+                                        searchController.searchtaglist.value,
+                                  ),
+                                )
+                              : Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 32,
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    "검색어와 일치하는 질문이 아직 없어요",
+                                    style: kSubTitle2Style,
+                                  )))),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 50.0),

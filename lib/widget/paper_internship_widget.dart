@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class PaperinternshipWidget extends StatelessWidget {
@@ -127,11 +128,17 @@ class PaperinternshipWidget extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  Tagwidget(content: '공모전', fontSize: 12),
+                                  Tagwidget(
+                                    tag: Tag(tagId: 0, tag: '공모전'),
+                                    fontSize: 12,
+                                  ),
                                   SizedBox(
                                     width: 4,
                                   ),
-                                  Tagwidget(content: '공모전', fontSize: 12),
+                                  Tagwidget(
+                                    tag: Tag(tagId: 0, tag: '공모전'),
+                                    fontSize: 12,
+                                  ),
                                 ],
                               ),
                               Text(

@@ -139,7 +139,7 @@ class HomePostingWidget extends StatelessWidget {
                                 children: item.project!.projectTag
                                     .map((tag) => Row(children: [
                                           Tagwidget(
-                                            content: tag.tag,
+                                            tag: tag,
                                             fontSize: 12,
                                           ),
                                           item.project!.projectTag

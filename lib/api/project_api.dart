@@ -67,7 +67,7 @@ Future addproject() async {
   }
 }
 
-Future<Project> getproject(int project_id) async {
+Future getproject(int project_id) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   // String? userid = await FlutterSecureStorage().read(key: "id");
 

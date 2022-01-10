@@ -18,6 +18,7 @@ import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/custom_refresher.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -31,9 +32,8 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 2,
-        child: Obx(
-          () => Scaffold(
+      length: 2,
+      child: Obx(() => Scaffold(
             appBar: profileController.user.value.isuser == 1
                 ? (AppController.to.ismyprofile.value == true)
                     ? AppBar(
@@ -59,6 +59,7 @@ class ProfileScreen extends StatelessWidget {
                 : AppBarWidget(
                     title: '${profileController.user.value.realName}님의 프로필'),
             body: NestedScrollView(
+              controller: profileController.userscrollController,
               headerSliverBuilder: (context, value) {
                 return [
                   SliverToBoxAdapter(
@@ -159,7 +160,7 @@ class ProfileScreen extends StatelessWidget {
                                     profileController.user.value.profileTag
                                         .map((tag) => Row(children: [
                                               Tagwidget(
-                                                content: tag.tag,
+                                                tag: tag,
                                                 fontSize: 14,
                                               ),
                                               profileController
@@ -383,45 +384,46 @@ class ProfileScreen extends StatelessWidget {
               },
               body: TabBarView(children: [
                 SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 24, 16, 20),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('활동', style: kSubTitle2Style),
-                              GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => ProjectAddTitleScreen(
-                                          screenType: Screentype.add,
-                                        ));
-                                  },
-                                  child:
-                                      profileController.user.value.isuser == 1
-                                          ? Text(
-                                              '추가하기',
-                                              style: kButtonStyle.copyWith(
-                                                  color: mainblue),
-                                            )
-                                          : Container())
-                            ]),
-                      ),
-                      Obx(
-                        () => Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
-                          child: Column(
-                            children: profileController.projectlist.value,
+                    key: PageStorageKey('1'),
+                    // controller: ScrollController(),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 24, 16, 20),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('활동', style: kSubTitle2Style),
+                                GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => ProjectAddTitleScreen(
+                                            screenType: Screentype.add,
+                                          ));
+                                    },
+                                    child:
+                                        profileController.user.value.isuser == 1
+                                            ? Text(
+                                                '추가하기',
+                                                style: kButtonStyle.copyWith(
+                                                    color: mainblue),
+                                              )
+                                            : Container())
+                              ]),
+                        ),
+                        Obx(
+                          () => Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
+                            child: Column(
+                              children: profileController.projectlist.value,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
+                      ],
+                    )),
                 SingleChildScrollView(
+                  key: PageStorageKey('2'),
+                  // controller: ScrollController(),
                   child: Column(
-                    // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Align(
                           alignment: Alignment.centerLeft,
@@ -501,7 +503,7 @@ class ProfileScreen extends StatelessWidget {
                 )
               ]),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
