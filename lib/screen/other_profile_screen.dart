@@ -308,7 +308,10 @@ class OtherProfileScreen extends StatelessWidget {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            Get.to(() => LoopPeopleScreen());
+                            Get.to(() => LoopPeopleScreen(
+                                  userid:
+                                      profileController.myUserInfo.value.user,
+                                ));
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 12.0),

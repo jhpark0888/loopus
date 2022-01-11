@@ -6,7 +6,7 @@ import 'package:loopus/widget/selected_tag_widget.dart';
 
 class ProjectAddPersonController extends GetxController {
   static ProjectAddPersonController get to => Get.find();
-  ProjectAddController projectMakeController = Get.find();
+  ProjectAddController projectaddController = Get.find();
 
   void onInit() {
     // looppersonlist.add(

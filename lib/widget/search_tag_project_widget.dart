@@ -4,8 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
@@ -16,34 +18,37 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class SearchTagProjectWidget extends StatelessWidget {
   ProfileController profileController = Get.find();
   // PostItem item; required this.item,
-  String projecttitle;
-  String department;
-  String name;
-  var profileimage;
-  int id;
-  int like_count;
-  int post_count;
-  DateTime start_date;
-  var end_date;
-  int user_id;
+  // String projecttitle;
+  // String department;
+  // String name;
+  // var profileimage;
+  // int id;
+  // int like_count;
+  // int post_count;
+  // DateTime start_date;
+  // DateTime? end_date;
+  // int user_id;
+  Project project;
 
   SearchTagProjectWidget({
-    required this.id,
-    required this.user_id,
-    required this.like_count,
-    required this.post_count,
-    required this.start_date,
-    required this.end_date,
-    required this.profileimage,
-    required this.name,
-    required this.department,
-    required this.projecttitle,
+    required this.project,
+    // required this.id,
+    // required this.user_id,
+    // required this.like_count,
+    // required this.post_count,
+    // required this.start_date,
+    // required this.end_date,
+    // required this.profileimage,
+    // required this.name,
+    // required this.department,
+    // required this.projecttitle,
   });
   BookmarkController bookmarkController = Get.put(BookmarkController());
   HomeController homeController = Get.find();
@@ -51,8 +56,15 @@ class SearchTagProjectWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         print("click posting");
+        project = await getproject(project.id);
+        Project exproject = await Get.to(() => ProjectScreen(
+              project: project.obs,
+            ));
+        if (exproject != null) {
+          project = exproject;
+        }
       },
       child: Container(
         width: Get.width * 0.94,
@@ -87,7 +99,7 @@ class SearchTagProjectWidget extends StatelessWidget {
           children: [
             Container(
               child: Text(
-                "${projecttitle}",
+                "${project.projectName}",
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -98,9 +110,9 @@ class SearchTagProjectWidget extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            end_date == null
+            project.endDate == null
                 ? Text(
-                    "${start_date.year}.${start_date.month} ~  진행중",
+                    "${DateFormat("yyyy.MM").format(project.startDate!)} ~  진행중",
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -108,7 +120,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    "${start_date.year}.${start_date.month} ~ ${DateTime.parse(end_date).year}.${DateTime.parse(end_date).month}",
+                    "${DateFormat("yyyy.MM").format(project.startDate!)} ~ ${DateFormat("yyyy.MM").format(project.endDate!)}",
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -126,7 +138,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () async {
-                          await getProfile(user_id).then((response) {
+                          await getProfile(project.userid).then((response) {
                             var responseBody =
                                 json.decode(utf8.decode(response.bodyBytes));
                             profileController
@@ -147,7 +159,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                         child: Row(
                           children: [
                             ClipOval(
-                                child: profileimage == null
+                                child: project.profileimage == null
                                     ? Image.asset(
                                         "assets/illustrations/default_profile.png",
                                         height: 32,
@@ -156,7 +168,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                                     : CachedNetworkImage(
                                         height: 32,
                                         width: 32,
-                                        imageUrl: "${profileimage}",
+                                        imageUrl: project.profileimage!,
                                         placeholder: (context, url) =>
                                             CircleAvatar(
                                           child: Center(
@@ -169,7 +181,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                               width: 8,
                             ),
                             Text(
-                              "${name} · ",
+                              "${project.realname} · ",
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
@@ -177,7 +189,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "$department",
+                        "${project.department}",
                         style: TextStyle(fontSize: 14),
                       ),
                     ],
@@ -189,7 +201,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                         width: 4,
                       ),
                       Text(
-                        "${post_count}",
+                        "${project.post_count}",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
@@ -200,7 +212,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                         width: 4,
                       ),
                       Text(
-                        "${like_count}",
+                        "${project.like_count}",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],

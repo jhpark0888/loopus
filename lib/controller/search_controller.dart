@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/search_posting_widget.dart';
@@ -273,22 +274,29 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
         //   ));
         // });
       } else if (searchType == SearchType.tag_project) {
-        searchlist.forEach((element) {
-          searchtagprojectlist.add(SearchTagProjectWidget(
-            department: element["department"],
-            id: element["id"],
-            like_count: element["project_post"]["like_count"],
-            name: element["real_name"],
-            post_count: element["project_post"]["post_count"],
-            profileimage: element["profile_image"],
-            projecttitle: element["project_name"],
-            user_id: element["user_id"],
-            end_date: element["end_date"] != null
-                ? DateTime.parse(element["end_date"])
-                : null,
-            start_date: DateTime.parse(element["start_date"]),
-          ));
-        });
+        searchtagprojectlist(searchlist
+            .map((json) => Project.fromJson(json))
+            .toList()
+            .map((project) => SearchTagProjectWidget(
+                  project: project,
+                ))
+            .toList());
+        // searchlist.forEach((element) {
+        //   searchtagprojectlist.add(SearchTagProjectWidget(
+        //     department: element["department"],
+        //     id: element["id"],
+        //     like_count: element["project_post"]["like_count"],
+        //     name: element["real_name"],
+        //     post_count: element["project_post"]["post_count"],
+        //     profileimage: element["profile_image"],
+        //     projecttitle: element["project_name"],
+        //     user_id: element["user_id"],
+        //     end_date: element["end_date"] != null
+        //         ? DateTime.parse(element["end_date"])
+        //         : null,
+        //     start_date: DateTime.parse(element["start_date"]),
+        //   ));
+        // });
       } else if (searchType == SearchType.tag_question) {
         searchtagquestionlist(searchlist
             .map((json) => QuestionItem.fromJson(json))

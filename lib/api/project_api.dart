@@ -25,9 +25,9 @@ Future addproject() async {
 
   request.headers.addAll(headers);
 
-  if (projectAddController.projectimage.value!.path != '') {
+  if (projectAddController.projectthumbnail.value!.path != '') {
     var multipartFile = await http.MultipartFile.fromPath(
-        'thumbnail', projectAddController.projectimage.value!.path);
+        'thumbnail', projectAddController.projectthumbnail.value!.path);
     request.files.add(multipartFile);
   }
 
@@ -96,10 +96,12 @@ Future updateproject(int projectId) async {
 
   request.headers.addAll(headers);
 
-  if (projectAddController.projectimage.value!.path != '') {
+  if (projectAddController.projectthumbnail.value!.path != '') {
     var multipartFile = await http.MultipartFile.fromPath(
-        'thumbnail', projectAddController.projectimage.value!.path);
+        'thumbnail', projectAddController.projectthumbnail.value!.path);
     request.files.add(multipartFile);
+  } else {
+    request.fields['thumbnail'] = 'image';
   }
 
   request.fields['project_name'] =

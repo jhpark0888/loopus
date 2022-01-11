@@ -34,8 +34,7 @@ class ProjectWidget extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () async {
-          project.value = await getproject(
-              project.value.id); // getproject에서 총 포스팅수와 총 like수 안줌
+          project.value = await getproject(project.value.id);
           exproject = await Get.to(() => ProjectScreen(
                 project: project,
               ));

@@ -13,7 +13,6 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
   ProjectAddThumbnailScreen({Key? key, required this.screenType, this.project})
       : super(key: key);
 
-  final _formKey = GlobalKey<FormState>();
   final ProjectAddController projectAddController =
       Get.put(ProjectAddController());
   final TagController tagController = Get.put(TagController());
@@ -68,7 +67,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
             GestureDetector(
               onTap: () async {
                 projectAddController
-                    .projectimage(await getcropImage(ImageType.thumnail));
+                    .projectthumbnail(await getcropImage(ImageType.thumnail));
               },
               child: Container(
                 width: 141,
@@ -138,15 +137,20 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: projectAddController
-                                            .projectimage.value!.path !=
+                                            .projectthumbnail.value!.path !=
                                         ''
                                     ? FileImage(
                                         projectAddController
-                                            .projectimage.value!,
-                                      ) as ImageProvider
-                                    : AssetImage(
-                                        "assets/illustrations/default_image.png",
-                                      ),
+                                            .projectthumbnail.value!,
+                                      )
+                                    : projectAddController
+                                                .projecturlthumbnail !=
+                                            null
+                                        ? NetworkImage(projectAddController
+                                            .projecturlthumbnail!)
+                                        : const AssetImage(
+                                            "assets/illustrations/default_image.png",
+                                          ) as ImageProvider,
                                 fit: BoxFit.cover,
                               ),
                             ),

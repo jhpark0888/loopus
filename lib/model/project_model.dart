@@ -5,6 +5,10 @@ import 'package:loopus/model/tag_model.dart';
 class Project {
   Project(
       {required this.id,
+      required this.userid,
+      this.realname,
+      this.profileimage,
+      this.department,
       required this.projectName,
       this.thumbnail,
       this.introduction,
@@ -18,6 +22,10 @@ class Project {
       this.is_user});
 
   int id;
+  int? userid;
+  String? realname;
+  String? profileimage;
+  String? department;
   String projectName;
   String? thumbnail;
   String? introduction;
@@ -32,6 +40,10 @@ class Project {
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
         id: json["project_id"] ?? json["id"],
+        userid: json["user_id"],
+        realname: json["real_name"],
+        profileimage: json["profile_image"],
+        department: json["department"],
         projectName: json["project_name"],
         thumbnail: json["pj_thumbnail"],
         introduction: json["introduction"],
@@ -48,15 +60,20 @@ class Project {
         looper: json["looper"],
         post_count: json["project_post"] != null
             ? json["project_post"]["post_count"]
-            : 0,
+            : json["post"] != null
+                ? List.from(json["post"]).length
+                : 0,
         like_count: json["project_post"] != null
             ? json["project_post"]["like_count"]
-            : 0,
+            : json["like_count"] ?? 0,
         is_user: json['is_user'] == 1 ? true : false,
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "user_id": userid,
+        "real_name": realname,
+        "profile_image": profileimage,
         "project_name": projectName,
         "thumbnail": thumbnail,
         "introduction": introduction,

@@ -73,6 +73,8 @@ class ProjectModifyScreen extends StatelessWidget {
         ));
       }
     }
+
+    projectaddcontroller.projecturlthumbnail = project.value.thumbnail;
   }
 
   @override
