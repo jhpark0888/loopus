@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 
-void loginRequest() async {
+Future<void> loginRequest() async {
   LogInController logInController = Get.put(LogInController());
   const FlutterSecureStorage storage = FlutterSecureStorage();
   ModalController _modalController = Get.put(ModalController());
