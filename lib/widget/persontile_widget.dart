@@ -1,20 +1,46 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/model/project_model.dart';
+import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/widget/project_widget.dart';
 
 class PersonTileWidget extends StatelessWidget {
-  PersonTileWidget(
-      {Key? key, required this.name, required this.department, this.image})
-      : super(key: key);
+  PersonTileWidget({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
 
-  String name;
-  String department;
-  String? image;
+  ProfileController profileController = Get.put(ProfileController());
+  User user;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () async {
+        await getProfile(user.user).then((response) {
+          var responseBody = json.decode(utf8.decode(response.bodyBytes));
+          profileController.otherUser(User.fromJson(responseBody));
+
+          List projectmaplist = responseBody['project'];
+          profileController.otherProjectList(projectmaplist
+              .map((project) => Project.fromJson(project))
+              .map((project) => ProjectWidget(
+                    project: project.obs,
+                  ))
+              .toList());
+        });
+        AppController.to.ismyprofile.value = false;
+        print(AppController.to.ismyprofile.value);
+        Get.to(() => OtherProfileScreen());
+      },
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: 16,
@@ -24,16 +50,21 @@ class PersonTileWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipOval(
-              child: CachedNetworkImage(
-                height: 56,
-                width: 56,
-                imageUrl: image ?? "https://i.stack.imgur.com/l60Hf.png",
-                placeholder: (context, url) => const CircleAvatar(
-                  child: Center(child: CircularProgressIndicator()),
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
+                child: user.profileImage == null
+                    ? Image.asset(
+                        "assets/illustrations/default_profile.png",
+                        width: 56,
+                        height: 56,
+                      )
+                    : CachedNetworkImage(
+                        height: 56,
+                        width: 56,
+                        imageUrl: user.profileImage!,
+                        placeholder: (context, url) => CircleAvatar(
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                        fit: BoxFit.fill,
+                      )),
             SizedBox(
               width: 12,
             ),
@@ -41,14 +72,14 @@ class PersonTileWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$name',
+                  user.realName,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 8,
                 ),
                 Text(
-                  '$department',
+                  user.department,
                   style: TextStyle(
                     fontSize: 16,
                     color: mainblack.withOpacity(0.6),
