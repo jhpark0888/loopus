@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 class TagController extends GetxController {
   static TagController get to => Get.find();
   ScrollController _tagScrollController = ScrollController();
+  RxBool isTagChanging = false.obs;
   final maxExtent = Get.height * 0.25;
   RxDouble currentExtent = 0.0.obs;
 
