@@ -380,7 +380,6 @@ class ProjectScreen extends StatelessWidget {
                   SizedBox(
                     height: 16,
                   ),
-                  Text(project.value.realname ?? ''),
                   Obx(
                     () => Column(
                         children: project.value.post != null

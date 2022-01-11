@@ -38,11 +38,11 @@ class AppController extends GetxService {
     if (index == 4) {
       ismyprofile.value = true;
 
-      // if (currentIndex.value != 4) {
-      //   //임시
-      //   ProfileController.to.isProfileLoading.value = true;
-      //   ProfileController.to.loadProfile();
-      // }
+      if (currentIndex.value != 4) {
+        //임시
+        ProfileController.to.isProfileLoading.value = true;
+        ProfileController.to.loadProfile();
+      }
     }
     currentIndex(index);
   }
