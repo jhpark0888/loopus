@@ -28,7 +28,7 @@ class StartScreen extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                flex: 2,
+                flex: 7,
                 child: PageView(
                   physics: const BouncingScrollPhysics(),
                   controller: pageController,
@@ -42,6 +42,9 @@ class StartScreen extends StatelessWidget {
                             width: 250,
                             child: Image.asset(
                                 "assets/illustrations/tutorial_$index.png")),
+                        SizedBox(
+                          height: index != 0 ? 24 : 0,
+                        ),
                         Text(
                           text_start[index],
                           style: kSubTitle1Style,
@@ -52,6 +55,7 @@ class StartScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
+                flex: 4,
                 child: Padding(
                   padding: const EdgeInsets.only(
                     right: 16,
@@ -59,7 +63,7 @@ class StartScreen extends StatelessWidget {
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Center(
@@ -74,7 +78,7 @@ class StartScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 24,
                       ),
                       InkWell(
                         onTap: () {
@@ -113,9 +117,7 @@ class StartScreen extends StatelessWidget {
                           child: Text(
                             "이미 계정이 있어요",
                             textAlign: TextAlign.center,
-                            style: kButtonStyle.copyWith(
-                                fontWeight: FontWeight.normal,
-                                color: mainblack),
+                            style: kButtonStyle.copyWith(color: mainblack),
                           ),
                         ),
                       ),
@@ -123,12 +125,11 @@ class StartScreen extends StatelessWidget {
                         height: 12,
                       ),
                       TextButton(
-                        onPressed: () {
-                          print("click");
-                        },
+                        onPressed: () {},
                         child: Text(
-                          "기업회원 / 교직원 입니다",
+                          "기업회원 / 교직원 ",
                           style: TextStyle(
+                            fontWeight: FontWeight.bold,
                             fontSize: 14,
                             shadows: [
                               Shadow(
@@ -137,8 +138,8 @@ class StartScreen extends StatelessWidget {
                             ],
                             color: Colors.transparent,
                             decoration: TextDecoration.underline,
-                            decorationColor: mainblack.withOpacity(0.6),
-                            decorationThickness: 1,
+                            decorationColor: mainblack.withOpacity(0.4),
+                            decorationThickness: 1.6,
                             decorationStyle: TextDecorationStyle.solid,
                           ),
                         ),

@@ -17,7 +17,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
   @override
   void onInit() {
     _animationController = BottomSheet.createAnimationController(this);
-    _animationController.duration = Duration(milliseconds: 200);
+    _animationController.duration = Duration(milliseconds: 300);
     _animationController.reverseDuration = Duration(milliseconds: 200);
     _animationController.drive(CurveTween(curve: Curves.easeInOut));
     super.onInit();

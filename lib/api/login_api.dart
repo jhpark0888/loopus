@@ -6,11 +6,13 @@ import 'package:loopus/app.dart';
 import 'package:loopus/controller/login_controller.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 
 void loginRequest() async {
   LogInController logInController = Get.put(LogInController());
   const FlutterSecureStorage storage = FlutterSecureStorage();
+  ModalController _modalController = Get.put(ModalController());
 
   Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/login/');
 
@@ -35,25 +37,9 @@ void loginRequest() async {
     storage.write(key: 'id', value: userid);
 
     Get.offAll(App());
-
-    if (kDebugMode) {
-      print('login status code : ${response.statusCode}');
-    }
   } else if (response.statusCode == 401) {
-    Get.defaultDialog(
-      title: '로그인 오류',
-      content: const Text('아이디 또는 비밀번호가 틀렸습니다'),
-    );
-    if (kDebugMode) {
-      print('login status code : ${response.statusCode}');
-    }
+    _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
   } else {
-    if (kDebugMode) {
-      print('login status code : ${response.statusCode}');
-    }
-    Get.defaultDialog(
-      title: '${response.statusCode}',
-      content: Text('${response.statusCode}'),
-    );
+    _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
   }
 }
