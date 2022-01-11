@@ -19,6 +19,7 @@ class TagController extends GetxController {
 
   void onInit() {
     super.onInit();
+
     tagsearch.addListener(() {
       gettagsearch();
     });

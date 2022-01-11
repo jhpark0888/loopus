@@ -16,39 +16,35 @@ class SelectedTagWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-      child: Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-        height: 32,
-        decoration: BoxDecoration(
-          color: mainlightgrey,
-          borderRadius: BorderRadius.circular(40),
-        ),
-        child: Row(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              text,
-              style: TextStyle(fontSize: 14),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: InkWell(
-                onTap: () {
-                  tagController.selectedtaglist
-                      .removeWhere((element) => element.id == id);
-                  gettagsearch();
-                },
-                child: SvgPicture.asset(
-                  "assets/icons/Close_blue.svg",
-                  width: 24,
-                  height: 24,
-                ),
+    return Container(
+      margin: EdgeInsets.only(right: 8),
+      padding: EdgeInsets.fromLTRB(14, 4, 4, 4),
+      decoration: BoxDecoration(
+        color: mainlightgrey,
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: Row(
+        children: [
+          Text(
+            text,
+            style: const TextStyle(fontSize: 14),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: InkWell(
+              onTap: () {
+                tagController.selectedtaglist
+                    .removeWhere((element) => element.id == id);
+                gettagsearch();
+              },
+              child: SvgPicture.asset(
+                "assets/icons/Close_blue.svg",
+                width: 24,
+                height: 24,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

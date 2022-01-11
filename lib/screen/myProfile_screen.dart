@@ -182,8 +182,7 @@ class MyProfileScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: GestureDetector(
-                                onTap: () =>
-                                    Get.to(() => ProfileTagChangeScreen()),
+                                onTap: () => Get.to(ProfileTagChangeScreen()),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: mainlightgrey,

@@ -125,10 +125,9 @@ class SearchTypingScreen extends StatelessWidget {
                       print(value);
                       // searchController.searchtextcontroller.clear();
                     },
-                    style: TextStyle(color: mainblack, fontSize: 14),
+                    style: kBody2Style,
                     cursorColor: Colors.grey,
-                    cursorWidth: 1.5,
-                    cursorHeight: 14,
+                    cursorWidth: 1.2,
                     cursorRadius: Radius.circular(5.0),
                     autofocus: true,
                     // focusNode: searchController.detailsearchFocusnode,
