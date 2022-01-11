@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -115,7 +113,7 @@ class ProjectScreen extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              width: 8,
+                              width: (project.value.endDate == null) ? 4 : 8,
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(
