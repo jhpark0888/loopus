@@ -155,9 +155,6 @@ class LoopScreen extends StatelessWidget {
                                   (homeController.isLoopLoading.value == false)
                                       ? HomePostingWidget(
                                           index: index,
-                                          key: Key(
-                                            toString(),
-                                          ),
                                           item: homeController.loopResult.value
                                               .postingitems[index],
                                         )

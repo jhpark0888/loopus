@@ -11,6 +11,7 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
@@ -22,33 +23,40 @@ import 'package:loopus/widget/tag_widget.dart';
 import 'package:http/http.dart' as http;
 
 class HomePostingWidget extends StatelessWidget {
-  // PostItem item; required this.item,
   final int index;
   Post item;
 
-  HomePostingWidget({required Key key, required this.item, required this.index})
-      : super(key: key);
+  HomePostingWidget({required this.item, required this.index});
   BookmarkController bookmarkController = Get.put(BookmarkController());
   ProfileController profileController = Get.put(ProfileController());
+  PostingDetailController postingDetailController =
+      Get.put(PostingDetailController());
+
   HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        http.Response? response = await getposting(item.id);
-        var responseBody = json.decode(utf8.decode(response!.bodyBytes));
-        Post post = Post.fromJson(responseBody['posting_info']);
-        User user = User(
-            type: 0,
-            user: responseBody['user_id'],
-            realName: responseBody['real_name'],
-            profileImage: responseBody['profile_image'],
-            profileTag: [],
-            department: '',
-            isuser: -1);
-
-        Get.to(() => PostingScreen(post: post, user: user));
+      onTap: () {
+        // http.Response? response = await getposting(item.id);
+        // var responseBody = json.decode(utf8.decode(response!.bodyBytes));
+        // Post post = Post.fromJson(responseBody['posting_info']);
+        postingDetailController.isPostingContentLoading.value = true;
+        getposting(item.id).then((value) {
+          postingDetailController.item = value;
+          postingDetailController.isPostingContentLoading.value = false;
+        });
+        print(item.thumbnail);
+        Get.to(() => PostingScreen(), arguments: {
+          'id': item.id,
+          'realName': item.realname,
+          'profileImage': item.profileimage,
+          'title': item.title,
+          'content': item.contents,
+          'postDate': item.date,
+          'department': item.department,
+          'thumbNail': item.thumbnail,
+        });
       },
       child: Column(
         children: [

@@ -161,7 +161,7 @@ class BookmarkScreen extends StatelessWidget {
                                   false)
                               ? BookmarkWidget(
                                   index: index,
-                                  post: bookmarkController
+                                  item: bookmarkController
                                       .bookmarkResult.value.postingitems[index],
                                 )
                               : Column(

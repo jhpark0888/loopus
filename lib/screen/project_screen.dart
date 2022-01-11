@@ -380,12 +380,18 @@ class ProjectScreen extends StatelessWidget {
                   SizedBox(
                     height: 16,
                   ),
+                  Text(project.value.realname ?? ''),
                   Obx(
                     () => Column(
                         children: project.value.post != null
                             ? List.from(project.value.post!
                                 .map((post) => ProjectPostingWidget(
-                                      post: post,
+                                      item: post,
+                                      realName: project.value.realname ?? '',
+                                      department:
+                                          project.value.department ?? '',
+                                      profileImage:
+                                          project.value.profileimage ?? '',
                                     ))
                                 .toList()
                                 .reversed)

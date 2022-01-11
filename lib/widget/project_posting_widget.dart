@@ -8,7 +8,9 @@ import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
+import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:http/http.dart' as http;
@@ -17,26 +19,47 @@ import 'package:intl/intl.dart';
 class ProjectPostingWidget extends StatelessWidget {
   ProjectPostingWidget({
     Key? key,
-    required this.post,
+    required this.item,
+    required this.realName,
+    required this.profileImage,
+    required this.department,
   }) : super(key: key);
 
-  // BookmarkController bookmarkController = Get.put(BookmarkController());
-  Post post;
-  User? user;
+  PostingDetailController postingDetailController =
+      Get.put(PostingDetailController());
+
+  Post item;
+  String realName;
+  var profileImage;
+  String department;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () async {
-        http.Response? response = await getposting(post.id);
-        if (response != null) {
-          var responseBody = json.decode(utf8.decode(response.bodyBytes));
-          user = User.fromJson(responseBody);
-          post = Post.fromJson(responseBody['posting_info']);
-        }
-        Get.to(() => PostingScreen(
-              post: post,
-              user: user!,
-            ));
+      onTap: () {
+        postingDetailController.isPostingContentLoading.value = true;
+        getposting(item.id).then((value) {
+          postingDetailController.item = value;
+          postingDetailController.isPostingContentLoading.value = false;
+        });
+        // if (response != null) {
+        //   var responseBody = json.decode(utf8.decode(response.bodyBytes));
+        //   user = User.fromJson(responseBody);
+        //   post = Post.fromJson(responseBody['posting_info']);
+        // }
+        Get.to(
+            () => PostingScreen(// user: user!,
+                ),
+            arguments: {
+              'id': item.id,
+              'realName': realName,
+              'profileImage': profileImage,
+              'title': item.title,
+              'content': item.contents,
+              'postDate': item.date,
+              'department': department,
+              'thumbNail': item.thumbnail,
+            });
       },
       child: Padding(
         padding: const EdgeInsets.only(
@@ -53,8 +76,8 @@ class ProjectPostingWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
-                          image: post.thumbnail != null
-                              ? NetworkImage(post.thumbnail!)
+                          image: item.thumbnail != null
+                              ? NetworkImage(item.thumbnail)
                               : const AssetImage(
                                   "assets/illustrations/default_image.png",
                                 ) as ImageProvider,
@@ -64,14 +87,14 @@ class ProjectPostingWidget extends StatelessWidget {
                   height: 16,
                 ),
                 Text(
-                  post.title,
+                  item.title,
                   style: kSubTitle1Style,
                 ),
                 SizedBox(
                   height: 8,
                 ),
                 Text(
-                  post.content_summary ?? '',
+                  item.content_summary ?? '',
                   style: kBody1Style,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -84,7 +107,7 @@ class ProjectPostingWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      '${DateFormat('yy.MM.dd').format(post.date)}',
+                      '${DateFormat('yy.MM.dd').format(item.date)}',
                       style: kBody2Style.copyWith(
                         color: mainblack.withOpacity(
                           0.6,
@@ -95,17 +118,17 @@ class ProjectPostingWidget extends StatelessWidget {
                       children: [
                         Obx(() => InkWell(
                             onTap: () {
-                              if (post.isLiked.value == 0) {
-                                likepost(post.id);
-                                post.likeCount += 1;
-                                post.isLiked.value = 1;
+                              if (item.isLiked.value == 0) {
+                                likepost(item.id);
+                                item.likeCount += 1;
+                                item.isLiked.value = 1;
                               } else {
-                                likepost(post.id);
-                                post.likeCount -= 1;
-                                post.isLiked.value = 0;
+                                likepost(item.id);
+                                item.likeCount -= 1;
+                                item.isLiked.value = 0;
                               }
                             },
-                            child: post.isLiked.value == 0
+                            child: item.isLiked.value == 0
                                 ? SvgPicture.asset(
                                     "assets/icons/Favorite_Inactive.svg")
                                 : SvgPicture.asset(
@@ -115,7 +138,7 @@ class ProjectPostingWidget extends StatelessWidget {
                         ),
                         Obx(
                           () => Text(
-                            post.likeCount.toString(),
+                            item.likeCount.toString(),
                             style: kButtonStyle,
                           ),
                         ),
@@ -124,15 +147,15 @@ class ProjectPostingWidget extends StatelessWidget {
                         ),
                         Obx(() => InkWell(
                             onTap: () {
-                              if (post.isMarked.value == 0) {
-                                bookmarkpost(post.id);
-                                post.isMarked(1);
+                              if (item.isMarked.value == 0) {
+                                bookmarkpost(item.id);
+                                item.isMarked(1);
                               } else {
-                                bookmarkpost(post.id);
-                                post.isMarked(0);
+                                bookmarkpost(item.id);
+                                item.isMarked(0);
                               }
                             },
-                            child: post.isMarked.value == 0
+                            child: item.isMarked.value == 0
                                 ? SvgPicture.asset(
                                     "assets/icons/Mark_Default.svg")
                                 : SvgPicture.asset(

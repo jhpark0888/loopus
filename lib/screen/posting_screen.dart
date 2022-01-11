@@ -9,26 +9,21 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/post_content_widget.dart';
 
 class PostingScreen extends StatelessWidget {
-  PostingScreen({Key? key, required this.post, this.user}) : super(key: key);
+  PostingDetailController _postingDetailController =
+      Get.put(PostingDetailController());
 
   ScrollController _controller = ScrollController();
-  Post post;
-  User? user;
+  // Post post;
+  // User? user;
 
   @override
   Widget build(BuildContext context) {
-    // String text = '';
-    // post.contents!.forEach((map) {
-    //   if (map['insert'] is String) {
-    //     text = text + map['insert'];
-    //   }
-    // });
-    // print(text.replaceAll('\n', ''));
     return Scaffold(
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
@@ -61,27 +56,51 @@ class PostingScreen extends StatelessWidget {
             ],
             pinned: true,
             flexibleSpace: _MyAppSpace(
-              post: post,
-              user: user!,
+              title: Get.arguments['title'],
+              realName: Get.arguments['realName'],
+              profileImage: Get.arguments['profileImage'],
+              postDate: Get.arguments['postDate'],
+              department: Get.arguments['department'],
+              thumbNail: Get.arguments['thumbNail'],
             ),
             expandedHeight: Get.width / 3 * 2,
           ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 24,
+          Obx(
+            () => SliverList(
+              delegate: SliverChildListDelegate([
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 24,
+                  ),
+                  child:
+                      (_postingDetailController.isPostingContentLoading.value ==
+                              false)
+                          ? Column(
+                              children: _postingDetailController.item!.contents!
+                                  .map((content) =>
+                                      PostContentWidget(content: content))
+                                  .toList(),
+                            )
+                          : Column(children: [
+                              Image.asset(
+                                'assets/icons/loading.gif',
+                                scale: 9,
+                              ),
+                              SizedBox(
+                                height: 4,
+                              ),
+                              Text(
+                                '내용을 받는 중이에요...',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: mainblue,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ]),
                 ),
-                child: post.contents != null
-                    ? Column(
-                        children: post.contents!
-                            .map((content) =>
-                                PostContentWidget(content: content))
-                            .toList(),
-                      )
-                    : Container(),
-              ),
-            ]),
+              ]),
+            ),
           ),
         ],
       ),
@@ -90,11 +109,27 @@ class PostingScreen extends StatelessWidget {
 }
 
 class _MyAppSpace extends StatelessWidget {
-  _MyAppSpace({Key? key, required this.post, required this.user})
-      : super(key: key);
+  _MyAppSpace({
+    Key? key,
+    // required this.post,
+    // required this.user,
+    required this.title,
+    required this.realName,
+    required this.profileImage,
+    required this.postDate,
+    required this.department,
+    required this.thumbNail,
+  }) : super(key: key);
 
-  Post post;
-  User user;
+  // Post post;
+  // User user;
+  String title;
+  String realName;
+  var profileImage;
+  DateTime postDate;
+  String department;
+  var thumbNail;
+
   @override
   Widget build(
     BuildContext context,
@@ -122,7 +157,7 @@ class _MyAppSpace extends StatelessWidget {
                 child: Opacity(
                   opacity: 1 - opacity2,
                   child: getCollapseTitle(
-                    post.title,
+                    title,
                   ),
                 ),
               ),
@@ -132,7 +167,7 @@ class _MyAppSpace extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
-                  getImage(post.thumbnail),
+                  getImage(thumbNail),
                   SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -142,7 +177,7 @@ class _MyAppSpace extends StatelessWidget {
                           height: 32,
                         ),
                         getExpendTitle(
-                          post.title,
+                          title,
                         ),
                         SizedBox(
                           height: 16,
@@ -157,25 +192,33 @@ class _MyAppSpace extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  ClipOval(
-                                    child: CachedNetworkImage(
-                                      height: 32,
-                                      width: 32,
-                                      imageUrl: user.profileImage ??
-                                          "https://i.stack.imgur.com/l60Hf.png",
-                                      placeholder: (context, url) =>
-                                          CircleAvatar(
-                                        child: Center(
-                                            child: CircularProgressIndicator()),
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                                  (profileImage != null)
+                                      ? ClipOval(
+                                          child: CachedNetworkImage(
+                                            height: 32,
+                                            width: 32,
+                                            imageUrl: profileImage,
+                                            placeholder: (context, url) =>
+                                                CircleAvatar(
+                                              child: Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : ClipOval(
+                                          child: Image.asset(
+                                            "assets/illustrations/default_profile.png",
+                                            height: 32,
+                                            width: 32,
+                                          ),
+                                        ),
                                   SizedBox(
                                     width: 8,
                                   ),
                                   Text(
-                                    "${user.realName} · ",
+                                    "$realName · ",
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -183,7 +226,7 @@ class _MyAppSpace extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    user.department,
+                                    department,
                                     style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.normal,
@@ -192,7 +235,7 @@ class _MyAppSpace extends StatelessWidget {
                                 ],
                               ),
                               Text(
-                                '${post.date.year}.${post.date.month}.${post.date.day}',
+                                '${postDate.year}.${postDate.month}.${postDate.day}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: mainblack.withOpacity(0.6),
@@ -216,16 +259,16 @@ class _MyAppSpace extends StatelessWidget {
     );
   }
 
-  Widget getImage(String? thumbnail) {
+  Widget getImage(String? image) {
     return Container(
       width: Get.width,
       height: Get.height,
       child: Opacity(
-        opacity: thumbnail != null ? 0.25 : 1,
-        child: thumbnail != null
+        opacity: image != null ? 0.25 : 1,
+        child: (image != null)
             ? CachedNetworkImage(
                 fit: BoxFit.cover,
-                imageUrl: thumbnail,
+                imageUrl: image,
               )
             : Image.asset(
                 "assets/illustrations/default_image.png",

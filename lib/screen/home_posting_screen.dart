@@ -156,7 +156,6 @@ class HomePostingScreen extends StatelessWidget {
                                 (homeController.isPostingLoading.value == false)
                                     ? HomePostingWidget(
                                         index: index,
-                                        key: Key(toString()),
                                         item: homeController.postingResult.value
                                             .postingitems[index],
                                       )

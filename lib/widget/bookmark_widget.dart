@@ -13,6 +13,7 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
@@ -23,14 +24,17 @@ import 'package:loopus/widget/project_widget.dart';
 
 class BookmarkWidget extends StatelessWidget {
   final int index;
-  Post post;
+  Post item;
 
   BookmarkWidget({
     required this.index,
-    required this.post,
+    required this.item,
   });
   ProfileController profileController = Get.find();
   BookmarkController bookmarkController = Get.put(BookmarkController());
+  PostingDetailController postingDetailController =
+      Get.put(PostingDetailController());
+
   HomeController homeController = Get.find();
 
   @override
@@ -70,7 +74,7 @@ class BookmarkWidget extends StatelessWidget {
               children: [
                 Container(
                   child: Text(
-                    "${post.title}",
+                    "${item.title}",
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -82,7 +86,7 @@ class BookmarkWidget extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  "${post.projectname}",
+                  "${item.projectname}",
                   style: TextStyle(
                     fontSize: 14,
                     color: mainblack.withOpacity(0.6),
@@ -108,7 +112,7 @@ class BookmarkWidget extends StatelessWidget {
                             child: Row(
                               children: [
                                 ClipOval(
-                                    child: post.profileimage == null
+                                    child: item.profileimage == null
                                         ? Image.asset(
                                             "assets/illustrations/default_profile.png",
                                             height: 32,
@@ -117,7 +121,7 @@ class BookmarkWidget extends StatelessWidget {
                                         : CachedNetworkImage(
                                             height: 32,
                                             width: 32,
-                                            imageUrl: "${post.profileimage}",
+                                            imageUrl: "${item.profileimage}",
                                             placeholder: (context, url) =>
                                                 CircleAvatar(
                                               child: Center(
@@ -130,7 +134,7 @@ class BookmarkWidget extends StatelessWidget {
                                   width: 8,
                                 ),
                                 Text(
-                                  "${post.realname} · ",
+                                  "${item.realname} · ",
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold),
@@ -139,7 +143,7 @@ class BookmarkWidget extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${post.department}",
+                            "${item.department}",
                             style: TextStyle(fontSize: 14),
                           ),
                         ],
@@ -149,7 +153,7 @@ class BookmarkWidget extends StatelessWidget {
                           children: [
                             InkWell(
                               onTap: tapLike,
-                              child: post.isLiked.value == 0
+                              child: item.isLiked.value == 0
                                   ? SvgPicture.asset(
                                       "assets/icons/Favorite_Inactive.svg")
                                   : SvgPicture.asset(
@@ -159,7 +163,7 @@ class BookmarkWidget extends StatelessWidget {
                               width: 4,
                             ),
                             Text(
-                              "${post.likeCount.value}",
+                              "${item.likeCount.value}",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
@@ -167,7 +171,7 @@ class BookmarkWidget extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: tapBookmark,
-                              child: post.isMarked.value == 0 //0: 비활성 1: 활성
+                              child: item.isMarked.value == 0 //0: 비활성 1: 활성
                                   ? SvgPicture.asset(
                                       "assets/icons/Mark_Default.svg",
                                       color: mainblack,
@@ -190,8 +194,8 @@ class BookmarkWidget extends StatelessWidget {
   }
 
   void tapBookmark() async {
-    if (post.isMarked.value == 0) {
-      post.isMarked.value = 1;
+    if (item.isMarked.value == 0) {
+      item.isMarked.value = 1;
     } else {
       bookmarkController.bookmarkResult.value.postingitems.removeAt(index);
 
@@ -199,24 +203,24 @@ class BookmarkWidget extends StatelessWidget {
       if (bookmarkController.bookmarkResult.value.postingitems.isEmpty) {
         bookmarkController.isBookmarkEmpty.value = true;
       }
-      post.isMarked.value = 0;
+      item.isMarked.value = 0;
     }
-    await bookmarkpost(post.id);
+    await bookmarkpost(item.id);
   }
 
   void tapLike() {
-    if (post.isLiked.value == 0) {
-      post.isLiked.value = 1;
-      post.likeCount.value += 1;
+    if (item.isLiked.value == 0) {
+      item.isLiked.value = 1;
+      item.likeCount.value += 1;
     } else {
-      post.isLiked.value = 0;
-      post.likeCount.value -= 1;
+      item.isLiked.value = 0;
+      item.likeCount.value -= 1;
     }
-    likepost(post.id);
+    likepost(item.id);
   }
 
   Future<void> tapProfile() async {
-    await getProfile(post.userId).then((response) {
+    await getProfile(item.userId).then((response) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       profileController.otherUser(User.fromJson(responseBody));
 
@@ -230,21 +234,22 @@ class BookmarkWidget extends StatelessWidget {
     });
   }
 
-  Future<void> tapPosting() async {
-    http.Response? response = await getposting(post.id);
-    var responseBody = json.decode(utf8.decode(response!.bodyBytes));
-    Get.to(() => PostingScreen(
-          user: User(
-              type: 0,
-              user: responseBody['user_id'],
-              realName: responseBody['real_name'],
-              profileImage: responseBody['profile_image'],
-              profileTag: [],
-              department: '',
-              isuser: -1),
-          post: Post.fromJson(
-            responseBody['posting_info'],
-          ),
-        ));
+  void tapPosting() {
+    postingDetailController.isPostingContentLoading.value = true;
+    getposting(item.id).then((value) {
+      postingDetailController.item = value;
+      postingDetailController.isPostingContentLoading.value = false;
+    });
+    // var responseBody = json.decode(utf8.decode(response!.bodyBytes));
+    Get.to(() => PostingScreen(), arguments: {
+      'id': item.id,
+      'realName': item.realname,
+      'profileImage': item.profileimage,
+      'title': item.title,
+      'content': item.contents,
+      'postDate': item.date,
+      'department': item.department,
+      'thumbNail': item.thumbnail,
+    });
   }
 }

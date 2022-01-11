@@ -107,7 +107,7 @@ Future<void> addposting(int projectId) async {
   }
 }
 
-Future<http.Response?> getposting(int postingId) async {
+Future<Post> getposting(int postingId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   String? userid = await FlutterSecureStorage().read(key: "id");
 
@@ -122,7 +122,8 @@ Future<http.Response?> getposting(int postingId) async {
 
   if (response.statusCode == 200) {
     Post post = Post.fromJson(responseBody['posting_info']);
-    return response;
+
+    return post;
   } else {
     return Future.error(response.statusCode);
   }
