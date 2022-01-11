@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class StartScreen extends StatelessWidget {
   PageController pageController = PageController(viewportFraction: 1);
+  ModalController _modalController = Get.put(ModalController());
   List text_start = [
     "당신의 대학 생활, 루프어스",
     "본인이 했던 활동들을 남겨보세요",
@@ -75,7 +77,9 @@ class StartScreen extends StatelessWidget {
                         height: 20,
                       ),
                       InkWell(
-                        onTap: () => Get.to(() => SignupCampusInfoScreen()),
+                        onTap: () {
+                          _modalController.showContentModal(context);
+                        },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 28,
@@ -106,10 +110,12 @@ class StartScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                               color: const Color(0xffe7e7e7),
                               borderRadius: BorderRadius.circular(4)),
-                          child: const Text(
+                          child: Text(
                             "이미 계정이 있어요",
                             textAlign: TextAlign.center,
-                            style: kButtonStyle,
+                            style: kButtonStyle.copyWith(
+                                fontWeight: FontWeight.normal,
+                                color: mainblack),
                           ),
                         ),
                       ),

@@ -15,7 +15,7 @@ class LogInScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final LogInController _loginController = Get.put(LogInController());
-  static final FlutterSecureStorage? storage = new FlutterSecureStorage();
+  static final FlutterSecureStorage? storage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {

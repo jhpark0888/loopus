@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class LogInController extends GetxController {
   late TextEditingController idcontroller;
   late TextEditingController passwordcontroller;
-  static final FlutterSecureStorage storage = new FlutterSecureStorage();
+  static const FlutterSecureStorage storage = FlutterSecureStorage();
 
   @override
   void onInit() {
