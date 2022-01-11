@@ -85,7 +85,7 @@ Future updateproject(int projectId) async {
 
   String? token = await const FlutterSecureStorage().read(key: "token");
   Uri uri = Uri.parse(
-      'http://3.35.253.151:8000/project_api/update_project/$projectId');
+      'http://3.35.253.151:8000/project_api/update_project/$projectId/');
 
   var request = http.MultipartRequest('POST', uri);
 
@@ -116,6 +116,7 @@ Future updateproject(int projectId) async {
       .selectedpersontaglist
       .map((person) => person.id)
       .toList());
+
   request.fields['tag'] = json
       .encode(tagController.selectedtaglist.map((tag) => tag.text).toList());
 

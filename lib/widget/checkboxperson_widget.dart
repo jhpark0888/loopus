@@ -4,35 +4,34 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/selected_persontag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class CheckBoxPersonWidget extends StatelessWidget {
   // ProjectAddPersonController projectaddpersoncontroller = Get.find();
-  ProjectAddController projectMakeController = Get.find();
+  ProjectAddController projectaddController = Get.find();
 
   CheckBoxPersonWidget({
     Key? key,
-    required this.name,
-    required this.department,
-    required this.id,
-    this.image,
+    required this.user,
   }) : super(key: key);
 
-  String name;
-  String department;
-  String? image;
-  int id;
+  User user;
+  // String name;
+  // String department;
+  // String? image;
+  // int id;
   RxBool isselected = false.obs;
 
   @override
   Widget build(BuildContext context) {
-    if (projectMakeController.selectedpersontaglist
-        .where((element) => element.id == id)
+    if (projectaddController.selectedpersontaglist
+        .where((element) => element.id == user.user)
         .isNotEmpty) {
-      projectMakeController.selectedpersontaglist.contains(
-        projectMakeController.selectedpersontaglist
-            .where((element) => element.id == id)
+      projectaddController.selectedpersontaglist.contains(
+        projectaddController.selectedpersontaglist
+            .where((element) => element.id == user.user)
             .first,
       )
           ? isselected(true)
@@ -43,18 +42,18 @@ class CheckBoxPersonWidget extends StatelessWidget {
             child: CachedNetworkImage(
           height: 56,
           width: 56,
-          imageUrl: image ?? "https://i.stack.imgur.com/l60Hf.png",
+          imageUrl: user.profileImage ?? "https://i.stack.imgur.com/l60Hf.png",
           placeholder: (context, url) => const CircleAvatar(
             child: Center(child: CircularProgressIndicator()),
           ),
           fit: BoxFit.fill,
         )),
         title: Text(
-          '$name',
+          user.realName,
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          '$department',
+          user.department,
           style: TextStyle(
             fontSize: 16,
           ),
@@ -64,14 +63,14 @@ class CheckBoxPersonWidget extends StatelessWidget {
             onPressed: () {
               if (isselected.value) {
                 isselected(false);
-                projectMakeController.selectedpersontaglist
-                    .removeWhere((element) => element.id == id);
+                projectaddController.selectedpersontaglist
+                    .removeWhere((element) => element.id == user.user);
               } else {
                 isselected(true);
-                projectMakeController.selectedpersontaglist.add(
+                projectaddController.selectedpersontaglist.add(
                   SelectedPersonTagWidget(
-                    text: name,
-                    id: id,
+                    text: user.realName,
+                    id: user.user,
                   ),
                 );
               }

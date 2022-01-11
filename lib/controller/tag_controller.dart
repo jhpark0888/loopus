@@ -30,6 +30,7 @@ class TagController extends GetxController {
   }
 
   TextEditingController tagsearch = TextEditingController();
+  FocusNode tagsearchfocusNode = FocusNode();
 
   RxList<SelectedTagWidget> selectedtaglist = <SelectedTagWidget>[].obs;
   RxList<SearchTagWidget> searchtaglist = <SearchTagWidget>[].obs;

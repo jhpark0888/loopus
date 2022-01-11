@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 
 class SelectedPersonTagWidget extends StatelessWidget {
   SelectedPersonTagWidget({Key? key, required this.text, this.id})
       : super(key: key);
-  ProjectAddController projectMakeController = Get.find();
+  ProjectAddController projectaddController = Get.find();
   // ProjectAddPersonController projectAddPersonController = Get.find();
 
   String text;
@@ -21,7 +22,7 @@ class SelectedPersonTagWidget extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         height: 32,
         decoration: BoxDecoration(
-          color: Colors.grey[300],
+          color: mainlightgrey,
           borderRadius: BorderRadius.circular(40),
         ),
         child: Row(
@@ -35,10 +36,10 @@ class SelectedPersonTagWidget extends StatelessWidget {
               padding: const EdgeInsets.only(right: 5),
               child: InkWell(
                 onTap: () {
-                  projectMakeController.selectedpersontaglist
+                  projectaddController.selectedpersontaglist
                       .removeWhere((element) => element.id == id);
-                  projectMakeController.looppersonlist
-                      .where((element) => element.id == id)
+                  projectaddController.looppersonlist
+                      .where((element) => element.user.user == id)
                       .first
                       .isselected(false);
                 },
