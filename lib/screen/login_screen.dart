@@ -153,9 +153,9 @@ class LogInScreen extends StatelessWidget {
                           InkWell(
                               onTap: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  _loginController.isLoading.value = true;
+                                  _loginController.isLogin.value = true;
                                   await loginRequest().then((value) =>
-                                      _loginController.isLoading.value = false);
+                                      _loginController.isLogin.value = false);
                                 }
                               },
                               child: Container(
@@ -194,7 +194,7 @@ class LogInScreen extends StatelessWidget {
                 ),
               ),
             ),
-            if (_loginController.isLoading.value == true)
+            if (_loginController.isLogin.value == true)
               Container(
                 height: Get.height,
                 width: Get.width,
