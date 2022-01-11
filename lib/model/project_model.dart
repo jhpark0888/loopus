@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/model/user_model.dart';
 
 class Project {
   Project(
@@ -14,9 +15,9 @@ class Project {
       this.introduction,
       this.startDate,
       this.endDate,
-      this.post,
+      required this.post,
       required this.projectTag,
-      this.looper,
+      required this.looper,
       this.post_count,
       this.like_count,
       this.is_user});
@@ -31,9 +32,9 @@ class Project {
   String? introduction;
   DateTime? startDate;
   DateTime? endDate;
-  List<Post>? post;
+  List<Post> post;
   List<Tag> projectTag;
-  List<dynamic>? looper;
+  List<User> looper;
   int? post_count;
   int? like_count;
   bool? is_user;
@@ -54,10 +55,13 @@ class Project {
             json["end_date"] != null ? DateTime.parse(json["end_date"]) : null,
         post: json["post"] != null
             ? List<Post>.from(json["post"].map((x) => Post.fromJson(x)))
-            : null,
+            : [],
         projectTag:
             List<Tag>.from(json["project_tag"].map((x) => Tag.fromJson(x))),
-        looper: json["looper"],
+        looper: json["looper"] != null
+            ? List<User>.from(
+                json["looper"].map((x) => User.fromJson(x["profile"])))
+            : [],
         post_count: json["project_post"] != null
             ? json["project_post"]["post_count"]
             : json["post"] != null
@@ -79,9 +83,11 @@ class Project {
         "introduction": introduction,
         "start_date": startDate,
         "end_date": endDate,
-        "post": post != null
-            ? List<dynamic>.from(post!.map((x) => x.toJson()))
-            : null,
+        "post":
+            post != null ? List<dynamic>.from(post.map((x) => x.toJson())) : [],
+        "looper": looper != null
+            ? List<dynamic>.from(post.map((x) => x.toJson()))
+            : [],
         "project_tag": List<dynamic>.from(projectTag.map((x) => x.toJson())),
         "post_count": post_count,
         "like_count": like_count,

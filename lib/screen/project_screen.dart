@@ -383,7 +383,7 @@ class ProjectScreen extends StatelessWidget {
                   Obx(
                     () => Column(
                         children: project.value.post != null
-                            ? List.from(project.value.post!
+                            ? List.from(project.value.post
                                 .map((post) => ProjectPostingWidget(
                                       post: post,
                                     ))

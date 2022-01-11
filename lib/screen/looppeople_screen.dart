@@ -26,7 +26,7 @@ class LoopPeopleScreen extends StatelessWidget {
           title: '루프',
         ),
         body: FutureBuilder<List<User>>(
-            future: getlooplist(userid),
+            future: getlooplist(userid.toString()),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(

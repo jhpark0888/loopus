@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
@@ -13,6 +15,7 @@ import 'package:loopus/screen/project_add_person_screen.dart';
 import 'package:loopus/screen/project_add_tag_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:loopus/widget/checkboxperson_widget.dart';
 import 'package:loopus/widget/selected_persontag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
@@ -48,7 +51,9 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                         project: project.value,
                       ));
-                  project(exproject);
+                  if (exproject != null) {
+                    project(exproject);
+                  }
                 },
                 project: project.value,
                 title: '활동명',
@@ -63,7 +68,9 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                         project: project.value,
                       ));
-                  project(exproject);
+                  if (exproject != null) {
+                    project(exproject);
+                  }
                 },
                 project: project.value,
                 title: '활동 기간',
@@ -79,7 +86,9 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                         project: project.value,
                       ));
-                  project(exproject);
+                  if (exproject != null) {
+                    project(exproject);
+                  }
                 },
                 project: project.value,
                 title: '활동 정보',
@@ -94,7 +103,9 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                         project: project.value,
                       ));
-                  project(exproject);
+                  if (exproject != null) {
+                    project(exproject);
+                  }
                 },
                 project: project.value,
                 title: '활동 태그',
@@ -105,19 +116,33 @@ class ProjectModifyScreen extends StatelessWidget {
             ),
             Obx(
               () => updateProjectTile(
-                isSubtitleExist: project.value.looper!.isEmpty ? false : true,
+                isSubtitleExist: true,
                 onTap: () async {
+                  String? userId =
+                      await const FlutterSecureStorage().read(key: "id");
+                  getlooplist(userId!).then((value) {
+                    projectaddcontroller.looplist = value;
+                    projectaddcontroller.looppersonlist(projectaddcontroller
+                        .looplist
+                        .map((user) => CheckBoxPersonWidget(user: user))
+                        .toList());
+                    projectaddcontroller.islooppersonloading(false);
+                  });
                   exproject = await Get.to(() => ProjectAddPersonScreen(
                         screenType: Screentype.update,
                         project: project.value,
                       ));
-                  project(exproject);
+                  if (exproject != null) {
+                    project(exproject);
+                  }
                 },
                 project: project.value,
                 title: '함께 활동한 사람',
-                subtitle: project.value.looper!.isEmpty
+                subtitle: project.value.looper.isEmpty
                     ? '함께 활동한 사람이 없어요'
-                    : '함께 활동한 사람이 없어요',
+                    : project.value.looper
+                        .map((user) => user.realName)
+                        .toString(),
               ),
             ),
             updateProjectTile(
@@ -171,11 +196,11 @@ class ProjectModifyScreen extends StatelessWidget {
       ));
     }
     if (project.value.looper != null) {
-      tagController.selectedpersontaglist.clear();
-      for (var tag in project.value.looper!) {
-        tagController.selectedpersontaglist.add(SelectedPersonTagWidget(
-          id: tag.tagId,
-          text: tag.tag,
+      projectaddcontroller.selectedpersontaglist.clear();
+      for (var user in project.value.looper) {
+        projectaddcontroller.selectedpersontaglist.add(SelectedPersonTagWidget(
+          id: user.user,
+          text: user.realName,
         ));
       }
     }

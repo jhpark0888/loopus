@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
 import 'package:loopus/widget/selected_persontag_widget.dart';
@@ -41,7 +42,9 @@ class ProjectAddController extends GetxController {
   RxBool isongoing = false.obs;
   RxBool ontitlebutton = false.obs;
 
-  List<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
+  List<User> looplist = <User>[].obs;
+  RxList<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
+  RxBool islooppersonloading = true.obs;
 
   Rx<File?> projectthumbnail = File('').obs;
   String? projecturlthumbnail;
