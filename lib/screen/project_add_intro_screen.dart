@@ -5,43 +5,73 @@ import 'package:get/get.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
 class ProjectAddIntroScreen extends StatelessWidget {
-  ProjectAddIntroScreen({Key? key, required this.screenType, this.project})
-      : super(key: key);
+  ProjectAddIntroScreen({
+    Key? key,
+    required this.screenType,
+  }) : super(key: key);
 
   ProjectAddController projectaddcontroller = Get.find();
   Screentype screenType;
-  Project? project;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
         actions: [
-          TextButton(
-            onPressed: () async {
-              if (screenType == Screentype.add) {
-                Get.to(() => ProjectAddPeriodScreen(
-                      screenType: Screentype.add,
-                    ));
-              } else {
-                project = await updateproject(project!.id);
-                Get.back(result: project);
-              }
-            },
-            child: Text(
-              screenType == Screentype.add ? '다음' : '저장',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: mainblue,
-              ),
-            ),
-          ),
+          screenType == Screentype.add
+              ? TextButton(
+                  onPressed: () async {
+                    Get.to(() => ProjectAddPeriodScreen(
+                          screenType: Screentype.add,
+                        ));
+                  },
+                  child: Text(
+                    '다음',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: mainblue,
+                    ),
+                  ),
+                )
+              : Obx(
+                  () => ProjectDetailController.to.isProjectLoading.value
+                      ? Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 9,
+                        )
+                      : TextButton(
+                          onPressed: () async {
+                            ProjectDetailController.to.isProjectLoading.value =
+                                true;
+                            await updateproject(
+                                ProjectDetailController.to.project.value.id,
+                                ProjectUpdateType.introduction);
+                            await getproject(
+                                    ProjectDetailController.to.project.value.id)
+                                .then((value) {
+                              ProjectDetailController.to.project(value);
+                              ProjectDetailController
+                                  .to.isProjectLoading.value = false;
+                            });
+                            Get.back();
+                          },
+                          child: Text(
+                            '저장',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: mainblue,
+                            ),
+                          ),
+                        ),
+                )
         ],
         title: '활동 정보',
       ),

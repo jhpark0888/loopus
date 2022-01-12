@@ -4,50 +4,82 @@ import 'package:get/get.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
 class ProjectAddTitleScreen extends StatelessWidget {
-  ProjectAddTitleScreen({Key? key, required this.screenType, this.project})
-      : super(key: key);
+  ProjectAddTitleScreen({
+    Key? key,
+    required this.screenType,
+  }) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
   Screentype screenType;
   ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
   TagController tagController = Get.put(TagController());
-  Project? project;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
         actions: [
-          TextButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                if (screenType == Screentype.add) {
-                  Get.to(() => ProjectAddIntroScreen(
-                        screenType: Screentype.add,
-                      ));
-                } else {
-                  project = await updateproject(project!.id);
-                  Get.back(result: project);
-                }
-              }
-            },
-            child: Obx(
-              () => Text(
-                screenType == Screentype.add ? '다음' : '저장',
-                style: kSubTitle2Style.copyWith(
-                  color: projectaddcontroller.ontitlebutton.value
-                      ? mainblue
-                      : mainblack.withOpacity(0.38),
-                ),
-              ),
-            ),
-          ),
+          screenType == Screentype.add
+              ? TextButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      Get.to(() => ProjectAddIntroScreen(
+                            screenType: Screentype.add,
+                          ));
+                    }
+                  },
+                  child: Obx(
+                    () => Text(
+                      '다음',
+                      style: kSubTitle2Style.copyWith(
+                        color: projectaddcontroller.ontitlebutton.value
+                            ? mainblue
+                            : mainblack.withOpacity(0.38),
+                      ),
+                    ),
+                  ),
+                )
+              : Obx(() => ProjectDetailController.to.isProjectLoading.value
+                  ? Image.asset(
+                      'assets/icons/loading.gif',
+                      scale: 9,
+                    )
+                  : TextButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          ProjectDetailController.to.isProjectLoading.value =
+                              true;
+                          await updateproject(
+                              ProjectDetailController.to.project.value.id,
+                              ProjectUpdateType.project_name);
+                          await getproject(
+                                  ProjectDetailController.to.project.value.id)
+                              .then((value) {
+                            ProjectDetailController.to.project(value);
+                            ProjectDetailController.to.isProjectLoading.value =
+                                false;
+                          });
+                          Get.back();
+                        }
+                      },
+                      child: Obx(
+                        () => Text(
+                          '저장',
+                          style: kSubTitle2Style.copyWith(
+                            color: projectaddcontroller.ontitlebutton.value
+                                ? mainblue
+                                : mainblack.withOpacity(0.38),
+                          ),
+                        ),
+                      ),
+                    ))
         ],
         title: '활동명',
       ),

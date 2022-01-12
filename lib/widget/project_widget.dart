@@ -12,6 +12,7 @@ import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
@@ -24,6 +25,8 @@ class ProjectWidget extends StatelessWidget {
     required this.project,
   }) : super(key: key);
 
+  ProjectDetailController projectDetailController =
+      Get.put(ProjectDetailController());
   Rx<Project> project;
   Project? exproject;
 
@@ -35,12 +38,26 @@ class ProjectWidget extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () async {
-          project.value = await getproject(project.value.id);
-          exproject = await Get.to(() => ProjectScreen(
-                project: project,
-              ));
+          projectDetailController.isProjectLoading.value = true;
+          getproject(project.value.id).then((value) {
+            projectDetailController.project(value);
+            projectDetailController.isProjectLoading.value = false;
+          });
+          exproject = await Get.to(() => ProjectScreen());
           if (exproject != null) {
             project(exproject);
+            // projectDetailController.project.value.projectName =
+            //     exproject!.projectName;
+            // projectDetailController.project.value.introduction =
+            //     exproject!.introduction;
+            // projectDetailController.project.value.startDate =
+            //     exproject!.startDate;
+            // projectDetailController.project.value.endDate = exproject!.endDate;
+            // projectDetailController.project.value.projectTag =
+            //     exproject!.projectTag;
+            // projectDetailController.project.value.looper = exproject!.looper;
+            // projectDetailController.project.value.thumbnail =
+            //     exproject!.thumbnail;
           }
         },
         child: Container(

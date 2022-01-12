@@ -6,6 +6,8 @@ class User {
     required this.realName,
     required this.type,
     required this.department,
+    required this.loopcount,
+    required this.totalposting,
     required this.isuser,
     this.profileImage,
     required this.profileTag,
@@ -16,6 +18,8 @@ class User {
   int type;
   String department;
   int? isuser;
+  int loopcount;
+  int totalposting;
   String? profileImage;
   List<Tag> profileTag;
 
@@ -24,6 +28,8 @@ class User {
         realName: json["real_name"],
         type: json["type"] ?? 0,
         profileImage: json["profile_image"],
+        loopcount: json["loop_count"] ?? 0,
+        totalposting: json["total_post_count"] ?? 0,
         profileTag: json["profile_tag"] != null
             ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
             : [],

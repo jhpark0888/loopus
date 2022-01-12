@@ -7,6 +7,7 @@ import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
@@ -15,45 +16,76 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 
 class ProjectAddPersonScreen extends StatelessWidget {
-  ProjectAddPersonScreen({Key? key, required this.screenType, this.project})
-      : super(key: key);
+  ProjectAddPersonScreen({
+    Key? key,
+    required this.screenType,
+  }) : super(key: key);
   // ProjectAddPersonController projectaddpersoncontroller =
   // Get.put(ProjectAddPersonController());
   ProjectAddController projectaddcontroller = Get.find();
   Screentype screenType;
-  Project? project;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
         actions: [
-          TextButton(
-            onPressed: () async {
-              if (screenType == Screentype.add) {
-                Get.to(() => ProjectAddThumbnailScreen(
-                      screenType: Screentype.add,
-                    ));
-              } else {
-                project = await updateproject(project!.id);
-                Get.back(result: project);
-              }
-            },
-            child: Obx(
-              () => Text(
-                screenType == Screentype.add
-                    ? projectaddcontroller.selectedpersontaglist.isEmpty
-                        ? '건너뛰기'
-                        : '다음'
-                    : '저장',
-                style: kSubTitle2Style.copyWith(
-                  color: projectaddcontroller.selectedpersontaglist.isEmpty
-                      ? mainblack
-                      : mainblue,
-                ),
-              ),
-            ),
-          ),
+          screenType == Screentype.add
+              ? TextButton(
+                  onPressed: () async {
+                    Get.to(() => ProjectAddThumbnailScreen(
+                          screenType: Screentype.add,
+                        ));
+                  },
+                  child: Obx(
+                    () => Text(
+                      projectaddcontroller.selectedpersontaglist.isEmpty
+                          ? '건너뛰기'
+                          : '다음',
+                      style: kSubTitle2Style.copyWith(
+                        color:
+                            projectaddcontroller.selectedpersontaglist.isEmpty
+                                ? mainblack
+                                : mainblue,
+                      ),
+                    ),
+                  ),
+                )
+              : Obx(
+                  () => ProjectDetailController.to.isProjectLoading.value
+                      ? Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 9,
+                        )
+                      : TextButton(
+                          onPressed: () async {
+                            ProjectDetailController.to.isProjectLoading.value =
+                                true;
+                            await updateproject(
+                                ProjectDetailController.to.project.value.id,
+                                ProjectUpdateType.looper);
+                            await getproject(
+                                    ProjectDetailController.to.project.value.id)
+                                .then((value) {
+                              ProjectDetailController.to.project(value);
+                              ProjectDetailController
+                                  .to.isProjectLoading.value = false;
+                            });
+                            Get.back();
+                          },
+                          child: Obx(
+                            () => Text(
+                              '저장',
+                              style: kSubTitle2Style.copyWith(
+                                color: projectaddcontroller
+                                        .selectedpersontaglist.isEmpty
+                                    ? mainblack
+                                    : mainblue,
+                              ),
+                            ),
+                          ),
+                        ),
+                )
         ],
         title: '함께 활동한 사람',
       ),

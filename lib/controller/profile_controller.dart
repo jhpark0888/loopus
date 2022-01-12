@@ -48,6 +48,8 @@ class ProfileController extends GetxController
     type: 0,
     realName: '',
     profileTag: [],
+    totalposting: 0,
+    loopcount: 0,
     department: '',
     //0 : 다른 프로필, 1 : 내 프로필
     isuser: 1,
@@ -57,6 +59,8 @@ class ProfileController extends GetxController
     user: 0,
     type: 0,
     realName: '',
+    totalposting: 0,
+    loopcount: 0,
     profileTag: [],
     department: '',
     isuser: 1,
