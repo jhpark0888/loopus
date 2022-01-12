@@ -9,7 +9,7 @@ import 'package:loopus/controller/tag_controller.dart';
 void emailRequest() async {
   SignupController signupController = Get.put(SignupController());
 
-  Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/check_email/');
+  Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/check_email');
 
   var checkemail = {
     "email": signupController.emailidcontroller.text,
@@ -32,7 +32,7 @@ void emailRequest() async {
 Future<http.Response> signupRequest() async {
   SignupController signupController = Get.find();
   TagController tagController = Get.find();
-  Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/signup/');
+  Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/signup');
   const FlutterSecureStorage storage = FlutterSecureStorage();
 
   var user = {

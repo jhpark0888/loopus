@@ -25,7 +25,7 @@ Future<http.Response> getProfile(var userId) async {
 Future<User?> updateProfile(User user, File? image, List? taglist) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse("http://3.35.253.151:8000/user_api/update_profile/");
+  final uri = Uri.parse("http://3.35.253.151:8000/user_api/update_profile");
 
   var request = http.MultipartRequest('POST', uri);
 

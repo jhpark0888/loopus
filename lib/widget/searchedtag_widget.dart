@@ -22,7 +22,6 @@ class SearchTagWidget extends StatelessWidget {
       : super(key: key);
 
   TagController tagController = Get.put(TagController());
-  SearchController searchController = Get.find();
   int id;
   String tag;
   int? count;
@@ -77,12 +76,12 @@ class SearchTagWidget extends StatelessWidget {
               )
             : GestureDetector(
                 onTap: () async {
-                  searchController.searchtagprojectlist.clear();
-                  searchController.searchtagquestionlist.clear();
-                  await searchController.search(SearchType.tag_project, id,
-                      searchController.tagpagenumber);
-                  await searchController.search(
-                      SearchType.tag_question, id, searchController.pagenumber);
+                  SearchController.to.searchtagprojectlist.clear();
+                  SearchController.to.searchtagquestionlist.clear();
+                  await SearchController.to.search(SearchType.tag_project, id,
+                      SearchController.to.tagpagenumber);
+                  await SearchController.to.search(SearchType.tag_question, id,
+                      SearchController.to.pagenumber);
                   Get.to(() => TagDetailScreen(
                         title: tag,
                         count: count,

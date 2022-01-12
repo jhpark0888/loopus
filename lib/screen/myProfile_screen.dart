@@ -31,10 +31,11 @@ class MyProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (Platform.isAndroid) {
+        if (Platform.isAndroid && (AppController.to.currentIndex.value == 4)) {
           AppController.to.currentIndex(0);
+          return false;
         }
-        return false;
+        return true;
       },
       child: DefaultTabController(
         initialIndex: profileController.profileTabController.index,

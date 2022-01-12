@@ -62,13 +62,13 @@ class Project {
             ? List<User>.from(
                 json["looper"].map((x) => User.fromJson(x["profile"])))
             : [],
-        post_count: json["project_post"] != null
-            ? json["project_post"]["post_count"]
+        post_count: json["count"] != null
+            ? json["count"]["post_count"]
             : json["post"] != null
                 ? List.from(json["post"]).length
                 : 0,
-        like_count: json["project_post"] != null
-            ? json["project_post"]["like_count"]
+        like_count: json["count"] != null
+            ? json["count"]["like_count"]
             : json["like_count"] ?? 0,
         is_user: json['is_user'] == 1 ? true : false,
       );

@@ -77,7 +77,7 @@ void gettagsearch() async {
 Future<SearchTag?> postmaketag() async {
   TagController tagController = Get.find();
 
-  Uri uri = Uri.parse('http://3.35.253.151:8000/tag_api/create/');
+  Uri uri = Uri.parse('http://3.35.253.151:8000/tag_api/create');
 
   var tag = {"tag": tagController.tagsearch.text};
 

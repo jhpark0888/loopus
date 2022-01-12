@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
@@ -55,7 +56,14 @@ class ProjectScreen extends StatelessWidget {
               onPressed: () {
                 modalController.showModalIOS(
                   context,
-                  func1: () {},
+                  func1: () {
+                    modalController.showButtonDialog('정말로 삭제하시겠습니까?', () async {
+                      await deleteproject(
+                          projectdetailController.project.value.id);
+                    }, () {
+                      Get.back();
+                    });
+                  },
                   func2: () {},
                   value1: '이 활동 삭제하기',
                   value2: '',

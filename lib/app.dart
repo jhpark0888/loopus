@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/login_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
@@ -20,6 +21,7 @@ class App extends GetView<AppController> {
 
   @override
   Widget build(BuildContext context) {
+    postconnect();
     return Scaffold(
       extendBody: false,
       body: Obx(

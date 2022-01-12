@@ -116,16 +116,17 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
     });
   }
 
-  void showButtonDialog(String title) {
+  void showButtonDialog(
+      String title, Function() yesfunction, Function() nofunction) {
     Get.dialog(
       AlertDialog(
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: yesfunction,
             child: Center(child: Text('네')),
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: nofunction,
             child: Center(child: Text('아니오')),
           ),
         ],

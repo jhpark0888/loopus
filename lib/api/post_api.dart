@@ -24,7 +24,7 @@ Future<void> addposting(int projectId) async {
   final String? token = await const FlutterSecureStorage().read(key: 'token');
 
   Uri postingUploadUri =
-      Uri.parse('http://3.35.253.151:8000/post_api/posting_upload/$projectId/');
+      Uri.parse('http://3.35.253.151:8000/post_api/posting_upload/$projectId');
 
   var request = http.MultipartRequest('POST', postingUploadUri);
 
@@ -135,8 +135,8 @@ Future<dynamic> mainpost(int pageNumber) async {
     token = value;
   });
 
-  final mainloadUri = Uri.parse(
-      "http://3.35.253.151:8000/post_api/main_load/?page=$pageNumber");
+  final mainloadUri =
+      Uri.parse("http://3.35.253.151:8000/post_api/main_load?page=$pageNumber");
 
   final response =
       await get(mainloadUri, headers: {"Authorization": "Token $token"});
@@ -160,7 +160,7 @@ Future<dynamic> bookmarklist(int pageNumber) async {
   });
 
   final bookmarkListUri = Uri.parse(
-      "http://3.35.253.151:8000/post_api/bookmark_list/?page=$pageNumber");
+      "http://3.35.253.151:8000/post_api/bookmark_list?page=$pageNumber");
 
   final response =
       await get(bookmarkListUri, headers: {"Authorization": "Token $token"});
@@ -180,8 +180,8 @@ Future<dynamic> looppost(int pageNumber) async {
     token = value;
   });
 
-  final loopUri = Uri.parse(
-      "http://3.35.253.151:8000/post_api/loop_load/?page=$pageNumber/");
+  final loopUri =
+      Uri.parse("http://3.35.253.151:8000/post_api/loop_load?page=$pageNumber");
 
   final response =
       await get(loopUri, headers: {"Authorization": "Token $token"});
@@ -204,7 +204,7 @@ Future<dynamic> bookmarkpost(int postingId) async {
   });
 
   final bookmarkUri =
-      Uri.parse("http://3.35.253.151:8000/post_api/bookmark/$postingId/");
+      Uri.parse("http://3.35.253.151:8000/post_api/bookmark/$postingId");
 
   final response =
       await post(bookmarkUri, headers: {"Authorization": "Token $token"});
@@ -220,7 +220,7 @@ Future<dynamic> likepost(int postingId) async {
   });
 
   final likeUri =
-      Uri.parse("http://3.35.253.151:8000/post_api/like/$postingId/");
+      Uri.parse("http://3.35.253.151:8000/post_api/like/$postingId");
 
   final response =
       await post(likeUri, headers: {"Authorization": "Token $token"});
