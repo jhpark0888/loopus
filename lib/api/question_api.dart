@@ -13,8 +13,7 @@ void questionmake(String content) async {
     token = value;
   });
 
-  final url =
-      Uri.parse("http://3.35.253.151:8000/question_api/raise_question/");
+  final url = Uri.parse("http://3.35.253.151:8000/question_api/raise_question");
   var data = {
     "content": content,
     "tag":
@@ -57,7 +56,7 @@ Future<dynamic> specificquestion(int questionid) async {
   });
 
   final url = Uri.parse(
-      "http://3.35.253.151:8000/question_api/specific_question_load/$questionid/");
+      "http://3.35.253.151:8000/question_api/specific_question_load/$questionid");
 
   final response = await get(url, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
@@ -79,7 +78,7 @@ Future<Map<dynamic, dynamic>> answermake(String content, int id) async {
     token = value;
   });
 
-  final url = Uri.parse("http://3.35.253.151:8000/question_api/answer/$id/");
+  final url = Uri.parse("http://3.35.253.151:8000/question_api/answer/$id");
 
   print(token);
   var data = {

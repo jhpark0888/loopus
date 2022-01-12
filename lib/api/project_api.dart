@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
@@ -14,7 +15,7 @@ Future addproject() async {
   TagController tagController = Get.find();
 
   String? token = await const FlutterSecureStorage().read(key: "token");
-  Uri uri = Uri.parse('http://3.35.253.151:8000/project_api/create_project/');
+  Uri uri = Uri.parse('http://3.35.253.151:8000/project_api/create_project');
 
   var request = http.MultipartRequest('POST', uri);
 
@@ -94,7 +95,7 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
 
   String? token = await const FlutterSecureStorage().read(key: "token");
   Uri uri = Uri.parse(
-      'http://3.35.253.151:8000/project_api/update_project/${updateType.name}/$projectId/');
+      'http://3.35.253.151:8000/project_api/update_project/${updateType.name}/$projectId');
 
   var request = http.MultipartRequest('POST', uri);
 
@@ -143,6 +144,27 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
     print(responsemap);
     Project project = Project.fromJson(responsemap);
     return project;
+  } else {
+    return Future.error(response.statusCode);
+  }
+}
+
+Future<void> deleteproject(int projectId) async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  final uri = Uri.parse(
+      "http://3.35.253.151:8000/project_api/delete_project/$projectId");
+
+  http.Response response =
+      await http.post(uri, headers: {"Authorization": "Token $token"});
+
+  print(response.statusCode);
+  if (response.statusCode == 200) {
+    Get.back();
+    Get.back();
+    Get.back();
+    ProfileController.to.myProjectList
+        .removeWhere((project) => project.project.value.id == projectId);
   } else {
     return Future.error(response.statusCode);
   }

@@ -54,7 +54,10 @@ class SearchProfileWidget extends StatelessWidget {
               (profileimage == null)
                   ? ClipOval(
                       child: Image.asset(
-                          "assets/illustrations/default_profile.png"),
+                        "assets/illustrations/default_profile.png",
+                        height: 50,
+                        width: 50,
+                      ),
                     )
                   : ClipOval(
                       child: CachedNetworkImage(

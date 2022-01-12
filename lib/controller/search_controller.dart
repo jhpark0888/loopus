@@ -153,15 +153,20 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
             isSearch: 1,
           );
         }).toList());
-        if (searchtextcontroller.text != '') {
-          searchtaglist.insert(
-              0,
-              SearchTagWidget(
-                id: -1,
-                tag: "아직 검색어와 일치하는 태그가 없어요",
-                isSearch: 1,
-              ));
-        }
+        // if (searchtextcontroller.text != '') {
+        //   searchtaglist.insert(
+        //       0,
+        //       SearchTagWidget(
+        //         id: -1,
+        //         tag: "아직 검색어와 일치하는 태그가 없어요",
+        //         isSearch: 1,
+        //       ));
+        // }
+      }
+      if (tagmaplist.isEmpty) {
+        isnosearchtag(true);
+      } else {
+        isnosearchtag(false);
       }
     } else if (response.statusCode == 401) {
     } else {
@@ -177,7 +182,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     // 수정
 
     final url = Uri.parse(
-        "http://3.35.253.151:8000/search_api/search/${searchType.name}/?query=${search}&page=${pagenumber}");
+        "http://3.35.253.151:8000/search_api/search/${searchType.name}?query=${search}&page=${pagenumber}");
 
     final response = await get(url, headers: {"Authorization": "Token $token"});
     var statusCode = response.statusCode;

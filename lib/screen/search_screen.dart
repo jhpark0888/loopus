@@ -447,7 +447,7 @@ class SearchScreen extends StatelessWidget {
                                               height: 80,
                                               child: Center(
                                                 child: Text(
-                                                  "검색 결과가 존재하지 않습니다.",
+                                                  "아직 검색어와 일치하는 태그가 없어요.",
                                                   style: kSubTitle2Style,
                                                 ),
                                               ),

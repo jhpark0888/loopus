@@ -14,7 +14,7 @@ Future<void> loginRequest() async {
   const FlutterSecureStorage storage = FlutterSecureStorage();
   ModalController _modalController = Get.put(ModalController());
 
-  Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/login/');
+  Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/login');
 
   final user = {
     'username': logInController.idcontroller.text,
@@ -36,10 +36,32 @@ Future<void> loginRequest() async {
     storage.write(key: 'token', value: token);
     storage.write(key: 'id', value: userid);
 
-    Get.offAll(App());
+    Get.offAll(() => App());
   } else if (response.statusCode == 401) {
     _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
   } else {
     _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+  }
+}
+
+Future<void> postconnect() async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  Uri uri = Uri.parse('http://3.35.253.151:8000/search_api/connect');
+
+  http.Response response = await http.post(
+    uri,
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+      "Authorization": "Token $token"
+    },
+  );
+
+  if (response.statusCode == 200) {
+    print('postconnect :연결 성공');
+  } else if (response.statusCode == 401) {
+    print('postconnect :연결 실패');
+  } else {
+    print('postconnect :연결 실패');
   }
 }

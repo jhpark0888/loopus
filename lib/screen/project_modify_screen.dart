@@ -169,8 +169,8 @@ class ProjectModifyScreen extends StatelessWidget {
   }
 
   void projectdateinput() {
-    projectaddcontroller.startyearcontroller.text =
-        projectDetailController.project.value.startDate!.year.toString();
+    projectaddcontroller.startyearcontroller.text = DateFormat("yyyy")
+        .format(projectDetailController.project.value.startDate!);
     projectaddcontroller.startmonthcontroller.text = DateFormat("MM")
         .format(projectDetailController.project.value.startDate!);
     projectaddcontroller.startdaycontroller.text = DateFormat("dd")
@@ -180,8 +180,8 @@ class ProjectModifyScreen extends StatelessWidget {
       projectaddcontroller.isvaildstartdate(true);
       projectaddcontroller.isongoing(true);
     } else {
-      projectaddcontroller.endyearcontroller.text =
-          projectDetailController.project.value.startDate!.year.toString();
+      projectaddcontroller.endyearcontroller.text = DateFormat("yyyy")
+          .format(projectDetailController.project.value.endDate!);
       projectaddcontroller.endmonthcontroller.text = DateFormat("MM")
           .format(projectDetailController.project.value.endDate!);
       projectaddcontroller.enddaycontroller.text = DateFormat("dd")

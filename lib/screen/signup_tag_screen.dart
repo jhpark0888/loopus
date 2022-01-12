@@ -113,7 +113,7 @@ class SignupTagScreen extends StatelessWidget {
                   height: 30,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: tagController.selectedtaglist,
+                    children: tagController.selectedtaglist.value,
                   ),
                 ),
               ),
@@ -124,10 +124,7 @@ class SignupTagScreen extends StatelessWidget {
                 controller: tagController.tagsearch,
                 style: kBody1Style,
                 cursorColor: mainblack,
-                // autofocus: true,
-                // focusNode: searchController.detailsearchFocusnode,
                 textAlign: TextAlign.start,
-                // selectionHeightStyle: BoxHeightStyle.tight,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: mainlightgrey,
@@ -137,8 +134,6 @@ class SignupTagScreen extends StatelessWidget {
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(12)),
-                  // focusColor: Colors.black,
-                  // border: OutlineInputBorder(borderSide: BorderSide.none),
                   contentPadding: EdgeInsets.all(10),
                   hintStyle:
                       kBody1Style.copyWith(color: mainblack.withOpacity(0.38)),
@@ -155,7 +150,7 @@ class SignupTagScreen extends StatelessWidget {
               Obx(
                 () => Expanded(
                   child: ListView(
-                    children: tagController.searchtaglist,
+                    children: tagController.searchtaglist.value,
                   ),
                 ),
               )
