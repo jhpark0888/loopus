@@ -9,6 +9,7 @@ import 'package:loopus/api/project_api.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
@@ -20,53 +21,86 @@ import 'package:loopus/widget/checkboxperson_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class ProjectAddTagScreen extends StatelessWidget {
-  ProjectAddTagScreen({Key? key, required this.screenType, this.project})
-      : super(key: key);
+  ProjectAddTagScreen({
+    Key? key,
+    required this.screenType,
+  }) : super(key: key);
   ProjectAddController projectaddcontroller = Get.find();
   TagController tagController = Get.find();
   Screentype screenType;
-  Project? project;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
         actions: [
-          TextButton(
-            onPressed: () async {
-              if (tagController.selectedtaglist.length == 3) {
-                if (screenType == Screentype.add) {
-                  String? userId =
-                      await const FlutterSecureStorage().read(key: "id");
-                  getlooplist(userId!).then((value) {
-                    projectaddcontroller.looplist = value;
-                    projectaddcontroller.looppersonlist(projectaddcontroller
-                        .looplist
-                        .map((user) => CheckBoxPersonWidget(user: user))
-                        .toList());
-                    projectaddcontroller.islooppersonloading(false);
-                  });
-                  tagController.tagsearchfocusNode.unfocus();
-                  Get.to(() => ProjectAddPersonScreen(
-                        screenType: Screentype.add,
-                      ));
-                } else {
-                  project = await updateproject(project!.id);
-                  Get.back(result: project);
-                }
-              }
-            },
-            child: Obx(
-              () => Text(
-                screenType == Screentype.add ? '다음' : '저장',
-                style: kSubTitle2Style.copyWith(
-                  color: tagController.selectedtaglist.length == 3
-                      ? mainblue
-                      : mainblack.withOpacity(0.38),
-                ),
-              ),
-            ),
-          ),
+          screenType == Screentype.add
+              ? TextButton(
+                  onPressed: () async {
+                    if (tagController.selectedtaglist.length == 3) {
+                      String? userId =
+                          await const FlutterSecureStorage().read(key: "id");
+                      getlooplist(userId!).then((value) {
+                        projectaddcontroller.looplist = value;
+                        projectaddcontroller.looppersonlist(projectaddcontroller
+                            .looplist
+                            .map((user) => CheckBoxPersonWidget(user: user))
+                            .toList());
+                        projectaddcontroller.islooppersonloading(false);
+                      });
+                      tagController.tagsearchfocusNode.unfocus();
+                      Get.to(() => ProjectAddPersonScreen(
+                            screenType: Screentype.add,
+                          ));
+                    }
+                  },
+                  child: Obx(
+                    () => Text(
+                      '다음',
+                      style: kSubTitle2Style.copyWith(
+                        color: tagController.selectedtaglist.length == 3
+                            ? mainblue
+                            : mainblack.withOpacity(0.38),
+                      ),
+                    ),
+                  ),
+                )
+              : Obx(
+                  () => ProjectDetailController.to.isProjectLoading.value
+                      ? Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 9,
+                        )
+                      : TextButton(
+                          onPressed: () async {
+                            if (tagController.selectedtaglist.length == 3) {
+                              ProjectDetailController
+                                  .to.isProjectLoading.value = true;
+                              await updateproject(
+                                  ProjectDetailController.to.project.value.id,
+                                  ProjectUpdateType.tag);
+                              await getproject(ProjectDetailController
+                                      .to.project.value.id)
+                                  .then((value) {
+                                ProjectDetailController.to.project(value);
+                                ProjectDetailController
+                                    .to.isProjectLoading.value = false;
+                              });
+                              Get.back();
+                            }
+                          },
+                          child: Obx(
+                            () => Text(
+                              '저장',
+                              style: kSubTitle2Style.copyWith(
+                                color: tagController.selectedtaglist.length == 3
+                                    ? mainblue
+                                    : mainblack.withOpacity(0.38),
+                              ),
+                            ),
+                          ),
+                        ),
+                )
         ],
         title: "활동 태그",
       ),

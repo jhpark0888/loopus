@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_tag_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -12,12 +13,13 @@ import 'package:loopus/widget/datefield_end_widget.dart';
 import 'package:loopus/widget/datefield_start_widget.dart';
 
 class ProjectAddPeriodScreen extends StatelessWidget {
-  ProjectAddPeriodScreen({Key? key, required this.screenType, this.project})
-      : super(key: key);
+  ProjectAddPeriodScreen({
+    Key? key,
+    required this.screenType,
+  }) : super(key: key);
 
   ProjectAddController projectaddcontroller = Get.find();
   Screentype screenType;
-  Project? project;
   // final _formKey = GlobalKey<FormState>();
 
   Color? buttoncolor() {
@@ -42,44 +44,90 @@ class ProjectAddPeriodScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBarWidget(
         actions: [
-          TextButton(
-            onPressed: () async {
-              if (projectaddcontroller.isongoing.value == true) {
-                if (projectaddcontroller.isvaildstartdate.value) {
-                  if (screenType == Screentype.add) {
-                    Get.to(() => ProjectAddTagScreen(
-                          screenType: Screentype.add,
-                        ));
-                  } else {
-                    project = await updateproject(project!.id);
-                    Get.back(result: project);
-                  }
-                }
-              } else {
-                if (projectaddcontroller.isvaildstartdate.value &&
-                    projectaddcontroller.isvaildenddate.value) {
-                  if (screenType == Screentype.add) {
-                    Get.to(() => ProjectAddTagScreen(
-                          screenType: Screentype.add,
-                        ));
-                  } else {
-                    project = await updateproject(project!.id);
-                    Get.back(result: project);
-                  }
-                }
-              }
-            },
-            child: Obx(
-              () => Text(
-                screenType == Screentype.add ? '다음' : '저장',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: buttoncolor(),
-                ),
-              ),
-            ),
-          ),
+          screenType == Screentype.add
+              ? TextButton(
+                  onPressed: () async {
+                    if (projectaddcontroller.isongoing.value == true) {
+                      if (projectaddcontroller.isvaildstartdate.value) {
+                        Get.to(() => ProjectAddTagScreen(
+                              screenType: Screentype.add,
+                            ));
+                      }
+                    } else {
+                      if (projectaddcontroller.isvaildstartdate.value &&
+                          projectaddcontroller.isvaildenddate.value) {
+                        Get.to(() => ProjectAddTagScreen(
+                              screenType: Screentype.add,
+                            ));
+                      }
+                    }
+                  },
+                  child: Obx(
+                    () => Text(
+                      '다음',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: buttoncolor(),
+                      ),
+                    ),
+                  ),
+                )
+              : Obx(
+                  () => ProjectDetailController.to.isProjectLoading.value
+                      ? Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 9,
+                        )
+                      : TextButton(
+                          onPressed: () async {
+                            if (projectaddcontroller.isongoing.value == true) {
+                              if (projectaddcontroller.isvaildstartdate.value) {
+                                ProjectDetailController
+                                    .to.isProjectLoading.value = true;
+                                await updateproject(
+                                    ProjectDetailController.to.project.value.id,
+                                    ProjectUpdateType.date);
+                                await getproject(ProjectDetailController
+                                        .to.project.value.id)
+                                    .then((value) {
+                                  ProjectDetailController.to.project(value);
+                                  ProjectDetailController
+                                      .to.isProjectLoading.value = false;
+                                });
+                                Get.back();
+                              }
+                            } else {
+                              if (projectaddcontroller.isvaildstartdate.value &&
+                                  projectaddcontroller.isvaildenddate.value) {
+                                ProjectDetailController
+                                    .to.isProjectLoading.value = true;
+                                await updateproject(
+                                    ProjectDetailController.to.project.value.id,
+                                    ProjectUpdateType.date);
+                                await getproject(ProjectDetailController
+                                        .to.project.value.id)
+                                    .then((value) {
+                                  ProjectDetailController.to.project(value);
+                                  ProjectDetailController
+                                      .to.isProjectLoading.value = false;
+                                });
+                                Get.back();
+                              }
+                            }
+                          },
+                          child: Obx(
+                            () => Text(
+                              '저장',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: buttoncolor(),
+                              ),
+                            ),
+                          ),
+                        ),
+                )
         ],
         title: '활동 기간',
       ),

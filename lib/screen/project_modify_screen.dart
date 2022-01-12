@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
@@ -20,23 +23,31 @@ import 'package:loopus/widget/selected_persontag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class ProjectModifyScreen extends StatelessWidget {
-  ProjectModifyScreen({Key? key, required this.project}) : super(key: key);
+  ProjectModifyScreen({
+    Key? key,
+  }) : super(key: key);
 
   ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
+  ProjectDetailController projectDetailController = Get.find();
   TagController tagController = Get.put(TagController());
 
-  Rx<Project> project;
+  // Rx<Project> project;
   Project? exproject;
 
   @override
   Widget build(BuildContext context) {
-    datainput();
+    projectnameinput();
+    projectdateinput();
+    projectintroinput();
+    projecttaginput();
+    projectlooperinput();
+    projectthumbnailinput();
     return Scaffold(
         appBar: AppBarWidget(
           title: '활동 편집',
           leading: IconButton(
             onPressed: () {
-              Get.back(result: project.value);
+              Get.back(result: projectDetailController.project.value);
             },
             icon: SvgPicture.asset('assets/icons/Arrow.svg'),
           ),
@@ -47,77 +58,67 @@ class ProjectModifyScreen extends StatelessWidget {
               () => updateProjectTile(
                 isSubtitleExist: true,
                 onTap: () async {
-                  exproject = await Get.to(() => ProjectAddTitleScreen(
+                  projectnameinput();
+                  Get.to(() => ProjectAddTitleScreen(
                         screenType: Screentype.update,
-                        project: project.value,
                       ));
-                  if (exproject != null) {
-                    project(exproject);
-                  }
                 },
-                project: project.value,
+                project: projectDetailController.project.value,
                 title: '활동명',
-                subtitle: project.value.projectName,
+                subtitle: projectDetailController.project.value.projectName,
               ),
             ),
             Obx(
               () => updateProjectTile(
                 isSubtitleExist: true,
                 onTap: () async {
-                  exproject = await Get.to(() => ProjectAddPeriodScreen(
+                  projectdateinput();
+                  Get.to(() => ProjectAddPeriodScreen(
                         screenType: Screentype.update,
-                        project: project.value,
                       ));
-                  if (exproject != null) {
-                    project(exproject);
-                  }
                 },
-                project: project.value,
+                project: projectDetailController.project.value,
                 title: '활동 기간',
                 subtitle:
-                    '${DateFormat("yyyy.MM").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yyyy.MM").format(project.value.endDate!) : ''}',
+                    '${DateFormat("yyyy.MM").format(projectDetailController.project.value.startDate!)} ~ ${projectDetailController.project.value.endDate != null ? DateFormat("yyyy.MM").format(projectDetailController.project.value.endDate!) : ''}',
               ),
             ),
             Obx(
               () => updateProjectTile(
                 isSubtitleExist: true,
                 onTap: () async {
-                  exproject = await Get.to(() => ProjectAddIntroScreen(
+                  projectintroinput();
+                  Get.to(() => ProjectAddIntroScreen(
                         screenType: Screentype.update,
-                        project: project.value,
                       ));
-                  if (exproject != null) {
-                    project(exproject);
-                  }
                 },
-                project: project.value,
+                project: projectDetailController.project.value,
                 title: '활동 정보',
-                subtitle: project.value.introduction!,
+                subtitle: projectDetailController.project.value.introduction!,
               ),
             ),
             Obx(
               () => updateProjectTile(
                 isSubtitleExist: true,
                 onTap: () async {
-                  exproject = await Get.to(() => ProjectAddTagScreen(
+                  projecttaginput();
+                  Get.to(() => ProjectAddTagScreen(
                         screenType: Screentype.update,
-                        project: project.value,
                       ));
-                  if (exproject != null) {
-                    project(exproject);
-                  }
                 },
-                project: project.value,
+                project: projectDetailController.project.value,
                 title: '활동 태그',
-                subtitle: project.value.projectTag.isEmpty
+                subtitle: projectDetailController
+                        .project.value.projectTag.isEmpty
                     ? ''
-                    : '${project.value.projectTag[0].tag}, ${project.value.projectTag[1].tag}, ${project.value.projectTag[2].tag}',
+                    : '${projectDetailController.project.value.projectTag[0].tag}, ${projectDetailController.project.value.projectTag[1].tag}, ${projectDetailController.project.value.projectTag[2].tag}',
               ),
             ),
             Obx(
               () => updateProjectTile(
                 isSubtitleExist: true,
                 onTap: () async {
+                  projectlooperinput();
                   String? userId =
                       await const FlutterSecureStorage().read(key: "id");
                   getlooplist(userId!).then((value) {
@@ -128,19 +129,15 @@ class ProjectModifyScreen extends StatelessWidget {
                         .toList());
                     projectaddcontroller.islooppersonloading(false);
                   });
-                  exproject = await Get.to(() => ProjectAddPersonScreen(
+                  Get.to(() => ProjectAddPersonScreen(
                         screenType: Screentype.update,
-                        project: project.value,
                       ));
-                  if (exproject != null) {
-                    project(exproject);
-                  }
                 },
-                project: project.value,
+                project: projectDetailController.project.value,
                 title: '함께 활동한 사람',
-                subtitle: project.value.looper.isEmpty
+                subtitle: projectDetailController.project.value.looper.isEmpty
                     ? '함께 활동한 사람이 없어요'
-                    : project.value.looper
+                    : projectDetailController.project.value.looper
                         .map((user) => user.realName)
                         .toString(),
               ),
@@ -148,13 +145,12 @@ class ProjectModifyScreen extends StatelessWidget {
             updateProjectTile(
               isSubtitleExist: false,
               onTap: () async {
-                exproject = await Get.to(() => ProjectAddThumbnailScreen(
+                projectthumbnailinput();
+                Get.to(() => ProjectAddThumbnailScreen(
                       screenType: Screentype.update,
-                      project: project.value,
                     ));
-                project(exproject);
               },
-              project: project.value,
+              project: projectDetailController.project.value,
               title: '대표 사진 변경',
               subtitle: '',
             ),
@@ -162,50 +158,64 @@ class ProjectModifyScreen extends StatelessWidget {
         ));
   }
 
-  void datainput() {
-    projectaddcontroller.projectnamecontroller.text = project.value.projectName;
+  void projectnameinput() {
+    projectaddcontroller.projectnamecontroller.text =
+        projectDetailController.project.value.projectName;
+  }
 
+  void projectintroinput() {
     projectaddcontroller.introcontroller.text =
-        project.value.introduction ?? '';
+        projectDetailController.project.value.introduction ?? '';
+  }
 
+  void projectdateinput() {
     projectaddcontroller.startyearcontroller.text =
-        project.value.startDate!.year.toString();
-    projectaddcontroller.startmonthcontroller.text =
-        DateFormat("MM").format(project.value.startDate!);
-    projectaddcontroller.startdaycontroller.text =
-        DateFormat("dd").format(project.value.startDate!);
+        projectDetailController.project.value.startDate!.year.toString();
+    projectaddcontroller.startmonthcontroller.text = DateFormat("MM")
+        .format(projectDetailController.project.value.startDate!);
+    projectaddcontroller.startdaycontroller.text = DateFormat("dd")
+        .format(projectDetailController.project.value.startDate!);
 
-    if (project.value.endDate == null) {
+    if (projectDetailController.project.value.endDate == null) {
       projectaddcontroller.isvaildstartdate(true);
       projectaddcontroller.isongoing(true);
     } else {
       projectaddcontroller.endyearcontroller.text =
-          project.value.startDate!.year.toString();
-      projectaddcontroller.endmonthcontroller.text =
-          DateFormat("MM").format(project.value.endDate!);
-      projectaddcontroller.enddaycontroller.text =
-          DateFormat("dd").format(project.value.endDate!);
+          projectDetailController.project.value.startDate!.year.toString();
+      projectaddcontroller.endmonthcontroller.text = DateFormat("MM")
+          .format(projectDetailController.project.value.endDate!);
+      projectaddcontroller.enddaycontroller.text = DateFormat("dd")
+          .format(projectDetailController.project.value.endDate!);
       projectaddcontroller.isvaildstartdate(true);
       projectaddcontroller.isvaildenddate(true);
     }
+  }
+
+  void projecttaginput() {
     tagController.selectedtaglist.clear();
-    for (var tag in project.value.projectTag) {
+    for (var tag in projectDetailController.project.value.projectTag) {
       tagController.selectedtaglist.add(SelectedTagWidget(
         id: tag.tagId,
         text: tag.tag,
       ));
     }
-    if (project.value.looper != null) {
+  }
+
+  void projectlooperinput() {
+    if (projectDetailController.project.value.looper != null) {
       projectaddcontroller.selectedpersontaglist.clear();
-      for (var user in project.value.looper) {
+      for (var user in projectDetailController.project.value.looper) {
         projectaddcontroller.selectedpersontaglist.add(SelectedPersonTagWidget(
           id: user.user,
           text: user.realName,
         ));
       }
     }
+  }
 
-    projectaddcontroller.projecturlthumbnail = project.value.thumbnail;
+  void projectthumbnailinput() {
+    projectaddcontroller.projecturlthumbnail =
+        projectDetailController.project.value.thumbnail;
   }
 }
 

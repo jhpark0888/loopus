@@ -58,13 +58,13 @@ class SearchTagProjectWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         print("click posting");
-        project = await getproject(project.id);
-        Project exproject = await Get.to(() => ProjectScreen(
-              project: project.obs,
-            ));
-        if (exproject != null) {
-          project = exproject;
-        }
+        // project = await getproject(project.id);
+        // Project exproject = await Get.to(() => ProjectScreen(
+        //       project: project.obs,
+        //     ));
+        // if (exproject != null) {
+        //   project = exproject;
+        // }
       },
       child: Container(
         margin: EdgeInsets.symmetric(

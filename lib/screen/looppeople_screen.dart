@@ -15,15 +15,17 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/persontile_widget.dart';
 
 class LoopPeopleScreen extends StatelessWidget {
-  LoopPeopleScreen({Key? key, required this.userid}) : super(key: key);
+  LoopPeopleScreen({Key? key, required this.userid, required this.loopcount})
+      : super(key: key);
 
   int userid;
+  int loopcount;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBarWidget(
-          title: '루프',
+          title: '루프 ${loopcount.toString()}명',
         ),
         body: FutureBuilder<List<User>>(
             future: getlooplist(userid.toString()),

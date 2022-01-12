@@ -252,7 +252,7 @@ class MyProfileScreen extends StatelessWidget {
                               vertical: 12.0,
                             ),
                             child: Column(
-                              children: const [
+                              children: [
                                 Text(
                                   '포스팅',
                                   style: kBody1Style,
@@ -260,9 +260,13 @@ class MyProfileScreen extends StatelessWidget {
                                 SizedBox(
                                   height: 8,
                                 ),
-                                Text(
-                                  '36',
-                                  style: kSubTitle2Style,
+                                Obx(
+                                  () => Text(
+                                    profileController
+                                        .myUserInfo.value.totalposting
+                                        .toString(),
+                                    style: kSubTitle2Style,
+                                  ),
                                 )
                               ],
                             ),
@@ -275,12 +279,14 @@ class MyProfileScreen extends StatelessWidget {
                             Get.to(() => LoopPeopleScreen(
                                   userid:
                                       profileController.myUserInfo.value.user,
+                                  loopcount: profileController
+                                      .myUserInfo.value.loopcount,
                                 ));
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 12.0),
                             child: Column(
-                              children: const [
+                              children: [
                                 Text(
                                   '루프',
                                   style: kBody1Style,
@@ -288,9 +294,12 @@ class MyProfileScreen extends StatelessWidget {
                                 SizedBox(
                                   height: 8,
                                 ),
-                                Text(
-                                  '112',
-                                  style: kSubTitle2Style,
+                                Obx(
+                                  () => Text(
+                                    profileController.myUserInfo.value.loopcount
+                                        .toString(),
+                                    style: kSubTitle2Style,
+                                  ),
                                 )
                               ],
                             ),

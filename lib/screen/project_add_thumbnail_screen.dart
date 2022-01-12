@@ -5,39 +5,65 @@ import 'package:loopus/api/get_image_api.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
 class ProjectAddThumbnailScreen extends StatelessWidget {
-  ProjectAddThumbnailScreen({Key? key, required this.screenType, this.project})
-      : super(key: key);
+  ProjectAddThumbnailScreen({
+    Key? key,
+    required this.screenType,
+  }) : super(key: key);
 
   final ProjectAddController projectAddController =
       Get.put(ProjectAddController());
   final TagController tagController = Get.put(TagController());
   final Screentype screenType;
-  Project? project;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
         actions: [
-          TextButton(
-            onPressed: () async {
-              if (screenType == Screentype.add) {
-                await addproject();
-              } else {
-                project = await updateproject(project!.id);
-                Get.back(result: project);
-              }
-            },
-            child: Text(
-              '저장',
-              style: kSubTitle2Style.copyWith(color: mainblue),
-            ),
-          ),
+          screenType == Screentype.add
+              ? TextButton(
+                  onPressed: () async {
+                    await addproject();
+                  },
+                  child: Text(
+                    '저장',
+                    style: kSubTitle2Style.copyWith(color: mainblue),
+                  ),
+                )
+              : Obx(
+                  () => ProjectDetailController.to.isProjectLoading.value
+                      ? Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 9,
+                        )
+                      : TextButton(
+                          onPressed: () async {
+                            ProjectDetailController.to.isProjectLoading.value =
+                                true;
+                            await updateproject(
+                                ProjectDetailController.to.project.value.id,
+                                ProjectUpdateType.thumbnail);
+                            await getproject(
+                                    ProjectDetailController.to.project.value.id)
+                                .then((value) {
+                              ProjectDetailController.to.project(value);
+                              ProjectDetailController
+                                  .to.isProjectLoading.value = false;
+                            });
+                            Get.back();
+                          },
+                          child: Text(
+                            '저장',
+                            style: kSubTitle2Style.copyWith(color: mainblue),
+                          ),
+                        ),
+                )
         ],
         title: '대표 사진',
       ),

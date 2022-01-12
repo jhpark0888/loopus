@@ -312,6 +312,8 @@ class OtherProfileScreen extends StatelessWidget {
                             Get.to(() => LoopPeopleScreen(
                                   userid:
                                       profileController.myUserInfo.value.user,
+                                  loopcount: profileController
+                                      .myUserInfo.value.loopcount,
                                 ));
                           },
                           child: Padding(

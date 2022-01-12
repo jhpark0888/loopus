@@ -94,7 +94,7 @@ Future<void> addposting(int projectId) async {
     Get.back();
     Get.back();
     Get.back();
-    Get.to(() => ProjectScreen(project: project.obs));
+    Get.to(() => ProjectScreen());
   } else if (response.statusCode == 400) {
     if (kDebugMode) {
       print("status code : ${response.statusCode} 포스팅 업로드 실패");

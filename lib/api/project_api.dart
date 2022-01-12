@@ -79,13 +79,22 @@ Future<Project> getproject(int projectId) async {
   }
 }
 
-Future updateproject(int projectId) async {
+enum ProjectUpdateType {
+  project_name,
+  date,
+  tag,
+  introduction,
+  thumbnail,
+  looper
+}
+
+Future updateproject(int projectId, ProjectUpdateType updateType) async {
   ProjectAddController projectAddController = Get.find();
   TagController tagController = Get.find();
 
   String? token = await const FlutterSecureStorage().read(key: "token");
   Uri uri = Uri.parse(
-      'http://3.35.253.151:8000/project_api/update_project/$projectId/');
+      'http://3.35.253.151:8000/project_api/update_project/${updateType.name}/$projectId/');
 
   var request = http.MultipartRequest('POST', uri);
 
@@ -96,29 +105,34 @@ Future updateproject(int projectId) async {
 
   request.headers.addAll(headers);
 
-  if (projectAddController.projectthumbnail.value!.path != '') {
-    var multipartFile = await http.MultipartFile.fromPath(
-        'thumbnail', projectAddController.projectthumbnail.value!.path);
-    request.files.add(multipartFile);
-  } else {
-    request.fields['thumbnail'] = 'image';
+  if (updateType == ProjectUpdateType.project_name) {
+    request.fields['project_name'] =
+        projectAddController.projectnamecontroller.text;
+  } else if (updateType == ProjectUpdateType.introduction) {
+    request.fields['introduction'] = projectAddController.introcontroller.text;
+  } else if (updateType == ProjectUpdateType.date) {
+    request.fields['start_date'] =
+        '${projectAddController.startyearcontroller.text}-${projectAddController.startmonthcontroller.text}-${projectAddController.startdaycontroller.text}';
+    request.fields['end_date'] = projectAddController.isongoing.value
+        ? ""
+        : '${projectAddController.endyearcontroller.text}-${projectAddController.endmonthcontroller.text}-${projectAddController.enddaycontroller.text}';
+  } else if (updateType == ProjectUpdateType.tag) {
+    request.fields['tag'] = json
+        .encode(tagController.selectedtaglist.map((tag) => tag.text).toList());
+  } else if (updateType == ProjectUpdateType.looper) {
+    request.fields['looper'] = json.encode(projectAddController
+        .selectedpersontaglist
+        .map((person) => person.id)
+        .toList());
+  } else if (updateType == ProjectUpdateType.thumbnail) {
+    if (projectAddController.projectthumbnail.value!.path != '') {
+      var multipartFile = await http.MultipartFile.fromPath(
+          'thumbnail', projectAddController.projectthumbnail.value!.path);
+      request.files.add(multipartFile);
+    } else {
+      request.fields['thumbnail'] = 'image';
+    }
   }
-
-  request.fields['project_name'] =
-      projectAddController.projectnamecontroller.text;
-  request.fields['introduction'] = projectAddController.introcontroller.text;
-  request.fields['start_date'] =
-      '${projectAddController.startyearcontroller.text}-${projectAddController.startmonthcontroller.text}-${projectAddController.startdaycontroller.text}';
-  request.fields['end_date'] = projectAddController.isongoing.value
-      ? ""
-      : '${projectAddController.endyearcontroller.text}-${projectAddController.endmonthcontroller.text}-${projectAddController.enddaycontroller.text}';
-  request.fields['looper'] = json.encode(projectAddController
-      .selectedpersontaglist
-      .map((person) => person.id)
-      .toList());
-
-  request.fields['tag'] = json
-      .encode(tagController.selectedtaglist.map((tag) => tag.text).toList());
 
   http.StreamedResponse response = await request.send();
 
@@ -126,6 +140,7 @@ Future updateproject(int projectId) async {
 
   if (response.statusCode == 200) {
     var responsemap = json.decode(responsebody);
+    print(responsemap);
     Project project = Project.fromJson(responsemap);
     return project;
   } else {
