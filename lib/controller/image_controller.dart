@@ -26,8 +26,12 @@ class ImageController extends GetxController {
         isImagePickerLoading.value = true;
         return await profilecropImage(pickedFile);
       } else if (type == ImageType.thumnail) {
+        isImagePickerLoading.value = true;
+
         return await postingthumbnailcropImage(pickedFile);
       } else if (type == ImageType.post) {
+        isImagePickerLoading.value = true;
+
         return await postingcropImage(pickedFile);
       }
     }
@@ -35,10 +39,7 @@ class ImageController extends GetxController {
 
   Future<File?> profilecropImage(pickimage) async {
     File? croppedFile = await ImageCropper.cropImage(
-        maxHeight: 120,
-        maxWidth: 120,
         cropStyle: CropStyle.circle,
-        compressQuality: 40,
         sourcePath: pickimage.path,
         aspectRatioPresets: [
           CropAspectRatioPreset.original,
@@ -54,7 +55,6 @@ class ImageController extends GetxController {
           minimumAspectRatio: 1 / 1,
         ));
     if (croppedFile != null) {
-      print('cropfile $croppedFile');
       return croppedFile;
     } else {
       isImagePickerLoading.value = false;
@@ -74,10 +74,13 @@ class ImageController extends GetxController {
             initAspectRatio: CropAspectRatioPreset.ratio3x2,
             lockAspectRatio: true),
         iosUiSettings: const IOSUiSettings(
+          aspectRatioPickerButtonHidden: true,
           minimumAspectRatio: 1.0,
         ));
     if (croppedFile != null) {
       return croppedFile;
+    } else {
+      isImagePickerLoading.value = false;
     }
   }
 
@@ -92,10 +95,13 @@ class ImageController extends GetxController {
             initAspectRatio: CropAspectRatioPreset.ratio16x9,
             lockAspectRatio: true),
         iosUiSettings: const IOSUiSettings(
+          aspectRatioPickerButtonHidden: true,
           minimumAspectRatio: 1.0,
         ));
     if (croppedFile != null) {
       return croppedFile;
+    } else {
+      isImagePickerLoading.value = false;
     }
   }
 }

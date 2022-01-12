@@ -35,40 +35,60 @@ class PostingAddImageScreen extends StatelessWidget {
         i++) {
       contentlist.add(PostAddContentWidget(index: i));
     }
-    return Scaffold(
-        appBar: AppBarWidget(
-          title: '대표 사진 설정',
-          actions: [
-            TextButton(
-              onPressed: () async {
-                await addposting(project_id);
-              },
-              child: Text(
-                '올리기',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: mainblue,
+    return Obx(
+      () => Stack(
+        children: [
+          Scaffold(
+            appBar: AppBarWidget(
+              title: '대표 사진 설정',
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    postingAddController.isPostingUploading.value = true;
+                    await addposting(project_id).then((value) {
+                      postingAddController.isPostingUploading.value = false;
+                    });
+                  },
+                  child: Text(
+                    '올리기',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: mainblue,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            body: SingleChildScrollView(
+              child: Column(
                 children: [
-                  _MyAppSpace(),
                   Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: contentlist)
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _MyAppSpace(),
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: contentlist)
+                    ],
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
-        ));
+          if (postingAddController.isPostingUploading.value == true)
+            Container(
+              height: Get.height,
+              width: Get.width,
+              color: mainblack.withOpacity(0.3),
+              child: Image.asset(
+                'assets/icons/loading.gif',
+                scale: 6,
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }
 
@@ -109,9 +129,15 @@ class _MyAppSpace extends StatelessWidget {
                             alignment: Alignment.bottomRight,
                             child: BlueTextButton(
                               onTap: () async {
+                                imageController.isImagePickerLoading.value =
+                                    true;
                                 postingAddController.thumbnail(
                                     await imageController
-                                        .getcropImage(ImageType.thumnail));
+                                        .getcropImage(ImageType.thumnail)
+                                        .then((value) {
+                                  imageController.isImagePickerLoading.value =
+                                      false;
+                                }));
                               },
                               text: '대표 사진 변경',
                             )),

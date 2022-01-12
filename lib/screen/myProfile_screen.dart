@@ -104,7 +104,10 @@ class MyProfileScreen extends StatelessWidget {
                                                               profileController
                                                                   .myUserInfo
                                                                   .value
-                                                                  .profileImage!,
+                                                                  .profileImage!
+                                                                  .replaceAll(
+                                                                      'https',
+                                                                      'http'),
                                                           placeholder:
                                                               (context, url) =>
                                                                   Image.asset(
@@ -560,13 +563,12 @@ class MyProfileScreen extends StatelessWidget {
     if (image != null) {
       User? user =
           await updateProfile(profileController.myUserInfo.value, image, null)
-              .then((value) {
+              .then((user) {
         imageController.isImagePickerLoading.value = false;
+        if (user != null) {
+          profileController.myUserInfo(user);
+        }
       });
-      if (user != null) {
-        profileController.myUserInfo(user);
-        imageController.isImagePickerLoading.value = false;
-      }
     }
   }
 }

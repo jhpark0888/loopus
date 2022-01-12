@@ -9,9 +9,12 @@ class DurationCaculator extends GetxController {
     RxString durationResult = ''.obs;
 
     int _dateDiffence = (endDate.difference(startDate).inDays).toInt();
-    // print('d : ${_dateDiffence / 30}');
 
-    if ((_dateDiffence / 30).floor() > 0) {
+    // print('d : ${_dateDiffence / 30}');
+    if ((_dateDiffence / 365).floor() > 0) {
+      durationResult.value =
+          '${((_dateDiffence / 365).floor()).toString()}년 ${((_dateDiffence - 365) / 30).floor().toString()}개월';
+    } else if ((_dateDiffence / 30).floor() > 0) {
       durationResult.value = '${((_dateDiffence / 30).floor()).toString()}개월';
       // print('dd : ${(_dateDiffence / 30).floor()}');
     } else if ((_dateDiffence / 30).floor() == 0) {

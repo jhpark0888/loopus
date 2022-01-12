@@ -15,6 +15,7 @@ class PostingAddController extends GetxController {
 
   EditorController editorController = Get.put(EditorController());
   TextEditingController titlecontroller = TextEditingController();
+  RxBool isPostingUploading = false.obs;
   // QuillController postcontroller = QuillController.basic();
   List<File> images = [];
   Rx<File> thumbnail = File("").obs;
