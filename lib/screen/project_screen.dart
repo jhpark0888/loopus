@@ -57,12 +57,16 @@ class ProjectScreen extends StatelessWidget {
                 modalController.showModalIOS(
                   context,
                   func1: () {
-                    modalController.showButtonDialog('정말로 삭제하시겠습니까?', () async {
-                      await deleteproject(
-                          projectdetailController.project.value.id);
-                    }, () {
-                      Get.back();
-                    });
+                    modalController.showButtonDialog(
+                        title:
+                            '정말 <${projectdetailController.project.value.projectName}> 활동을 삭제하시겠어요?',
+                        content:
+                            '지금까지 작성한 ${projectdetailController.project.value.post.length}개의 포스팅도 삭제됩니다',
+                        yesfunction: () => Get.back(),
+                        nofunction: () async {
+                          await deleteproject(
+                              projectdetailController.project.value.id);
+                        });
                   },
                   func2: () {},
                   value1: '이 활동 삭제하기',

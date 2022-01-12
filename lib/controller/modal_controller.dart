@@ -116,40 +116,94 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
     });
   }
 
-  void showButtonDialog(
-      String title, Function() yesfunction, Function() nofunction) {
+  void showButtonDialog({
+    required String title,
+    required String content,
+    required Function() yesfunction,
+    required Function() nofunction,
+  }) {
     Get.dialog(
       AlertDialog(
+        buttonPadding: EdgeInsets.zero,
+        actionsAlignment: MainAxisAlignment.spaceBetween,
         actions: [
-          TextButton(
-            onPressed: yesfunction,
-            child: Center(child: Text('네')),
-          ),
-          TextButton(
-            onPressed: nofunction,
-            child: Center(child: Text('아니오')),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: yesfunction,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        right: BorderSide(
+                          width: 1,
+                          color: Color(0xffe7e7e7),
+                        ),
+                        top: BorderSide(
+                          width: 1,
+                          color: Color(0xffe7e7e7),
+                        ),
+                      ),
+                    ),
+                    height: 40,
+                    child: Center(
+                      child: Text(
+                        '취소',
+                        style: kBody2Style.copyWith(
+                          color: mainpink,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: nofunction,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          width: 1,
+                          color: Color(0xffe7e7e7),
+                        ),
+                      ),
+                    ),
+                    height: 40,
+                    child: Center(
+                      child: Text(
+                        '삭제',
+                        style: kBody2Style,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
-            Radius.circular(8.0),
+            Radius.circular(8),
           ),
         ),
-        contentPadding: EdgeInsets.fromLTRB(
-          24,
-          12,
-          24,
-          14,
-        ),
+        contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 20),
+        titlePadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
         backgroundColor: Colors.white,
-        content: Text(
+        title: Text(
           title,
           style: kSubTitle4Style,
           textAlign: TextAlign.center,
         ),
+        content: Text(
+          content,
+          style: kBody1Style,
+          textAlign: TextAlign.center,
+        ),
       ),
-      barrierDismissible: true,
+      barrierDismissible: false,
       barrierColor: mainblack.withOpacity(0.3),
       transitionCurve: Curves.easeInOut,
       transitionDuration: Duration(milliseconds: 300),
@@ -158,6 +212,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
 
   void showContentModal(BuildContext context) {
     showModalBottomSheet(
+      enableDrag: false,
       context: context,
       builder: (context) => Obx(
         () => Padding(
