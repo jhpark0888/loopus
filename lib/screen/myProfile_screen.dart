@@ -29,80 +29,50 @@ class MyProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      initialIndex: profileController.profileTabController.index,
-      length: 2,
-      child: Obx(
-        () => Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            centerTitle: false,
-            title: Text(
-              '프로필',
-              style: kHeaderH1Style,
-            ),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  Get.to(() => SettingScreen());
-                },
-                icon: SvgPicture.asset(
-                  'assets/icons/Setting.svg',
-                ),
+    return WillPopScope(
+      onWillPop: () async {
+        if (Platform.isAndroid) {
+          AppController.to.currentIndex(0);
+        }
+        return false;
+      },
+      child: DefaultTabController(
+        initialIndex: profileController.profileTabController.index,
+        length: 2,
+        child: Obx(
+          () => Scaffold(
+            appBar: AppBar(
+              elevation: 0,
+              centerTitle: false,
+              title: Text(
+                '프로필',
+                style: kHeaderH1Style,
               ),
-            ],
-          ),
-          body: NestedScrollView(
-            headerSliverBuilder: (context, value) {
-              return [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                    ),
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            Obx(
-                              () => GestureDetector(
-                                onTap: () => ModalController.to.showModalIOS(
-                                    context,
-                                    func1: changeProfileImage,
-                                    func2: () {},
-                                    value1: '라이브러리에서 선택',
-                                    value2: '기본 이미지로 변경',
-                                    isValue1Red: false,
-                                    isValue2Red: false,
-                                    isOne: false),
-                                child: ClipOval(
-                                    child: (profileController
-                                                .isProfileLoading.value ==
-                                            false)
-                                        ? CachedNetworkImage(
-                                            height: 92,
-                                            width: 92,
-                                            imageUrl: profileController
-                                                .myUserInfo.value.profileImage!,
-                                            placeholder: (context, url) =>
-                                                Image.asset(
-                                              "assets/illustrations/default_profile.png",
-                                              height: 92,
-                                              width: 92,
-                                            ),
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image.asset(
-                                            "assets/illustrations/default_profile.png",
-                                            height: 92,
-                                            width: 92,
-                                          )),
-                              ),
-                            ),
-                            Positioned.fill(
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: GestureDetector(
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Get.to(() => SettingScreen());
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/icons/Setting.svg',
+                  ),
+                ),
+              ],
+            ),
+            body: NestedScrollView(
+              headerSliverBuilder: (context, value) {
+                return [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                      ),
+                      child: Column(
+                        children: [
+                          Stack(
+                            children: [
+                              Obx(
+                                () => GestureDetector(
                                   onTap: () => ModalController.to.showModalIOS(
                                       context,
                                       func1: changeProfileImage,
@@ -112,375 +82,419 @@ class MyProfileScreen extends StatelessWidget {
                                       isValue1Red: false,
                                       isValue2Red: false,
                                       isOne: false),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: mainWhite),
-                                    child: SvgPicture.asset(
-                                      "assets/icons/Image.svg",
-                                      width: 24,
-                                      height: 24,
-                                    ),
-                                  ),
+                                  child: ClipOval(
+                                      child: (profileController
+                                                  .isProfileLoading.value ==
+                                              false)
+                                          ? CachedNetworkImage(
+                                              height: 92,
+                                              width: 92,
+                                              imageUrl: profileController
+                                                  .myUserInfo
+                                                  .value
+                                                  .profileImage!,
+                                              placeholder: (context, url) =>
+                                                  Image.asset(
+                                                "assets/illustrations/default_profile.png",
+                                                height: 92,
+                                                width: 92,
+                                              ),
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.asset(
+                                              "assets/illustrations/default_profile.png",
+                                              height: 92,
+                                              width: 92,
+                                            )),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Obx(
-                          () => Text(
-                            profileController.myUserInfo.value.realName,
-                            style: kSubTitle2Style,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Obx(
-                          () => Text(
-                            profileController.myUserInfo.value.department,
-                            style: kBody1Style,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        Obx(
-                          () => Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children:
-                                  profileController.myUserInfo.value.profileTag
-                                      .map((tag) => Row(children: [
-                                            Tagwidget(
-                                              tag: tag,
-                                              fontSize: 14,
-                                            ),
-                                            profileController.myUserInfo.value
-                                                        .profileTag
-                                                        .indexOf(tag) !=
-                                                    profileController
-                                                            .myUserInfo
-                                                            .value
-                                                            .profileTag
-                                                            .length -
-                                                        1
-                                                ? SizedBox(
-                                                    width: 8,
-                                                  )
-                                                : Container()
-                                          ]))
-                                      .toList()),
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () => Get.to(ProfileTagChangeScreen()),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: mainlightgrey,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Center(
-                                      child: Text(
-                                        '관심 태그 변경하기',
-                                        style: kButtonStyle,
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: GestureDetector(
+                                    onTap: () => ModalController.to
+                                        .showModalIOS(context,
+                                            func1: changeProfileImage,
+                                            func2: () {},
+                                            value1: '라이브러리에서 선택',
+                                            value2: '기본 이미지로 변경',
+                                            isValue1Red: false,
+                                            isValue2Red: false,
+                                            isOne: false),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: mainWhite),
+                                      child: SvgPicture.asset(
+                                        "assets/icons/Image.svg",
+                                        width: 24,
+                                        height: 24,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Obx(
+                            () => Text(
+                              profileController.myUserInfo.value.realName,
+                              style: kSubTitle2Style,
                             ),
-                            SizedBox(
-                              width: 8,
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Obx(
+                            () => Text(
+                              profileController.myUserInfo.value.department,
+                              style: kBody1Style,
                             ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: mainblue,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  // color: Colors.grey[400],
-
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0,
+                          ),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          Obx(
+                            () => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: profileController
+                                    .myUserInfo.value.profileTag
+                                    .map((tag) => Row(children: [
+                                          Tagwidget(
+                                            tag: tag,
+                                            fontSize: 14,
+                                          ),
+                                          profileController.myUserInfo.value
+                                                      .profileTag
+                                                      .indexOf(tag) !=
+                                                  profileController
+                                                          .myUserInfo
+                                                          .value
+                                                          .profileTag
+                                                          .length -
+                                                      1
+                                              ? SizedBox(
+                                                  width: 8,
+                                                )
+                                              : Container()
+                                        ]))
+                                    .toList()),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () => Get.to(ProfileTagChangeScreen()),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: mainlightgrey,
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
-                                    child: Center(
-                                        child: Text('내 프로필 공유하기',
-                                            style: kButtonStyle.copyWith(
-                                                color: mainWhite))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Center(
+                                        child: Text(
+                                          '관심 태그 변경하기',
+                                          style: kButtonStyle,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: mainblue,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    // color: Colors.grey[400],
+
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0,
+                                      ),
+                                      child: Center(
+                                          child: Text('내 프로필 공유하기',
+                                              style: kButtonStyle.copyWith(
+                                                  color: mainWhite))),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      height: 8,
+                      color: Color(0xffF2F3F5),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12.0,
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '포스팅',
+                                    style: kBody1Style,
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Obx(
+                                    () => Text(
+                                      profileController
+                                          .myUserInfo.value.totalposting
+                                          .toString(),
+                                      style: kSubTitle2Style,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                        SizedBox(
-                          height: 16,
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.to(() => LoopPeopleScreen(
+                                    userid:
+                                        profileController.myUserInfo.value.user,
+                                    loopcount: profileController
+                                        .myUserInfo.value.loopcount,
+                                  ));
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 12.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '루프',
+                                    style: kBody1Style,
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Obx(
+                                    () => Text(
+                                      profileController
+                                          .myUserInfo.value.loopcount
+                                          .toString(),
+                                      style: kSubTitle2Style,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 8,
-                    color: Color(0xffF2F3F5),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 12.0,
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  '포스팅',
-                                  style: kBody1Style,
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Obx(
-                                  () => Text(
-                                    profileController
-                                        .myUserInfo.value.totalposting
-                                        .toString(),
-                                    style: kSubTitle2Style,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(() => LoopPeopleScreen(
-                                  userid:
-                                      profileController.myUserInfo.value.user,
-                                  loopcount: profileController
-                                      .myUserInfo.value.loopcount,
-                                ));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12.0),
-                            child: Column(
-                              children: [
-                                Text(
-                                  '루프',
-                                  style: kBody1Style,
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Obx(
-                                  () => Text(
-                                    profileController.myUserInfo.value.loopcount
-                                        .toString(),
-                                    style: kSubTitle2Style,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 1,
-                    color: Color(0xfff2f3f5),
-                  ),
-                ),
-                SliverOverlapAbsorber(
-                  handle:
-                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                  sliver: SliverSafeArea(
-                    top: false,
-                    sliver: SliverAppBar(
-                      automaticallyImplyLeading: false,
-                      toolbarHeight: 43,
-                      elevation: 0,
-                      pinned: true,
-                      flexibleSpace: Theme(
-                        data: ThemeData().copyWith(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                        ),
-                        child: TabBar(
-                          controller: profileController.profileTabController,
-                          labelStyle: TextStyle(
-                            color: mainblack,
-                            fontSize: 14,
-                            fontFamily: 'Nanum',
-                            fontWeight: FontWeight.bold,
-                          ),
-                          labelColor: mainblack,
-                          unselectedLabelStyle: TextStyle(
-                            color: Colors.yellow,
-                            fontSize: 14,
-                            fontFamily: 'Nanum',
-                            fontWeight: FontWeight.normal,
-                          ),
-                          unselectedLabelColor: mainblack.withOpacity(0.6),
-                          indicator: UnderlineIndicator(
-                            strokeCap: StrokeCap.round,
-                            borderSide: BorderSide(width: 2),
-                          ),
-                          indicatorColor: mainblack,
-                          tabs: [
-                            Tab(
-                              height: 40,
-                              child: Text(
-                                "활동",
-                              ),
-                            ),
-                            Tab(
-                              height: 40,
-                              child: Text(
-                                "질문과 답변",
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      height: 1,
+                      color: Color(0xfff2f3f5),
                     ),
                   ),
-                ),
-              ];
-            },
-            body: TabBarView(
-                controller: profileController.profileTabController,
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 24, 16, 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('활동', style: kSubTitle2Style),
-                              GestureDetector(
-                                onTap: () {
-                                  Get.to(() => ProjectAddTitleScreen(
-                                        screenType: Screentype.add,
-                                      ));
-                                },
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                    sliver: SliverSafeArea(
+                      top: false,
+                      sliver: SliverAppBar(
+                        automaticallyImplyLeading: false,
+                        toolbarHeight: 43,
+                        elevation: 0,
+                        pinned: true,
+                        flexibleSpace: Theme(
+                          data: ThemeData().copyWith(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                          ),
+                          child: TabBar(
+                            controller: profileController.profileTabController,
+                            labelStyle: TextStyle(
+                              color: mainblack,
+                              fontSize: 14,
+                              fontFamily: 'Nanum',
+                              fontWeight: FontWeight.bold,
+                            ),
+                            labelColor: mainblack,
+                            unselectedLabelStyle: TextStyle(
+                              color: Colors.yellow,
+                              fontSize: 14,
+                              fontFamily: 'Nanum',
+                              fontWeight: FontWeight.normal,
+                            ),
+                            unselectedLabelColor: mainblack.withOpacity(0.6),
+                            indicator: UnderlineIndicator(
+                              strokeCap: StrokeCap.round,
+                              borderSide: BorderSide(width: 2),
+                            ),
+                            indicatorColor: mainblack,
+                            tabs: [
+                              Tab(
+                                height: 40,
                                 child: Text(
-                                  '추가하기',
-                                  style: kButtonStyle.copyWith(color: mainblue),
+                                  "활동",
                                 ),
                               ),
+                              Tab(
+                                height: 40,
+                                child: Text(
+                                  "질문과 답변",
+                                ),
+                              )
                             ],
                           ),
                         ),
-                        Obx(
-                          () => Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                            child: (profileController.isProfileLoading.value ==
-                                    false)
-                                ? Column(
-                                    children:
-                                        profileController.myProjectList.value,
-                                  )
-                                : Padding(
-                                    padding: EdgeInsets.zero,
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          'assets/icons/loading.gif',
-                                          scale: 6,
-                                        ),
-                                        Text(
-                                          '활동 받아오는 중...',
-                                          style: TextStyle(
-                                              fontSize: 10, color: mainblue),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                  SingleChildScrollView(
-                    child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: DropdownButtonHideUnderline(
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: DropdownButton(
-                                onChanged: (int? value) {
-                                  profileController.selectqanda(value);
-                                },
-                                onTap: () {},
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                                elevation: 1,
-                                underline: Container(),
-                                icon: Icon(
-                                  Icons.expand_more_rounded,
-                                  color: mainblack,
+                ];
+              },
+              body: TabBarView(
+                  controller: profileController.profileTabController,
+                  children: [
+                    SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 24, 16, 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('활동', style: kSubTitle2Style),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => ProjectAddTitleScreen(
+                                          screenType: Screentype.add,
+                                        ));
+                                  },
+                                  child: Text(
+                                    '추가하기',
+                                    style:
+                                        kButtonStyle.copyWith(color: mainblue),
+                                  ),
                                 ),
-                                value: profileController.selectqanda.value,
-                                items: profileController.dropdownQanda
-                                    .map((value) => DropdownMenuItem(
-                                        value: profileController.dropdownQanda
-                                            .indexOf("$value"),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            right: 4,
+                              ],
+                            ),
+                          ),
+                          Obx(
+                            () => Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                              child: (profileController
+                                          .isProfileLoading.value ==
+                                      false)
+                                  ? Column(
+                                      children:
+                                          profileController.myProjectList.value,
+                                    )
+                                  : Padding(
+                                      padding: EdgeInsets.zero,
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            'assets/icons/loading.gif',
+                                            scale: 6,
                                           ),
-                                          child: Text(
-                                            "$value",
+                                          Text(
+                                            '활동 받아오는 중...',
                                             style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                                fontSize: 10, color: mainblue),
                                           ),
-                                        )))
-                                    .toList(),
+                                        ],
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: DropdownButtonHideUnderline(
+                              child: ButtonTheme(
+                                alignedDropdown: true,
+                                child: DropdownButton(
+                                  onChanged: (int? value) {
+                                    profileController.selectqanda(value);
+                                  },
+                                  onTap: () {},
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                  elevation: 1,
+                                  underline: Container(),
+                                  icon: Icon(
+                                    Icons.expand_more_rounded,
+                                    color: mainblack,
+                                  ),
+                                  value: profileController.selectqanda.value,
+                                  items: profileController.dropdownQanda
+                                      .map((value) => DropdownMenuItem(
+                                          value: profileController.dropdownQanda
+                                              .indexOf("$value"),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              right: 4,
+                                            ),
+                                            child: Text(
+                                              "$value",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          )))
+                                      .toList(),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        QuestionWidget(),
-                        QuestionWidget(),
-                        QuestionWidget(),
-                        QuestionWidget(),
-                      ],
-                    ),
-                  )
-                ]),
+                          QuestionWidget(),
+                          QuestionWidget(),
+                          QuestionWidget(),
+                          QuestionWidget(),
+                        ],
+                      ),
+                    )
+                  ]),
+            ),
           ),
         ),
       ),

@@ -24,6 +24,11 @@ void main() async {
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: mainblack,
+    systemNavigationBarIconBrightness: Brightness.light,
+    statusBarColor: mainWhite, // status bar color
+  ));
   String? temptoken = await FlutterSecureStorage().read(key: 'token');
   print(temptoken);
 
