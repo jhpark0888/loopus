@@ -37,9 +37,13 @@ Future<User?> updateProfile(User user, File? image, List? taglist) async {
   request.headers.addAll(headers);
 
   if (image != null) {
+    print('api image : ${image.path}');
     var multipartFile = await http.MultipartFile.fromPath('image', image.path);
     request.files.add(multipartFile);
+    print('multipartFile : $multipartFile');
   } else {
+    print('api error image : $image');
+
     request.fields['image'] = user.profileImage ?? json.encode(null);
   }
 
@@ -48,7 +52,7 @@ Future<User?> updateProfile(User user, File? image, List? taglist) async {
       json.encode(taglist ?? user.profileTag.map((tag) => tag.tag).toList());
 
   http.StreamedResponse response = await request.send();
-
+  print(response.statusCode);
   if (response.statusCode == 200) {
     String responsebody = await response.stream.bytesToString();
     var responsemap = jsonDecode(responsebody);

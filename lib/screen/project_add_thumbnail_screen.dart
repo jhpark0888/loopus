@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/get_image_api.dart';
+import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
@@ -19,6 +19,8 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
   final ProjectAddController projectAddController =
       Get.put(ProjectAddController());
   final TagController tagController = Get.put(TagController());
+  final ImageController imageController = Get.put(ImageController());
+
   final Screentype screenType;
 
   @override
@@ -92,8 +94,8 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () async {
-                projectAddController
-                    .projectthumbnail(await getcropImage(ImageType.thumnail));
+                projectAddController.projectthumbnail(
+                    await imageController.getcropImage(ImageType.thumnail));
               },
               child: Container(
                 width: 141,

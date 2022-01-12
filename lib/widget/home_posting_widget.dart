@@ -202,8 +202,7 @@ class HomePostingWidget extends StatelessWidget {
                                           });
                                           AppController.to.ismyprofile.value =
                                               false;
-                                          print(AppController
-                                              .to.ismyprofile.value);
+
                                           Get.to(() => OtherProfileScreen());
                                         },
                                         child: Row(

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:loopus/api/get_image_api.dart';
+import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';

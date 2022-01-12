@@ -6,7 +6,7 @@ import 'package:flutter_quill/widgets/toolbar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:loopus/api/get_image_api.dart';
+import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';

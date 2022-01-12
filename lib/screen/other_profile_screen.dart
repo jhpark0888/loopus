@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/get_image_api.dart';
+import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
@@ -24,7 +24,8 @@ import 'package:underline_indicator/underline_indicator.dart';
 
 class OtherProfileScreen extends StatelessWidget {
   OtherProfileScreen({Key? key}) : super(key: key);
-  ProfileController profileController = Get.put(ProfileController());
+  final ProfileController profileController = Get.put(ProfileController());
+  final ImageController imageController = Get.put(ImageController());
   RxBool isLoop = false.obs;
 
   @override
@@ -551,7 +552,7 @@ class OtherProfileScreen extends StatelessWidget {
   }
 
   void changeProfileImage() async {
-    File? image = await getcropImage(ImageType.profile);
+    File? image = await imageController.getcropImage(ImageType.profile);
     if (image != null) {
       User? user =
           await updateProfile(profileController.myUserInfo.value, image, null);

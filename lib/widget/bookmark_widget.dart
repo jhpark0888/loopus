@@ -246,7 +246,6 @@ class BookmarkWidget extends StatelessWidget {
       'realName': item.realname,
       'profileImage': item.profileimage,
       'title': item.title,
-      'content': item.contents,
       'postDate': item.date,
       'department': item.department,
       'thumbNail': item.thumbnail,

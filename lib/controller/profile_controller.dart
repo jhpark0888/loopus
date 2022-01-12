@@ -81,12 +81,14 @@ class ProfileController extends GetxController
       myUserInfo(User.fromJson(responseBody));
 
       List projectmaplist = responseBody['project'];
+      print(projectmaplist);
       myProjectList(projectmaplist
           .map((project) => Project.fromJson(project))
           .map((project) => ProjectWidget(
                 project: project.obs,
               ))
           .toList());
+
       isProfileLoading.value = false;
     });
   }

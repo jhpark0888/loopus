@@ -26,7 +26,7 @@ class LoopScreen extends StatelessWidget {
         () => SmartRefresher(
           controller: homeController.loopRefreshController,
           enablePullDown: !homeController.isLoopEmpty.value
-              ? (homeController.isLoopLoading == true)
+              ? (homeController.isLoopLoading.value == true)
                   ? false
                   : true
               : false,
@@ -205,6 +205,46 @@ class LoopScreen extends StatelessWidget {
                           );
                         }, childCount: 1),
                       ),
+                if (homeController.enableLoopPullup.value == false)
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return Container(
+                          height: 120,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Text(
+                                  '포스팅을 모두 보여드렸어요',
+                                  style: kSubTitle2Style.copyWith(
+                                    color: mainblack,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  // homeController.hometabcontroller.animateTo(
+                                  //   2,
+                                  //   curve: Curves.easeInOut,
+                                  //   duration: Duration(milliseconds: 300),
+                                  // );
+                                },
+                                child: Text(
+                                  '루프한 학생들의 포스팅 읽기',
+                                  style: kButtonStyle.copyWith(
+                                    color: mainblue,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      childCount: 1,
+                    ),
+                  ),
               ],
             ),
           ),

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/models/documents/document.dart';
 import 'package:flutter_quill/widgets/controller.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/get_image_api.dart';
+import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
@@ -23,6 +23,7 @@ import 'package:flutter/rendering.dart';
 class PostingAddImageScreen extends StatelessWidget {
   PostingAddImageScreen({Key? key, required this.project_id}) : super(key: key);
   PostingAddController postingAddController = Get.find();
+
   int project_id;
   List<PostAddContentWidget> contentlist = [];
 
@@ -72,6 +73,8 @@ class PostingAddImageScreen extends StatelessWidget {
 }
 
 class _MyAppSpace extends StatelessWidget {
+  final ImageController imageController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     PostingAddController postingAddController = Get.find();
@@ -107,7 +110,8 @@ class _MyAppSpace extends StatelessWidget {
                             child: BlueTextButton(
                               onTap: () async {
                                 postingAddController.thumbnail(
-                                    await getcropImage(ImageType.thumnail));
+                                    await imageController
+                                        .getcropImage(ImageType.thumnail));
                               },
                               text: '대표 사진 변경',
                             )),

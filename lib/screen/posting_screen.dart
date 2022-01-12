@@ -81,23 +81,10 @@ class PostingScreen extends StatelessWidget {
                                       PostContentWidget(content: content))
                                   .toList(),
                             )
-                          : Column(children: [
-                              Image.asset(
-                                'assets/icons/loading.gif',
-                                scale: 9,
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                '내용을 받는 중이에요...',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: mainblue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ]),
+                          : Image.asset(
+                              'assets/icons/loading.gif',
+                              scale: 9,
+                            ),
                 ),
               ]),
             ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:loopus/api/get_image_api.dart';
+import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
@@ -22,6 +22,8 @@ class EditorController extends GetxController {
   FocusNode nodeAt(int index) => nodes.elementAt(index);
   TextEditingController textAt(int index) => textcontrollers.elementAt(index);
   SmartTextType typeAt(int index) => types.elementAt(index);
+
+  final ImageController imageController = Get.put(ImageController());
 
   @override
   void onInit() {
@@ -180,7 +182,7 @@ class EditorController extends GetxController {
   }
 
   Future<void> insertimage(int index) async {
-    File? image = await getcropImage(ImageType.post);
+    File? image = await imageController.getcropImage(ImageType.post);
     print(image);
     if (image != null) {
       textcontrollers.insert(index + 1, TextEditingController());
