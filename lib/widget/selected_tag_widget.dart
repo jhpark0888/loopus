@@ -29,6 +29,9 @@ class SelectedTagWidget extends StatelessWidget {
             text,
             style: const TextStyle(fontSize: 14),
           ),
+          const SizedBox(
+            width: 2,
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 4),
             child: InkWell(

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/screen/loop_screen.dart';
@@ -17,6 +18,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomePostingScreen extends StatelessWidget {
   HomeController homeController = Get.find();
+  HoverController _hoverController = Get.put(HoverController());
 
   @override
   Widget build(BuildContext context) {

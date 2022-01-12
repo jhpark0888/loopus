@@ -10,6 +10,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -26,9 +27,12 @@ class HomePostingWidget extends StatelessWidget {
   final int index;
   Post item;
 
-  HomePostingWidget({required this.item, required this.index});
+  HomePostingWidget({required this.item, required this.index, Key? key})
+      : super(key: key);
+
   BookmarkController bookmarkController = Get.put(BookmarkController());
   ProfileController profileController = Get.put(ProfileController());
+  HoverController _hoverController = Get.put(HoverController());
   PostingDetailController postingDetailController =
       Get.put(PostingDetailController());
 
@@ -37,6 +41,9 @@ class HomePostingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      // onTapDown: (details) => _hoverController.isHoverState(),
+      // onTapCancel: () => _hoverController.isNonHoverState(),
+      // onTapUp: (details) => _hoverController.isNonHoverState(),
       onTap: () {
         // http.Response? response = await getposting(item.id);
         // var responseBody = json.decode(utf8.decode(response!.bodyBytes));
@@ -46,7 +53,6 @@ class HomePostingWidget extends StatelessWidget {
           postingDetailController.item = value;
           postingDetailController.isPostingContentLoading.value = false;
         });
-        print(item.thumbnail);
         Get.to(() => PostingScreen(), arguments: {
           'id': item.id,
           'realName': item.realname,
@@ -62,7 +68,7 @@ class HomePostingWidget extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
                 bottomLeft: Radius.circular(8),

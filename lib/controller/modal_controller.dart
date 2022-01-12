@@ -116,6 +116,45 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
     });
   }
 
+  void showButtonDialog(String title) {
+    Get.dialog(
+      AlertDialog(
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: Center(child: Text('네')),
+          ),
+          TextButton(
+            onPressed: () {},
+            child: Center(child: Text('아니오')),
+          ),
+        ],
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8.0),
+          ),
+        ),
+        contentPadding: EdgeInsets.fromLTRB(
+          24,
+          12,
+          24,
+          14,
+        ),
+        backgroundColor: Colors.white,
+        content: Text(
+          title,
+          style: kSubTitle4Style,
+          textAlign: TextAlign.center,
+        ),
+      ),
+      barrierDismissible: true,
+      barrierColor: mainblack.withOpacity(0.3),
+      transitionCurve: Curves.easeInOut,
+      transitionDuration: Duration(milliseconds: 300),
+    );
+  }
+
   void showContentModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -336,7 +375,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                         isModalNextBtnClicked.value == false)
                     ? () {
                         isModalNextBtnClicked.value = true;
-                        Get.to(SignupCampusInfoScreen(),
+                        Get.to(() => SignupCampusInfoScreen(),
                             preventDuplicates: false);
                         isModalNextBtnClicked.value = false;
                       }

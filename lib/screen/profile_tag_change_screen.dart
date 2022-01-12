@@ -160,11 +160,11 @@ class ProfileTagChangeScreen extends StatelessWidget {
                           // border: OutlineInputBorder(borderSide: BorderSide.none),
                           contentPadding: EdgeInsets.only(right: 16),
                           hintStyle: kBody2Style.copyWith(
-                              color: mainblack.withOpacity(0.38)),
+                              color: mainblack.withOpacity(0.38), height: 1.5),
                           isDense: true,
                           hintText: "예) 봉사, 기계공학과, 서포터즈",
                           prefixIcon: Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
+                            padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
                             child: SvgPicture.asset(
                               "assets/icons/Search_Inactive.svg",
                               width: 16,
