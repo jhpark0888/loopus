@@ -25,61 +25,67 @@ class PostingAddContentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBarWidget(
-          actions: [
-            TextButton(
-              onPressed: () {
-                // postingAddController.editorController
-                //     .nodeAt(postingAddController.editorController.focus)
-                //     .unfocus();
-                Get.to(() => PostingAddImageScreen(
-                      project_id: project_id,
-                    ));
-              },
-              child: Text(
-                '다음',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: mainblue,
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBarWidget(
+            bottomBorder: false,
+            actions: [
+              TextButton(
+                onPressed: () {
+                  // postingAddController.editorController
+                  //     .nodeAt(postingAddController.editorController.focus)
+                  //     .unfocus();
+                  Get.to(() => PostingAddImageScreen(
+                        project_id: project_id,
+                      ));
+                },
+                child: Text(
+                  '다음',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: mainblue,
+                  ),
                 ),
               ),
-            ),
-          ],
-          title: '포스팅 내용',
+            ],
+            title: '포스팅 내용',
+          ),
+          body: Column(
+            children: [
+              Obx(
+                () => Expanded(
+                    child: GestureDetector(
+                  onTap: () {
+                    if (postingAddController.editorController.types.last ==
+                        SmartTextType.IMAGE) {
+                      postingAddController.editorController.insert(
+                          index: postingAddController
+                              .editorController.types.length);
+                      postingAddController.editorController
+                          .setFocus(SmartTextType.T);
+                    } else {
+                      postingAddController.editorController.nodes.last
+                          .requestFocus();
+                    }
+                  },
+                  child: ListView(
+                    children: postingAddController
+                        .editorController.smarttextfieldlist,
+                  ),
+                )),
+              ),
+              Obx(
+                () => EditorToolbar(
+                    selectedType: postingAddController
+                        .editorController.selectedType.value,
+                    onSelected: postingAddController.editorController.setType),
+              )
+            ],
+          ),
         ),
-        body: Column(
-          children: [
-            Obx(
-              () => Expanded(
-                  child: GestureDetector(
-                onTap: () {
-                  if (postingAddController.editorController.types.last ==
-                      SmartTextType.IMAGE) {
-                    postingAddController.editorController.insert(
-                        index:
-                            postingAddController.editorController.types.length);
-                    postingAddController.editorController
-                        .setFocus(SmartTextType.T);
-                  } else {
-                    postingAddController.editorController.nodes.last
-                        .requestFocus();
-                  }
-                },
-                child: ListView(
-                  children:
-                      postingAddController.editorController.smarttextfieldlist,
-                ),
-              )),
-            ),
-            Obx(
-              () => EditorToolbar(
-                  selectedType:
-                      postingAddController.editorController.selectedType.value,
-                  onSelected: postingAddController.editorController.setType),
-            )
-          ],
-        ));
+      ],
+    );
   }
 }

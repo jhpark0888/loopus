@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
@@ -36,42 +37,42 @@ class EditorToolbar extends StatelessWidget {
               onTap: () => editorController.setFontSizeType(selectedType),
             ),
             SizedBox(
-              width: 16,
+              width: 20,
             ),
             GestureDetector(
               child: Icon(Icons.format_quote,
                   color: selectedType == SmartTextType.QUOTE
-                      ? Colors.teal
-                      : Colors.black),
+                      ? mainblue
+                      : mainblack),
               onTap: () => onSelected(SmartTextType.QUOTE),
             ),
             SizedBox(
-              width: 16,
+              width: 20,
             ),
             GestureDetector(
               child: Icon(Icons.format_list_bulleted,
                   color: selectedType == SmartTextType.BULLET
-                      ? Colors.teal
-                      : Colors.black),
+                      ? mainblue
+                      : mainblack),
               onTap: () => onSelected(SmartTextType.BULLET),
             ),
             SizedBox(
-              width: 16,
+              width: 20,
             ),
             GestureDetector(
-              child: Icon(Icons.image, color: Colors.black),
+              child: Icon(Icons.image, color: mainblack),
               onTap: () async {
                 await editorController.insertimage(editorController.focus);
               },
             ),
             SizedBox(
-              width: 16,
+              width: 20,
             ),
             GestureDetector(
               child: Icon(Icons.link,
                   color: selectedType == SmartTextType.LINK
-                      ? Colors.teal
-                      : Colors.black),
+                      ? mainblue
+                      : mainblack),
               onTap: () {
                 editorController.linkonbutton(editorController.focus);
               },

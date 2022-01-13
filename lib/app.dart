@@ -21,7 +21,7 @@ class App extends GetView<AppController> {
 
   @override
   Widget build(BuildContext context) {
-    postconnect();
+    // postconnect();
     return Scaffold(
       extendBody: false,
       body: Obx(

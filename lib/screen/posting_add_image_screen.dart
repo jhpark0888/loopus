@@ -40,6 +40,7 @@ class PostingAddImageScreen extends StatelessWidget {
         children: [
           Scaffold(
             appBar: AppBarWidget(
+              bottomBorder: false,
               title: '대표 사진 설정',
               actions: [
                 TextButton(
@@ -154,9 +155,8 @@ class _MyAppSpace extends StatelessWidget {
   }
 
   Widget getImage(PostingAddController controller) {
-    return Container(
-      width: Get.width,
-      height: Get.width * 2 / 3,
+    return AspectRatio(
+      aspectRatio: 3 / 2,
       child: Opacity(
         opacity: 0.25,
         child: Obx(() {
@@ -187,6 +187,7 @@ class _MyAppSpace extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
+        vertical: 12,
       ),
       child: Text(
         text,

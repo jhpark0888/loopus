@@ -25,71 +25,78 @@ class PostingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        physics: BouncingScrollPhysics(),
-        controller: _controller,
-        slivers: [
-          SliverAppBar(
-            stretch: true,
-            bottom: PreferredSize(
-                child: Container(
-                  color: Color(0xffe7e7e7),
-                  height: 1,
-                ),
-                preferredSize: Size.fromHeight(4.0)),
-            automaticallyImplyLeading: false,
-            elevation: 0,
-            backgroundColor: Colors.white,
-            leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: SvgPicture.asset('assets/icons/Arrow.svg'),
-            ),
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: SvgPicture.asset(
-                  'assets/icons/More.svg',
-                ),
-              ),
-            ],
-            pinned: true,
-            flexibleSpace: _MyAppSpace(
-              title: Get.arguments['title'],
-              realName: Get.arguments['realName'],
-              profileImage: Get.arguments['profileImage'],
-              postDate: Get.arguments['postDate'],
-              department: Get.arguments['department'],
-              thumbNail: Get.arguments['thumbNail'],
-            ),
-            expandedHeight: Get.width / 3 * 2,
-          ),
-          Obx(
-            () => SliverList(
-              delegate: SliverChildListDelegate([
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 24,
+      body: GestureDetector(
+        onPanUpdate: (details) {
+          if (details.delta.dx > 20) {
+            Get.back();
+          }
+        },
+        child: CustomScrollView(
+          physics: BouncingScrollPhysics(),
+          controller: _controller,
+          slivers: [
+            SliverAppBar(
+              stretch: true,
+              bottom: PreferredSize(
+                  child: Container(
+                    color: Color(0xffe7e7e7),
+                    height: 1,
                   ),
-                  child:
-                      (_postingDetailController.isPostingContentLoading.value ==
-                              false)
-                          ? Column(
-                              children: _postingDetailController.item!.contents!
-                                  .map((content) =>
-                                      PostContentWidget(content: content))
-                                  .toList(),
-                            )
-                          : Image.asset(
-                              'assets/icons/loading.gif',
-                              scale: 9,
-                            ),
+                  preferredSize: Size.fromHeight(4.0)),
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              backgroundColor: Colors.white,
+              leading: IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                icon: SvgPicture.asset('assets/icons/Arrow.svg'),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(
+                    'assets/icons/More.svg',
+                  ),
                 ),
-              ]),
+              ],
+              pinned: true,
+              flexibleSpace: _MyAppSpace(
+                title: Get.arguments['title'],
+                realName: Get.arguments['realName'],
+                profileImage: Get.arguments['profileImage'],
+                postDate: Get.arguments['postDate'],
+                department: Get.arguments['department'],
+                thumbNail: Get.arguments['thumbNail'],
+              ),
+              expandedHeight: Get.width / 3 * 2,
             ),
-          ),
-        ],
+            Obx(
+              () => SliverList(
+                delegate: SliverChildListDelegate([
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 24,
+                    ),
+                    child: (_postingDetailController
+                                .isPostingContentLoading.value ==
+                            false)
+                        ? Column(
+                            children: _postingDetailController.item!.contents!
+                                .map((content) =>
+                                    PostContentWidget(content: content))
+                                .toList(),
+                          )
+                        : Image.asset(
+                            'assets/icons/loading.gif',
+                            scale: 9,
+                          ),
+                  ),
+                ]),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

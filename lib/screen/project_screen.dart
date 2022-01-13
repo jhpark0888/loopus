@@ -329,10 +329,7 @@ class ProjectScreen extends StatelessWidget {
                                   text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: projectdetailController
-                                            .project.value.looper
-                                            .map((user) => user.realName)
-                                            .toList()[0],
+                                        text: '박지환',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),

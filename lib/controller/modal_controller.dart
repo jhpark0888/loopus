@@ -145,7 +145,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    height: 40,
+                    height: 48,
                     child: Center(
                       child: Text(
                         '취소',
@@ -170,7 +170,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    height: 40,
+                    height: 48,
                     child: Center(
                       child: Text(
                         '삭제',

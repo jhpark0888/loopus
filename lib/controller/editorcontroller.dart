@@ -6,6 +6,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 class EditorController extends GetxController {
@@ -214,11 +215,7 @@ class EditorController extends GetxController {
     } else {
       TextEditingController linkcontroller = TextEditingController();
       if (textAt(index).text == '\u200B') {
-        Get.defaultDialog(
-            title: '잠깐',
-            middleText: '텍스트를 먼저 입력해주세요',
-            textConfirm: '확인',
-            onConfirm: () => Get.back());
+        ModalController.to.showCustomDialog('텍스트를 먼저 입력해주세요', 1000);
       } else {
         Get.defaultDialog(
             content: TextField(

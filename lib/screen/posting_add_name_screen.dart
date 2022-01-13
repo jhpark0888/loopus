@@ -25,6 +25,7 @@ class PostingAddNameScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBarWidget(
+          bottomBorder: false,
           actions: [
             TextButton(
               onPressed: () {

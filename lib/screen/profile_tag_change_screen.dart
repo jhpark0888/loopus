@@ -41,6 +41,7 @@ class ProfileTagChangeScreen extends StatelessWidget {
         children: [
           Scaffold(
             appBar: AppBarWidget(
+              bottomBorder: false,
               actions: [
                 TextButton(
                   onPressed: () async {
