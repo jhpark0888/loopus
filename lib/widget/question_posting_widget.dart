@@ -108,23 +108,22 @@ class QuestionPostingWidget extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () async {
-                                  await getProfile(item.user).then((response) {
-                                    var responseBody = json.decode(
-                                        utf8.decode(response.bodyBytes));
+                                  await getProfile(item.user)
+                                      .then((user) async {
+                                    profileController.otherUser(user);
+                                    profileController.isProfileLoading.value =
+                                        false;
+                                  });
+                                  await getProjectlist(item.user)
+                                      .then((projectlist) {
                                     profileController
-                                        .otherUser(User.fromJson(responseBody));
-
-                                    List projectmaplist =
-                                        responseBody['project'];
-                                    profileController.otherProjectList(
-                                        projectmaplist
-                                            .map((project) =>
-                                                Project.fromJson(project))
+                                        .otherProjectList(projectlist
                                             .map((project) => ProjectWidget(
                                                   project: project.obs,
                                                 ))
                                             .toList());
                                   });
+
                                   AppController.to.ismyprofile.value = false;
                                   print(AppController.to.ismyprofile.value);
                                   Get.to(() => OtherProfileScreen());

@@ -181,19 +181,15 @@ class HomePostingWidget extends StatelessWidget {
                                       InkWell(
                                         onTap: () async {
                                           await getProfile(item.userId)
-                                              .then((response) {
-                                            var responseBody = json.decode(utf8
-                                                .decode(response.bodyBytes));
-                                            profileController.otherUser(
-                                                User.fromJson(responseBody));
-
-                                            List projectmaplist =
-                                                responseBody['project'];
+                                              .then((user) async {
+                                            profileController.otherUser(user);
+                                            profileController
+                                                .isProfileLoading.value = false;
+                                          });
+                                          await getProjectlist(item.userId)
+                                              .then((projectlist) {
                                             profileController.otherProjectList(
-                                                projectmaplist
-                                                    .map((project) =>
-                                                        Project.fromJson(
-                                                            project))
+                                                projectlist
                                                     .map((project) =>
                                                         ProjectWidget(
                                                           project: project.obs,

@@ -554,8 +554,8 @@ class OtherProfileScreen extends StatelessWidget {
   void changeProfileImage() async {
     File? image = await imageController.getcropImage(ImageType.profile);
     if (image != null) {
-      User? user =
-          await updateProfile(profileController.myUserInfo.value, image, null);
+      User? user = await updateProfile(profileController.myUserInfo.value,
+          image, null, ProfileUpdateType.image);
       if (user != null) {
         profileController.myUserInfo(user);
       }

@@ -54,9 +54,6 @@ class ProjectScreen extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                print(projectdetailController.project.value.looper
-                    .map((user) => user.realName)
-                    .toList()[0]);
                 modalController.showModalIOS(
                   context,
                   func1: () {
@@ -328,14 +325,14 @@ class ProjectScreen extends StatelessWidget {
                                 RichText(
                                   text: TextSpan(
                                     children: [
-                                      TextSpan(
-                                        text: projectdetailController
-                                            .project.value.looper
-                                            .map((user) => user.realName)
-                                            .toList()[0],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      // TextSpan(
+                                      //   text: projectdetailController
+                                      //       .project.value.looper
+                                      //       .map((user) => user.realName)
+                                      //       .toList()[0],
+                                      //   style: TextStyle(
+                                      //       fontWeight: FontWeight.bold),
+                                      // ),
                                       TextSpan(
                                         text: '님, ',
                                       ),

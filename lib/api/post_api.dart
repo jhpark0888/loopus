@@ -12,6 +12,7 @@ import 'package:loopus/api/project_api.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
@@ -89,7 +90,8 @@ Future<void> addposting(int projectId) async {
       print("status code : ${response.statusCode} 포스팅 업로드 완료");
     }
 
-    Project project = await getproject(projectId);
+    await getproject(projectId)
+        .then((value) => ProjectDetailController.to.project(value));
     Get.back();
     Get.back();
     Get.back();

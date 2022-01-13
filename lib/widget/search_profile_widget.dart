@@ -29,18 +29,18 @@ class SearchProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () async {
-          await getProfile(id).then((response) {
-            var responseBody = json.decode(utf8.decode(response.bodyBytes));
-            profileController.otherUser(User.fromJson(responseBody));
-
-            List projectmaplist = responseBody['project'];
-            profileController.otherProjectList(projectmaplist
-                .map((project) => Project.fromJson(project))
+          await getProfile(id).then((user) async {
+            profileController.otherUser(user);
+            profileController.isProfileLoading.value = false;
+          });
+          await getProjectlist(id).then((projectlist) {
+            profileController.otherProjectList(projectlist
                 .map((project) => ProjectWidget(
                       project: project.obs,
                     ))
                 .toList());
           });
+
           AppController.to.ismyprofile.value = false;
           Get.to(() => OtherProfileScreen());
         },

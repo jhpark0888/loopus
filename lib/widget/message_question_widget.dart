@@ -54,20 +54,18 @@ class MessageQuestionWidget extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () async {
-                          await getProfile(user).then((response) {
-                            var responseBody =
-                                json.decode(utf8.decode(response.bodyBytes));
-                            profileController
-                                .myUserInfo(User.fromJson(responseBody));
-
-                            List projectmaplist = responseBody['project'];
-                            profileController.myProjectList(projectmaplist
-                                .map((project) => Project.fromJson(project))
+                          await getProfile(user).then((user) async {
+                            profileController.myUserInfo(user);
+                            profileController.isProfileLoading.value = false;
+                          });
+                          await getProjectlist(user).then((projectlist) {
+                            profileController.myProjectList(projectlist
                                 .map((project) => ProjectWidget(
                                       project: project.obs,
                                     ))
                                 .toList());
                           });
+
                           AppController.to.ismyprofile.value = false;
                           print(AppController.to.ismyprofile.value);
                           Get.to(() => OtherProfileScreen());

@@ -140,20 +140,19 @@ class SearchTagProjectWidget extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () async {
-                          await getProfile(project.userid).then((response) {
-                            var responseBody =
-                                json.decode(utf8.decode(response.bodyBytes));
-                            profileController
-                                .otherUser(User.fromJson(responseBody));
-
-                            List projectmaplist = responseBody['project'];
-                            profileController.otherProjectList(projectmaplist
-                                .map((project) => Project.fromJson(project))
+                          await getProfile(project.userid).then((user) async {
+                            profileController.otherUser(user);
+                            profileController.isProfileLoading.value = false;
+                          });
+                          await getProjectlist(project.userid)
+                              .then((projectlist) {
+                            profileController.otherProjectList(projectlist
                                 .map((project) => ProjectWidget(
                                       project: project.obs,
                                     ))
                                 .toList());
                           });
+
                           AppController.to.ismyprofile.value = false;
                           Get.to(() => OtherProfileScreen());
                         },

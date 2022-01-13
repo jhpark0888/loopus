@@ -131,13 +131,13 @@ class _MyAppSpace extends StatelessWidget {
                               onTap: () async {
                                 imageController.isImagePickerLoading.value =
                                     true;
-                                postingAddController.thumbnail(
-                                    await imageController
-                                        .getcropImage(ImageType.thumnail)
-                                        .then((value) {
+                                imageController
+                                    .getcropImage(ImageType.thumnail)
+                                    .then((value) {
+                                  postingAddController.thumbnail(value);
                                   imageController.isImagePickerLoading.value =
                                       false;
-                                }));
+                                });
                               },
                               text: '대표 사진 변경',
                             )),
