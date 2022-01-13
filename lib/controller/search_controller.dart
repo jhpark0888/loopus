@@ -48,6 +48,8 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   late TabController tabController;
   late TabController tagtabController;
 
+  RxBool isSearchLoading = false.obs;
+
   final FocusNode focusNode = FocusNode();
 
   void onInit() {
@@ -66,6 +68,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     tabController.addListener(() {
       if (searchtextcontroller.text.isEmpty == false) {
         if (tabController.indexIsChanging == true) {
+          isSearchLoading(true);
           print(searchpostinglist);
           print(searchprofilelist);
           print(searchquestionlist);
@@ -80,6 +83,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
           } else if (tabController.index == 3 && searchtaglist.isEmpty) {
             tagsearch();
           }
+          isSearchLoading(false);
         }
       }
       if (tabController.index == 3) {

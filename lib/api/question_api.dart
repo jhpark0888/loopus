@@ -29,14 +29,14 @@ void questionmake(String content) async {
   var responseBody = utf8.decode(response.bodyBytes);
 }
 
-Future<dynamic> questionlist(int pageNumber, String type) async {
+Future<dynamic> questionlist(int lastindex, String type) async {
   String? token;
   await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
   final url = Uri.parse(
-      "http://3.35.253.151:8000/question_api/question_list_load/$type?page=$pageNumber");
+      "http://3.35.253.151:8000/question_api/question_list_load/$type?last=$lastindex");
   final response = await get(url, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
   var responseHeaders = response.headers;

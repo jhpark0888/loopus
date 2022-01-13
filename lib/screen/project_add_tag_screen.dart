@@ -8,6 +8,7 @@ import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
@@ -38,9 +39,9 @@ class ProjectAddTagScreen extends StatelessWidget {
               ? TextButton(
                   onPressed: () async {
                     if (tagController.selectedtaglist.length == 3) {
-                      String? userId =
-                          await const FlutterSecureStorage().read(key: "id");
-                      getlooplist(userId!).then((value) {
+                      projectaddcontroller.islooppersonloading(true);
+                      getlooplist(ProfileController.to.myUserInfo.value.user)
+                          .then((value) {
                         projectaddcontroller.looplist = value;
                         projectaddcontroller.looppersonlist(projectaddcontroller
                             .looplist

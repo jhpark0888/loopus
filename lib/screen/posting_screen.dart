@@ -8,7 +8,9 @@ import 'package:flutter/rendering.dart';
 
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -18,6 +20,7 @@ class PostingScreen extends StatelessWidget {
   PostingDetailController _postingDetailController =
       Get.put(PostingDetailController());
 
+  ModalController modalController = Get.put(ModalController());
   ScrollController _controller = ScrollController();
   // Post post;
   // User? user;
@@ -54,7 +57,28 @@ class PostingScreen extends StatelessWidget {
               ),
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    modalController.showModalIOS(
+                      context,
+                      func1: () {
+                        modalController.showButtonDialog(
+                            title:
+                                '정말 <${_postingDetailController.item?.title}> 포스팅을 삭제하시겠어요?',
+                            content: '',
+                            yesfunction: () => Get.back(),
+                            nofunction: () async {
+                              await deleteposting(
+                                  _postingDetailController.item!.id);
+                            });
+                      },
+                      func2: () {},
+                      value1: '이 포스팅 삭제하기',
+                      value2: '',
+                      isValue1Red: true,
+                      isValue2Red: false,
+                      isOne: true,
+                    );
+                  },
                   icon: SvgPicture.asset(
                     'assets/icons/More.svg',
                   ),

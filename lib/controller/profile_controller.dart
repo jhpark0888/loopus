@@ -66,13 +66,18 @@ class ProfileController extends GetxController
     isuser: 1,
   ).obs;
 
+  RxList<User> mylooplist = <User>[].obs;
+  RxList<User> otherlooplist = <User>[].obs;
+
   late TabController profileTabController;
 
   RxBool isProfileLoading = true.obs;
+  RxBool isLoopPeopleLoading = true.obs;
+
   RefreshController profileRefreshController =
       RefreshController(initialRefresh: false);
 
-  void loadProfile() async {
+  void loadmyProfile() async {
     String? userId = await const FlutterSecureStorage().read(key: "id");
 
     await getProfile(userId).then((user) async {
@@ -88,11 +93,25 @@ class ProfileController extends GetxController
     });
   }
 
+  void loadotherProfile(int userid) async {
+    await getProfile(userid).then((user) async {
+      otherUser(user);
+      isProfileLoading.value = false;
+    });
+    await getProjectlist(userid).then((projectlist) {
+      otherProjectList(projectlist
+          .map((project) => ProjectWidget(
+                project: project.obs,
+              ))
+          .toList());
+    });
+  }
+
   @override
   void onInit() {
     profileTabController = TabController(length: 2, vsync: this);
     // isProfileLoading.value = true;
-    loadProfile();
+    loadmyProfile();
     super.onInit();
   }
 }

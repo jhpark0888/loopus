@@ -54,7 +54,7 @@ enum ProfileUpdateType {
 Future<User?> updateProfile(
     User user, File? image, List? taglist, ProfileUpdateType updateType) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
-
+  print(taglist);
   final uri = Uri.parse(
       "http://3.35.253.151:8000/user_api/update_profile/${updateType.name}");
 
@@ -81,7 +81,7 @@ Future<User?> updateProfile(
     }
   } else if (updateType == ProfileUpdateType.department) {
     request.fields['department'] = user.department;
-  } else if (updateType == ProfileUpdateType.department) {
+  } else if (updateType == ProfileUpdateType.tag) {
     request.fields['tag'] =
         json.encode(taglist ?? user.profileTag.map((tag) => tag.tag).toList());
   }

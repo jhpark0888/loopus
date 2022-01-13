@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
@@ -119,9 +120,9 @@ class ProjectModifyScreen extends StatelessWidget {
                 isSubtitleExist: true,
                 onTap: () async {
                   projectlooperinput();
-                  String? userId =
-                      await const FlutterSecureStorage().read(key: "id");
-                  getlooplist(userId!).then((value) {
+                  projectaddcontroller.islooppersonloading(true);
+                  getlooplist(ProfileController.to.myUserInfo.value.user)
+                      .then((value) {
                     projectaddcontroller.looplist = value;
                     projectaddcontroller.looppersonlist(projectaddcontroller
                         .looplist

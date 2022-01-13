@@ -220,17 +220,7 @@ class BookmarkWidget extends StatelessWidget {
   }
 
   Future<void> tapProfile() async {
-    await getProfile(item.userId).then((user) async {
-      profileController.otherUser(user);
-      profileController.isProfileLoading.value = false;
-    });
-    await getProjectlist(item.userId).then((projectlist) {
-      profileController.otherProjectList(projectlist
-          .map((project) => ProjectWidget(
-                project: project.obs,
-              ))
-          .toList());
-    });
+    profileController.loadotherProfile(item.userId);
   }
 
   void tapPosting() {

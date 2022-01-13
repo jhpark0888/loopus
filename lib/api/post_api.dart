@@ -131,14 +131,35 @@ Future<Post> getposting(int postingId) async {
   }
 }
 
-Future<dynamic> mainpost(int pageNumber) async {
+Future<void> deleteposting(int postId) async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  final uri = Uri.parse("http://3.35.253.151:8000/post_api/delete/$postId");
+
+  http.Response response =
+      await http.post(uri, headers: {"Authorization": "Token $token"});
+
+  print(response.statusCode);
+  if (response.statusCode == 200) {
+    Get.back();
+    Get.back();
+    Get.back();
+    ProjectDetailController.to.project.value.post
+        .removeWhere((post) => post.id == postId);
+  } else {
+    return Future.error(response.statusCode);
+  }
+}
+
+Future<dynamic> mainpost(int lastindex) async {
   String? token;
+  // print('메인페이지 번호 : $pageNumber');
   await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
   final mainloadUri =
-      Uri.parse("http://3.35.253.151:8000/post_api/main_load?page=$pageNumber");
+      Uri.parse("http://3.35.253.151:8000/post_api/main_load?last=$lastindex");
 
   final response =
       await get(mainloadUri, headers: {"Authorization": "Token $token"});
@@ -156,6 +177,7 @@ Future<dynamic> mainpost(int pageNumber) async {
 }
 
 Future<dynamic> bookmarklist(int pageNumber) async {
+  // print('북마크페이지 번호 : $pageNumber');
   String? token;
   await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
@@ -176,14 +198,15 @@ Future<dynamic> bookmarklist(int pageNumber) async {
   }
 }
 
-Future<dynamic> looppost(int pageNumber) async {
+Future<dynamic> looppost(int lastindex) async {
+  // print('루프페이지 번호 : $pageNumber');
   String? token;
   await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
   final loopUri =
-      Uri.parse("http://3.35.253.151:8000/post_api/loop_load?page=$pageNumber");
+      Uri.parse("http://3.35.253.151:8000/post_api/loop_load?last=$lastindex");
 
   final response =
       await get(loopUri, headers: {"Authorization": "Token $token"});

@@ -113,7 +113,7 @@ class SignupTagScreen extends StatelessWidget {
                   height: 30,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: tagController.selectedtaglist.value,
+                    children: tagController.selectedtaglist,
                   ),
                 ),
               ),
@@ -150,7 +150,7 @@ class SignupTagScreen extends StatelessWidget {
               Obx(
                 () => Expanded(
                   child: ListView(
-                    children: tagController.searchtaglist.value,
+                    children: tagController.searchtaglist,
                   ),
                 ),
               )

@@ -25,17 +25,7 @@ class PersonTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        await getProfile(user.user).then((user) async {
-          profileController.otherUser(user);
-          profileController.isProfileLoading.value = false;
-        });
-        await getProjectlist(user.user).then((projectlist) {
-          profileController.otherProjectList(projectlist
-              .map((project) => ProjectWidget(
-                    project: project.obs,
-                  ))
-              .toList());
-        });
+        profileController.loadotherProfile(user.user);
 
         AppController.to.ismyprofile.value = false;
         print(AppController.to.ismyprofile.value);

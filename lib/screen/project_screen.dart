@@ -473,7 +473,7 @@ class ProjectScreen extends StatelessWidget {
                                   children: projectdetailController
                                               .project.value.post !=
                                           null
-                                      ? List.from(projectdetailController
+                                      ?  List.from(projectdetailController
                                           .project.value.post
                                           .map((post) => ProjectPostingWidget(
                                                 item: post,
@@ -498,9 +498,7 @@ class ProjectScreen extends StatelessWidget {
                                               ))
                                           .toList()
                                           .reversed)
-                                      : [Container()]
-                                  //     [
-                                  ),
+                                      : [Container()]),
                             )
                           ],
                         ),

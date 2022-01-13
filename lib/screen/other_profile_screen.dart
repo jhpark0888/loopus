@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
@@ -75,39 +76,50 @@ class OtherProfileScreen extends StatelessWidget {
                         Stack(
                           children: [
                             Obx(
-                              () => GestureDetector(
-                                onTap: () => ModalController.to.showModalIOS(
-                                    context,
-                                    func1: changeProfileImage,
-                                    func2: () {},
-                                    value1: '라이브러리에서 선택',
-                                    value2: '기본 이미지로 변경',
-                                    isValue1Red: false,
-                                    isValue2Red: false,
-                                    isOne: false),
-                                child: ClipOval(
-                                    child: (profileController
-                                                .isProfileLoading.value ==
-                                            false)
-                                        ? CachedNetworkImage(
-                                            height: 92,
-                                            width: 92,
-                                            imageUrl: profileController
-                                                .otherUser.value.profileImage!,
-                                            placeholder: (context, url) =>
-                                                Image.asset(
+                              () =>
+                                  // GestureDetector(
+                                  //   onTap: () => ModalController.to.showModalIOS(
+                                  //       context,
+                                  //       func1: changeProfileImage,
+                                  //       func2: () {},
+                                  //       value1: '라이브러리에서 선택',
+                                  //       value2: '기본 이미지로 변경',
+                                  //       isValue1Red: false,
+                                  //       isValue2Red: false,
+                                  //       isOne: false),
+                                  //   child:
+                                  ClipOval(
+                                      child: (profileController
+                                              .isProfileLoading.value)
+                                          ? Image.asset(
                                               "assets/illustrations/default_profile.png",
                                               height: 92,
                                               width: 92,
-                                            ),
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image.asset(
-                                            "assets/illustrations/default_profile.png",
-                                            height: 92,
-                                            width: 92,
-                                          )),
-                              ),
+                                            )
+                                          : profileController.otherUser.value
+                                                      .profileImage !=
+                                                  null
+                                              ? CachedNetworkImage(
+                                                  height: 92,
+                                                  width: 92,
+                                                  imageUrl: profileController
+                                                      .otherUser
+                                                      .value
+                                                      .profileImage!,
+                                                  placeholder: (context, url) =>
+                                                      Image.asset(
+                                                    "assets/illustrations/default_profile.png",
+                                                    height: 92,
+                                                    width: 92,
+                                                  ),
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Image.asset(
+                                                  "assets/illustrations/default_profile.png",
+                                                  height: 92,
+                                                  width: 92,
+                                                )),
+                              // ),
                             ),
                             Positioned.fill(
                               child: Align(
@@ -290,7 +302,7 @@ class OtherProfileScreen extends StatelessWidget {
                               vertical: 12.0,
                             ),
                             child: Column(
-                              children: const [
+                              children: [
                                 Text(
                                   '포스팅',
                                   style: kBody1Style,
@@ -299,7 +311,8 @@ class OtherProfileScreen extends StatelessWidget {
                                   height: 8,
                                 ),
                                 Text(
-                                  '36',
+                                  profileController.otherUser.value.totalposting
+                                      .toString(),
                                   style: kSubTitle2Style,
                                 )
                               ],
@@ -310,17 +323,18 @@ class OtherProfileScreen extends StatelessWidget {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
+                            profileController.isLoopPeopleLoading(true);
                             Get.to(() => LoopPeopleScreen(
                                   userid:
-                                      profileController.myUserInfo.value.user,
+                                      profileController.otherUser.value.user,
                                   loopcount: profileController
-                                      .myUserInfo.value.loopcount,
+                                      .otherUser.value.loopcount,
                                 ));
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 12.0),
                             child: Column(
-                              children: const [
+                              children: [
                                 Text(
                                   '루프',
                                   style: kBody1Style,
@@ -329,7 +343,8 @@ class OtherProfileScreen extends StatelessWidget {
                                   height: 8,
                                 ),
                                 Text(
-                                  '112',
+                                  profileController.otherUser.value.loopcount
+                                      .toString(),
                                   style: kSubTitle2Style,
                                 )
                               ],

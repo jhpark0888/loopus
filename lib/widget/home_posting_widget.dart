@@ -180,22 +180,9 @@ class HomePostingWidget extends StatelessWidget {
                                     children: [
                                       InkWell(
                                         onTap: () async {
-                                          await getProfile(item.userId)
-                                              .then((user) async {
-                                            profileController.otherUser(user);
-                                            profileController
-                                                .isProfileLoading.value = false;
-                                          });
-                                          await getProjectlist(item.userId)
-                                              .then((projectlist) {
-                                            profileController.otherProjectList(
-                                                projectlist
-                                                    .map((project) =>
-                                                        ProjectWidget(
-                                                          project: project.obs,
-                                                        ))
-                                                    .toList());
-                                          });
+                                          profileController
+                                              .loadotherProfile(item.userId);
+
                                           AppController.to.ismyprofile.value =
                                               false;
 

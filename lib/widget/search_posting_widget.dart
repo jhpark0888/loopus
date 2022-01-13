@@ -117,17 +117,7 @@ class SearchPostingWidget extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () async {
-                          await getProfile(user_id).then((user) async {
-                            profileController.otherUser(user);
-                            profileController.isProfileLoading.value = false;
-                          });
-                          await getProjectlist(user_id).then((projectlist) {
-                            profileController.otherProjectList(projectlist
-                                .map((project) => ProjectWidget(
-                                      project: project.obs,
-                                    ))
-                                .toList());
-                          });
+                          profileController.loadotherProfile(user_id);
 
                           AppController.to.ismyprofile.value = false;
                           print(AppController.to.ismyprofile.value);

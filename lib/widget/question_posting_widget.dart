@@ -108,21 +108,7 @@ class QuestionPostingWidget extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () async {
-                                  await getProfile(item.user)
-                                      .then((user) async {
-                                    profileController.otherUser(user);
-                                    profileController.isProfileLoading.value =
-                                        false;
-                                  });
-                                  await getProjectlist(item.user)
-                                      .then((projectlist) {
-                                    profileController
-                                        .otherProjectList(projectlist
-                                            .map((project) => ProjectWidget(
-                                                  project: project.obs,
-                                                ))
-                                            .toList());
-                                  });
+                                  profileController.loadotherProfile(item.user);
 
                                   AppController.to.ismyprofile.value = false;
                                   print(AppController.to.ismyprofile.value);

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
@@ -316,6 +317,8 @@ class MyProfileScreen extends StatelessWidget {
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
+                                      profileController
+                                          .isLoopPeopleLoading(true);
                                       Get.to(() => LoopPeopleScreen(
                                             userid: profileController
                                                 .myUserInfo.value.user,

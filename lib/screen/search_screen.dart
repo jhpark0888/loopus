@@ -90,6 +90,7 @@ class SearchScreen extends StatelessWidget {
                   _searchController.searchtaglist.clear();
                 },
                 onSubmitted: (value) async {
+                  _searchController.isSearchLoading(true);
                   if (_searchController.postpagenumber == 1) {
                     _searchController.searchpostinglist.clear();
                   } else if (_searchController.profilepagenumber == 1) {
@@ -112,6 +113,7 @@ class SearchScreen extends StatelessWidget {
                   } else if (_searchController.tabController.index == 3) {
                     await _searchController.tagsearch();
                   }
+                  _searchController.isSearchLoading(false);
                   print(value);
                 },
                 focusNode: _searchController.focusNode,
@@ -374,84 +376,97 @@ class SearchScreen extends StatelessWidget {
                                 children: [
                                   SingleChildScrollView(
                                     child: Obx(() => _searchController
-                                                .isnosearchpost.value ==
-                                            false
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10.0),
-                                            child: Column(
-                                              children: _searchController
-                                                  .searchpostinglist,
-                                            ))
-                                        : Container(
-                                            height: 80,
-                                            child: Center(
-                                                child: Text(
-                                              "아직 검색어와 일치하는 포스팅이 없어요",
-                                              style: kSubTitle2Style,
-                                            )))),
+                                            .isSearchLoading.value
+                                        ? searchloading()
+                                        : _searchController
+                                                    .isnosearchpost.value ==
+                                                false
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10.0),
+                                                child: Column(
+                                                  children: _searchController
+                                                      .searchpostinglist,
+                                                ))
+                                            : Container(
+                                                height: 80,
+                                                child: Center(
+                                                    child: Text(
+                                                  "아직 검색어와 일치하는 포스팅이 없어요",
+                                                  style: kSubTitle2Style,
+                                                )))),
                                   ),
                                   SingleChildScrollView(
                                     child: Obx(() => _searchController
-                                                .isnosearchprofile.value ==
-                                            false
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10.0),
-                                            child: Column(
-                                              children: _searchController
-                                                  .searchprofilelist,
-                                            ))
-                                        : Container(
-                                            height: 80,
-                                            child: Center(
-                                                child: Text(
-                                              "아직 검색어와 일치하는 학생이 없어요",
-                                              style: kSubTitle2Style,
-                                            )))),
+                                            .isSearchLoading.value
+                                        ? searchloading()
+                                        : _searchController
+                                                    .isnosearchprofile.value ==
+                                                false
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10.0),
+                                                child: Column(
+                                                  children: _searchController
+                                                      .searchprofilelist,
+                                                ))
+                                            : Container(
+                                                height: 80,
+                                                child: Center(
+                                                    child: Text(
+                                                  "아직 검색어와 일치하는 학생이 없어요",
+                                                  style: kSubTitle2Style,
+                                                )))),
                                   ),
                                   SingleChildScrollView(
                                     child: Obx(() => _searchController
-                                                .isnosearchquestion.value ==
-                                            false
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10.0),
-                                            child: Column(
-                                              children: _searchController
-                                                  .searchquestionlist,
-                                            ),
-                                          )
-                                        : Container(
-                                            height: 80,
-                                            child: Center(
-                                                child: Text(
-                                              "아직 검색어와 일치하는 질문이 없어요",
-                                              style: kSubTitle2Style,
-                                            )))),
+                                            .isSearchLoading.value
+                                        ? searchloading()
+                                        : _searchController
+                                                    .isnosearchquestion.value ==
+                                                false
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10.0),
+                                                child: Column(
+                                                  children: _searchController
+                                                      .searchquestionlist,
+                                                ),
+                                              )
+                                            : Container(
+                                                height: 80,
+                                                child: Center(
+                                                    child: Text(
+                                                  "아직 검색어와 일치하는 질문이 없어요",
+                                                  style: kSubTitle2Style,
+                                                )))),
                                   ),
                                   SingleChildScrollView(
                                     child: Obx(
                                       () => _searchController
-                                                  .isnosearchtag.value ==
-                                              false
-                                          ? Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10.0),
-                                              child: Column(
-                                                children: _searchController
-                                                    .searchtaglist,
-                                              ),
-                                            )
-                                          : Container(
-                                              height: 80,
-                                              child: Center(
-                                                child: Text(
-                                                  "아직 검색어와 일치하는 태그가 없어요.",
-                                                  style: kSubTitle2Style,
+                                              .isSearchLoading.value
+                                          ? searchloading()
+                                          : _searchController
+                                                      .isnosearchtag.value ==
+                                                  false
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 10.0),
+                                                  child: Column(
+                                                    children: _searchController
+                                                        .searchtaglist,
+                                                  ),
+                                                )
+                                              : Container(
+                                                  height: 80,
+                                                  child: Center(
+                                                    child: Text(
+                                                      "아직 검색어와 일치하는 태그가 없어요.",
+                                                      style: kSubTitle2Style,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
                                     ),
                                   ),
                                   Padding(
@@ -471,4 +486,29 @@ class SearchScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget searchloading() {
+  return Column(
+    children: [
+      SizedBox(
+        height: 10,
+      ),
+      Image.asset(
+        'assets/icons/loading.gif',
+        scale: 6,
+      ),
+      SizedBox(
+        height: 4,
+      ),
+      Text(
+        '검색중...',
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+          color: mainblue.withOpacity(0.6),
+        ),
+      ),
+    ],
+  );
 }

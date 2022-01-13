@@ -42,7 +42,7 @@ class HomeController extends GetxController
 
   late TabController hometabcontroller;
 
-  int pageNumber = 1;
+  // int pageNumber = 1;
 
   @override
   void onInit() {
@@ -61,13 +61,13 @@ class HomeController extends GetxController
     enablePostingPullup.value = true;
     postingResult(PostingModel(postingitems: <Post>[].obs));
 
-    pageNumber = 1;
+    // pageNumber = 1;
     await postloadItem().then((value) => isPostingLoading.value = false);
     postingRefreshController.refreshCompleted();
   }
 
   void onPostingLoading() async {
-    pageNumber += 1;
+    // pageNumber += 1;
     //페이지 처리
     await postloadItem();
     postingRefreshController.loadComplete();
@@ -77,7 +77,7 @@ class HomeController extends GetxController
     enableQuestionPullup.value = true;
     questionResult(QuestionModel(questionitems: []));
 
-    pageNumber = 1;
+    // pageNumber = 1;
     await questionLoadItem().then((value) {
       if (selectgroup.value == '모든 질문') {
         isAllQuestionLoading.value = false;
@@ -89,7 +89,7 @@ class HomeController extends GetxController
   }
 
   void onQuestionLoading() async {
-    pageNumber += 1;
+    // pageNumber += 1;
     //페이지 처리
     await questionLoadItem();
     questionRefreshController.loadComplete();
@@ -99,13 +99,13 @@ class HomeController extends GetxController
     enableLoopPullup.value = true;
     loopResult(PostingModel(postingitems: <Post>[].obs));
 
-    pageNumber = 1;
+    // pageNumber = 1;
     await looploadItem().then((value) => isLoopLoading.value = false);
     loopRefreshController.refreshCompleted();
   }
 
   void onLoopLoading() async {
-    pageNumber += 1;
+    // pageNumber += 1;
     //페이지 처리
     await looploadItem();
     loopRefreshController.loadComplete();
@@ -113,75 +113,70 @@ class HomeController extends GetxController
 
   Future<void> questionLoadItem() async {
     if (selectgroup == "모든 질문") {
-      QuestionModel questionModel = await questionlist(pageNumber, "any");
-      QuestionModel nextMyQuestionModel =
-          await questionlist(pageNumber + 1, "any");
-      if (questionModel.questionitems.isEmpty) {
+      QuestionModel questionModel = await questionlist(
+          questionResult.value.questionitems.isEmpty
+              ? 0
+              : questionResult.value.questionitems.last.id,
+          "any");
+
+      if (questionModel.questionitems.isEmpty &&
+          questionResult.value.questionitems.isEmpty) {
         isAllQuestionEmpty.value = true;
-      } else {
-        if (questionModel.questionitems[0].id ==
-            nextMyQuestionModel.questionitems[0].id) {
-          enableQuestionPullup.value = false;
-
-          print("questionitems : ${questionModel.questionitems}");
-        }
+      } else if (questionModel.questionitems.isEmpty &&
+          questionResult.value.questionitems.isNotEmpty) {
+        enableQuestionPullup.value = false;
       }
-      questionResult.update((val) {
-        val!.questionitems.addAll(questionModel.questionitems);
-      });
+
+      questionResult.value.questionitems.addAll(questionModel.questionitems);
     } else {
-      QuestionModel questionModel = await questionlist(pageNumber, "my");
-      QuestionModel nextMyQuestionModel =
-          await questionlist(pageNumber + 1, "my");
-      if (questionModel.questionitems.isEmpty) {
-        isMyQuestionEmpty.value = true;
-      } else {
-        if (questionModel.questionitems[0].id ==
-            nextMyQuestionModel.questionitems[0].id) {
-          enableQuestionPullup.value = false;
+      QuestionModel questionModel = await questionlist(
+          questionResult.value.questionitems.isEmpty
+              ? 0
+              : questionResult.value.questionitems.last.id,
+          "my");
 
-          print("questionitems : ${questionModel.questionitems}");
-        }
+      if (questionModel.questionitems.isEmpty &&
+          questionResult.value.questionitems.isEmpty) {
+        isMyQuestionEmpty.value = true;
+      } else if (questionModel.questionitems.isEmpty &&
+          questionResult.value.questionitems.isNotEmpty) {
+        enableQuestionPullup.value = false;
       }
-      questionResult.update((val) {
-        val!.questionitems.addAll(questionModel.questionitems);
-      });
+
+      questionResult.value.questionitems.addAll(questionModel.questionitems);
     }
   }
 
   Future<void> postloadItem() async {
-    PostingModel postingModel = await mainpost(pageNumber);
-    PostingModel nextPostingModel = await mainpost(pageNumber + 1);
+    PostingModel postingModel = await mainpost(
+        postingResult.value.postingitems.isEmpty
+            ? 0
+            : postingResult.value.postingitems.last.id);
 
-    if (postingModel.postingitems.isEmpty) {
+    if (postingModel.postingitems.isEmpty &&
+        postingResult.value.postingitems.isEmpty) {
       isPostingEmpty.value = true;
-    } else {
-      if (postingModel.postingitems[0].id ==
-          nextPostingModel.postingitems[0].id) {
-        enablePostingPullup.value = false;
-
-        print("postingitems : ${postingModel.postingitems}");
-      }
+    } else if (postingModel.postingitems.isEmpty &&
+        postingResult.value.postingitems.isNotEmpty) {
+      enablePostingPullup.value = false;
     }
-    postingResult.update((val) {
-      val!.postingitems.addAll(postingModel.postingitems);
-    });
+    postingResult.value.postingitems.addAll(postingModel.postingitems);
   }
 
   Future<void> looploadItem() async {
-    PostingModel loopModel = await looppost(pageNumber);
-    PostingModel nextLoopModel = await looppost(pageNumber + 1);
-    if (loopModel.postingitems.isEmpty) {
-      isLoopEmpty.value = true;
-    } else {
-      if (loopModel.postingitems[0].id == nextLoopModel.postingitems[0].id) {
-        enableLoopPullup.value = false;
+    PostingModel loopModel = await looppost(
+        loopResult.value.postingitems.isEmpty
+            ? 0
+            : loopResult.value.postingitems.last.id);
 
-        print('loopitems : ${loopModel.postingitems}');
-      }
+    if (loopModel.postingitems.isEmpty &&
+        loopResult.value.postingitems.isEmpty) {
+      isLoopEmpty.value = true;
+    } else if (loopModel.postingitems.isEmpty &&
+        loopResult.value.postingitems.isNotEmpty) {
+      enableLoopPullup.value = false;
     }
-    loopResult.update((val) {
-      val!.postingitems.addAll(loopModel.postingitems);
-    });
+
+    loopResult.value.postingitems.addAll(loopModel.postingitems);
   }
 }
