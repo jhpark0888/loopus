@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
@@ -29,14 +30,24 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
       appBar: AppBarWidget(
         actions: [
           screenType == Screentype.add
-              ? TextButton(
-                  onPressed: () async {
-                    await addproject();
-                  },
-                  child: Text(
-                    '저장',
-                    style: kSubTitle2Style.copyWith(color: mainblue),
-                  ),
+              ? Obx(
+                  () => ProfileController.to.isProfileLoading.value
+                      ? Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 9,
+                        )
+                      : TextButton(
+                          onPressed: () async {
+                            ProfileController.to.isProfileLoading(true);
+                            await addproject().then((value) {
+                              ProfileController.to.isProfileLoading(false);
+                            });
+                          },
+                          child: Text(
+                            '저장',
+                            style: kSubTitle2Style.copyWith(color: mainblue),
+                          ),
+                        ),
                 )
               : Obx(
                   () => ProjectDetailController.to.isProjectLoading.value
@@ -95,11 +106,12 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
             GestureDetector(
               onTap: () async {
                 imageController.isImagePickerLoading.value = true;
-                projectAddController.projectthumbnail(await imageController
+                await imageController
                     .getcropImage(ImageType.thumnail)
                     .then((value) {
+                  projectAddController.projectthumbnail(value);
                   imageController.isImagePickerLoading.value = false;
-                }));
+                });
               },
               child: Container(
                 width: 141,

@@ -75,21 +75,16 @@ class ProfileController extends GetxController
   void loadProfile() async {
     String? userId = await const FlutterSecureStorage().read(key: "id");
 
-    await getProfile(userId).then((response) {
-      var responseBody = json.decode(utf8.decode(response.bodyBytes));
-
-      myUserInfo(User.fromJson(responseBody));
-
-      List projectmaplist = responseBody['project'];
-      print(projectmaplist);
-      myProjectList(projectmaplist
-          .map((project) => Project.fromJson(project))
+    await getProfile(userId).then((user) async {
+      myUserInfo(user);
+      isProfileLoading.value = false;
+    });
+    await getProjectlist(userId).then((projectlist) {
+      myProjectList(projectlist
           .map((project) => ProjectWidget(
                 project: project.obs,
               ))
           .toList());
-
-      isProfileLoading.value = false;
     });
   }
 

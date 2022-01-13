@@ -7,8 +7,11 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
+import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/widget/project_widget.dart';
 
 Future addproject() async {
   ProjectAddController projectAddController = Get.find();
@@ -49,8 +52,6 @@ Future addproject() async {
 
   http.StreamedResponse response = await request.send();
 
-  String responsebody = await response.stream.bytesToString();
-
   if (response.statusCode == 201) {
     Get.back();
     Get.back();
@@ -58,7 +59,15 @@ Future addproject() async {
     Get.back();
     Get.back();
     Get.back();
-    AppController.to.changePageIndex(4);
+    String responsebody = await response.stream.bytesToString();
+    Map<String, dynamic> responsemap = json.decode(responsebody);
+    Project project = Project.fromJson(responsemap);
+    ProjectDetailController.to.isProjectLoading(true);
+    Get.to(() => ProjectScreen());
+    ProfileController.to.myProjectList
+        .insert(0, ProjectWidget(project: project.obs));
+    ProjectDetailController.to.project(project);
+    ProjectDetailController.to.isProjectLoading(false);
   }
 }
 

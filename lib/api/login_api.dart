@@ -44,24 +44,24 @@ Future<void> loginRequest() async {
   }
 }
 
-Future<void> postconnect() async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
+// Future<void> postconnect() async {
+//   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  Uri uri = Uri.parse('http://3.35.253.151:8000/search_api/connect');
+//   Uri uri = Uri.parse('http://3.35.253.151:8000/search_api/connect');
 
-  http.Response response = await http.post(
-    uri,
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-      "Authorization": "Token $token"
-    },
-  );
+//   http.Response response = await http.post(
+//     uri,
+//     headers: <String, String>{
+//       'Content-Type': 'application/json',
+//       "Authorization": "Token $token"
+//     },
+//   );
 
-  if (response.statusCode == 200) {
-    print('postconnect :연결 성공');
-  } else if (response.statusCode == 401) {
-    print('postconnect :연결 실패');
-  } else {
-    print('postconnect :연결 실패');
-  }
-}
+//   if (response.statusCode == 200) {
+//     print('postconnect :연결 성공');
+//   } else if (response.statusCode == 401) {
+//     print('postconnect :연결 실패');
+//   } else {
+//     print('postconnect :연결 실패');
+//   }
+// }

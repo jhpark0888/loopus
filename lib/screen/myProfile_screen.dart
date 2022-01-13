@@ -561,9 +561,9 @@ class MyProfileScreen extends StatelessWidget {
     File? image = await imageController.getcropImage(ImageType.profile);
     print('image : $image');
     if (image != null) {
-      User? user =
-          await updateProfile(profileController.myUserInfo.value, image, null)
-              .then((user) {
+      User? user = await updateProfile(profileController.myUserInfo.value,
+              image, null, ProfileUpdateType.image)
+          .then((user) {
         imageController.isImagePickerLoading.value = false;
         if (user != null) {
           profileController.myUserInfo(user);

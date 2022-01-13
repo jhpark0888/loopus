@@ -54,9 +54,6 @@ class ProjectScreen extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                print(projectdetailController.project.value.looper
-                    .map((user) => user.realName)
-                    .toList()[0]);
                 modalController.showModalIOS(
                   context,
                   func1: () {

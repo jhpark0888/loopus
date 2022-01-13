@@ -132,13 +132,13 @@ class _MyAppSpace extends StatelessWidget {
                               onTap: () async {
                                 imageController.isImagePickerLoading.value =
                                     true;
-                                postingAddController.thumbnail(
-                                    await imageController
-                                        .getcropImage(ImageType.thumnail)
-                                        .then((value) {
+                                imageController
+                                    .getcropImage(ImageType.thumnail)
+                                    .then((value) {
+                                  postingAddController.thumbnail(value);
                                   imageController.isImagePickerLoading.value =
                                       false;
-                                }));
+                                });
                               },
                               text: '대표 사진 변경',
                             )),
@@ -173,10 +173,10 @@ class _MyAppSpace extends StatelessWidget {
               fit: BoxFit.cover,
             );
           } else {
-            return CachedNetworkImage(
-                fit: BoxFit.cover,
-                imageUrl:
-                    'https://cdn.pixabay.com/photo/2021/12/20/15/01/christmas-tree-6883263_1280.jpg');
+            return Image.asset(
+              'assets/illustrations/default_image.png',
+              fit: BoxFit.cover,
+            );
           }
         }),
       ),
