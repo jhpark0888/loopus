@@ -29,7 +29,6 @@ class EditorController extends GetxController {
   @override
   void onInit() {
     insert(index: 0);
-    // TODO: implement onInit
     super.onInit();
   }
 

@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/constant.dart';
-import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/screen/login_screen.dart';
-import 'package:loopus/screen/signup_campus_info_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import 'package:loopus/constant.dart';
+
+import 'package:loopus/controller/modal_controller.dart';
+
+import 'package:loopus/screen/login_screen.dart';
+
+//TODO : 일러스트 다시 만들까...
+
 class StartScreen extends StatelessWidget {
-  PageController pageController = PageController(viewportFraction: 1);
-  ModalController _modalController = Get.put(ModalController());
-  List text_start = [
-    "당신의 대학 생활, 루프어스",
-    "본인이 했던 활동들을 남겨보세요",
-    "다른 학생들과 활동을 공유해보세요",
-    "궁금한 점을 질문해보세요",
-    "나에게 맞는 공고를 찾아보세요"
-  ];
+  final PageController pageController = PageController(viewportFraction: 1);
+  final ModalController _modalController = Get.put(ModalController());
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +35,16 @@ class StartScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                            height: 200,
-                            width: 250,
-                            child: Image.asset(
-                                "assets/illustrations/tutorial_$index.png")),
+                          height: 200,
+                          width: 250,
+                          child: Image.asset(
+                              "assets/illustrations/tutorial_$index.png"),
+                        ),
                         SizedBox(
                           height: index != 0 ? 24 : 0,
                         ),
                         Text(
-                          text_start[index],
+                          kOnboadingText[index],
                           style: kSubTitle1Style,
                         ),
                       ],
@@ -81,17 +79,15 @@ class StartScreen extends StatelessWidget {
                         height: 24,
                       ),
                       InkWell(
-                        onTap: () {
-                          _modalController.showContentModal(context);
-                        },
+                        onTap: () => _modalController.showContentModal(context),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 28,
                             vertical: 12,
                           ),
                           decoration: BoxDecoration(
-                              color: mainblue,
-                              borderRadius: BorderRadius.circular(4)),
+                            color: mainblue,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
                           child: Text(
                             "시작하기",
                             textAlign: TextAlign.center,
@@ -105,42 +101,33 @@ class StartScreen extends StatelessWidget {
                         height: 12,
                       ),
                       InkWell(
-                        onTap: () => Get.to(() => LogInScreen()),
+                        onTap: () => Get.to(
+                          () => LogInScreen(),
+                        ),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 28,
                             vertical: 12,
                           ),
                           decoration: BoxDecoration(
-                              color: const Color(0xffe7e7e7),
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Text(
+                            color: const Color(0xffe7e7e7),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
                             "이미 계정이 있어요",
                             textAlign: TextAlign.center,
-                            style: kButtonStyle.copyWith(color: mainblack),
+                            style: kButtonStyle,
                           ),
                         ),
                       ),
                       const SizedBox(
-                        height: 12,
+                        height: 8,
                       ),
                       TextButton(
                         onPressed: () {},
                         child: Text(
-                          "기업회원 / 교직원 ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            shadows: [
-                              Shadow(
-                                  color: mainblack.withOpacity(0.6),
-                                  offset: const Offset(0, -6))
-                            ],
-                            color: Colors.transparent,
-                            decoration: TextDecoration.underline,
-                            decorationColor: mainblack.withOpacity(0.4),
-                            decorationThickness: 1.6,
-                            decorationStyle: TextDecorationStyle.solid,
+                          "기업회원 또는 교직원입니다",
+                          style: kButtonStyle.copyWith(
+                            color: mainblack.withOpacity(0.6),
                           ),
                         ),
                       ),

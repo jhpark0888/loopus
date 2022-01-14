@@ -64,7 +64,7 @@ class PostingScreen extends StatelessWidget {
                         modalController.showButtonDialog(
                             title:
                                 '정말 <${_postingDetailController.item?.title}> 포스팅을 삭제하시겠어요?',
-                            content: '',
+                            content: '삭제한 포스팅은 복구할 수 없어요',
                             yesfunction: () => Get.back(),
                             nofunction: () async {
                               await deleteposting(

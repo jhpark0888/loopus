@@ -10,6 +10,8 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
+import '../check_form_validate.dart';
+
 class ProjectAddTitleScreen extends StatelessWidget {
   ProjectAddTitleScreen({
     Key? key,
@@ -152,21 +154,8 @@ class ProjectAddTitleScreen extends StatelessWidget {
   }
 }
 
-class CheckValidate {
-  String? validateName(String value) {
-    if (value.isEmpty) {
-      return '제목을 입력해주세요.';
-    } else {
-      Pattern pattern = r'[\-\_\/\\\[\]\(\)\|\{\}*$@$!%*#?~^<>,.&+=]';
-      RegExp regExp = new RegExp(pattern.toString());
-      if (regExp.hasMatch(value)) {
-        return '특수문자를 제거해주세요.';
-      } else {
-        return null;
-      }
-    }
-  }
-}
+
+
 
   // String? validatePassword(String value) {
   //   if (value.isEmpty) {

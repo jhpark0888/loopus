@@ -1,23 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:underline_indicator/underline_indicator.dart';
+
 import 'package:loopus/constant.dart';
+
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
+
 import 'package:loopus/screen/home_posting_screen.dart';
 import 'package:loopus/screen/loop_screen.dart';
 import 'package:loopus/screen/message_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
-import 'package:loopus/screen/posting_detail_screen.dart';
 import 'package:loopus/screen/question_answer_screen.dart';
-import 'package:loopus/screen/search_typing_screen.dart';
-import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/home_posting_widget.dart';
-import 'package:underline_indicator/underline_indicator.dart';
 
 class HomeScreen extends StatelessWidget {
   final HomeController homecontroller = Get.put(HomeController());
@@ -31,7 +29,7 @@ class HomeScreen extends StatelessWidget {
       initialIndex: homecontroller.hometabcontroller.index,
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
+          elevation: 0,
           title: GestureDetector(
             onTap: () => CustomScrollController.to.scrollToTop(),
             child: Image.asset(
@@ -42,9 +40,7 @@ class HomeScreen extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              onPressed: () => Get.to(() => NotificationScreen()),
+              onPressed: () => Get.to(() => const NotificationScreen()),
               icon: SvgPicture.asset(
                 "assets/icons/Bell_Inactive.svg",
                 width: 28,
@@ -52,8 +48,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             IconButton(
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
               onPressed: () => Get.to(MessageScreen()),
               icon: SvgPicture.asset(
                 "assets/icons/Chat.svg",

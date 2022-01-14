@@ -4,16 +4,6 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
-/// Default [FirebaseOptions] for use with your Firebase apps.
-///
-/// Example:
-/// ```dart
-/// import 'firebase_options.dart';
-/// // ...
-/// await Firebase.initializeApp(
-///   options: DefaultFirebaseOptions.currentPlatform,
-/// );
-/// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -58,7 +48,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '840100932483',
     projectId: 'loopus-bb12f',
     storageBucket: 'loopus-bb12f.appspot.com',
-    iosClientId: '840100932483-gfu3gepjb9fusvls2ce3r7kr0p6jujcl.apps.googleusercontent.com',
+    iosClientId:
+        '840100932483-gfu3gepjb9fusvls2ce3r7kr0p6jujcl.apps.googleusercontent.com',
     iosBundleId: 'com.example.loopusfrontendDesign',
   );
 
@@ -68,7 +59,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '840100932483',
     projectId: 'loopus-bb12f',
     storageBucket: 'loopus-bb12f.appspot.com',
-    iosClientId: '840100932483-gfu3gepjb9fusvls2ce3r7kr0p6jujcl.apps.googleusercontent.com',
+    iosClientId:
+        '840100932483-gfu3gepjb9fusvls2ce3r7kr0p6jujcl.apps.googleusercontent.com',
     iosBundleId: 'com.example.loopusfrontendDesign',
   );
 }
