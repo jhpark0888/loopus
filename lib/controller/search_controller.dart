@@ -15,11 +15,12 @@ import 'package:loopus/widget/search_question_widget.dart';
 import 'package:loopus/widget/search_tag_project_widget.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
 
-enum SearchType { post, profile, question, tag_project, tag_question }
+enum SearchType { post, profile, question, tagProject, tagQuestion }
 
 class SearchController extends GetxController with GetTickerProviderStateMixin {
   static SearchController get to => Get.find();
   TextEditingController searchtextcontroller = TextEditingController();
+
   RxList<SearchPostingWidget> searchpostinglist = <SearchPostingWidget>[].obs;
   RxList<SearchProfileWidget> searchprofilelist = <SearchProfileWidget>[].obs;
   RxList<SearchQuestionWidget> searchquestionlist =
@@ -52,6 +53,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
 
   final FocusNode focusNode = FocusNode();
 
+  @override
   void onInit() {
     _focusListen();
     tabController = TabController(
@@ -112,8 +114,14 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     });
   }
 
+  void clearSearchedList() {
+    searchpostinglist.clear();
+    searchprofilelist.clear();
+    searchquestionlist.clear();
+    searchtaglist.clear();
+  }
+
   Future<void> tagsearch() async {
-    // Uri uri = Uri.parse('http://52.79.75.189:8000/user_api/login/');
     Uri uri = Uri.parse(
         'http://3.35.253.151:8000/tag_api/search?query=${searchtextcontroller.text}');
 
@@ -157,15 +165,6 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
             isSearch: 1,
           );
         }).toList());
-        // if (searchtextcontroller.text != '') {
-        //   searchtaglist.insert(
-        //       0,
-        //       SearchTagWidget(
-        //         id: -1,
-        //         tag: "아직 검색어와 일치하는 태그가 없어요",
-        //         isSearch: 1,
-        //       ));
-        // }
       }
       if (tagmaplist.isEmpty) {
         isnosearchtag(true);
@@ -224,9 +223,9 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
         isnosearchprofile(true);
       } else if (searchType == SearchType.question) {
         isnosearchquestion(true);
-      } else if (searchType == SearchType.tag_project) {
+      } else if (searchType == SearchType.tagProject) {
         return;
-      } else if (searchType == SearchType.tag_question) {
+      } else if (searchType == SearchType.tagQuestion) {
         return;
       }
     } else {
@@ -282,7 +281,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
         //     istag: 0,
         //   ));
         // });
-      } else if (searchType == SearchType.tag_project) {
+      } else if (searchType == SearchType.tagProject) {
         searchtagprojectlist(searchlist
             .map((json) => Project.fromJson(json))
             .toList()
@@ -306,7 +305,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
         //     start_date: DateTime.parse(element["start_date"]),
         //   ));
         // });
-      } else if (searchType == SearchType.tag_question) {
+      } else if (searchType == SearchType.tagQuestion) {
         searchtagquestionlist(searchlist
             .map((json) => QuestionItem.fromJson(json))
             .toList()

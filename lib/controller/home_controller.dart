@@ -112,7 +112,7 @@ class HomeController extends GetxController
   }
 
   Future<void> questionLoadItem() async {
-    if (selectgroup == "모든 질문") {
+    if (selectgroup.value == "모든 질문") {
       QuestionModel questionModel = await questionlist(
           questionResult.value.questionitems.isEmpty
               ? 0

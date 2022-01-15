@@ -7,7 +7,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
-import 'package:loopus/screen/loop_screen.dart';
+import 'package:loopus/screen/home_loop_screen.dart';
 import 'package:loopus/screen/question_add_content_screen.dart';
 import 'package:loopus/screen/question_screen.dart';
 import 'package:loopus/widget/home_posting_widget.dart';
@@ -17,8 +17,8 @@ import 'package:loopus/widget/custom_refresher.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomePostingScreen extends StatelessWidget {
-  HomeController homeController = Get.find();
-  HoverController _hoverController = Get.put(HoverController());
+  final HomeController homeController = Get.find();
+  // final HoverController _hoverController = Get.put(HoverController());
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +80,11 @@ class HomePostingScreen extends StatelessWidget {
             ),
             completeIcon: Column(
               children: [
-                Icon(
+                const Icon(
                   Icons.check_rounded,
                   color: mainblue,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
                 Text(
@@ -103,7 +103,7 @@ class HomePostingScreen extends StatelessWidget {
                   'assets/icons/loading.png',
                   scale: 12,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Text(

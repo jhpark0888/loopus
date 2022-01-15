@@ -48,7 +48,7 @@ class SignupEmailcheckScreen extends StatelessWidget {
               style: kSubTitle1Style,
             ),
             const SizedBox(
-              height: 32,
+              height: 24,
             ),
             Obx(
               () => TextFormField(
@@ -58,8 +58,8 @@ class SignupEmailcheckScreen extends StatelessWidget {
                 ),
                 controller: signupController.emailidcontroller,
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(bottom: 12),
-                  isDense: true,
+                  contentPadding: const EdgeInsets.only(bottom: 0),
+                  isDense: false,
                   enabledBorder: UnderlineInputBorder(
                     borderRadius: BorderRadius.circular(2),
                     borderSide: const BorderSide(color: mainblack, width: 1.2),
@@ -68,16 +68,22 @@ class SignupEmailcheckScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(2),
                     borderSide: const BorderSide(color: mainblack, width: 1.2),
                   ),
-                  suffix: signupController.emailcheck.value != false
-                      ? Text(
-                          '인증 대기 중...',
-                          style: kButtonStyle.copyWith(
-                              color: mainblack.withOpacity(0.38)),
+                  suffixIconConstraints:
+                      BoxConstraints(minHeight: 24, minWidth: 24),
+                  suffixIcon: signupController.emailcheck.value != false
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 0, left: 0),
+                          child: SvgPicture.asset(
+                            'assets/icons/Check_Active_blue.svg',
+                          ),
                         )
-                      //TODO: 아이콘 align 수정
-                      : SvgPicture.asset(
-                          'assets/icons/Check_Active_blue.svg',
-                          width: 20,
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 6, bottom: 0),
+                          child: Text(
+                            '인증 대기 중...',
+                            style: kButtonStyle.copyWith(
+                                color: mainblack.withOpacity(0.38)),
+                          ),
                         ),
                 ),
               ),

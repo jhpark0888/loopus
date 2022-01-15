@@ -16,7 +16,7 @@ import 'package:loopus/widget/question_posting_widget.dart';
 import 'package:loopus/widget/custom_refresher.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class LoopScreen extends StatelessWidget {
+class HomeLoopScreen extends StatelessWidget {
   HomeController homeController = Get.find();
 
   @override

@@ -17,8 +17,8 @@ class SelectedTagWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(right: 8),
-      padding: EdgeInsets.fromLTRB(14, 4, 4, 4),
+      margin: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsets.fromLTRB(14, 4, 4, 4),
       decoration: BoxDecoration(
         color: mainlightgrey,
         borderRadius: BorderRadius.circular(40),
