@@ -180,13 +180,13 @@ class HomePostingWidget extends StatelessWidget {
                                     children: [
                                       InkWell(
                                         onTap: () async {
+                                          // AppController.to.ismyprofile.value =false;
                                           profileController
-                                              .loadotherProfile(item.userId);
+                                              .isProfileLoading(true);
 
-                                          AppController.to.ismyprofile.value =
-                                              false;
-
-                                          Get.to(() => OtherProfileScreen());
+                                          Get.to(() => OtherProfileScreen(
+                                                userid: item.userid,
+                                              ));
                                         },
                                         child: Row(
                                           children: [
@@ -242,13 +242,10 @@ class HomePostingWidget extends StatelessWidget {
                                         InkWell(
                                           onTap: () {
                                             if (item.isLiked.value == 0) {
-                                              item.isLiked.value = 1;
-                                              item.likeCount.value += 1;
+                                              homeController.tapLike(item.id);
                                             } else {
-                                              item.isLiked.value = 0;
-                                              item.likeCount.value -= 1;
+                                              homeController.tapunLike(item.id);
                                             }
-                                            likepost(item.id);
                                           },
                                           child: item.isLiked.value == 0
                                               ? SvgPicture.asset(
@@ -270,17 +267,18 @@ class HomePostingWidget extends StatelessWidget {
                                         InkWell(
                                           onTap: () async {
                                             if (item.isMarked.value == 0) {
-                                              item.isMarked.value = 1;
+                                              homeController
+                                                  .tapBookmark(item.id);
                                               ModalController.to
                                                   .showCustomDialog(
                                                       '북마크 탭에 저장했어요', 1000);
                                             } else {
-                                              item.isMarked.value = 0;
+                                              homeController
+                                                  .tapunBookmark(item.id);
                                               ModalController.to
                                                   .showCustomDialog(
                                                       '북마크 탭에서 삭제했어요', 1000);
                                             }
-                                            await bookmarkpost(item.id);
                                           },
                                           child: (item.isMarked.value == 0)
                                               ? SvgPicture.asset(

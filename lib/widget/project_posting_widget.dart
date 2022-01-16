@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
@@ -119,11 +120,11 @@ class ProjectPostingWidget extends StatelessWidget {
                         Obx(() => InkWell(
                             onTap: () {
                               if (item.isLiked.value == 0) {
-                                likepost(item.id);
+                                HomeController.to.tapLike(item.id);
                                 item.likeCount += 1;
                                 item.isLiked.value = 1;
                               } else {
-                                likepost(item.id);
+                                HomeController.to.tapunLike(item.id);
                                 item.likeCount -= 1;
                                 item.isLiked.value = 0;
                               }
@@ -148,10 +149,10 @@ class ProjectPostingWidget extends StatelessWidget {
                         Obx(() => InkWell(
                             onTap: () {
                               if (item.isMarked.value == 0) {
-                                bookmarkpost(item.id);
+                                HomeController.to.tapBookmark(item.id);
                                 item.isMarked(1);
                               } else {
-                                bookmarkpost(item.id);
+                                HomeController.to.tapunBookmark(item.id);
                                 item.isMarked(0);
                               }
                             },

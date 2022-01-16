@@ -29,10 +29,12 @@ class SearchProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () async {
-          profileController.loadotherProfile(id);
+          profileController.isProfileLoading(true);
 
-          AppController.to.ismyprofile.value = false;
-          Get.to(() => OtherProfileScreen());
+          // AppController.to.ismyprofile.value = false;
+          Get.to(() => OtherProfileScreen(
+                userid: id,
+              ));
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(

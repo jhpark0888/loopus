@@ -459,7 +459,7 @@ class MyProfileScreen extends StatelessWidget {
                                               false)
                                           ? Column(
                                               children: profileController
-                                                  .myProjectList.value,
+                                                  .myProjectList,
                                             )
                                           : Padding(
                                               padding: EdgeInsets.zero,

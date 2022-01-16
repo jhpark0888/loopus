@@ -108,11 +108,13 @@ class QuestionPostingWidget extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () async {
-                                  profileController.loadotherProfile(item.user);
+                                  // AppController.to.ismyprofile.value = false;
+                                  // print(AppController.to.ismyprofile.value);
+                                  profileController.isProfileLoading(true);
 
-                                  AppController.to.ismyprofile.value = false;
-                                  print(AppController.to.ismyprofile.value);
-                                  Get.to(() => OtherProfileScreen());
+                                  Get.to(() => OtherProfileScreen(
+                                        userid: item.user,
+                                      ));
                                 },
                                 child: Row(
                                   children: [

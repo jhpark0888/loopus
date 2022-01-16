@@ -4,7 +4,7 @@ import 'package:loopus/model/project_model.dart';
 class Post {
   Post({
     required this.id,
-    required this.userId,
+    required this.userid,
     required this.thumbnail,
     required this.title,
     required this.date,
@@ -22,7 +22,7 @@ class Post {
   });
 
   int id;
-  int userId;
+  int userid;
   var thumbnail;
   int? project_id;
   String title;
@@ -41,7 +41,7 @@ class Post {
   factory Post.fromJson(Map<String, dynamic> json) => Post(
         project_id: json["project_id"],
         id: json["id"],
-        userId: json["user_id"],
+        userid: json["user_id"],
         thumbnail: json["thumbnail"] == null ? null : json["thumbnail"],
         title: json["title"],
         date: DateTime.parse(json["date"]),
@@ -68,7 +68,7 @@ class Post {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "user_id": userId,
+        "user_id": userid,
         "thumbnail": thumbnail == null ? null : thumbnail,
         "title": title,
         "date": date.toIso8601String(),

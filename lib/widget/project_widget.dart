@@ -16,6 +16,7 @@ import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:intl/intl.dart';
 
@@ -41,6 +42,22 @@ class ProjectWidget extends StatelessWidget {
           projectDetailController.isProjectLoading.value = true;
           getproject(project.value.id).then((value) {
             projectDetailController.project(value);
+            projectDetailController.postinglist(
+                List.from(projectDetailController.project.value.post
+                    .map((post) => ProjectPostingWidget(
+                          item: post,
+                          realName:
+                              projectDetailController.project.value.realname ??
+                                  '',
+                          department: projectDetailController
+                                  .project.value.department ??
+                              '',
+                          profileImage: projectDetailController
+                                  .project.value.profileimage ??
+                              '',
+                        ))
+                    .toList()
+                    .reversed));
             projectDetailController.isProjectLoading.value = false;
           });
           exproject = await Get.to(() => ProjectScreen());

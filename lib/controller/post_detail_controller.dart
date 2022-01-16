@@ -8,6 +8,7 @@ import 'package:loopus/model/post_model.dart';
 
 class PostingDetailController extends GetxController {
   RxBool isPostingContentLoading = true.obs;
+  RxBool isPostDeleteLoading = false.obs;
   Post? item;
 
   // Future<void> loadPostingContent() async {

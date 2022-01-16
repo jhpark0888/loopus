@@ -117,11 +117,13 @@ class SearchPostingWidget extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () async {
-                          profileController.loadotherProfile(user_id);
+                          // AppController.to.ismyprofile.value = false;
+                          // print(AppController.to.ismyprofile.value);
+                          profileController.isProfileLoading(true);
 
-                          AppController.to.ismyprofile.value = false;
-                          print(AppController.to.ismyprofile.value);
-                          Get.to(() => OtherProfileScreen());
+                          Get.to(() => OtherProfileScreen(
+                                userid: user_id,
+                              ));
                         },
                         child: Row(
                           children: [
@@ -167,13 +169,14 @@ class SearchPostingWidget extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             if (is_liked.value == 0) {
+                              HomeController.to.tapLike(id);
                               is_liked.value = 1;
                               like_count.value += 1;
                             } else {
+                              HomeController.to.tapunLike(id);
                               is_liked.value = 0;
                               like_count.value -= 1;
                             }
-                            likepost(id);
                           },
                           child: is_liked.value == 0
                               ? SvgPicture.asset(
@@ -194,11 +197,12 @@ class SearchPostingWidget extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             if (is_marked.value == 0) {
+                              HomeController.to.tapBookmark(id);
                               is_marked.value = 1;
                             } else {
+                              HomeController.to.tapunBookmark(id);
                               is_marked.value = 0;
                             }
-                            bookmarkpost(id);
                           },
                           child: is_marked.value == 0
                               ? SvgPicture.asset(
