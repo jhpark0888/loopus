@@ -114,10 +114,19 @@ class MyProfileScreen extends StatelessWidget {
                                                                       'http'),
                                                           placeholder:
                                                               (context, url) =>
-                                                                  Image.asset(
-                                                            "assets/illustrations/default_profile.png",
-                                                            height: 92,
-                                                            width: 92,
+                                                                  CircleAvatar(
+                                                            backgroundColor:
+                                                                const Color(
+                                                                    0xffe7e7e7),
+                                                            child: Container(),
+                                                          ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              CircleAvatar(
+                                                            backgroundColor:
+                                                                const Color(
+                                                                    0xffe7e7e7),
+                                                            child: Container(),
                                                           ),
                                                           fit: BoxFit.cover,
                                                         )
@@ -147,7 +156,7 @@ class MyProfileScreen extends StatelessWidget {
                                                     isValue2Red: false,
                                                     isOne: false),
                                             child: Container(
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: mainWhite),
                                               child: SvgPicture.asset(
@@ -439,7 +448,7 @@ class MyProfileScreen extends StatelessWidget {
                                           },
                                           child: Text(
                                             '추가하기',
-                                            style: kButtonStyle.copyWith(
+                                            style: kSubTitle2Style.copyWith(
                                                 color: mainblue),
                                           ),
                                         ),

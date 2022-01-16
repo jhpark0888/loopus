@@ -52,9 +52,10 @@ class PersonTileWidget extends StatelessWidget {
                         width: 56,
                         imageUrl: user.profileImage!,
                         placeholder: (context, url) => CircleAvatar(
-                          child: Center(child: CircularProgressIndicator()),
+                          backgroundColor: Color(0xffe7e7e7),
+                          child: Container(),
                         ),
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       )),
             SizedBox(
               width: 12,

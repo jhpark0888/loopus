@@ -38,7 +38,7 @@ class LoopPeopleScreen extends StatelessWidget {
             () => ProfileController.to.isLoopPeopleLoading.value
                 ? Column(children: [
                     SizedBox(
-                      height: 30,
+                      height: 24,
                     ),
                     Center(
                       child: Image.asset(
@@ -47,10 +47,13 @@ class LoopPeopleScreen extends StatelessWidget {
                       ),
                     ),
                   ])
-                : Column(
-                    children: looplist
-                        .map((friend) => PersonTileWidget(user: friend))
-                        .toList()),
+                : Padding(
+                    padding: const EdgeInsets.only(top: 16, bottom: 40),
+                    child: Column(
+                        children: looplist
+                            .map((friend) => PersonTileWidget(user: friend))
+                            .toList()),
+                  ),
           ),
         )
         // FutureBuilder<List<User>>(
