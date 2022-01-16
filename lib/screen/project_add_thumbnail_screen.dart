@@ -31,16 +31,17 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
         actions: [
           screenType == Screentype.add
               ? Obx(
-                  () => ProfileController.to.isProfileLoading.value
+                  () => ProjectDetailController.to.isProjectLoading.value
                       ? Image.asset(
                           'assets/icons/loading.gif',
                           scale: 9,
                         )
                       : TextButton(
                           onPressed: () async {
-                            ProfileController.to.isProfileLoading(true);
+                            ProjectDetailController.to.isProjectLoading(true);
                             await addproject().then((value) {
-                              ProfileController.to.isProfileLoading(false);
+                              ProjectDetailController.to
+                                  .isProjectLoading(false);
                             });
                           },
                           child: Text(

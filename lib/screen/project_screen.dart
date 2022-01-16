@@ -471,34 +471,28 @@ class ProjectScreen extends StatelessWidget {
                             Obx(
                               () => Column(
                                   children: projectdetailController
-                                              .project.value.post !=
-                                          null
-                                      ?  List.from(projectdetailController
-                                          .project.value.post
-                                          .map((post) => ProjectPostingWidget(
-                                                item: post,
-                                                realName:
-                                                    projectdetailController
-                                                            .project
-                                                            .value
-                                                            .realname ??
-                                                        '',
-                                                department:
-                                                    projectdetailController
-                                                            .project
-                                                            .value
-                                                            .department ??
-                                                        '',
-                                                profileImage:
-                                                    projectdetailController
-                                                            .project
-                                                            .value
-                                                            .profileimage ??
-                                                        '',
-                                              ))
-                                          .toList()
-                                          .reversed)
-                                      : [Container()]),
+                                          .project.value.post.isNotEmpty
+                                      ? projectdetailController.postinglist
+                                      : [
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            '첫 포스팅을 작성해주세요',
+                                            style: kSubTitle2Style.copyWith(
+                                              color: mainblack,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            '포스팅을 통해 경험한 순간들을 남겨 보세요',
+                                            style: kButtonStyle.copyWith(
+                                              color: mainblue,
+                                            ),
+                                          ),
+                                        ]),
                             )
                           ],
                         ),

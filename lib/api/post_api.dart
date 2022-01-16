@@ -16,6 +16,7 @@ import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 Future<void> addposting(int projectId) async {
@@ -89,9 +90,28 @@ Future<void> addposting(int projectId) async {
     if (kDebugMode) {
       print("status code : ${response.statusCode} 포스팅 업로드 완료");
     }
+    // String responsebody = await response.stream.bytesToString();
+    // String responsemap = json.decode(responsebody);
+    // print(responsemap = ok);
 
-    await getproject(projectId)
-        .then((value) => ProjectDetailController.to.project(value));
+    await getproject(projectId).then((value) {
+      ProjectDetailController.to.project(value);
+      ProjectDetailController.to
+          .postinglist(List.from(ProjectDetailController.to.project.value.post
+              .map((post) => ProjectPostingWidget(
+                    item: post,
+                    realName:
+                        ProjectDetailController.to.project.value.realname ?? '',
+                    department:
+                        ProjectDetailController.to.project.value.department ??
+                            '',
+                    profileImage:
+                        ProjectDetailController.to.project.value.profileimage ??
+                            '',
+                  ))
+              .toList()
+              .reversed));
+    });
     Get.back();
     Get.back();
     Get.back();
@@ -109,13 +129,13 @@ Future<void> addposting(int projectId) async {
   }
 }
 
-Future<Post> getposting(int postingId) async {
+Future<Post> getposting(int postingid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   String? userid = await FlutterSecureStorage().read(key: "id");
 
   // print(userid);
   final specificPostingLoadUri = Uri.parse(
-      "http://3.35.253.151:8000/post_api/specific_posting_load/$postingId");
+      "http://3.35.253.151:8000/post_api/specific_posting_load/$postingid");
 
   http.Response response = await http
       .get(specificPostingLoadUri, headers: {"Authorization": "Token $token"});
@@ -131,10 +151,10 @@ Future<Post> getposting(int postingId) async {
   }
 }
 
-Future<void> deleteposting(int postId) async {
+Future<void> deleteposting(int postid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse("http://3.35.253.151:8000/post_api/delete/$postId");
+  final uri = Uri.parse("http://3.35.253.151:8000/post_api/delete/$postid");
 
   http.Response response =
       await http.post(uri, headers: {"Authorization": "Token $token"});
@@ -142,10 +162,10 @@ Future<void> deleteposting(int postId) async {
   print(response.statusCode);
   if (response.statusCode == 200) {
     Get.back();
-    Get.back();
-    Get.back();
     ProjectDetailController.to.project.value.post
-        .removeWhere((post) => post.id == postId);
+        .removeWhere((post) => post.id == postid);
+    ProjectDetailController.to.postinglist
+        .removeWhere((post) => post.item.id == postid);
   } else {
     return Future.error(response.statusCode);
   }

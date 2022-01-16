@@ -140,9 +140,12 @@ class SearchTagProjectWidget extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () async {
-                          profileController.loadotherProfile(project.userid!);
-                          AppController.to.ismyprofile.value = false;
-                          Get.to(() => OtherProfileScreen());
+                          profileController.isProfileLoading(true);
+
+                          // AppController.to.ismyprofile.value = false;
+                          Get.to(() => OtherProfileScreen(
+                                userid: project.userid,
+                              ));
                         },
                         child: Row(
                           children: [

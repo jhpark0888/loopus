@@ -30,7 +30,8 @@ class HomeController extends GetxController
   RxBool enableLoopPullup = true.obs;
   RxString selectgroup = '모든 질문'.obs;
 
-  Rx<QuestionModel> questionResult = QuestionModel(questionitems: []).obs;
+  Rx<QuestionModel> questionResult =
+      QuestionModel(questionitems: <QuestionItem>[].obs).obs;
   Rx<PostingModel> postingResult = PostingModel(postingitems: <Post>[].obs).obs;
   Rx<PostingModel> loopResult = PostingModel(postingitems: <Post>[].obs).obs;
   RefreshController postingRefreshController =
@@ -75,7 +76,7 @@ class HomeController extends GetxController
 
   Future<void> onQuestionRefresh() async {
     enableQuestionPullup.value = true;
-    questionResult(QuestionModel(questionitems: []));
+    questionResult(QuestionModel(questionitems: <QuestionItem>[].obs));
 
     // pageNumber = 1;
     await questionLoadItem().then((value) {
@@ -178,5 +179,104 @@ class HomeController extends GetxController
     }
 
     loopResult.value.postingitems.addAll(loopModel.postingitems);
+  }
+
+  void tapBookmark(int postid) async {
+    if (HomeController.to.postingResult.value.postingitems.value
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      HomeController.to.postingResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .isMarked(1);
+    }
+    if (HomeController.to.loopResult.value.postingitems.value
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      HomeController.to.loopResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .isMarked(1);
+    }
+
+    await bookmarkpost(postid);
+  }
+
+  void tapunBookmark(int postid) async {
+    if (HomeController.to.postingResult.value.postingitems.value
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      HomeController.to.postingResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .isMarked(0);
+    }
+    if (HomeController.to.loopResult.value.postingitems.value
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      HomeController.to.loopResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .isMarked(0);
+    }
+
+    await bookmarkpost(postid);
+  }
+
+  void tapLike(int postid) {
+    if (HomeController.to.postingResult.value.postingitems.value
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      HomeController.to.postingResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .isLiked(1);
+      HomeController.to.postingResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .likeCount += 1;
+    }
+    if (HomeController.to.loopResult.value.postingitems.value
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      HomeController.to.loopResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .isLiked(1);
+      HomeController.to.loopResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .likeCount += 1;
+    }
+
+    likepost(postid);
+  }
+
+  void tapunLike(int postid) {
+    if (HomeController.to.postingResult.value.postingitems.value
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      HomeController.to.postingResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .isLiked(0);
+      HomeController.to.postingResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .likeCount -= 1;
+    }
+    if (HomeController.to.loopResult.value.postingitems.value
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      HomeController.to.loopResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .isLiked(0);
+      HomeController.to.loopResult.value.postingitems.value
+          .where((post) => post.id == postid)
+          .first
+          .likeCount -= 1;
+    }
+    likepost(postid);
   }
 }

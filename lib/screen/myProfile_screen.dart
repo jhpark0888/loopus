@@ -457,7 +457,7 @@ class MyProfileScreen extends StatelessWidget {
                                               false)
                                           ? Column(
                                               children: profileController
-                                                  .myProjectList.value,
+                                                  .myProjectList,
                                             )
                                           : Column(
                                               children: [

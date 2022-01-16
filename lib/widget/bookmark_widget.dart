@@ -104,10 +104,13 @@ class BookmarkWidget extends StatelessWidget {
                         children: [
                           InkWell(
                             onTap: () async {
-                              AppController.to.ismyprofile.value = false;
-                              await tapProfile();
+                              // AppController.to.ismyprofile.value = false;
+                              // await tapProfile();
+                              profileController.isProfileLoading(true);
 
-                              Get.to(() => OtherProfileScreen());
+                              Get.to(() => OtherProfileScreen(
+                                    userid: item.userid,
+                                  ));
                             },
                             child: Row(
                               children: [
@@ -194,9 +197,13 @@ class BookmarkWidget extends StatelessWidget {
   }
 
   void tapBookmark() async {
+    int bookmarkid =
+        bookmarkController.bookmarkResult.value.postingitems[index].id;
     if (item.isMarked.value == 0) {
       item.isMarked.value = 1;
+      await bookmarkpost(item.id);
     } else {
+      HomeController.to.tapunBookmark(bookmarkid);
       bookmarkController.bookmarkResult.value.postingitems.removeAt(index);
 
       ModalController.to.showCustomDialog("북마크 탭에서 삭제했어요.", 1000);
@@ -205,22 +212,24 @@ class BookmarkWidget extends StatelessWidget {
       }
       item.isMarked.value = 0;
     }
-    await bookmarkpost(item.id);
   }
 
   void tapLike() {
+    int bookmarkid =
+        bookmarkController.bookmarkResult.value.postingitems[index].id;
     if (item.isLiked.value == 0) {
+      HomeController.to.tapLike(bookmarkid);
       item.isLiked.value = 1;
       item.likeCount.value += 1;
     } else {
+      HomeController.to.tapunLike(bookmarkid);
       item.isLiked.value = 0;
       item.likeCount.value -= 1;
     }
-    likepost(item.id);
   }
 
   Future<void> tapProfile() async {
-    profileController.loadotherProfile(item.userId);
+    profileController.loadotherProfile(item.userid);
   }
 
   void tapPosting() {

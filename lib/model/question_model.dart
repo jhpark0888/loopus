@@ -60,12 +60,12 @@ class QuestionItem {
 }
 
 class QuestionModel {
-  List<QuestionItem> questionitems;
+  RxList<QuestionItem> questionitems;
   QuestionModel({required this.questionitems});
 
   factory QuestionModel.fromJson(List<dynamic> json) {
-    List<QuestionItem>? items = [];
-    items = json.map((e) => QuestionItem.fromJson(e)).toList();
+    RxList<QuestionItem>? items = <QuestionItem>[].obs;
+    items.value = json.map((e) => QuestionItem.fromJson(e)).toList();
     return QuestionModel(questionitems: items);
     // factory QuestionModel.fromJson(Map<dynamic> json) {
     //   List<Question>? items = [];

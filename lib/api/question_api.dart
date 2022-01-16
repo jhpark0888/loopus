@@ -34,18 +34,21 @@ Future<dynamic> questionlist(int lastindex, String type) async {
   await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
-
+  print(lastindex);
   final url = Uri.parse(
       "http://3.35.253.151:8000/question_api/question_list_load/$type?last=$lastindex");
   final response = await get(url, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
   var responseHeaders = response.headers;
-  var responseBody = utf8.decode(response.bodyBytes);
-  List<dynamic> list = jsonDecode(responseBody);
-  if (response.statusCode != 200) {
-    return Future.error(response.statusCode);
-  } else {
+  if (response.statusCode == 200) {
+    var responseBody = utf8.decode(response.bodyBytes);
+    print(responseBody);
+
+    List<dynamic> list = jsonDecode(responseBody);
+    // print(list);
     return QuestionModel.fromJson(list);
+  } else {
+    return Future.error(response.statusCode);
   }
 }
 

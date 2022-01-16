@@ -11,6 +11,7 @@ import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
 
 Future addproject() async {
@@ -62,12 +63,10 @@ Future addproject() async {
     String responsebody = await response.stream.bytesToString();
     Map<String, dynamic> responsemap = json.decode(responsebody);
     Project project = Project.fromJson(responsemap);
-    ProjectDetailController.to.isProjectLoading(true);
     Get.to(() => ProjectScreen());
     ProfileController.to.myProjectList
         .insert(0, ProjectWidget(project: project.obs));
     ProjectDetailController.to.project(project);
-    ProjectDetailController.to.isProjectLoading(false);
   }
 }
 
