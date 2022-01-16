@@ -46,18 +46,6 @@ class ProjectWidget extends StatelessWidget {
           exproject = await Get.to(() => ProjectScreen());
           if (exproject != null) {
             project(exproject);
-            // projectDetailController.project.value.projectName =
-            //     exproject!.projectName;
-            // projectDetailController.project.value.introduction =
-            //     exproject!.introduction;
-            // projectDetailController.project.value.startDate =
-            //     exproject!.startDate;
-            // projectDetailController.project.value.endDate = exproject!.endDate;
-            // projectDetailController.project.value.projectTag =
-            //     exproject!.projectTag;
-            // projectDetailController.project.value.looper = exproject!.looper;
-            // projectDetailController.project.value.thumbnail =
-            //     exproject!.thumbnail;
           }
         },
         child: Container(

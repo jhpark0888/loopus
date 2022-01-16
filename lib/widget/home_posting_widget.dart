@@ -53,16 +53,22 @@ class HomePostingWidget extends StatelessWidget {
           postingDetailController.item = value;
           postingDetailController.isPostingContentLoading.value = false;
         });
-        Get.to(() => PostingScreen(), arguments: {
-          'id': item.id,
-          'realName': item.realname,
-          'profileImage': item.profileimage,
-          'title': item.title,
-          'content': item.contents,
-          'postDate': item.date,
-          'department': item.department,
-          'thumbNail': item.thumbnail,
-        });
+        Get.to(
+          () => PostingScreen(),
+          arguments: {
+            'id': item.id,
+            'realName': item.realname,
+            'profileImage': item.profileimage,
+            'title': item.title,
+            'content': item.contents,
+            'postDate': item.date,
+            'department': item.department,
+            'thumbNail': item.thumbnail,
+          },
+          // transition: Transition.fade,
+          // duration: kAnimationDuration,
+          // curve: kAnimationCurve,
+        );
       },
       child: Column(
         children: [
@@ -115,7 +121,7 @@ class HomePostingWidget extends StatelessWidget {
                 Column(
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(8),
                         bottomRight: Radius.circular(8),
                       ),
@@ -129,9 +135,12 @@ class HomePostingWidget extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Text(
-                                "${item.title}",
-                                style: kHeaderH2Style,
+                              Material(
+                                type: MaterialType.transparency,
+                                child: Text(
+                                  "${item.title}",
+                                  style: kHeaderH2Style,
+                                ),
                               ),
                               SizedBox(
                                 height: 24,
@@ -144,7 +153,7 @@ class HomePostingWidget extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 24,
                               ),
                               Row(
@@ -167,7 +176,7 @@ class HomePostingWidget extends StatelessWidget {
                                         ]))
                                     .toList(),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               Row(
@@ -194,45 +203,46 @@ class HomePostingWidget extends StatelessWidget {
                                               height: 32,
                                               width: 32,
                                               child: ClipOval(
-                                                  child: item.profileimage ==
-                                                          null
-                                                      ? Image.asset(
-                                                          "assets/illustrations/default_profile.png")
-                                                      : CachedNetworkImage(
-                                                          height: 32,
-                                                          width: 32,
-                                                          imageUrl:
-                                                              "${item.profileimage}",
-                                                          placeholder:
-                                                              (context, url) =>
-                                                                  CircleAvatar(
-                                                            child: Center(
-                                                                child:
-                                                                    CircularProgressIndicator()),
-                                                          ),
-                                                          fit: BoxFit.fill,
-                                                        )),
+                                                child: item.profileimage == null
+                                                    ? Image.asset(
+                                                        "assets/illustrations/default_profile.png")
+                                                    : CachedNetworkImage(
+                                                        height: 32,
+                                                        width: 32,
+                                                        imageUrl:
+                                                            "${item.profileimage}",
+                                                        placeholder:
+                                                            (context, url) =>
+                                                                CircleAvatar(
+                                                          child: Center(
+                                                              child:
+                                                                  CircularProgressIndicator()),
+                                                        ),
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                              ),
                                             ),
                                             SizedBox(
                                               width: 8,
                                             ),
-                                            Text(
-                                              "${item.realname} · ",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: mainblack,
+                                            Material(
+                                              type: MaterialType.transparency,
+                                              child: Text(
+                                                "${item.realname} · ",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: mainblack,
+                                                ),
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      Text(
-                                        "${item.department}",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: mainblack,
-                                        ),
+                                      Material(
+                                        type: MaterialType.transparency,
+                                        child: Text("${item.department}",
+                                            style: kBody2Style),
                                       ),
                                     ],
                                   ),

@@ -50,7 +50,7 @@ class MyProfileScreen extends StatelessWidget {
                     appBar: AppBar(
                       elevation: 0,
                       centerTitle: false,
-                      title: Text(
+                      title: const Text(
                         '프로필',
                         style: kHeaderH1Style,
                       ),
@@ -158,7 +158,7 @@ class MyProfileScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 8,
                                   ),
                                   Obx(
@@ -168,7 +168,7 @@ class MyProfileScreen extends StatelessWidget {
                                       style: kSubTitle2Style,
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 4,
                                   ),
                                   Obx(
@@ -178,7 +178,7 @@ class MyProfileScreen extends StatelessWidget {
                                       style: kBody1Style,
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 12,
                                   ),
                                   Obx(
@@ -201,14 +201,14 @@ class MyProfileScreen extends StatelessWidget {
                                                                   .profileTag
                                                                   .length -
                                                               1
-                                                      ? SizedBox(
+                                                      ? const SizedBox(
                                                           width: 8,
                                                         )
                                                       : Container()
                                                 ]))
                                             .toList()),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 16,
                                   ),
                                   Row(
@@ -224,10 +224,9 @@ class MyProfileScreen extends StatelessWidget {
                                               borderRadius:
                                                   BorderRadius.circular(4),
                                             ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 8.0),
+                                            child: const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 8.0),
                                               child: Center(
                                                 child: Text(
                                                   '관심 태그 변경하기',
@@ -238,7 +237,7 @@ class MyProfileScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 8,
                                       ),
                                       Expanded(
@@ -250,8 +249,6 @@ class MyProfileScreen extends StatelessWidget {
                                               borderRadius:
                                                   BorderRadius.circular(4),
                                             ),
-                                            // color: Colors.grey[400],
-
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
@@ -269,7 +266,7 @@ class MyProfileScreen extends StatelessWidget {
                                       )
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 16,
                                   ),
                                 ],
@@ -279,7 +276,7 @@ class MyProfileScreen extends StatelessWidget {
                           SliverToBoxAdapter(
                             child: Container(
                               height: 8,
-                              color: Color(0xffF2F3F5),
+                              color: const Color(0xffF2F3F5),
                             ),
                           ),
                           SliverToBoxAdapter(
@@ -425,6 +422,7 @@ class MyProfileScreen extends StatelessWidget {
                           children: [
                             SingleChildScrollView(
                               child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Padding(
@@ -461,22 +459,19 @@ class MyProfileScreen extends StatelessWidget {
                                               children: profileController
                                                   .myProjectList.value,
                                             )
-                                          : Padding(
-                                              padding: EdgeInsets.zero,
-                                              child: Column(
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/icons/loading.gif',
-                                                    scale: 6,
-                                                  ),
-                                                  Text(
-                                                    '활동 받아오는 중...',
-                                                    style: TextStyle(
-                                                        fontSize: 10,
-                                                        color: mainblue),
-                                                  ),
-                                                ],
-                                              ),
+                                          : Column(
+                                              children: [
+                                                Image.asset(
+                                                  'assets/icons/loading.gif',
+                                                  scale: 6,
+                                                ),
+                                                const Text(
+                                                  '활동 받아오는 중...',
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      color: mainblue),
+                                                ),
+                                              ],
                                             ),
                                     ),
                                   ),
