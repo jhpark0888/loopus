@@ -2,9 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/custom_textfield.dart';
 
 class WithdrawalScreen extends StatelessWidget {
   const WithdrawalScreen({Key? key}) : super(key: key);
@@ -13,74 +16,63 @@ class WithdrawalScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        // actions: [
-        //   TextButton(
-        //     onPressed: () {
-        //       // Get.to(() => ActivityAddPeriodScreen());
-        //     },
-        //     child: Text(
-        //       '다음',
-        //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        //     ),
-        //   ),
-        // ],
+        bottomBorder: false,
         title: '회원탈퇴',
+        actions: [
+          TextButton(
+            onPressed: () {
+              ModalController.to.showButtonDialog(
+                  leftText: '취소',
+                  rightText: '탈퇴',
+                  title: '정말 탈퇴하시겠어요?',
+                  content: '회원님의 모든 정보와 데이터들이 삭제돼요',
+                  leftFunction: () {},
+                  rightFunction: () => Get.back());
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: Text(
+                '탈퇴하기',
+                style: kSubTitle2Style.copyWith(color: mainpink),
+              ),
+            ),
+          ),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Text(
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            32,
+            24,
+            32,
+            40,
+          ),
+          child: Column(
+            children: [
+              Text(
                 '탈퇴하시는 이유가 무엇인가요?',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: kSubTitle1Style,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
-              child: Text(
-                '적어주신 내용은 서비스 개선에 큰 도움이 됩니다!',
-                style: TextStyle(
-                  fontSize: 14,
-                ),
+              SizedBox(
+                height: 16,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
-              child: TextField(
-                maxLines: 6,
-                cursorColor: Colors.black,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                    borderSide: BorderSide(color: Colors.black, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                    borderSide: BorderSide(color: Colors.black, width: 2),
-                  ),
-                ),
+              Text(
+                '적어주신 내용들을 적극적으로 개선하겠습니다',
+                style: kBody1Style,
               ),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: Container(
-                width: 347,
-                height: 40,
-                child: Center(
-                  child: Text(
-                    '회원 탈퇴하기',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(8),
-                ),
+              SizedBox(
+                height: 32,
               ),
-            )
-          ],
+              CustomTextField(
+                textController: null,
+                hintText: '탈퇴 사유...',
+                validator: null,
+                obscureText: false,
+                maxLines: 5,
+              ),
+            ],
+          ),
         ),
       ),
     );

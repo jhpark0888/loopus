@@ -55,6 +55,7 @@ class LogInScreen extends StatelessWidget {
                             obscureText: false,
                             validator: (value) =>
                                 (CheckValidate().validateEmail(value!)),
+                            maxLines: 1,
                           ),
                           SizedBox(
                             height: 32,
@@ -72,6 +73,7 @@ class LogInScreen extends StatelessWidget {
                             obscureText: true,
                             validator: (value) =>
                                 CheckValidate().validatePassword(value!),
+                            maxLines: 1,
                           ),
                           const SizedBox(
                             height: 32,

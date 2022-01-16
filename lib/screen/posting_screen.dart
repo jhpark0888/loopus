@@ -29,7 +29,7 @@ class PostingScreen extends StatelessWidget {
     dynamic profileImage = Get.arguments['profileImage'];
     DateTime postDate = Get.arguments['postDate'];
     String department = Get.arguments['department'];
-    dynamic thumbNail = Get.arguments['thumbNail'];
+    dynamic thumbNail = Get.arguments['thumbnail'];
     return Obx(
       () => Stack(
         children: [
@@ -71,8 +71,10 @@ class PostingScreen extends StatelessWidget {
                                   title:
                                       '정말 <${_postingDetailController.item?.title}> 포스팅을 삭제하시겠어요?',
                                   content: '',
-                                  yesfunction: () => Get.back(),
-                                  nofunction: () async {
+                                  leftText: '취소',
+                                  rightText: '삭제',
+                                  leftFunction: () => Get.back(),
+                                  rightFunction: () async {
                                     _postingDetailController
                                         .isPostDeleteLoading(true);
                                     Get.back();
@@ -104,7 +106,7 @@ class PostingScreen extends StatelessWidget {
                       profileImage: profileImage,
                       postDate: postDate,
                       department: department,
-                      thumbNail: thumbNail,
+                      thumbnail: thumbNail,
                     ),
                     expandedHeight: Get.width / 3 * 2,
                   ),
@@ -162,7 +164,7 @@ class _MyAppSpace extends StatelessWidget {
     required this.profileImage,
     required this.postDate,
     required this.department,
-    required this.thumbNail,
+    required this.thumbnail,
   }) : super(key: key);
 
   String title;
@@ -170,7 +172,7 @@ class _MyAppSpace extends StatelessWidget {
   var profileImage;
   DateTime postDate;
   String department;
-  var thumbNail;
+  var thumbnail;
   int id;
 
   @override
@@ -210,7 +212,7 @@ class _MyAppSpace extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
-                  getImage(thumbNail, 'thumbnail$id'),
+                  getImage(thumbnail, 'thumbnail$id'),
                   SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,

@@ -114,50 +114,51 @@ class OtherProfileScreen extends StatelessWidget {
                                 Stack(
                                   children: [
                                     Obx(
-                                      () =>
-                                          // GestureDetector(
-                                          //   onTap: () => ModalController.to.showModalIOS(
-                                          //       context,
-                                          //       func1: changeProfileImage,
-                                          //       func2: () {},
-                                          //       value1: '라이브러리에서 선택',
-                                          //       value2: '기본 이미지로 변경',
-                                          //       isValue1Red: false,
-                                          //       isValue2Red: false,
-                                          //       isOne: false),
-                                          //   child:
-                                          ClipOval(
-                                              child: (profileController
-                                                      .isProfileLoading.value)
-                                                  ? Image.asset(
-                                                      "assets/illustrations/default_profile.png",
-                                                      height: 92,
-                                                      width: 92,
-                                                    )
-                                                  : otherUser.value
-                                                              .profileImage !=
-                                                          null
-                                                      ? CachedNetworkImage(
-                                                          height: 92,
-                                                          width: 92,
-                                                          imageUrl: otherUser
-                                                              .value
-                                                              .profileImage!,
-                                                          placeholder:
-                                                              (context, url) =>
-                                                                  Image.asset(
-                                                            "assets/illustrations/default_profile.png",
-                                                            height: 92,
-                                                            width: 92,
-                                                          ),
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      : Image.asset(
-                                                          "assets/illustrations/default_profile.png",
-                                                          height: 92,
-                                                          width: 92,
-                                                        )),
-                                      // ),
+                                      () => GestureDetector(
+                                        onTap: otherUser.value.isuser == 1
+                                            ? () => ModalController.to
+                                                .showModalIOS(context,
+                                                    func1: changeProfileImage,
+                                                    func2: () {},
+                                                    value1: '라이브러리에서 선택',
+                                                    value2: '기본 이미지로 변경',
+                                                    isValue1Red: false,
+                                                    isValue2Red: false,
+                                                    isOne: false)
+                                            : () {},
+                                        child: ClipOval(
+                                            child: (profileController
+                                                    .isProfileLoading.value)
+                                                ? Image.asset(
+                                                    "assets/illustrations/default_profile.png",
+                                                    height: 92,
+                                                    width: 92,
+                                                  )
+                                                : otherUser.value
+                                                            .profileImage !=
+                                                        null
+                                                    ? CachedNetworkImage(
+                                                        height: 92,
+                                                        width: 92,
+                                                        imageUrl: otherUser
+                                                            .value
+                                                            .profileImage!,
+                                                        placeholder:
+                                                            (context, url) =>
+                                                                CircleAvatar(
+                                                          backgroundColor:
+                                                              const Color(
+                                                                  0xffe7e7e7),
+                                                          child: Container(),
+                                                        ),
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                    : Image.asset(
+                                                        "assets/illustrations/default_profile.png",
+                                                        height: 92,
+                                                        width: 92,
+                                                      )),
+                                      ),
                                     ),
                                     Positioned.fill(
                                       child: Align(
@@ -174,9 +175,11 @@ class OtherProfileScreen extends StatelessWidget {
                                                     isOne: false),
                                             child: otherUser.value.isuser == 1
                                                 ? Container(
-                                                    decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color: mainWhite),
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            color: mainWhite),
                                                     child: SvgPicture.asset(
                                                       "assets/icons/Image.svg",
                                                       width: 24,

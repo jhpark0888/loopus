@@ -25,8 +25,11 @@ import 'package:underline_indicator/underline_indicator.dart';
 
 class MyProfileScreen extends StatelessWidget {
   MyProfileScreen({Key? key}) : super(key: key);
-  ProfileController profileController = Get.put(ProfileController());
-  ImageController imageController = Get.put(ImageController());
+  final ProfileController profileController = Get.put(ProfileController());
+  final ImageController imageController = Get.put(ImageController());
+  final ScrollController _projectScrollController = ScrollController();
+  final ScrollController _questionScrollController = ScrollController();
+
   RxBool isLoop = false.obs;
 
   @override
@@ -368,49 +371,38 @@ class MyProfileScreen extends StatelessWidget {
                                 toolbarHeight: 43,
                                 elevation: 0,
                                 pinned: true,
-                                flexibleSpace: Theme(
-                                  data: ThemeData().copyWith(
-                                    splashColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
+                                stretch: false,
+                                flexibleSpace: TabBar(
+                                  controller:
+                                      profileController.profileTabController,
+                                  labelStyle: kButtonStyle,
+                                  labelColor: mainblack,
+                                  unselectedLabelStyle: const TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Nanum',
+                                    fontWeight: FontWeight.normal,
                                   ),
-                                  child: TabBar(
-                                    controller:
-                                        profileController.profileTabController,
-                                    labelStyle: TextStyle(
-                                      color: mainblack,
-                                      fontSize: 14,
-                                      fontFamily: 'Nanum',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    labelColor: mainblack,
-                                    unselectedLabelStyle: TextStyle(
-                                      color: Colors.yellow,
-                                      fontSize: 14,
-                                      fontFamily: 'Nanum',
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                    unselectedLabelColor:
-                                        mainblack.withOpacity(0.6),
-                                    indicator: UnderlineIndicator(
-                                      strokeCap: StrokeCap.round,
-                                      borderSide: BorderSide(width: 2),
-                                    ),
-                                    indicatorColor: mainblack,
-                                    tabs: [
-                                      Tab(
-                                        height: 40,
-                                        child: Text(
-                                          "활동",
-                                        ),
+                                  unselectedLabelColor:
+                                      mainblack.withOpacity(0.6),
+                                  indicator: const UnderlineIndicator(
+                                    strokeCap: StrokeCap.round,
+                                    borderSide: BorderSide(width: 2),
+                                  ),
+                                  indicatorColor: mainblack,
+                                  tabs: const [
+                                    Tab(
+                                      height: 40,
+                                      child: Text(
+                                        "활동",
                                       ),
-                                      Tab(
-                                        height: 40,
-                                        child: Text(
-                                          "질문과 답변",
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                    Tab(
+                                      height: 40,
+                                      child: Text(
+                                        "질문과 답변",
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                             ),
@@ -418,26 +410,32 @@ class MyProfileScreen extends StatelessWidget {
                         ];
                       },
                       body: TabBarView(
+                          physics: const PageScrollPhysics(),
                           controller: profileController.profileTabController,
                           children: [
                             SingleChildScrollView(
                               child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(
-                                        16, 24, 16, 20),
+                                      16,
+                                      24,
+                                      16,
+                                      20,
+                                    ),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('활동', style: kSubTitle2Style),
+                                        const Text('활동',
+                                            style: kSubTitle2Style),
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(() => ProjectAddTitleScreen(
-                                                  screenType: Screentype.add,
-                                                ));
+                                            Get.to(
+                                              () => ProjectAddTitleScreen(
+                                                screenType: Screentype.add,
+                                              ),
+                                            );
                                           },
                                           child: Text(
                                             '추가하기',
@@ -527,8 +525,6 @@ class MyProfileScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  QuestionWidget(),
-                                  QuestionWidget(),
                                   QuestionWidget(),
                                   QuestionWidget(),
                                 ],

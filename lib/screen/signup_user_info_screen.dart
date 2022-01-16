@@ -68,6 +68,7 @@ class SignupUserInfoScreen extends StatelessWidget {
                   hintText: 'loopus@inu.ac.kr',
                   validator: (value) => CheckValidate().validateEmail(value!),
                   obscureText: false,
+                  maxLines: 1,
                 ),
                 const SizedBox(
                   height: 32,
@@ -84,6 +85,7 @@ class SignupUserInfoScreen extends StatelessWidget {
                   hintText: '김루프',
                   validator: null,
                   obscureText: false,
+                  maxLines: 1,
                 ),
                 const SizedBox(
                   height: 32,
@@ -101,6 +103,7 @@ class SignupUserInfoScreen extends StatelessWidget {
                   validator: (value) =>
                       CheckValidate().validatePassword(value!),
                   obscureText: true,
+                  maxLines: 1,
                 ),
                 const SizedBox(
                   height: 32,
@@ -121,6 +124,7 @@ class SignupUserInfoScreen extends StatelessWidget {
                     }
                   },
                   obscureText: true,
+                  maxLines: 1,
                 ),
               ],
             ),

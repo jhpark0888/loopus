@@ -9,10 +9,10 @@ import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/screen/home_loop_screen.dart';
 import 'package:loopus/screen/question_add_content_screen.dart';
-import 'package:loopus/screen/question_screen.dart';
+import 'package:loopus/screen/question_detail_screen.dart';
 import 'package:loopus/widget/home_posting_widget.dart';
 import 'package:loopus/widget/my_question_posting_widget.dart';
-import 'package:loopus/widget/question_posting_widget.dart';
+import 'package:loopus/widget/home_question_widget.dart';
 import 'package:loopus/widget/custom_refresher.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -140,8 +140,8 @@ class HomePostingScreen extends StatelessWidget {
           child: CustomScrollView(
             // controller:
             //     CustomScrollController.to.customScrollController.value,
-            physics: BouncingScrollPhysics(),
-            key: PageStorageKey("key1"),
+            physics: const BouncingScrollPhysics(),
+            key: const PageStorageKey("key1"),
             slivers: [
               (homeController.isPostingEmpty.value == false)
                   ? SliverList(
@@ -169,7 +169,7 @@ class HomePostingScreen extends StatelessWidget {
                                               'assets/icons/loading.gif',
                                               scale: 6,
                                             ),
-                                            Text(
+                                            const Text(
                                               '포스팅 받아오는 중...',
                                               style: TextStyle(
                                                   fontSize: 10,

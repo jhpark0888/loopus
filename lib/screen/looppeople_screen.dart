@@ -8,7 +8,7 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
-import 'package:loopus/screen/inquiry_screen.dart';
+import 'package:loopus/screen/contact_email_screen.dart';
 import 'package:loopus/screen/privacypolicy_screen.dart';
 import 'package:loopus/screen/termsofservice_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';

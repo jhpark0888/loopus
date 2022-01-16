@@ -13,8 +13,6 @@ import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
-import 'package:loopus/widget/alertdialog1_widget.dart';
-import 'package:loopus/widget/alertdialog2_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
 
 class MessageAnswerWidget extends StatelessWidget {

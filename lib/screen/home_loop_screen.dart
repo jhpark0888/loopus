@@ -7,12 +7,12 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/question_add_content_screen.dart';
-import 'package:loopus/screen/question_screen.dart';
+import 'package:loopus/screen/question_detail_screen.dart';
 import 'package:loopus/screen/search_screen.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/home_posting_widget.dart';
 import 'package:loopus/widget/my_question_posting_widget.dart';
-import 'package:loopus/widget/question_posting_widget.dart';
+import 'package:loopus/widget/home_question_widget.dart';
 import 'package:loopus/widget/custom_refresher.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 

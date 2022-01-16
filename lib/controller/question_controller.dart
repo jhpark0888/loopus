@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/model/question_specific_model.dart';
@@ -17,26 +18,26 @@ class QuestionController extends GetxController {
   RxBool ignore_check_add_q = true.obs;
   RxBool check_alarm = false.obs;
   RxBool isDropdown = false.obs;
-  RxDouble textFormHeight = 36.0.obs;
-  Rx<GlobalKey> textFieldBoxKey = GlobalKey().obs;
-  Rx<Size> textBoxSize = Size(Get.width, 36).obs;
+  // RxDouble textFormHeight = 36.0.obs;
+  // Rx<GlobalKey> textFieldBoxKey = GlobalKey().obs;
+  // Rx<Size> textBoxSize = Size(Get.width, 36).obs;
 
-  @override
-  void onInit() {
-    answertextController.addListener(() {
-      textBoxSize.value = getSize(textFieldBoxKey.value);
-    });
-    super.onInit();
-  }
+  // @override
+  // void onInit() {
+  //   answertextController.addListener(() {
+  //     textBoxSize.value = getSize(textFieldBoxKey.value);
+  //   });
+  //   super.onInit();
+  // }
 
-  getSize(GlobalKey key) {
-    if (key.currentContext != null) {
-      RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
-      Size size = renderBox.size;
-      return size;
-    }
-    return Size(Get.width, 36);
-  }
+  // getSize(GlobalKey key) {
+  //   if (key.currentContext != null) {
+  //     RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
+  //     Size size = renderBox.size;
+  //     return size;
+  //   }
+  //   return Size(Get.width, 36);
+  // }
 
   QuestionModel2 questionModel2 = QuestionModel2(QuestionItem(
       adopt: null,
@@ -67,8 +68,6 @@ class QuestionController extends GetxController {
 
   Future<void> loadItem(int questionid) async {
     QuestionModel2 result = await specificquestion(questionid);
-    print("hihi");
-    print(result);
     questionModel2 = result;
   }
 }

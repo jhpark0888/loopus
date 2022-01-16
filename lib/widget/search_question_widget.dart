@@ -13,7 +13,7 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
-import 'package:loopus/screen/question_screen.dart';
+import 'package:loopus/screen/question_detail_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
@@ -39,7 +39,7 @@ class SearchQuestionWidget extends StatelessWidget {
           questionController.messageanswerlist.clear();
           await questionController.loadItem(question.id);
           await questionController.addanswer();
-          Get.to(() => QuestionScreen());
+          Get.to(() => QuestionDetailScreen());
         },
         child: Container(
           decoration: BoxDecoration(

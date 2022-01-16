@@ -1,24 +1,25 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/signup_controller.dart';
-import 'package:loopus/screen/signup_user_info_screen.dart';
+import 'package:loopus/screen/contact_finish_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
-class SignupDepartmentScreen extends StatelessWidget {
-  SignupController signupController = Get.find();
+class ContactContentScreen extends StatelessWidget {
+  const ContactContentScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
+        title: '문의',
         bottomBorder: false,
         actions: [
           TextButton(
             onPressed: () {
-              //TODO: 학과 선택 시 활성화되어야 함
-              Get.to(() => SignupUserInfoScreen());
+              Get.to(ContactFinishScreen());
             },
             child: Text(
               '다음',
@@ -26,30 +27,26 @@ class SignupDepartmentScreen extends StatelessWidget {
             ),
           ),
         ],
-        title: '회원 가입',
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          32,
-          24,
-          32,
-          40,
-        ),
+        padding: const EdgeInsets.fromLTRB(32, 24, 32, 40),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              '어느 학과를 전공하고 계신가요?',
+            Text(
+              '문의 내용을 적어주세요',
               style: kSubTitle1Style,
             ),
-            const SizedBox(
+            SizedBox(
               height: 32,
             ),
             CustomTextField(
-              textController: signupController.departmentcontroller,
-              hintText: '학과 이름 검색',
+              textController: null,
+              hintText: '문의 내용...',
               validator: null,
               obscureText: false,
-              maxLines: 1,
+              maxLines: 5,
             ),
           ],
         ),

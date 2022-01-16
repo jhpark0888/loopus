@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/login_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
@@ -49,7 +50,17 @@ class UserInfoScreen extends StatelessWidget {
                 ),
                 ListTile(
                   onTap: () {
-                    Get.to(() => PwChangeScreen());
+                    ModalController.to.showTextFieldDialog(
+                        title: '현재 비밀번호를 입력해주세요',
+                        hintText: '',
+                        obscureText: true,
+                        textEditingController: TextEditingController(),
+                        validator: null,
+                        yesfunction: () => Get.back(),
+                        nofunction: () {
+                          Get.to(() => PwChangeScreen());
+                        });
+                    // Get.to(() => PwChangeScreen());
                   },
                   title: Text(
                     '비밀번호 변경',
@@ -62,11 +73,24 @@ class UserInfoScreen extends StatelessWidget {
                 ),
                 ListTile(
                   onTap: () {
-                    _logInController.isLogout.value = true;
-                    logOut().then((value) {
-                      _logInController.isLogout.value = false;
-                      Get.offAll(() => StartScreen());
-                    });
+                    ModalController.to.showButtonDialog(
+                        title: '로그아웃하시겠어요?',
+                        content: '중요한 알림을 받지 못하게 돼요',
+                        leftFunction: () => Get.back(),
+                        rightFunction: () {
+                          _logInController.isLogout.value = true;
+                          logOut().then((value) {
+                            _logInController.isLogout.value = false;
+                            Get.offAll(() => StartScreen());
+                          });
+                        },
+                        rightText: '로그아웃',
+                        leftText: '취소');
+                    // _logInController.isLogout.value = true;
+                    // logOut().then((value) {
+                    //   _logInController.isLogout.value = false;
+                    //   Get.offAll(() => StartScreen());
+                    // });
                   },
                   title: Text(
                     '로그아웃',

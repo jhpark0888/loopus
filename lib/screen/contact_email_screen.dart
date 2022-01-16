@@ -1,24 +1,25 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/signup_controller.dart';
-import 'package:loopus/screen/signup_department_screen.dart';
+import 'package:loopus/screen/contact_content_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
-class SignupCampusInfoScreen extends StatelessWidget {
-  SignupController signupController = Get.put(SignupController());
+class ContactEmailScreen extends StatelessWidget {
+  const ContactEmailScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
+        title: '문의',
         bottomBorder: false,
         actions: [
           TextButton(
             onPressed: () {
-              //TODO: 학교 선택 시 활성화되어야 함
-              Get.to(() => SignupDepartmentScreen());
+              Get.to(ContactContentScreen());
             },
             child: Text(
               '다음',
@@ -26,33 +27,29 @@ class SignupCampusInfoScreen extends StatelessWidget {
             ),
           ),
         ],
-        title: '회원 가입',
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            32,
-            24,
-            32,
-            40,
-          ),
+          padding: const EdgeInsets.fromLTRB(32, 24, 32, 40),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
-                '어느 대학에 재학 중이신가요?',
+              Text(
+                '답변 받으실 이메일 주소를 입력해주세요',
                 style: kSubTitle1Style,
               ),
-              const SizedBox(
+              SizedBox(
                 height: 32,
               ),
               CustomTextField(
-                textController: signupController.campusnamecontroller,
-                hintText: '학교 이름 검색',
-                obscureText: false,
+                textController: null,
+                hintText: 'loopus@loopus.co.kr',
                 validator: null,
+                obscureText: false,
                 maxLines: 1,
-              )
+              ),
             ],
           ),
         ),

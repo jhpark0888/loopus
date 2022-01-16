@@ -215,16 +215,8 @@ class HomeScreen extends StatelessWidget {
                                 imageUrl:
                                     "http://www.lg.co.kr/images/common/default_og_image_new.jpg",
                                 placeholder: (context, url) => CircleAvatar(
-                                  backgroundColor: mainWhite,
-                                  child: Center(
-                                      child: Container(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: mainblack,
-                                    ),
-                                  )),
+                                  backgroundColor: Color(0xffe7e7e7),
+                                  child: Container(),
                                 ),
                                 fit: BoxFit.cover,
                               ),
@@ -280,10 +272,9 @@ class HomeScreen extends StatelessWidget {
                                 height: 32,
                                 imageUrl:
                                     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3KEuCtQgm3AS4bd8RbO9kWyE0xpP--1e-hQ&usqp=CAU",
-                                placeholder: (context, url) =>
-                                    const CircleAvatar(
-                                  child: Center(
-                                      child: CircularProgressIndicator()),
+                                placeholder: (context, url) => CircleAvatar(
+                                  backgroundColor: Color(0xffe7e7e7),
+                                  child: Container(),
                                 ),
                                 fit: BoxFit.cover,
                               ),
@@ -339,10 +330,9 @@ class HomeScreen extends StatelessWidget {
                                 height: 32,
                                 imageUrl:
                                     "https://ww.namu.la/s/fa7510d2897ae3fce73ba629a3b51ebc4035e9737d916adb03e6d38e139b2a61e2a29e7e5cfd845e01c7d69889c719edce83330202c0161d9373a960b3dede25c1ed31bc52da585c154fe035e29a92dd",
-                                placeholder: (context, url) =>
-                                    const CircleAvatar(
-                                  child: Center(
-                                      child: CircularProgressIndicator()),
+                                placeholder: (context, url) => CircleAvatar(
+                                  backgroundColor: Color(0xffe7e7e7),
+                                  child: Container(),
                                 ),
                                 fit: BoxFit.cover,
                               ),

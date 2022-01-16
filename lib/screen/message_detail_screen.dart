@@ -46,7 +46,9 @@ class MessageDetailScreen extends StatelessWidget {
               minLines: 1,
               maxLines: 5,
               decoration: InputDecoration(
-                suffix: Text('작성'),
+                suffixIconConstraints:
+                    BoxConstraints(minHeight: 24, minWidth: 24),
+                suffixIcon: Text('작성'),
                 contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 isDense: true,
                 border: OutlineInputBorder(

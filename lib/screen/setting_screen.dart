@@ -2,9 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/screen/project_add_period_screen.dart';
-import 'package:loopus/screen/inquiry_screen.dart';
+import 'package:loopus/constant.dart';
+import 'package:loopus/screen/contact_email_screen.dart';
 import 'package:loopus/screen/privacypolicy_screen.dart';
 import 'package:loopus/screen/termsofservice_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';
@@ -17,72 +16,77 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBarWidget(
-          // actions: [
-          //   TextButton(
-          //     onPressed: () {
-          //       // Get.to(() => ActivityAddPeriodScreen());
-          //     },
-          //     child: Text(
-          //       '다음',
-          //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          //     ),
-          //   ),
-          // ],
+          bottomBorder: false,
           title: '설정',
         ),
         body: ListView(
           children: [
             ListTile(
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 16,
+              ),
               onTap: () {
                 Get.to(() => UserInfoScreen());
               },
-              title: Text('계정 정보',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              title: Text('계정 정보', style: TextStyle(fontSize: 16)),
               trailing: Icon(
-                Icons.chevron_right,
-                color: Colors.black,
+                Icons.chevron_right_rounded,
+                color: mainblack,
               ),
             ),
             ListTile(
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 16,
+              ),
               onTap: () {},
-              title: Text('알림 설정',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              title: Text('알림 설정', style: TextStyle(fontSize: 16)),
               trailing: Icon(
-                Icons.chevron_right,
-                color: Colors.black,
+                Icons.chevron_right_rounded,
+                color: mainblack,
               ),
             ),
             ListTile(
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 16,
+              ),
               onTap: () {
                 Get.to(() => TermsOfServiceScreen());
               },
-              title: Text('서비스 이용 약관',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              title: Text('서비스 이용 약관', style: TextStyle(fontSize: 16)),
               trailing: Icon(
-                Icons.chevron_right,
-                color: Colors.black,
+                Icons.chevron_right_rounded,
+                color: mainblack,
               ),
             ),
             ListTile(
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 16,
+              ),
               onTap: () {
                 Get.to(() => PrivacyPolicyScreen());
               },
-              title: Text('개인정보 처리방침',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              title: Text('개인정보 처리방침', style: TextStyle(fontSize: 16)),
               trailing: Icon(
-                Icons.chevron_right,
-                color: Colors.black,
+                Icons.chevron_right_rounded,
+                color: mainblack,
               ),
             ),
             ListTile(
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 16,
+              ),
               onTap: () {
-                Get.to(() => InquiryScreen());
+                Get.to(() => ContactEmailScreen());
               },
-              title: Text('문의하기',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              title: Text('문의하기', style: TextStyle(fontSize: 16)),
               trailing: Icon(
-                Icons.chevron_right,
-                color: Colors.black,
+                Icons.chevron_right_rounded,
+                color: mainblack,
               ),
             )
           ],

@@ -5,16 +5,18 @@ import '../check_form_validate.dart';
 import '../constant.dart';
 
 class CustomTextField extends StatelessWidget {
-  final TextEditingController textController;
+  final TextEditingController? textController;
   final String hintText;
   final String? Function(String?)? validator;
   final bool obscureText;
+  final int? maxLines;
 
   CustomTextField({
     required this.textController,
     required this.hintText,
     required this.validator,
     required this.obscureText,
+    required this.maxLines,
   });
 
   @override
@@ -23,9 +25,9 @@ class CustomTextField extends StatelessWidget {
       obscureText: obscureText,
       autocorrect: false,
       minLines: 1,
-      maxLines: 1,
+      maxLines: maxLines,
       autofocus: true,
-      style: kSubTitle3Style,
+      style: kSubTitle3Style.copyWith(height: 1.5),
       cursorColor: mainblack,
       cursorWidth: 1.2,
       cursorRadius: Radius.circular(2),

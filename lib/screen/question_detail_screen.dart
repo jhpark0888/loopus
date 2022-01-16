@@ -7,22 +7,19 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/screen/report_screen.dart';
-import 'package:loopus/widget/alertdialog2_widget.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/message_answer_widget.dart';
 import 'package:loopus/widget/message_question_widget.dart';
 
-class QuestionScreen extends StatelessWidget {
+class QuestionDetailScreen extends StatelessWidget {
   ModalController modalController = Get.put(ModalController());
   final _formKey = GlobalKey<FormState>();
 
-  // const QuestionScreen({Key? key}) : super(key: key);
-
   QuestionController questionController = Get.find();
   late Map data;
+  RxInt numLines = 0.obs;
 
   void _handleSubmitted(String text) async {
-    print(text);
     data =
         await answermake(text, questionController.questionModel2.questions.id);
     questionController.messageanswerlist.add(MessageAnswerWidget(
@@ -50,99 +47,61 @@ class QuestionScreen extends StatelessWidget {
         horizontal: 16,
         vertical: 8,
       ),
-      child: Obx(
-        () => Form(
-          key: _formKey,
-          onChanged: () {
-            print(questionController.answertextController.value.text);
-            questionController.textBoxSize.value = questionController
-                .getSize(questionController.textFieldBoxKey.value);
-
-            print(questionController.textBoxSize.value.height);
+      child: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: TextFormField(
+          cursorWidth: 1.2,
+          focusNode: questionController.answerfocus,
+          style: const TextStyle(decoration: TextDecoration.none),
+          cursorColor: mainblack.withOpacity(0.6),
+          controller: questionController.answertextController,
+          onFieldSubmitted: _handleSubmitted,
+          validator: (value) {
+            if (value!.trim().isEmpty) {
+              questionController.isemptytext.value = true;
+            } else {
+              questionController.isemptytext.value = false;
+            }
           },
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: Row(
-            children: [
-              Flexible(
-                child: TextFormField(
-                  key: questionController.textFieldBoxKey.value,
-                  cursorWidth: 1.2,
-                  focusNode: questionController.answerfocus,
-                  style: TextStyle(decoration: TextDecoration.none),
-                  cursorColor: mainblack.withOpacity(0.6),
-                  controller: questionController.answertextController,
-                  onFieldSubmitted: _handleSubmitted,
-                  validator: (value) {
-                    if (value!.trim().isEmpty) {
-                      questionController.isemptytext.value = true;
-                    } else {
-                      questionController.isemptytext.value = false;
-                    }
-                  },
-                  minLines: 1,
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                    suffix: Text('작성'),
-                    contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
-                      ),
-                    ),
-                    hintText: "답변 남기기...",
-                    hintStyle: TextStyle(
-                      fontSize: 14,
-                      color: mainblack.withOpacity(0.38),
-                    ),
-                    fillColor: mainlightgrey,
-                    filled: true,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 12,
-              ),
-              Obx(
-                () => SizedBox(
-                  height: questionController.textBoxSize.value.height > 36
-                      ? questionController.textBoxSize.value.height - 16
-                      : questionController.textBoxSize.value.height,
-                  child: Align(
-                    alignment: questionController.textBoxSize.value.height > 36
-                        ? Alignment.bottomRight
-                        : Alignment.center,
-                    child: IgnorePointer(
-                      ignoring: questionController.isemptytext.value,
-                      child: questionController.answertextController.text == ""
-                          ? InkWell(
-                              onTap: () {},
-                              child: Text(
-                                "작성",
-                                style: TextStyle(
-                                  color: mainblack.withOpacity(0.38),
-                                ),
-                              ),
-                            )
-                          : InkWell(
-                              onTap: () {
-                                _handleSubmitted(questionController
-                                    .answertextController.text);
-                              },
-                              child: Text(
-                                "작성",
-                                style: TextStyle(
-                                  color: mainblue,
-                                ),
-                              ),
-                            ),
+          minLines: 1,
+          maxLines: 5,
+          decoration: InputDecoration(
+            suffixIconConstraints: BoxConstraints(minWidth: 24),
+            suffixIcon: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Flexible(
+                  child: GestureDetector(
+                    onTap: () {
+                      _handleSubmitted(
+                          questionController.answertextController.text);
+                    },
+                    child: Text(
+                      '작성',
+                      style: kButtonStyle.copyWith(color: mainblue),
                     ),
                   ),
                 ),
+              ],
+            ),
+            contentPadding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
+            isDense: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                width: 0,
+                style: BorderStyle.none,
               ),
-            ],
+            ),
+            hintText: "답변을 작성해주세요...",
+            hintStyle: TextStyle(
+              fontSize: 14,
+              color: mainblack.withOpacity(0.38),
+            ),
+            fillColor: mainlightgrey,
+            filled: true,
           ),
         ),
       ),
@@ -242,8 +201,8 @@ class QuestionScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 50,
+                const SizedBox(
+                  height: 56,
                 ),
               ],
             ),

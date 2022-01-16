@@ -5,7 +5,7 @@ import 'package:loopus/api/question_api.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/widget/home_posting_widget.dart';
-import 'package:loopus/widget/question_posting_widget.dart';
+import 'package:loopus/widget/home_question_widget.dart';
 import 'package:loopus/widget/recommend_posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 

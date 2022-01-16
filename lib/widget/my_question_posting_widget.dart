@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/model/question_model.dart';
-import 'package:loopus/screen/question_screen.dart';
+import 'package:loopus/screen/question_detail_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class MyQuestionPostingWidget extends StatelessWidget {
@@ -45,7 +45,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
         onTap: () async {
           await questionController.loadItem(item.id);
           await questionController.addanswer();
-          Get.to(() => QuestionScreen());
+          Get.to(() => QuestionDetailScreen());
           print("click posting");
         },
         child: Padding(

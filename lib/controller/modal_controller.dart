@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
+import 'package:loopus/widget/custom_textfield.dart';
 
 import '../constant.dart';
 
@@ -119,6 +120,105 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
   void showButtonDialog({
     required String title,
     required String content,
+    required Function() leftFunction,
+    required Function() rightFunction,
+    required String rightText,
+    required String leftText,
+  }) {
+    Get.dialog(
+      AlertDialog(
+        buttonPadding: EdgeInsets.zero,
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: leftFunction,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        right: BorderSide(
+                          width: 1,
+                          color: Color(0xffe7e7e7),
+                        ),
+                        top: BorderSide(
+                          width: 1,
+                          color: Color(0xffe7e7e7),
+                        ),
+                      ),
+                    ),
+                    height: 48,
+                    child: Center(
+                      child: Text(
+                        leftText,
+                        style: kBody2Style.copyWith(
+                          color: mainpink,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: rightFunction,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          width: 1,
+                          color: Color(0xffe7e7e7),
+                        ),
+                      ),
+                    ),
+                    height: 48,
+                    child: Center(
+                      child: Text(
+                        rightText,
+                        style: kBody2Style,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+        ),
+        contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 20),
+        titlePadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
+        backgroundColor: Colors.white,
+        title: Text(
+          title,
+          style: kSubTitle4Style,
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          content,
+          style: kBody1Style,
+          textAlign: TextAlign.center,
+        ),
+      ),
+      barrierDismissible: false,
+      barrierColor: mainblack.withOpacity(0.3),
+      transitionCurve: Curves.easeInOut,
+      transitionDuration: Duration(milliseconds: 300),
+    );
+  }
+
+  void showTextFieldDialog({
+    required String title,
+    required String hintText,
+    required TextEditingController textEditingController,
+    required bool obscureText,
+    required String? Function(String?)? validator,
     required Function() yesfunction,
     required Function() nofunction,
   }) {
@@ -150,8 +250,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                       child: Text(
                         '취소',
                         style: kBody2Style.copyWith(
-                          color: mainpink,
-                          fontWeight: FontWeight.bold,
+                          color: mainblack,
                         ),
                       ),
                     ),
@@ -173,8 +272,10 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     height: 48,
                     child: Center(
                       child: Text(
-                        '삭제',
-                        style: kBody2Style,
+                        '확인',
+                        style: kBody2Style.copyWith(
+                          color: mainblue,
+                        ),
                       ),
                     ),
                   ),
@@ -189,7 +290,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
             Radius.circular(8),
           ),
         ),
-        contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 20),
+        contentPadding: EdgeInsets.fromLTRB(16, 12, 16, 24),
         titlePadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
         backgroundColor: Colors.white,
         title: Text(
@@ -197,10 +298,15 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
           style: kSubTitle4Style,
           textAlign: TextAlign.center,
         ),
-        content: Text(
-          content,
-          style: kBody1Style,
-          textAlign: TextAlign.center,
+        content: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: CustomTextField(
+            hintText: hintText,
+            textController: textEditingController,
+            obscureText: obscureText,
+            validator: validator,
+            maxLines: 1,
+          ),
         ),
       ),
       barrierDismissible: false,
