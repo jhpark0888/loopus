@@ -20,11 +20,10 @@ import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class HomePostingWidget extends StatelessWidget {
-  final int index;
+  // final int index;
   Post item;
 
-  HomePostingWidget({required this.item, required this.index, Key? key})
-      : super(key: key);
+  HomePostingWidget({required this.item, Key? key}) : super(key: key);
 
   final BookmarkController bookmarkController = Get.put(BookmarkController());
   final ProfileController profileController = Get.put(ProfileController());

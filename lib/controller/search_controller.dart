@@ -15,7 +15,7 @@ import 'package:loopus/widget/search_question_widget.dart';
 import 'package:loopus/widget/search_tag_project_widget.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
 
-enum SearchType { post, profile, question, tagProject, tagQuestion }
+enum SearchType { post, profile, question, tag_project, tag_question }
 
 class SearchController extends GetxController with GetTickerProviderStateMixin {
   static SearchController get to => Get.find();
@@ -223,9 +223,9 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
         isnosearchprofile(true);
       } else if (searchType == SearchType.question) {
         isnosearchquestion(true);
-      } else if (searchType == SearchType.tagProject) {
+      } else if (searchType == SearchType.tag_project) {
         return;
-      } else if (searchType == SearchType.tagQuestion) {
+      } else if (searchType == SearchType.tag_question) {
         return;
       }
     } else {
@@ -281,7 +281,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
         //     istag: 0,
         //   ));
         // });
-      } else if (searchType == SearchType.tagProject) {
+      } else if (searchType == SearchType.tag_project) {
         searchtagprojectlist(searchlist
             .map((json) => Project.fromJson(json))
             .toList()
@@ -305,7 +305,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
         //     start_date: DateTime.parse(element["start_date"]),
         //   ));
         // });
-      } else if (searchType == SearchType.tagQuestion) {
+      } else if (searchType == SearchType.tag_question) {
         searchtagquestionlist(searchlist
             .map((json) => QuestionItem.fromJson(json))
             .toList()

@@ -63,7 +63,9 @@ Future addproject() async {
     String responsebody = await response.stream.bytesToString();
     Map<String, dynamic> responsemap = json.decode(responsebody);
     Project project = Project.fromJson(responsemap);
-    Get.to(() => ProjectScreen());
+    Get.to(() => ProjectScreen(
+          projectid: project.id,
+        ));
     ProfileController.to.myProjectList
         .insert(0, ProjectWidget(project: project.obs));
     ProjectDetailController.to.project(project);
@@ -79,6 +81,7 @@ Future<Project> getproject(int projectId) async {
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
 
+  print(response.statusCode);
   if (response.statusCode == 200) {
     var responseBody = json.decode(utf8.decode(response.bodyBytes));
     Project project = Project.fromJson(responseBody);

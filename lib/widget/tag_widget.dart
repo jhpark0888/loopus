@@ -18,11 +18,16 @@ class Tagwidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
+      onTap: () {
         SearchController.to.searchtagprojectlist.clear();
         SearchController.to.searchtagquestionlist.clear();
-        await SearchController.to.search(SearchType.tagProject, tag.tagId, 1);
-        await SearchController.to.search(SearchType.tagQuestion, tag.tagId, 1);
+        SearchController.to.isSearchLoading(true);
+        SearchController.to.search(SearchType.tag_project, tag.tagId, 1);
+        SearchController.to
+            .search(SearchType.tag_question, tag.tagId, 1)
+            .then((value) {
+          SearchController.to.isSearchLoading(false);
+        });
         Get.to(() => TagDetailScreen(
               title: tag.tag,
               count: 0,

@@ -53,6 +53,7 @@ class ProfileController extends GetxController
     department: '',
     //0 : 다른 프로필, 1 : 내 프로필
     isuser: 1,
+    looped: 0,
   ).obs;
 
   Rx<User> otherUser = User(
@@ -64,6 +65,7 @@ class ProfileController extends GetxController
     profileTag: [],
     department: '',
     isuser: 1,
+    looped: 0,
   ).obs;
 
   RxList<User> mylooplist = <User>[].obs;

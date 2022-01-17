@@ -52,6 +52,7 @@ class ProjectPostingWidget extends StatelessWidget {
             () => PostingScreen(// user: user!,
                 ),
             arguments: {
+              'isuser': item.isuser,
               'id': item.id,
               'realName': realName,
               'profileImage': profileImage,

@@ -12,12 +12,65 @@ Future<List<User>> getlooplist(int userid) async {
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
 
+  print('루프 리스트 statusCode: ${response.statusCode}');
   if (response.statusCode == 200) {
     var responseBody = json.decode(utf8.decode(response.bodyBytes));
     List<User> looplist = List.from(responseBody["friend"])
         .map((friend) => User.fromJson(friend))
         .toList();
     return looplist;
+  } else {
+    return Future.error(response.statusCode);
+  }
+}
+
+Future<void> postloopRequest(int friendid) async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  final uri =
+      Uri.parse("http://3.35.253.151:8000/loop_api/loop_request/$friendid");
+
+  http.Response response =
+      await http.post(uri, headers: {"Authorization": "Token $token"});
+
+  print('루프 신청 statusCode: ${response.statusCode}');
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+    print(responseBody);
+  } else {
+    return Future.error(response.statusCode);
+  }
+}
+
+Future<void> postloopPermit(int friendid) async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  final uri = Uri.parse("http://3.35.253.151:8000/loop_api/loop/$friendid");
+
+  http.Response response =
+      await http.post(uri, headers: {"Authorization": "Token $token"});
+
+  print('루프 허락 statusCode: ${response.statusCode}');
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+    print(responseBody);
+  } else {
+    return Future.error(response.statusCode);
+  }
+}
+
+Future<void> postloopRelease(int friendid) async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  final uri = Uri.parse("http://3.35.253.151:8000/loop_api/get_list/$friendid");
+
+  http.Response response =
+      await http.post(uri, headers: {"Authorization": "Token $token"});
+
+  print('루프 해제 statusCode: ${response.statusCode}');
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+    print(responseBody);
   } else {
     return Future.error(response.statusCode);
   }

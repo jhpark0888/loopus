@@ -18,11 +18,12 @@ class PostingScreen extends StatelessWidget {
 
   final ModalController modalController = Get.put(ModalController());
   final ScrollController _controller = ScrollController();
-  final TransitionAnimationController _transitionAnimationController =
-      Get.put(TransitionAnimationController());
+  // final TransitionAnimationController _transitionAnimationController =
+  // Get.put(TransitionAnimationController());
 
   @override
   Widget build(BuildContext context) {
+    int isuser = Get.arguments['isuser'];
     int id = Get.arguments['id'];
     String title = Get.arguments['title'];
     String realName = Get.arguments['realName'];
@@ -31,126 +32,141 @@ class PostingScreen extends StatelessWidget {
     String department = Get.arguments['department'];
     dynamic thumbNail = Get.arguments['thumbnail'];
     return Obx(
-      () => Stack(
-        children: [
-          Scaffold(
-            body: GestureDetector(
-              onPanUpdate: (details) {
-                if (details.delta.dx > 20) {
-                  Get.back();
-                }
-              },
-              child: CustomScrollView(
-                physics: BouncingScrollPhysics(),
-                controller: _controller,
-                slivers: [
-                  SliverAppBar(
-                    stretch: true,
-                    bottom: PreferredSize(
-                        child: Container(
-                          color: Color(0xffe7e7e7),
-                          height: 1,
-                        ),
-                        preferredSize: Size.fromHeight(4.0)),
-                    automaticallyImplyLeading: false,
-                    elevation: 0,
-                    backgroundColor: Colors.white,
-                    leading: IconButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      icon: SvgPicture.asset('assets/icons/Arrow.svg'),
-                    ),
-                    actions: [
-                      IconButton(
-                        onPressed: () {
-                          modalController.showModalIOS(
-                            context,
-                            func1: () {
-                              modalController.showButtonDialog(
-                                  title:
-                                      '정말 <${_postingDetailController.item?.title}> 포스팅을 삭제하시겠어요?',
-                                  content: '',
-                                  leftText: '취소',
-                                  rightText: '삭제',
-                                  leftFunction: () => Get.back(),
-                                  rightFunction: () async {
-                                    _postingDetailController
-                                        .isPostDeleteLoading(true);
-                                    Get.back();
-                                    Get.back();
-                                    await deleteposting(
-                                        _postingDetailController.item!.id);
-                                    _postingDetailController
-                                        .isPostDeleteLoading(false);
-                                  });
-                            },
-                            func2: () {},
-                            value1: '이 포스팅 삭제하기',
-                            value2: '',
-                            isValue1Red: true,
-                            isValue2Red: false,
-                            isOne: true,
-                          );
-                        },
-                        icon: SvgPicture.asset(
-                          'assets/icons/More.svg',
-                        ),
+      () => Stack(children: [
+        Scaffold(
+          body: GestureDetector(
+            onTap: () {},
+            // },
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              controller: _controller,
+              slivers: [
+                SliverAppBar(
+                  stretch: false,
+                  bottom: PreferredSize(
+                      child: Container(
+                        color: const Color(0xffe7e7e7),
+                        height: 1,
                       ),
-                    ],
-                    pinned: true,
-                    flexibleSpace: _MyAppSpace(
-                      id: id,
-                      title: title,
-                      realName: realName,
-                      profileImage: profileImage,
-                      postDate: postDate,
-                      department: department,
-                      thumbnail: thumbNail,
-                    ),
-                    expandedHeight: Get.width / 3 * 2,
+                      preferredSize: const Size.fromHeight(4.0)),
+                  automaticallyImplyLeading: false,
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  leading: IconButton(
+                    onPressed: () => Get.back(),
+                    icon: SvgPicture.asset('assets/icons/Arrow.svg'),
                   ),
-                  Obx(
-                    () => SliverList(
-                      delegate: SliverChildListDelegate([
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 24,
-                          ),
-                          child: (_postingDetailController
-                                      .isPostingContentLoading.value ==
-                                  false)
-                              ? Column(
-                                  children: _postingDetailController
-                                      .item!.contents!
-                                      .map((content) =>
-                                          PostContentWidget(content: content))
-                                      .toList(),
-                                )
-                              : Image.asset(
-                                  'assets/icons/loading.gif',
-                                  scale: 9,
-                                ),
+                  actions: [
+                    IconButton(
+                      onPressed: isuser == 1
+                          ? () {
+                              modalController.showModalIOS(
+                                context,
+                                func1: () {
+                                  modalController.showButtonDialog(
+                                      leftText: '',
+                                      rightText: '',
+                                      title:
+                                          '정말 <${_postingDetailController.item?.title}> 포스팅을 삭제하시겠어요?',
+                                      content: '삭제한 포스팅은 복구할 수 없어요',
+                                      leftFunction: () => Get.back(),
+                                      rightFunction: () async {
+                                        _postingDetailController
+                                            .isPostDeleteLoading(true);
+                                        Get.back();
+                                        Get.back();
+                                        await deleteposting(
+                                            _postingDetailController.item!.id);
+                                        _postingDetailController
+                                            .isPostDeleteLoading(false);
+                                      });
+                                },
+                                func2: () {},
+                                value1: '이 포스팅 삭제하기',
+                                value2: '',
+                                isValue1Red: true,
+                                isValue2Red: false,
+                                isOne: true,
+                              );
+                            }
+                          : () {
+                              modalController.showModalIOS(
+                                context,
+                                func1: () {
+                                  modalController.showButtonDialog(
+                                      leftText: '',
+                                      rightText: '',
+                                      title:
+                                          '정말 <${_postingDetailController.item?.title}> 포스팅을 신고하시겠어요?',
+                                      content: '신고 횟수가 누적되면 포스팅은 삭제됩니다',
+                                      leftFunction: () => Get.back(),
+                                      rightFunction: () {});
+                                },
+                                func2: () {},
+                                value1: '이 포스팅 신고하기',
+                                value2: '',
+                                isValue1Red: true,
+                                isValue2Red: false,
+                                isOne: true,
+                              );
+                            },
+                      icon: SvgPicture.asset(
+                        'assets/icons/More.svg',
+                      ),
+                    ),
+                  ],
+                  pinned: true,
+                  flexibleSpace: _MyAppSpace(
+                    id: id,
+                    title: title,
+                    realName: realName,
+                    profileImage: profileImage,
+                    postDate: postDate,
+                    department: department,
+                    thumbnail: thumbNail,
+                  ),
+                  expandedHeight: Get.width / 3 * 2,
+                ),
+                Obx(
+                  () => SliverList(
+                    delegate: SliverChildListDelegate([
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 24,
                         ),
-                      ]),
-                    ),
+                        child: (_postingDetailController
+                                    .isPostingContentLoading.value ==
+                                false)
+                            ? Column(
+                                children: _postingDetailController
+                                    .item!.contents!
+                                    .map((content) =>
+                                        PostContentWidget(content: content))
+                                    .toList(),
+                              )
+                            : Image.asset(
+                                'assets/icons/loading.gif',
+                                scale: 9,
+                              ),
+                      ),
+                    ]),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          if (_postingDetailController.isPostDeleteLoading.value == true)
-            Container(
-              height: Get.height,
-              width: Get.width,
-              color: mainblack.withOpacity(0.3),
-              child: Image.asset(
-                'assets/icons/loading.gif',
-                scale: 6,
-              ),
+        ),
+        if (_postingDetailController.isPostDeleteLoading.value == true)
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: mainblack.withOpacity(0.3),
+            child: Image.asset(
+              'assets/icons/loading.gif',
+              scale: 6,
             ),
-        ],
-      ),
+          ),
+      ]),
     );
   }
 }

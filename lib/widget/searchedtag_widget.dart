@@ -78,9 +78,9 @@ class SearchTagWidget extends StatelessWidget {
                 onTap: () async {
                   SearchController.to.searchtagprojectlist.clear();
                   SearchController.to.searchtagquestionlist.clear();
-                  await SearchController.to.search(SearchType.tagProject, id,
+                  await SearchController.to.search(SearchType.tag_project, id,
                       SearchController.to.tagpagenumber);
-                  await SearchController.to.search(SearchType.tagQuestion, id,
+                  await SearchController.to.search(SearchType.tag_question, id,
                       SearchController.to.pagenumber);
                   Get.to(() => TagDetailScreen(
                         title: tag,

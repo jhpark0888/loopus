@@ -104,26 +104,74 @@ class TagDetailScreen extends StatelessWidget {
               ),
             ];
           },
-          body: TabBarView(
-            controller: searchController.tagtabController,
-            children: [
-              SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Column(
-                    children: searchController.searchtagprojectlist.value,
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Column(
-                    children: searchController.searchtagquestionlist.value,
-                  ),
-                ),
-              ),
-            ],
+          body: Obx(
+            () => TabBarView(
+              controller: searchController.tagtabController,
+              children: [
+                searchController.isSearchLoading.value
+                    ? Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Image.asset(
+                            'assets/icons/loading.gif',
+                            scale: 6,
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            '검색중...',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: mainblue.withOpacity(0.6),
+                            ),
+                          ),
+                        ],
+                      )
+                    : SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Column(
+                            children: searchController.searchtagprojectlist,
+                          ),
+                        ),
+                      ),
+                searchController.isSearchLoading.value
+                    ? Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Image.asset(
+                            'assets/icons/loading.gif',
+                            scale: 6,
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            '검색중...',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: mainblue.withOpacity(0.6),
+                            ),
+                          ),
+                        ],
+                      )
+                    : SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Column(
+                            children: searchController.searchtagquestionlist,
+                          ),
+                        ),
+                      ),
+              ],
+            ),
           ),
         ),
       ),

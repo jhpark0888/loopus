@@ -37,7 +37,7 @@ class Project {
   List<User> looper;
   int? post_count;
   int? like_count;
-  bool? is_user;
+  int? is_user;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
         id: json["project_id"] ?? json["id"],
@@ -70,7 +70,7 @@ class Project {
         like_count: json["count"] != null
             ? json["count"]["like_count"]
             : json["like_count"] ?? 0,
-        is_user: json['is_user'] == 1 ? true : false,
+        is_user: json['is_user'],
       );
 
   Map<String, dynamic> toJson() => {

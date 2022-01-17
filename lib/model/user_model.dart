@@ -11,6 +11,7 @@ class User {
     required this.isuser,
     this.profileImage,
     required this.profileTag,
+    required this.looped,
   });
 
   int user;
@@ -22,6 +23,7 @@ class User {
   int totalposting;
   String? profileImage;
   List<Tag> profileTag;
+  int looped;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         user: json["user_id"],
@@ -35,6 +37,7 @@ class User {
             : [],
         department: json["department"],
         isuser: json["is_user"] ?? 1,
+        looped: json["looped"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {

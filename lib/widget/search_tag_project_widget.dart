@@ -13,6 +13,7 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -57,13 +58,22 @@ class SearchTagProjectWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        print("click posting");
-        // project = await getproject(project.id);
-        // Project exproject = await Get.to(() => ProjectScreen(
-        //       project: project.obs,
+        ProjectDetailController.to.isProjectLoading.value = true;
+        Get.to(() => ProjectScreen(
+              projectid: project.id,
+            ));
+        // if (exproject != null) {
+        //   project(exproject);
+        // }
+        // ProjectDetailController.to.isProjectLoading.value = true;
+        // getproject(project.id).then((value) {
+        //   ProjectDetailController.to.isProjectLoading.value = false;
+        // });
+        // project = await Get.to(() => ProjectScreen(
+        //       projectid: project.id,
         //     ));
         // if (exproject != null) {
-        //   project = exproject;
+        //   project(exproject);
         // }
       },
       child: Container(
