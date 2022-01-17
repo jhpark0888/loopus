@@ -27,12 +27,14 @@ class ProjectScreen extends StatelessWidget {
   ProjectDetailController projectdetailController = Get.find();
   int projectid;
   Rx<Project> project = Project(
-      id: 0,
-      userid: 0,
-      projectName: '',
-      post: [],
-      projectTag: [],
-      looper: []).obs;
+          id: 0,
+          userid: 0,
+          projectName: '',
+          post: [],
+          projectTag: [],
+          looper: [],
+          is_user: 0)
+      .obs;
   RxList<ProjectPostingWidget> postinglist = <ProjectPostingWidget>[].obs;
   Project? exproject;
 
@@ -43,12 +45,9 @@ class ProjectScreen extends StatelessWidget {
       postinglist(List.from(project.value.post
           .map((post) => ProjectPostingWidget(
                 item: post,
-                realName:
-                    ProjectDetailController.to.project.value.realname ?? '',
-                department:
-                    ProjectDetailController.to.project.value.department ?? '',
-                profileImage:
-                    ProjectDetailController.to.project.value.profileimage ?? '',
+                realName: project.value.realname ?? '',
+                department: project.value.department ?? '',
+                profileImage: project.value.profileimage ?? '',
               ))
           .toList()
           .reversed));
@@ -93,8 +92,7 @@ class ProjectScreen extends StatelessWidget {
                                 '지금까지 작성한 ${project.value.post.length}개의 포스팅도 삭제됩니다',
                             leftFunction: () => Get.back(),
                             rightFunction: () async {
-                              await deleteproject(
-                                  projectdetailController.project.value.id);
+                              await deleteproject(project.value.id);
                             });
                       },
                       func2: () {},
@@ -109,7 +107,7 @@ class ProjectScreen extends StatelessWidget {
                       func1: () {
                         modalController.showButtonDialog(
                             leftText: '취소',
-                            rightText: '삭제',
+                            rightText: '신고',
                             title:
                                 '정말 <${project.value.projectName}> 활동을 신고하시겠어요?',
                             content:
@@ -118,7 +116,7 @@ class ProjectScreen extends StatelessWidget {
                             rightFunction: () {});
                       },
                       func2: () {},
-                      value1: '이 활동 삭제하기',
+                      value1: '이 활동 신고하기',
                       value2: '',
                       isValue1Red: true,
                       isValue2Red: false,
@@ -191,7 +189,7 @@ class ProjectScreen extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      '${DateFormat("yy.MM.dd").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''}',
+                                      '${DateFormat("yy.MM.dd").format(project.value.startDate ?? DateTime(2022))} ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate ?? DateTime(2022)) : ''}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -404,7 +402,7 @@ class ProjectScreen extends StatelessWidget {
                           ),
                           Obx(
                             () => Text(
-                              project.value.introduction!,
+                              project.value.introduction ?? '',
                               style: TextStyle(
                                 fontSize: 14,
                                 height: 1.5,

@@ -63,12 +63,12 @@ Future addproject() async {
     String responsebody = await response.stream.bytesToString();
     Map<String, dynamic> responsemap = json.decode(responsebody);
     Project project = Project.fromJson(responsemap);
+    ProjectDetailController.to.isProjectLoading(true);
     Get.to(() => ProjectScreen(
           projectid: project.id,
         ));
     ProfileController.to.myProjectList
         .insert(0, ProjectWidget(project: project.obs));
-    ProjectDetailController.to.project(project);
   }
 }
 

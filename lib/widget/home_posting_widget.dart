@@ -232,6 +232,7 @@ class HomePostingWidget extends StatelessWidget {
     Get.to(
       () => PostingScreen(),
       arguments: {
+        'isuser': item.isuser,
         'id': item.id,
         'isuser': item.isuser,
         'realName': item.realname,
