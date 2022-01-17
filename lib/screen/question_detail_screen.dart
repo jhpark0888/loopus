@@ -78,9 +78,12 @@ class QuestionDetailScreen extends StatelessWidget {
                       _handleSubmitted(
                           questionController.answertextController.text);
                     },
-                    child: Text(
-                      '작성',
-                      style: kButtonStyle.copyWith(color: mainblue),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Text(
+                        '작성',
+                        style: kButtonStyle.copyWith(color: mainblue),
+                      ),
                     ),
                   ),
                 ),
@@ -89,7 +92,7 @@ class QuestionDetailScreen extends StatelessWidget {
             contentPadding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
             isDense: true,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
                 width: 0,
                 style: BorderStyle.none,
@@ -111,6 +114,9 @@ class QuestionDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        child: _buildTextComposer(),
+      ),
       appBar: AppBarWidget(
         bottomBorder: false,
         leading: IconButton(
@@ -145,9 +151,11 @@ class QuestionDetailScreen extends StatelessWidget {
                 icon: questionController.check_alarm.value == false
                     ? SvgPicture.asset(
                         'assets/icons/Bell_Inactive.svg',
+                        width: 28,
                       )
                     : SvgPicture.asset(
                         'assets/icons/Alert.svg',
+                        width: 28,
                       )),
           ),
           IconButton(
@@ -166,6 +174,7 @@ class QuestionDetailScreen extends StatelessWidget {
               },
               icon: SvgPicture.asset(
                 'assets/icons/More.svg',
+                width: 28,
               ))
         ],
       ),
@@ -206,8 +215,8 @@ class QuestionDetailScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Align(
-                alignment: Alignment.bottomCenter, child: _buildTextComposer())
+            // Align(
+            //     alignment: Alignment.bottomCenter, child: _buildTextComposer())
           ],
         ),
       ),

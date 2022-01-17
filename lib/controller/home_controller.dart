@@ -162,6 +162,7 @@ class HomeController extends GetxController
       enablePostingPullup.value = false;
     }
     postingResult.value.postingitems.addAll(postingModel.postingitems);
+    print(postingModel.postingitems[2].thumbnail);
   }
 
   Future<void> looploadItem() async {

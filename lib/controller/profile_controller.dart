@@ -17,7 +17,7 @@ class ProfileController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static ProfileController get to => Get.find();
 
-  List<String> dropdownQanda = ["내가 답변한 질문", "내가 한 질문"];
+  List<String> dropdownQanda = ["답변한 질문", "내가 한 질문"];
   var selectqanda = 0.obs;
   RxBool profileenablepullup = true.obs;
   ScrollController userscrollController = ScrollController();
