@@ -133,7 +133,7 @@ class BookmarkScreen extends StatelessWidget {
                       (context, index) {
                         return Padding(
                           padding: EdgeInsets.only(
-                            top: (index == 0) ? 24 : 8,
+                            top: (index == 0) ? 16 : 8,
                             right: 16,
                             left: 16,
                             bottom: (index ==

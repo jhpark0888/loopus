@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 
 import 'package:loopus/screen/bookmark_screen.dart';
 import 'package:loopus/screen/company_screen.dart';
@@ -15,16 +16,18 @@ import 'package:loopus/screen/search_screen.dart';
 
 // ignore: use_key_in_widget_constructors
 class App extends GetView<AppController> {
-  static final List<Widget> _screens = [
-    HomeScreen(),
-    SearchScreen(),
-    CompanyScreen(),
-    // BookmarkScreen(),
-    MyProfileScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _screens = [
+      HomeScreen(),
+      SearchScreen(),
+      Container(
+        color: mainblack.withOpacity(0.25),
+      ),
+      CompanyScreen(),
+      MyProfileScreen(),
+    ];
+
     return Scaffold(
       extendBody: false,
       body: Obx(
@@ -59,55 +62,47 @@ class App extends GetView<AppController> {
               bottomLeft: Radius.circular(0),
               bottomRight: Radius.circular(0),
             ),
-            child: Theme(
-              data: Theme.of(context).copyWith(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-              ),
-              child: BottomNavigationBar(
-                backgroundColor: mainWhite,
-                type: BottomNavigationBarType.fixed,
-                currentIndex: controller.currentIndex.value,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                enableFeedback: false,
-                onTap: controller.changePageIndex,
-                items: [
-                  BottomNavigationBarItem(
-                      tooltip: '',
-                      icon: SvgPicture.asset("assets/icons/Home_Inactive.svg"),
-                      activeIcon:
-                          SvgPicture.asset("assets/icons/Home_Active.svg"),
-                      label: "홈"),
-                  BottomNavigationBarItem(
-                      tooltip: '',
-                      icon:
-                          SvgPicture.asset("assets/icons/Search_Inactive.svg"),
-                      activeIcon:
-                          SvgPicture.asset("assets/icons/Search_Active.svg"),
-                      label: "검색"),
-                  BottomNavigationBarItem(
-                      tooltip: '',
-                      icon: SvgPicture.asset("assets/icons/Paper_Inactive.svg"),
-                      activeIcon:
-                          SvgPicture.asset("assets/icons/Paper_Active.svg"),
-                      label: "공고"),
-                  // BottomNavigationBarItem(
-                  //     tooltip: '',
-                  //     icon: SvgPicture.asset(
-                  //         "assets/icons/Bookmark_Inactive.svg"),
-                  //     activeIcon:
-                  //         SvgPicture.asset("assets/icons/Bookmark_Active.svg"),
-                  //     label: "북마크"),
-                  BottomNavigationBarItem(
+            child: BottomNavigationBar(
+              backgroundColor: mainWhite,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: controller.currentIndex.value,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              enableFeedback: false,
+              onTap: controller.changePageIndex,
+              items: [
+                BottomNavigationBarItem(
                     tooltip: '',
-                    icon: SvgPicture.asset("assets/icons/Profile_Inactive.svg"),
+                    icon: SvgPicture.asset("assets/icons/Home_Inactive.svg"),
                     activeIcon:
-                        SvgPicture.asset("assets/icons/Profile_Active.svg"),
-                    label: "프로필",
-                  ),
-                ],
-              ),
+                        SvgPicture.asset("assets/icons/Home_Active.svg"),
+                    label: "홈"),
+                BottomNavigationBarItem(
+                    tooltip: '',
+                    icon: SvgPicture.asset("assets/icons/Search_Inactive.svg"),
+                    activeIcon:
+                        SvgPicture.asset("assets/icons/Search_Active.svg"),
+                    label: "검색"),
+                BottomNavigationBarItem(
+                    tooltip: '',
+                    icon: SvgPicture.asset("assets/icons/Plus_inactive.svg"),
+                    activeIcon:
+                        SvgPicture.asset("assets/icons/Plus_active.svg"),
+                    label: "기업"),
+                BottomNavigationBarItem(
+                    tooltip: '',
+                    icon: SvgPicture.asset("assets/icons/Paper_Inactive.svg"),
+                    activeIcon:
+                        SvgPicture.asset("assets/icons/Paper_Active.svg"),
+                    label: "공고"),
+                BottomNavigationBarItem(
+                  tooltip: '',
+                  icon: SvgPicture.asset("assets/icons/Profile_Inactive.svg"),
+                  activeIcon:
+                      SvgPicture.asset("assets/icons/Profile_Active.svg"),
+                  label: "프로필",
+                ),
+              ],
             ),
           ),
         ),

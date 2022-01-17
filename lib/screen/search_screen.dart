@@ -208,61 +208,7 @@ class SearchScreen extends StatelessWidget {
                                 );
                               }),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            right: 16,
-                            left: 16,
-                            top: 28,
-                            bottom: 32,
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "이 주의 학생",
-                                    style: kSubTitle2Style,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _modalController.showCustomDialog(
-                                        '이 주의 활동 수, 포스팅 수, 답변 수 등을 점수로 환산해 매긴 순위입니다 (매 주 금요일마다 갱신됩니다)',
-                                        1500,
-                                      );
-                                    },
-                                    child: Text(
-                                      "선정 기준이 뭔가요?",
-                                      style: kButtonStyle.copyWith(
-                                          color: mainblue),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: Column(
-                                  children: [
-                                    SearchStudentWidget(),
-                                    SearchStudentWidget(),
-                                    SearchStudentWidget(),
-                                    SearchStudentWidget(),
-                                    SearchStudentWidget(),
-                                    SearchStudentWidget(),
-                                    SearchStudentWidget(),
-                                    SearchStudentWidget(),
-                                    SearchStudentWidget(),
-                                    SearchStudentWidget(),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        // weekendStudent(_modalController),
                       ],
                     ),
                   ),
@@ -475,6 +421,62 @@ class SearchScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget weekendStudent(ModalController _modalController) {
+  return Padding(
+    padding: const EdgeInsets.only(
+      right: 16,
+      left: 16,
+      top: 28,
+      bottom: 32,
+    ),
+    child: Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "이 주의 학생",
+              style: kSubTitle2Style,
+            ),
+            GestureDetector(
+              onTap: () {
+                _modalController.showCustomDialog(
+                  '이 주의 활동 수, 포스팅 수, 답변 수 등을 점수로 환산해 매긴 순위입니다 (매 주 금요일마다 갱신됩니다)',
+                  1500,
+                );
+              },
+              child: Text(
+                "선정 기준이 뭔가요?",
+                style: kButtonStyle.copyWith(color: mainblue),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              SearchStudentWidget(),
+              SearchStudentWidget(),
+              SearchStudentWidget(),
+              SearchStudentWidget(),
+              SearchStudentWidget(),
+              SearchStudentWidget(),
+              SearchStudentWidget(),
+              SearchStudentWidget(),
+              SearchStudentWidget(),
+              SearchStudentWidget(),
+            ],
+          ),
+        )
+      ],
+    ),
+  );
 }
 
 Widget searchloading() {
