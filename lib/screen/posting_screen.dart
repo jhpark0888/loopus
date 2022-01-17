@@ -31,6 +31,8 @@ class PostingScreen extends StatelessWidget {
     DateTime postDate = Get.arguments['postDate'];
     String department = Get.arguments['department'];
     dynamic thumbNail = Get.arguments['thumbnail'];
+    print(profileImage);
+    print(thumbNail);
     return Obx(
       () => Stack(children: [
         Scaffold(
