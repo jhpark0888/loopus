@@ -39,11 +39,11 @@ class MessageQuestionWidget extends StatelessWidget {
               Text(
                 "$content",
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 16,
                   height: 1.5,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
               Row(

@@ -7,6 +7,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 
 import 'package:loopus/screen/bookmark_screen.dart';
+import 'package:loopus/screen/company_screen.dart';
 import 'package:loopus/screen/home_screen.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/paper_screen.dart';
@@ -17,8 +18,8 @@ class App extends GetView<AppController> {
   static final List<Widget> _screens = [
     HomeScreen(),
     SearchScreen(),
-    PaperScreen(),
-    BookmarkScreen(),
+    CompanyScreen(),
+    // BookmarkScreen(),
     MyProfileScreen(),
   ];
 
@@ -91,13 +92,13 @@ class App extends GetView<AppController> {
                       activeIcon:
                           SvgPicture.asset("assets/icons/Paper_Active.svg"),
                       label: "공고"),
-                  BottomNavigationBarItem(
-                      tooltip: '',
-                      icon: SvgPicture.asset(
-                          "assets/icons/Bookmark_Inactive.svg"),
-                      activeIcon:
-                          SvgPicture.asset("assets/icons/Bookmark_Active.svg"),
-                      label: "북마크"),
+                  // BottomNavigationBarItem(
+                  //     tooltip: '',
+                  //     icon: SvgPicture.asset(
+                  //         "assets/icons/Bookmark_Inactive.svg"),
+                  //     activeIcon:
+                  //         SvgPicture.asset("assets/icons/Bookmark_Active.svg"),
+                  //     label: "북마크"),
                   BottomNavigationBarItem(
                     tooltip: '',
                     icon: SvgPicture.asset("assets/icons/Profile_Inactive.svg"),

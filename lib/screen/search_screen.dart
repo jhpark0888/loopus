@@ -275,7 +275,7 @@ class SearchScreen extends StatelessWidget {
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                     child: DefaultTabController(
-                      length: 5,
+                      length: 4,
                       initialIndex: 0,
                       child: WillPopScope(
                         onWillPop: () async {
@@ -349,12 +349,6 @@ class SearchScreen extends StatelessWidget {
                                                   height: 40,
                                                   child: Text(
                                                     "태그",
-                                                  ),
-                                                ),
-                                                Tab(
-                                                  height: 40,
-                                                  child: Text(
-                                                    "공고",
                                                   ),
                                                 ),
                                               ]),
@@ -468,11 +462,6 @@ class SearchScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 50.0),
-                                    child: Center(child: Text("공고")),
                                   ),
                                 ]),
                           ),

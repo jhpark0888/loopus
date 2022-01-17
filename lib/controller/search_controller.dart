@@ -57,7 +57,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   void onInit() {
     _focusListen();
     tabController = TabController(
-      length: 5,
+      length: 4,
       initialIndex: 0,
       vsync: this,
     );

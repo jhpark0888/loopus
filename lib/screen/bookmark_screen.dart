@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/bookmark_widget.dart';
 import 'package:loopus/widget/custom_refresher.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -14,24 +15,9 @@ class BookmarkScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        bottom: PreferredSize(
-          child: Container(
-            color: const Color(0xffe7e7e7),
-            height: 1,
-          ),
-          preferredSize: const Size.fromHeight(4.0),
-        ),
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        centerTitle: false,
-        title: const Text(
-          '북마크',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Nanum',
-          ),
-        ),
+      appBar: AppBarWidget(
+        title: '북마크',
+        bottomBorder: false,
       ),
       body: Obx(
         () => SmartRefresher(

@@ -86,13 +86,13 @@ class MyApp extends StatelessWidget {
           name: "/",
           page: token != null ? () => App() : () => StartScreen(),
         ),
-        GetPage(
-          name: '/search',
-          page: () => SearchTypingScreen(),
-          transition: Transition.fadeIn,
-          transitionDuration: kAnimationDuration,
-          curve: kAnimationCurve,
-        ),
+        // GetPage(
+        //   name: '/search',
+        //   page: () => SearchTypingScreen(),
+        //   transition: Transition.fadeIn,
+        //   transitionDuration: kAnimationDuration,
+        //   curve: kAnimationCurve,
+        // ),
       ],
     );
   }

@@ -190,7 +190,7 @@ class HomeLoopScreen extends StatelessWidget {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Get.to(SearchTypingScreen());
+                                    // Get.to(SearchTypingScreen());
                                   },
                                   child: Text(
                                     '관심사가 비슷한 학생 찾아보기',

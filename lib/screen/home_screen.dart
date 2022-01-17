@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
           headerSliverBuilder: (context, value) {
             return [
               //홈 검색 탭
-              homeSearchBar(_searchController),
+              // homeSearchBar(_searchController),
               //활동중인 공식계정
               activatedOfficialAccount(_modalController),
               //탭 바

@@ -34,6 +34,45 @@ class PostingScreen extends StatelessWidget {
     return Obx(
       () => Stack(children: [
         Scaffold(
+          bottomNavigationBar: BottomAppBar(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              height: kBottomNavigationBarHeight,
+              decoration: const BoxDecoration(
+                color: mainWhite,
+                border: Border(
+                  top: BorderSide(
+                    width: 1,
+                    color: Color(0xffe7e7e7),
+                  ),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: () {},
+                    child:
+                        SvgPicture.asset("assets/icons/Favorite_Inactive.svg"),
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    "4",
+                    style: kButtonStyle,
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: SvgPicture.asset("assets/icons/Mark_Default.svg"),
+                  ),
+                ],
+              ),
+            ),
+          ),
           body: GestureDetector(
             onTap: () {},
             // },
@@ -42,7 +81,7 @@ class PostingScreen extends StatelessWidget {
               controller: _controller,
               slivers: [
                 SliverAppBar(
-                  stretch: false,
+                  stretch: true,
                   bottom: PreferredSize(
                       child: Container(
                         color: const Color(0xffe7e7e7),
@@ -150,6 +189,36 @@ class PostingScreen extends StatelessWidget {
                               ),
                       ),
                     ]),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      '이 활동의 다른 포스팅 읽기',
+                      style: kSubTitle2Style.copyWith(color: mainblue),
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    height: 8,
+                    color: Color(0xffF2F3F5),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16, 24, 16, 40),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          '관련 포스팅',
+                          style: kSubTitle2Style,
+                        ),
+                        //TODO: 관련 포스팅 리스트
+                      ],
+                    ),
                   ),
                 ),
               ],

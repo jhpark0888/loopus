@@ -12,6 +12,7 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/bookmark_screen.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
@@ -58,6 +59,14 @@ class MyProfileScreen extends StatelessWidget {
                         style: kHeaderH1Style,
                       ),
                       actions: [
+                        IconButton(
+                          onPressed: () {
+                            Get.to(() => BookmarkScreen());
+                          },
+                          icon: SvgPicture.asset(
+                            'assets/icons/Bookmark_Inactive.svg',
+                          ),
+                        ),
                         IconButton(
                           onPressed: () {
                             Get.to(() => SettingScreen());
