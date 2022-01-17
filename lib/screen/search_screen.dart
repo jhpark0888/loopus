@@ -195,7 +195,8 @@ class SearchScreen extends StatelessWidget {
                                   child: Row(
                                     children: [
                                       Tagwidget(
-                                        tag: Tag(tagId: 0, tag: '공모전'),
+                                        tag:
+                                            Tag(tagId: 0, tag: '공모전', count: 0),
                                         fontSize: 14,
                                       ),
                                       index != 6

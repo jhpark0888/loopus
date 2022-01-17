@@ -229,7 +229,11 @@ class BookmarkWidget extends StatelessWidget {
   }
 
   Future<void> tapProfile() async {
-    profileController.loadotherProfile(item.userid);
+    profileController.isProfileLoading(true);
+
+    Get.to(() => OtherProfileScreen(
+          userid: item.userid,
+        ));
   }
 
   void tapPosting() {

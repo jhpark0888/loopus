@@ -129,14 +129,14 @@ class PaperinternshipWidget extends StatelessWidget {
                               Row(
                                 children: [
                                   Tagwidget(
-                                    tag: Tag(tagId: 0, tag: '공모전'),
+                                    tag: Tag(tagId: 0, tag: '공모전', count: 0),
                                     fontSize: 12,
                                   ),
                                   SizedBox(
                                     width: 4,
                                   ),
                                   Tagwidget(
-                                    tag: Tag(tagId: 0, tag: '공모전'),
+                                    tag: Tag(tagId: 0, tag: '공모전', count: 0),
                                     fontSize: 12,
                                   ),
                                 ],
