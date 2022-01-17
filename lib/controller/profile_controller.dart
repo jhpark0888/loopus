@@ -27,15 +27,16 @@ class ProfileController extends GetxController
   RefreshController profilerefreshController =
       RefreshController(initialRefresh: false);
 
-  // Future<void> onRefresh() async {
-  //   await Future.delayed(Duration(milliseconds: 1000));
-  //   profilerefreshController.refreshCompleted();
-  // }
+  void onRefresh() async {
+    profileenablepullup.value = true;
+    loadmyProfile();
+    profilerefreshController.refreshCompleted();
+  }
 
-  // void onLoding() async {
-  //   await Future.delayed(Duration(milliseconds: 1000));
-  //   profilerefreshController.loadComplete();
-  // }
+  void onLoading() async {
+    await Future.delayed(Duration(milliseconds: 10));
+    profilerefreshController.loadComplete();
+  }
 
   RxList<ProjectWidget> myProjectList = <ProjectWidget>[].obs;
   RxList<ProjectWidget> otherProjectList = <ProjectWidget>[].obs;
@@ -76,9 +77,6 @@ class ProfileController extends GetxController
   RxBool isProfileLoading = true.obs;
   RxBool isLoopPeopleLoading = true.obs;
 
-  RefreshController profileRefreshController =
-      RefreshController(initialRefresh: false);
-
   void loadmyProfile() async {
     String? userId = await const FlutterSecureStorage().read(key: "id");
 
@@ -95,19 +93,19 @@ class ProfileController extends GetxController
     });
   }
 
-  void loadotherProfile(int userid) async {
-    await getProfile(userid).then((user) async {
-      otherUser(user);
-      isProfileLoading.value = false;
-    });
-    await getProjectlist(userid).then((projectlist) {
-      otherProjectList(projectlist
-          .map((project) => ProjectWidget(
-                project: project.obs,
-              ))
-          .toList());
-    });
-  }
+  // void loadotherProfile(int userid) async {
+  //   await getProfile(userid).then((user) async {
+  //     otherUser(user);
+  //     isProfileLoading.value = false;
+  //   });
+  //   await getProjectlist(userid).then((projectlist) {
+  //     otherProjectList(projectlist
+  //         .map((project) => ProjectWidget(
+  //               project: project.obs,
+  //             ))
+  //         .toList());
+  //   });
+  // }
 
   @override
   void onInit() {

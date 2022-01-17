@@ -6,19 +6,16 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 import 'dart:math' as math;
 
 class TagDetailScreen extends StatelessWidget {
   final TagController _tagController = Get.put(TagController());
   final SearchController searchController = Get.find();
-  String title;
-  var count;
+  Tag tag;
 
-  TagDetailScreen({
-    required this.title,
-    required this.count,
-  });
+  TagDetailScreen({required this.tag});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +42,7 @@ class TagDetailScreen extends StatelessWidget {
                 ),
                 automaticallyImplyLeading: false,
                 centerTitle: true,
-                flexibleSpace: _CustomSpace(title, count.toString()),
+                flexibleSpace: _CustomSpace(tag.tag, tag.count.toString()),
                 expandedHeight: Get.height * 0.18,
               ),
               SliverOverlapAbsorber(

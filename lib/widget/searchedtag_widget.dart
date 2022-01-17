@@ -83,8 +83,7 @@ class SearchTagWidget extends StatelessWidget {
                   await SearchController.to.search(SearchType.tag_question, id,
                       SearchController.to.pagenumber);
                   Get.to(() => TagDetailScreen(
-                        title: tag,
-                        count: count,
+                        tag: Tag(tagId: id, tag: tag, count: count ?? 0),
                       ));
                 },
                 child: Padding(

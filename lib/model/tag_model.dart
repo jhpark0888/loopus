@@ -18,21 +18,18 @@ class SearchTag {
 }
 
 class Tag {
-  Tag({
-    required this.tagId,
-    required this.tag,
-  });
+  Tag({required this.tagId, required this.tag, required this.count});
 
   int tagId;
   String tag;
+  int count;
 
   factory Tag.fromJson(Map<String, dynamic> json) => Tag(
         tagId: json["tag_id"],
         tag: json["tag"],
+        count: json["tag_count"] ?? 0,
       );
 
-  Map<String, dynamic> toJson() => {
-        "tag_id": tagId,
-        "tag": tag,
-      };
+  Map<String, dynamic> toJson() =>
+      {"tag_id": tagId, "tag": tag, "tag_count": count};
 }

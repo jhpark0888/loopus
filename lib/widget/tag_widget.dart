@@ -29,8 +29,7 @@ class Tagwidget extends StatelessWidget {
           SearchController.to.isSearchLoading(false);
         });
         Get.to(() => TagDetailScreen(
-              title: tag.tag,
-              count: 0,
+              tag: tag,
             ));
       },
       child: Container(
