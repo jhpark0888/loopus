@@ -37,6 +37,7 @@ class OtherProfileScreen extends StatelessWidget {
     profileTag: [],
     department: '',
     isuser: 0,
+    looped: 0,
   ).obs;
   RxList<ProjectWidget> otherProjectList = <ProjectWidget>[].obs;
   RxBool isLoop = false.obs;
@@ -278,7 +279,14 @@ class OtherProfileScreen extends StatelessWidget {
                                     Expanded(
                                       child: GestureDetector(
                                         onTap: () {
-                                          if (otherUser.value.isuser == 1) {}
+                                          if (otherUser.value.isuser == 1) {
+                                          } else {
+                                            otherUser.value.looped == 1
+                                                ? postloopRelease(
+                                                    otherUser.value.user)
+                                                : postloopRequest(
+                                                    otherUser.value.user);
+                                          }
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
@@ -301,7 +309,12 @@ class OtherProfileScreen extends StatelessWidget {
                                                                     mainWhite)),
                                                   )
                                                 : Center(
-                                                    child: Text('루프 맺기',
+                                                    child: Text(
+                                                        otherUser.value
+                                                                    .looped ==
+                                                                1
+                                                            ? '루프 해제'
+                                                            : '루프 맺기',
                                                         style: kButtonStyle
                                                             .copyWith(
                                                                 color:

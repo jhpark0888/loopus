@@ -1,18 +1,16 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:get/get.dart';
+
 import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/firebase_options.dart';
-import 'package:loopus/screen/home_screen.dart';
-import 'package:loopus/screen/login_screen.dart';
+
 import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 
@@ -21,16 +19,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: mainblack,
     systemNavigationBarIconBrightness: Brightness.light,
     statusBarColor: mainWhite, // status bar color
   ));
-  String? temptoken = await FlutterSecureStorage().read(key: 'token');
-  print(temptoken);
+  String? temptoken = await const FlutterSecureStorage().read(key: 'token');
 
   runApp(
     // DevicePreview(
@@ -49,18 +45,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('ko'),
+      supportedLocales: const [
+        Locale('ko'),
       ],
       home: WelcomeScreen(token: token),
       locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
-      title: "Loop Us",
+      title: "루프어스",
       theme: ThemeData(
         fontFamily: 'Nanum',
         appBarTheme: const AppBarTheme(
@@ -68,12 +64,12 @@ class MyApp extends StatelessWidget {
           foregroundColor: mainblack,
         ),
         canvasColor: mainWhite,
-        // brightness: Brightness.dark,
         textTheme: const TextTheme(
           bodyText1: TextStyle(color: mainblack),
           bodyText2: TextStyle(color: mainblack),
         ).apply(bodyColor: mainblack),
-        textSelectionTheme: TextSelectionThemeData(cursorColor: mainblack),
+        textSelectionTheme:
+            const TextSelectionThemeData(cursorColor: mainblack),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
@@ -81,7 +77,6 @@ class MyApp extends StatelessWidget {
             splashFactory: NoSplash.splashFactory,
           ),
         ),
-
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
@@ -95,8 +90,8 @@ class MyApp extends StatelessWidget {
           name: '/search',
           page: () => SearchTypingScreen(),
           transition: Transition.fadeIn,
-          transitionDuration: Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
+          transitionDuration: kAnimationDuration,
+          curve: kAnimationCurve,
         ),
       ],
     );
@@ -113,25 +108,28 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenStete extends State<WelcomeScreen> {
   String? token;
   _WelcomeScreenStete({this.token});
+
   @override
   void initState() {
     super.initState();
-    new Future.delayed(
-        const Duration(seconds: 3),
-        () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: token == null
-                      ? (context) => StartScreen()
-                      : (context) => App()),
-            ));
+    //TODO: Splash Screen을 띄우는 더 효율적인 방법이 있지 않을까?
+    Future.delayed(
+      const Duration(seconds: 3),
+      () => Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder:
+              token == null ? (context) => StartScreen() : (context) => App(),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
-      body: Container(
+      backgroundColor: mainWhite,
+      body: SizedBox(
         height: Get.height,
         width: Get.width,
         child: Image.asset("assets/illustrations/splash_animation.gif",

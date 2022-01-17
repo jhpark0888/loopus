@@ -94,29 +94,31 @@ Future<void> addposting(int projectId) async {
     // String responsemap = json.decode(responsebody);
     // print(responsemap = ok);
 
-    await getproject(projectId).then((value) {
-      ProjectDetailController.to.project(value);
-      ProjectDetailController.to
-          .postinglist(List.from(ProjectDetailController.to.project.value.post
-              .map((post) => ProjectPostingWidget(
-                    item: post,
-                    realName:
-                        ProjectDetailController.to.project.value.realname ?? '',
-                    department:
-                        ProjectDetailController.to.project.value.department ??
-                            '',
-                    profileImage:
-                        ProjectDetailController.to.project.value.profileimage ??
-                            '',
-                  ))
-              .toList()
-              .reversed));
-    });
+    // await getproject(projectId).then((value) {
+    //   ProjectDetailController.to.project(value);
+    //   ProjectDetailController.to
+    //       .postinglist(List.from(ProjectDetailController.to.project.value.post
+    //           .map((post) => ProjectPostingWidget(
+    //                 item: post,
+    //                 realName:
+    //                     ProjectDetailController.to.project.value.realname ?? '',
+    //                 department:
+    //                     ProjectDetailController.to.project.value.department ??
+    //                         '',
+    //                 profileImage:
+    //                     ProjectDetailController.to.project.value.profileimage ??
+    //                         '',
+    //               ))
+    //           .toList()
+    //           .reversed));
+    // });
     Get.back();
     Get.back();
     Get.back();
     Get.back();
-    Get.to(() => ProjectScreen());
+    Get.to(() => ProjectScreen(
+          projectid: projectId,
+        ));
   } else if (response.statusCode == 400) {
     if (kDebugMode) {
       print("status code : ${response.statusCode} 포스팅 업로드 실패");
@@ -166,6 +168,8 @@ Future<void> deleteposting(int postid) async {
         .removeWhere((post) => post.id == postid);
     ProjectDetailController.to.postinglist
         .removeWhere((post) => post.item.id == postid);
+    HomeController.to.postingResult.value.postingitems
+        .removeWhere((post) => post.id == postid);
   } else {
     return Future.error(response.statusCode);
   }

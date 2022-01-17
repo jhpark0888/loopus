@@ -19,33 +19,59 @@ import 'package:intl/intl.dart';
 class ProjectScreen extends StatelessWidget {
   ProjectScreen({
     Key? key,
+    required this.projectid,
   }) : super(key: key);
 
   ModalController modalController = Get.put(ModalController());
 
   ProjectDetailController projectdetailController = Get.find();
+  int projectid;
+  Rx<Project> project = Project(
+      id: 0,
+      userid: 0,
+      projectName: '',
+      post: [],
+      projectTag: [],
+      looper: []).obs;
+  RxList<ProjectPostingWidget> postinglist = <ProjectPostingWidget>[].obs;
   Project? exproject;
 
   @override
   Widget build(BuildContext context) {
+    getproject(projectid).then((value) {
+      project(value);
+      postinglist(List.from(project.value.post
+          .map((post) => ProjectPostingWidget(
+                item: post,
+                realName:
+                    ProjectDetailController.to.project.value.realname ?? '',
+                department:
+                    ProjectDetailController.to.project.value.department ?? '',
+                profileImage:
+                    ProjectDetailController.to.project.value.profileimage ?? '',
+              ))
+          .toList()
+          .reversed));
+      projectdetailController.isProjectLoading.value = false;
+    });
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
           elevation: 0,
           leading: IconButton(
             onPressed: () {
-              Get.back(result: projectdetailController.project.value);
+              Get.back(result: project.value);
             },
             icon: SvgPicture.asset('assets/icons/Arrow.svg'),
           ),
           actions: [
             Obx(
-              () => projectdetailController.project.value.is_user == true
+              () => project.value.is_user == 1
                   ? IconButton(
                       onPressed: () async {
                         exproject = await Get.to(() => ProjectModifyScreen());
                         if (exproject != null) {
-                          projectdetailController.project(exproject);
+                          project(exproject);
                         }
                       },
                       icon: SvgPicture.asset('assets/icons/Edit.svg'),
@@ -54,27 +80,44 @@ class ProjectScreen extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                modalController.showModalIOS(
-                  context,
-                  func1: () {
-                    modalController.showButtonDialog(
-                        title:
-                            '정말 <${projectdetailController.project.value.projectName}> 활동을 삭제하시겠어요?',
-                        content:
-                            '지금까지 작성한 ${projectdetailController.project.value.post.length}개의 포스팅도 삭제됩니다',
-                        yesfunction: () => Get.back(),
-                        nofunction: () async {
-                          await deleteproject(
-                              projectdetailController.project.value.id);
-                        });
-                  },
-                  func2: () {},
-                  value1: '이 활동 삭제하기',
-                  value2: '',
-                  isValue1Red: true,
-                  isValue2Red: false,
-                  isOne: true,
-                );
+                project.value.is_user == 1
+                    ? modalController.showModalIOS(
+                        context,
+                        func1: () {
+                          modalController.showButtonDialog(
+                              title:
+                                  '정말 <${project.value.projectName}> 활동을 삭제하시겠어요?',
+                              content:
+                                  '지금까지 작성한 ${project.value.post.length}개의 포스팅도 삭제됩니다',
+                              yesfunction: () => Get.back(),
+                              nofunction: () async {
+                                await deleteproject(project.value.id);
+                              });
+                        },
+                        func2: () {},
+                        value1: '이 활동 삭제하기',
+                        value2: '',
+                        isValue1Red: true,
+                        isValue2Red: false,
+                        isOne: true,
+                      )
+                    : modalController.showModalIOS(
+                        context,
+                        func1: () {
+                          modalController.showButtonDialog(
+                              title:
+                                  '정말 <${project.value.projectName}> 활동을 신고하시겠어요?',
+                              content: '신고 횟수가 누적되면 활동이 삭제됩니다.',
+                              yesfunction: () => Get.back(),
+                              nofunction: () {});
+                        },
+                        func2: () {},
+                        value1: '이 활동 신고하기',
+                        value2: '',
+                        isValue1Red: true,
+                        isValue2Red: false,
+                        isOne: true,
+                      );
               },
               icon: SvgPicture.asset('assets/icons/More.svg'),
             ),
@@ -124,8 +167,7 @@ class ProjectScreen extends StatelessWidget {
                           children: [
                             Obx(
                               () => Text(
-                                projectdetailController
-                                    .project.value.projectName,
+                                project.value.projectName,
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -144,16 +186,14 @@ class ProjectScreen extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text(
-                                        '${DateFormat("yy.MM.dd").format(projectdetailController.project.value.startDate!)} ~ ${projectdetailController.project.value.endDate != null ? DateFormat("yy.MM.dd").format(projectdetailController.project.value.endDate!) : ''}',
+                                        '${DateFormat("yy.MM.dd").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''}',
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       SizedBox(
-                                        width: (projectdetailController
-                                                    .project.value.endDate ==
-                                                null)
+                                        width: (project.value.endDate == null)
                                             ? 4
                                             : 8,
                                       ),
@@ -165,44 +205,28 @@ class ProjectScreen extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(4),
-                                          color: (projectdetailController
-                                                      .project.value.endDate ==
-                                                  null)
+                                          color: (project.value.endDate == null)
                                               ? Color(0xffefefef)
                                               : Color(0xff888B8C),
                                         ),
                                         child: Center(
                                           child: Text(
-                                            projectdetailController.project
-                                                        .value.endDate ==
-                                                    null
+                                            project.value.endDate == null
                                                 ? '진행중'
                                                 : DurationCaculator()
                                                     .durationCaculate(
-                                                        startDate:
-                                                            projectdetailController
-                                                                .project
-                                                                .value
-                                                                .startDate!,
-                                                        endDate:
-                                                            projectdetailController
-                                                                .project
-                                                                .value
-                                                                .endDate!),
+                                                        startDate: project
+                                                            .value.startDate!,
+                                                        endDate: project
+                                                            .value.endDate!),
                                             style: TextStyle(
                                               fontWeight:
-                                                  (projectdetailController
-                                                              .project
-                                                              .value
-                                                              .endDate ==
+                                                  (project.value.endDate ==
                                                           null)
                                                       ? FontWeight.normal
                                                       : FontWeight.bold,
                                               fontSize: 14,
-                                              color: (projectdetailController
-                                                          .project
-                                                          .value
-                                                          .endDate ==
+                                              color: (project.value.endDate ==
                                                       null)
                                                   ? mainblack.withOpacity(0.6)
                                                   : mainWhite,
@@ -218,10 +242,8 @@ class ProjectScreen extends StatelessWidget {
                                       print(DurationCaculator()
                                           .durationCaculate(
                                               startDate:
-                                                  projectdetailController
-                                                      .project.value.startDate!,
-                                              endDate: projectdetailController
-                                                  .project.value.endDate!));
+                                                  project.value.startDate!,
+                                              endDate: project.value.endDate!));
                                     },
                                     child: Row(
                                       children: [
@@ -232,7 +254,7 @@ class ProjectScreen extends StatelessWidget {
                                           width: 4,
                                         ),
                                         Text(
-                                          '${projectdetailController.project.value.like_count}',
+                                          '${project.value.like_count}',
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
@@ -384,8 +406,7 @@ class ProjectScreen extends StatelessWidget {
                             ),
                             Obx(
                               () => Text(
-                                projectdetailController
-                                    .project.value.introduction!,
+                                project.value.introduction!,
                                 style: TextStyle(
                                   fontSize: 14,
                                   height: 1.5,
@@ -408,20 +429,15 @@ class ProjectScreen extends StatelessWidget {
                             Obx(
                               () => Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  children: projectdetailController
-                                      .project.value.projectTag
+                                  children: project.value.projectTag
                                       .map((tag) => Row(children: [
                                             Tagwidget(
                                               tag: tag,
                                               fontSize: 14,
                                             ),
-                                            projectdetailController.project
-                                                        .value.projectTag
+                                            project.value.projectTag
                                                         .indexOf(tag) !=
-                                                    projectdetailController
-                                                            .project
-                                                            .value
-                                                            .projectTag
+                                                    project.value.projectTag
                                                             .length -
                                                         1
                                                 ? SizedBox(
@@ -443,14 +459,11 @@ class ProjectScreen extends StatelessWidget {
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                projectdetailController.project.value.is_user ==
-                                        true
+                                project.value.is_user == true
                                     ? GestureDetector(
                                         onTap: () {
                                           Get.to(() => PostingAddNameScreen(
-                                                project_id:
-                                                    projectdetailController
-                                                        .project.value.id,
+                                                project_id: project.value.id,
                                               ));
                                         },
                                         child: Text(
@@ -470,9 +483,8 @@ class ProjectScreen extends StatelessWidget {
                             ),
                             Obx(
                               () => Column(
-                                  children: projectdetailController
-                                          .project.value.post.isNotEmpty
-                                      ? projectdetailController.postinglist
+                                  children: project.value.post.isNotEmpty
+                                      ? postinglist
                                       : [
                                           SizedBox(
                                             height: 20,

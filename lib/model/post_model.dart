@@ -19,6 +19,7 @@ class Post {
     required this.department,
     required this.profileimage,
     required this.isMarked,
+    required this.isuser,
   });
 
   int id;
@@ -37,6 +38,7 @@ class Post {
   RxInt likeCount;
   RxInt isLiked;
   RxInt isMarked;
+  int isuser;
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
         project_id: json["project_id"],
@@ -64,6 +66,7 @@ class Post {
         profileimage: json["profile_image"],
         realname: json["real_name"] ?? '',
         projectname: json["project_name"] ?? '',
+        isuser: json["is_user"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -114,26 +117,6 @@ class PostContent {
         "type": type,
         "content": content,
         "url": url ?? null,
-      };
-}
-
-class ProjectTag {
-  ProjectTag({
-    required this.tagId,
-    required this.tag,
-  });
-
-  int tagId;
-  String tag;
-
-  factory ProjectTag.fromJson(Map<String, dynamic> json) => ProjectTag(
-        tagId: json["tag_id"],
-        tag: json["tag"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "tag_id": tagId,
-        "tag": tag,
       };
 }
 

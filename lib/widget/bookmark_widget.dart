@@ -240,6 +240,7 @@ class BookmarkWidget extends StatelessWidget {
     });
     // var responseBody = json.decode(utf8.decode(response!.bodyBytes));
     Get.to(() => PostingScreen(), arguments: {
+      'isuser': item.isuser,
       'id': item.id,
       'realName': item.realname,
       'profileImage': item.profileimage,

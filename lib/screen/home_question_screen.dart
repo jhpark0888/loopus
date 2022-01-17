@@ -12,9 +12,7 @@ import 'package:loopus/widget/question_posting_widget.dart';
 import 'package:loopus/widget/custom_refresher.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class QuestionAnswerScreen extends StatelessWidget {
-  QuestionAnswerScreen({Key? key}) : super(key: key);
-
+class HomeQuestionScreen extends StatelessWidget {
   final HomeController homeController = Get.find();
 
   @override
@@ -38,7 +36,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                   ? homeController.enableQuestionPullup.value
                   : false,
           header: ClassicHeader(
-            textStyle: TextStyle(color: mainblack),
+            textStyle: const TextStyle(color: mainblack),
             refreshingText: '',
             releaseText: "",
             completeText: "",
@@ -49,7 +47,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                   'assets/icons/loading.gif',
                   scale: 6,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
                 Text(
@@ -68,7 +66,7 @@ class QuestionAnswerScreen extends StatelessWidget {
                   'assets/icons/loading.gif',
                   scale: 6,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
                 Text(
@@ -83,11 +81,11 @@ class QuestionAnswerScreen extends StatelessWidget {
             ),
             completeIcon: Column(
               children: [
-                Icon(
+                const Icon(
                   Icons.check_rounded,
                   color: mainblue,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
                 Text(

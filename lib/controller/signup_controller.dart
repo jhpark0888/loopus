@@ -21,7 +21,6 @@ class SignupController extends GetxController {
 
   @override
   void onClose() {
-    // TODO: implement onClose
     campusnamecontroller.clear();
     classnumcontroller.clear();
     departmentcontroller.clear();

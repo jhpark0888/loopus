@@ -79,7 +79,7 @@ class ProfileTagChangeScreen extends StatelessWidget {
                           12,
                         ),
                         child: Column(
-                          children: [
+                          children: const [
                             Text(
                               '어떤 태그로 변경하시겠어요?',
                               style: kSubTitle1Style,
@@ -121,17 +121,21 @@ class ProfileTagChangeScreen extends StatelessWidget {
                     SizedBox(
                       height: 20,
                     ),
-                    Obx(
-                      () => Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        width: Get.width,
-                        height: 32,
-                        child: ListView(
-                          shrinkWrap: true,
+                    //TODO : 태그 삭제하고 검색 탭 눌렀을 때 초기화되는 오류 수정
+                    Container(
+                      height: 32,
+                      child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          children: tagController.selectedtaglist,
-                        ),
-                      ),
+                          itemCount: 1,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  left: (index == 0) ? 16 : 0,
+                                  right: (index == 0) ? 16 : 0),
+                              child: Obx(() =>
+                                  Row(children: tagController.selectedtaglist)),
+                            );
+                          }),
                     ),
                     SizedBox(
                       height: 16,

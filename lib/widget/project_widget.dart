@@ -40,41 +40,11 @@ class ProjectWidget extends StatelessWidget {
       child: GestureDetector(
         onTap: () async {
           projectDetailController.isProjectLoading.value = true;
-          getproject(project.value.id).then((value) {
-            projectDetailController.project(value);
-            projectDetailController.postinglist(
-                List.from(projectDetailController.project.value.post
-                    .map((post) => ProjectPostingWidget(
-                          item: post,
-                          realName:
-                              projectDetailController.project.value.realname ??
-                                  '',
-                          department: projectDetailController
-                                  .project.value.department ??
-                              '',
-                          profileImage: projectDetailController
-                                  .project.value.profileimage ??
-                              '',
-                        ))
-                    .toList()
-                    .reversed));
-            projectDetailController.isProjectLoading.value = false;
-          });
-          exproject = await Get.to(() => ProjectScreen());
+          exproject = await Get.to(() => ProjectScreen(
+                projectid: project.value.id,
+              ));
           if (exproject != null) {
             project(exproject);
-            // projectDetailController.project.value.projectName =
-            //     exproject!.projectName;
-            // projectDetailController.project.value.introduction =
-            //     exproject!.introduction;
-            // projectDetailController.project.value.startDate =
-            //     exproject!.startDate;
-            // projectDetailController.project.value.endDate = exproject!.endDate;
-            // projectDetailController.project.value.projectTag =
-            //     exproject!.projectTag;
-            // projectDetailController.project.value.looper = exproject!.looper;
-            // projectDetailController.project.value.thumbnail =
-            //     exproject!.thumbnail;
           }
         },
         child: Container(

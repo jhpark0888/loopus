@@ -113,7 +113,7 @@ class HomeController extends GetxController
   }
 
   Future<void> questionLoadItem() async {
-    if (selectgroup == "모든 질문") {
+    if (selectgroup.value == "모든 질문") {
       QuestionModel questionModel = await questionlist(
           questionResult.value.questionitems.isEmpty
               ? 0
@@ -182,18 +182,18 @@ class HomeController extends GetxController
   }
 
   void tapBookmark(int postid) async {
-    if (HomeController.to.postingResult.value.postingitems.value
+    if (postingResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      HomeController.to.postingResult.value.postingitems.value
+      postingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isMarked(1);
     }
-    if (HomeController.to.loopResult.value.postingitems.value
+    if (loopResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      HomeController.to.loopResult.value.postingitems.value
+      loopResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isMarked(1);
@@ -203,18 +203,18 @@ class HomeController extends GetxController
   }
 
   void tapunBookmark(int postid) async {
-    if (HomeController.to.postingResult.value.postingitems.value
+    if (postingResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      HomeController.to.postingResult.value.postingitems.value
+      postingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isMarked(0);
     }
-    if (HomeController.to.loopResult.value.postingitems.value
+    if (loopResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      HomeController.to.loopResult.value.postingitems.value
+      loopResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isMarked(0);
@@ -224,26 +224,26 @@ class HomeController extends GetxController
   }
 
   void tapLike(int postid) {
-    if (HomeController.to.postingResult.value.postingitems.value
+    if (postingResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      HomeController.to.postingResult.value.postingitems.value
+      postingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isLiked(1);
-      HomeController.to.postingResult.value.postingitems.value
+      postingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .likeCount += 1;
     }
-    if (HomeController.to.loopResult.value.postingitems.value
+    if (loopResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      HomeController.to.loopResult.value.postingitems.value
+      loopResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isLiked(1);
-      HomeController.to.loopResult.value.postingitems.value
+      loopResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .likeCount += 1;
@@ -253,26 +253,26 @@ class HomeController extends GetxController
   }
 
   void tapunLike(int postid) {
-    if (HomeController.to.postingResult.value.postingitems.value
+    if (postingResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      HomeController.to.postingResult.value.postingitems.value
+      postingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isLiked(0);
-      HomeController.to.postingResult.value.postingitems.value
+      postingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .likeCount -= 1;
     }
-    if (HomeController.to.loopResult.value.postingitems.value
+    if (loopResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      HomeController.to.loopResult.value.postingitems.value
+      loopResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isLiked(0);
-      HomeController.to.loopResult.value.postingitems.value
+      loopResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .likeCount -= 1;

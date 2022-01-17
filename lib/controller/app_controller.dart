@@ -41,7 +41,7 @@ class AppController extends GetxService {
       ismyprofile.value = true;
 
       if (currentIndex.value != 4) {
-        //임시
+        //TODO: 임시
         ProfileController.to.isProfileLoading.value = true;
         ProfileController.to.loadmyProfile();
       }

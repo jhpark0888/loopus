@@ -18,11 +18,16 @@ class Tagwidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
+      onTap: () {
         SearchController.to.searchtagprojectlist.clear();
         SearchController.to.searchtagquestionlist.clear();
-        await SearchController.to.search(SearchType.tag_project, tag.tagId, 1);
-        await SearchController.to.search(SearchType.tag_question, tag.tagId, 1);
+        SearchController.to.isSearchLoading(true);
+        SearchController.to.search(SearchType.tag_project, tag.tagId, 1);
+        SearchController.to
+            .search(SearchType.tag_question, tag.tagId, 1)
+            .then((value) {
+          SearchController.to.isSearchLoading(false);
+        });
         Get.to(() => TagDetailScreen(
               title: tag.tag,
               count: 0,
@@ -30,15 +35,15 @@ class Tagwidget extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0xffefefef),
+          color: const Color(0xffefefef),
           borderRadius: BorderRadius.circular(4),
         ),
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
         child: Text(
-          "${tag.tag}",
+          tag.tag,
           style: TextStyle(
             fontSize: fontSize,
-            color: Color(0xff999999),
+            color: const Color(0xff999999),
           ),
         ),
       ),

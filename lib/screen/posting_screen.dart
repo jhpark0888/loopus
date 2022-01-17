@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -12,21 +9,22 @@ import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
-import 'package:loopus/model/post_model.dart';
-import 'package:loopus/model/user_model.dart';
+import 'package:loopus/controller/transition_animation_controller.dart';
 import 'package:loopus/widget/post_content_widget.dart';
 
 class PostingScreen extends StatelessWidget {
-  PostingDetailController _postingDetailController =
+  final PostingDetailController _postingDetailController =
       Get.put(PostingDetailController());
 
-  ModalController modalController = Get.put(ModalController());
-  ScrollController _controller = ScrollController();
-  // Post post;
-  // User? user;
+  final ModalController modalController = Get.put(ModalController());
+  final ScrollController _controller = ScrollController();
+  // final TransitionAnimationController _transitionAnimationController =
+  // Get.put(TransitionAnimationController());
 
   @override
   Widget build(BuildContext context) {
+    int isuser = Get.arguments['isuser'];
+    int id = Get.arguments['id'];
     String title = Get.arguments['title'];
     String realName = Get.arguments['realName'];
     dynamic profileImage = Get.arguments['profileImage'];
@@ -34,123 +32,157 @@ class PostingScreen extends StatelessWidget {
     String department = Get.arguments['department'];
     dynamic thumbNail = Get.arguments['thumbNail'];
     return Obx(
-      () => Stack(
-        children: [
-          Scaffold(
-            body: GestureDetector(
-              onPanUpdate: (details) {
-                if (details.delta.dx > 20) {
-                  Get.back();
-                }
-              },
-              child: CustomScrollView(
-                physics: BouncingScrollPhysics(),
-                controller: _controller,
-                slivers: [
-                  SliverAppBar(
-                    stretch: true,
-                    bottom: PreferredSize(
-                        child: Container(
-                          color: Color(0xffe7e7e7),
-                          height: 1,
-                        ),
-                        preferredSize: Size.fromHeight(4.0)),
-                    automaticallyImplyLeading: false,
-                    elevation: 0,
-                    backgroundColor: Colors.white,
-                    leading: IconButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      icon: SvgPicture.asset('assets/icons/Arrow.svg'),
-                    ),
-                    actions: [
-                      IconButton(
-                        onPressed: () {
-                          modalController.showModalIOS(
-                            context,
-                            func1: () {
-                              modalController.showButtonDialog(
-                                  title:
-                                      '정말 <${_postingDetailController.item?.title}> 포스팅을 삭제하시겠어요?',
-                                  content: '',
-                                  yesfunction: () => Get.back(),
-                                  nofunction: () async {
-                                    _postingDetailController
-                                        .isPostDeleteLoading(true);
-                                    Get.back();
-                                    Get.back();
-                                    await deleteposting(
-                                        _postingDetailController.item!.id);
-                                    _postingDetailController
-                                        .isPostDeleteLoading(false);
-                                  });
-                            },
-                            func2: () {},
-                            value1: '이 포스팅 삭제하기',
-                            value2: '',
-                            isValue1Red: true,
-                            isValue2Red: false,
-                            isOne: true,
-                          );
-                        },
-                        icon: SvgPicture.asset(
-                          'assets/icons/More.svg',
-                        ),
+      () => Stack(children: [
+        Scaffold(
+          body: GestureDetector(
+            // onPanDown: (details) {
+            //   print('onpandown: $details');
+            //   _transitionAnimationController.controller.stop();
+            // },
+            // onPanUpdate: (details) {
+            //   print('onPanUpdate: $details');
+            //   print('onPanUpdate Size : ${_transitionAnimationController.size}');
+
+            //   _transitionAnimationController.dragAlignment.value += Alignment(
+            //     details.delta.dx /
+            //         (_transitionAnimationController.size.value.width / 2),
+            //     details.delta.dy /
+            //         (_transitionAnimationController.size.value.height / 2),
+            //   );
+            // },
+            // onPanEnd: (details) {
+            //   print('onPanEnd: $details');
+
+            //   _transitionAnimationController.runAnimation(
+            //       details.velocity.pixelsPerSecond,
+            //       _transitionAnimationController.size.value);
+            // },
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              controller: _controller,
+              slivers: [
+                SliverAppBar(
+                  stretch: false,
+                  bottom: PreferredSize(
+                      child: Container(
+                        color: const Color(0xffe7e7e7),
+                        height: 1,
                       ),
-                    ],
-                    pinned: true,
-                    flexibleSpace: _MyAppSpace(
-                      title: title,
-                      realName: realName,
-                      profileImage: profileImage,
-                      postDate: postDate,
-                      department: department,
-                      thumbNail: thumbNail,
-                    ),
-                    expandedHeight: Get.width / 3 * 2,
+                      preferredSize: const Size.fromHeight(4.0)),
+                  automaticallyImplyLeading: false,
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  leading: IconButton(
+                    onPressed: () => Get.back(),
+                    icon: SvgPicture.asset('assets/icons/Arrow.svg'),
                   ),
-                  Obx(
-                    () => SliverList(
-                      delegate: SliverChildListDelegate([
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 24,
-                          ),
-                          child: (_postingDetailController
-                                      .isPostingContentLoading.value ==
-                                  false)
-                              ? Column(
-                                  children: _postingDetailController
-                                      .item!.contents!
-                                      .map((content) =>
-                                          PostContentWidget(content: content))
-                                      .toList(),
-                                )
-                              : Image.asset(
-                                  'assets/icons/loading.gif',
-                                  scale: 9,
-                                ),
+                  actions: [
+                    IconButton(
+                      onPressed: isuser == 1
+                          ? () {
+                              modalController.showModalIOS(
+                                context,
+                                func1: () {
+                                  modalController.showButtonDialog(
+                                      title:
+                                          '정말 <${_postingDetailController.item?.title}> 포스팅을 삭제하시겠어요?',
+                                      content: '삭제한 포스팅은 복구할 수 없어요',
+                                      yesfunction: () => Get.back(),
+                                      nofunction: () async {
+                                        _postingDetailController
+                                            .isPostDeleteLoading(true);
+                                        Get.back();
+                                        Get.back();
+                                        await deleteposting(
+                                            _postingDetailController.item!.id);
+                                        _postingDetailController
+                                            .isPostDeleteLoading(false);
+                                      });
+                                },
+                                func2: () {},
+                                value1: '이 포스팅 삭제하기',
+                                value2: '',
+                                isValue1Red: true,
+                                isValue2Red: false,
+                                isOne: true,
+                              );
+                            }
+                          : () {
+                              modalController.showModalIOS(
+                                context,
+                                func1: () {
+                                  modalController.showButtonDialog(
+                                      title:
+                                          '정말 <${_postingDetailController.item?.title}> 포스팅을 신고하시겠어요?',
+                                      content: '신고 횟수가 누적되면 포스팅은 삭제됩니다',
+                                      yesfunction: () => Get.back(),
+                                      nofunction: () {});
+                                },
+                                func2: () {},
+                                value1: '이 포스팅 신고하기',
+                                value2: '',
+                                isValue1Red: true,
+                                isValue2Red: false,
+                                isOne: true,
+                              );
+                            },
+                      icon: SvgPicture.asset(
+                        'assets/icons/More.svg',
+                      ),
+                    ),
+                  ],
+                  pinned: true,
+                  flexibleSpace: _MyAppSpace(
+                    id: id,
+                    title: title,
+                    realName: realName,
+                    profileImage: profileImage,
+                    postDate: postDate,
+                    department: department,
+                    thumbNail: thumbNail,
+                  ),
+                  expandedHeight: Get.width / 3 * 2,
+                ),
+                Obx(
+                  () => SliverList(
+                    delegate: SliverChildListDelegate([
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 24,
                         ),
-                      ]),
-                    ),
+                        child: (_postingDetailController
+                                    .isPostingContentLoading.value ==
+                                false)
+                            ? Column(
+                                children: _postingDetailController
+                                    .item!.contents!
+                                    .map((content) =>
+                                        PostContentWidget(content: content))
+                                    .toList(),
+                              )
+                            : Image.asset(
+                                'assets/icons/loading.gif',
+                                scale: 9,
+                              ),
+                      ),
+                    ]),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          if (_postingDetailController.isPostDeleteLoading.value == true)
-            Container(
-              height: Get.height,
-              width: Get.width,
-              color: mainblack.withOpacity(0.3),
-              child: Image.asset(
-                'assets/icons/loading.gif',
-                scale: 6,
-              ),
+        ),
+        if (_postingDetailController.isPostDeleteLoading.value == true)
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: mainblack.withOpacity(0.3),
+            child: Image.asset(
+              'assets/icons/loading.gif',
+              scale: 6,
             ),
-        ],
-      ),
+          ),
+      ]),
     );
   }
 }
@@ -158,8 +190,7 @@ class PostingScreen extends StatelessWidget {
 class _MyAppSpace extends StatelessWidget {
   _MyAppSpace({
     Key? key,
-    // required this.post,
-    // required this.user,
+    required this.id,
     required this.title,
     required this.realName,
     required this.profileImage,
@@ -168,14 +199,13 @@ class _MyAppSpace extends StatelessWidget {
     required this.thumbNail,
   }) : super(key: key);
 
-  // Post post;
-  // User user;
   String title;
   String realName;
   var profileImage;
   DateTime postDate;
   String department;
   var thumbNail;
+  int id;
 
   @override
   Widget build(
@@ -214,7 +244,7 @@ class _MyAppSpace extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
-                  getImage(thumbNail),
+                  getImage(thumbNail, 'thumbnail$id'),
                   SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -223,9 +253,7 @@ class _MyAppSpace extends StatelessWidget {
                         SizedBox(
                           height: 32,
                         ),
-                        getExpendTitle(
-                          title,
-                        ),
+                        getExpendTitle(title, 'title$id'),
                         SizedBox(
                           height: 16,
                         ),
@@ -240,18 +268,21 @@ class _MyAppSpace extends StatelessWidget {
                               Row(
                                 children: [
                                   (profileImage != null)
-                                      ? ClipOval(
-                                          child: CachedNetworkImage(
-                                            height: 32,
-                                            width: 32,
-                                            imageUrl: profileImage,
-                                            placeholder: (context, url) =>
-                                                CircleAvatar(
-                                              child: Center(
-                                                  child:
-                                                      CircularProgressIndicator()),
+                                      ? Hero(
+                                          tag: 'profileImage$id',
+                                          child: ClipOval(
+                                            child: CachedNetworkImage(
+                                              height: 32,
+                                              width: 32,
+                                              imageUrl: profileImage,
+                                              placeholder: (context, url) =>
+                                                  CircleAvatar(
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator()),
+                                              ),
+                                              fit: BoxFit.cover,
                                             ),
-                                            fit: BoxFit.cover,
                                           ),
                                         )
                                       : ClipOval(
@@ -264,20 +295,29 @@ class _MyAppSpace extends StatelessWidget {
                                   SizedBox(
                                     width: 8,
                                   ),
-                                  Text(
-                                    "$realName · ",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: mainblack,
+                                  Hero(
+                                    tag: 'realname$id',
+                                    child: Material(
+                                      type: MaterialType.transparency,
+                                      child: Text(
+                                        "$realName · ",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: mainblack,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  Text(
-                                    department,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                        color: mainblack),
+                                  Hero(
+                                    tag: 'department$id',
+                                    child: Material(
+                                      type: MaterialType.transparency,
+                                      child: Text(
+                                        department,
+                                        style: kBody2Style,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -306,38 +346,47 @@ class _MyAppSpace extends StatelessWidget {
     );
   }
 
-  Widget getImage(String? image) {
-    return Container(
-      width: Get.width,
-      height: Get.height,
-      child: Opacity(
-        opacity: image != null ? 0.25 : 1,
-        child: (image != null)
-            ? CachedNetworkImage(
-                fit: BoxFit.cover,
-                imageUrl: image,
-              )
-            : Image.asset(
-                "assets/illustrations/default_image.png",
-                fit: BoxFit.cover,
-              ),
+  Widget getImage(String? image, String heroThumbnailTag) {
+    return Hero(
+      tag: heroThumbnailTag,
+      child: Container(
+        width: Get.width,
+        height: Get.height,
+        child: Opacity(
+          opacity: image != null ? 0.25 : 1,
+          child: (image != null)
+              ? CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  imageUrl: image,
+                )
+              : Image.asset(
+                  "assets/illustrations/default_image.png",
+                  fit: BoxFit.cover,
+                ),
+        ),
       ),
     );
   }
 
-  Widget getExpendTitle(String text) {
+  Widget getExpendTitle(String text, String heroTitleTag) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
       ),
-      child: Text(
-        text,
-        textAlign: TextAlign.start,
-        style: TextStyle(
-          height: 1.5,
-          color: mainblack,
-          fontSize: 20.0,
-          fontWeight: FontWeight.bold,
+      child: Hero(
+        tag: heroTitleTag,
+        child: Material(
+          type: MaterialType.transparency,
+          child: Text(
+            text,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              height: 1.5,
+              color: mainblack,
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );
