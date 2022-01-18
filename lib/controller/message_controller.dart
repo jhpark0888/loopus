@@ -14,9 +14,10 @@ class MessageController extends GetxController {
   static MessageController get to => Get.find();
   RxList<MessageWidget> messagelist = <MessageWidget>[].obs;
   FocusNode messagefocus = FocusNode();
-  TextEditingController messagetextController = TextEditingController();
+  Rx<TextEditingController> messagetextController = TextEditingController().obs;
   RxList<MessageRoom> chattingroomlist = <MessageRoom>[].obs;
-  RxBool isMessageLoading = false.obs;
+  RxBool isMessageRoomListLoading = false.obs;
+  RxBool isMessageListLoading = false.obs;
 
   String username = "";
   int userid = 0;

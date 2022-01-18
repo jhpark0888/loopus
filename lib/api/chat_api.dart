@@ -18,7 +18,7 @@ Future<void> getmessageroomlist() async {
     },
   );
 
-  print('채팅 리스트 statuscode: ${response.statusCode}');
+  print('채팅방 리스트 statuscode: ${response.statusCode}');
   if (response.statusCode == 200) {
     List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
     MessageController.to.chattingroomlist(responseBody
@@ -33,7 +33,7 @@ Future<void> getmessageroomlist() async {
   }
 }
 
-Future<dynamic> getmessagelist(int userid) async {
+Future<List<Message>> getmessagelist(int userid) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
 
   final url = Uri.parse("http://3.35.253.151:8000/chat/chatting/$userid");
@@ -41,11 +41,20 @@ Future<dynamic> getmessagelist(int userid) async {
   final response =
       await http.get(url, headers: {"Authorization": "Token $token"});
 
-  var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-  print(response.statusCode);
-  print(responseBody);
-  Map<String, dynamic> map = jsonDecode(responseBody);
+  print('채팅 리스트 statuscode: ${response.statusCode}');
+  if (response.statusCode == 200) {
+    List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+    print(responseBody);
 
+    List<Message> messagelist =
+        responseBody.map((message) => Message.fromJson(message)).toList();
+    // MessageController.to.chattingroomlist(responseBody
+    //     .map((messageroom) => MessageRoom.fromJson(messageroom))
+    //     .toList());
+    return messagelist;
+  } else {
+    return Future.error(response.statusCode);
+  }
   // print(map);
   // String username = map["real_name"];
   // userid = map["user_id"];

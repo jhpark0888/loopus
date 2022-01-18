@@ -52,10 +52,10 @@ class HomeScreen extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                _messageController.isMessageLoading(true);
+                _messageController.isMessageRoomListLoading(true);
                 Get.to(() => MessageScreen());
                 getmessageroomlist().then((value) {
-                  _messageController.isMessageLoading(false);
+                  _messageController.isMessageRoomListLoading(false);
                 });
               },
               icon: SvgPicture.asset(

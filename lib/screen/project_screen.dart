@@ -68,7 +68,9 @@ class ProjectScreen extends StatelessWidget {
             () => (project.value.is_user == 1)
                 ? IconButton(
                     onPressed: () async {
-                      exproject = await Get.to(() => ProjectModifyScreen());
+                      exproject = await Get.to(() => ProjectModifyScreen(
+                            project: project,
+                          ));
                       if (exproject != null) {
                         project(exproject);
                       }

@@ -17,7 +17,7 @@ class MessageScreen extends StatelessWidget {
           title: '메시지',
         ),
         body: Obx(
-          () => messageController.isMessageLoading.value
+          () => messageController.isMessageRoomListLoading.value
               ? Center(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -30,7 +30,7 @@ class MessageScreen extends StatelessWidget {
                           height: 4,
                         ),
                         Text(
-                          '메세지를 받아오는 중이에요...',
+                          '채팅 목록을 받아오는 중이에요...',
                           style: TextStyle(
                             fontSize: 10,
                             color: mainblue,

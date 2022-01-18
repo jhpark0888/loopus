@@ -17,9 +17,11 @@ class MessageRoomWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () async {
-        MessageController.to.messagelist.clear();
-        await getmessagelist(24);
-        Get.to(() => MessageDetailScreen());
+        // MessageController.to.messagelist.clear();
+        MessageController.to.isMessageListLoading(true);
+        Get.to(() => MessageDetailScreen(
+              user: messageRoom.user,
+            ));
       },
       leading: ClipOval(
         child: messageRoom.user.profileImage != null

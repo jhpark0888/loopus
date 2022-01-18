@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/transition_animation_controller.dart';
@@ -69,25 +70,48 @@ class PostingScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  InkWell(
-                    onTap: () {},
-                    child:
-                        SvgPicture.asset("assets/icons/Favorite_Inactive.svg"),
-                  ),
+                  Obx(() => InkWell(
+                      onTap: () {
+                        if (post.value.isLiked.value == 0) {
+                          HomeController.to.tapLike(post.value.id);
+                          post.value.likeCount += 1;
+                          post.value.isLiked.value = 1;
+                        } else {
+                          HomeController.to.tapunLike(post.value.id);
+                          post.value.likeCount -= 1;
+                          post.value.isLiked.value = 0;
+                        }
+                      },
+                      child: post.value.isLiked.value == 0
+                          ? SvgPicture.asset(
+                              "assets/icons/Favorite_Inactive.svg")
+                          : SvgPicture.asset(
+                              "assets/icons/Favorite_Active.svg"))),
                   const SizedBox(
                     width: 4,
                   ),
-                  Text(
-                    "4",
-                    style: kButtonStyle,
+                  Obx(
+                    () => Text(
+                      post.value.likeCount.toString(),
+                      style: kButtonStyle,
+                    ),
                   ),
                   const SizedBox(
                     width: 16,
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: SvgPicture.asset("assets/icons/Mark_Default.svg"),
-                  ),
+                  Obx(() => InkWell(
+                      onTap: () {
+                        if (post.value.isMarked.value == 0) {
+                          HomeController.to.tapBookmark(post.value.id);
+                          post.value.isMarked(1);
+                        } else {
+                          HomeController.to.tapunBookmark(post.value.id);
+                          post.value.isMarked(0);
+                        }
+                      },
+                      child: post.value.isMarked.value == 0
+                          ? SvgPicture.asset("assets/icons/Mark_Default.svg")
+                          : SvgPicture.asset("assets/icons/Mark_Saved.svg")))
                 ],
               ),
             ),

@@ -24,15 +24,13 @@ import 'package:loopus/widget/selected_persontag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class ProjectModifyScreen extends StatelessWidget {
-  ProjectModifyScreen({
-    Key? key,
-  }) : super(key: key);
+  ProjectModifyScreen({Key? key, required this.project}) : super(key: key);
 
   ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
-  ProjectDetailController projectDetailController = Get.find();
+  // ProjectDetailController projectDetailController = Get.find();
   TagController tagController = Get.put(TagController());
 
-  // Rx<Project> project;
+  Rx<Project> project;
   Project? exproject;
 
   @override
@@ -48,7 +46,7 @@ class ProjectModifyScreen extends StatelessWidget {
           title: '활동 편집',
           leading: IconButton(
             onPressed: () {
-              Get.back(result: projectDetailController.project.value);
+              Get.back(result: project.value);
             },
             icon: SvgPicture.asset('assets/icons/Arrow.svg'),
           ),
@@ -64,9 +62,9 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                       ));
                 },
-                project: projectDetailController.project.value,
+                project: project.value,
                 title: '활동명',
-                subtitle: projectDetailController.project.value.projectName,
+                subtitle: project.value.projectName,
               ),
             ),
             Obx(
@@ -78,10 +76,10 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                       ));
                 },
-                project: projectDetailController.project.value,
+                project: project.value,
                 title: '활동 기간',
                 subtitle:
-                    '${DateFormat("yyyy.MM").format(projectDetailController.project.value.startDate!)} ~ ${projectDetailController.project.value.endDate != null ? DateFormat("yyyy.MM").format(projectDetailController.project.value.endDate!) : ''}',
+                    '${DateFormat("yyyy.MM").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yyyy.MM").format(project.value.endDate!) : ''}',
               ),
             ),
             Obx(
@@ -93,9 +91,9 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                       ));
                 },
-                project: projectDetailController.project.value,
+                project: project.value,
                 title: '활동 정보',
-                subtitle: projectDetailController.project.value.introduction!,
+                subtitle: project.value.introduction!,
               ),
             ),
             Obx(
@@ -107,12 +105,11 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                       ));
                 },
-                project: projectDetailController.project.value,
+                project: project.value,
                 title: '활동 태그',
-                subtitle: projectDetailController
-                        .project.value.projectTag.isEmpty
+                subtitle: project.value.projectTag.isEmpty
                     ? ''
-                    : '${projectDetailController.project.value.projectTag[0].tag}, ${projectDetailController.project.value.projectTag[1].tag}, ${projectDetailController.project.value.projectTag[2].tag}',
+                    : '${project.value.projectTag[0].tag}, ${project.value.projectTag[1].tag}, ${project.value.projectTag[2].tag}',
               ),
             ),
             Obx(
@@ -134,11 +131,11 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                       ));
                 },
-                project: projectDetailController.project.value,
+                project: project.value,
                 title: '함께 활동한 사람',
-                subtitle: projectDetailController.project.value.looper.isEmpty
+                subtitle: project.value.looper.isEmpty
                     ? '함께 활동한 사람이 없어요'
-                    : projectDetailController.project.value.looper
+                    : project.value.looper
                         .map((user) => user.realName)
                         .toString(),
               ),
@@ -151,7 +148,7 @@ class ProjectModifyScreen extends StatelessWidget {
                       screenType: Screentype.update,
                     ));
               },
-              project: projectDetailController.project.value,
+              project: project.value,
               title: '대표 사진 변경',
               subtitle: '',
             ),
@@ -160,33 +157,32 @@ class ProjectModifyScreen extends StatelessWidget {
   }
 
   void projectnameinput() {
-    projectaddcontroller.projectnamecontroller.text =
-        projectDetailController.project.value.projectName;
+    projectaddcontroller.projectnamecontroller.text = project.value.projectName;
   }
 
   void projectintroinput() {
     projectaddcontroller.introcontroller.text =
-        projectDetailController.project.value.introduction ?? '';
+        project.value.introduction ?? '';
   }
 
   void projectdateinput() {
-    projectaddcontroller.startyearcontroller.text = DateFormat("yyyy")
-        .format(projectDetailController.project.value.startDate!);
-    projectaddcontroller.startmonthcontroller.text = DateFormat("MM")
-        .format(projectDetailController.project.value.startDate!);
-    projectaddcontroller.startdaycontroller.text = DateFormat("dd")
-        .format(projectDetailController.project.value.startDate!);
+    projectaddcontroller.startyearcontroller.text =
+        DateFormat("yyyy").format(project.value.startDate!);
+    projectaddcontroller.startmonthcontroller.text =
+        DateFormat("MM").format(project.value.startDate!);
+    projectaddcontroller.startdaycontroller.text =
+        DateFormat("dd").format(project.value.startDate!);
 
-    if (projectDetailController.project.value.endDate == null) {
+    if (project.value.endDate == null) {
       projectaddcontroller.isvaildstartdate(true);
       projectaddcontroller.isongoing(true);
     } else {
-      projectaddcontroller.endyearcontroller.text = DateFormat("yyyy")
-          .format(projectDetailController.project.value.endDate!);
-      projectaddcontroller.endmonthcontroller.text = DateFormat("MM")
-          .format(projectDetailController.project.value.endDate!);
-      projectaddcontroller.enddaycontroller.text = DateFormat("dd")
-          .format(projectDetailController.project.value.endDate!);
+      projectaddcontroller.endyearcontroller.text =
+          DateFormat("yyyy").format(project.value.endDate!);
+      projectaddcontroller.endmonthcontroller.text =
+          DateFormat("MM").format(project.value.endDate!);
+      projectaddcontroller.enddaycontroller.text =
+          DateFormat("dd").format(project.value.endDate!);
       projectaddcontroller.isvaildstartdate(true);
       projectaddcontroller.isvaildenddate(true);
     }
@@ -194,7 +190,7 @@ class ProjectModifyScreen extends StatelessWidget {
 
   void projecttaginput() {
     tagController.selectedtaglist.clear();
-    for (var tag in projectDetailController.project.value.projectTag) {
+    for (var tag in project.value.projectTag) {
       tagController.selectedtaglist.add(SelectedTagWidget(
         id: tag.tagId,
         text: tag.tag,
@@ -203,9 +199,9 @@ class ProjectModifyScreen extends StatelessWidget {
   }
 
   void projectlooperinput() {
-    if (projectDetailController.project.value.looper != null) {
+    if (project.value.looper != null) {
       projectaddcontroller.selectedpersontaglist.clear();
-      for (var user in projectDetailController.project.value.looper) {
+      for (var user in project.value.looper) {
         projectaddcontroller.selectedpersontaglist.add(SelectedPersonTagWidget(
           id: user.user,
           text: user.realName,
@@ -215,8 +211,7 @@ class ProjectModifyScreen extends StatelessWidget {
   }
 
   void projectthumbnailinput() {
-    projectaddcontroller.projecturlthumbnail =
-        projectDetailController.project.value.thumbnail;
+    projectaddcontroller.projecturlthumbnail = project.value.thumbnail;
   }
 }
 
