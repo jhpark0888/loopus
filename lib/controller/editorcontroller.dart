@@ -131,6 +131,11 @@ class EditorController extends GetxController {
     final TextEditingController controller =
         TextEditingController(text: '\u200B' + (text ?? ''));
     controller.addListener(() {
+      if (controller.selection ==
+          TextSelection.fromPosition(TextPosition(offset: 0))) {
+        controller.selection =
+            TextSelection.fromPosition(TextPosition(offset: 1));
+      }
       if (!controller.text.startsWith('\u200B')) {
         final int index = textcontrollers.indexOf(controller);
         int noimageindex = index;
@@ -202,6 +207,7 @@ class EditorController extends GetxController {
     nodes.removeAt(index);
     smarttextfieldlist.removeAt(index);
     imageindex.removeAt(index);
+    linkindex.removeAt(index);
     textcontrollers.removeAt(index);
   }
 

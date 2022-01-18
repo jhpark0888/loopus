@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/chat_api.dart';
+import 'package:loopus/controller/message_controller.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 import 'package:loopus/constant.dart';
@@ -21,6 +23,7 @@ class HomeScreen extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
   final ModalController _modalController = Get.put(ModalController());
   final SearchController _searchController = Get.put(SearchController());
+  final MessageController _messageController = Get.put(MessageController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,13 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () => Get.to(MessageScreen()),
+              onPressed: () {
+                _messageController.isMessageLoading(true);
+                Get.to(() => MessageScreen());
+                getmessageroomlist().then((value) {
+                  _messageController.isMessageLoading(false);
+                });
+              },
               icon: SvgPicture.asset(
                 "assets/icons/Chat.svg",
                 width: 28,

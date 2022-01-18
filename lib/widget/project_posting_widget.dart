@@ -60,7 +60,7 @@ class ProjectPostingWidget extends StatelessWidget {
               'content': item.contents,
               'postDate': item.date,
               'department': department,
-              'thumbNail': item.thumbnail,
+              'thumbnail': item.thumbnail,
             });
       },
       child: Padding(

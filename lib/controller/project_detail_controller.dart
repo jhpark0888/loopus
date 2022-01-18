@@ -11,7 +11,7 @@ import 'package:loopus/widget/project_posting_widget.dart';
 
 class ProjectDetailController extends GetxController {
   static ProjectDetailController get to => Get.find();
-  RxBool isProjectLoading = true.obs;
+  RxBool isProjectLoading = false.obs;
   Rx<Project> project = Project(
       id: 0,
       userid: 0,
