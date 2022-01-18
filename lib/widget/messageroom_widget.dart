@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
-import 'package:loopus/duration_calculate.dart';
+import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
 

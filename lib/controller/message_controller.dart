@@ -7,8 +7,6 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/widget/message_widget.dart';
-import 'package:loopus/widget/paper_competition_widget.dart';
-import 'package:loopus/widget/paper_internship_widget.dart';
 
 class MessageController extends GetxController {
   static MessageController get to => Get.find();

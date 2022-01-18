@@ -56,8 +56,8 @@ class UserInfoScreen extends StatelessWidget {
                         obscureText: true,
                         textEditingController: TextEditingController(),
                         validator: null,
-                        yesfunction: () => Get.back(),
-                        nofunction: () {
+                        leftFunction: () => Get.back(),
+                        rightFunction: () {
                           Get.to(() => PwChangeScreen());
                         });
                     // Get.to(() => PwChangeScreen());

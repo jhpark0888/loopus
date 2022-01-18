@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loopus/controller/login_controller.dart';
 
-import '../check_form_validate.dart';
+import '../utils/check_form_validate.dart';
 import '../constant.dart';
 
 class CustomTextField extends StatelessWidget {

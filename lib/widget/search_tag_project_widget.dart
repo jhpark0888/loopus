@@ -23,7 +23,7 @@ import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
-import '../duration_calculate.dart';
+import '../utils/duration_calculate.dart';
 
 class SearchTagProjectWidget extends StatelessWidget {
   ProfileController profileController = Get.find();

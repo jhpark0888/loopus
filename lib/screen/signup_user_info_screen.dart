@@ -8,7 +8,7 @@ import 'package:loopus/screen/signup_emailcheck_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
-import '../check_form_validate.dart';
+import '../utils/check_form_validate.dart';
 
 class SignupUserInfoScreen extends StatelessWidget {
   SignupController signupController = Get.find();

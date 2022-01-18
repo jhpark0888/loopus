@@ -220,8 +220,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
     required TextEditingController textEditingController,
     required bool obscureText,
     required String? Function(String?)? validator,
-    required Function() yesfunction,
-    required Function() nofunction,
+    required Function() leftFunction,
+    required Function() rightFunction,
   }) {
     Get.dialog(
       AlertDialog(
@@ -232,7 +232,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: yesfunction,
+                  onTap: leftFunction,
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border(
@@ -260,7 +260,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap: nofunction,
+                  onTap: rightFunction,
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border(

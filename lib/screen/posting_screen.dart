@@ -20,8 +20,7 @@ class PostingScreen extends StatelessWidget {
 
   final ModalController modalController = Get.put(ModalController());
   final ScrollController _controller = ScrollController();
-  // final TransitionAnimationController _transitionAnimationController =
-  // Get.put(TransitionAnimationController());
+
   Rx<Post> post = Post(
           id: 0,
           userid: 0,

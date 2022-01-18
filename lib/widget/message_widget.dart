@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
-import 'package:loopus/duration_calculate.dart';
+import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 

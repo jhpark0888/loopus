@@ -222,21 +222,37 @@ class EditorController extends GetxController {
       if (textAt(index).text == '\u200B') {
         ModalController.to.showCustomDialog('텍스트를 먼저 입력해주세요', 1000);
       } else {
-        Get.defaultDialog(
-            content: TextField(
-              controller: linkcontroller,
-              decoration: InputDecoration(hintText: "http//www."),
-            ),
-            title: '링크를 넣어주세요',
-            textCancel: '취소',
-            textConfirm: '확인',
-            onConfirm: () {
+        ModalController.to.showTextFieldDialog(
+            title: '링크를 입력해주세요',
+            hintText: 'https//',
+            textEditingController: linkcontroller,
+            obscureText: false,
+            validator: null,
+            leftFunction: () {
+              Get.back();
+            },
+            rightFunction: () {
               linkindex[index] = linkcontroller.text;
               selectedType(SmartTextType.LINK);
               types.removeAt(index);
               types.insert(index, selectedType.value);
               Get.back();
             });
+        // Get.defaultDialog(
+        //     content: TextField(
+        //       controller: linkcontroller,
+        //       decoration: InputDecoration(hintText: "http//www."),
+        //     ),
+        //     title: '링크를 넣어주세요',
+        //     textCancel: '취소',
+        //     textConfirm: '확인',
+        //     onConfirm: () {
+        //       linkindex[index] = linkcontroller.text;
+        //       selectedType(SmartTextType.LINK);
+        //       types.removeAt(index);
+        //       types.insert(index, selectedType.value);
+        //       Get.back();
+        //     });
       }
     }
   }

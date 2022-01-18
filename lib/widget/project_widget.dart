@@ -13,7 +13,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
-import 'package:loopus/duration_calculate.dart';
+import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/project_posting_widget.dart';

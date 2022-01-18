@@ -12,7 +12,6 @@ import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/screen/posting_add_image_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/customlinkstylewidget.dart';
 import 'package:loopus/widget/editortoolbar.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 

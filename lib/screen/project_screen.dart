@@ -6,7 +6,7 @@ import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
-import 'package:loopus/duration_calculate.dart';
+import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/screen/posting_add_content_screen.dart';

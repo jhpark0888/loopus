@@ -10,7 +10,7 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
-import '../check_form_validate.dart';
+import '../utils/check_form_validate.dart';
 
 class ProjectAddTitleScreen extends StatelessWidget {
   ProjectAddTitleScreen({
