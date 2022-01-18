@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -10,9 +11,9 @@ class MessageDetailScreen extends StatelessWidget {
 
   void _handleSubmitted(String text) async {
     print(text);
-    await messageController.messagemake(text, messageController.userid);
+    await messagemake(text, messageController.userid);
     messageController.messagelist.clear();
-    await messageController.messageload(messageController.userid);
+    await getmessagelist(messageController.userid);
     messageController.messagefocus.unfocus();
     messageController.messagetextController.clear();
   }

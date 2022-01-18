@@ -10,6 +10,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/transition_animation_controller.dart';
+import 'package:loopus/model/post_model.dart';
 import 'package:loopus/widget/post_content_widget.dart';
 
 class PostingScreen extends StatelessWidget {
@@ -20,6 +21,24 @@ class PostingScreen extends StatelessWidget {
   final ScrollController _controller = ScrollController();
   // final TransitionAnimationController _transitionAnimationController =
   // Get.put(TransitionAnimationController());
+  Rx<Post> post = Post(
+          id: 0,
+          userid: 0,
+          thumbnail: null,
+          title: '',
+          date: DateTime.now(),
+          project: null,
+          project_id: 0,
+          contents: [],
+          projectname: '',
+          likeCount: 0.obs,
+          isLiked: 0.obs,
+          realname: '',
+          department: '',
+          profileimage: null,
+          isMarked: 0.obs,
+          isuser: 0)
+      .obs;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +50,6 @@ class PostingScreen extends StatelessWidget {
     DateTime postDate = Get.arguments['postDate'];
     String department = Get.arguments['department'];
     dynamic thumbNail = Get.arguments['thumbnail'];
-    print(profileImage);
-    print(thumbNail);
     return Obx(
       () => Stack(children: [
         Scaffold(

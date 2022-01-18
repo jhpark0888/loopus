@@ -120,7 +120,7 @@ class ProjectModifyScreen extends StatelessWidget {
                 isSubtitleExist: true,
                 onTap: () async {
                   projectlooperinput();
-                  projectaddcontroller.islooppersonloading(true);
+                  projectaddcontroller.isLooppersonLoading(true);
                   getlooplist(ProfileController.to.myUserInfo.value.user)
                       .then((value) {
                     projectaddcontroller.looplist = value;
@@ -128,7 +128,7 @@ class ProjectModifyScreen extends StatelessWidget {
                         .looplist
                         .map((user) => CheckBoxPersonWidget(user: user))
                         .toList());
-                    projectaddcontroller.islooppersonloading(false);
+                    projectaddcontroller.isLooppersonLoading(false);
                   });
                   Get.to(() => ProjectAddPersonScreen(
                         screenType: Screentype.update,

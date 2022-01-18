@@ -170,7 +170,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Obx(() => projectaddcontroller.islooppersonloading.value
+              Obx(() => projectaddcontroller.isLooppersonLoading.value
                   ? Column(
                       children: [
                         Image.asset(

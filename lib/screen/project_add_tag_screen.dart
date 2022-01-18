@@ -39,7 +39,7 @@ class ProjectAddTagScreen extends StatelessWidget {
               ? TextButton(
                   onPressed: () async {
                     if (tagController.selectedtaglist.length == 3) {
-                      projectaddcontroller.islooppersonloading(true);
+                      projectaddcontroller.isLooppersonLoading(true);
                       getlooplist(ProfileController.to.myUserInfo.value.user)
                           .then((value) {
                         projectaddcontroller.looplist = value;
@@ -47,7 +47,7 @@ class ProjectAddTagScreen extends StatelessWidget {
                             .looplist
                             .map((user) => CheckBoxPersonWidget(user: user))
                             .toList());
-                        projectaddcontroller.islooppersonloading(false);
+                        projectaddcontroller.isLooppersonLoading(false);
                       });
                       tagController.tagsearchfocusNode.unfocus();
                       Get.to(() => ProjectAddPersonScreen(

@@ -99,6 +99,7 @@ class ImageController extends GetxController {
           minimumAspectRatio: 1.0,
         ));
     if (croppedFile != null) {
+      // isImagePickerLoading.value = false;
       return croppedFile;
     } else {
       isImagePickerLoading.value = false;

@@ -44,7 +44,9 @@ class ProjectAddController extends GetxController {
 
   List<User> looplist = <User>[].obs;
   RxList<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
-  RxBool islooppersonloading = true.obs;
+  RxBool isLooppersonLoading = true.obs;
+
+  RxBool isProjectUploading = false.obs;
 
   Rx<File?> projectthumbnail = File('').obs;
   String? projecturlthumbnail;
