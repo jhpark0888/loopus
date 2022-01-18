@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/widget/home_posting_widget.dart';
+import 'package:loopus/widget/posting_widget.dart';
 
 class HoverController extends GetxController with GetTickerProviderStateMixin {
   static HoverController get to => Get.find();

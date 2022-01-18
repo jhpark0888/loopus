@@ -48,26 +48,7 @@ class ProjectWidget extends StatelessWidget {
           }
         },
         child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-              bottomLeft: Radius.circular(8),
-              bottomRight: Radius.circular(8),
-            ),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 3,
-                offset: Offset(0.0, 1.0),
-                color: Colors.black.withOpacity(0.1),
-              ),
-              BoxShadow(
-                blurRadius: 2,
-                offset: Offset(0.0, 1.0),
-                color: Colors.black.withOpacity(0.06),
-              ),
-            ],
-          ),
+          decoration: kCardStyle,
           child: Column(
             children: [
               ClipRRect(

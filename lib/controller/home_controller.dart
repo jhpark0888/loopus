@@ -4,15 +4,15 @@ import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/question_model.dart';
-import 'package:loopus/widget/home_posting_widget.dart';
-import 'package:loopus/widget/home_question_widget.dart';
+import 'package:loopus/widget/posting_widget.dart';
+import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/widget/recommend_posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static HomeController get to => Get.find();
-  List<HomePostingWidget> posting = [];
+  List<PostingWidget> posting = [];
   // List<RecommendPostingWidget> recommend_posting = [];
   RxBool bookmark = false.obs;
   RxBool isLoopEmpty = false.obs;

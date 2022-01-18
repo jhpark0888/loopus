@@ -9,6 +9,7 @@ import 'package:http/http.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/widget/search_posting_widget.dart';
 import 'package:loopus/widget/search_profile_widget.dart';
 import 'package:loopus/widget/search_question_widget.dart';
@@ -29,8 +30,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
 
   RxList<SearchTagProjectWidget> searchtagprojectlist =
       <SearchTagProjectWidget>[].obs;
-  RxList<SearchQuestionWidget> searchtagquestionlist =
-      <SearchQuestionWidget>[].obs;
+  RxList<QuestionWidget> searchtagquestionlist = <QuestionWidget>[].obs;
 
   RxBool isnosearchpost = false.obs;
   RxBool isnosearchprofile = false.obs;
@@ -210,7 +210,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
         }
       }
       if (searchType == SearchType.question && searchlist.isNotEmpty) {
-        if (searchlist[0]["id"] == searchquestionlist.value[0].question.id) {
+        if (searchlist[0]["id"] == searchquestionlist.value[0].item.id) {
           return;
         }
       }
@@ -265,7 +265,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
             .map((json) => QuestionItem.fromJson(json))
             .toList()
             .map((question) => SearchQuestionWidget(
-                  question: question,
+                  item: question,
                 ))
             .toList());
         // searchlist.forEach((element) {
@@ -309,8 +309,8 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
         searchtagquestionlist(searchlist
             .map((json) => QuestionItem.fromJson(json))
             .toList()
-            .map((question) => SearchQuestionWidget(
-                  question: question,
+            .map((question) => QuestionWidget(
+                  item: question,
                 ))
             .toList());
         // searchlist.forEach((element) {
