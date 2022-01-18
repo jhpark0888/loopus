@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';
@@ -112,7 +113,6 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
-    //TODO: Splash Screen을 띄우는 더 효율적인 방법이 있지 않을까?
     Future.delayed(
       const Duration(seconds: 3),
       () => Navigator.pushReplacement(
@@ -132,8 +132,8 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
       body: SizedBox(
         height: Get.height,
         width: Get.width,
-        child: Image.asset("assets/illustrations/splash_animation.gif",
-            gaplessPlayback: true),
+        child: Lottie.asset("assets/lotties/loopus_splash.json",
+            repeat: false, frameRate: FrameRate.max),
       ),
     );
   }

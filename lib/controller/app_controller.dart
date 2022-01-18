@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/login_api.dart';
 import 'package:loopus/api/profile_api.dart';
@@ -42,6 +43,7 @@ class AppController extends GetxService {
       if (currentIndex.value != 2) {
         Get.bottomSheet(
           Container(
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 56),
             decoration: BoxDecoration(
               color: mainWhite,
               borderRadius: BorderRadius.only(
@@ -52,9 +54,73 @@ class AppController extends GetxService {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Hii 1'),
-                Text('Hii 1'),
-                Text('Hii 1'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '작성 및 추가',
+                      style: kHeaderH1Style,
+                    ),
+                    IconButton(
+                      onPressed: () => Get.back(),
+                      icon: SvgPicture.asset('assets/icons/Close.svg'),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: SvgPicture.asset(
+                        'assets/icons/Edit.svg',
+                        width: 24,
+                      ),
+                      decoration: BoxDecoration(
+                        color: mainlightgrey,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Text(
+                      '포스팅 작성하기',
+                      style: kSubTitle3Style,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: SvgPicture.asset(
+                        'assets/icons/Add.svg',
+                        width: 24,
+                        fit: BoxFit.cover,
+                      ),
+                      decoration: BoxDecoration(
+                        color: mainlightgrey,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Text(
+                      '새로운 활동 추가하기',
+                      style: kSubTitle3Style,
+                    ),
+                  ],
+                )
               ],
             ),
           ),
