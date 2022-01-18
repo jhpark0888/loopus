@@ -1,123 +1,145 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
+import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/model/question_model.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/question_detail_screen.dart';
+import 'package:loopus/widget/tag_widget.dart';
 
 class QuestionWidget extends StatelessWidget {
-  const QuestionWidget({Key? key}) : super(key: key);
+  final QuestionController questionController = Get.put(QuestionController());
+  final ProfileController profileController = Get.find();
+  final QuestionItem item;
+
+  QuestionWidget({required this.item});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        padding: EdgeInsets.all(12),
-        width: 347,
-        height: 160,
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '앱 어떻게 만들어요?',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: InkWell(
+        onTap: tapQuestion,
+        child: Container(
+          decoration: kCardStyle,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 16,
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 35, 0, 10),
-              child: Row(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    width: 83,
-                    height: 20,
-                    child: const Center(
-                      child: Text(
-                        '#관심태그1',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    width: 83,
-                    height: 20,
-                    child: const Center(
-                      child: Text(
-                        '#관심태그2',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    width: 83,
-                    height: 20,
-                    child: const Center(
-                      child: Text(
-                        '#관심태그3',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Text(
+                  "${item.content}",
+                  style: kSubTitle1Style,
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: item.questionTag
+                      .map((tag) => Row(children: [
+                            Tagwidget(
+                              tag: tag,
+                              fontSize: 12,
+                            ),
+                            item.questionTag.indexOf(tag) !=
+                                    item.questionTag.length - 1
+                                ? SizedBox(
+                                    width: 4,
+                                  )
+                                : Container()
+                          ]))
+                      .toList(),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ClipOval(
-                        child: CachedNetworkImage(
-                      height: 32,
-                      width: 32,
-                      imageUrl: "https://i.stack.imgur.com/l60Hf.png",
-                      placeholder: (context, url) => const CircleAvatar(
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-                      fit: BoxFit.fill,
-                    )),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Text(
-                        '박지환 ·',
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold),
-                      ),
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: tapProfile,
+                          child: Row(
+                            children: [
+                              ClipOval(
+                                  child: item.profileimage == null
+                                      ? Image.asset(
+                                          "assets/illustrations/default_profile.png",
+                                          height: 32,
+                                          width: 32,
+                                        )
+                                      : CachedNetworkImage(
+                                          height: 32,
+                                          width: 32,
+                                          imageUrl: item.profileimage ?? "",
+                                          placeholder: (context, url) =>
+                                              CircleAvatar(
+                                            backgroundColor: Color(0xffe7e7e7),
+                                            child: Container(),
+                                          ),
+                                          fit: BoxFit.cover,
+                                        )),
+                              Text(
+                                "  ${item.realname}  · ",
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          "${item.department}",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
                     ),
-                    Text(
-                      ' 산업경영공학과',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset("assets/icons/Comment.svg"),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        (item.answercount == 0)
+                            ? Text(
+                                '답변하기',
+                                style: kButtonStyle.copyWith(height: 0.7),
+                              )
+                            : Text(
+                                item.answercount.toString(),
+                                style: kButtonStyle.copyWith(height: 1.1),
+                              )
+                      ],
+                    )
                   ],
                 ),
-                TextButton.icon(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.textsms,
-                      color: Colors.white,
-                    ),
-                    label: Text('2'))
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
     );
+  }
+
+  void tapQuestion() async {
+    questionController.messageanswerlist.clear();
+    await questionController.loadItem(item.id);
+    await questionController.addanswer();
+    Get.to(() => QuestionDetailScreen());
+  }
+
+  void tapProfile() {
+    profileController.isProfileLoading(true);
+
+    Get.to(() => OtherProfileScreen(
+          userid: item.user,
+        ));
   }
 }

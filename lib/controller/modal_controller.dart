@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/screen/select_project_screen.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
@@ -576,6 +577,101 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
           topRight: Radius.circular(16),
         ),
       ),
+    );
+  }
+
+  void showBottomSheet() {
+    Get.bottomSheet(
+      Container(
+        padding: EdgeInsets.fromLTRB(20, 20, 20, 56),
+        decoration: BoxDecoration(
+          color: mainWhite,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  '작성 및 추가',
+                  style: kHeaderH1Style,
+                ),
+                IconButton(
+                  onPressed: () => Get.back(),
+                  icon: SvgPicture.asset('assets/icons/Close.svg'),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                Get.to(SelectProjectScreen());
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    child: SvgPicture.asset(
+                      'assets/icons/Edit.svg',
+                      width: 24,
+                    ),
+                    decoration: BoxDecoration(
+                      color: mainlightgrey,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Text(
+                    '포스팅 작성하기',
+                    style: kSubTitle3Style,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8),
+                  child: SvgPicture.asset(
+                    'assets/icons/Add.svg',
+                    width: 24,
+                    fit: BoxFit.cover,
+                  ),
+                  decoration: BoxDecoration(
+                    color: mainlightgrey,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                SizedBox(
+                  width: 12,
+                ),
+                Text(
+                  '새로운 활동 추가하기',
+                  style: kSubTitle3Style,
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+      barrierColor: mainblack.withOpacity(0.3),
+      enterBottomSheetDuration: Duration(milliseconds: 150),
+      exitBottomSheetDuration: Duration(milliseconds: 150),
     );
   }
 }

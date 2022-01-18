@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
@@ -43,7 +44,7 @@ class TagDetailScreen extends StatelessWidget {
                 automaticallyImplyLeading: false,
                 centerTitle: true,
                 flexibleSpace: _CustomSpace(tag.tag, tag.count.toString()),
-                expandedHeight: Get.height * 0.18,
+                expandedHeight: Get.height * 0.14,
               ),
               SliverOverlapAbsorber(
                 handle:
@@ -58,37 +59,31 @@ class TagDetailScreen extends StatelessWidget {
                     elevation: 0,
                     flexibleSpace: Column(
                       children: [
-                        Theme(
-                          data: ThemeData().copyWith(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
+                        TabBar(
+                          controller: searchController.tagtabController,
+                          labelStyle: kButtonStyle,
+                          labelColor: mainblack,
+                          unselectedLabelStyle: kBody1Style,
+                          unselectedLabelColor: mainblack.withOpacity(0.6),
+                          indicator: const UnderlineIndicator(
+                            strokeCap: StrokeCap.round,
+                            borderSide: BorderSide(width: 2),
                           ),
-                          child: TabBar(
-                            controller: searchController.tagtabController,
-                            labelStyle: kButtonStyle,
-                            labelColor: mainblack,
-                            unselectedLabelStyle: kBody1Style,
-                            unselectedLabelColor: mainblack.withOpacity(0.6),
-                            indicator: const UnderlineIndicator(
-                              strokeCap: StrokeCap.round,
-                              borderSide: BorderSide(width: 2),
-                            ),
-                            indicatorColor: mainblack,
-                            tabs: [
-                              Tab(
-                                height: 40,
-                                child: Text(
-                                  "활동",
-                                ),
+                          indicatorColor: mainblack,
+                          tabs: const [
+                            Tab(
+                              height: 40,
+                              child: Text(
+                                "관련 활동",
                               ),
-                              Tab(
-                                height: 40,
-                                child: Text(
-                                  "질문",
-                                ),
-                              )
-                            ],
-                          ),
+                            ),
+                            Tab(
+                              height: 40,
+                              child: Text(
+                                "관련 질문",
+                              ),
+                            )
+                          ],
                         ),
                         Container(
                           height: 1,
@@ -109,7 +104,7 @@ class TagDetailScreen extends StatelessWidget {
                     ? Column(
                         children: [
                           SizedBox(
-                            height: 10,
+                            height: 24,
                           ),
                           Image.asset(
                             'assets/icons/loading.gif',
@@ -160,7 +155,11 @@ class TagDetailScreen extends StatelessWidget {
                         ],
                       )
                     : SingleChildScrollView(
-                        child: Padding(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 16,
+                          ),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Column(
                             children: searchController.searchtagquestionlist,
@@ -186,6 +185,8 @@ class _CustomSpace extends StatelessWidget {
     BuildContext context,
   ) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
+    var numberFormat = NumberFormat('###,###,###,###');
+
     return LayoutBuilder(
       builder: (context, c) {
         var top = c.biggest.height;
@@ -235,7 +236,7 @@ class _CustomSpace extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '관심도 $tagCount',
+                              '관심도 ${numberFormat.format(int.parse(tagCount))}',
                               style: kSubTitle4Style.copyWith(
                                 fontSize: 16,
                                 color: mainblack.withOpacity(0.6),

@@ -14,26 +14,23 @@ import 'package:loopus/widget/project_widget.dart';
 
 class PersonTileWidget extends StatelessWidget {
   PersonTileWidget({
-    Key? key,
     required this.user,
-  }) : super(key: key);
+  });
 
-  ProfileController profileController = Get.put(ProfileController());
-  User user;
+  final ProfileController profileController = Get.put(ProfileController());
+  final User user;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
         profileController.isProfileLoading(true);
-        // AppController.to.ismyprofile.value = false;
-        print(AppController.to.ismyprofile.value);
         Get.to(() => OtherProfileScreen(
               userid: user.user,
             ));
       },
       child: Container(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 8,
         ),
@@ -52,12 +49,12 @@ class PersonTileWidget extends StatelessWidget {
                         width: 56,
                         imageUrl: user.profileImage!,
                         placeholder: (context, url) => CircleAvatar(
-                          backgroundColor: Color(0xffe7e7e7),
+                          backgroundColor: const Color(0xffe7e7e7),
                           child: Container(),
                         ),
                         fit: BoxFit.cover,
                       )),
-            SizedBox(
+            const SizedBox(
               width: 12,
             ),
             Column(

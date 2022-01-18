@@ -8,7 +8,7 @@ import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/question_add_content_screen.dart';
 import 'package:loopus/screen/question_detail_screen.dart';
 import 'package:loopus/widget/my_question_posting_widget.dart';
-import 'package:loopus/widget/home_question_widget.dart';
+import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/widget/custom_refresher.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -254,13 +254,9 @@ class HomeQuestionScreen extends StatelessWidget {
                                   child: (homeController
                                               .isAllQuestionLoading.value ==
                                           false)
-                                      ? HomeQuestionWidget(
+                                      ? QuestionWidget(
                                           item: homeController.questionResult
                                               .value.questionitems[index],
-                                          index: index,
-                                          key: Key(
-                                            toString(),
-                                          ),
                                         )
                                       : Column(
                                           children: [

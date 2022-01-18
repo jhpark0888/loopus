@@ -102,7 +102,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
                         width: 8,
                       ),
                       Text(
-                        "${item.realname}님에게 남긴 질문",
+                        "${item.realname}",
                         style: kButtonStyle.copyWith(
                           color: mainblack.withOpacity(0.6),
                         ),

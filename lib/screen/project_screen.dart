@@ -281,10 +281,9 @@ class ProjectScreen extends StatelessWidget {
                                           imageUrl:
                                               "https://i.stack.imgur.com/l60Hf.png",
                                           placeholder: (context, url) =>
-                                              const CircleAvatar(
-                                            child: Center(
-                                                child:
-                                                    CircularProgressIndicator()),
+                                              CircleAvatar(
+                                            backgroundColor: Color(0xffe7e7e7),
+                                            child: Container(),
                                           ),
                                           fit: BoxFit.cover,
                                         ),
@@ -302,10 +301,10 @@ class ProjectScreen extends StatelessWidget {
                                             imageUrl:
                                                 "https://i.stack.imgur.com/l60Hf.png",
                                             placeholder: (context, url) =>
-                                                const CircleAvatar(
-                                              child: Center(
-                                                  child:
-                                                      CircularProgressIndicator()),
+                                                CircleAvatar(
+                                              backgroundColor:
+                                                  Color(0xffe7e7e7),
+                                              child: Container(),
                                             ),
                                             fit: BoxFit.cover,
                                           ),
@@ -324,10 +323,10 @@ class ProjectScreen extends StatelessWidget {
                                             imageUrl:
                                                 "https://i.stack.imgur.com/l60Hf.png",
                                             placeholder: (context, url) =>
-                                                const CircleAvatar(
-                                              child: Center(
-                                                  child:
-                                                      CircularProgressIndicator()),
+                                                CircleAvatar(
+                                              backgroundColor:
+                                                  Color(0xffe7e7e7),
+                                              child: Container(),
                                             ),
                                             fit: BoxFit.cover,
                                           ),

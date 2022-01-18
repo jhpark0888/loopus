@@ -20,7 +20,6 @@ import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
-import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:underline_indicator/underline_indicator.dart';
