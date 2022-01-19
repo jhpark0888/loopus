@@ -11,36 +11,19 @@ import 'package:loopus/widget/selected_persontag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:http/http.dart' as http;
 
+enum SelectDateType { start, end }
+
 class ProjectAddController extends GetxController {
   static ProjectAddController get to => Get.find();
 
-  final startmonthFocusNode = FocusNode();
-  final startdayFocusNode = FocusNode();
-  final endyearFocusNode = FocusNode();
-  final endmonthFocusNode = FocusNode();
-  final enddayFocusNode = FocusNode();
-
-  TextEditingController projectnamecontroller = TextEditingController();
-  TextEditingController introcontroller = TextEditingController();
-
-  TextEditingController startyearcontroller = TextEditingController();
-  TextEditingController startmonthcontroller = TextEditingController();
-  TextEditingController startdaycontroller = TextEditingController();
-  TextEditingController endyearcontroller = TextEditingController();
-  TextEditingController endmonthcontroller = TextEditingController();
-  TextEditingController enddaycontroller = TextEditingController();
+  final TextEditingController projectnamecontroller = TextEditingController();
+  final TextEditingController introcontroller = TextEditingController();
 
   RxList<SelectedPersonTagWidget> selectedpersontaglist =
       <SelectedPersonTagWidget>[].obs;
 
-  Rx<GlobalKey<FormState>> formKeystart = GlobalKey<FormState>().obs;
-  RxBool isvaildstartdate = false.obs;
-
-  Rx<GlobalKey<FormState>> formKeyend = GlobalKey<FormState>().obs;
-  RxBool isvaildenddate = false.obs;
-
-  RxBool isongoing = false.obs;
   RxBool ontitlebutton = false.obs;
+  RxBool isIntroTextEmpty = true.obs;
 
   List<User> looplist = <User>[].obs;
   RxList<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
@@ -51,18 +34,20 @@ class ProjectAddController extends GetxController {
   Rx<File?> projectthumbnail = File('').obs;
   String? projecturlthumbnail;
 
+  //새로운 datepicker
+  RxBool isEndedProject = true.obs;
+  RxBool isDateValidated = false.obs;
+  RxBool startDateIsBiggerThanEndDate = false.obs;
+  RxBool isDateChange = false.obs;
+  RxString selectedStartDateTime = ''.obs;
+  RxString selectedEndDateTime = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
-    periodaddListener(startyearcontroller, startmonthFocusNode, 4);
-    periodaddListener(startmonthcontroller, startdayFocusNode, 2);
-    periodaddListener(startdaycontroller, endyearFocusNode, 2);
-    periodaddListener(endyearcontroller, endmonthFocusNode, 4);
-    periodaddListener(endmonthcontroller, enddayFocusNode, 2);
-    periodaddListener(enddaycontroller, null, 2);
 
     projectnamecontroller.addListener(() {
-      if (projectnamecontroller.text.isEmpty) {
+      if (projectnamecontroller.text.trim().isEmpty) {
         ontitlebutton(false);
       } else {
         Pattern pattern = r'[\-\_\/\\\[\]\(\)\|\{\}*$@$!%*#?~^<>,.&+=]';
@@ -72,6 +57,13 @@ class ProjectAddController extends GetxController {
         } else {
           ontitlebutton(true);
         }
+      }
+    });
+    introcontroller.addListener(() {
+      if (introcontroller.text.trim().isNotEmpty) {
+        isIntroTextEmpty(false);
+      } else {
+        isIntroTextEmpty(true);
       }
     });
   }
@@ -85,36 +77,44 @@ class ProjectAddController extends GetxController {
   void onClose() {
     projectnamecontroller.dispose();
     introcontroller.dispose();
-    startyearcontroller.dispose();
-    startmonthcontroller.dispose();
-    startdaycontroller.dispose();
-    endyearcontroller.dispose();
-    endmonthcontroller.dispose();
-    enddaycontroller.dispose();
   }
 
-  periodaddListener(TextEditingController controller, FocusNode? nextfocusnode,
-      int textlength) {
-    controller.addListener(() {
-      if (controller.text.length == textlength && nextfocusnode != null) {
-        nextfocusnode.requestFocus();
-      }
-    });
-  }
+  //새로운 datepicker
+  void changeEndState() {
+    isEndedProject.value = !isEndedProject.value;
 
-  String? validateDate(String value, int maxlenght) {
-    if (value.isEmpty) {
-      return '';
+    if (isEndedProject.value == false) {
+      startDateIsBiggerThanEndDate.value = false;
+
+      selectedEndDateTime.value = '';
+      validateDate();
     } else {
-      Pattern pattern = r'[\-\_\/\\\[\]\(\)\|\{\}*$@$!%*#?~^<>,.&+=]';
-      RegExp regExp = new RegExp(pattern.toString());
-      if (regExp.hasMatch(value) || value.length != maxlenght) {
-        return '';
+      validateDate();
+    }
+  }
+
+  void validateDate() {
+    if (isEndedProject.value == true) {
+      if (selectedStartDateTime.value != '' &&
+          selectedEndDateTime.value != '') {
+        if (DateTime.parse(selectedEndDateTime.value)
+                .difference(DateTime.parse(selectedStartDateTime.value))
+                .inDays >=
+            0) {
+          startDateIsBiggerThanEndDate.value = false;
+          isDateValidated.value = true;
+        } else {
+          isDateValidated.value = false;
+          startDateIsBiggerThanEndDate.value = true;
+        }
       } else {
-        // formKey.currentState!.validate()
-        //     ? ondatebutton(true)
-        //     : ondatebutton(false);
-        return null;
+        isDateValidated.value = false;
+      }
+    } else {
+      if (selectedStartDateTime.value != '') {
+        isDateValidated.value = true;
+      } else {
+        isDateValidated.value = false;
       }
     }
   }

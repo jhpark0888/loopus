@@ -534,7 +534,7 @@ class MyProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-            if (imageController.isImagePickerLoading.value == true)
+            if (imageController.isProfileImagePickerLoading.value == true)
               Container(
                 height: Get.height,
                 width: Get.width,
@@ -549,14 +549,14 @@ class MyProfileScreen extends StatelessWidget {
   }
 
   void changeProfileImage() async {
-    imageController.isImagePickerLoading.value = true;
+    imageController.isProfileImagePickerLoading.value = true;
     File? image = await imageController.getcropImage(ImageType.profile);
     print('image : $image');
     if (image != null) {
       User? user = await updateProfile(profileController.myUserInfo.value,
               image, null, ProfileUpdateType.image)
           .then((user) {
-        imageController.isImagePickerLoading.value = false;
+        imageController.isProfileImagePickerLoading.value = false;
         if (user != null) {
           profileController.myUserInfo(user);
         }

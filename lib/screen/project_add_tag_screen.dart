@@ -1,34 +1,27 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/api/project_api.dart';
-import 'package:loopus/api/question_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
-import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
-import 'package:loopus/model/project_model.dart';
-import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/project_add_person_screen.dart';
-import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
-import 'package:loopus/widget/selected_tag_widget.dart';
 
 class ProjectAddTagScreen extends StatelessWidget {
   ProjectAddTagScreen({
     Key? key,
     required this.screenType,
   }) : super(key: key);
-  ProjectAddController projectaddcontroller = Get.find();
-  TagController tagController = Get.find();
-  Screentype screenType;
+  final ProjectAddController projectaddcontroller = Get.find();
+  final TagController tagController = Get.find();
+  final Screentype screenType;
 
   @override
   Widget build(BuildContext context) {

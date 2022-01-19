@@ -71,7 +71,7 @@ class ProjectModifyScreen extends StatelessWidget {
               () => updateProjectTile(
                 isSubtitleExist: true,
                 onTap: () async {
-                  projectdateinput();
+                  // projectdateinput();
                   Get.to(() => ProjectAddPeriodScreen(
                         screenType: Screentype.update,
                       ));
@@ -79,7 +79,7 @@ class ProjectModifyScreen extends StatelessWidget {
                 project: project.value,
                 title: '활동 기간',
                 subtitle:
-                    '${DateFormat("yyyy.MM").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yyyy.MM").format(project.value.endDate!) : ''}',
+                    '${DateFormat("yy.MM.dd").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''}',
               ),
             ),
             Obx(
@@ -166,25 +166,32 @@ class ProjectModifyScreen extends StatelessWidget {
   }
 
   void projectdateinput() {
-    projectaddcontroller.startyearcontroller.text =
-        DateFormat("yyyy").format(project.value.startDate!);
-    projectaddcontroller.startmonthcontroller.text =
-        DateFormat("MM").format(project.value.startDate!);
-    projectaddcontroller.startdaycontroller.text =
-        DateFormat("dd").format(project.value.startDate!);
+    // projectaddcontroller.startyearcontroller.text =
+    //     DateFormat("yyyy").format(project.value.startDate!);
+    // projectaddcontroller.startmonthcontroller.text =
+    //     DateFormat("MM").format(project.value.startDate!);
+    // projectaddcontroller.startdaycontroller.text =
+    //     DateFormat("dd").format(project.value.startDate!);
+    projectaddcontroller.selectedStartDateTime.value =
+        project.value.startDate!.toString();
 
-    if (project.value.endDate == null) {
-      projectaddcontroller.isvaildstartdate(true);
-      projectaddcontroller.isongoing(true);
+    if (project.value.endDate != null) {
+      // projectaddcontroller.isvaildstartdate(true);
+      // projectaddcontroller.isongoing(true);
+      projectaddcontroller.selectedEndDateTime.value =
+          project.value.startDate!.toString();
+      projectaddcontroller.isEndedProject.value = true;
     } else {
-      projectaddcontroller.endyearcontroller.text =
-          DateFormat("yyyy").format(project.value.endDate!);
-      projectaddcontroller.endmonthcontroller.text =
-          DateFormat("MM").format(project.value.endDate!);
-      projectaddcontroller.enddaycontroller.text =
-          DateFormat("dd").format(project.value.endDate!);
-      projectaddcontroller.isvaildstartdate(true);
-      projectaddcontroller.isvaildenddate(true);
+      projectaddcontroller.isEndedProject.value = false;
+      // projectaddcontroller.endyearcontroller.text =
+      //     DateFormat("yyyy").format(project.value.endDate!);
+      // projectaddcontroller.endmonthcontroller.text =
+      //     DateFormat("MM").format(project.value.endDate!);
+      // projectaddcontroller.enddaycontroller.text =
+      //     DateFormat("dd").format(project.value.endDate!);
+      // projectaddcontroller.isvaildstartdate(true);
+      // projectaddcontroller.isvaildenddate(true);
+
     }
   }
 

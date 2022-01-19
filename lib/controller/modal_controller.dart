@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/select_project_screen.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
 import 'package:loopus/widget/custom_textfield.dart';
@@ -672,6 +674,46 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
       barrierColor: mainblack.withOpacity(0.3),
       enterBottomSheetDuration: Duration(milliseconds: 150),
       exitBottomSheetDuration: Duration(milliseconds: 150),
+    );
+  }
+
+  void showDatePicker(BuildContext context, SelectDateType selectDateType) {
+    DatePicker.showDatePicker(
+      context,
+      showTitleActions: true,
+      minTime: DateTime(2000, 1, 1),
+      maxTime: DateTime.now(),
+      theme: DatePickerTheme(
+        headerColor: mainWhite,
+        backgroundColor: mainWhite,
+        cancelStyle: kSubTitle3Style.copyWith(
+          color: mainblack.withOpacity(0.6),
+        ),
+        itemStyle: kSubTitle3Style,
+        doneStyle: kSubTitle3Style.copyWith(
+          color: mainblue,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      onChanged: (date) {
+        ProjectAddController.to.isDateChange.value = true;
+        print('isdatechange : ${ProjectAddController.to.isDateChange.value}');
+      },
+      onConfirm: (date) {
+        if (selectDateType == SelectDateType.start) {
+          ProjectAddController.to.selectedStartDateTime.value = date.toString();
+          ProjectAddController.to.validateDate();
+
+          print('start ${ProjectAddController.to.selectedStartDateTime.value}');
+        } else {
+          ProjectAddController.to.selectedEndDateTime.value = date.toString();
+          ProjectAddController.to.validateDate();
+
+          print('end ${ProjectAddController.to.selectedEndDateTime.value}');
+        }
+      },
+      currentTime: DateTime.now(),
+      locale: LocaleType.ko,
     );
   }
 }

@@ -37,6 +37,7 @@ dependencies:
   firebase_analytics: ^9.0.4
   intl: ^0.17.0
   lottie: ^1.2.1
+  flutter_datetime_picker: ^1.5.1
 
 dev_dependencies:
   flutter_test:

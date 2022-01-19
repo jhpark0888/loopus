@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -39,11 +40,13 @@ Future addproject() async {
   request.fields['project_name'] =
       projectAddController.projectnamecontroller.text;
   request.fields['introduction'] = projectAddController.introcontroller.text;
-  request.fields['start_date'] =
-      '${projectAddController.startyearcontroller.text}-${projectAddController.startmonthcontroller.text}-${projectAddController.startdaycontroller.text}';
-  request.fields['end_date'] = projectAddController.isongoing.value
-      ? ""
-      : '${projectAddController.endyearcontroller.text}-${projectAddController.endmonthcontroller.text}-${projectAddController.enddaycontroller.text}';
+  request.fields['start_date'] = DateFormat('yyyy-MM-dd')
+      .format(DateTime.parse(projectAddController.selectedStartDateTime.value));
+  request.fields['end_date'] =
+      (projectAddController.isEndedProject.value == true)
+          ? DateFormat('yyyy-MM-dd').format(
+              DateTime.parse(projectAddController.selectedEndDateTime.value))
+          : '';
   request.fields['looper'] = json.encode(projectAddController
       .selectedpersontaglist
       .map((person) => person.id)
@@ -123,11 +126,10 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
   } else if (updateType == ProjectUpdateType.introduction) {
     request.fields['introduction'] = projectAddController.introcontroller.text;
   } else if (updateType == ProjectUpdateType.date) {
-    request.fields['start_date'] =
-        '${projectAddController.startyearcontroller.text}-${projectAddController.startmonthcontroller.text}-${projectAddController.startdaycontroller.text}';
-    request.fields['end_date'] = projectAddController.isongoing.value
-        ? ""
-        : '${projectAddController.endyearcontroller.text}-${projectAddController.endmonthcontroller.text}-${projectAddController.enddaycontroller.text}';
+    request.fields['start_date'] = DateFormat('yyyy-MM-dd').format(
+        DateTime.parse(projectAddController.selectedStartDateTime.value));
+    request.fields['end_date'] = DateFormat('yyyy-MM-dd')
+        .format(DateTime.parse(projectAddController.selectedEndDateTime.value));
   } else if (updateType == ProjectUpdateType.tag) {
     request.fields['tag'] = json
         .encode(tagController.selectedtaglist.map((tag) => tag.text).toList());

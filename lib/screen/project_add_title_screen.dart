@@ -9,6 +9,7 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/custom_textfield.dart';
 
 import '../utils/check_form_validate.dart';
 
@@ -19,9 +20,10 @@ class ProjectAddTitleScreen extends StatelessWidget {
   }) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
-  Screentype screenType;
-  ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
-  TagController tagController = Get.put(TagController());
+  final Screentype screenType;
+  final ProjectAddController projectaddcontroller =
+      Get.put(ProjectAddController());
+  final TagController tagController = Get.put(TagController());
 
   @override
   Widget build(BuildContext context) {
@@ -97,55 +99,26 @@ class ProjectAddTitleScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Text(
+              const Text(
                 '활동명이 무엇인가요?',
                 style: kSubTitle1Style,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
-              Text(
+              const Text(
                 '어떤 활동인지 잘 드러나는 이름을 입력해주세요',
                 style: kBody2Style,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 32,
               ),
-              TextFormField(
-                  minLines: 1,
-                  maxLines: 2,
-                  maxLength: 32,
-                  autocorrect: false,
-                  cursorWidth: 1.5,
-                  cursorRadius: Radius.circular(2),
-                  style: TextStyle(
-                    color: mainblack,
-                    fontWeight: FontWeight.bold,
-                    height: 1.5,
-                  ),
-                  cursorColor: mainblack,
-                  controller: projectaddcontroller.projectnamecontroller,
-                  decoration: InputDecoration(
-                    hintText: 'OO 스터디, OO 공모전, OO 프로젝트...',
-                    hintStyle: TextStyle(
-                      color: mainblack.withOpacity(0.38),
-                      fontWeight: FontWeight.bold,
-                      height: 1.5,
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderRadius: BorderRadius.circular(2),
-                      borderSide: BorderSide(color: mainblack, width: 1),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderRadius: BorderRadius.circular(2),
-                      borderSide: BorderSide(color: mainblack, width: 1),
-                    ),
-                    errorBorder: UnderlineInputBorder(
-                      borderRadius: BorderRadius.circular(2),
-                      borderSide: BorderSide(color: mainpink, width: 1),
-                    ),
-                  ),
-                  validator: (value) => CheckValidate().validateName(value!))
+              CustomTextField(
+                  textController: projectaddcontroller.projectnamecontroller,
+                  hintText: 'OO 스터디, OO 공모전, OO 프로젝트...',
+                  validator: (value) => CheckValidate().validateName(value!),
+                  obscureText: false,
+                  maxLines: 2),
             ],
           ),
         ),

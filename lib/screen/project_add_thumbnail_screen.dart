@@ -105,12 +105,12 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () async {
-                imageController.isImagePickerLoading.value = true;
+                imageController.isProfileImagePickerLoading.value = true;
                 await imageController
-                    .getcropImage(ImageType.thumnail)
+                    .getcropImage(ImageType.thumbnail)
                     .then((value) {
                   projectAddController.projectthumbnail(value);
-                  imageController.isImagePickerLoading.value = false;
+                  imageController.isProfileImagePickerLoading.value = false;
                 });
               },
               child: Container(
@@ -226,15 +226,16 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  '${projectAddController.startyearcontroller.text}.${projectAddController.startmonthcontroller.text}  ~',
+                                  '${projectAddController.selectedStartDateTime}  ~',
                                   style: kSubTitle2Style,
                                 ),
                                 SizedBox(
                                   width: 8,
                                 ),
-                                projectAddController.isongoing.value == false
+                                projectAddController.isEndedProject.value ==
+                                        true
                                     ? Text(
-                                        '${projectAddController.endyearcontroller.text}.${projectAddController.endmonthcontroller.text}',
+                                        '${projectAddController.selectedEndDateTime}',
                                         style: kSubTitle2Style,
                                       )
                                     : Container(),
@@ -252,8 +253,9 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      projectAddController.isongoing.value ==
-                                              false
+                                      projectAddController
+                                                  .isEndedProject.value ==
+                                              true
                                           ? '9개월'
                                           : '진행중',
                                       style: kBody1Style,

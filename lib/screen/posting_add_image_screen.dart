@@ -130,14 +130,14 @@ class _MyAppSpace extends StatelessWidget {
                             alignment: Alignment.bottomRight,
                             child: BlueTextButton(
                               onTap: () async {
-                                imageController.isImagePickerLoading.value =
-                                    true;
                                 imageController
-                                    .getcropImage(ImageType.thumnail)
+                                    .isProfileImagePickerLoading.value = true;
+                                imageController
+                                    .getcropImage(ImageType.thumbnail)
                                     .then((value) {
                                   postingAddController.thumbnail(value);
-                                  imageController.isImagePickerLoading.value =
-                                      false;
+                                  imageController.isProfileImagePickerLoading
+                                      .value = false;
                                 });
                               },
                               text: '대표 사진 변경',

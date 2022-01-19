@@ -8,8 +8,6 @@ import 'package:loopus/widget/custom_refresher.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class BookmarkScreen extends StatelessWidget {
-  BookmarkScreen({Key? key}) : super(key: key);
-
   final BookmarkController bookmarkController = Get.put(BookmarkController());
 
   @override

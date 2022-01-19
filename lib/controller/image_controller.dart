@@ -8,29 +8,31 @@ import 'package:loopus/constant.dart';
 
 enum ImageType {
   profile,
-  thumnail,
+  thumbnail,
   post,
 }
 
 class ImageController extends GetxController {
   static ImageController get to => Get.find();
-  RxBool isImagePickerLoading = false.obs;
+  RxBool isProfileImagePickerLoading = false.obs;
+  RxBool isPostingImagePickerLoading = false.obs;
+  RxBool isThumbnailImagePickerLoading = false.obs;
 
   Future<File?> getcropImage(ImageType type) async {
     XFile? pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     print('pickedFile : $pickedFile');
-    isImagePickerLoading.value = false;
+    isProfileImagePickerLoading.value = false;
     if (pickedFile != null) {
       if (type == ImageType.profile) {
-        isImagePickerLoading.value = true;
+        isProfileImagePickerLoading.value = true;
         return await profilecropImage(pickedFile);
-      } else if (type == ImageType.thumnail) {
-        isImagePickerLoading.value = true;
+      } else if (type == ImageType.thumbnail) {
+        isThumbnailImagePickerLoading.value = true;
 
         return await postingthumbnailcropImage(pickedFile);
       } else if (type == ImageType.post) {
-        isImagePickerLoading.value = true;
+        isPostingImagePickerLoading.value = true;
 
         return await postingcropImage(pickedFile);
       }
@@ -57,7 +59,7 @@ class ImageController extends GetxController {
     if (croppedFile != null) {
       return croppedFile;
     } else {
-      isImagePickerLoading.value = false;
+      isProfileImagePickerLoading.value = false;
     }
   }
 
@@ -80,7 +82,7 @@ class ImageController extends GetxController {
     if (croppedFile != null) {
       return croppedFile;
     } else {
-      isImagePickerLoading.value = false;
+      isThumbnailImagePickerLoading.value = false;
     }
   }
 
@@ -102,7 +104,7 @@ class ImageController extends GetxController {
       // isImagePickerLoading.value = false;
       return croppedFile;
     } else {
-      isImagePickerLoading.value = false;
+      isPostingImagePickerLoading.value = false;
     }
   }
 }
