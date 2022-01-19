@@ -40,7 +40,7 @@ class ProjectAddTagScreen extends StatelessWidget {
                   onPressed: () async {
                     if (tagController.selectedtaglist.length == 3) {
                       projectaddcontroller.isLooppersonLoading(true);
-                      getlooplist(ProfileController.to.myUserInfo.value.user)
+                      getlooplist(ProfileController.to.myUserInfo.value.userid)
                           .then((value) {
                         projectaddcontroller.looplist = value;
                         projectaddcontroller.looppersonlist(projectaddcontroller

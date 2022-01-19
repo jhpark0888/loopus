@@ -162,7 +162,7 @@ class HomeController extends GetxController
       enablePostingPullup.value = false;
     }
     postingResult.value.postingitems.addAll(postingModel.postingitems);
-    print(postingModel.postingitems[2].thumbnail);
+    // print(postingModel.postingitems[2].thumbnail);
   }
 
   Future<void> looploadItem() async {
@@ -224,7 +224,7 @@ class HomeController extends GetxController
     await bookmarkpost(postid);
   }
 
-  void tapLike(int postid) {
+  void tapLike(int postid, int likecount) {
     if (postingResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
@@ -235,7 +235,7 @@ class HomeController extends GetxController
       postingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
-          .likeCount += 1;
+          .likeCount(likecount);
     }
     if (loopResult.value.postingitems
         .where((post) => post.id == postid)
@@ -247,13 +247,13 @@ class HomeController extends GetxController
       loopResult.value.postingitems
           .where((post) => post.id == postid)
           .first
-          .likeCount += 1;
+          .likeCount(likecount);
     }
 
     likepost(postid);
   }
 
-  void tapunLike(int postid) {
+  void tapunLike(int postid, int likecount) {
     if (postingResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
@@ -264,7 +264,7 @@ class HomeController extends GetxController
       postingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
-          .likeCount -= 1;
+          .likeCount(likecount);
     }
     if (loopResult.value.postingitems
         .where((post) => post.id == postid)
@@ -276,7 +276,7 @@ class HomeController extends GetxController
       loopResult.value.postingitems
           .where((post) => post.id == postid)
           .first
-          .likeCount -= 1;
+          .likeCount(likecount);
     }
     likepost(postid);
   }

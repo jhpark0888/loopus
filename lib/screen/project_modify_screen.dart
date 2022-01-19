@@ -118,7 +118,7 @@ class ProjectModifyScreen extends StatelessWidget {
                 onTap: () async {
                   projectlooperinput();
                   projectaddcontroller.isLooppersonLoading(true);
-                  getlooplist(ProfileController.to.myUserInfo.value.user)
+                  getlooplist(ProfileController.to.myUserInfo.value.userid)
                       .then((value) {
                     projectaddcontroller.looplist = value;
                     projectaddcontroller.looppersonlist(projectaddcontroller
@@ -203,7 +203,7 @@ class ProjectModifyScreen extends StatelessWidget {
       projectaddcontroller.selectedpersontaglist.clear();
       for (var user in project.value.looper) {
         projectaddcontroller.selectedpersontaglist.add(SelectedPersonTagWidget(
-          id: user.user,
+          id: user.userid,
           text: user.realName,
         ));
       }

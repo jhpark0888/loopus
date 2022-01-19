@@ -15,6 +15,21 @@ import 'package:loopus/model/post_model.dart';
 import 'package:loopus/widget/post_content_widget.dart';
 
 class PostingScreen extends StatelessWidget {
+  PostingScreen({
+    Key? key,
+    required this.userid,
+    required this.isuser,
+    required this.id,
+    required this.title,
+    required this.realName,
+    required this.department,
+    required this.postDate,
+    required this.profileImage,
+    required this.thumbNail,
+    required this.likecount,
+    required this.isLiked,
+    required this.isMarked,
+  }) : super(key: key);
   final PostingDetailController _postingDetailController =
       Get.put(PostingDetailController());
 
@@ -22,35 +37,45 @@ class PostingScreen extends StatelessWidget {
   final ScrollController _controller = ScrollController();
   // final TransitionAnimationController _transitionAnimationController =
   // Get.put(TransitionAnimationController());
-  Rx<Post> post = Post(
-          id: 0,
-          userid: 0,
-          thumbnail: null,
-          title: '',
-          date: DateTime.now(),
-          project: null,
-          project_id: 0,
-          contents: [],
-          projectname: '',
-          likeCount: 0.obs,
-          isLiked: 0.obs,
-          realname: '',
-          department: '',
-          profileimage: null,
-          isMarked: 0.obs,
-          isuser: 0)
-      .obs;
+
+  int userid;
+  int isuser;
+  int id;
+  String title;
+  String realName;
+  dynamic profileImage;
+  DateTime postDate;
+  String department;
+  dynamic thumbNail;
+  RxInt likecount;
+  RxInt isLiked;
+  RxInt isMarked;
 
   @override
   Widget build(BuildContext context) {
-    int isuser = Get.arguments['isuser'];
-    int id = Get.arguments['id'];
-    String title = Get.arguments['title'];
-    String realName = Get.arguments['realName'];
-    dynamic profileImage = Get.arguments['profileImage'];
-    DateTime postDate = Get.arguments['postDate'];
-    String department = Get.arguments['department'];
-    dynamic thumbNail = Get.arguments['thumbnail'];
+    print(isLiked);
+    Rx<Post> post = Post(
+            id: id,
+            userid: 0,
+            thumbnail: thumbNail,
+            title: title,
+            date: DateTime.now(),
+            project: null,
+            project_id: 0,
+            contents: [],
+            projectname: '',
+            likeCount: likecount,
+            isLiked: 0.obs,
+            realname: '',
+            department: '',
+            profileimage: null,
+            isMarked: 0.obs,
+            isuser: 0)
+        .obs;
+    getposting(id).then((value) {
+      post(value);
+      _postingDetailController.isPostingContentLoading(false);
+    });
     return Obx(
       () => Stack(children: [
         Scaffold(
@@ -72,17 +97,19 @@ class PostingScreen extends StatelessWidget {
                 children: [
                   Obx(() => InkWell(
                       onTap: () {
-                        if (post.value.isLiked.value == 0) {
-                          HomeController.to.tapLike(post.value.id);
-                          post.value.likeCount += 1;
-                          post.value.isLiked.value = 1;
+                        if (isLiked.value == 0) {
+                          likecount += 1;
+
+                          HomeController.to.tapLike(id, likecount.value);
+                          isLiked(1);
                         } else {
-                          HomeController.to.tapunLike(post.value.id);
-                          post.value.likeCount -= 1;
-                          post.value.isLiked.value = 0;
+                          likecount -= 1;
+                          HomeController.to.tapunLike(id, likecount.value);
+
+                          isLiked(0);
                         }
                       },
-                      child: post.value.isLiked.value == 0
+                      child: isLiked.value == 0
                           ? SvgPicture.asset(
                               "assets/icons/Favorite_Inactive.svg")
                           : SvgPicture.asset(
@@ -92,7 +119,7 @@ class PostingScreen extends StatelessWidget {
                   ),
                   Obx(
                     () => Text(
-                      post.value.likeCount.toString(),
+                      likecount.toString(),
                       style: kButtonStyle,
                     ),
                   ),
@@ -101,15 +128,15 @@ class PostingScreen extends StatelessWidget {
                   ),
                   Obx(() => InkWell(
                       onTap: () {
-                        if (post.value.isMarked.value == 0) {
-                          HomeController.to.tapBookmark(post.value.id);
-                          post.value.isMarked(1);
+                        if (isMarked.value == 0) {
+                          HomeController.to.tapBookmark(id);
+                          isMarked(1);
                         } else {
-                          HomeController.to.tapunBookmark(post.value.id);
-                          post.value.isMarked(0);
+                          HomeController.to.tapunBookmark(id);
+                          isMarked(0);
                         }
                       },
-                      child: post.value.isMarked.value == 0
+                      child: isMarked.value == 0
                           ? SvgPicture.asset("assets/icons/Mark_Default.svg")
                           : SvgPicture.asset("assets/icons/Mark_Saved.svg")))
                 ],
@@ -149,7 +176,7 @@ class PostingScreen extends StatelessWidget {
                                       leftText: '',
                                       rightText: '',
                                       title:
-                                          '정말 <${_postingDetailController.item?.title}> 포스팅을 삭제하시겠어요?',
+                                          '정말 <${post.value.title}> 포스팅을 삭제하시겠어요?',
                                       content: '삭제한 포스팅은 복구할 수 없어요',
                                       leftFunction: () => Get.back(),
                                       rightFunction: () async {
@@ -157,8 +184,7 @@ class PostingScreen extends StatelessWidget {
                                             .isPostDeleteLoading(true);
                                         Get.back();
                                         Get.back();
-                                        await deleteposting(
-                                            _postingDetailController.item!.id);
+                                        await deleteposting(post.value.id);
                                         _postingDetailController
                                             .isPostDeleteLoading(false);
                                       });
@@ -179,7 +205,7 @@ class PostingScreen extends StatelessWidget {
                                       leftText: '',
                                       rightText: '',
                                       title:
-                                          '정말 <${_postingDetailController.item?.title}> 포스팅을 신고하시겠어요?',
+                                          '정말 <${post.value.title}> 포스팅을 신고하시겠어요?',
                                       content: '신고 횟수가 누적되면 포스팅은 삭제됩니다',
                                       leftFunction: () => Get.back(),
                                       rightFunction: () {});
@@ -220,8 +246,7 @@ class PostingScreen extends StatelessWidget {
                                     .isPostingContentLoading.value ==
                                 false)
                             ? Column(
-                                children: _postingDetailController
-                                    .item!.contents!
+                                children: post.value.contents!
                                     .map((content) =>
                                         PostContentWidget(content: content))
                                     .toList(),

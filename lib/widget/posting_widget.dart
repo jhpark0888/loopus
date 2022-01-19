@@ -25,7 +25,6 @@ class PostingWidget extends StatelessWidget {
 
   PostingWidget({required this.item, Key? key}) : super(key: key);
 
-  final BookmarkController bookmarkController = Get.put(BookmarkController());
   final ProfileController profileController = Get.put(ProfileController());
   // final HoverController _hoverController = Get.put(HoverController());
   final PostingDetailController postingDetailController =
@@ -225,23 +224,20 @@ class PostingWidget extends StatelessWidget {
 
   void tapPosting() {
     postingDetailController.isPostingContentLoading.value = true;
-    getposting(item.id).then((value) {
-      postingDetailController.item = value;
-      postingDetailController.isPostingContentLoading.value = false;
-    });
     Get.to(
-      () => PostingScreen(),
-      arguments: {
-        'isuser': item.isuser,
-        'id': item.id,
-        'realName': item.realname,
-        'profileImage': item.profileimage,
-        'title': item.title,
-        'content': item.contents,
-        'postDate': item.date,
-        'department': item.department,
-        'thumbnail': item.thumbnail,
-      },
+      () => PostingScreen(
+          userid: item.userid,
+          isuser: item.isuser,
+          id: item.id,
+          title: item.title,
+          realName: item.realname,
+          department: item.department,
+          postDate: item.date,
+          profileImage: item.profileimage,
+          thumbNail: item.thumbnail,
+          likecount: item.likeCount,
+          isLiked: item.isLiked,
+          isMarked: item.isMarked),
     );
   }
 
@@ -257,9 +253,11 @@ class PostingWidget extends StatelessWidget {
 
   void tapLike() {
     if (item.isLiked.value == 0) {
-      homeController.tapLike(item.id);
+      item.likeCount += 1;
+      homeController.tapLike(item.id, item.likeCount.value);
     } else {
-      homeController.tapunLike(item.id);
+      item.likeCount -= 1;
+      homeController.tapunLike(item.id, item.likeCount.value);
     }
   }
 
@@ -268,6 +266,8 @@ class PostingWidget extends StatelessWidget {
 
     Get.to(() => OtherProfileScreen(
           userid: item.userid,
+          isuser: item.isuser,
+          realname: item.realname,
         ));
   }
 }

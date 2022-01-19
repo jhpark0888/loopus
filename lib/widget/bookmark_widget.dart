@@ -110,6 +110,8 @@ class BookmarkWidget extends StatelessWidget {
 
                               Get.to(() => OtherProfileScreen(
                                     userid: item.userid,
+                                    isuser: item.isuser,
+                                    realname: item.realname,
                                   ));
                             },
                             child: Row(
@@ -218,13 +220,15 @@ class BookmarkWidget extends StatelessWidget {
     int bookmarkid =
         bookmarkController.bookmarkResult.value.postingitems[index].id;
     if (item.isLiked.value == 0) {
-      HomeController.to.tapLike(bookmarkid);
-      item.isLiked.value = 1;
       item.likeCount.value += 1;
+
+      HomeController.to.tapLike(bookmarkid, item.likeCount.value);
+      item.isLiked.value = 1;
     } else {
-      HomeController.to.tapunLike(bookmarkid);
-      item.isLiked.value = 0;
       item.likeCount.value -= 1;
+
+      HomeController.to.tapunLike(bookmarkid, item.likeCount.value);
+      item.isLiked.value = 0;
     }
   }
 
@@ -233,25 +237,27 @@ class BookmarkWidget extends StatelessWidget {
 
     Get.to(() => OtherProfileScreen(
           userid: item.userid,
+          isuser: item.isuser,
+          realname: item.realname,
         ));
   }
 
   void tapPosting() {
     postingDetailController.isPostingContentLoading.value = true;
-    getposting(item.id).then((value) {
-      postingDetailController.item = value;
-      postingDetailController.isPostingContentLoading.value = false;
-    });
-    // var responseBody = json.decode(utf8.decode(response!.bodyBytes));
-    Get.to(() => PostingScreen(), arguments: {
-      'isuser': item.isuser,
-      'id': item.id,
-      'realName': item.realname,
-      'profileImage': item.profileimage,
-      'title': item.title,
-      'postDate': item.date,
-      'department': item.department,
-      'thumbNail': item.thumbnail,
-    });
+    Get.to(
+      () => PostingScreen(
+          userid: item.userid,
+          isuser: item.isuser,
+          id: item.id,
+          title: item.title,
+          realName: item.realname,
+          department: item.department,
+          postDate: item.date,
+          profileImage: item.profileimage,
+          thumbNail: item.thumbnail,
+          likecount: item.likeCount,
+          isLiked: item.isLiked,
+          isMarked: item.isMarked),
+    );
   }
 }

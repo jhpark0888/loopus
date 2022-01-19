@@ -20,9 +20,10 @@ import 'package:intl/intl.dart';
 class ProjectPostingWidget extends StatelessWidget {
   ProjectPostingWidget({
     Key? key,
+    required this.isuser,
     required this.item,
-    required this.realName,
-    required this.profileImage,
+    required this.realname,
+    required this.profileimage,
     required this.department,
   }) : super(key: key);
 
@@ -30,8 +31,9 @@ class ProjectPostingWidget extends StatelessWidget {
       Get.put(PostingDetailController());
 
   Post item;
-  String realName;
-  var profileImage;
+  int isuser;
+  String realname;
+  var profileimage;
   String department;
 
   @override
@@ -39,29 +41,22 @@ class ProjectPostingWidget extends StatelessWidget {
     return InkWell(
       onTap: () {
         postingDetailController.isPostingContentLoading.value = true;
-        getposting(item.id).then((value) {
-          postingDetailController.item = value;
-          postingDetailController.isPostingContentLoading.value = false;
-        });
-        // if (response != null) {
-        //   var responseBody = json.decode(utf8.decode(response.bodyBytes));
-        //   user = User.fromJson(responseBody);
-        //   post = Post.fromJson(responseBody['posting_info']);
-        // }
+        print(item.isLiked);
         Get.to(
-            () => PostingScreen(// user: user!,
-                ),
-            arguments: {
-              'isuser': item.isuser,
-              'id': item.id,
-              'realName': realName,
-              'profileImage': profileImage,
-              'title': item.title,
-              'content': item.contents,
-              'postDate': item.date,
-              'department': department,
-              'thumbnail': item.thumbnail,
-            });
+          () => PostingScreen(
+              userid: item.userid,
+              isuser: isuser,
+              id: item.id,
+              title: item.title,
+              realName: realname,
+              department: department,
+              postDate: item.date,
+              profileImage: profileimage,
+              thumbNail: item.thumbnail,
+              likecount: item.likeCount,
+              isLiked: item.isLiked,
+              isMarked: item.isMarked),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.only(
@@ -121,12 +116,16 @@ class ProjectPostingWidget extends StatelessWidget {
                         Obx(() => InkWell(
                             onTap: () {
                               if (item.isLiked.value == 0) {
-                                HomeController.to.tapLike(item.id);
                                 item.likeCount += 1;
+                                HomeController.to
+                                    .tapLike(item.id, item.likeCount.value);
+
                                 item.isLiked.value = 1;
                               } else {
-                                HomeController.to.tapunLike(item.id);
                                 item.likeCount -= 1;
+                                HomeController.to
+                                    .tapunLike(item.id, item.likeCount.value);
+
                                 item.isLiked.value = 0;
                               }
                             },

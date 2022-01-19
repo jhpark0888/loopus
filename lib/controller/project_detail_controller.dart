@@ -12,6 +12,7 @@ import 'package:loopus/widget/project_posting_widget.dart';
 class ProjectDetailController extends GetxController {
   static ProjectDetailController get to => Get.find();
   RxBool isProjectLoading = false.obs;
+  RxBool isProjectDeleteLoading = false.obs;
   Rx<Project> project = Project(
       id: 0,
       userid: 0,
@@ -21,6 +22,14 @@ class ProjectDetailController extends GetxController {
       looper: []).obs;
 
   RxList<ProjectPostingWidget> postinglist = <ProjectPostingWidget>[].obs;
+
+  RxInt likesum(RxInt likecount, List<int> list) {
+    likecount(0);
+    for (var like in list) {
+      likecount.value += like;
+    }
+    return likecount;
+  }
 
   @override
   void onInit() {

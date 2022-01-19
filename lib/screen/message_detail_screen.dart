@@ -17,11 +17,11 @@ class MessageDetailScreen extends StatelessWidget {
 
   void _handleSubmitted(String text) async {
     print(text);
-    await messagemake(text, messageController.userid);
+    await postmessage(text, messageController.userid);
     messageController.messagelist.clear();
     await getmessagelist(messageController.userid);
     messageController.messagefocus.unfocus();
-    messageController.messagetextController.value.clear();
+    messageController.messagetextController.clear();
   }
 
   Widget _buildTextComposer() {
@@ -47,7 +47,7 @@ class MessageDetailScreen extends StatelessWidget {
               focusNode: messageController.messagefocus,
               style: TextStyle(decoration: TextDecoration.none),
               cursorColor: mainblack.withOpacity(0.6),
-              controller: messageController.messagetextController.value,
+              controller: messageController.messagetextController,
               onFieldSubmitted: _handleSubmitted,
               validator: (value) {},
               minLines: 1,
@@ -77,31 +77,19 @@ class MessageDetailScreen extends StatelessWidget {
           const SizedBox(
             width: 12,
           ),
-          Obx(
-            () => Align(
-              alignment: Alignment.center,
-              child: messageController.messagetextController.value.text == ""
-                  ? InkWell(
-                      onTap: () {},
-                      child: Text(
-                        "보내기",
-                        style: TextStyle(
-                          color: mainblack.withOpacity(0.38),
-                        ),
-                      ),
-                    )
-                  : InkWell(
-                      onTap: () {
-                        _handleSubmitted(
-                            messageController.messagetextController.value.text);
-                      },
-                      child: Text(
-                        "보내기",
-                        style: TextStyle(
-                          color: mainblue,
-                        ),
-                      ),
-                    ),
+          Align(
+            alignment: Alignment.center,
+            child: InkWell(
+              onTap: () {
+                _handleSubmitted(
+                    messageController.messagetextController.value.text);
+              },
+              child: Text(
+                "보내기",
+                style: TextStyle(
+                  color: mainblue,
+                ),
+              ),
             ),
           ),
         ],
@@ -111,7 +99,7 @@ class MessageDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getmessagelist(user.user).then((value) {
+    getmessagelist(user.userid).then((value) {
       messagelist(value
           .map((message) => MessageWidget(message: message, user: user))
           .toList());
@@ -159,90 +147,7 @@ class MessageDetailScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-            Container(
-              decoration: BoxDecoration(
-                color: mainWhite,
-                border: Border(
-                  top: BorderSide(
-                    width: 1,
-                    color: Color(0xffe7e7e7),
-                  ),
-                ),
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
-              child: Row(
-                children: [
-                  Flexible(
-                    child: TextFormField(
-                      cursorWidth: 1.2,
-                      focusNode: messageController.messagefocus,
-                      style: TextStyle(decoration: TextDecoration.none),
-                      cursorColor: mainblack.withOpacity(0.6),
-                      controller: messageController.messagetextController.value,
-                      onFieldSubmitted: _handleSubmitted,
-                      validator: (value) {},
-                      minLines: 1,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        suffixIconConstraints:
-                            BoxConstraints(minHeight: 24, minWidth: 24),
-                        contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                        isDense: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        hintText: "메세지 보내기...",
-                        hintStyle: TextStyle(
-                          fontSize: 14,
-                          color: mainblack.withOpacity(0.38),
-                        ),
-                        fillColor: mainlightgrey,
-                        filled: true,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  Obx(
-                    () => Align(
-                      alignment: Alignment.center,
-                      child:
-                          messageController.messagetextController.value.text ==
-                                  ""
-                              ? InkWell(
-                                  onTap: () {},
-                                  child: Text(
-                                    "보내기",
-                                    style: TextStyle(
-                                      color: mainblack.withOpacity(0.38),
-                                    ),
-                                  ),
-                                )
-                              : InkWell(
-                                  onTap: () {
-                                    _handleSubmitted(messageController
-                                        .messagetextController.value.text);
-                                  },
-                                  child: Text(
-                                    "보내기",
-                                    style: TextStyle(
-                                      color: mainblue,
-                                    ),
-                                  ),
-                                ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _buildTextComposer()
           ],
         ),
       ),

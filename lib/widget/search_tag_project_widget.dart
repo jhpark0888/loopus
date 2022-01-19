@@ -193,7 +193,9 @@ class SearchTagProjectWidget extends StatelessWidget {
 
     // AppController.to.ismyprofile.value = false;
     Get.to(() => OtherProfileScreen(
-          userid: project.userid,
+          userid: project.userid!,
+          isuser: project.is_user!,
+          realname: project.realname!,
         ));
   }
 

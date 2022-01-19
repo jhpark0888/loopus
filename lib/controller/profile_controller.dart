@@ -44,7 +44,7 @@ class ProfileController extends GetxController
   Rx<File> profileimage = File('').obs;
   Rx<User> myUserInfo = User(
     //id
-    user: 0,
+    userid: 0,
     //0 : 학생, 1: 기업
     type: 0,
     realName: '',
@@ -58,7 +58,7 @@ class ProfileController extends GetxController
   ).obs;
 
   Rx<User> otherUser = User(
-    user: 0,
+    userid: 0,
     type: 0,
     realName: '',
     totalposting: 0,

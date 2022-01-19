@@ -27,11 +27,11 @@ class CheckBoxPersonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (projectaddController.selectedpersontaglist
-        .where((element) => element.id == user.user)
+        .where((element) => element.id == user.userid)
         .isNotEmpty) {
       projectaddController.selectedpersontaglist.contains(
         projectaddController.selectedpersontaglist
-            .where((element) => element.id == user.user)
+            .where((element) => element.id == user.userid)
             .first,
       )
           ? isselected(true)
@@ -64,13 +64,13 @@ class CheckBoxPersonWidget extends StatelessWidget {
               if (isselected.value) {
                 isselected(false);
                 projectaddController.selectedpersontaglist
-                    .removeWhere((element) => element.id == user.user);
+                    .removeWhere((element) => element.id == user.userid);
               } else {
                 isselected(true);
                 projectaddController.selectedpersontaglist.add(
                   SelectedPersonTagWidget(
                     text: user.realName,
-                    id: user.user,
+                    id: user.userid,
                   ),
                 );
               }

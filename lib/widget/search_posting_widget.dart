@@ -117,13 +117,12 @@ class SearchPostingWidget extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () async {
-                          // AppController.to.ismyprofile.value = false;
-                          // print(AppController.to.ismyprofile.value);
-                          profileController.isProfileLoading(true);
+                          // profileController.isProfileLoading(true);
 
-                          Get.to(() => OtherProfileScreen(
-                                userid: user_id,
-                              ));
+                          // Get.to(() => OtherProfileScreen(
+                          //       userid: user_id,
+                          //       isuser: ,
+                          //     ));
                         },
                         child: Row(
                           children: [
@@ -169,13 +168,13 @@ class SearchPostingWidget extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             if (is_liked.value == 0) {
-                              HomeController.to.tapLike(id);
-                              is_liked.value = 1;
                               like_count.value += 1;
+                              HomeController.to.tapLike(id, like_count.value);
+                              is_liked.value = 1;
                             } else {
-                              HomeController.to.tapunLike(id);
-                              is_liked.value = 0;
                               like_count.value -= 1;
+                              HomeController.to.tapunLike(id, like_count.value);
+                              is_liked.value = 0;
                             }
                           },
                           child: is_liked.value == 0

@@ -432,7 +432,7 @@ class MyProfileScreen extends StatelessWidget {
                                   profileController.isLoopPeopleLoading(true);
                                   Get.to(() => LoopPeopleScreen(
                                         userid: profileController
-                                            .myUserInfo.value.user,
+                                            .myUserInfo.value.userid,
                                         loopcount: profileController
                                             .myUserInfo.value.loopcount,
                                       ));
