@@ -86,7 +86,6 @@ class ProjectAddController extends GetxController {
     if (isEndedProject.value == false) {
       startDateIsBiggerThanEndDate.value = false;
 
-      selectedEndDateTime.value = '';
       validateDate();
     } else {
       validateDate();

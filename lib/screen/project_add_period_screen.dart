@@ -238,6 +238,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                         IconButton(
                           onPressed: () {
                             projectaddcontroller.changeEndState();
+                            projectaddcontroller.isDateChange.value = true;
                           },
                           icon: (projectaddcontroller.isEndedProject.value ==
                                   true)
