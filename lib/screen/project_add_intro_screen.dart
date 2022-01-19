@@ -70,14 +70,12 @@ class ProjectAddIntroScreen extends StatelessWidget {
                             });
                             Get.back();
                           },
-                          child: Obx(
-                            () => Text(
-                              '저장',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: mainblue,
-                              ),
+                          child: Text(
+                            '저장',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: mainblue,
                             ),
                           ),
                         ),
