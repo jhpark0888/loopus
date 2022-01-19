@@ -114,6 +114,8 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 height: 32,
               ),
               CustomTextField(
+                  counterText: null,
+                  maxLength: 32,
                   textController: projectaddcontroller.projectnamecontroller,
                   hintText: 'OO 스터디, OO 공모전, OO 프로젝트...',
                   validator: (value) => CheckValidate().validateName(value!),

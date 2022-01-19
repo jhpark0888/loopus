@@ -50,6 +50,8 @@ class LogInScreen extends StatelessWidget {
                             height: 16,
                           ),
                           CustomTextField(
+                            counterText: null,
+                            maxLength: null,
                             textController: _loginController.idcontroller,
                             hintText: 'loopus@inu.ac.kr',
                             obscureText: false,
@@ -68,6 +70,8 @@ class LogInScreen extends StatelessWidget {
                             height: 16,
                           ),
                           CustomTextField(
+                            counterText: null,
+                            maxLength: null,
                             textController: _loginController.passwordcontroller,
                             hintText: '영문, 숫자, 특수문자 포함 8자리 이상',
                             obscureText: true,

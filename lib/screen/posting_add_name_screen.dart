@@ -10,11 +10,13 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/posting_add_content_screen.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/custom_textfield.dart';
 
 class PostingAddNameScreen extends StatelessWidget {
   PostingAddNameScreen({Key? key, required this.project_id}) : super(key: key);
-  PostingAddController postingcontroller = Get.put(PostingAddController());
-  FocusNode _focusNode = FocusNode();
+  final PostingAddController postingcontroller =
+      Get.put(PostingAddController());
+  final FocusNode _focusNode = FocusNode();
   int project_id;
 
   @override
@@ -72,36 +74,14 @@ class PostingAddNameScreen extends StatelessWidget {
               SizedBox(
                 height: 32,
               ),
-              TextField(
-                focusNode: _focusNode,
-                autocorrect: false,
-                maxLength: 40,
-                minLines: 1,
-                maxLines: 2,
-                autofocus: true,
-                style: kSubTitle1Style,
-                cursorColor: mainblack,
-                cursorWidth: 1.5,
-                cursorRadius: Radius.circular(2),
-                controller: postingcontroller.titlecontroller,
-                decoration: InputDecoration(
+              CustomTextField(
+                  counterText: null,
+                  maxLength: 40,
+                  textController: postingcontroller.titlecontroller,
                   hintText: '포스팅 제목...',
-                  hintStyle: kSubTitle1Style.copyWith(
-                    color: mainblack.withOpacity(0.38),
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderRadius: BorderRadius.circular(2),
-                    borderSide: BorderSide(
-                        color: mainblack.withOpacity(
-                          0.6,
-                        ),
-                        width: 1),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: mainblack, width: 1),
-                  ),
-                ),
-              )
+                  validator: null,
+                  obscureText: false,
+                  maxLines: 2),
             ],
           ),
         ),

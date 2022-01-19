@@ -122,20 +122,16 @@ class ProfileTagChangeScreen extends StatelessWidget {
                       height: 20,
                     ),
                     //TODO : 태그 삭제하고 검색 탭 눌렀을 때 초기화되는 오류 수정
-                    Container(
-                      height: 32,
-                      child: ListView.builder(
+                    Obx(
+                      () => Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        width: Get.width,
+                        height: 32,
+                        child: ListView(
                           scrollDirection: Axis.horizontal,
-                          itemCount: 1,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  left: (index == 0) ? 16 : 0,
-                                  right: (index == 0) ? 16 : 0),
-                              child: Obx(() =>
-                                  Row(children: tagController.selectedtaglist)),
-                            );
-                          }),
+                          children: tagController.selectedtaglist,
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: 16,

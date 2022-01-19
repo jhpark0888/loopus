@@ -16,73 +16,87 @@ import 'package:loopus/widget/smarttextfield.dart';
 class PostingAddContentScreen extends StatelessWidget {
   PostingAddContentScreen({Key? key, required this.project_id})
       : super(key: key);
-  PostingAddController postingAddController = Get.find();
+  final PostingAddController postingAddController = Get.find();
+  final ImageController _imageController = Get.put(ImageController());
   // EditorController editorController = Get.put(EditorController());
   int project_id;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBarWidget(
-            bottomBorder: false,
-            actions: [
-              TextButton(
-                onPressed: () {
-                  // postingAddController.editorController
-                  //     .nodeAt(postingAddController.editorController.focus)
-                  //     .unfocus();
-                  Get.to(() => PostingAddImageScreen(
-                        project_id: project_id,
-                      ));
-                },
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue,
+    return Obx(
+      () => Stack(
+        children: [
+          Scaffold(
+            appBar: AppBarWidget(
+              bottomBorder: false,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    // postingAddController.editorController
+                    //     .nodeAt(postingAddController.editorController.focus)
+                    //     .unfocus();
+                    Get.to(() => PostingAddImageScreen(
+                          project_id: project_id,
+                        ));
+                  },
+                  child: Text(
+                    '다음',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: mainblue,
+                    ),
                   ),
                 ),
-              ),
-            ],
-            title: '포스팅 내용',
+              ],
+              title: '포스팅 내용',
+            ),
+            body: Column(
+              children: [
+                Obx(
+                  () => Expanded(
+                      child: GestureDetector(
+                    onTap: () {
+                      if (postingAddController.editorController.types.last ==
+                          SmartTextType.IMAGE) {
+                        postingAddController.editorController.insert(
+                            index: postingAddController
+                                .editorController.types.length);
+                        postingAddController.editorController
+                            .setFocus(SmartTextType.T);
+                      } else {
+                        postingAddController.editorController.nodes.last
+                            .requestFocus();
+                      }
+                    },
+                    child: ListView(
+                      children: postingAddController
+                          .editorController.smarttextfieldlist,
+                    ),
+                  )),
+                ),
+                Obx(
+                  () => EditorToolbar(
+                      selectedType: postingAddController
+                          .editorController.selectedType.value,
+                      onSelected:
+                          postingAddController.editorController.setType),
+                )
+              ],
+            ),
           ),
-          body: Column(
-            children: [
-              Obx(
-                () => Expanded(
-                    child: GestureDetector(
-                  onTap: () {
-                    if (postingAddController.editorController.types.last ==
-                        SmartTextType.IMAGE) {
-                      postingAddController.editorController.insert(
-                          index: postingAddController
-                              .editorController.types.length);
-                      postingAddController.editorController
-                          .setFocus(SmartTextType.T);
-                    } else {
-                      postingAddController.editorController.nodes.last
-                          .requestFocus();
-                    }
-                  },
-                  child: ListView(
-                    children: postingAddController
-                        .editorController.smarttextfieldlist,
-                  ),
-                )),
+          if (_imageController.isPostingImagePickerLoading.value == true)
+            Container(
+              height: Get.height,
+              width: Get.width,
+              color: mainblack.withOpacity(0.3),
+              child: Image.asset(
+                'assets/icons/loading.gif',
+                scale: 6,
               ),
-              Obx(
-                () => EditorToolbar(
-                    selectedType: postingAddController
-                        .editorController.selectedType.value,
-                    onSelected: postingAddController.editorController.setType),
-              )
-            ],
-          ),
-        ),
-      ],
+            ),
+        ],
+      ),
     );
   }
 }

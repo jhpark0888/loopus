@@ -89,15 +89,16 @@ class ImageController extends GetxController {
   Future<File?> postingcropImage(pickimage) async {
     File? croppedFile = await ImageCropper.cropImage(
         sourcePath: pickimage.path,
-        aspectRatio: const CropAspectRatio(ratioX: 2, ratioY: 1),
         androidUiSettings: const AndroidUiSettings(
             toolbarTitle: 'Cropper',
             toolbarColor: mainblue,
             toolbarWidgetColor: mainWhite,
-            initAspectRatio: CropAspectRatioPreset.ratio16x9,
-            lockAspectRatio: true),
+            lockAspectRatio: false),
         iosUiSettings: const IOSUiSettings(
-          aspectRatioPickerButtonHidden: true,
+          // resetAspectRatioEnabled: false,
+          aspectRatioLockDimensionSwapEnabled: true,
+          aspectRatioLockEnabled: true,
+          aspectRatioPickerButtonHidden: false,
           minimumAspectRatio: 1.0,
         ));
     if (croppedFile != null) {

@@ -304,6 +304,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
         content: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: CustomTextField(
+            counterText: null,
+            maxLength: null,
             hintText: hintText,
             textController: textEditingController,
             obscureText: obscureText,

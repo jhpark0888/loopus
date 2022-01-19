@@ -47,6 +47,8 @@ class SignupCampusInfoScreen extends StatelessWidget {
                 height: 32,
               ),
               CustomTextField(
+                counterText: null,
+                maxLength: null,
                 textController: signupController.campusnamecontroller,
                 hintText: '학교 이름 검색',
                 obscureText: false,

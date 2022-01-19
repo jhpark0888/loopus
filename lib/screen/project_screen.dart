@@ -478,7 +478,8 @@ class ProjectScreen extends StatelessWidget {
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  project.value.is_user == 1
+                                  (project.value.is_user == 1 &&
+                                          project.value.post.isNotEmpty)
                                       ? GestureDetector(
                                           onTap: () {
                                             Get.to(() => PostingAddNameScreen(
@@ -505,22 +506,30 @@ class ProjectScreen extends StatelessWidget {
                                   children: project.value.post.isNotEmpty
                                       ? postinglist
                                       : [
-                                          SizedBox(
-                                            height: 20,
+                                          const SizedBox(
+                                            height: 32,
                                           ),
                                           Text(
-                                            '첫 포스팅을 작성해주세요',
+                                            '포스팅을 통해 경험한 순간들을 남겨보세요',
                                             style: kSubTitle2Style.copyWith(
                                               color: mainblack,
                                             ),
                                           ),
-                                          SizedBox(
-                                            height: 10,
+                                          const SizedBox(
+                                            height: 4,
                                           ),
-                                          Text(
-                                            '포스팅을 통해 경험한 순간들을 남겨 보세요',
-                                            style: kButtonStyle.copyWith(
-                                              color: mainblue,
+                                          TextButton(
+                                            onPressed: () {
+                                              Get.to(() => PostingAddNameScreen(
+                                                    project_id:
+                                                        project.value.id,
+                                                  ));
+                                            },
+                                            child: Text(
+                                              '첫 포스팅 작성하기',
+                                              style: kSubTitle2Style.copyWith(
+                                                color: mainblue,
+                                              ),
                                             ),
                                           ),
                                         ],

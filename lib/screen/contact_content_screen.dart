@@ -42,6 +42,8 @@ class ContactContentScreen extends StatelessWidget {
               height: 32,
             ),
             CustomTextField(
+              counterText: null,
+              maxLength: null,
               textController: null,
               hintText: '문의 내용...',
               validator: null,
