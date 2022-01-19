@@ -132,9 +132,12 @@ class EditorController extends GetxController {
         TextEditingController(text: '\u200B' + (text ?? ''));
     controller.addListener(() {
       if (controller.selection ==
-          TextSelection.fromPosition(TextPosition(offset: 0))) {
-        controller.selection =
-            TextSelection.fromPosition(TextPosition(offset: 1));
+              TextSelection.fromPosition(TextPosition(offset: 0)) &&
+          controller.text != '' &&
+          index > 0) {
+        controller.selection = TextSelection.fromPosition(TextPosition(
+          offset: 1,
+        ));
       }
       if (!controller.text.startsWith('\u200B')) {
         final int index = textcontrollers.indexOf(controller);

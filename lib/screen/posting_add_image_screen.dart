@@ -3,8 +3,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/models/documents/document.dart';
-import 'package:flutter_quill/widgets/controller.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/post_api.dart';

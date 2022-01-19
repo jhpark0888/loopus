@@ -25,10 +25,7 @@ dependencies:
   http: ^0.13.4
   image_cropper: ^1.4.1
   device_preview: ^1.0.0
-  flutter_markdown: ^0.6.8
   pull_to_refresh: ^2.0.0
-  flutter_quill: ^3.0.3
-  tuple: ^2.0.0
   sticky_headers: ^0.2.0
   underline_indicator: ^0.0.4
   webview_flutter: ^3.0.0

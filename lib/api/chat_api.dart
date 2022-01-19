@@ -79,36 +79,30 @@ Future<List<Message>> getmessagelist(int userid) async {
   // }
 }
 
-Future<void> messagemake(String content, int id) async {
-  String? token;
-  await FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
+Future<void> postmessage(String content, int userid) async {
+  String? token = await const FlutterSecureStorage().read(key: 'token');
 
-  final url = Uri.parse("http://3.35.253.151:8000/chat/chatting/$id/");
-  print("token");
-  print(token);
-  var data = {
-    "content": content,
+  final url = Uri.parse("http://3.35.253.151:8000/chat/chatting/$userid");
+
+  var message = {
+    "message": content,
   };
-  // TagController.to.selectedtaglist.clear();
+
   http.Response response = await http.post(url,
       headers: {
         'Authorization': 'Token $token',
         'Content-Type': 'application/json'
       },
-      body: jsonEncode(data));
-  var responseHeaders = response.headers;
-  var responseBody = utf8.decode(response.bodyBytes);
-  // List<dynamic> list = jsonDecode(responseBody);
-  // print(list);
-  Map<String, dynamic> map = jsonDecode(responseBody);
-  print("---------------------------");
-  print(responseBody);
-  print(response.statusCode);
-  if (response.statusCode != 200) {
-    return Future.error(response.statusCode);
-  } else {
+      body: jsonEncode(message));
+
+  print('메세지 보내기 statuscode: ${response.statusCode}');
+  if (response.statusCode == 200) {
+    var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+    print(responseBody);
+
+    Message messagelist = Message.fromJson(responseBody);
     return;
+  } else {
+    return Future.error(response.statusCode);
   }
 }

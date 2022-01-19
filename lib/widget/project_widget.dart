@@ -28,6 +28,7 @@ class ProjectWidget extends StatelessWidget {
 
   ProjectDetailController projectDetailController =
       Get.put(ProjectDetailController());
+  RxInt likecount = 0.obs;
   Rx<Project> project;
   Project? exproject;
 
@@ -177,7 +178,7 @@ class ProjectWidget extends StatelessWidget {
                             ),
                             Obx(
                               () => Text(
-                                "${project.value.like_count}",
+                                "${ProjectDetailController.to.likesum(likecount, project.value.post.map((post) => post.likeCount.value).toList())}",
                                 style: kButtonStyle,
                               ),
                             ),

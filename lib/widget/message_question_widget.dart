@@ -54,13 +54,11 @@ class MessageQuestionWidget extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () async {
-                          // AppController.to.ismyprofile.value = false;
-                          // print(AppController.to.ismyprofile.value);
-                          profileController.isProfileLoading(true);
+                          // profileController.isProfileLoading(true);
 
-                          Get.to(() => OtherProfileScreen(
-                                userid: 26,
-                              ));
+                          // Get.to(() => OtherProfileScreen(
+                          //       userid: 26,
+                          //     ));
                         },
                         child: Row(
                           children: [

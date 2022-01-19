@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loopus/controller/image_controller.dart';
@@ -16,7 +15,6 @@ class PostingAddController extends GetxController {
   EditorController editorController = Get.put(EditorController());
   TextEditingController titlecontroller = TextEditingController();
   RxBool isPostingUploading = false.obs;
-  // QuillController postcontroller = QuillController.basic();
   List<File> images = [];
   Rx<File> thumbnail = File("").obs;
 

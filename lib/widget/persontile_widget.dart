@@ -26,7 +26,9 @@ class PersonTileWidget extends StatelessWidget {
       onTap: () async {
         profileController.isProfileLoading(true);
         Get.to(() => OtherProfileScreen(
-              userid: user.user,
+              userid: user.userid,
+              isuser: user.isuser!,
+              realname: user.realName,
             ));
       },
       child: Container(

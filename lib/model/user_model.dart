@@ -2,7 +2,7 @@ import 'package:loopus/model/tag_model.dart';
 
 class User {
   User({
-    required this.user,
+    required this.userid,
     required this.realName,
     required this.type,
     required this.department,
@@ -14,7 +14,7 @@ class User {
     required this.looped,
   });
 
-  int user;
+  int userid;
   String realName;
   int type;
   String department;
@@ -26,7 +26,7 @@ class User {
   int looped;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        user: json["user_id"],
+        userid: json["user_id"],
         realName: json["real_name"],
         type: json["type"] ?? 0,
         profileImage: json["profile_image"],
@@ -41,7 +41,7 @@ class User {
       );
 
   Map<String, dynamic> toJson() => {
-        "user": user,
+        "user": userid,
         "real_name": realName,
         "type": type,
         "profile_image": profileImage,

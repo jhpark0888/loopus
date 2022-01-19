@@ -173,9 +173,6 @@ Future<void> deleteproject(int projectId) async {
 
   print(response.statusCode);
   if (response.statusCode == 200) {
-    Get.back();
-    Get.back();
-    Get.back();
     ProfileController.to.myProjectList
         .removeWhere((project) => project.project.value.id == projectId);
   } else {
