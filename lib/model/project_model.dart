@@ -19,7 +19,7 @@ class Project {
       required this.projectTag,
       required this.looper,
       this.post_count,
-      this.like_count,
+      required this.like_count,
       this.is_user});
 
   int id;
@@ -36,7 +36,7 @@ class Project {
   List<Tag> projectTag;
   List<User> looper;
   int? post_count;
-  int? like_count;
+  int like_count;
   int? is_user;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(

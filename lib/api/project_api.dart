@@ -67,10 +67,12 @@ Future addproject() async {
     Map<String, dynamic> responsemap = json.decode(responsebody);
     Project project = Project.fromJson(responsemap);
     ProjectDetailController.to.isProjectLoading(true);
-    Get.to(() => ProjectScreen(
-          isuser: project.is_user!,
-          projectid: project.id,
-        ));
+    Get.to(
+        () => ProjectScreen(
+              projectid: project.id,
+              isuser: project.is_user!,
+            ),
+        arguments: {"projectid": project.id, "isuser": project.is_user!});
     ProfileController.to.myProjectList
         .insert(0, ProjectWidget(project: project.obs));
   }
@@ -151,13 +153,14 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
 
   http.StreamedResponse response = await request.send();
 
-  String responsebody = await response.stream.bytesToString();
-
   if (response.statusCode == 200) {
-    var responsemap = json.decode(responsebody);
-    print(responsemap);
-    Project project = Project.fromJson(responsemap);
-    return project;
+    print(response.statusCode);
+    // String responsebody = await response.stream.bytesToString();
+    // print(responsebody);
+    // var responsemap = json.decode(responsebody);
+    // print(responsemap);
+    // Project project = Project.fromJson(responsemap);
+    return;
   } else {
     return Future.error(response.statusCode);
   }

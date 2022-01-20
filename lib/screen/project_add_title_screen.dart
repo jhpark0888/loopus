@@ -16,6 +16,7 @@ import '../utils/check_form_validate.dart';
 class ProjectAddTitleScreen extends StatelessWidget {
   ProjectAddTitleScreen({
     Key? key,
+    this.projectid,
     required this.screenType,
   }) : super(key: key);
 
@@ -24,6 +25,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
   final ProjectAddController projectaddcontroller =
       Get.put(ProjectAddController());
   final TagController tagController = Get.put(TagController());
+  int? projectid;
 
   @override
   Widget build(BuildContext context) {
@@ -50,40 +52,57 @@ class ProjectAddTitleScreen extends StatelessWidget {
                     ),
                   ),
                 )
-              : Obx(() => ProjectDetailController.to.isProjectLoading.value
-                  ? Image.asset(
-                      'assets/icons/loading.gif',
-                      scale: 9,
-                    )
-                  : TextButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          ProjectDetailController.to.isProjectLoading.value =
-                              true;
-                          await updateproject(
-                              ProjectDetailController.to.project.value.id,
-                              ProjectUpdateType.project_name);
-                          await getproject(
-                                  ProjectDetailController.to.project.value.id)
-                              .then((value) {
-                            ProjectDetailController.to.project(value);
-                            ProjectDetailController.to.isProjectLoading.value =
-                                false;
-                          });
-                          Get.back();
-                        }
-                      },
-                      child: Obx(
-                        () => Text(
-                          '저장',
-                          style: kSubTitle2Style.copyWith(
-                            color: projectaddcontroller.ontitlebutton.value
-                                ? mainblue
-                                : mainblack.withOpacity(0.38),
+              : Obx(() =>
+                  Get.find<ProjectDetailController>(tag: projectid.toString())
+                          .isProjectUpdateLoading
+                          .value
+                      ? Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 9,
+                        )
+                      : TextButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              Get.find<ProjectDetailController>(
+                                      tag: projectid.toString())
+                                  .isProjectUpdateLoading
+                                  .value = true;
+                              await updateproject(
+                                  Get.find<ProjectDetailController>(
+                                          tag: projectid.toString())
+                                      .project
+                                      .value
+                                      .id,
+                                  ProjectUpdateType.project_name);
+                              await getproject(
+                                      Get.find<ProjectDetailController>(
+                                              tag: projectid.toString())
+                                          .project
+                                          .value
+                                          .id)
+                                  .then((value) {
+                                Get.find<ProjectDetailController>(
+                                        tag: projectid.toString())
+                                    .project(value);
+                                Get.find<ProjectDetailController>(
+                                        tag: projectid.toString())
+                                    .isProjectUpdateLoading
+                                    .value = false;
+                              });
+                              Get.back();
+                            }
+                          },
+                          child: Obx(
+                            () => Text(
+                              '저장',
+                              style: kSubTitle2Style.copyWith(
+                                color: projectaddcontroller.ontitlebutton.value
+                                    ? mainblue
+                                    : mainblack.withOpacity(0.38),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ))
+                        ))
         ],
         title: '활동명',
       ),

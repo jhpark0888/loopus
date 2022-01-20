@@ -116,10 +116,12 @@ Future<void> addposting(int projectId) async {
     Get.back();
     Get.back();
     Get.back();
-    Get.to(() => ProjectScreen(
-          isuser: 1,
-          projectid: projectId,
-        ));
+    Get.to(
+        () => ProjectScreen(
+              projectid: projectId,
+              isuser: 1,
+            ),
+        arguments: {"projectid": projectId, "isuser": 1});
   } else if (response.statusCode == 400) {
     if (kDebugMode) {
       print("status code : ${response.statusCode} 포스팅 업로드 실패");
@@ -154,7 +156,7 @@ Future<Post> getposting(int postingid) async {
   }
 }
 
-Future<void> deleteposting(int postid) async {
+Future<void> deleteposting(int postid, int projectid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
   final uri = Uri.parse("http://3.35.253.151:8000/post_api/delete/$postid");
@@ -165,9 +167,13 @@ Future<void> deleteposting(int postid) async {
   print(response.statusCode);
   if (response.statusCode == 200) {
     Get.back();
-    ProjectDetailController.to.project.value.post
+    Get.find<ProjectDetailController>(tag: projectid.toString())
+        .project
+        .value
+        .post
         .removeWhere((post) => post.id == postid);
-    ProjectDetailController.to.postinglist
+    Get.find<ProjectDetailController>(tag: projectid.toString())
+        .postinglist
         .removeWhere((post) => post.item.id == postid);
     HomeController.to.postingResult.value.postingitems
         .removeWhere((post) => post.id == postid);

@@ -139,8 +139,6 @@ class SearchQuestionWidget extends StatelessWidget {
   }
 
   void tapProfile() {
-    profileController.isProfileLoading(true);
-
     // AppController.to.ismyprofile.value = false;
     Get.to(() => OtherProfileScreen(
           userid: item.user,

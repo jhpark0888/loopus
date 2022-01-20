@@ -8,6 +8,5 @@ class InitBinding implements Bindings {
   void dependencies() {
     Get.put(AppController());
     Get.put(NotificationController());
-    Get.create(() => ProjectDetailController());
   }
 }

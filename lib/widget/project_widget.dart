@@ -40,10 +40,13 @@ class ProjectWidget extends StatelessWidget {
         onTap: () async {
           // projectDetailController.isProjectLoading.value = true;
           print(project.value.is_user);
-          exproject = await Get.to(() => ProjectScreen(
-                isuser: 1,
-                projectid: project.value.id,
-              ));
+          exproject = await Get.to(
+            () => ProjectScreen(
+              projectid: project.value.id,
+              isuser: 1,
+            ),
+            arguments: {"projectid": project.value.id, "isuser": 1},
+          );
           if (exproject != null) {
             project(exproject);
           }
@@ -178,7 +181,7 @@ class ProjectWidget extends StatelessWidget {
                             ),
                             Obx(
                               () => Text(
-                                "${ProjectDetailController.to.likesum(likecount, project.value.post.map((post) => post.likeCount.value).toList())}",
+                                "${project.value.like_count}",
                                 style: kButtonStyle,
                               ),
                             ),

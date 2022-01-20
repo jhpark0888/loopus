@@ -17,11 +17,13 @@ import 'package:loopus/widget/checkboxperson_widget.dart';
 class ProjectAddTagScreen extends StatelessWidget {
   ProjectAddTagScreen({
     Key? key,
+    this.projectid,
     required this.screenType,
   }) : super(key: key);
   final ProjectAddController projectaddcontroller = Get.find();
   final TagController tagController = Get.find();
   final Screentype screenType;
+  int? projectid;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,10 @@ class ProjectAddTagScreen extends StatelessWidget {
                   ),
                 )
               : Obx(
-                  () => ProjectDetailController.to.isProjectLoading.value
+                  () => Get.find<ProjectDetailController>(
+                              tag: projectid.toString())
+                          .isProjectUpdateLoading
+                          .value
                       ? Image.asset(
                           'assets/icons/loading.gif',
                           scale: 9,
@@ -69,17 +74,31 @@ class ProjectAddTagScreen extends StatelessWidget {
                       : TextButton(
                           onPressed: () async {
                             if (tagController.selectedtaglist.length == 3) {
-                              ProjectDetailController
-                                  .to.isProjectLoading.value = true;
+                              Get.find<ProjectDetailController>(
+                                      tag: projectid.toString())
+                                  .isProjectUpdateLoading
+                                  .value = true;
                               await updateproject(
-                                  ProjectDetailController.to.project.value.id,
+                                  Get.find<ProjectDetailController>(
+                                          tag: projectid.toString())
+                                      .project
+                                      .value
+                                      .id,
                                   ProjectUpdateType.tag);
-                              await getproject(ProjectDetailController
-                                      .to.project.value.id)
+                              await getproject(
+                                      Get.find<ProjectDetailController>(
+                                              tag: projectid.toString())
+                                          .project
+                                          .value
+                                          .id)
                                   .then((value) {
-                                ProjectDetailController.to.project(value);
-                                ProjectDetailController
-                                    .to.isProjectLoading.value = false;
+                                Get.find<ProjectDetailController>(
+                                        tag: projectid.toString())
+                                    .project(value);
+                                Get.find<ProjectDetailController>(
+                                        tag: projectid.toString())
+                                    .isProjectUpdateLoading
+                                    .value = false;
                               });
                               Get.back();
                             }

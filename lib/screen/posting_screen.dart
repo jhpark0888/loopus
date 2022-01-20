@@ -10,8 +10,10 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/transition_animation_controller.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/widget/post_content_widget.dart';
 
 class PostingScreen extends StatelessWidget {
@@ -19,7 +21,7 @@ class PostingScreen extends StatelessWidget {
     Key? key,
     required this.userid,
     required this.isuser,
-    required this.id,
+    required this.postid,
     required this.title,
     required this.realName,
     required this.department,
@@ -30,8 +32,8 @@ class PostingScreen extends StatelessWidget {
     required this.isLiked,
     required this.isMarked,
   }) : super(key: key);
-  final PostingDetailController _postingDetailController =
-      Get.put(PostingDetailController());
+  late PostingDetailController controller =
+      Get.put(PostingDetailController(postid), tag: postid.toString());
 
   final ModalController modalController = Get.put(ModalController());
   final ScrollController _controller = ScrollController();
@@ -40,7 +42,7 @@ class PostingScreen extends StatelessWidget {
 
   int userid;
   int isuser;
-  int id;
+  int postid;
   String title;
   String realName;
   dynamic profileImage;
@@ -53,29 +55,6 @@ class PostingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(isLiked);
-    Rx<Post> post = Post(
-            id: id,
-            userid: 0,
-            thumbnail: thumbNail,
-            title: title,
-            date: DateTime.now(),
-            project: null,
-            project_id: 0,
-            contents: [],
-            projectname: '',
-            likeCount: likecount,
-            isLiked: 0.obs,
-            realname: '',
-            department: '',
-            profileimage: null,
-            isMarked: 0.obs,
-            isuser: 0)
-        .obs;
-    getposting(id).then((value) {
-      post(value);
-      _postingDetailController.isPostingContentLoading(false);
-    });
     return Obx(
       () => Stack(children: [
         Scaffold(
@@ -100,11 +79,11 @@ class PostingScreen extends StatelessWidget {
                         if (isLiked.value == 0) {
                           likecount += 1;
 
-                          HomeController.to.tapLike(id, likecount.value);
+                          HomeController.to.tapLike(postid, likecount.value);
                           isLiked(1);
                         } else {
                           likecount -= 1;
-                          HomeController.to.tapunLike(id, likecount.value);
+                          HomeController.to.tapunLike(postid, likecount.value);
 
                           isLiked(0);
                         }
@@ -129,10 +108,10 @@ class PostingScreen extends StatelessWidget {
                   Obx(() => InkWell(
                       onTap: () {
                         if (isMarked.value == 0) {
-                          HomeController.to.tapBookmark(id);
+                          HomeController.to.tapBookmark(postid);
                           isMarked(1);
                         } else {
-                          HomeController.to.tapunBookmark(id);
+                          HomeController.to.tapunBookmark(postid);
                           isMarked(0);
                         }
                       },
@@ -176,17 +155,17 @@ class PostingScreen extends StatelessWidget {
                                       leftText: '',
                                       rightText: '',
                                       title:
-                                          '정말 <${post.value.title}> 포스팅을 삭제하시겠어요?',
+                                          '정말 <${controller.post.value.title}> 포스팅을 삭제하시겠어요?',
                                       content: '삭제한 포스팅은 복구할 수 없어요',
                                       leftFunction: () => Get.back(),
                                       rightFunction: () async {
-                                        _postingDetailController
-                                            .isPostDeleteLoading(true);
+                                        controller.isPostDeleteLoading(true);
                                         Get.back();
                                         Get.back();
-                                        await deleteposting(post.value.id);
-                                        _postingDetailController
-                                            .isPostDeleteLoading(false);
+                                        await deleteposting(
+                                            controller.post.value.id,
+                                            controller.post.value.project_id!);
+                                        controller.isPostDeleteLoading(false);
                                       });
                                 },
                                 func2: () {},
@@ -205,7 +184,7 @@ class PostingScreen extends StatelessWidget {
                                       leftText: '',
                                       rightText: '',
                                       title:
-                                          '정말 <${post.value.title}> 포스팅을 신고하시겠어요?',
+                                          '정말 <${controller.post.value.title}> 포스팅을 신고하시겠어요?',
                                       content: '신고 횟수가 누적되면 포스팅은 삭제됩니다',
                                       leftFunction: () => Get.back(),
                                       rightFunction: () {});
@@ -225,13 +204,15 @@ class PostingScreen extends StatelessWidget {
                   ],
                   pinned: true,
                   flexibleSpace: _MyAppSpace(
-                    id: id,
+                    id: postid,
                     title: title,
-                    realName: realName,
+                    realname: realName,
                     profileImage: profileImage,
                     postDate: postDate,
                     department: department,
                     thumbnail: thumbNail,
+                    isuser: isuser,
+                    userid: userid,
                   ),
                   expandedHeight: Get.width / 3 * 2,
                 ),
@@ -242,19 +223,18 @@ class PostingScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                           vertical: 24,
                         ),
-                        child: (_postingDetailController
-                                    .isPostingContentLoading.value ==
-                                false)
-                            ? Column(
-                                children: post.value.contents!
-                                    .map((content) =>
-                                        PostContentWidget(content: content))
-                                    .toList(),
-                              )
-                            : Image.asset(
-                                'assets/icons/loading.gif',
-                                scale: 9,
-                              ),
+                        child:
+                            (controller.isPostingContentLoading.value == false)
+                                ? Column(
+                                    children: controller.post.value.contents!
+                                        .map((content) =>
+                                            PostContentWidget(content: content))
+                                        .toList(),
+                                  )
+                                : Image.asset(
+                                    'assets/icons/loading.gif',
+                                    scale: 9,
+                                  ),
                       ),
                     ]),
                   ),
@@ -293,7 +273,7 @@ class PostingScreen extends StatelessWidget {
             ),
           ),
         ),
-        if (_postingDetailController.isPostDeleteLoading.value == true)
+        if (controller.isPostDeleteLoading.value == true)
           Container(
             height: Get.height,
             width: Get.width,
@@ -309,24 +289,28 @@ class PostingScreen extends StatelessWidget {
 }
 
 class _MyAppSpace extends StatelessWidget {
-  _MyAppSpace({
-    Key? key,
-    required this.id,
-    required this.title,
-    required this.realName,
-    required this.profileImage,
-    required this.postDate,
-    required this.department,
-    required this.thumbnail,
-  }) : super(key: key);
+  _MyAppSpace(
+      {Key? key,
+      required this.id,
+      required this.title,
+      required this.realname,
+      required this.profileImage,
+      required this.postDate,
+      required this.department,
+      required this.thumbnail,
+      required this.isuser,
+      required this.userid})
+      : super(key: key);
 
   String title;
-  String realName;
+  String realname;
   var profileImage;
   DateTime postDate;
   String department;
   var thumbnail;
   int id;
+  int isuser;
+  int userid;
 
   @override
   Widget build(
@@ -386,61 +370,70 @@ class _MyAppSpace extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Row(
-                                children: [
-                                  (profileImage != null)
-                                      ? Hero(
-                                          tag: 'profileImage$id',
-                                          child: ClipOval(
-                                            child: CachedNetworkImage(
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => OtherProfileScreen(
+                                        userid: userid,
+                                        isuser: isuser,
+                                        realname: realname,
+                                      ));
+                                },
+                                child: Row(
+                                  children: [
+                                    (profileImage != null)
+                                        ? Hero(
+                                            tag: 'profileImage$id',
+                                            child: ClipOval(
+                                              child: CachedNetworkImage(
+                                                height: 32,
+                                                width: 32,
+                                                imageUrl: profileImage,
+                                                placeholder: (context, url) =>
+                                                    CircleAvatar(
+                                                  backgroundColor:
+                                                      Color(0xffe7e7e7),
+                                                  child: Container(),
+                                                ),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          )
+                                        : ClipOval(
+                                            child: Image.asset(
+                                              "assets/illustrations/default_profile.png",
                                               height: 32,
                                               width: 32,
-                                              imageUrl: profileImage,
-                                              placeholder: (context, url) =>
-                                                  CircleAvatar(
-                                                backgroundColor:
-                                                    Color(0xffe7e7e7),
-                                                child: Container(),
-                                              ),
-                                              fit: BoxFit.cover,
                                             ),
                                           ),
-                                        )
-                                      : ClipOval(
-                                          child: Image.asset(
-                                            "assets/illustrations/default_profile.png",
-                                            height: 32,
-                                            width: 32,
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Hero(
+                                      tag: 'realname$id',
+                                      child: Material(
+                                        type: MaterialType.transparency,
+                                        child: Text(
+                                          "$realname · ",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: mainblack,
                                           ),
                                         ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Hero(
-                                    tag: 'realname$id',
-                                    child: Material(
-                                      type: MaterialType.transparency,
-                                      child: Text(
-                                        "$realName · ",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: mainblack,
+                                      ),
+                                    ),
+                                    Hero(
+                                      tag: 'department$id',
+                                      child: Material(
+                                        type: MaterialType.transparency,
+                                        child: Text(
+                                          department,
+                                          style: kBody2Style,
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Hero(
-                                    tag: 'department$id',
-                                    child: Material(
-                                      type: MaterialType.transparency,
-                                      child: Text(
-                                        department,
-                                        style: kBody2Style,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                               Text(
                                 '${postDate.year}.${postDate.month}.${postDate.day}',
