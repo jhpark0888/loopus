@@ -44,6 +44,8 @@ class ContactEmailScreen extends StatelessWidget {
                 height: 32,
               ),
               CustomTextField(
+                counterText: null,
+                maxLength: null,
                 textController: null,
                 hintText: 'loopus@loopus.co.kr',
                 validator: null,

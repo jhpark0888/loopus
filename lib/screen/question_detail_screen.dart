@@ -51,6 +51,8 @@ class QuestionDetailScreen extends StatelessWidget {
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: TextFormField(
+          autocorrect: false,
+          enableSuggestions: false,
           cursorWidth: 1.2,
           focusNode: questionController.answerfocus,
           style: const TextStyle(decoration: TextDecoration.none),
@@ -114,8 +116,11 @@ class QuestionDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        child: _buildTextComposer(),
+      bottomNavigationBar: Transform.translate(
+        offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+        child: BottomAppBar(
+          child: _buildTextComposer(),
+        ),
       ),
       appBar: AppBarWidget(
         bottomBorder: false,

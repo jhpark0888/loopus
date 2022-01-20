@@ -29,6 +29,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
+        bottomBorder: false,
         actions: [
           screenType == Screentype.add
               ? TextButton(
@@ -38,15 +39,15 @@ class ProjectAddPersonScreen extends StatelessWidget {
                         ));
                   },
                   child: Obx(
-                    () => Text(
-                      projectaddcontroller.selectedpersontaglist.isEmpty
-                          ? '건너뛰기'
-                          : '다음',
-                      style: kSubTitle2Style.copyWith(
-                        color:
-                            projectaddcontroller.selectedpersontaglist.isEmpty
-                                ? mainblack
-                                : mainblue,
+                    () => Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: Text(
+                        projectaddcontroller.selectedpersontaglist.isEmpty
+                            ? '건너뛰기'
+                            : '다음',
+                        style: kSubTitle2Style.copyWith(
+                          color: mainblue,
+                        ),
                       ),
                     ),
                   ),
@@ -94,67 +95,66 @@ class ProjectAddPersonScreen extends StatelessWidget {
           return [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: Text(
-                          '이 활동을 함께 진행한 학생이 있나요?',
-                          style: kSubTitle1Style,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: Text(
-                          '루프 중인 학생만 추가할 수 있어요',
-                          style: kBody2Style,
-                        ),
-                      ),
-                    ],
-                  ),
+                padding: const EdgeInsets.fromLTRB(
+                  32,
+                  24,
+                  32,
+                  12,
+                ),
+                child: Column(
+                  children: const [
+                    Text(
+                      '활동을 같이 진행한 학생이 있나요?',
+                      style: kSubTitle1Style,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Text(
+                      '루프 중인 학생만 추가할 수 있어요',
+                      style: kBody1Style,
+                    ),
+                  ],
                 ),
               ),
-            )
+            ),
           ];
         },
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            15,
-            20,
-            15,
-            10,
-          ),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '선택한 사람',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 16, left: 16, top: 20),
+              child: Text(
+                '선택한 학생',
+                style: kSubTitle2Style,
               ),
-              SizedBox(
-                height: 16,
-              ),
-              Obx(
-                () => Flexible(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 2),
-                    width: Get.width,
-                    height: 30,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: projectaddcontroller.selectedpersontaglist,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: 32,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 1,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                          left: (index == 0) ? 16 : 0,
+                          right: (index == 0) ? 16 : 0),
+                      child: Obx(() => Row(
+                          children:
+                              projectaddcontroller.selectedpersontaglist)),
+                    );
+                  }),
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16, left: 16),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -170,24 +170,30 @@ class ProjectAddPersonScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Obx(() => projectaddcontroller.isLooppersonLoading.value
-                  ? Column(
-                      children: [
-                        Image.asset(
-                          'assets/icons/loading.gif',
-                          scale: 6,
-                        ),
-                        Text(
-                          '루프 리스트 받아오는 중...',
-                          style: TextStyle(fontSize: 10, color: mainblue),
-                        )
-                      ],
-                    )
-                  : Column(
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Obx(() => projectaddcontroller.isLooppersonLoading.value
+                ? Column(
+                    children: [
+                      Image.asset(
+                        'assets/icons/loading.gif',
+                        scale: 6,
+                      ),
+                      Text(
+                        '루프 리스트 받아오는 중...',
+                        style: TextStyle(fontSize: 10, color: mainblue),
+                      )
+                    ],
+                  )
+                : Padding(
+                    padding: const EdgeInsets.only(right: 16, left: 16),
+                    child: Column(
                       children: projectaddcontroller.looppersonlist,
-                    )),
-            ],
-          ),
+                    ),
+                  )),
+          ],
         ),
       ),
     );

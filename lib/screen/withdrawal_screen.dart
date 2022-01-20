@@ -65,6 +65,8 @@ class WithdrawalScreen extends StatelessWidget {
                 height: 32,
               ),
               CustomTextField(
+                counterText: null,
+                maxLength: null,
                 textController: null,
                 hintText: '탈퇴 사유...',
                 validator: null,

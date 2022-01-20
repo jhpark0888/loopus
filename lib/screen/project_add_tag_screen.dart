@@ -27,6 +27,7 @@ class ProjectAddTagScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
+        bottomBorder: false,
         actions: [
           screenType == Screentype.add
               ? TextButton(
@@ -103,41 +104,36 @@ class ProjectAddTagScreen extends StatelessWidget {
           return [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: Text(
-                          '활동을 대표하는 키워드가 무엇인가요?',
-                          style: kSubTitle1Style,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: Text(
-                          '누구나 쉽게 찾을 수 있는 태그를 입력해주세요',
-                          style: kBody2Style,
-                        ),
-                      ),
-                    ],
-                  ),
+                padding: const EdgeInsets.fromLTRB(
+                  32,
+                  24,
+                  32,
+                  12,
+                ),
+                child: Column(
+                  children: const [
+                    Text(
+                      '활동을 대표하는 키워드가 무엇인가요?',
+                      style: kSubTitle1Style,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Text(
+                      '나중에 얼마든지 변경할 수 있어요',
+                      style: kBody1Style,
+                    ),
+                  ],
                 ),
               ),
             ),
           ];
         },
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            15,
-            20,
-            15,
-            10,
-          ),
-          child: Column(
-            children: [
-              Row(
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 16, left: 16, top: 20),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -152,29 +148,37 @@ class ProjectAddTagScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 16,
-              ),
-              Obx(
-                () => Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 2),
-                  width: Get.width,
-                  height: 30,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: tagController.selectedtaglist,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              TextField(
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: 32,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 1,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                          left: (index == 0) ? 16 : 0,
+                          right: (index == 0) ? 16 : 0),
+                      child: Obx(
+                          () => Row(children: tagController.selectedtaglist)),
+                    );
+                  }),
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextField(
                 controller: tagController.tagsearch,
-                style: kBody1Style,
-                cursorColor: mainblack,
-                focusNode: tagController.tagsearchfocusNode,
-                // autofocus: true,
+                style: kBody2Style,
+                cursorColor: Colors.grey,
+                cursorWidth: 1.2,
+                cursorRadius: Radius.circular(5.0),
+
                 // focusNode: searchController.detailsearchFocusnode,
                 textAlign: TextAlign.start,
                 // selectionHeightStyle: BoxHeightStyle.tight,
@@ -183,34 +187,40 @@ class ProjectAddTagScreen extends StatelessWidget {
                   fillColor: mainlightgrey,
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(8)),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(8)),
                   // focusColor: Colors.black,
                   // border: OutlineInputBorder(borderSide: BorderSide.none),
-                  contentPadding: EdgeInsets.all(10),
-                  hintStyle:
-                      kBody1Style.copyWith(color: mainblack.withOpacity(0.38)),
+                  contentPadding: EdgeInsets.only(right: 16),
+                  hintStyle: kBody2Style.copyWith(
+                      color: mainblack.withOpacity(0.38), height: 1.5),
                   isDense: true,
                   hintText: "예) 봉사, 기계공학과, 서포터즈",
                   prefixIcon: Padding(
-                    padding: const EdgeInsets.all(14.0),
+                    padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
                     child: SvgPicture.asset(
-                      'assets/icons/Search_Inactive.svg',
+                      "assets/icons/Search_Inactive.svg",
+                      width: 16,
+                      height: 16,
+                      color: mainblack.withOpacity(0.6),
                     ),
                   ),
                 ),
               ),
-              Obx(
-                () => Expanded(
-                  child: ListView(
-                    children: tagController.searchtaglist,
-                  ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Obx(
+              () => Expanded(
+                child: ListView(
+                  children: tagController.searchtaglist,
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

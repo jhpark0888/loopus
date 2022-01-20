@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
+import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 class EditorToolbar extends StatelessWidget {
@@ -63,7 +64,11 @@ class EditorToolbar extends StatelessWidget {
               GestureDetector(
                 child: Icon(Icons.image, color: mainblack),
                 onTap: () async {
-                  await editorController.insertimage(editorController.focus);
+                  ImageController.to.isPostingImagePickerLoading.value = true;
+                  await editorController
+                      .insertimage(editorController.focus)
+                      .then((value) => ImageController
+                          .to.isPostingImagePickerLoading.value = false);
                 },
               ),
               SizedBox(

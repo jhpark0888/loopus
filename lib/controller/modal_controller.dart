@@ -304,6 +304,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
         content: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: CustomTextField(
+            counterText: null,
+            maxLength: null,
             hintText: hintText,
             textController: textEditingController,
             obscureText: obscureText,
@@ -703,11 +705,13 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
         if (selectDateType == SelectDateType.start) {
           ProjectAddController.to.selectedStartDateTime.value = date.toString();
           ProjectAddController.to.validateDate();
+          ProjectAddController.to.isDateChange.value = true;
 
           print('start ${ProjectAddController.to.selectedStartDateTime.value}');
         } else {
           ProjectAddController.to.selectedEndDateTime.value = date.toString();
           ProjectAddController.to.validateDate();
+          ProjectAddController.to.isDateChange.value = true;
 
           print('end ${ProjectAddController.to.selectedEndDateTime.value}');
         }

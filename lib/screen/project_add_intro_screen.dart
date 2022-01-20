@@ -70,14 +70,12 @@ class ProjectAddIntroScreen extends StatelessWidget {
                             });
                             Get.back();
                           },
-                          child: Obx(
-                            () => Text(
-                              '저장',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: mainblue,
-                              ),
+                          child: Text(
+                            '저장',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: mainblue,
                             ),
                           ),
                         ),
@@ -110,6 +108,8 @@ class ProjectAddIntroScreen extends StatelessWidget {
                 height: 32,
               ),
               CustomTextField(
+                  counterText: null,
+                  maxLength: null,
                   textController: projectaddcontroller.introcontroller,
                   hintText: 'OO를 주제로 진행하였으며, OO 역할을 맡았습니다.',
                   validator: null,

@@ -64,6 +64,8 @@ class SignupUserInfoScreen extends StatelessWidget {
                   height: 16,
                 ),
                 CustomTextField(
+                  counterText: null,
+                  maxLength: null,
                   textController: signupController.emailidcontroller,
                   hintText: 'loopus@inu.ac.kr',
                   validator: (value) => CheckValidate().validateEmail(value!),
@@ -81,6 +83,8 @@ class SignupUserInfoScreen extends StatelessWidget {
                   height: 16,
                 ),
                 CustomTextField(
+                  counterText: null,
+                  maxLength: null,
                   textController: signupController.namecontroller,
                   hintText: '김루프',
                   validator: null,
@@ -98,6 +102,8 @@ class SignupUserInfoScreen extends StatelessWidget {
                   height: 16,
                 ),
                 CustomTextField(
+                  counterText: null,
+                  maxLength: null,
                   textController: signupController.passwordcontroller,
                   hintText: '영문, 숫자, 특수문자 포함 8자리 이상',
                   validator: (value) =>
@@ -116,6 +122,8 @@ class SignupUserInfoScreen extends StatelessWidget {
                   height: 16,
                 ),
                 CustomTextField(
+                  counterText: null,
+                  maxLength: null,
                   textController: signupController.passwordcheckcontroller,
                   hintText: '',
                   validator: (value) {

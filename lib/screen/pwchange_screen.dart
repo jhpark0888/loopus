@@ -35,6 +35,8 @@ class PwChangeScreen extends StatelessWidget {
               height: 12,
             ),
             CustomTextField(
+              counterText: null,
+              maxLength: null,
               textController: null,
               hintText: '',
               validator: null,
@@ -52,6 +54,8 @@ class PwChangeScreen extends StatelessWidget {
               height: 12,
             ),
             CustomTextField(
+              counterText: null,
+              maxLength: null,
               textController: null,
               hintText: '',
               validator: null,

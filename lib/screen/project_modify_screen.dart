@@ -166,32 +166,15 @@ class ProjectModifyScreen extends StatelessWidget {
   }
 
   void projectdateinput() {
-    // projectaddcontroller.startyearcontroller.text =
-    //     DateFormat("yyyy").format(project.value.startDate!);
-    // projectaddcontroller.startmonthcontroller.text =
-    //     DateFormat("MM").format(project.value.startDate!);
-    // projectaddcontroller.startdaycontroller.text =
-    //     DateFormat("dd").format(project.value.startDate!);
     projectaddcontroller.selectedStartDateTime.value =
         project.value.startDate!.toString();
 
     if (project.value.endDate != null) {
-      // projectaddcontroller.isvaildstartdate(true);
-      // projectaddcontroller.isongoing(true);
       projectaddcontroller.selectedEndDateTime.value =
-          project.value.startDate!.toString();
+          project.value.endDate!.toString();
       projectaddcontroller.isEndedProject.value = true;
     } else {
       projectaddcontroller.isEndedProject.value = false;
-      // projectaddcontroller.endyearcontroller.text =
-      //     DateFormat("yyyy").format(project.value.endDate!);
-      // projectaddcontroller.endmonthcontroller.text =
-      //     DateFormat("MM").format(project.value.endDate!);
-      // projectaddcontroller.enddaycontroller.text =
-      //     DateFormat("dd").format(project.value.endDate!);
-      // projectaddcontroller.isvaildstartdate(true);
-      // projectaddcontroller.isvaildenddate(true);
-
     }
   }
 
