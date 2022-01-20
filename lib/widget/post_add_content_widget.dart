@@ -14,9 +14,12 @@ class PostAddContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (editorController.types[index] == SmartTextType.IMAGE) {
-      return Padding(
-        padding: editorController.types[index].padding,
-        child: Image.file(editorController.imageindex[index]!),
+      return Align(
+        alignment: editorController.types[index].imageAlign,
+        child: Padding(
+          padding: editorController.types[index].padding,
+          child: Image.file(editorController.imageindex[index]!),
+        ),
       );
     } else {
       return Container(

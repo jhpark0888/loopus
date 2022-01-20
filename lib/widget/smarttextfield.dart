@@ -72,6 +72,15 @@ extension SmartTextStyle on SmartTextType {
     }
   }
 
+  Alignment get imageAlign {
+    switch (this) {
+      case SmartTextType.IMAGE:
+        return Alignment.center;
+      default:
+        return Alignment.topLeft;
+    }
+  }
+
   String? get prefix {
     switch (this) {
       case SmartTextType.BULLET:
@@ -95,15 +104,23 @@ class SmartTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return type.value == SmartTextType.IMAGE
-        ? Stack(children: [
-            Image.file(editorController.imageindex[
-                editorController.textcontrollers.indexOf(controller)]!),
-            IconButton(
+        ? Align(
+            alignment: type.value.imageAlign,
+            child: Stack(children: [
+              Image.file(editorController.imageindex[
+                  editorController.textcontrollers.indexOf(controller)]!),
+              IconButton(
                 onPressed: () {
                   editorController.imagedelete(controller);
                 },
-                icon: Icon(Icons.cancel))
-          ])
+                icon: const Icon(
+                  Icons.cancel_rounded,
+                  color: Colors.grey,
+                ),
+                iconSize: 32,
+              )
+            ]),
+          )
         : Focus(
             onFocusChange: (hasFocus) {
               if (hasFocus) {
@@ -122,7 +139,7 @@ class SmartTextField extends StatelessWidget {
               maxLines: null,
               cursorColor: mainblue,
               cursorWidth: 1.3,
-              cursorRadius: Radius.circular(500),
+              cursorRadius: const Radius.circular(500),
               textAlign: type.value.align,
               decoration: InputDecoration(
                   border: InputBorder.none,
@@ -131,7 +148,7 @@ class SmartTextField extends StatelessWidget {
                   isDense: true,
                   contentPadding: type.value.padding),
               style: type.value.textStyle,
-              toolbarOptions: ToolbarOptions(
+              toolbarOptions: const ToolbarOptions(
                 cut: true,
                 copy: true,
                 paste: true,

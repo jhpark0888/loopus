@@ -15,9 +15,12 @@ class PostContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (SmartTextType.values[content.type] == SmartTextType.IMAGE) {
-      return Padding(
-        padding: SmartTextType.values[content.type].padding,
-        child: Container(child: Image.network(content.content)),
+      return Align(
+        alignment: SmartTextType.values[content.type].imageAlign,
+        child: Padding(
+          padding: SmartTextType.values[content.type].padding,
+          child: Container(child: Image.network(content.content)),
+        ),
       );
     } else if (SmartTextType.values[content.type] == SmartTextType.LINK) {
       return Padding(
