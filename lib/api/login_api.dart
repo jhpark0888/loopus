@@ -9,12 +9,14 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 
+import '../constant.dart';
+
 Future<void> loginRequest() async {
   LogInController logInController = Get.put(LogInController());
   const FlutterSecureStorage storage = FlutterSecureStorage();
   ModalController _modalController = Get.put(ModalController());
 
-  Uri uri = Uri.parse('http://3.35.253.151:8000/user_api/login');
+  Uri uri = Uri.parse('$serverUri/user_api/login');
 
   final user = {
     'username': logInController.idcontroller.text,
@@ -39,8 +41,10 @@ Future<void> loginRequest() async {
     Get.offAll(() => App());
   } else if (response.statusCode == 401) {
     _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+    print('에러1');
   } else {
     _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+    print('에러');
   }
 }
 

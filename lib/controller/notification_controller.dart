@@ -34,7 +34,11 @@ class NotificationController extends GetxController {
   //사용자 고유의 알림 토근 가져오기
   Future<String?> getToken() async {
     try {
-      String? userMessageToken = await messaging.getToken();
+      String? userMessageToken = await messaging.getToken(
+          //TODO: WEB KEY 추가
+          // vapidKey:
+          //     'BCLIUKVcUhNC9-qwvJ01m_YQ3l46lrehYmmBVcXOtMp21iwY6x-EKTOLg8v4wNPNRcjrLMReFfAq0ohfvHjWZOw',
+          );
       // messaging.deleteToken();
       print('token : $userMessageToken');
       return await userMessageToken ?? '';

@@ -58,6 +58,7 @@ class TagDetailScreen extends StatelessWidget {
                     toolbarHeight: 43,
                     elevation: 0,
                     flexibleSpace: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         TabBar(
                           controller: searchController.tagtabController,
@@ -281,9 +282,7 @@ class _CustomSpace extends StatelessWidget {
 
   Widget getExpendTitle(String text) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-      ),
+      padding: const EdgeInsets.only(right: 16, left: 16),
       child: Text(
         text,
         textAlign: TextAlign.center,

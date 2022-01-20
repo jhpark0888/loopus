@@ -117,17 +117,21 @@ class HomeLoopScreen extends StatelessWidget {
             ),
           ),
           footer: ClassicFooter(
-            textStyle: TextStyle(color: mainblack),
+            completeDuration: Duration.zero,
             loadingText: "",
             canLoadingText: "",
             idleText: "",
-            idleIcon: CircularProgressIndicator(
-              color: mainblack,
-              strokeWidth: 3,
+            idleIcon: Container(),
+            noMoreIcon: Container(
+              child: Text('as'),
             ),
-            canLoadingIcon: CircularProgressIndicator(
-              color: mainblack,
-              strokeWidth: 3,
+            loadingIcon: Image.asset(
+              'assets/icons/loading.gif',
+              scale: 6,
+            ),
+            canLoadingIcon: Image.asset(
+              'assets/icons/loading.gif',
+              scale: 6,
             ),
           ),
           onRefresh: homeController.onLoopRefresh,

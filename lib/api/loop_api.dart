@@ -4,10 +4,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/model/user_model.dart';
 
+import '../constant.dart';
+
 Future<List<User>> getlooplist(int userid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse("http://3.35.253.151:8000/loop_api/get_list/$userid");
+  final uri = Uri.parse("$serverUri/loop_api/get_list/$userid");
 
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
@@ -27,8 +29,7 @@ Future<List<User>> getlooplist(int userid) async {
 Future<void> postloopRequest(int friendid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri =
-      Uri.parse("http://3.35.253.151:8000/loop_api/loop_request/$friendid");
+  final uri = Uri.parse("$serverUri/loop_api/loop_request/$friendid");
 
   http.Response response =
       await http.post(uri, headers: {"Authorization": "Token $token"});
@@ -45,7 +46,7 @@ Future<void> postloopRequest(int friendid) async {
 Future<void> postloopPermit(int friendid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse("http://3.35.253.151:8000/loop_api/loop/$friendid");
+  final uri = Uri.parse("$serverUri/loop_api/loop/$friendid");
 
   http.Response response =
       await http.post(uri, headers: {"Authorization": "Token $token"});
@@ -62,7 +63,7 @@ Future<void> postloopPermit(int friendid) async {
 Future<void> postloopRelease(int friendid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse("http://3.35.253.151:8000/loop_api/get_list/$friendid");
+  final uri = Uri.parse("$serverUri/loop_api/get_list/$friendid");
 
   http.Response response =
       await http.post(uri, headers: {"Authorization": "Token $token"});

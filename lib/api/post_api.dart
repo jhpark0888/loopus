@@ -19,6 +19,8 @@ import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
+import '../constant.dart';
+
 Future<void> addposting(int projectId) async {
   final PostingAddController postingAddController = Get.find();
   final EditorController editorController = Get.find();
@@ -26,7 +28,7 @@ Future<void> addposting(int projectId) async {
   final String? token = await const FlutterSecureStorage().read(key: 'token');
 
   Uri postingUploadUri =
-      Uri.parse('http://3.35.253.151:8000/post_api/posting_upload/$projectId');
+      Uri.parse('$serverUri/post_api/posting_upload/$projectId');
 
   var request = http.MultipartRequest('POST', postingUploadUri);
 
@@ -137,8 +139,8 @@ Future<Post> getposting(int postingid) async {
   String? userid = await FlutterSecureStorage().read(key: "id");
 
   // print(userid);
-  final specificPostingLoadUri = Uri.parse(
-      "http://3.35.253.151:8000/post_api/specific_posting_load/$postingid");
+  final specificPostingLoadUri =
+      Uri.parse("$serverUri/post_api/specific_posting_load/$postingid");
 
   http.Response response = await http
       .get(specificPostingLoadUri, headers: {"Authorization": "Token $token"});
@@ -157,7 +159,7 @@ Future<Post> getposting(int postingid) async {
 Future<void> deleteposting(int postid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse("http://3.35.253.151:8000/post_api/delete/$postid");
+  final uri = Uri.parse("$serverUri/post_api/delete/$postid");
 
   http.Response response =
       await http.post(uri, headers: {"Authorization": "Token $token"});
@@ -184,7 +186,7 @@ Future<dynamic> mainpost(int lastindex) async {
   });
 
   final mainloadUri =
-      Uri.parse("http://3.35.253.151:8000/post_api/main_load?last=$lastindex");
+      Uri.parse("$serverUri/post_api/main_load?last=$lastindex");
 
   final response =
       await get(mainloadUri, headers: {"Authorization": "Token $token"});
@@ -208,8 +210,8 @@ Future<dynamic> bookmarklist(int pageNumber) async {
     token = value;
   });
 
-  final bookmarkListUri = Uri.parse(
-      "http://3.35.253.151:8000/post_api/bookmark_list?page=$pageNumber");
+  final bookmarkListUri =
+      Uri.parse("$serverUri/post_api/bookmark_list?page=$pageNumber");
 
   final response =
       await get(bookmarkListUri, headers: {"Authorization": "Token $token"});
@@ -230,8 +232,7 @@ Future<dynamic> looppost(int lastindex) async {
     token = value;
   });
 
-  final loopUri =
-      Uri.parse("http://3.35.253.151:8000/post_api/loop_load?last=$lastindex");
+  final loopUri = Uri.parse("$serverUri/post_api/loop_load?last=$lastindex");
 
   final response =
       await get(loopUri, headers: {"Authorization": "Token $token"});
@@ -253,8 +254,7 @@ Future<dynamic> bookmarkpost(int postingId) async {
     token = value;
   });
 
-  final bookmarkUri =
-      Uri.parse("http://3.35.253.151:8000/post_api/bookmark/$postingId");
+  final bookmarkUri = Uri.parse("$serverUri/post_api/bookmark/$postingId");
 
   final response =
       await post(bookmarkUri, headers: {"Authorization": "Token $token"});
@@ -269,8 +269,7 @@ Future<dynamic> likepost(int postingId) async {
     token = value;
   });
 
-  final likeUri =
-      Uri.parse("http://3.35.253.151:8000/post_api/like/$postingId");
+  final likeUri = Uri.parse("$serverUri/post_api/like/$postingId");
 
   final response =
       await post(likeUri, headers: {"Authorization": "Token $token"});

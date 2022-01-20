@@ -15,12 +15,14 @@ import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
 
+import '../constant.dart';
+
 Future addproject() async {
   ProjectAddController projectAddController = Get.find();
   TagController tagController = Get.find();
 
   String? token = await const FlutterSecureStorage().read(key: "token");
-  Uri uri = Uri.parse('http://3.35.253.151:8000/project_api/create_project');
+  Uri uri = Uri.parse('$serverUri/project_api/create_project');
 
   var request = http.MultipartRequest('POST', uri);
 
@@ -79,8 +81,7 @@ Future addproject() async {
 Future<Project> getproject(int projectId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri =
-      Uri.parse("http://3.35.253.151:8000/project_api/load_project/$projectId");
+  final uri = Uri.parse("$serverUri/project_api/load_project/$projectId");
 
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
@@ -110,7 +111,7 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
 
   String? token = await const FlutterSecureStorage().read(key: "token");
   Uri uri = Uri.parse(
-      'http://3.35.253.151:8000/project_api/update_project/${updateType.name}/$projectId');
+      '$serverUri/project_api/update_project/${updateType.name}/$projectId');
 
   var request = http.MultipartRequest('POST', uri);
 
@@ -166,8 +167,7 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
 Future<void> deleteproject(int projectId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse(
-      "http://3.35.253.151:8000/project_api/delete_project/$projectId");
+  final uri = Uri.parse("$serverUri/project_api/delete_project/$projectId");
 
   http.Response response =
       await http.post(uri, headers: {"Authorization": "Token $token"});

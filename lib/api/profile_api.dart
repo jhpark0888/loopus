@@ -8,10 +8,12 @@ import 'package:loopus/model/project_model.dart';
 
 import 'package:loopus/model/user_model.dart';
 
+import '../constant.dart';
+
 Future<User> getProfile(var userId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  var uri = Uri.parse("http://3.35.253.151:8000/user_api/profile_load/$userId");
+  var uri = Uri.parse("$serverUri/user_api/profile_load/$userId");
 
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
@@ -29,7 +31,7 @@ Future<User> getProfile(var userId) async {
 Future<List<Project>> getProjectlist(var userId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  var uri = Uri.parse("http://3.35.253.151:8000/user_api/project_load/$userId");
+  var uri = Uri.parse("$serverUri/user_api/project_load/$userId");
 
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
@@ -55,8 +57,8 @@ Future<User?> updateProfile(
     User user, File? image, List? taglist, ProfileUpdateType updateType) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   print(taglist);
-  final uri = Uri.parse(
-      "http://3.35.253.151:8000/user_api/update_profile/${updateType.name}");
+  final uri =
+      Uri.parse("$serverUri/user_api/update_profile/${updateType.name}");
 
   var request = http.MultipartRequest('POST', uri);
 

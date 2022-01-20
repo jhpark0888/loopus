@@ -5,10 +5,12 @@ import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/widget/message_widget.dart';
 
+import '../constant.dart';
+
 Future<void> getmessageroomlist() async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
 
-  final url = Uri.parse("http://3.35.253.151:8000/chat/get_list");
+  final url = Uri.parse("$serverUri/chat/get_list");
 
   http.Response response = await http.get(
     url,
@@ -36,7 +38,7 @@ Future<void> getmessageroomlist() async {
 Future<List<Message>> getmessagelist(int userid) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
 
-  final url = Uri.parse("http://3.35.253.151:8000/chat/chatting/$userid");
+  final url = Uri.parse("$serverUri/chat/chatting/$userid");
 
   final response =
       await http.get(url, headers: {"Authorization": "Token $token"});
@@ -82,7 +84,7 @@ Future<List<Message>> getmessagelist(int userid) async {
 Future<void> postmessage(String content, int userid) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
 
-  final url = Uri.parse("http://3.35.253.151:8000/chat/chatting/$userid");
+  final url = Uri.parse("$serverUri/chat/chatting/$userid");
 
   var message = {
     "message": content,

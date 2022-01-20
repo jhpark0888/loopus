@@ -5,10 +5,12 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
 
+import '../constant.dart';
+
 void gettagsearch() async {
   TagController tagController = Get.find();
   Uri uri = Uri.parse(
-      'http://3.35.253.151:8000/tag_api/search?query=${tagController.tagsearch.text}');
+      '$serverUri/tag_api/search?query=${tagController.tagsearch.text}');
 
   http.Response response = await http.get(
     uri,
@@ -77,7 +79,7 @@ void gettagsearch() async {
 Future<SearchTag?> postmaketag() async {
   TagController tagController = Get.find();
 
-  Uri uri = Uri.parse('http://3.35.253.151:8000/tag_api/create');
+  Uri uri = Uri.parse('$serverUri/tag_api/create');
 
   var tag = {"tag": tagController.tagsearch.text};
 

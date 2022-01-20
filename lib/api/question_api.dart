@@ -7,13 +7,15 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/question_specific_model.dart';
 
+import '../constant.dart';
+
 void questionmake(String content) async {
   String? token;
   await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
-  final url = Uri.parse("http://3.35.253.151:8000/question_api/raise_question");
+  final url = Uri.parse("$serverUri/question_api/raise_question");
   var data = {
     "content": content,
     "tag":
@@ -36,7 +38,7 @@ Future<dynamic> questionlist(int lastindex, String type) async {
   });
   print(lastindex);
   final url = Uri.parse(
-      "http://3.35.253.151:8000/question_api/question_list_load/$type?last=$lastindex");
+      "$serverUri/question_api/question_list_load/$type?last=$lastindex");
   final response = await get(url, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
   var responseHeaders = response.headers;
@@ -58,8 +60,8 @@ Future<dynamic> specificquestion(int questionid) async {
     token = value;
   });
 
-  final url = Uri.parse(
-      "http://3.35.253.151:8000/question_api/specific_question_load/$questionid");
+  final url =
+      Uri.parse("$serverUri/question_api/specific_question_load/$questionid");
 
   final response = await get(url, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;
@@ -81,7 +83,7 @@ Future<Map<dynamic, dynamic>> answermake(String content, int id) async {
     token = value;
   });
 
-  final url = Uri.parse("http://3.35.253.151:8000/question_api/answer/$id");
+  final url = Uri.parse("$serverUri/question_api/answer/$id");
 
   print(token);
   var data = {
