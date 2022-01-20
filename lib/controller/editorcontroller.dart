@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 class EditorController extends GetxController {
@@ -29,6 +30,7 @@ class EditorController extends GetxController {
   @override
   void onInit() {
     insert(index: 0);
+
     super.onInit();
   }
 
@@ -241,22 +243,28 @@ class EditorController extends GetxController {
               types.insert(index, selectedType.value);
               Get.back();
             });
-        // Get.defaultDialog(
-        //     content: TextField(
-        //       controller: linkcontroller,
-        //       decoration: InputDecoration(hintText: "http//www."),
-        //     ),
-        //     title: '링크를 넣어주세요',
-        //     textCancel: '취소',
-        //     textConfirm: '확인',
-        //     onConfirm: () {
-        //       linkindex[index] = linkcontroller.text;
-        //       selectedType(SmartTextType.LINK);
-        //       types.removeAt(index);
-        //       types.insert(index, selectedType.value);
-        //       Get.back();
-        //     });
       }
     }
+  }
+
+  void checkPostingContent() {
+    for (var item in textcontrollers) {
+      print(item);
+      if (item.text.replaceFirst('\u200B', '').trim() != '') {
+        PostingAddController.to.isPostingContentEmpty.value = false;
+        break;
+      } else {
+        PostingAddController.to.isPostingContentEmpty.value = true;
+        if (PostingAddController.to.isPostingContentEmpty.value == true) {
+          if (imageindex.whereType<File>().isEmpty) {
+            PostingAddController.to.isPostingContentEmpty.value = true;
+          } else {
+            PostingAddController.to.isPostingContentEmpty.value = false;
+          }
+        }
+      }
+    }
+
+    print(PostingAddController.to.isPostingContentEmpty.value);
   }
 }

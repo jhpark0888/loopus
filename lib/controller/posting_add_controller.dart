@@ -17,8 +17,18 @@ class PostingAddController extends GetxController {
   RxBool isPostingUploading = false.obs;
   List<File> images = [];
   Rx<File> thumbnail = File("").obs;
+  RxBool isPostingTitleEmpty = false.obs;
+  RxBool isPostingContentEmpty = true.obs;
 
   void onInit() {
+    titlecontroller.addListener(() {
+      if (titlecontroller.text.trim().isEmpty) {
+        isPostingTitleEmpty.value = true;
+      } else {
+        isPostingTitleEmpty.value = false;
+      }
+    });
+
     super.onInit();
   }
 }

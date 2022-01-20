@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/screen/posting_add_image_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -32,12 +33,18 @@ class PostingAddContentScreen extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () {
+                    postingAddController.editorController.checkPostingContent();
+                    if (postingAddController.isPostingContentEmpty.value ==
+                        false) {
+                      Get.to(() => PostingAddImageScreen(
+                            project_id: project_id,
+                          ));
+                    } else {
+                      ModalController.to.showCustomDialog('내용을 입력해주세요', 1000);
+                    }
                     // postingAddController.editorController
                     //     .nodeAt(postingAddController.editorController.focus)
                     //     .unfocus();
-                    Get.to(() => PostingAddImageScreen(
-                          project_id: project_id,
-                        ));
                   },
                   child: Text(
                     '다음',

@@ -14,7 +14,7 @@ import 'package:loopus/widget/custom_textfield.dart';
 
 class PostingAddNameScreen extends StatelessWidget {
   PostingAddNameScreen({Key? key, required this.project_id}) : super(key: key);
-  final PostingAddController postingcontroller =
+  final PostingAddController postingAddController =
       Get.put(PostingAddController());
   final FocusNode _focusNode = FocusNode();
   int project_id;
@@ -29,17 +29,26 @@ class PostingAddNameScreen extends StatelessWidget {
         appBar: AppBarWidget(
           bottomBorder: false,
           actions: [
-            TextButton(
-              onPressed: () {
-                _focusNode.unfocus();
-                Get.to(() => PostingAddContentScreen(
-                      project_id: project_id,
-                    ));
-              },
-              child: Text(
-                '다음',
-                style: kSubTitle2Style.copyWith(
-                  color: mainblue,
+            Obx(
+              () => TextButton(
+                onPressed: postingAddController.isPostingTitleEmpty.value
+                    ? () {}
+                    : () {
+                        _focusNode.unfocus();
+                        postingAddController.isPostingContentEmpty.value =
+                            false;
+
+                        Get.to(() => PostingAddContentScreen(
+                              project_id: project_id,
+                            ));
+                      },
+                child: Text(
+                  '다음',
+                  style: kSubTitle2Style.copyWith(
+                    color: postingAddController.isPostingTitleEmpty.value
+                        ? mainblack.withOpacity(0.38)
+                        : mainblue,
+                  ),
                 ),
               ),
             ),
@@ -77,7 +86,7 @@ class PostingAddNameScreen extends StatelessWidget {
               CustomTextField(
                   counterText: null,
                   maxLength: 40,
-                  textController: postingcontroller.titlecontroller,
+                  textController: postingAddController.titlecontroller,
                   hintText: '포스팅 제목...',
                   validator: null,
                   obscureText: false,
