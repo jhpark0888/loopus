@@ -26,8 +26,6 @@ class ProjectWidget extends StatelessWidget {
     required this.project,
   }) : super(key: key);
 
-  ProjectDetailController projectDetailController =
-      Get.put(ProjectDetailController());
   RxInt likecount = 0.obs;
   Rx<Project> project;
   Project? exproject;
@@ -40,8 +38,10 @@ class ProjectWidget extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () async {
-          projectDetailController.isProjectLoading.value = true;
+          // projectDetailController.isProjectLoading.value = true;
+          print(project.value.is_user);
           exproject = await Get.to(() => ProjectScreen(
+                isuser: 1,
                 projectid: project.value.id,
               ));
           if (exproject != null) {

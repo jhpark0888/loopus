@@ -202,6 +202,7 @@ class SearchTagProjectWidget extends StatelessWidget {
   void tapProject() {
     ProjectDetailController.to.isProjectLoading.value = true;
     Get.to(() => ProjectScreen(
+          isuser: 1,
           projectid: project.id,
         ));
   }
