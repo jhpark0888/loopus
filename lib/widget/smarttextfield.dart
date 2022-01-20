@@ -21,7 +21,7 @@ extension SmartTextStyle on SmartTextType {
           fontSize: 20,
           color: mainblack,
           fontWeight: FontWeight.bold,
-          height: 1.6,
+          height: 1.5,
         );
       case SmartTextType.H2:
         return TextStyle(
@@ -34,8 +34,12 @@ extension SmartTextStyle on SmartTextType {
       case SmartTextType.LINK:
         return TextStyle(
           fontSize: 16,
-          color: mainblue,
+          shadows: [Shadow(color: mainblue, offset: Offset(0, -4))],
+          color: Colors.transparent,
           decoration: TextDecoration.underline,
+          decorationColor: mainblue,
+          decorationThickness: 1.2,
+          decorationStyle: TextDecorationStyle.solid,
         );
       default:
         return TextStyle(
@@ -52,6 +56,8 @@ extension SmartTextStyle on SmartTextType {
         return EdgeInsets.fromLTRB(16, 12, 16, 8);
       case SmartTextType.BULLET:
         return EdgeInsets.fromLTRB(24, 4, 16, 4);
+      case SmartTextType.IMAGE:
+        return EdgeInsets.only(top: 16);
       default:
         return EdgeInsets.fromLTRB(16, 8, 16, 8);
     }

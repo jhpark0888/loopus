@@ -17,74 +17,78 @@ class EditorToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      child: Container(
-          height: kBottomNavigationBarHeight,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(
-              top: BorderSide(
-                width: 1,
-                color: Color(0xffe7e7e7),
+    return Transform.translate(
+      //TODO: 정확히 어떤 역할을 하는 걸까
+      offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+      child: BottomAppBar(
+        child: Container(
+            height: kBottomNavigationBarHeight,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                top: BorderSide(
+                  width: 1,
+                  color: Color(0xffe7e7e7),
+                ),
               ),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
-            child: Row(children: [
-              GestureDetector(
-                child: editorController.setFontSizeIcon(selectedType),
-                onTap: () => editorController.setFontSizeType(selectedType),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
               ),
-              SizedBox(
-                width: 20,
-              ),
-              GestureDetector(
-                child: Icon(Icons.format_quote,
-                    color: selectedType == SmartTextType.QUOTE
-                        ? mainblue
-                        : mainblack),
-                onTap: () => onSelected(SmartTextType.QUOTE),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              GestureDetector(
-                child: Icon(Icons.format_list_bulleted,
-                    color: selectedType == SmartTextType.BULLET
-                        ? mainblue
-                        : mainblack),
-                onTap: () => onSelected(SmartTextType.BULLET),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              GestureDetector(
-                child: Icon(Icons.image, color: mainblack),
-                onTap: () async {
-                  ImageController.to.isPostingImagePickerLoading.value = true;
-                  await editorController
-                      .insertimage(editorController.focus)
-                      .then((value) => ImageController
-                          .to.isPostingImagePickerLoading.value = false);
-                },
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              GestureDetector(
-                child: Icon(Icons.link,
-                    color: selectedType == SmartTextType.LINK
-                        ? mainblue
-                        : mainblack),
-                onTap: () {
-                  editorController.linkonbutton(editorController.focus);
-                },
-              ),
-            ]),
-          )),
+              child: Row(children: [
+                GestureDetector(
+                  child: editorController.setFontSizeIcon(selectedType),
+                  onTap: () => editorController.setFontSizeType(selectedType),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                GestureDetector(
+                  child: Icon(Icons.format_quote,
+                      color: selectedType == SmartTextType.QUOTE
+                          ? mainblue
+                          : mainblack),
+                  onTap: () => onSelected(SmartTextType.QUOTE),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                GestureDetector(
+                  child: Icon(Icons.format_list_bulleted,
+                      color: selectedType == SmartTextType.BULLET
+                          ? mainblue
+                          : mainblack),
+                  onTap: () => onSelected(SmartTextType.BULLET),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                GestureDetector(
+                  child: Icon(Icons.image, color: mainblack),
+                  onTap: () async {
+                    ImageController.to.isPostingImagePickerLoading.value = true;
+                    await editorController
+                        .insertimage(editorController.focus)
+                        .then((value) => ImageController
+                            .to.isPostingImagePickerLoading.value = false);
+                  },
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                GestureDetector(
+                  child: Icon(Icons.link,
+                      color: selectedType == SmartTextType.LINK
+                          ? mainblue
+                          : mainblack),
+                  onTap: () {
+                    editorController.linkonbutton(editorController.focus);
+                  },
+                ),
+              ]),
+            )),
+      ),
     );
   }
 }

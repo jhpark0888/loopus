@@ -225,7 +225,7 @@ class EditorController extends GetxController {
     } else {
       TextEditingController linkcontroller = TextEditingController();
       if (textAt(index).text == '\u200B') {
-        ModalController.to.showCustomDialog('텍스트를 먼저 입력해주세요', 1000);
+        ModalController.to.showCustomDialog('링크를 삽입할 텍스트를 먼저 입력해주세요', 1000);
       } else {
         ModalController.to.showTextFieldDialog(
             title: '링크를 입력해주세요',

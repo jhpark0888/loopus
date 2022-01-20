@@ -398,9 +398,9 @@ class _MyAppSpace extends StatelessWidget {
                                               imageUrl: profileImage,
                                               placeholder: (context, url) =>
                                                   CircleAvatar(
-                                                child: Center(
-                                                    child:
-                                                        CircularProgressIndicator()),
+                                                backgroundColor:
+                                                    Color(0xffe7e7e7),
+                                                child: Container(),
                                               ),
                                               fit: BoxFit.cover,
                                             ),
