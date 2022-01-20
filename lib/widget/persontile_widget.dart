@@ -24,7 +24,6 @@ class PersonTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        profileController.isProfileLoading(true);
         Get.to(() => OtherProfileScreen(
               userid: user.userid,
               isuser: user.isuser!,

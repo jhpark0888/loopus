@@ -32,8 +32,6 @@ class BookmarkWidget extends StatelessWidget {
   });
   ProfileController profileController = Get.find();
   BookmarkController bookmarkController = Get.put(BookmarkController());
-  PostingDetailController postingDetailController =
-      Get.put(PostingDetailController());
 
   HomeController homeController = Get.find();
 
@@ -106,7 +104,6 @@ class BookmarkWidget extends StatelessWidget {
                             onTap: () async {
                               // AppController.to.ismyprofile.value = false;
                               // await tapProfile();
-                              profileController.isProfileLoading(true);
 
                               Get.to(() => OtherProfileScreen(
                                     userid: item.userid,
@@ -233,8 +230,6 @@ class BookmarkWidget extends StatelessWidget {
   }
 
   Future<void> tapProfile() async {
-    profileController.isProfileLoading(true);
-
     Get.to(() => OtherProfileScreen(
           userid: item.userid,
           isuser: item.isuser,
@@ -243,12 +238,11 @@ class BookmarkWidget extends StatelessWidget {
   }
 
   void tapPosting() {
-    postingDetailController.isPostingContentLoading.value = true;
     Get.to(
       () => PostingScreen(
           userid: item.userid,
           isuser: item.isuser,
-          id: item.id,
+          postid: item.id,
           title: item.title,
           realName: item.realname,
           department: item.department,

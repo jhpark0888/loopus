@@ -16,18 +16,20 @@ import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:intl/intl.dart';
 
-class ProjectScreen extends GetWidget<ProjectDetailController> {
+class ProjectScreen extends StatelessWidget {
   ProjectScreen({
-    required this.isuser,
     required this.projectid,
+    required this.isuser,
     Key? key,
   }) : super(key: key);
 
   ModalController modalController = Get.put(ModalController());
 
-  // ProjectDetailController controller = Get.find();
-  int isuser;
+  late ProjectDetailController controller =
+      Get.put(ProjectDetailController(projectid), tag: projectid.toString());
+
   int projectid;
+  int isuser;
   RxInt likecount = 0.obs;
   // Rx<Project> project = Project(
   //         id: 0,
@@ -43,21 +45,6 @@ class ProjectScreen extends GetWidget<ProjectDetailController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.isProjectLoading(true);
-    getproject(projectid).then((value) {
-      controller.project(value);
-      controller.postinglist(List.from(controller.project.value.post
-          .map((post) => ProjectPostingWidget(
-                item: post,
-                isuser: controller.project.value.is_user ?? 0,
-                realname: controller.project.value.realname ?? '',
-                department: controller.project.value.department ?? '',
-                profileimage: controller.project.value.profileimage ?? '',
-              ))
-          .toList()
-          .reversed));
-      controller.isProjectLoading.value = false;
-    });
     return Obx(
       () => Stack(children: [
         Scaffold(
@@ -75,9 +62,11 @@ class ProjectScreen extends GetWidget<ProjectDetailController> {
                 () => (controller.project.value.is_user == 1)
                     ? IconButton(
                         onPressed: () async {
-                          exproject = await Get.to(() => ProjectModifyScreen(
-                                project: controller.project,
-                              ));
+                          exproject = await Get.to(
+                            () => ProjectModifyScreen(
+                              projectid: controller.project.value.id,
+                            ),
+                          );
                           if (exproject != null) {
                             controller.project(exproject);
                           }

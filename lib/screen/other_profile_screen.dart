@@ -9,6 +9,7 @@ import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
@@ -28,62 +29,29 @@ class OtherProfileScreen extends StatelessWidget {
       required this.isuser,
       required this.realname})
       : super(key: key);
-  final ProfileController profileController = Get.put(ProfileController());
+  late OtherProfileController controller =
+      Get.put(OtherProfileController(userid), tag: userid.toString());
+
   final ImageController imageController = Get.put(ImageController());
   int userid;
   int isuser;
   String realname;
-  Rx<User> otherUser = User(
-    userid: 0,
-    type: 0,
-    realName: '',
-    totalposting: 0,
-    loopcount: 0,
-    profileTag: [],
-    department: '',
-    isuser: 0,
-    looped: 0,
-  ).obs;
-  RxList<ProjectWidget> otherProjectList = <ProjectWidget>[].obs;
-  // RxBool isLoop = false.obs;
 
   RefreshController otherprofilerefreshController =
       RefreshController(initialRefresh: false);
 
   void onRefresh() async {
-    profileController.profileenablepullup.value = true;
-    getProfile(userid).then((user) {
-      otherUser(user);
-    });
-    getProjectlist(userid).then((projectlist) {
-      otherProjectList(projectlist
-          .map((project) => ProjectWidget(
-                project: project.obs,
-              ))
-          .toList());
-      profileController.isProfileLoading(false);
-    });
+    controller.profileenablepullup.value = true;
+    controller.loadotherProfile(userid);
     otherprofilerefreshController.refreshCompleted();
   }
 
-  // void onLoading() async {
-  //   await Future.delayed(Duration(milliseconds: 10));
-  //   otherprofilerefreshController.loadComplete();
-  // }
+  void onLoading() async {
+    otherprofilerefreshController.loadComplete();
+  }
 
   @override
   Widget build(BuildContext context) {
-    getProfile(userid).then((user) {
-      otherUser(user);
-    });
-    getProjectlist(userid).then((projectlist) {
-      otherProjectList(projectlist
-          .map((project) => ProjectWidget(
-                project: project.obs,
-              ))
-          .toList());
-      profileController.isProfileLoading(false);
-    });
     return Scaffold(
       appBar: isuser == 1
           ? AppBarWidget(
@@ -102,7 +70,7 @@ class OtherProfileScreen extends StatelessWidget {
             )
           : AppBarWidget(bottomBorder: false, title: '${realname}님의 프로필'),
       body: Obx(
-        () => ProfileController.to.isProfileLoading.value
+        () => controller.isProfileLoading.value
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -128,11 +96,10 @@ class OtherProfileScreen extends StatelessWidget {
             : Obx(
                 () => SmartRefresher(
                   controller: otherprofilerefreshController,
-                  enablePullDown:
-                      (profileController.isProfileLoading.value == true)
-                          ? false
-                          : true,
-                  enablePullUp: !profileController.profileenablepullup.value,
+                  enablePullDown: (controller.isProfileLoading.value == true)
+                      ? false
+                      : true,
+                  enablePullUp: !controller.profileenablepullup.value,
                   header: ClassicHeader(
                     spacing: 0.0,
                     height: 60,
@@ -251,47 +218,51 @@ class OtherProfileScreen extends StatelessWidget {
                               children: [
                                 Obx(
                                   () => GestureDetector(
-                                    onTap: otherUser.value.isuser == 1
-                                        ? () => ModalController.to.showModalIOS(
-                                            context,
-                                            func1: changeProfileImage,
-                                            func2: () {},
-                                            value1: '라이브러리에서 선택',
-                                            value2: '기본 이미지로 변경',
-                                            isValue1Red: false,
-                                            isValue2Red: false,
-                                            isOne: false)
-                                        : () {},
+                                    onTap:
+                                        controller.otherUser.value.isuser == 1
+                                            ? () => ModalController.to
+                                                .showModalIOS(context,
+                                                    func1: changeProfileImage,
+                                                    func2: () {},
+                                                    value1: '라이브러리에서 선택',
+                                                    value2: '기본 이미지로 변경',
+                                                    isValue1Red: false,
+                                                    isValue2Red: false,
+                                                    isOne: false)
+                                            : () {},
                                     child: ClipOval(
-                                        child: (profileController
-                                                .isProfileLoading.value)
-                                            ? Image.asset(
-                                                "assets/illustrations/default_profile.png",
-                                                height: 92,
-                                                width: 92,
-                                              )
-                                            : otherUser.value.profileImage !=
-                                                    null
-                                                ? CachedNetworkImage(
-                                                    height: 92,
-                                                    width: 92,
-                                                    imageUrl: otherUser
-                                                        .value.profileImage!,
-                                                    placeholder:
-                                                        (context, url) =>
-                                                            CircleAvatar(
-                                                      backgroundColor:
-                                                          const Color(
-                                                              0xffe7e7e7),
-                                                      child: Container(),
-                                                    ),
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : Image.asset(
+                                        child:
+                                            (controller.isProfileLoading.value)
+                                                ? Image.asset(
                                                     "assets/illustrations/default_profile.png",
                                                     height: 92,
                                                     width: 92,
-                                                  )),
+                                                  )
+                                                : controller.otherUser.value
+                                                            .profileImage !=
+                                                        null
+                                                    ? CachedNetworkImage(
+                                                        height: 92,
+                                                        width: 92,
+                                                        imageUrl: controller
+                                                            .otherUser
+                                                            .value
+                                                            .profileImage!,
+                                                        placeholder:
+                                                            (context, url) =>
+                                                                CircleAvatar(
+                                                          backgroundColor:
+                                                              const Color(
+                                                                  0xffe7e7e7),
+                                                          child: Container(),
+                                                        ),
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                    : Image.asset(
+                                                        "assets/illustrations/default_profile.png",
+                                                        height: 92,
+                                                        width: 92,
+                                                      )),
                                   ),
                                 ),
                                 Positioned.fill(
@@ -307,7 +278,9 @@ class OtherProfileScreen extends StatelessWidget {
                                                 isValue1Red: false,
                                                 isValue2Red: false,
                                                 isOne: false),
-                                        child: otherUser.value.isuser == 1
+                                        child: controller
+                                                    .otherUser.value.isuser ==
+                                                1
                                             ? Container(
                                                 decoration: const BoxDecoration(
                                                     shape: BoxShape.circle,
@@ -328,7 +301,7 @@ class OtherProfileScreen extends StatelessWidget {
                             ),
                             Obx(
                               () => Text(
-                                otherUser.value.realName,
+                                controller.otherUser.value.realName,
                                 style: kSubTitle2Style,
                               ),
                             ),
@@ -337,7 +310,7 @@ class OtherProfileScreen extends StatelessWidget {
                             ),
                             Obx(
                               () => Text(
-                                otherUser.value.department,
+                                controller.otherUser.value.department,
                                 style: kBody1Style,
                               ),
                             ),
@@ -347,26 +320,28 @@ class OtherProfileScreen extends StatelessWidget {
                             Obx(
                               () => Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: otherUser.value.profileTag
-                                      .map((tag) => Row(children: [
-                                            Tagwidget(
-                                              tag: tag,
-                                              fontSize: 14,
-                                            ),
-                                            otherUser.value.profileTag
-                                                        .indexOf(tag) !=
-                                                    profileController
-                                                            .otherUser
-                                                            .value
+                                  children:
+                                      controller.otherUser.value.profileTag
+                                          .map((tag) => Row(children: [
+                                                Tagwidget(
+                                                  tag: tag,
+                                                  fontSize: 14,
+                                                ),
+                                                controller.otherUser.value
                                                             .profileTag
-                                                            .length -
-                                                        1
-                                                ? SizedBox(
-                                                    width: 8,
-                                                  )
-                                                : Container()
-                                          ]))
-                                      .toList()),
+                                                            .indexOf(tag) !=
+                                                        controller
+                                                                .otherUser
+                                                                .value
+                                                                .profileTag
+                                                                .length -
+                                                            1
+                                                    ? SizedBox(
+                                                        width: 8,
+                                                      )
+                                                    : Container()
+                                              ]))
+                                          .toList()),
                             ),
                             SizedBox(
                               height: 16,
@@ -376,7 +351,8 @@ class OtherProfileScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: GestureDetector(
-                                    onTap: otherUser.value.isuser == 1
+                                    onTap: controller.otherUser.value.isuser ==
+                                            1
                                         ? () {
                                             Get.to(
                                                 () => ProfileTagChangeScreen());
@@ -390,7 +366,9 @@ class OtherProfileScreen extends StatelessWidget {
                                       child: Padding(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 8.0),
-                                          child: otherUser.value.isuser == 1
+                                          child: controller
+                                                      .otherUser.value.isuser ==
+                                                  1
                                               ? const Center(
                                                   child: Text(
                                                   '관심 태그 변경하기',
@@ -410,13 +388,14 @@ class OtherProfileScreen extends StatelessWidget {
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
-                                      if (otherUser.value.isuser == 1) {
+                                      if (controller.otherUser.value.isuser ==
+                                          1) {
                                       } else {
-                                        otherUser.value.looped == 1
-                                            ? postloopRelease(
-                                                otherUser.value.userid)
-                                            : postloopRequest(
-                                                otherUser.value.userid);
+                                        controller.otherUser.value.looped == 1
+                                            ? postloopRelease(controller
+                                                .otherUser.value.userid)
+                                            : postloopRequest(controller
+                                                .otherUser.value.userid);
                                       }
                                     },
                                     child: Container(
@@ -430,7 +409,9 @@ class OtherProfileScreen extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 8.0,
                                         ),
-                                        child: otherUser.value.isuser == 1
+                                        child: controller
+                                                    .otherUser.value.isuser ==
+                                                1
                                             ? Center(
                                                 child: Text('내 프로필 공유하기',
                                                     style:
@@ -439,9 +420,13 @@ class OtherProfileScreen extends StatelessWidget {
                                               )
                                             : Center(
                                                 child: Text(
-                                                    otherUser.value.looped == 0
+                                                    controller.otherUser.value
+                                                                .looped ==
+                                                            0
                                                         ? '루프 맺기'
-                                                        : otherUser.value
+                                                        : controller
+                                                                    .otherUser
+                                                                    .value
                                                                     .looped ==
                                                                 1
                                                             ? '루프 해제'
@@ -485,7 +470,8 @@ class OtherProfileScreen extends StatelessWidget {
                                       height: 8,
                                     ),
                                     Text(
-                                      otherUser.value.totalposting.toString(),
+                                      controller.otherUser.value.totalposting
+                                          .toString(),
                                       style: kSubTitle2Style,
                                     )
                                   ],
@@ -496,10 +482,11 @@ class OtherProfileScreen extends StatelessWidget {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                profileController.isLoopPeopleLoading(true);
+                                controller.isLoopPeopleLoading(true);
                                 Get.to(() => LoopPeopleScreen(
-                                      userid: otherUser.value.userid,
-                                      loopcount: otherUser.value.loopcount,
+                                      userid: controller.otherUser.value.userid,
+                                      loopcount:
+                                          controller.otherUser.value.loopcount,
                                     ));
                               },
                               child: Padding(
@@ -515,7 +502,8 @@ class OtherProfileScreen extends StatelessWidget {
                                       height: 8,
                                     ),
                                     Text(
-                                      otherUser.value.loopcount.toString(),
+                                      controller.otherUser.value.loopcount
+                                          .toString(),
                                       style: kSubTitle2Style,
                                     )
                                   ],
@@ -547,7 +535,9 @@ class OtherProfileScreen extends StatelessWidget {
                                                 screenType: Screentype.add,
                                               ));
                                         },
-                                        child: otherUser.value.isuser == 1
+                                        child: controller
+                                                    .otherUser.value.isuser ==
+                                                1
                                             ? Text(
                                                 '추가하기',
                                                 style: kButtonStyle.copyWith(
@@ -560,29 +550,28 @@ class OtherProfileScreen extends StatelessWidget {
                               () => Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                child:
-                                    (profileController.isProfileLoading.value ==
-                                            false)
-                                        ? Column(
-                                            children: otherProjectList,
-                                          )
-                                        : Padding(
-                                            padding: EdgeInsets.zero,
-                                            child: Column(
-                                              children: [
-                                                Image.asset(
-                                                  'assets/icons/loading.gif',
-                                                  scale: 6,
-                                                ),
-                                                Text(
-                                                  '활동 받아오는 중...',
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: mainblue),
-                                                ),
-                                              ],
+                                child: (controller.isProfileLoading.value ==
+                                        false)
+                                    ? Column(
+                                        children: controller.otherProjectList,
+                                      )
+                                    : Padding(
+                                        padding: EdgeInsets.zero,
+                                        child: Column(
+                                          children: [
+                                            Image.asset(
+                                              'assets/icons/loading.gif',
+                                              scale: 6,
                                             ),
-                                          ),
+                                            Text(
+                                              '활동 받아오는 중...',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: mainblue),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                               ),
                             ),
                           ],
@@ -599,10 +588,10 @@ class OtherProfileScreen extends StatelessWidget {
   void changeProfileImage() async {
     File? image = await imageController.getcropImage(ImageType.profile);
     if (image != null) {
-      User? user = await updateProfile(profileController.myUserInfo.value,
-          image, null, ProfileUpdateType.image);
+      User? user = await updateProfile(
+          controller.otherUser.value, image, null, ProfileUpdateType.image);
       if (user != null) {
-        profileController.myUserInfo(user);
+        controller.otherUser(user);
       }
     }
   }

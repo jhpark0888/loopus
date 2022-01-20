@@ -10,6 +10,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
+import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -27,9 +28,6 @@ class ProjectPostingWidget extends StatelessWidget {
     required this.department,
   }) : super(key: key);
 
-  PostingDetailController postingDetailController =
-      Get.put(PostingDetailController());
-
   Post item;
   int isuser;
   String realname;
@@ -40,13 +38,11 @@ class ProjectPostingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        postingDetailController.isPostingContentLoading.value = true;
-        print(item.isLiked);
         Get.to(
           () => PostingScreen(
               userid: item.userid,
               isuser: isuser,
-              id: item.id,
+              postid: item.id,
               title: item.title,
               realName: realname,
               department: department,
@@ -116,12 +112,22 @@ class ProjectPostingWidget extends StatelessWidget {
                         Obx(() => InkWell(
                             onTap: () {
                               if (item.isLiked.value == 0) {
+                                Get.find<ProjectDetailController>(
+                                        tag: item.project_id.toString())
+                                    .project
+                                    .value
+                                    .like_count += 1;
                                 item.likeCount += 1;
                                 HomeController.to
                                     .tapLike(item.id, item.likeCount.value);
 
                                 item.isLiked.value = 1;
                               } else {
+                                Get.find<ProjectDetailController>(
+                                        tag: item.project_id.toString())
+                                    .project
+                                    .value
+                                    .like_count -= 1;
                                 item.likeCount -= 1;
                                 HomeController.to
                                     .tapunLike(item.id, item.likeCount.value);

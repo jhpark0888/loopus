@@ -189,8 +189,6 @@ class SearchTagProjectWidget extends StatelessWidget {
   }
 
   void tapProfile() {
-    profileController.isProfileLoading(true);
-
     // AppController.to.ismyprofile.value = false;
     Get.to(() => OtherProfileScreen(
           userid: project.userid!,
@@ -200,10 +198,11 @@ class SearchTagProjectWidget extends StatelessWidget {
   }
 
   void tapProject() {
-    ProjectDetailController.to.isProjectLoading.value = true;
-    Get.to(() => ProjectScreen(
-          isuser: 1,
-          projectid: project.id,
-        ));
+    Get.to(
+        () => ProjectScreen(
+              projectid: project.id,
+              isuser: 1,
+            ),
+        arguments: {"projectid": project.id, "isuser": 1});
   }
 }

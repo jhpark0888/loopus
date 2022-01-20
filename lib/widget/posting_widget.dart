@@ -27,8 +27,8 @@ class PostingWidget extends StatelessWidget {
 
   final ProfileController profileController = Get.put(ProfileController());
   // final HoverController _hoverController = Get.put(HoverController());
-  final PostingDetailController postingDetailController =
-      Get.put(PostingDetailController());
+  // final PostingDetailController postingDetailController =
+  //     Get.put(PostingDetailController());
 
   final HomeController homeController = Get.find();
 
@@ -223,12 +223,11 @@ class PostingWidget extends StatelessWidget {
   }
 
   void tapPosting() {
-    postingDetailController.isPostingContentLoading.value = true;
     Get.to(
       () => PostingScreen(
           userid: item.userid,
           isuser: item.isuser,
-          id: item.id,
+          postid: item.id,
           title: item.title,
           realName: item.realname,
           department: item.department,
@@ -262,8 +261,6 @@ class PostingWidget extends StatelessWidget {
   }
 
   void tapProfile() {
-    profileController.isProfileLoading(true);
-
     Get.to(() => OtherProfileScreen(
           userid: item.userid,
           isuser: item.isuser,

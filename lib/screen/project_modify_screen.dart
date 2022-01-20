@@ -24,14 +24,15 @@ import 'package:loopus/widget/selected_persontag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class ProjectModifyScreen extends StatelessWidget {
-  ProjectModifyScreen({Key? key, required this.project}) : super(key: key);
+  ProjectModifyScreen({Key? key, required this.projectid}) : super(key: key);
 
   ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
   // ProjectDetailController projectDetailController = Get.find();
   TagController tagController = Get.put(TagController());
-
-  Rx<Project> project;
+  //
+  int projectid;
   Project? exproject;
+  late ProjectDetailController controller = Get.find(tag: projectid.toString());
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class ProjectModifyScreen extends StatelessWidget {
           title: '활동 편집',
           leading: IconButton(
             onPressed: () {
-              Get.back(result: project.value);
+              Get.back(result: controller.project.value);
             },
             icon: SvgPicture.asset('assets/icons/Arrow.svg'),
           ),
@@ -59,12 +60,13 @@ class ProjectModifyScreen extends StatelessWidget {
                 onTap: () async {
                   projectnameinput();
                   Get.to(() => ProjectAddTitleScreen(
+                        projectid: projectid,
                         screenType: Screentype.update,
                       ));
                 },
-                project: project.value,
+                project: controller.project.value,
                 title: '활동명',
-                subtitle: project.value.projectName,
+                subtitle: controller.project.value.projectName,
               ),
             ),
             Obx(
@@ -73,13 +75,14 @@ class ProjectModifyScreen extends StatelessWidget {
                 onTap: () async {
                   // projectdateinput();
                   Get.to(() => ProjectAddPeriodScreen(
+                        projectid: projectid,
                         screenType: Screentype.update,
                       ));
                 },
-                project: project.value,
+                project: controller.project.value,
                 title: '활동 기간',
                 subtitle:
-                    '${DateFormat("yy.MM.dd").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''}',
+                    '${DateFormat("yy.MM.dd").format(controller.project.value.startDate!)} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate!) : ''}',
               ),
             ),
             Obx(
@@ -88,12 +91,13 @@ class ProjectModifyScreen extends StatelessWidget {
                 onTap: () async {
                   projectintroinput();
                   Get.to(() => ProjectAddIntroScreen(
+                        projectid: projectid,
                         screenType: Screentype.update,
                       ));
                 },
-                project: project.value,
+                project: controller.project.value,
                 title: '활동 정보',
-                subtitle: project.value.introduction!,
+                subtitle: controller.project.value.introduction!,
               ),
             ),
             Obx(
@@ -102,14 +106,15 @@ class ProjectModifyScreen extends StatelessWidget {
                 onTap: () async {
                   projecttaginput();
                   Get.to(() => ProjectAddTagScreen(
+                        projectid: projectid,
                         screenType: Screentype.update,
                       ));
                 },
-                project: project.value,
+                project: controller.project.value,
                 title: '활동 태그',
-                subtitle: project.value.projectTag.isEmpty
+                subtitle: controller.project.value.projectTag.isEmpty
                     ? ''
-                    : '${project.value.projectTag[0].tag}, ${project.value.projectTag[1].tag}, ${project.value.projectTag[2].tag}',
+                    : '${controller.project.value.projectTag[0].tag}, ${controller.project.value.projectTag[1].tag}, ${controller.project.value.projectTag[2].tag}',
               ),
             ),
             Obx(
@@ -128,14 +133,15 @@ class ProjectModifyScreen extends StatelessWidget {
                     projectaddcontroller.isLooppersonLoading(false);
                   });
                   Get.to(() => ProjectAddPersonScreen(
+                        projectid: projectid,
                         screenType: Screentype.update,
                       ));
                 },
-                project: project.value,
+                project: controller.project.value,
                 title: '함께 활동한 사람',
-                subtitle: project.value.looper.isEmpty
+                subtitle: controller.project.value.looper.isEmpty
                     ? '함께 활동한 사람이 없어요'
-                    : project.value.looper
+                    : controller.project.value.looper
                         .map((user) => user.realName)
                         .toString(),
               ),
@@ -145,10 +151,11 @@ class ProjectModifyScreen extends StatelessWidget {
               onTap: () async {
                 projectthumbnailinput();
                 Get.to(() => ProjectAddThumbnailScreen(
+                      projectid: projectid,
                       screenType: Screentype.update,
                     ));
               },
-              project: project.value,
+              project: controller.project.value,
               title: '대표 사진 변경',
               subtitle: '',
             ),
@@ -157,21 +164,22 @@ class ProjectModifyScreen extends StatelessWidget {
   }
 
   void projectnameinput() {
-    projectaddcontroller.projectnamecontroller.text = project.value.projectName;
+    projectaddcontroller.projectnamecontroller.text =
+        controller.project.value.projectName;
   }
 
   void projectintroinput() {
     projectaddcontroller.introcontroller.text =
-        project.value.introduction ?? '';
+        controller.project.value.introduction ?? '';
   }
 
   void projectdateinput() {
     projectaddcontroller.selectedStartDateTime.value =
-        project.value.startDate!.toString();
+        controller.project.value.startDate!.toString();
 
-    if (project.value.endDate != null) {
+    if (controller.project.value.endDate != null) {
       projectaddcontroller.selectedEndDateTime.value =
-          project.value.endDate!.toString();
+          controller.project.value.endDate!.toString();
       projectaddcontroller.isEndedProject.value = true;
     } else {
       projectaddcontroller.isEndedProject.value = false;
@@ -180,7 +188,7 @@ class ProjectModifyScreen extends StatelessWidget {
 
   void projecttaginput() {
     tagController.selectedtaglist.clear();
-    for (var tag in project.value.projectTag) {
+    for (var tag in controller.project.value.projectTag) {
       tagController.selectedtaglist.add(SelectedTagWidget(
         id: tag.tagId,
         text: tag.tag,
@@ -189,9 +197,9 @@ class ProjectModifyScreen extends StatelessWidget {
   }
 
   void projectlooperinput() {
-    if (project.value.looper != null) {
+    if (controller.project.value.looper != null) {
       projectaddcontroller.selectedpersontaglist.clear();
-      for (var user in project.value.looper) {
+      for (var user in controller.project.value.looper) {
         projectaddcontroller.selectedpersontaglist.add(SelectedPersonTagWidget(
           id: user.userid,
           text: user.realName,
@@ -201,7 +209,8 @@ class ProjectModifyScreen extends StatelessWidget {
   }
 
   void projectthumbnailinput() {
-    projectaddcontroller.projecturlthumbnail = project.value.thumbnail;
+    projectaddcontroller.projecturlthumbnail =
+        controller.project.value.thumbnail;
   }
 }
 

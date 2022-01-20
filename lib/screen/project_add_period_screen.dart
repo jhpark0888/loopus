@@ -17,12 +17,14 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 class ProjectAddPeriodScreen extends StatelessWidget {
   ProjectAddPeriodScreen({
     Key? key,
+    this.projectid,
     required this.screenType,
   }) : super(key: key);
 
   final ProjectAddController projectaddcontroller = Get.find();
   final ModalController _modalController = Get.put(ModalController());
   final Screentype screenType;
+  int? projectid;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,10 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                   ),
                 )
               : Obx(
-                  () => ProjectDetailController.to.isProjectLoading.value
+                  () => Get.find<ProjectDetailController>(
+                              tag: projectid.toString())
+                          .isProjectUpdateLoading
+                          .value
                       ? Image.asset(
                           'assets/icons/loading.gif',
                           scale: 9,
@@ -63,17 +68,31 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                                     true &&
                                 projectaddcontroller.isDateChange.value ==
                                     true) {
-                              ProjectDetailController
-                                  .to.isProjectLoading.value = true;
+                              Get.find<ProjectDetailController>(
+                                      tag: projectid.toString())
+                                  .isProjectUpdateLoading
+                                  .value = true;
                               await updateproject(
-                                  ProjectDetailController.to.project.value.id,
+                                  Get.find<ProjectDetailController>(
+                                          tag: projectid.toString())
+                                      .project
+                                      .value
+                                      .id,
                                   ProjectUpdateType.date);
-                              await getproject(ProjectDetailController
-                                      .to.project.value.id)
+                              await getproject(
+                                      Get.find<ProjectDetailController>(
+                                              tag: projectid.toString())
+                                          .project
+                                          .value
+                                          .id)
                                   .then((value) {
-                                ProjectDetailController.to.project(value);
-                                ProjectDetailController
-                                    .to.isProjectLoading.value = false;
+                                Get.find<ProjectDetailController>(
+                                        tag: projectid.toString())
+                                    .project(value);
+                                Get.find<ProjectDetailController>(
+                                        tag: projectid.toString())
+                                    .isProjectUpdateLoading
+                                    .value = false;
                               });
                               Get.back();
                             }
