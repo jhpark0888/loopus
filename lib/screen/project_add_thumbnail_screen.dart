@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
@@ -226,7 +227,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  '${projectAddController.selectedStartDateTime}  ~',
+                                  '${DateFormat("yy.MM.dd").format(DateTime.parse(projectAddController.selectedStartDateTime.value))}  ~',
                                   style: kSubTitle2Style,
                                 ),
                                 SizedBox(
@@ -235,7 +236,9 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                                 projectAddController.isEndedProject.value ==
                                         true
                                     ? Text(
-                                        '${projectAddController.selectedEndDateTime}',
+                                        DateFormat("yy.MM.dd").format(
+                                            DateTime.parse(projectAddController
+                                                .selectedEndDateTime.value)),
                                         style: kSubTitle2Style,
                                       )
                                     : Container(),

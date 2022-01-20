@@ -45,6 +45,7 @@ class ProjectScreen extends StatelessWidget {
       project(value);
       postinglist(List.from(project.value.post
           .map((post) => ProjectPostingWidget(
+                allpostlike: value.like_count!.obs,
                 item: post,
                 isuser: project.value.is_user ?? 0,
                 realname: project.value.realname ?? '',
