@@ -117,6 +117,7 @@ Future<void> addposting(int projectId) async {
     Get.back();
     Get.back();
     Get.to(() => ProjectScreen(
+          isuser: 1,
           projectid: projectId,
         ));
   } else if (response.statusCode == 400) {

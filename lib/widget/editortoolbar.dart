@@ -72,6 +72,12 @@ class EditorToolbar extends StatelessWidget {
                         .insertimage(editorController.focus)
                         .then((value) => ImageController
                             .to.isPostingImagePickerLoading.value = false);
+                    editorController.insert(
+                        index: editorController.focus + 2,
+                        type: SmartTextType.QUOTE);
+                    editorController
+                        .nodeAt(editorController.focus + 2)
+                        .requestFocus();
                   },
                 ),
                 SizedBox(

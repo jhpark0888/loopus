@@ -68,6 +68,7 @@ Future addproject() async {
     Project project = Project.fromJson(responsemap);
     ProjectDetailController.to.isProjectLoading(true);
     Get.to(() => ProjectScreen(
+          isuser: project.is_user!,
           projectid: project.id,
         ));
     ProfileController.to.myProjectList
