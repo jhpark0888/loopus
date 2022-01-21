@@ -116,7 +116,7 @@ class QuestionAddTagScreen extends StatelessWidget {
                 () => Padding(
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: Row(
-                    children: tagController.selectedtaglist,
+                    children: tagController.selectedtaglist.value,
                   ),
                 ),
               ),

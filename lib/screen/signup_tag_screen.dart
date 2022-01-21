@@ -117,7 +117,8 @@ class SignupTagScreen extends StatelessWidget {
                           left: (index == 0) ? 16 : 0,
                           right: (index == 0) ? 16 : 0),
                       child: Obx(
-                        () => Row(children: tagController.selectedtaglist),
+                        () =>
+                            Row(children: tagController.selectedtaglist.value),
                       ),
                     );
                   }),

@@ -162,8 +162,8 @@ class ProjectAddPersonScreen extends StatelessWidget {
                           left: (index == 0) ? 16 : 0,
                           right: (index == 0) ? 16 : 0),
                       child: Obx(() => Row(
-                          children:
-                              projectaddcontroller.selectedpersontaglist)),
+                          children: projectaddcontroller
+                              .selectedpersontaglist.value)),
                     );
                   }),
             ),
