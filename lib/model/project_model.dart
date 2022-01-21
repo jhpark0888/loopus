@@ -19,8 +19,8 @@ class Project {
       required this.projectTag,
       required this.looper,
       this.post_count,
-      required this.like_count,
-      this.is_user});
+      this.like_count,
+      required this.is_user});
 
   int id;
   int? userid;
@@ -35,9 +35,9 @@ class Project {
   List<Post> post;
   List<Tag> projectTag;
   List<User> looper;
-  int? post_count;
-  int like_count;
-  int? is_user;
+  RxInt? post_count;
+  RxInt? like_count;
+  int is_user;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
         id: json["project_id"] ?? json["id"],
@@ -63,14 +63,14 @@ class Project {
                 json["looper"].map((x) => User.fromJson(x["profile"])))
             : [],
         post_count: json["count"] != null
-            ? json["count"]["post_count"]
+            ? RxInt(json["count"]["post_count"])
             : json["post"] != null
-                ? List.from(json["post"]).length
-                : 0,
+                ? RxInt(List.from(json["post"]).length)
+                : RxInt(0),
         like_count: json["count"] != null
-            ? json["count"]["like_count"]
-            : json["like_count"] ?? 0,
-        is_user: json['is_user'],
+            ? RxInt(json["count"]["like_count"])
+            : RxInt(json["like_count"] ?? 0),
+        is_user: json['is_user'] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {

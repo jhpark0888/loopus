@@ -75,6 +75,7 @@ class ProfileController extends GetxController
       myProjectList(projectlist
           .map((project) => ProjectWidget(
                 project: project.obs,
+                type: ProjectWidgetType.profile,
               ))
           .toList());
     });

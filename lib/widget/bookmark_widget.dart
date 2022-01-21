@@ -84,7 +84,7 @@ class BookmarkWidget extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  "${item.projectname}",
+                  "${item.project!.projectName}",
                   style: TextStyle(
                     fontSize: 14,
                     color: mainblack.withOpacity(0.6),

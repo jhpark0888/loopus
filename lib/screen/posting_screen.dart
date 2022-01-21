@@ -55,6 +55,7 @@ class PostingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(controller.post.value.project);
     return Obx(
       () => Stack(children: [
         Scaffold(
@@ -152,8 +153,8 @@ class PostingScreen extends StatelessWidget {
                                 context,
                                 func1: () {
                                   modalController.showButtonDialog(
-                                      leftText: '',
-                                      rightText: '',
+                                      leftText: '취소',
+                                      rightText: '삭제',
                                       title:
                                           '정말 <${controller.post.value.title}> 포스팅을 삭제하시겠어요?',
                                       content: '삭제한 포스팅은 복구할 수 없어요',
@@ -164,7 +165,7 @@ class PostingScreen extends StatelessWidget {
                                         Get.back();
                                         await deleteposting(
                                             controller.post.value.id,
-                                            controller.post.value.project_id!);
+                                            controller.post.value.project!.id);
                                         controller.isPostDeleteLoading(false);
                                       });
                                 },

@@ -9,9 +9,7 @@ class Post {
     required this.title,
     required this.date,
     required this.project,
-    required this.project_id,
     required this.contents,
-    required this.projectname,
     required this.likeCount,
     required this.isLiked,
     required this.realname,
@@ -25,9 +23,7 @@ class Post {
   int id;
   int userid;
   var thumbnail;
-  int? project_id;
   String title;
-  String? projectname;
   String realname;
   List<PostContent>? contents;
   String department;
@@ -41,7 +37,6 @@ class Post {
   int isuser;
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
-        project_id: json["project_id"],
         id: json["id"],
         userid: json["user_id"],
         thumbnail: json["thumbnail"] == null ? null : json["thumbnail"],
@@ -65,7 +60,6 @@ class Post {
         department: json["department"] ?? '',
         profileimage: json["profile_image"],
         realname: json["real_name"] ?? '',
-        projectname: json["project_name"] ?? '',
         isuser: json["is_user"] ?? 0,
       );
 

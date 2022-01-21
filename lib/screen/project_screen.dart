@@ -45,6 +45,7 @@ class ProjectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.loadProject();
     return Obx(
       () => Stack(children: [
         Scaffold(
@@ -58,23 +59,21 @@ class ProjectScreen extends StatelessWidget {
               icon: SvgPicture.asset('assets/icons/Arrow.svg'),
             ),
             actions: [
-              Obx(
-                () => (controller.project.value.is_user == 1)
-                    ? IconButton(
-                        onPressed: () async {
-                          exproject = await Get.to(
-                            () => ProjectModifyScreen(
-                              projectid: controller.project.value.id,
-                            ),
-                          );
-                          if (exproject != null) {
-                            controller.project(exproject);
-                          }
-                        },
-                        icon: SvgPicture.asset('assets/icons/Edit.svg'),
-                      )
-                    : Container(),
-              ),
+              (isuser == 1)
+                  ? IconButton(
+                      onPressed: () async {
+                        exproject = await Get.to(
+                          () => ProjectModifyScreen(
+                            projectid: controller.project.value.id,
+                          ),
+                        );
+                        if (exproject != null) {
+                          controller.project(exproject);
+                        }
+                      },
+                      icon: SvgPicture.asset('assets/icons/Edit.svg'),
+                    )
+                  : Container(),
               IconButton(
                 onPressed: () {
                   controller.project.value.is_user == 1
@@ -268,7 +267,7 @@ class ProjectScreen extends StatelessWidget {
                                             width: 4,
                                           ),
                                           Text(
-                                            '${controller.likesum(likecount, controller.project.value.post.map((post) => post.likeCount.value).toList())}',
+                                            '${controller.project.value.like_count!.value}',
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,

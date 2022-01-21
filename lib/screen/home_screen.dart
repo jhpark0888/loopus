@@ -23,7 +23,6 @@ class HomeScreen extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
   final ModalController _modalController = Get.put(ModalController());
   final SearchController _searchController = Get.put(SearchController());
-  final MessageController _messageController = Get.put(MessageController());
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +51,7 @@ class HomeScreen extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                _messageController.isMessageRoomListLoading(true);
                 Get.to(() => MessageScreen());
-                getmessageroomlist().then((value) {
-                  _messageController.isMessageRoomListLoading(false);
-                });
               },
               icon: SvgPicture.asset(
                 "assets/icons/Chat.svg",

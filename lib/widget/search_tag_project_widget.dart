@@ -17,6 +17,7 @@ import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/project_screen.dart';
@@ -30,10 +31,7 @@ class SearchTagProjectWidget extends StatelessWidget {
 
   Project project;
 
-  SearchTagProjectWidget({
-    required this.project,
-  });
-  BookmarkController bookmarkController = Get.put(BookmarkController());
+  SearchTagProjectWidget({required this.project});
   HomeController homeController = Get.find();
 
   @override
@@ -192,17 +190,17 @@ class SearchTagProjectWidget extends StatelessWidget {
     // AppController.to.ismyprofile.value = false;
     Get.to(() => OtherProfileScreen(
           userid: project.userid!,
-          isuser: project.is_user!,
+          isuser: project.is_user,
           realname: project.realname!,
         ));
   }
 
   void tapProject() {
     Get.to(
-        () => ProjectScreen(
-              projectid: project.id,
-              isuser: 1,
-            ),
-        arguments: {"projectid": project.id, "isuser": 1});
+      () => ProjectScreen(
+        projectid: project.id,
+        isuser: project.is_user,
+      ),
+    );
   }
 }

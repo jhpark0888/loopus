@@ -9,8 +9,8 @@ import '../constant.dart';
 
 void gettagsearch() async {
   TagController tagController = Get.find();
-  Uri uri = Uri.parse(
-      '$serverUri/tag_api/search?query=${tagController.tagsearch.text}');
+  Uri uri =
+      Uri.parse('$serverUri/tag_api/tag?query=${tagController.tagsearch.text}');
 
   http.Response response = await http.get(
     uri,
@@ -79,7 +79,7 @@ void gettagsearch() async {
 Future<SearchTag?> postmaketag() async {
   TagController tagController = Get.find();
 
-  Uri uri = Uri.parse('$serverUri/tag_api/create');
+  Uri uri = Uri.parse('$serverUri/tag_api/tag');
 
   var tag = {"tag": tagController.tagsearch.text};
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/message_controller.dart';
+import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
@@ -11,14 +11,15 @@ import 'package:loopus/screen/message_detail_screen.dart';
 class MessageRoomWidget extends StatelessWidget {
   MessageRoomWidget({Key? key, required this.messageRoom}) : super(key: key);
 
+  late MessageDetailController controller = Get.put(
+      MessageDetailController(messageRoom.user.userid),
+      tag: messageRoom.user.userid.toString());
   MessageRoom messageRoom;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () async {
-        // MessageController.to.messagelist.clear();
-        MessageController.to.isMessageListLoading(true);
         Get.to(() => MessageDetailScreen(
               user: messageRoom.user,
             ));

@@ -13,7 +13,7 @@ import '../constant.dart';
 Future<User> getProfile(var userId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  var uri = Uri.parse("$serverUri/user_api/profile_load/$userId");
+  var uri = Uri.parse("$serverUri/user_api/profile?id=$userId");
 
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
@@ -31,7 +31,7 @@ Future<User> getProfile(var userId) async {
 Future<List<Project>> getProjectlist(var userId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  var uri = Uri.parse("$serverUri/user_api/project_load/$userId");
+  var uri = Uri.parse("$serverUri/user_api/project?id=$userId");
 
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
@@ -57,10 +57,9 @@ Future<User?> updateProfile(
     User user, File? image, List? taglist, ProfileUpdateType updateType) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   print(taglist);
-  final uri =
-      Uri.parse("$serverUri/user_api/update_profile/${updateType.name}");
+  final uri = Uri.parse("$serverUri/user_api/profile?type=${updateType.name}");
 
-  var request = http.MultipartRequest('POST', uri);
+  var request = http.MultipartRequest('PUT', uri);
 
   final headers = {
     'Authorization': 'Token $token',

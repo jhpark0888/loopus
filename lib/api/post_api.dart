@@ -27,8 +27,7 @@ Future<void> addposting(int projectId) async {
 
   final String? token = await const FlutterSecureStorage().read(key: 'token');
 
-  Uri postingUploadUri =
-      Uri.parse('$serverUri/post_api/posting_upload/$projectId');
+  Uri postingUploadUri = Uri.parse('$serverUri/post_api/posting?id=$projectId');
 
   var request = http.MultipartRequest('POST', postingUploadUri);
 
@@ -94,36 +93,17 @@ Future<void> addposting(int projectId) async {
     }
     // String responsebody = await response.stream.bytesToString();
     // String responsemap = json.decode(responsebody);
-    // print(responsemap = ok);
-
-    // await getproject(projectId).then((value) {
-    //   ProjectDetailController.to.project(value);
-    //   ProjectDetailController.to
-    //       .postinglist(List.from(ProjectDetailController.to.project.value.post
-    //           .map((post) => ProjectPostingWidget(
-    //                 item: post,
-    //                 realName:
-    //                     ProjectDetailController.to.project.value.realname ?? '',
-    //                 department:
-    //                     ProjectDetailController.to.project.value.department ??
-    //                         '',
-    //                 profileImage:
-    //                     ProjectDetailController.to.project.value.profileimage ??
-    //                         '',
-    //               ))
-    //           .toList()
-    //           .reversed));
-    // });
+    // print(responsemap);
     Get.back();
     Get.back();
     Get.back();
-    Get.back();
+    Get.find<ProjectDetailController>(tag: projectId.toString()).loadProject();
     Get.to(
-        () => ProjectScreen(
-              projectid: projectId,
-              isuser: 1,
-            ),
-        arguments: {"projectid": projectId, "isuser": 1});
+      () => ProjectScreen(
+        projectid: projectId,
+        isuser: 1,
+      ),
+    );
   } else if (response.statusCode == 400) {
     if (kDebugMode) {
       print("status code : ${response.statusCode} 포스팅 업로드 실패");
@@ -142,7 +122,7 @@ Future<Post> getposting(int postingid) async {
 
   // print(userid);
   final specificPostingLoadUri =
-      Uri.parse("$serverUri/post_api/specific_posting_load/$postingid");
+      Uri.parse("$serverUri/post_api/posting?id=$postingid");
 
   http.Response response = await http
       .get(specificPostingLoadUri, headers: {"Authorization": "Token $token"});
@@ -161,10 +141,10 @@ Future<Post> getposting(int postingid) async {
 Future<void> deleteposting(int postid, int projectid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse("$serverUri/post_api/delete/$postid");
+  final uri = Uri.parse("$serverUri/post_api/posting?id=$postid");
 
   http.Response response =
-      await http.post(uri, headers: {"Authorization": "Token $token"});
+      await http.delete(uri, headers: {"Authorization": "Token $token"});
 
   print(response.statusCode);
   if (response.statusCode == 200) {

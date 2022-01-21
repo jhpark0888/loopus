@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/select_project_screen.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
 import 'package:loopus/widget/custom_textfield.dart';
@@ -617,7 +619,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(SelectProjectScreen());
+                Get.to(() => SelectProjectScreen());
               },
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -646,29 +648,36 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
             SizedBox(
               height: 20,
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(8),
-                  child: SvgPicture.asset(
-                    'assets/icons/Add.svg',
-                    width: 24,
-                    fit: BoxFit.cover,
+            GestureDetector(
+              onTap: () {
+                Get.back();
+                Get.to(() => ProjectAddTitleScreen(screenType: Screentype.add));
+                AppController.to.changePageIndex(4);
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    child: SvgPicture.asset(
+                      'assets/icons/Add.svg',
+                      width: 24,
+                      fit: BoxFit.cover,
+                    ),
+                    decoration: BoxDecoration(
+                      color: mainlightgrey,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                    color: mainlightgrey,
-                    borderRadius: BorderRadius.circular(25),
+                  SizedBox(
+                    width: 12,
                   ),
-                ),
-                SizedBox(
-                  width: 12,
-                ),
-                Text(
-                  '새로운 활동 추가하기',
-                  style: kSubTitle3Style,
-                ),
-              ],
+                  Text(
+                    '새로운 활동 추가하기',
+                    style: kSubTitle3Style,
+                  ),
+                ],
+              ),
             )
           ],
         ),

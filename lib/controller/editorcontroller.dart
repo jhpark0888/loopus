@@ -201,6 +201,8 @@ class EditorController extends GetxController {
       linkindex.insert(index + 1, null);
       imageindex.insert(index + 1, image);
       // insert(index: index + 2);
+      insert(index: focus + 2, type: SmartTextType.QUOTE);
+      nodeAt(focus + 2).requestFocus();
       listupdate();
       // nodeAt(index).requestFocus();
     }
