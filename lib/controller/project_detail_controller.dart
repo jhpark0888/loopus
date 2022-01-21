@@ -24,7 +24,8 @@ class ProjectDetailController extends GetxController {
           post: [],
           projectTag: [],
           looper: [],
-          like_count: 0)
+          like_count: 0.obs,
+          is_user: 0)
       .obs;
   int projectid;
   RxList<ProjectPostingWidget> postinglist = <ProjectPostingWidget>[].obs;
@@ -37,15 +38,14 @@ class ProjectDetailController extends GetxController {
     return likecount;
   }
 
-  @override
-  void onInit() {
+  void loadProject() {
     isProjectLoading(true);
     getproject(projectid).then((value) {
       project(value);
       postinglist(List.from(project.value.post
           .map((post) => ProjectPostingWidget(
                 item: post,
-                isuser: project.value.is_user ?? 0,
+                isuser: project.value.is_user,
                 realname: project.value.realname ?? '',
                 department: project.value.department ?? '',
                 profileimage: project.value.profileimage ?? '',
@@ -54,6 +54,10 @@ class ProjectDetailController extends GetxController {
           .reversed));
       isProjectLoading.value = false;
     });
+  }
+
+  @override
+  void onInit() {
     super.onInit();
   }
 }

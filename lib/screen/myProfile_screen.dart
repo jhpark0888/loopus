@@ -36,7 +36,6 @@ class MyProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('user: ${profileController.myUserInfo.value.userid}');
     return Obx(() => Stack(
           children: [
             WillPopScope(

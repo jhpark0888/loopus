@@ -15,7 +15,7 @@ void questionmake(String content) async {
     token = value;
   });
 
-  final url = Uri.parse("$serverUri/question_api/raise_question");
+  final url = Uri.parse("$serverUri/question_api/question");
   var data = {
     "content": content,
     "tag":
@@ -60,8 +60,7 @@ Future<dynamic> specificquestion(int questionid) async {
     token = value;
   });
 
-  final url =
-      Uri.parse("$serverUri/question_api/specific_question_load/$questionid");
+  final url = Uri.parse("$serverUri/question_api/question?id=$questionid");
 
   final response = await get(url, headers: {"Authorization": "Token $token"});
   var statusCode = response.statusCode;

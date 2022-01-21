@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
+import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -10,18 +12,20 @@ import 'package:loopus/widget/message_widget.dart';
 
 class MessageDetailScreen extends StatelessWidget {
   MessageDetailScreen({Key? key, required this.user}) : super(key: key);
-  MessageController messageController = Get.find();
 
   User user;
   RxList<MessageWidget> messagelist = <MessageWidget>[].obs;
+  late MessageDetailController controller = Get.put(
+      MessageDetailController(user.userid),
+      tag: user.userid.toString());
 
   void _handleSubmitted(String text) async {
     print(text);
-    await postmessage(text, messageController.userid);
-    messageController.messagelist.clear();
-    await getmessagelist(messageController.userid);
-    messageController.messagefocus.unfocus();
-    messageController.messagetextController.clear();
+    await postmessage(text, controller.userid);
+    controller.messagelist.clear();
+    await getmessagelist(controller.userid);
+    controller.messagefocus.unfocus();
+    controller.messagetextController.clear();
   }
 
   Widget _buildTextComposer() {
@@ -44,10 +48,10 @@ class MessageDetailScreen extends StatelessWidget {
           Flexible(
             child: TextFormField(
               cursorWidth: 1.2,
-              focusNode: messageController.messagefocus,
+              focusNode: controller.messagefocus,
               style: TextStyle(decoration: TextDecoration.none),
               cursorColor: mainblack.withOpacity(0.6),
-              controller: messageController.messagetextController,
+              controller: controller.messagetextController,
               onFieldSubmitted: _handleSubmitted,
               validator: (value) {},
               minLines: 1,
@@ -81,8 +85,7 @@ class MessageDetailScreen extends StatelessWidget {
             alignment: Alignment.center,
             child: InkWell(
               onTap: () {
-                _handleSubmitted(
-                    messageController.messagetextController.value.text);
+                _handleSubmitted(controller.messagetextController.value.text);
               },
               child: Text(
                 "보내기",
@@ -103,7 +106,7 @@ class MessageDetailScreen extends StatelessWidget {
       messagelist(value
           .map((message) => MessageWidget(message: message, user: user))
           .toList());
-      MessageController.to.isMessageListLoading(false);
+      controller.isMessageListLoading(false);
     });
     return Scaffold(
       appBar: AppBarWidget(
@@ -112,7 +115,7 @@ class MessageDetailScreen extends StatelessWidget {
       body: Obx(
         () => Column(
           children: [
-            messageController.isMessageListLoading.value
+            controller.isMessageListLoading.value
                 ? Expanded(
                     child: Center(
                       child: Column(

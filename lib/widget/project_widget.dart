@@ -13,6 +13,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
+import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
@@ -20,66 +21,73 @@ import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:intl/intl.dart';
 
-class ProjectWidget extends StatelessWidget {
-  ProjectWidget({
-    Key? key,
-    required this.project,
-  }) : super(key: key);
+enum ProjectWidgetType { profile, addposting }
 
-  RxInt likecount = 0.obs;
+class ProjectWidget extends StatelessWidget {
+  ProjectWidget({Key? key, required this.project, required this.type})
+      : super(key: key);
+
+  ProjectWidgetType type;
+  late ProjectDetailController controller = Get.put(
+      ProjectDetailController(project.value.id),
+      tag: project.value.id.toString());
   Rx<Project> project;
-  Project? exproject;
 
   @override
   Widget build(BuildContext context) {
+    controller.project = project;
     return Padding(
       padding: const EdgeInsets.only(
         bottom: 16,
       ),
       child: GestureDetector(
         onTap: () async {
-          // projectDetailController.isProjectLoading.value = true;
-          print(project.value.is_user);
-          exproject = await Get.to(
-            () => ProjectScreen(
-              projectid: project.value.id,
-              isuser: 1,
-            ),
-            arguments: {"projectid": project.value.id, "isuser": 1},
-          );
-          if (exproject != null) {
-            project(exproject);
+          if (type == ProjectWidgetType.profile) {
+            Get.to(() => ProjectScreen(
+                  projectid: controller.project.value.id,
+                  isuser: controller.project.value.is_user,
+                ));
+          } else {
+            Get.to(() => ProjectScreen(
+                  projectid: controller.project.value.id,
+                  isuser: controller.project.value.is_user,
+                ));
+            Get.to(() =>
+                PostingAddNameScreen(project_id: controller.project.value.id));
           }
         },
         child: Container(
           decoration: kCardStyle,
           child: Column(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-                child: AspectRatio(
-                  aspectRatio: 2 / 1,
-                  child: Obx(
-                    () => Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: project.value.thumbnail != null
-                              ? NetworkImage(
-                                  project.value.thumbnail!,
-                                ) as ImageProvider
-                              : AssetImage(
-                                  "assets/illustrations/default_image.png",
-                                ),
-                          fit: BoxFit.cover,
+              type == ProjectWidgetType.profile
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8),
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 2 / 1,
+                        child: Obx(
+                          () => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image:
+                                    controller.project.value.thumbnail != null
+                                        ? NetworkImage(
+                                            controller.project.value.thumbnail!,
+                                          ) as ImageProvider
+                                        : AssetImage(
+                                            "assets/illustrations/default_image.png",
+                                          ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              ),
+                    )
+                  : Container(),
               ClipRRect(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8),
@@ -96,7 +104,7 @@ class ProjectWidget extends StatelessWidget {
                     children: [
                       Obx(
                         () => Text(
-                          project.value.projectName,
+                          controller.project.value.projectName,
                           style: kHeaderH2Style,
                         ),
                       ),
@@ -107,12 +115,14 @@ class ProjectWidget extends StatelessWidget {
                         children: [
                           Obx(
                             () => Text(
-                              '${DateFormat("yy.MM.dd").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''}',
+                              '${DateFormat("yy.MM.dd").format(controller.project.value.startDate!)} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate!) : ''}',
                               style: kSubTitle2Style,
                             ),
                           ),
                           SizedBox(
-                            width: (project.value.endDate == null) ? 4 : 8,
+                            width: (controller.project.value.endDate == null)
+                                ? 4
+                                : 8,
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(
@@ -121,27 +131,32 @@ class ProjectWidget extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
-                              color: (project.value.endDate == null)
+                              color: (controller.project.value.endDate == null)
                                   ? Color(0xffefefef)
                                   : Color(0xff888B8C),
                             ),
                             child: Center(
                               child: Obx(
                                 () => Text(
-                                  (project.value.endDate == null)
+                                  (controller.project.value.endDate == null)
                                       ? '진행중'
                                       : DurationCaculator().durationCaculate(
-                                          startDate: project.value.startDate!,
-                                          endDate: project.value.endDate!,
+                                          startDate: controller
+                                              .project.value.startDate!,
+                                          endDate:
+                                              controller.project.value.endDate!,
                                         ),
                                   style: kBody2Style.copyWith(
                                       fontWeight:
-                                          (project.value.endDate == null)
+                                          (controller.project.value.endDate ==
+                                                  null)
                                               ? FontWeight.normal
                                               : FontWeight.bold,
-                                      color: (project.value.endDate == null)
-                                          ? mainblack.withOpacity(0.6)
-                                          : mainWhite),
+                                      color:
+                                          (controller.project.value.endDate ==
+                                                  null)
+                                              ? mainblack.withOpacity(0.6)
+                                              : mainWhite),
                                 ),
                               ),
                             ),
@@ -167,7 +182,7 @@ class ProjectWidget extends StatelessWidget {
                               ),
                               Obx(
                                 () => Text(
-                                  '${project.value.post_count}',
+                                  '${controller.project.value.post_count!.value}',
                                   style: kButtonStyle,
                                 ),
                               ),
@@ -181,7 +196,7 @@ class ProjectWidget extends StatelessWidget {
                             ),
                             Obx(
                               () => Text(
-                                "${project.value.like_count}",
+                                "${controller.project.value.like_count!.value}",
                                 style: kButtonStyle,
                               ),
                             ),

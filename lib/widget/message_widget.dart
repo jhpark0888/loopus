@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
+import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 
 class MessageWidget extends StatelessWidget {
   MessageWidget({required this.message, required this.user});
-  MessageController messageController = Get.find();
+  late MessageDetailController controller = Get.put(
+      MessageDetailController(user.userid),
+      tag: user.userid.toString());
 
   Message message;
   User user;
@@ -47,7 +50,7 @@ class MessageWidget extends StatelessWidget {
           SizedBox(
             width: 10,
           ),
-          messageController.hasTextOverflow(message.message, kBody2Style)
+          controller.hasTextOverflow(message.message, kBody2Style)
               ? Container(
                   width: 250,
                   decoration: BoxDecoration(

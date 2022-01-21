@@ -113,10 +113,11 @@ class ProjectPostingWidget extends StatelessWidget {
                             onTap: () {
                               if (item.isLiked.value == 0) {
                                 Get.find<ProjectDetailController>(
-                                        tag: item.project_id.toString())
+                                        tag: item.project!.id.toString())
                                     .project
                                     .value
-                                    .like_count += 1;
+                                    .like_count!
+                                    .value += 1;
                                 item.likeCount += 1;
                                 HomeController.to
                                     .tapLike(item.id, item.likeCount.value);
@@ -124,10 +125,11 @@ class ProjectPostingWidget extends StatelessWidget {
                                 item.isLiked.value = 1;
                               } else {
                                 Get.find<ProjectDetailController>(
-                                        tag: item.project_id.toString())
+                                        tag: item.project!.id.toString())
                                     .project
                                     .value
-                                    .like_count -= 1;
+                                    .like_count!
+                                    .value -= 1;
                                 item.likeCount -= 1;
                                 HomeController.to
                                     .tapunLike(item.id, item.likeCount.value);

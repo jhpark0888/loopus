@@ -68,22 +68,23 @@ Future addproject() async {
     String responsebody = await response.stream.bytesToString();
     Map<String, dynamic> responsemap = json.decode(responsebody);
     Project project = Project.fromJson(responsemap);
-    ProjectDetailController.to.isProjectLoading(true);
-    Get.to(
-        () => ProjectScreen(
-              projectid: project.id,
-              isuser: project.is_user!,
-            ),
-        arguments: {"projectid": project.id, "isuser": project.is_user!});
-    ProfileController.to.myProjectList
-        .insert(0, ProjectWidget(project: project.obs));
+    Get.to(() => ProjectScreen(
+          projectid: project.id,
+          isuser: 1,
+        ));
+    ProfileController.to.myProjectList.insert(
+        0,
+        ProjectWidget(
+          project: project.obs,
+          type: ProjectWidgetType.profile,
+        ));
   }
 }
 
 Future<Project> getproject(int projectId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse("$serverUri/project_api/load_project/$projectId");
+  final uri = Uri.parse("$serverUri/project_api/project?id=$projectId");
 
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
@@ -113,9 +114,9 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
 
   String? token = await const FlutterSecureStorage().read(key: "token");
   Uri uri = Uri.parse(
-      '$serverUri/project_api/update_project/${updateType.name}/$projectId');
+      '$serverUri/project_api/project?id=$projectId&type=${updateType.name}');
 
-  var request = http.MultipartRequest('POST', uri);
+  var request = http.MultipartRequest('PUT', uri);
 
   final headers = {
     'Authorization': 'Token $token',
@@ -170,10 +171,10 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
 Future<void> deleteproject(int projectId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse("$serverUri/project_api/delete_project/$projectId");
+  final uri = Uri.parse("$serverUri/project_api/project?id=$projectId");
 
   http.Response response =
-      await http.post(uri, headers: {"Authorization": "Token $token"});
+      await http.delete(uri, headers: {"Authorization": "Token $token"});
 
   print(response.statusCode);
   if (response.statusCode == 200) {
