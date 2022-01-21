@@ -181,8 +181,8 @@ class ProjectAddTagScreen extends StatelessWidget {
                       padding: EdgeInsets.only(
                           left: (index == 0) ? 16 : 0,
                           right: (index == 0) ? 16 : 0),
-                      child: Obx(
-                          () => Row(children: tagController.selectedtaglist)),
+                      child: Obx(() =>
+                          Row(children: tagController.selectedtaglist.value)),
                     );
                   }),
             ),

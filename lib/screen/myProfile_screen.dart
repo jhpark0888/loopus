@@ -506,9 +506,11 @@ class MyProfileScreen extends StatelessWidget {
                                 child:
                                     (profileController.isProfileLoading.value ==
                                             false)
-                                        ? Column(
-                                            children:
-                                                profileController.myProjectList,
+                                        ? Obx(
+                                            () => Column(
+                                              children: profileController
+                                                  .myProjectList.value,
+                                            ),
                                           )
                                         : Column(
                                             children: [

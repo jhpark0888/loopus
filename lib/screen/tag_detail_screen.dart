@@ -127,8 +127,11 @@ class TagDetailScreen extends StatelessWidget {
                     : SingleChildScrollView(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: Column(
-                            children: searchController.searchtagprojectlist,
+                          child: Obx(
+                            () => Column(
+                              children:
+                                  searchController.searchtagprojectlist.value,
+                            ),
                           ),
                         ),
                       ),
@@ -162,8 +165,11 @@ class TagDetailScreen extends StatelessWidget {
                             horizontal: 16,
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: Column(
-                            children: searchController.searchtagquestionlist,
+                          child: Obx(
+                            () => Column(
+                              children:
+                                  searchController.searchtagquestionlist.value,
+                            ),
                           ),
                         ),
                       ),

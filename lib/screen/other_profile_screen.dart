@@ -552,8 +552,11 @@ class OtherProfileScreen extends StatelessWidget {
                                     const EdgeInsets.fromLTRB(16, 0, 16, 0),
                                 child: (controller.isProfileLoading.value ==
                                         false)
-                                    ? Column(
-                                        children: controller.otherProjectList,
+                                    ? Obx(
+                                        () => Column(
+                                          children:
+                                              controller.otherProjectList.value,
+                                        ),
                                       )
                                     : Padding(
                                         padding: EdgeInsets.zero,
