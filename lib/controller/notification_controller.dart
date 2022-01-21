@@ -41,7 +41,7 @@ class NotificationController extends GetxController {
           );
       // messaging.deleteToken();
       print('token : $userMessageToken');
-      return await userMessageToken ?? '';
+      return userMessageToken ?? '';
     } catch (e) {
       print(e);
     }

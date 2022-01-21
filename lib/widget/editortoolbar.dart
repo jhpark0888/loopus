@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
@@ -24,7 +25,7 @@ class EditorToolbar extends StatelessWidget {
         child: Container(
             height: kBottomNavigationBarHeight,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: mainWhite,
               border: Border(
                 top: BorderSide(
                   width: 1,
@@ -45,17 +46,20 @@ class EditorToolbar extends StatelessWidget {
                   width: 20,
                 ),
                 GestureDetector(
-                  child: Icon(Icons.format_quote,
-                      color: selectedType == SmartTextType.QUOTE
-                          ? mainblue
-                          : mainblack),
+                  child: selectedType == SmartTextType.QUOTE
+                      ? SvgPicture.asset(
+                          'assets/icons/quote_active.svg',
+                        )
+                      : SvgPicture.asset(
+                          'assets/icons/quote_inactive.svg',
+                        ),
                   onTap: () => onSelected(SmartTextType.QUOTE),
                 ),
                 SizedBox(
                   width: 20,
                 ),
                 GestureDetector(
-                  child: Icon(Icons.format_list_bulleted,
+                  child: SvgPicture.asset('assets/icons/bullet_point.svg',
                       color: selectedType == SmartTextType.BULLET
                           ? mainblue
                           : mainblack),
@@ -65,7 +69,10 @@ class EditorToolbar extends StatelessWidget {
                   width: 20,
                 ),
                 GestureDetector(
-                  child: Icon(Icons.image, color: mainblack),
+                  child: SvgPicture.asset(
+                    'assets/icons/image_icon.svg',
+                    color: mainblack,
+                  ),
                   onTap: () async {
                     ImageController.to.isPostingImagePickerLoading.value = true;
                     await editorController
@@ -84,7 +91,7 @@ class EditorToolbar extends StatelessWidget {
                   width: 20,
                 ),
                 GestureDetector(
-                  child: Icon(Icons.link,
+                  child: SvgPicture.asset('assets/icons/Link.svg',
                       color: selectedType == SmartTextType.LINK
                           ? mainblue
                           : mainblack),

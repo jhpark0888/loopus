@@ -115,7 +115,7 @@ class SmartTextField extends StatelessWidget {
                 },
                 icon: const Icon(
                   Icons.cancel_rounded,
-                  color: Colors.grey,
+                  color: Colors.black26,
                 ),
                 iconSize: 32,
               )

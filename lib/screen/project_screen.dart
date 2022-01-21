@@ -131,410 +131,364 @@ class ProjectScreen extends StatelessWidget {
               ),
             ],
           ),
-          body: Obx(
-            () => controller.isProjectLoading.value
-                ? Center(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/icons/loading.gif',
-                            scale: 9,
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(
+                    16,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Color(0xffe7e7e7),
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Obx(
+                        () => Text(
+                          controller.project.value.projectName,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            height: 1.5,
                           ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            '내용을 받는 중이에요...',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: mainblue,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ]),
-                  )
-                : SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(
-                            16,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Color(0xffe7e7e7),
-                                width: 1,
-                              ),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Obx(
-                                () => Text(
-                                  controller.project.value.projectName,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  '${DateFormat("yy.MM.dd").format(controller.project.value.startDate ?? DateTime(2022))} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate ?? DateTime(2022)) : ''}',
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    height: 1.5,
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              Obx(
-                                () => Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '${DateFormat("yy.MM.dd").format(controller.project.value.startDate ?? DateTime(2022))} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate ?? DateTime(2022)) : ''}',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: (controller
-                                                      .project.value.endDate ==
-                                                  null)
-                                              ? 4
-                                              : 8,
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                            vertical: 4,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            color: (controller.project.value
-                                                        .endDate ==
+                                SizedBox(
+                                  width:
+                                      (controller.project.value.endDate == null)
+                                          ? 4
+                                          : 8,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: (controller.project.value.endDate ==
+                                            null)
+                                        ? Color(0xffefefef)
+                                        : Color(0xff888B8C),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      controller.project.value.endDate == null
+                                          ? '진행중'
+                                          : DurationCaculator()
+                                              .durationCaculate(
+                                                  startDate: controller
+                                                      .project.value.startDate!,
+                                                  endDate: controller
+                                                      .project.value.endDate!),
+                                      style: TextStyle(
+                                        fontWeight:
+                                            (controller.project.value.endDate ==
                                                     null)
-                                                ? Color(0xffefefef)
-                                                : Color(0xff888B8C),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              controller.project.value
-                                                          .endDate ==
-                                                      null
-                                                  ? '진행중'
-                                                  : DurationCaculator()
-                                                      .durationCaculate(
-                                                          startDate: controller
-                                                              .project
-                                                              .value
-                                                              .startDate!,
-                                                          endDate: controller
-                                                              .project
-                                                              .value
-                                                              .endDate!),
-                                              style: TextStyle(
-                                                fontWeight: (controller.project
-                                                            .value.endDate ==
-                                                        null)
-                                                    ? FontWeight.normal
-                                                    : FontWeight.bold,
-                                                fontSize: 14,
-                                                color: (controller.project.value
-                                                            .endDate ==
-                                                        null)
-                                                    ? mainblack.withOpacity(0.6)
-                                                    : mainWhite,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        //좋아요 한 사람 리스트
-                                      },
-                                      child: Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                            "assets/icons/Favorite_Active.svg",
-                                          ),
-                                          SizedBox(
-                                            width: 4,
-                                          ),
-                                          Text(
-                                            '${controller.likesum(likecount, controller.project.value.post.map((post) => post.likeCount.value).toList())}',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
+                                                ? FontWeight.normal
+                                                : FontWeight.bold,
+                                        fontSize: 14,
+                                        color:
+                                            (controller.project.value.endDate ==
+                                                    null)
+                                                ? mainblack.withOpacity(0.6)
+                                                : mainWhite,
                                       ),
-                                    )
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                //좋아요 한 사람 리스트
+                              },
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/icons/Favorite_Active.svg",
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    '${controller.likesum(likecount, controller.project.value.post.map((post) => post.likeCount.value).toList())}',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: 70,
+                            child: Stack(
+                              children: [
+                                CircleAvatar(
+                                  radius: 15,
+                                  child: ClipOval(
+                                    child: CachedNetworkImage(
+                                      width: 28,
+                                      height: 28,
+                                      imageUrl:
+                                          "https://i.stack.imgur.com/l60Hf.png",
+                                      placeholder: (context, url) =>
+                                          CircleAvatar(
+                                        backgroundColor: Color(0xffe7e7e7),
+                                        child: Container(),
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  left: 20,
+                                  child: CircleAvatar(
+                                    radius: 15,
+                                    child: ClipOval(
+                                      child: CachedNetworkImage(
+                                        width: 28,
+                                        height: 28,
+                                        imageUrl:
+                                            "https://i.stack.imgur.com/l60Hf.png",
+                                        placeholder: (context, url) =>
+                                            CircleAvatar(
+                                          backgroundColor: Color(0xffe7e7e7),
+                                          child: Container(),
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  left: 40,
+                                  child: CircleAvatar(
+                                    radius: 15,
+                                    child: ClipOval(
+                                      child: CachedNetworkImage(
+                                        width: 28,
+                                        height: 28,
+                                        imageUrl:
+                                            "https://i.stack.imgur.com/l60Hf.png",
+                                        placeholder: (context, url) =>
+                                            CircleAvatar(
+                                          backgroundColor: Color(0xffe7e7e7),
+                                          child: Container(),
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '박지환',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                  text: '님, ',
+                                ),
+                                TextSpan(
+                                  text: '김형태',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                  text: '님 외 ',
+                                ),
+                                TextSpan(
+                                  text: '4명이',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                  text: ' 참여했어요',
+                                ),
+                              ],
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: mainblack,
+                                fontFamily: 'Nanum',
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    16,
+                    16,
+                    16,
+                    16,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        '활동 소개',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Obx(
+                        () => Text(
+                          controller.project.value.introduction ?? '',
+                          style: TextStyle(
+                            fontSize: 14,
+                            height: 1.5,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Text(
+                        '활동 태그',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: controller.project.value.projectTag
+                              .map(
+                                (tag) => Row(
+                                  children: [
+                                    Tagwidget(
+                                      tag: tag,
+                                      fontSize: 14,
+                                    ),
+                                    controller.project.value.projectTag
+                                                .indexOf(tag) !=
+                                            controller.project.value.projectTag
+                                                    .length -
+                                                1
+                                        ? SizedBox(
+                                            width: 8,
+                                          )
+                                        : Container()
                                   ],
                                 ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    child: Stack(
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundColor: mainblack,
-                                          radius: 15,
-                                          child: ClipOval(
-                                            child: CachedNetworkImage(
-                                              width: 28,
-                                              height: 28,
-                                              imageUrl:
-                                                  "https://i.stack.imgur.com/l60Hf.png",
-                                              placeholder: (context, url) =>
-                                                  CircleAvatar(
-                                                backgroundColor:
-                                                    Color(0xffe7e7e7),
-                                                child: Container(),
-                                              ),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 20,
-                                          child: CircleAvatar(
-                                            backgroundColor: mainblack,
-                                            radius: 15,
-                                            child: ClipOval(
-                                              child: CachedNetworkImage(
-                                                width: 28,
-                                                height: 28,
-                                                imageUrl:
-                                                    "https://i.stack.imgur.com/l60Hf.png",
-                                                placeholder: (context, url) =>
-                                                    CircleAvatar(
-                                                  backgroundColor:
-                                                      Color(0xffe7e7e7),
-                                                  child: Container(),
-                                                ),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 40,
-                                          child: CircleAvatar(
-                                            backgroundColor: mainblack,
-                                            radius: 15,
-                                            child: ClipOval(
-                                              child: CachedNetworkImage(
-                                                width: 28,
-                                                height: 28,
-                                                imageUrl:
-                                                    "https://i.stack.imgur.com/l60Hf.png",
-                                                placeholder: (context, url) =>
-                                                    CircleAvatar(
-                                                  backgroundColor:
-                                                      Color(0xffe7e7e7),
-                                                  child: Container(),
-                                                ),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                              )
+                              .toList(),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '활동 포스팅',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          controller.project.value.is_user == 1
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => PostingAddNameScreen(
+                                          project_id:
+                                              controller.project.value.id,
+                                        ));
+                                  },
+                                  child: Text(
+                                    '포스팅 작성하기',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: mainblue,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Obx(
+                        () => Column(
+                          children: controller.project.value.post.isNotEmpty
+                              ? controller.postinglist
+                              : [
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    '첫 포스팅을 작성해주세요',
+                                    style: kSubTitle2Style.copyWith(
+                                      color: mainblack,
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 8,
+                                    height: 10,
                                   ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: '박지환',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        TextSpan(
-                                          text: '님, ',
-                                        ),
-                                        TextSpan(
-                                          text: '김형태',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        TextSpan(
-                                          text: '님 외 ',
-                                        ),
-                                        TextSpan(
-                                          text: '4명이',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        TextSpan(
-                                          text: ' 참여했어요',
-                                        ),
-                                      ],
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: mainblack,
-                                        fontFamily: 'Nanum',
-                                      ),
+                                  Text(
+                                    '포스팅을 통해 경험한 순간들을 남겨 보세요',
+                                    style: kButtonStyle.copyWith(
+                                      color: mainblue,
                                     ),
                                   ),
                                 ],
-                              )
-                            ],
-                          ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            16,
-                            16,
-                            16,
-                            16,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                '활동 소개',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 12,
-                              ),
-                              Obx(
-                                () => Text(
-                                  controller.project.value.introduction ?? '',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    height: 1.5,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 24,
-                              ),
-                              Text(
-                                '활동 태그',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 12,
-                              ),
-                              Obx(
-                                () => Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: controller.project.value.projectTag
-                                      .map(
-                                        (tag) => Row(
-                                          children: [
-                                            Tagwidget(
-                                              tag: tag,
-                                              fontSize: 14,
-                                            ),
-                                            controller.project.value.projectTag
-                                                        .indexOf(tag) !=
-                                                    controller.project.value
-                                                            .projectTag.length -
-                                                        1
-                                                ? SizedBox(
-                                                    width: 8,
-                                                  )
-                                                : Container()
-                                          ],
-                                        ),
-                                      )
-                                      .toList(),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 24,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '활동 포스팅',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  controller.project.value.is_user == 1
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            Get.to(() => PostingAddNameScreen(
-                                                  project_id: controller
-                                                      .project.value.id,
-                                                ));
-                                          },
-                                          child: Text(
-                                            '포스팅 작성하기',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: mainblue,
-                                            ),
-                                          ),
-                                        )
-                                      : Container(),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              Obx(
-                                () => Column(
-                                  children:
-                                      controller.project.value.post.isNotEmpty
-                                          ? controller.postinglist
-                                          : [
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Text(
-                                                '첫 포스팅을 작성해주세요',
-                                                style: kSubTitle2Style.copyWith(
-                                                  color: mainblack,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Text(
-                                                '포스팅을 통해 경험한 순간들을 남겨 보세요',
-                                                style: kButtonStyle.copyWith(
-                                                  color: mainblue,
-                                                ),
-                                              ),
-                                            ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
+                ),
+              ],
+            ),
           ),
         ),
         if (controller.isProjectDeleteLoading.value)
@@ -546,6 +500,30 @@ class ProjectScreen extends StatelessWidget {
               'assets/icons/loading.gif',
               scale: 6,
             ),
+          ),
+        if (controller.isProjectLoading.value)
+          Center(
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Image.asset(
+                'assets/icons/loading.gif',
+                scale: 9,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Text(
+                '내용을 받는 중이에요...',
+                style: TextStyle(
+                  fontSize: 10,
+                  color: mainblue,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+            ]),
           ),
       ]),
     );

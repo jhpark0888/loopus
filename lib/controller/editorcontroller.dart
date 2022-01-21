@@ -41,7 +41,6 @@ class EditorController extends GetxController {
           '큰 제목',
           style: TextStyle(
             color: mainblue,
-            fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
         );
@@ -50,7 +49,6 @@ class EditorController extends GetxController {
           '작은 제목',
           style: TextStyle(
             color: mainblue,
-            fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
         );
@@ -68,7 +66,6 @@ class EditorController extends GetxController {
           '본문',
           style: TextStyle(
             color: mainblack,
-            fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
         );
@@ -225,7 +222,7 @@ class EditorController extends GetxController {
     } else {
       TextEditingController linkcontroller = TextEditingController();
       if (textAt(index).text == '\u200B') {
-        ModalController.to.showCustomDialog('링크를 삽입할 텍스트를 먼저 입력해주세요', 1000);
+        ModalController.to.showCustomDialog('링크를 첨부할 텍스트를 먼저 입력해주세요', 1000);
       } else {
         ModalController.to.showTextFieldDialog(
             title: '링크를 입력해주세요',

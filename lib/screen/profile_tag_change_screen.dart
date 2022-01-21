@@ -129,7 +129,7 @@ class ProfileTagChangeScreen extends StatelessWidget {
                       child: Obx(
                         () => ListView(
                           scrollDirection: Axis.horizontal,
-                          children: tagController.selectedtaglist.value,
+                          children: tagController.selectedtaglist,
                         ),
                       ),
                     ),

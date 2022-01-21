@@ -177,7 +177,7 @@ class BookmarkScreen extends StatelessWidget {
                           child: Center(
                             child: Text(
                               '아직 북마크한 포스팅이 없어요',
-                              style: kSubTitle2Style,
+                              style: kSubTitle3Style,
                             ),
                           ),
                         );
