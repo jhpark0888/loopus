@@ -18,6 +18,7 @@ import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
+import 'package:loopus/utils/kakao_share_manager.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -35,6 +36,7 @@ class MyProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('user: ${profileController.myUserInfo.value.userid}');
     return Obx(() => Stack(
           children: [
             WillPopScope(
@@ -364,7 +366,17 @@ class MyProfileScreen extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        KakaoShareManager()
+                                            .isKakaotalkInstalled()
+                                            .then((installed) {
+                                          if (installed) {
+                                            KakaoShareManager().shareMyCode();
+                                          } else {
+                                            // show alert
+                                          }
+                                        });
+                                      },
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: mainblue,
