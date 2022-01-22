@@ -73,38 +73,54 @@ class EditorController extends GetxController {
   }
 
   void setFontSizeType(SmartTextType type) {
-    switch (type) {
-      case SmartTextType.H1:
-        selectedType(SmartTextType.H2);
-        types.removeAt(focus);
-        types.insert(focus, selectedType.value);
-        break;
-      case SmartTextType.H2:
-        selectedType(SmartTextType.T);
-        types.removeAt(focus);
-        types.insert(focus, selectedType.value);
-        break;
-      // case SmartTextType.H3:
-      //   selectedType(SmartTextType.T);
-      //   types.removeAt(focus);
-      //   types.insert(focus, selectedType.value);
-      //   break;
-      default:
-        selectedType(SmartTextType.H1);
-        types.removeAt(focus);
-        types.insert(focus, selectedType.value);
-        break;
+    if (selectedType != SmartTextType.IMAGEINFO) {
+      switch (type) {
+        case SmartTextType.H1:
+          selectedType(SmartTextType.H2);
+          types.removeAt(focus);
+          types.insert(focus, selectedType.value);
+          break;
+        case SmartTextType.H2:
+          selectedType(SmartTextType.T);
+          types.removeAt(focus);
+          types.insert(focus, selectedType.value);
+          break;
+        // case SmartTextType.H3:
+        //   selectedType(SmartTextType.T);
+        //   types.removeAt(focus);
+        //   types.insert(focus, selectedType.value);
+        //   break;
+        default:
+          selectedType(SmartTextType.H1);
+          types.removeAt(focus);
+          types.insert(focus, selectedType.value);
+          break;
+      }
+    } else {
+      insert(index: focus + 1);
+      types.removeAt(focus + 1);
+      selectedType(SmartTextType.H1);
+      types.insert(focus + 1, selectedType.value);
+      nodeAt(focus + 1).requestFocus();
     }
   }
 
   void setType(SmartTextType type) {
-    if (selectedType.value == type) {
-      selectedType(SmartTextType.T);
+    if (selectedType.value != SmartTextType.IMAGEINFO) {
+      if (selectedType.value == type) {
+        selectedType(SmartTextType.T);
+      } else {
+        selectedType(type);
+      }
+      types.removeAt(focus);
+      types.insert(focus, selectedType.value);
     } else {
+      insert(index: focus + 1);
+      types.removeAt(focus + 1);
       selectedType(type);
+      types.insert(focus + 1, selectedType.value);
+      nodeAt(focus + 1).requestFocus();
     }
-    types.removeAt(focus);
-    types.insert(focus, selectedType.value);
   }
 
   void setFocus(SmartTextType type) {
@@ -129,16 +145,21 @@ class EditorController extends GetxController {
       SmartTextType type = SmartTextType.T}) {
     final TextEditingController controller =
         TextEditingController(text: '\u200B' + (text ?? ''));
+    if (type == SmartTextType.IMAGEINFO) {
+      controller.text = "";
+    }
     controller.addListener(() {
       if (controller.selection ==
               TextSelection.fromPosition(TextPosition(offset: 0)) &&
           controller.text != '' &&
-          index > 0) {
+          index > 0 &&
+          type != SmartTextType.IMAGEINFO) {
         controller.selection = TextSelection.fromPosition(TextPosition(
           offset: 1,
         ));
       }
-      if (!controller.text.startsWith('\u200B')) {
+      if (!controller.text.startsWith('\u200B') &&
+          type != SmartTextType.IMAGEINFO) {
         final int index = textcontrollers.indexOf(controller);
         int noimageindex = index;
         if (index > 0) {
@@ -197,9 +218,9 @@ class EditorController extends GetxController {
       nodes.insert(index + 1, FocusNode());
       linkindex.insert(index + 1, null);
       imageindex.insert(index + 1, image);
+      insert(index: index + 2, type: SmartTextType.IMAGEINFO);
+      nodeAt(index + 2).requestFocus();
       // insert(index: index + 2);
-      insert(index: focus + 2, type: SmartTextType.QUOTE);
-      nodeAt(focus + 2).requestFocus();
       listupdate();
       // nodeAt(index).requestFocus();
     }
@@ -207,6 +228,11 @@ class EditorController extends GetxController {
 
   void imagedelete(controller) {
     final int index = textcontrollers.indexOf(controller);
+    types.removeAt(index + 1);
+    nodes.removeAt(index + 1);
+    smarttextfieldlist.removeAt(index + 1);
+    imageindex.removeAt(index + 1);
+    textcontrollers.removeAt(index + 1);
     types.removeAt(index);
     nodes.removeAt(index);
     smarttextfieldlist.removeAt(index);
@@ -216,6 +242,11 @@ class EditorController extends GetxController {
   }
 
   String? linkonbutton(int index) {
+    if (selectedType == SmartTextType.IMAGEINFO) {
+      insert(index: focus + 1);
+      nodeAt(focus + 1).requestFocus();
+      index += 1;
+    }
     if (selectedType == SmartTextType.LINK) {
       linkindex[index] = null;
       selectedType(SmartTextType.T);
