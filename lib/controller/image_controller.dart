@@ -65,6 +65,9 @@ class ImageController extends GetxController {
 
   Future<File?> postingthumbnailcropImage(pickimage) async {
     File? croppedFile = await ImageCropper.cropImage(
+        // maxWidth: 1920,
+        // maxHeight: 1080,
+        // compressQuality: 90,
         sourcePath: pickimage.path,
         aspectRatioPresets: [
           CropAspectRatioPreset.ratio3x2,
@@ -103,6 +106,7 @@ class ImageController extends GetxController {
         ));
     if (croppedFile != null) {
       // isImagePickerLoading.value = false;
+      print(croppedFile);
       return croppedFile;
     } else {
       isPostingImagePickerLoading.value = false;

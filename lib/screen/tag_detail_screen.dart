@@ -44,7 +44,7 @@ class TagDetailScreen extends StatelessWidget {
                 automaticallyImplyLeading: false,
                 centerTitle: true,
                 flexibleSpace: _CustomSpace(tag.tag, tag.count.toString()),
-                expandedHeight: Get.height * 0.14,
+                expandedHeight: Get.height * 0.15,
               ),
               SliverOverlapAbsorber(
                 handle:

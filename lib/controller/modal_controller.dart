@@ -729,4 +729,39 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
       locale: LocaleType.ko,
     );
   }
+
+  void showCustomSnackbar(String? title, String? body) {
+    Get.snackbar(
+      title!,
+      body!,
+      titleText: Text(
+        title,
+        style: kButtonStyle,
+      ),
+      messageText: Text(
+        body,
+        style: kBody2Style,
+      ),
+      snackPosition: SnackPosition.TOP,
+      duration: Duration(seconds: 4),
+      forwardAnimationCurve: kAnimationCurve,
+      reverseAnimationCurve: kAnimationCurve,
+      barBlur: 40,
+      isDismissible: true,
+      borderRadius: 8,
+      backgroundColor: mainWhite,
+      boxShadows: [
+        BoxShadow(
+          blurRadius: 3,
+          offset: const Offset(0.0, 1.0),
+          color: Colors.black.withOpacity(0.1),
+        ),
+        BoxShadow(
+          blurRadius: 2,
+          offset: const Offset(0.0, 1.0),
+          color: Colors.black.withOpacity(0.06),
+        ),
+      ],
+    );
+  }
 }

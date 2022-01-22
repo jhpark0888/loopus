@@ -24,6 +24,7 @@ class UserInfoScreen extends StatelessWidget {
         children: [
           Scaffold(
             appBar: AppBarWidget(
+              bottomBorder: false,
               title: '계정 정보',
             ),
             body: ListView(

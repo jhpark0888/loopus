@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:loopus/controller/modal_controller.dart';
 
 class NotificationController extends GetxController {
   static NotificationController get to => Get.find();
@@ -16,6 +17,11 @@ class NotificationController extends GetxController {
     //Foreground 상태에서 알림을 받았을 때
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message recieved");
+      ModalController.to.showCustomSnackbar(
+        event.notification!.title,
+        event.notification!.body,
+      );
+
       print(event.notification!.body);
     });
     //Background, Killed 상태에서 알림을 받고, 그 알림을 클릭해서 앱에 접근했을 때
@@ -23,10 +29,10 @@ class NotificationController extends GetxController {
       print('Message clicked!');
     });
 
-    // FirebaseMessaging.onBackgroundMessage((message) {
-    //   print('a');
-    //   return
-    // });
+    FirebaseMessaging.onBackgroundMessage((message) async {
+      print('a');
+      return;
+    });
 
     super.onInit();
   }

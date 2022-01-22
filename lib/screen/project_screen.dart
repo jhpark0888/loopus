@@ -31,16 +31,6 @@ class ProjectScreen extends StatelessWidget {
   int projectid;
   int isuser;
   RxInt likecount = 0.obs;
-  // Rx<Project> project = Project(
-  //         id: 0,
-  //         userid: 0,
-  //         projectName: '',
-  //         post: [],
-  //         projectTag: [],
-  //         looper: [],
-  //         is_user: 0)
-  //     .obs;
-  // RxList<ProjectPostingWidget> postinglist = <ProjectPostingWidget>[].obs;
   Project? exproject;
 
   @override
@@ -150,7 +140,10 @@ class ProjectScreen extends StatelessWidget {
                               color: mainblue,
                               fontWeight: FontWeight.bold,
                             ),
-                          )
+                          ),
+                          SizedBox(
+                            height: 60,
+                          ),
                         ]),
                   )
                 : SingleChildScrollView(
