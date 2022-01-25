@@ -27,7 +27,7 @@ class Message {
         roomId: json["room_id"],
         receiverId: json["receiver_id"],
         message: json["message"],
-        date: DateTime.parse(json["date"]).add(const Duration(hours: -9)),
+        date: DateTime.parse(json["date"]).add(const Duration()),
         isRead: json["is_read"],
         issender: json["receiver_id"].toString() != myid ? 1 : 0,
         issending: false.obs,

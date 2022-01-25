@@ -12,6 +12,7 @@ import '../constant.dart';
 
 Future<User> getProfile(var userId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
+  print('user token: $token');
 
   var uri = Uri.parse("$serverUri/user_api/profile?id=$userId");
 
