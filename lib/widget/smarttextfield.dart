@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 
-enum SmartTextType { T, H1, H2, QUOTE, BULLET, IMAGE, LINK }
+enum SmartTextType { T, H1, H2, QUOTE, BULLET, IMAGE, LINK, IMAGEINFO }
 
 extension SmartTextStyle on SmartTextType {
   TextStyle get textStyle {
@@ -41,6 +41,12 @@ extension SmartTextStyle on SmartTextType {
           decorationThickness: 1.2,
           decorationStyle: TextDecorationStyle.solid,
         );
+      case SmartTextType.IMAGEINFO:
+        return TextStyle(
+          fontSize: 10.0,
+          fontStyle: FontStyle.italic,
+          color: Colors.black,
+        );
       default:
         return TextStyle(
           fontSize: 16.0,
@@ -66,6 +72,8 @@ extension SmartTextStyle on SmartTextType {
   TextAlign get align {
     switch (this) {
       case SmartTextType.QUOTE:
+        return TextAlign.center;
+      case SmartTextType.IMAGEINFO:
         return TextAlign.center;
       default:
         return TextAlign.start;
@@ -142,6 +150,9 @@ class SmartTextField extends StatelessWidget {
               cursorRadius: const Radius.circular(500),
               textAlign: type.value.align,
               decoration: InputDecoration(
+                  hintText: type.value == SmartTextType.IMAGEINFO
+                      ? "이미지에 대한 설명을 적어주세요"
+                      : "",
                   border: InputBorder.none,
                   prefixText: type.value.prefix,
                   prefixStyle: type.value.textStyle,

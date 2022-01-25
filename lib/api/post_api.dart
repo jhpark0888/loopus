@@ -81,6 +81,10 @@ Future<void> addposting(int projectId) async {
       map['content'] = editorController.textcontrollers[i].text;
       map['url'] = editorController.linkindex[i];
       postcontent.add(map);
+    } else if (type == SmartTextType.IMAGEINFO) {
+      map['type'] = 7;
+      map['content'] = editorController.textcontrollers[i].text;
+      postcontent.add(map);
     }
   }
   request.fields['title'] = postingAddController.titlecontroller.text;

@@ -9,6 +9,7 @@ import '../constant.dart';
 
 Future<void> getmessageroomlist() async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
+  String? myid = await const FlutterSecureStorage().read(key: 'id');
 
   final url = Uri.parse("$serverUri/chat/get_list");
 
@@ -24,7 +25,7 @@ Future<void> getmessageroomlist() async {
   if (response.statusCode == 200) {
     List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
     MessageController.to.chattingroomlist(responseBody
-        .map((messageroom) => MessageRoom.fromJson(messageroom))
+        .map((messageroom) => MessageRoom.fromJson(messageroom, myid))
         .toList());
     print("---------------------------");
     print(responseBody);
@@ -37,6 +38,7 @@ Future<void> getmessageroomlist() async {
 
 Future<List<Message>> getmessagelist(int userid) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
+  String? myid = await const FlutterSecureStorage().read(key: 'id');
 
   final url = Uri.parse("$serverUri/chat/chatting/$userid");
 
@@ -49,7 +51,7 @@ Future<List<Message>> getmessagelist(int userid) async {
     print(responseBody);
 
     List<Message> messagelist =
-        responseBody.map((message) => Message.fromJson(message)).toList();
+        responseBody.map((message) => Message.fromJson(message, myid)).toList();
     // MessageController.to.chattingroomlist(responseBody
     //     .map((messageroom) => MessageRoom.fromJson(messageroom))
     //     .toList());
@@ -83,6 +85,7 @@ Future<List<Message>> getmessagelist(int userid) async {
 
 Future<void> postmessage(String content, int userid) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
+  String? myid = await const FlutterSecureStorage().read(key: 'id');
 
   final url = Uri.parse("$serverUri/chat/chatting/$userid");
 
@@ -102,7 +105,7 @@ Future<void> postmessage(String content, int userid) async {
     var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
     print(responseBody);
 
-    Message messagelist = Message.fromJson(responseBody);
+    Message messagelist = Message.fromJson(responseBody, myid);
     return;
   } else {
     return Future.error(response.statusCode);

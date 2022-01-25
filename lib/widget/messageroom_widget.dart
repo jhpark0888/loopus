@@ -12,7 +12,7 @@ class MessageRoomWidget extends StatelessWidget {
   MessageRoomWidget({Key? key, required this.messageRoom}) : super(key: key);
 
   late MessageDetailController controller = Get.put(
-      MessageDetailController(messageRoom.user.userid),
+      MessageDetailController(messageRoom.user),
       tag: messageRoom.user.userid.toString());
   MessageRoom messageRoom;
 
@@ -64,7 +64,7 @@ class MessageRoomWidget extends StatelessWidget {
             ),
           ),
           Text(
-              ' · ${DurationCaculator().durationCaculate(startDate: messageRoom.message.date, endDate: DateTime.now())} 전')
+              ' · ${DurationCaculator().messagedurationCaculate(startDate: messageRoom.message.date, endDate: DateTime.now())} 전')
         ],
       ),
     );

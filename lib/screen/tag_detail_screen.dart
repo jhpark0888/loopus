@@ -139,7 +139,7 @@ class TagDetailScreen extends StatelessWidget {
                     ? Column(
                         children: [
                           SizedBox(
-                            height: 10,
+                            height: 24,
                           ),
                           Image.asset(
                             'assets/icons/loading.gif',

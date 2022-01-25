@@ -8,14 +8,12 @@ import 'package:loopus/widget/selected_tag_widget.dart';
 
 class QuestionController extends GetxController {
   static QuestionController get to => Get.find();
+  RxBool isQuestionDeleteLoading = false.obs;
   TextEditingController contentcontroller = TextEditingController();
-  RxList<SelectedTagWidget> selectedtaglist = <SelectedTagWidget>[].obs;
   TextEditingController answertextController = TextEditingController();
   RxBool isemptytext = true.obs;
-  TextEditingController tagsearch = TextEditingController();
   RxList<MessageAnswerWidget> messageanswerlist = <MessageAnswerWidget>[].obs;
   FocusNode answerfocus = FocusNode();
-  RxBool ignore_check_add_q = true.obs;
   RxBool check_alarm = false.obs;
   RxBool isDropdown = false.obs;
   // RxDouble textFormHeight = 36.0.obs;
@@ -46,7 +44,7 @@ class QuestionController extends GetxController {
       date: null,
       department: '',
       id: 0,
-      is_user: -1,
+      isuser: 0,
       profileimage: '',
       questionTag: [],
       realname: '',
@@ -67,7 +65,7 @@ class QuestionController extends GetxController {
   }
 
   Future<void> loadItem(int questionid) async {
-    QuestionModel2 result = await specificquestion(questionid);
+    QuestionModel2 result = await getquestion(questionid);
     questionModel2 = result;
   }
 }

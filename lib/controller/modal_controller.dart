@@ -650,9 +650,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
             ),
             GestureDetector(
               onTap: () {
-                Get.back();
                 Get.to(() => ProjectAddTitleScreen(screenType: Screentype.add));
-                AppController.to.changePageIndex(4);
               },
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,

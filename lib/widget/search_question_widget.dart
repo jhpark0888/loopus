@@ -142,7 +142,7 @@ class SearchQuestionWidget extends StatelessWidget {
     // AppController.to.ismyprofile.value = false;
     Get.to(() => OtherProfileScreen(
           userid: item.user,
-          isuser: item.is_user,
+          isuser: item.isuser,
           realname: item.realname,
         ));
   }

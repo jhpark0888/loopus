@@ -20,6 +20,7 @@ import 'package:loopus/screen/project_add_person_screen.dart';
 import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
+import 'package:loopus/widget/tagsearchwidget.dart';
 
 class ProfileTagChangeScreen extends StatelessWidget {
   ProfileController profileController = Get.find();
@@ -30,6 +31,7 @@ class ProfileTagChangeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     tagController.selectedtaglist.clear();
+    tagController.tagsearch.text = "";
     for (var tag in profileController.myUserInfo.value.profileTag) {
       tagController.selectedtaglist.add(SelectedTagWidget(
         id: tag.tagId,
@@ -68,128 +70,36 @@ class ProfileTagChangeScreen extends StatelessWidget {
             body: GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
               child: NestedScrollView(
-                headerSliverBuilder: (context, value) {
-                  return [
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          32,
-                          24,
-                          32,
-                          12,
-                        ),
-                        child: Column(
-                          children: const [
-                            Text(
-                              '어떤 태그로 변경하시겠어요?',
-                              style: kSubTitle1Style,
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Text(
-                              '관심태그와 관련된 포스팅과 질문을 추천해드려요',
-                              style: kBody1Style,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ];
-                },
-                body: Column(
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(right: 16, left: 16, top: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '선택한 태그',
-                            style: kSubTitle2Style,
+                  headerSliverBuilder: (context, value) {
+                    return [
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            32,
+                            24,
+                            32,
+                            12,
                           ),
-                          Obx(
-                            () => Text(
-                              '${tagController.selectedtaglist.length} / 3',
-                              style: kSubTitle2Style,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    //TODO : 태그 삭제하고 검색 탭 눌렀을 때 초기화되는 오류 수정
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      width: Get.width,
-                      height: 32,
-                      child: Obx(
-                        () => ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: tagController.selectedtaglist,
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: TextField(
-                        controller: tagController.tagsearch,
-                        style: kBody2Style,
-                        cursorColor: Colors.grey,
-                        cursorWidth: 1.2,
-                        cursorRadius: Radius.circular(5.0),
-
-                        // focusNode: searchController.detailsearchFocusnode,
-                        textAlign: TextAlign.start,
-                        // selectionHeightStyle: BoxHeightStyle.tight,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: mainlightgrey,
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(8)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(8)),
-                          // focusColor: Colors.black,
-                          // border: OutlineInputBorder(borderSide: BorderSide.none),
-                          contentPadding: EdgeInsets.only(right: 16),
-                          hintStyle: kBody2Style.copyWith(
-                              color: mainblack.withOpacity(0.38), height: 1.5),
-                          isDense: true,
-                          hintText: "예) 봉사, 기계공학과, 서포터즈",
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
-                            child: SvgPicture.asset(
-                              "assets/icons/Search_Inactive.svg",
-                              width: 16,
-                              height: 16,
-                              color: mainblack.withOpacity(0.6),
-                            ),
+                          child: Column(
+                            children: const [
+                              Text(
+                                '어떤 태그로 변경하시겠어요?',
+                                style: kSubTitle1Style,
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Text(
+                                '관심태그와 관련된 포스팅과 질문을 추천해드려요',
+                                style: kBody1Style,
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Obx(
-                      () => Expanded(
-                        child: ListView(
-                          children: tagController.searchtaglist,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+                    ];
+                  },
+                  body: TagSearchWidget()),
             ),
           ),
           if (tagController.isTagChanging.value == true)

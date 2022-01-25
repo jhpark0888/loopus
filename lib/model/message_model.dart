@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:loopus/model/user_model.dart';
 
 class Message {
@@ -9,6 +11,8 @@ class Message {
     required this.message,
     required this.date,
     required this.isRead,
+    required this.issender,
+    required this.issending,
   });
 
   int roomId;
@@ -16,13 +20,17 @@ class Message {
   String message;
   DateTime date;
   bool isRead;
+  int issender;
+  RxBool issending;
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
+  factory Message.fromJson(Map<String, dynamic> json, String? myid) => Message(
         roomId: json["room_id"],
         receiverId: json["receiver_id"],
         message: json["message"],
-        date: DateTime.parse(json["date"]),
+        date: DateTime.parse(json["date"]).add(const Duration(hours: -9)),
         isRead: json["is_read"],
+        issender: json["receiver_id"].toString() != myid ? 1 : 0,
+        issending: false.obs,
       );
 
   Map<String, dynamic> toJson() => {
@@ -45,8 +53,9 @@ class MessageRoom {
   User user;
   int notread;
 
-  factory MessageRoom.fromJson(Map<String, dynamic> json) => MessageRoom(
-        message: Message.fromJson(json["message"]),
+  factory MessageRoom.fromJson(Map<String, dynamic> json, String? myid) =>
+      MessageRoom(
+        message: Message.fromJson(json["message"], myid),
         user: User.fromJson(json["profile"]),
         notread: json["not_read"],
       );

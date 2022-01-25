@@ -48,10 +48,6 @@ class ProjectWidget extends StatelessWidget {
                   isuser: controller.project.value.is_user,
                 ));
           } else {
-            Get.to(() => ProjectScreen(
-                  projectid: controller.project.value.id,
-                  isuser: controller.project.value.is_user,
-                ));
             Get.to(() =>
                 PostingAddNameScreen(project_id: controller.project.value.id));
           }

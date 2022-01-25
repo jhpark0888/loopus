@@ -5,7 +5,7 @@ class QuestionItem {
   QuestionItem(
       {required this.id,
       required this.user,
-      required this.is_user,
+      required this.isuser,
       required this.content,
       required this.answercount,
       required this.adopt,
@@ -17,7 +17,7 @@ class QuestionItem {
 
   int id;
   int user;
-  int is_user;
+  int isuser;
   int answercount;
   String? department;
   String content;
@@ -39,7 +39,7 @@ class QuestionItem {
             List<Tag>.from(json["question_tag"].map((x) => Tag.fromJson(x))),
         date: DateTime.parse(json["date"]),
         department: json["department"],
-        is_user: -1,
+        isuser: json["is_user"] ?? 0,
         answercount: json["count"],
       );
 
@@ -52,7 +52,7 @@ class QuestionItem {
         "real_name": realname,
         "profile_image": profileimage == null ? null : profileimage,
         "department ": department,
-        "is_user": is_user,
+        "is_user": isuser,
         "count": answercount,
         "date":
             "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
