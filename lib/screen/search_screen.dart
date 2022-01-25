@@ -23,15 +23,20 @@ class SearchScreen extends StatelessWidget {
         titleSpacing: 0,
         elevation: 0,
         backgroundColor: mainWhite,
-        leading: Text(''),
-        leadingWidth: 16,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: SvgPicture.asset('assets/icons/Arrow.svg'),
+        ),
+        // leadingWidth: 16,
         actions: [
           Obx(
             () => (_searchController.isFocused.value == true)
                 ? TextButton(
                     onPressed: () {
                       _searchController.focusNode.unfocus();
-                      Get.back();
+                      // Get.back();
                       _searchController.searchpostinglist.clear();
                       _searchController.searchprofilelist.clear();
                       _searchController.searchquestionlist.clear();

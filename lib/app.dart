@@ -13,13 +13,15 @@ import 'package:loopus/screen/home_screen.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/search_screen.dart';
 
+import 'screen/example_screen.dart';
+
 // ignore: use_key_in_widget_constructors
 class App extends GetView<AppController> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
       HomeScreen(),
-      SearchScreen(),
+      ExampleScreen(),
       Container(
         color: mainblack.withOpacity(0.25),
       ),

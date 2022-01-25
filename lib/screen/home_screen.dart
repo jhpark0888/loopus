@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/controller/message_controller.dart';
+import 'package:loopus/screen/search_screen.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 import 'package:loopus/constant.dart';
@@ -41,6 +42,15 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           actions: [
+            //TODO: 검색 아이콘 수정
+            IconButton(
+              onPressed: () => Get.to(() => SearchScreen()),
+              icon: SvgPicture.asset(
+                "assets/icons/Search.svg",
+                width: 28,
+                height: 28,
+              ),
+            ),
             IconButton(
               onPressed: () => Get.to(() => const NotificationScreen()),
               icon: SvgPicture.asset(

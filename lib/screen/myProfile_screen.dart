@@ -61,7 +61,8 @@ class MyProfileScreen extends StatelessWidget {
                           Get.to(() => BookmarkScreen());
                         },
                         icon: SvgPicture.asset(
-                          'assets/icons/Bookmark_Inactive.svg',
+                          'assets/icons/Mark_Default.svg',
+                          width: 28,
                         )),
                     IconButton(
                       onPressed: () {
@@ -69,6 +70,7 @@ class MyProfileScreen extends StatelessWidget {
                       },
                       icon: SvgPicture.asset(
                         'assets/icons/Setting.svg',
+                        width: 28,
                       ),
                     ),
                   ],
