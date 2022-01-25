@@ -18,54 +18,75 @@ class MessageRoomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return GestureDetector(
       onTap: () async {
         Get.to(() => MessageDetailScreen(
               user: messageRoom.user,
             ));
       },
-      leading: ClipOval(
-        child: messageRoom.user.profileImage != null
-            ? CachedNetworkImage(
-                width: 56,
-                height: 56,
-                imageUrl:
-                    messageRoom.user.profileImage!.replaceAll('https', 'http'),
-                placeholder: (context, url) => CircleAvatar(
-                  backgroundColor: const Color(0xffe7e7e7),
-                  child: Container(),
-                ),
-                errorWidget: (context, url, error) => CircleAvatar(
-                  backgroundColor: const Color(0xffe7e7e7),
-                  child: Container(),
-                ),
-                fit: BoxFit.cover,
-              )
-            : Image.asset(
-                "assets/illustrations/default_profile.png",
-                width: 56,
-                height: 56,
-              ),
-      ),
-      title: Text(
-        messageRoom.user.realName,
-        style: kSubTitle2Style,
-      ),
-      subtitle: Row(
-        children: [
-          Text(
-            messageRoom.message.message,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: mainblack.withOpacity(0.6),
-              fontFamily: 'Nanum',
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
+        child: Row(
+          children: [
+            ClipOval(
+              child: messageRoom.user.profileImage != null
+                  ? CachedNetworkImage(
+                      width: 60,
+                      height: 60,
+                      imageUrl: messageRoom.user.profileImage!
+                          .replaceAll('https', 'http'),
+                      placeholder: (context, url) => CircleAvatar(
+                        backgroundColor: const Color(0xffe7e7e7),
+                        child: Container(),
+                      ),
+                      errorWidget: (context, url, error) => CircleAvatar(
+                        backgroundColor: const Color(0xffe7e7e7),
+                        child: Container(),
+                      ),
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      "assets/illustrations/default_profile.png",
+                      width: 60,
+                      height: 60,
+                    ),
             ),
-          ),
-          Text(
-              ' · ${DurationCaculator().messagedurationCaculate(startDate: messageRoom.message.date, endDate: DateTime.now())} 전')
-        ],
+            const SizedBox(
+              width: 12,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '${messageRoom.user.realName}' +
+                        ' · ${DurationCaculator().messagedurationCaculate(startDate: messageRoom.message.date, endDate: DateTime.now())} 전',
+                    style: kSubTitle2Style,
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          messageRoom.message.message,
+                          overflow: TextOverflow.ellipsis,
+                          style: kSubTitle3Style,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

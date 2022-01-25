@@ -56,58 +56,56 @@ class MessageDetailScreen extends StatelessWidget {
         horizontal: 16,
         vertical: 8,
       ),
-      child: Row(
-        children: [
-          Flexible(
-            child: TextFormField(
-              cursorWidth: 1.2,
-              style: TextStyle(decoration: TextDecoration.none),
-              cursorColor: mainblack.withOpacity(0.6),
-              controller: controller.messagetextController,
-              onFieldSubmitted: _handleSubmitted,
-              validator: (value) {},
-              minLines: 1,
-              maxLines: 5,
-              decoration: InputDecoration(
-                suffixIconConstraints:
-                    BoxConstraints(minHeight: 24, minWidth: 24),
-                contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                isDense: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(
-                    width: 0,
-                    style: BorderStyle.none,
+      child: TextFormField(
+        autocorrect: false,
+        enableSuggestions: false,
+        cursorWidth: 1.2,
+        style: const TextStyle(decoration: TextDecoration.none),
+        cursorColor: mainblack.withOpacity(0.6),
+        controller: controller.messagetextController,
+        onFieldSubmitted: _handleSubmitted,
+        minLines: 1,
+        maxLines: 5,
+        decoration: InputDecoration(
+          suffixIconConstraints: BoxConstraints(minWidth: 24),
+          suffixIcon: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Flexible(
+                child: GestureDetector(
+                  onTap: () {
+                    _handleSubmitted(
+                        controller.messagetextController.value.text);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: Text(
+                      '보내기',
+                      style: kButtonStyle.copyWith(color: mainblue),
+                    ),
                   ),
                 ),
-                hintText: "메세지 보내기...",
-                hintStyle: TextStyle(
-                  fontSize: 14,
-                  color: mainblack.withOpacity(0.38),
-                ),
-                fillColor: mainlightgrey,
-                filled: true,
               ),
+            ],
+          ),
+          contentPadding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
+          isDense: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(
+              width: 0,
+              style: BorderStyle.none,
             ),
           ),
-          const SizedBox(
-            width: 12,
+          hintText: "메시지를 입력해주세요...",
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: mainblack.withOpacity(0.38),
           ),
-          Align(
-            alignment: Alignment.center,
-            child: InkWell(
-              onTap: () {
-                _handleSubmitted(controller.messagetextController.value.text);
-              },
-              child: Text(
-                "보내기",
-                style: TextStyle(
-                  color: mainblue,
-                ),
-              ),
-            ),
-          ),
-        ],
+          fillColor: mainlightgrey,
+          filled: true,
+        ),
       ),
     );
   }
@@ -116,7 +114,15 @@ class MessageDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
+        bottomBorder: false,
         title: '${user.realName}님',
+      ),
+      bottomNavigationBar: Transform.translate(
+        offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+        child: BottomAppBar(
+          elevation: 0,
+          child: _buildTextComposer(),
+        ),
       ),
       body: Obx(
         () => controller.isMessageListLoading.value
@@ -141,20 +147,12 @@ class MessageDetailScreen extends StatelessWidget {
                       )
                     ]),
               )
-            : Column(children: [
-                Obx(
-                  () => Expanded(
-                    child: ListView(
-                      controller: controller.scrollController,
-                      children: controller.messagelist.value,
-                    ),
-                  ),
+            : Obx(
+                () => ListView(
+                  controller: controller.scrollController,
+                  children: controller.messagelist.value,
                 ),
-                KeyboardVisibilityProvider(
-                  controller: controller.keyboardController,
-                  child: _buildTextComposer(),
-                )
-              ]),
+              ),
       ),
     );
   }

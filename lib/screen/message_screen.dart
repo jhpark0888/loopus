@@ -14,6 +14,7 @@ class MessageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBarWidget(
+          bottomBorder: false,
           title: '메시지',
         ),
         body: Obx(

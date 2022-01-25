@@ -122,6 +122,7 @@ class QuestionDetailScreen extends StatelessWidget {
           bottomNavigationBar: Transform.translate(
             offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
             child: BottomAppBar(
+              elevation: 0,
               child: _buildTextComposer(),
             ),
           ),
