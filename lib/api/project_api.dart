@@ -22,7 +22,7 @@ Future addproject() async {
   TagController tagController = Get.find();
 
   String? token = await const FlutterSecureStorage().read(key: "token");
-  Uri uri = Uri.parse('$serverUri/project_api/create_project');
+  Uri uri = Uri.parse('$serverUri/project_api/project');
 
   var request = http.MultipartRequest('POST', uri);
 

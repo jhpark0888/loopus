@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
+import 'package:loopus/model/tag_model.dart';
 
 class QuestionItem {
   QuestionItem(
       {required this.id,
       required this.user,
-      required this.is_user,
+      required this.isuser,
       required this.content,
       required this.answer,
       required this.adopt,
@@ -16,7 +17,7 @@ class QuestionItem {
 
   int id;
   int user;
-  int is_user;
+  int isuser;
   String? department;
   String content;
   String realname;
@@ -24,7 +25,7 @@ class QuestionItem {
   List<Answer> answer;
   bool? adopt;
   DateTime? date;
-  List<QuestionTag> questionTag;
+  List<Tag> questionTag;
 
   factory QuestionItem.fromJson(Map<String, dynamic> json) => QuestionItem(
         id: json["id"],
@@ -36,11 +37,11 @@ class QuestionItem {
         answer:
             List<Answer>.from(json["answer"].map((x) => Answer.fromJson(x))),
         adopt: json["adopt"],
-        questionTag: List<QuestionTag>.from(
-            json["question_tag"].map((x) => QuestionTag.fromJson(x))),
+        questionTag:
+            List<Tag>.from(json["question_tag"].map((x) => Tag.fromJson(x))),
         date: DateTime.parse(json["date"]),
         department: json["department"],
-        is_user: -1,
+        isuser: json["is_user"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -53,29 +54,9 @@ class QuestionItem {
         "real_name": realname,
         "profile_image": profileimage == null ? null : profileimage,
         "department ": department,
-        "is_user": is_user,
+        "is_user": isuser,
         "date":
             "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
-      };
-}
-
-class QuestionTag {
-  QuestionTag({
-    required this.tagId,
-    required this.tag,
-  });
-
-  int tagId;
-  String tag;
-
-  factory QuestionTag.fromJson(Map<String, dynamic> json) => QuestionTag(
-        tagId: json["tag_id"],
-        tag: json["tag"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "tag_id": tagId,
-        "tag": tag,
       };
 }
 
@@ -148,7 +129,7 @@ class QuestionModel2 {
         realname: "",
         profileimage: null,
         department: '',
-        is_user: -1);
+        isuser: -1);
     item = QuestionItem.fromJson(json);
     return QuestionModel2(item);
   }

@@ -138,7 +138,7 @@ class QuestionWidget extends StatelessWidget {
   void tapProfile() {
     Get.to(() => OtherProfileScreen(
           userid: item.user,
-          isuser: item.is_user,
+          isuser: item.isuser,
           realname: item.realname,
         ));
   }

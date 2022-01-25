@@ -9,7 +9,7 @@ import 'package:loopus/model/question_specific_model.dart';
 
 import '../constant.dart';
 
-void questionmake(String content) async {
+Future postquestion(String content) async {
   String? token;
   await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
@@ -31,7 +31,7 @@ void questionmake(String content) async {
   var responseBody = utf8.decode(response.bodyBytes);
 }
 
-Future<dynamic> questionlist(int lastindex, String type) async {
+Future<dynamic> getquestionlist(int lastindex, String type) async {
   String? token;
   await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
@@ -54,7 +54,7 @@ Future<dynamic> questionlist(int lastindex, String type) async {
   }
 }
 
-Future<dynamic> specificquestion(int questionid) async {
+Future<dynamic> getquestion(int questionid) async {
   String? token;
   await FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
@@ -73,6 +73,31 @@ Future<dynamic> specificquestion(int questionid) async {
     return Future.error(response.statusCode);
   } else {
     return QuestionModel2.fromJson(map);
+  }
+}
+
+Future<dynamic> deletequestion(int questionid) async {
+  String? token;
+  await FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final url = Uri.parse("$serverUri/question_api/question?id=$questionid");
+
+  final response =
+      await delete(url, headers: {"Authorization": "Token $token"});
+
+  if (response.statusCode == 200) {
+    //   var statusCode = response.statusCode;
+    // var responseHeaders = response.headers;
+    // var responseBody = utf8.decode(response.bodyBytes);
+    // print(statusCode);
+    // Map<String, dynamic> map = jsonDecode(responseBody);
+
+    print(' 질문 삭제 성공 : ${response.statusCode}');
+    return;
+  } else {
+    return Future.error(response.statusCode);
   }
 }
 

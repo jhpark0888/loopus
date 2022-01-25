@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
@@ -115,116 +116,174 @@ class QuestionDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: Transform.translate(
-        offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
-        child: BottomAppBar(
-          child: _buildTextComposer(),
-        ),
-      ),
-      appBar: AppBarWidget(
-        bottomBorder: false,
-        leading: IconButton(
-          icon: SvgPicture.asset(
-            'assets/icons/Arrow.svg',
+    return Obx(
+      () => Stack(children: [
+        Scaffold(
+          bottomNavigationBar: Transform.translate(
+            offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+            child: BottomAppBar(
+              child: _buildTextComposer(),
+            ),
           ),
-          onPressed: () {
-            questionController.contentcontroller.clear();
-            Get.back();
-          },
-        ),
-        title: "${questionController.questionModel2.questions.realname}님의 질문",
-        actions: [
-          Obx(
-            () => IconButton(
-                onPressed: () {
-                  if (questionController.check_alarm.value) {
-                    questionController.check_alarm.value = false;
-                    modalController.showCustomDialog('알림이 취소되었어요', 1000);
-                    NotificationController.to.fcmQuestionUnSubscribe(
-                        questionController.questionModel2.questions.id
-                            .toString());
-                  } else {
-                    questionController.check_alarm.value = true;
-                    modalController.showCustomDialog('답글이 달리면 알림을 보내드려요', 1000);
-                    print(questionController.questionModel2.questions.id);
-                    NotificationController.to.fcmQuestionSubscribe(
-                        questionController.questionModel2.questions.id
-                            .toString());
-                  }
-                },
-                icon: questionController.check_alarm.value == false
-                    ? SvgPicture.asset(
-                        'assets/icons/Bell_Inactive.svg',
-                        width: 28,
-                      )
-                    : SvgPicture.asset(
-                        'assets/icons/Alert.svg',
-                        width: 28,
-                      )),
-          ),
-          IconButton(
-              onPressed: () {
-                modalController.showModalIOS(
-                  context,
-                  func1: () {},
-                  func2: () {},
-                  value1:
-                      '${questionController.questionModel2.questions.realname}님에게 메시지 보내기',
-                  value2: '이 질문 신고하기',
-                  isValue1Red: false,
-                  isValue2Red: true,
-                  isOne: false,
-                );
-              },
+          appBar: AppBarWidget(
+            bottomBorder: false,
+            leading: IconButton(
               icon: SvgPicture.asset(
-                'assets/icons/More.svg',
-                width: 28,
-              ))
-        ],
-      ),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-          questionController.answerfocus.unfocus();
-        },
-        child: Stack(
-          children: [
-            Column(
+                'assets/icons/Arrow.svg',
+              ),
+              onPressed: () {
+                questionController.contentcontroller.clear();
+                Get.back();
+              },
+            ),
+            title:
+                "${questionController.questionModel2.questions.realname}님의 질문",
+            actions: [
+              Obx(
+                () => IconButton(
+                    onPressed: () {
+                      if (questionController.check_alarm.value) {
+                        questionController.check_alarm.value = false;
+                        modalController.showCustomDialog('알림이 취소되었어요', 1000);
+                        NotificationController.to.fcmQuestionUnSubscribe(
+                            questionController.questionModel2.questions.id
+                                .toString());
+                      } else {
+                        questionController.check_alarm.value = true;
+                        modalController.showCustomDialog(
+                            '답글이 달리면 알림을 보내드려요', 1000);
+                        print(questionController.questionModel2.questions.id);
+                        NotificationController.to.fcmQuestionSubscribe(
+                            questionController.questionModel2.questions.id
+                                .toString());
+                      }
+                    },
+                    icon: questionController.check_alarm.value == false
+                        ? SvgPicture.asset(
+                            'assets/icons/Bell_Inactive.svg',
+                            width: 28,
+                          )
+                        : SvgPicture.asset(
+                            'assets/icons/Alert.svg',
+                            width: 28,
+                          )),
+              ),
+              IconButton(
+                  onPressed:
+                      questionController.questionModel2.questions.isuser == 1
+                          ? () {
+                              modalController.showModalIOS(
+                                context,
+                                func1: () {
+                                  modalController.showButtonDialog(
+                                      leftText: '취소',
+                                      rightText: '삭제',
+                                      title: '정말 이 질문을 삭제하시겠어요?',
+                                      content: '삭제한 질문은 복구할 수 없어요',
+                                      leftFunction: () => Get.back(),
+                                      rightFunction: () async {
+                                        Get.back();
+                                        questionController
+                                            .isQuestionDeleteLoading(true);
+                                        await deletequestion(questionController
+                                                .questionModel2.questions.id)
+                                            .then((value) {
+                                          HomeController.to.questionResult.value
+                                              .questionitems
+                                              .removeWhere((question) =>
+                                                  question.id ==
+                                                  questionController
+                                                      .questionModel2
+                                                      .questions
+                                                      .id);
+                                          Get.back();
+                                          Get.back();
+                                          questionController
+                                              .isQuestionDeleteLoading(false);
+                                        });
+                                      });
+                                },
+                                func2: () {},
+                                value1: '이 질문 삭제하기',
+                                value2: '',
+                                isValue1Red: true,
+                                isValue2Red: false,
+                                isOne: true,
+                              );
+                            }
+                          : () {
+                              modalController.showModalIOS(
+                                context,
+                                func1: () {},
+                                func2: () {},
+                                value1:
+                                    '${questionController.questionModel2.questions.realname}님에게 메시지 보내기',
+                                value2: '이 질문 신고하기',
+                                isValue1Red: false,
+                                isValue2Red: true,
+                                isOne: false,
+                              );
+                            },
+                  icon: SvgPicture.asset(
+                    'assets/icons/More.svg',
+                    width: 28,
+                  ))
+            ],
+          ),
+          body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+              questionController.answerfocus.unfocus();
+            },
+            child: Stack(
               children: [
-                Flexible(
-                  child: ListView(
-                    children: [
-                      Column(children: [
-                        MessageQuestionWidget(
-                          content: questionController
-                              .questionModel2.questions.content,
-                          image: questionController
-                                  .questionModel2.questions.profileimage ??
-                              "",
-                          name: questionController
-                              .questionModel2.questions.realname,
-                          user:
-                              questionController.questionModel2.questions.user,
-                        ),
-                        Obx(() => Column(
-                              children:
-                                  questionController.messageanswerlist.value,
-                            )),
-                      ]),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    Flexible(
+                      child: ListView(
+                        children: [
+                          Column(children: [
+                            MessageQuestionWidget(
+                              content: questionController
+                                  .questionModel2.questions.content,
+                              image: questionController
+                                      .questionModel2.questions.profileimage ??
+                                  "",
+                              name: questionController
+                                  .questionModel2.questions.realname,
+                              user: questionController
+                                  .questionModel2.questions.user,
+                            ),
+                            Obx(() => Column(
+                                  children: questionController
+                                      .messageanswerlist.value,
+                                )),
+                          ]),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 56,
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  height: 56,
-                ),
+                // Align(
+                //     alignment: Alignment.bottomCenter, child: _buildTextComposer())
               ],
             ),
-            // Align(
-            //     alignment: Alignment.bottomCenter, child: _buildTextComposer())
-          ],
+          ),
         ),
-      ),
+        if (questionController.isQuestionDeleteLoading.value)
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: mainblack.withOpacity(0.3),
+            child: Image.asset(
+              'assets/icons/loading.gif',
+              scale: 6,
+            ),
+          ),
+      ]),
     );
   }
 }

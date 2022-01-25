@@ -114,7 +114,7 @@ class HomeController extends GetxController
 
   Future<void> questionLoadItem() async {
     if (selectgroup.value == "모든 질문") {
-      QuestionModel questionModel = await questionlist(
+      QuestionModel questionModel = await getquestionlist(
           questionResult.value.questionitems.isEmpty
               ? 0
               : questionResult.value.questionitems.last.id,
@@ -130,7 +130,7 @@ class HomeController extends GetxController
 
       questionResult.value.questionitems.addAll(questionModel.questionitems);
     } else {
-      QuestionModel questionModel = await questionlist(
+      QuestionModel questionModel = await getquestionlist(
           questionResult.value.questionitems.isEmpty
               ? 0
               : questionResult.value.questionitems.last.id,

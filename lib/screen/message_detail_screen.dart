@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:loopus/api/chat_api.dart';
@@ -14,18 +16,29 @@ class MessageDetailScreen extends StatelessWidget {
   MessageDetailScreen({Key? key, required this.user}) : super(key: key);
 
   User user;
-  RxList<MessageWidget> messagelist = <MessageWidget>[].obs;
-  late MessageDetailController controller = Get.put(
-      MessageDetailController(user.userid),
-      tag: user.userid.toString());
+  late MessageDetailController controller =
+      Get.put(MessageDetailController(user), tag: user.userid.toString());
 
   void _handleSubmitted(String text) async {
-    print(text);
-    await postmessage(text, controller.userid);
-    controller.messagelist.clear();
-    await getmessagelist(controller.userid);
-    controller.messagefocus.unfocus();
-    controller.messagetextController.clear();
+    controller.messagelist.add(MessageWidget(
+        message: Message(
+            roomId: controller.messagelist.last.message.roomId,
+            receiverId: user.userid,
+            message: text,
+            date: DateTime.now(),
+            isRead: true,
+            issender: 1,
+            issending: true.obs),
+        user: user));
+    await postmessage(text, controller.user.userid).then((value) {
+      controller.messagelist.last.message.issending(false);
+      controller.messagefocus.unfocus();
+      controller.messagetextController.clear();
+      controller.scrollController.animateTo(
+          controller.scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.ease);
+    });
   }
 
   Widget _buildTextComposer() {
@@ -48,7 +61,6 @@ class MessageDetailScreen extends StatelessWidget {
           Flexible(
             child: TextFormField(
               cursorWidth: 1.2,
-              focusNode: controller.messagefocus,
               style: TextStyle(decoration: TextDecoration.none),
               cursorColor: mainblack.withOpacity(0.6),
               controller: controller.messagetextController,
@@ -102,57 +114,47 @@ class MessageDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getmessagelist(user.userid).then((value) {
-      messagelist(value
-          .map((message) => MessageWidget(message: message, user: user))
-          .toList());
-      controller.isMessageListLoading(false);
-    });
     return Scaffold(
       appBar: AppBarWidget(
         title: '${user.realName}님',
       ),
       body: Obx(
-        () => Column(
-          children: [
-            controller.isMessageListLoading.value
-                ? Expanded(
-                    child: Center(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/icons/loading.gif',
-                              scale: 9,
-                            ),
-                            SizedBox(
-                              height: 4,
-                            ),
-                            Text(
-                              '메세지 목록을 받아오는 중이에요...',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: mainblue,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          ]),
-                    ),
-                  )
-                : Expanded(
-                    child: ListView(
-                      children: [
-                        Obx(
-                          () => Column(
-                            children: messagelist,
-                          ),
+        () => controller.isMessageListLoading.value
+            ? Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/icons/loading.gif',
+                        scale: 9,
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        '메세지 목록을 받아오는 중이에요...',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: mainblue,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
+                      )
+                    ]),
+              )
+            : Column(children: [
+                Obx(
+                  () => Expanded(
+                    child: ListView(
+                      controller: controller.scrollController,
+                      children: controller.messagelist.value,
                     ),
                   ),
-            _buildTextComposer()
-          ],
-        ),
+                ),
+                KeyboardVisibilityProvider(
+                  controller: controller.keyboardController,
+                  child: _buildTextComposer(),
+                )
+              ]),
       ),
     );
   }
