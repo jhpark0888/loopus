@@ -11,7 +11,7 @@ import 'package:loopus/model/user_model.dart';
 class MessageWidget extends StatelessWidget {
   MessageWidget({required this.message, required this.user});
   late MessageDetailController controller =
-      Get.put(MessageDetailController(user), tag: user.userid.toString());
+      Get.find(tag: user.userid.toString());
 
   Message message;
   User user;

@@ -359,6 +359,8 @@ class OtherProfileScreen extends StatelessWidget {
                                                 () => ProfileTagChangeScreen());
                                           }
                                         : () {
+                                            controller.messagecontoller
+                                                .messageroomrefresh();
                                             Get.to(() => MessageDetailScreen(
                                                   user: controller
                                                       .otherUser.value,

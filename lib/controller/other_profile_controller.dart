@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:loopus/api/profile_api.dart';
@@ -27,6 +28,7 @@ class OtherProfileController extends GetxController
   ScrollController userscrollController = ScrollController();
   ScrollController projectscrollController = ScrollController();
   ScrollController questionscrollController = ScrollController();
+  late MessageDetailController messagecontoller;
 
   RxList<ProjectWidget> otherProjectList = <ProjectWidget>[].obs;
 
@@ -49,8 +51,8 @@ class OtherProfileController extends GetxController
   RxBool isProfileLoading = true.obs;
   RxBool isLoopPeopleLoading = true.obs;
 
-  void loadotherProfile(int userid) async {
-    await getProfile(userid).then((user) async {
+  Future loadotherProfile(int userid) async {
+    await getProfile(userid).then((user) {
       otherUser(user);
       isProfileLoading.value = false;
     });
@@ -66,10 +68,12 @@ class OtherProfileController extends GetxController
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     profileTabController = TabController(length: 2, vsync: this);
     isProfileLoading.value = true;
-    loadotherProfile(userid);
+    await loadotherProfile(userid);
+    messagecontoller = Get.put(MessageDetailController(otherUser.value),
+        tag: otherUser.value.userid.toString());
     super.onInit();
   }
 }

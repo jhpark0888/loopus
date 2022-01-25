@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -13,31 +14,42 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/message_widget.dart';
 
 class MessageDetailScreen extends StatelessWidget {
-  MessageDetailScreen({Key? key, required this.user}) : super(key: key);
+  MessageDetailScreen({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
 
   User user;
-  late MessageDetailController controller =
-      Get.put(MessageDetailController(user), tag: user.userid.toString());
+  late MessageDetailController controller = Get.put(
+      MessageDetailController(
+        user,
+      ),
+      tag: user.userid.toString());
 
   void _handleSubmitted(String text) async {
-    controller.messagelist.add(MessageWidget(
-        message: Message(
-            roomId: controller.messagelist.last.message.roomId,
-            receiverId: user.userid,
-            message: text,
-            date: DateTime.now(),
-            isRead: true,
-            issender: 1,
-            issending: true.obs),
-        user: user));
+    controller.messagefocus.unfocus();
+    controller.messagetextController.clear();
+    controller.messagelist.insert(
+        0,
+        MessageWidget(
+            message: Message(
+                roomId: controller.messagelist.isEmpty
+                    ? 0
+                    : controller.messagelist.first.message.roomId,
+                receiverId: user.userid,
+                message: text,
+                date: DateTime.now(),
+                isRead: true,
+                issender: 1,
+                issending: true.obs),
+            user: user));
+    if (controller.scrollController.hasClients) {
+      controller.scrollController.jumpTo(
+        0,
+      );
+    }
     await postmessage(text, controller.user.userid).then((value) {
-      controller.messagelist.last.message.issending(false);
-      controller.messagefocus.unfocus();
-      controller.messagetextController.clear();
-      controller.scrollController.animateTo(
-          controller.scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 500),
-          curve: Curves.ease);
+      controller.messagelist.first.message.issending(false);
     });
   }
 
@@ -149,6 +161,7 @@ class MessageDetailScreen extends StatelessWidget {
               )
             : Obx(
                 () => ListView(
+                  reverse: true,
                   controller: controller.scrollController,
                   children: controller.messagelist.value,
                 ),

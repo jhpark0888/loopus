@@ -7,6 +7,7 @@ import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
+import 'package:loopus/widget/message_widget.dart';
 
 class MessageRoomWidget extends StatelessWidget {
   MessageRoomWidget({Key? key, required this.messageRoom}) : super(key: key);
@@ -18,8 +19,13 @@ class MessageRoomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.messagelist.add(MessageWidget(
+      message: messageRoom.message,
+      user: messageRoom.user,
+    ));
     return GestureDetector(
       onTap: () async {
+        controller.messageroomrefresh();
         Get.to(() => MessageDetailScreen(
               user: messageRoom.user,
             ));

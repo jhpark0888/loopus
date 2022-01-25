@@ -13,13 +13,14 @@ import 'package:loopus/widget/message_widget.dart';
 
 class MessageDetailController extends GetxController {
   static MessageDetailController get to => Get.find();
-  MessageDetailController(this.user);
+  MessageDetailController(
+    this.user,
+  );
 
   RxList<MessageWidget> messagelist = <MessageWidget>[].obs;
   FocusNode messagefocus = FocusNode();
   TextEditingController messagetextController = TextEditingController();
-  ScrollController scrollController =
-      ScrollController(initialScrollOffset: Get.height);
+  ScrollController scrollController = ScrollController();
   KeyboardVisibilityController keyboardController =
       KeyboardVisibilityController();
   RxBool isMessageListLoading = false.obs;
@@ -30,9 +31,10 @@ class MessageDetailController extends GetxController {
   void messageroomrefresh() {
     isMessageListLoading(true);
     getmessagelist(user.userid).then((value) {
-      messagelist(value
+      messagelist(List.from(value
           .map((message) => MessageWidget(message: message, user: user))
-          .toList());
+          .toList()
+          .reversed));
       isMessageListLoading(false);
     });
   }
@@ -44,16 +46,15 @@ class MessageDetailController extends GetxController {
 
   @override
   void onInit() {
-    messageroomrefresh();
     keyboardController.onChange.listen((isVisible) {
       if (isVisible) {
         if (scrollController.hasClients) {
-          scrollController.animateTo(scrollController.offset + 248,
+          scrollController.animateTo(scrollController.offset,
               duration: Duration(milliseconds: 500), curve: Curves.ease);
         }
       } else {
         if (scrollController.hasClients) {
-          scrollController.animateTo(scrollController.offset - 248,
+          scrollController.animateTo(scrollController.offset,
               duration: Duration(milliseconds: 500), curve: Curves.ease);
         }
       }

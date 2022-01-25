@@ -56,6 +56,8 @@ Future<List<Message>> getmessagelist(int userid) async {
     //     .map((messageroom) => MessageRoom.fromJson(messageroom))
     //     .toList());
     return messagelist;
+  } else if (response.statusCode == 404) {
+    return [];
   } else {
     return Future.error(response.statusCode);
   }
