@@ -28,7 +28,6 @@ class OtherProfileController extends GetxController
   ScrollController userscrollController = ScrollController();
   ScrollController projectscrollController = ScrollController();
   ScrollController questionscrollController = ScrollController();
-  late MessageDetailController messagecontoller;
 
   RxList<ProjectWidget> otherProjectList = <ProjectWidget>[].obs;
 
@@ -71,9 +70,7 @@ class OtherProfileController extends GetxController
   void onInit() async {
     profileTabController = TabController(length: 2, vsync: this);
     isProfileLoading.value = true;
-    await loadotherProfile(userid);
-    messagecontoller = Get.put(MessageDetailController(otherUser.value),
-        tag: otherUser.value.userid.toString());
+    loadotherProfile(userid);
     super.onInit();
   }
 }
