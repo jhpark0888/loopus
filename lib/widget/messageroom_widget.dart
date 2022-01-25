@@ -25,7 +25,6 @@ class MessageRoomWidget extends StatelessWidget {
     ));
     return GestureDetector(
       onTap: () async {
-        controller.messageroomrefresh();
         Get.to(() => MessageDetailScreen(
               user: messageRoom.user,
             ));
@@ -70,7 +69,7 @@ class MessageRoomWidget extends StatelessWidget {
                 children: [
                   Text(
                     '${messageRoom.user.realName}' +
-                        ' · ${DurationCaculator().messagedurationCaculate(startDate: messageRoom.message.date, endDate: DateTime.now())} 전',
+                        ' · ${DurationCaculator().messagedurationCaculate(startDate: controller.messagelist.first.message.date, endDate: DateTime.now())} 전',
                     style: kSubTitle2Style,
                   ),
                   SizedBox(
@@ -81,7 +80,7 @@ class MessageRoomWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          messageRoom.message.message,
+                          controller.messagelist.first.message.message,
                           overflow: TextOverflow.ellipsis,
                           style: kSubTitle3Style,
                         ),

@@ -124,6 +124,7 @@ class MessageDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.messageroomrefresh();
     return Scaffold(
       appBar: AppBarWidget(
         bottomBorder: false,
