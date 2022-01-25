@@ -7,6 +7,7 @@ import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
+import 'package:loopus/widget/message_widget.dart';
 
 class MessageRoomWidget extends StatelessWidget {
   MessageRoomWidget({Key? key, required this.messageRoom}) : super(key: key);
@@ -18,8 +19,13 @@ class MessageRoomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.messagelist.add(MessageWidget(
+      message: messageRoom.message,
+      user: messageRoom.user,
+    ));
     return ListTile(
       onTap: () async {
+        controller.messageroomrefresh();
         Get.to(() => MessageDetailScreen(
               user: messageRoom.user,
             ));
@@ -51,21 +57,26 @@ class MessageRoomWidget extends StatelessWidget {
         messageRoom.user.realName,
         style: kSubTitle2Style,
       ),
-      subtitle: Row(
-        children: [
-          Text(
-            messageRoom.message.message,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: mainblack.withOpacity(0.6),
-              fontFamily: 'Nanum',
+      subtitle: Obx(
+        () => Row(
+          children: [
+            SizedBox(
+              width: 200,
+              child: Text(
+                controller.messagelist.first.message.message,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: mainblack.withOpacity(0.6),
+                  fontFamily: 'Nanum',
+                ),
+              ),
             ),
-          ),
-          Text(
-              ' · ${DurationCaculator().messagedurationCaculate(startDate: messageRoom.message.date, endDate: DateTime.now())} 전')
-        ],
+            Text(
+                ' · ${DurationCaculator().messagedurationCaculate(startDate: controller.messagelist.first.message.date, endDate: DateTime.now())} 전')
+          ],
+        ),
       ),
     );
   }

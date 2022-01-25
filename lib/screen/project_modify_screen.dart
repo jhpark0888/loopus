@@ -73,7 +73,7 @@ class ProjectModifyScreen extends StatelessWidget {
               () => updateProjectTile(
                 isSubtitleExist: true,
                 onTap: () async {
-                  // projectdateinput();
+                  projectdateinput();
                   Get.to(() => ProjectAddPeriodScreen(
                         projectid: projectid,
                         screenType: Screentype.update,
