@@ -13,7 +13,7 @@ import 'package:loopus/widget/message_widget.dart';
 class NotificationController extends GetxController {
   static NotificationController get to => Get.find();
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  RxMap<String, dynamic> message = Map<String, dynamic>().obs;
+  RxMap<String, dynamic> message = <String, dynamic>{}.obs;
 
   @override
   void onInit() {
@@ -95,6 +95,8 @@ class NotificationController extends GetxController {
       if (Platform.isIOS) {
         await messaging.setForegroundNotificationPresentationOptions(
           alert: true, // Required to display a heads up notification
+          badge: true,
+          sound: true,
         );
       }
     } else if (settings.authorizationStatus ==
