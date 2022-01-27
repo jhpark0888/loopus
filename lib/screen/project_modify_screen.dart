@@ -28,7 +28,8 @@ class ProjectModifyScreen extends StatelessWidget {
 
   ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
   // ProjectDetailController projectDetailController = Get.find();
-  TagController tagController = Get.put(TagController());
+  TagController tagController = Get.put(TagController(tagtype: Tagtype.project),
+      tag: Tagtype.project.toString());
   //
   int projectid;
   Project? exproject;
@@ -123,7 +124,8 @@ class ProjectModifyScreen extends StatelessWidget {
                 onTap: () async {
                   projectlooperinput();
                   projectaddcontroller.isLooppersonLoading(true);
-                  getlooplist(ProfileController.to.myUserInfo.value.userid)
+                  getfollowlist(ProfileController.to.myUserInfo.value.userid,
+                          followlist.follower)
                       .then((value) {
                     projectaddcontroller.looplist = value;
                     projectaddcontroller.looppersonlist(projectaddcontroller
@@ -190,7 +192,11 @@ class ProjectModifyScreen extends StatelessWidget {
     tagController.selectedtaglist.clear();
     for (var tag in controller.project.value.projectTag) {
       tagController.selectedtaglist.add(SelectedTagWidget(
-          id: tag.tagId, text: tag.tag, tagtype: SelectTagtype.interesting));
+        id: tag.tagId,
+        text: tag.tag,
+        selecttagtype: SelectTagtype.interesting,
+        tagtype: Tagtype.project,
+      ));
     }
   }
 
@@ -201,7 +207,8 @@ class ProjectModifyScreen extends StatelessWidget {
         projectaddcontroller.selectedpersontaglist.add(SelectedTagWidget(
           id: user.userid,
           text: user.realName,
-          tagtype: SelectTagtype.person,
+          selecttagtype: SelectTagtype.person,
+          tagtype: Tagtype.project,
         ));
       }
     }

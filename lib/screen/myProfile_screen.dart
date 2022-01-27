@@ -11,6 +11,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
@@ -21,6 +22,7 @@ import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/utils/kakao_share_manager.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
+import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:underline_indicator/underline_indicator.dart';
@@ -31,6 +33,8 @@ class MyProfileScreen extends StatelessWidget {
   final ImageController imageController = Get.put(ImageController());
   final ScrollController _projectScrollController = ScrollController();
   final ScrollController _questionScrollController = ScrollController();
+  TagController tagController = Get.put(TagController(tagtype: Tagtype.profile),
+      tag: Tagtype.profile.toString());
 
   RxBool isLoop = false.obs;
 
@@ -341,8 +345,22 @@ class MyProfileScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: GestureDetector(
-                                      onTap: () => Get.to(
-                                          () => ProfileTagChangeScreen()),
+                                      onTap: () {
+                                        tagController.selectedtaglist.clear();
+                                        tagController.tagsearch.text = "";
+                                        for (var tag in profileController
+                                            .myUserInfo.value.profileTag) {
+                                          tagController.selectedtaglist
+                                              .add(SelectedTagWidget(
+                                            id: tag.tagId,
+                                            text: tag.tag,
+                                            selecttagtype:
+                                                SelectTagtype.interesting,
+                                            tagtype: Tagtype.profile,
+                                          ));
+                                        }
+                                        Get.to(() => ProfileTagChangeScreen());
+                                      },
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: mainlightgrey,
@@ -456,7 +474,7 @@ class MyProfileScreen extends StatelessWidget {
                                   child: Column(
                                     children: [
                                       Text(
-                                        '루프',
+                                        '팔로워',
                                         style: kBody1Style,
                                       ),
                                       SizedBox(

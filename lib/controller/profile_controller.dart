@@ -55,7 +55,7 @@ class ProfileController extends GetxController
     department: '',
     //0 : 다른 프로필, 1 : 내 프로필
     isuser: 1,
-    looped: LoopState.unloop.obs,
+    looped: FollowState.normal.obs,
   ).obs;
 
   RxList<User> mylooplist = <User>[].obs;

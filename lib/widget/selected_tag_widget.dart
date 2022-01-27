@@ -9,13 +9,19 @@ import 'package:loopus/controller/tag_controller.dart';
 
 class SelectedTagWidget extends StatelessWidget {
   SelectedTagWidget(
-      {Key? key, required this.text, this.id, required this.tagtype})
+      {Key? key,
+      required this.text,
+      this.id,
+      required this.selecttagtype,
+      required this.tagtype})
       : super(key: key);
-  TagController tagController = Get.find();
+  late TagController tagController =
+      Get.find<TagController>(tag: tagtype.toString());
 
   String text;
   int? id;
-  SelectTagtype tagtype;
+  SelectTagtype selecttagtype;
+  Tagtype tagtype;
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +45,10 @@ class SelectedTagWidget extends StatelessWidget {
             padding: const EdgeInsets.only(right: 4),
             child: InkWell(
               onTap: () {
-                if (tagtype == SelectTagtype.interesting) {
+                if (selecttagtype == SelectTagtype.interesting) {
                   tagController.selectedtaglist
                       .removeWhere((element) => element.id == id);
-                  gettagsearch();
+                  gettagsearch(tagtype);
                 } else {
                   ProjectAddController.to.selectedpersontaglist
                       .removeWhere((element) => element.id == id);

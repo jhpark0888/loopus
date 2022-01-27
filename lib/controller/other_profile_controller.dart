@@ -41,7 +41,7 @@ class OtherProfileController extends GetxController
     profileTag: [],
     department: '',
     isuser: 0,
-    looped: LoopState.unloop.obs,
+    looped: FollowState.normal.obs,
   ).obs;
 
   RxList<User> otherlooplist = <User>[].obs;
@@ -55,6 +55,7 @@ class OtherProfileController extends GetxController
     await getProfile(userid).then((user) {
       otherUser(user);
       isProfileLoading.value = false;
+      print(user.looped);
     });
     await getProjectlist(userid).then((projectlist) {
       otherProjectList(projectlist

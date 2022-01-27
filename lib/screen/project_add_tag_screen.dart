@@ -22,7 +22,7 @@ class ProjectAddTagScreen extends StatelessWidget {
     required this.screenType,
   }) : super(key: key);
   final ProjectAddController projectaddcontroller = Get.find();
-  final TagController tagController = Get.find();
+  final TagController tagController = Get.find(tag: Tagtype.project.toString());
   final Screentype screenType;
   int? projectid;
 
@@ -37,7 +37,9 @@ class ProjectAddTagScreen extends StatelessWidget {
                   onPressed: () async {
                     if (tagController.selectedtaglist.length == 3) {
                       projectaddcontroller.isLooppersonLoading(true);
-                      getlooplist(ProfileController.to.myUserInfo.value.userid)
+                      getfollowlist(
+                              ProfileController.to.myUserInfo.value.userid,
+                              followlist.follower)
                           .then((value) {
                         projectaddcontroller.looplist = value;
                         projectaddcontroller.looppersonlist(projectaddcontroller
@@ -149,7 +151,9 @@ class ProjectAddTagScreen extends StatelessWidget {
               ),
             ];
           },
-          body: TagSearchWidget()),
+          body: TagSearchWidget(
+            tagtype: Tagtype.project,
+          )),
     );
   }
 }

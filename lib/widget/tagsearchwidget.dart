@@ -5,8 +5,11 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/tag_controller.dart';
 
 class TagSearchWidget extends StatelessWidget {
-  TagSearchWidget({Key? key}) : super(key: key);
-  final TagController tagController = Get.find();
+  TagSearchWidget({Key? key, required this.tagtype}) : super(key: key);
+  late TagController tagController =
+      Get.find<TagController>(tag: tagtype.toString());
+
+  Tagtype tagtype;
 
   @override
   Widget build(BuildContext context) {

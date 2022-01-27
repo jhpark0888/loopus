@@ -477,6 +477,7 @@ class ProjectScreen extends StatelessWidget {
                                             Get.to(() => PostingAddNameScreen(
                                                   project_id: controller
                                                       .project.value.id,
+                                                  route: PostaddRoute.project,
                                                 ));
                                           },
                                           child: Text(

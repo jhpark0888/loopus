@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/tag_api.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
@@ -12,11 +13,13 @@ import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:http/http.dart' as http;
 
 class TagController extends GetxController {
+  TagController({required this.tagtype});
   static TagController get to => Get.find();
   ScrollController _tagScrollController = ScrollController();
   RxBool isTagChanging = false.obs;
   RxBool isTagSearchLoading = false.obs;
 
+  Tagtype tagtype;
   final maxExtent = Get.height * 0.25;
   RxDouble currentExtent = 0.0.obs;
 
@@ -24,7 +27,7 @@ class TagController extends GetxController {
     super.onInit();
 
     tagsearch.addListener(() {
-      gettagsearch();
+      gettagsearch(tagtype);
     });
     _tagScrollController.addListener(() {
       currentExtent.value = maxExtent - _tagScrollController.offset;

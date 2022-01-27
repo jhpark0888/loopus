@@ -90,6 +90,11 @@ String contentsummary(List<Map<String, dynamic>> json) {
   return summary;
 }
 
+// String type = "SmartTextType.T";
+//     SmartTextType smartTextType =
+//         SmartTextType.values.firstWhere((e) => e.toString() == type);
+//     print(smartTextType);
+
 class PostContent {
   PostContent({
     required this.type,

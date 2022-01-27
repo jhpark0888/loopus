@@ -419,38 +419,44 @@ class OtherProfileScreen extends StatelessWidget {
                                         } else {
                                           if (controller.otherUser.value.looped
                                                   .value ==
-                                              LoopState.unloop) {
-                                            postloopRequest(controller
+                                              FollowState.normal) {
+                                            postfollowRequest(controller
                                                     .otherUser.value.userid)
                                                 .then((value) {
                                               controller.otherUser.value.looped(
-                                                  LoopState.looprequest);
+                                                  FollowState.following);
                                             });
                                           } else if (controller.otherUser.value
                                                   .looped.value ==
-                                              LoopState.looping) {
-                                            deleteloopRelease(controller
+                                              FollowState.follower) {
+                                            postfollowRequest(controller
                                                     .otherUser.value.userid)
                                                 .then((value) {
                                               controller.otherUser.value
-                                                  .looped(LoopState.unloop);
-                                              ProfileController.to.myUserInfo
-                                                      .value.loopcount -
-                                                  1;
+                                                  .looped(FollowState.wefollow);
+                                            });
+
+                                            // ProfileController.to.myUserInfo
+                                            //         .value.loopcount -
+                                            //     1;
+
+                                          } else if (controller.otherUser.value
+                                                  .looped.value ==
+                                              FollowState.following) {
+                                            deletefollow(controller
+                                                    .otherUser.value.userid)
+                                                .then((value) {
+                                              controller.otherUser.value
+                                                  .looped(FollowState.normal);
                                             });
                                           } else if (controller.otherUser.value
                                                   .looped.value ==
-                                              LoopState.looprequest) {
-                                            controller.otherUser.value
-                                                .looped(LoopState.unloop);
-                                          } else if (controller.otherUser.value
-                                                  .looped.value ==
-                                              LoopState.loopreceive) {
-                                            postloopPermit(controller
+                                              FollowState.wefollow) {
+                                            deletefollow(controller
                                                     .otherUser.value.userid)
                                                 .then((value) {
                                               controller.otherUser.value
-                                                  .looped(LoopState.looping);
+                                                  .looped(FollowState.follower);
                                             });
                                           }
                                         }
@@ -484,25 +490,25 @@ class OtherProfileScreen extends StatelessWidget {
                                                                   .value
                                                                   .looped
                                                                   .value ==
-                                                              LoopState.unloop
-                                                          ? '루프 맺기'
+                                                              FollowState.normal
+                                                          ? '팔로우'
                                                           : controller
                                                                       .otherUser
                                                                       .value
                                                                       .looped
                                                                       .value ==
-                                                                  LoopState
-                                                                      .looping
-                                                              ? '루프 해제'
+                                                                  FollowState
+                                                                      .follower
+                                                              ? '맞팔로우'
                                                               : controller
                                                                           .otherUser
                                                                           .value
                                                                           .looped
                                                                           .value ==
-                                                                      LoopState
-                                                                          .looprequest
-                                                                  ? '루프 요청중'
-                                                                  : '수락',
+                                                                      FollowState
+                                                                          .following
+                                                                  ? '팔로우 해제'
+                                                                  : '팔로우 해제',
                                                       style:
                                                           kButtonStyle.copyWith(
                                                               color:
@@ -569,7 +575,7 @@ class OtherProfileScreen extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     Text(
-                                      '루프',
+                                      '팔로워',
                                       style: kBody1Style,
                                     ),
                                     SizedBox(

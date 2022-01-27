@@ -19,7 +19,7 @@ import '../constant.dart';
 
 Future addproject() async {
   ProjectAddController projectAddController = Get.find();
-  TagController tagController = Get.find();
+  TagController tagController = Get.find(tag: Tagtype.project.toString());
 
   String? token = await const FlutterSecureStorage().read(key: "token");
   Uri uri = Uri.parse('$serverUri/project_api/project');
@@ -110,7 +110,7 @@ enum ProjectUpdateType {
 
 Future updateproject(int projectId, ProjectUpdateType updateType) async {
   ProjectAddController projectAddController = Get.find();
-  TagController tagController = Get.find();
+  TagController tagController = Get.find(tag: Tagtype.project.toString());
 
   String? token = await const FlutterSecureStorage().read(key: "token");
   Uri uri = Uri.parse(
