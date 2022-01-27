@@ -15,6 +15,8 @@ class TagController extends GetxController {
   static TagController get to => Get.find();
   ScrollController _tagScrollController = ScrollController();
   RxBool isTagChanging = false.obs;
+  RxBool isTagSearchLoading = false.obs;
+
   final maxExtent = Get.height * 0.25;
   RxDouble currentExtent = 0.0.obs;
 
@@ -37,6 +39,5 @@ class TagController extends GetxController {
   RxList<SelectedTagWidget> selectedtaglist = <SelectedTagWidget>[].obs;
   RxList<SearchTagWidget> searchtaglist = <SearchTagWidget>[].obs;
   RxList<SearchTagWidget> searchpagetag = <SearchTagWidget>[].obs;
-  RxList<SelectedPersonTagWidget> selectedpersontaglist =
-      <SelectedPersonTagWidget>[].obs;
+  RxList<SelectedTagWidget> selectedpersontaglist = <SelectedTagWidget>[].obs;
 }

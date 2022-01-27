@@ -20,30 +20,10 @@ import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class SearchPostingWidget extends StatelessWidget {
-  ProfileController profileController = Get.find();
-  // PostItem item; required this.item,
-  String postingtitle;
-  String projecttitle;
-  String department;
-  String name;
-  var profileimage;
-  int id;
-  RxInt is_liked;
-  RxInt is_marked;
-  RxInt like_count;
-  int user_id;
+  Post post;
 
   SearchPostingWidget({
-    required this.postingtitle,
-    required this.id,
-    required this.user_id,
-    required this.like_count,
-    required this.is_marked,
-    required this.is_liked,
-    required this.profileimage,
-    required this.name,
-    required this.department,
-    required this.projecttitle,
+    required this.post,
   });
   BookmarkController bookmarkController = Get.put(BookmarkController());
   HomeController homeController = Get.find();
@@ -51,7 +31,23 @@ class SearchPostingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Get.to(
+          () => PostingScreen(
+              userid: post.userid,
+              isuser: post.isuser,
+              postid: post.id,
+              title: post.title,
+              realName: post.realname,
+              department: post.department,
+              postDate: post.date,
+              profileImage: post.profileimage,
+              thumbNail: post.thumbnail,
+              likecount: post.likeCount,
+              isLiked: post.isLiked,
+              isMarked: post.isMarked),
+        );
+      },
       child: Container(
         margin: EdgeInsets.symmetric(
           vertical: 8,
@@ -87,7 +83,7 @@ class SearchPostingWidget extends StatelessWidget {
           children: [
             Container(
               child: Text(
-                "${postingtitle}",
+                "${post.title}",
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -99,7 +95,7 @@ class SearchPostingWidget extends StatelessWidget {
               height: 20,
             ),
             Text(
-              "${projecttitle}",
+              "${post.project!.projectName}",
               style: TextStyle(
                 fontSize: 14,
                 color: mainblack.withOpacity(0.6),
@@ -127,7 +123,7 @@ class SearchPostingWidget extends StatelessWidget {
                         child: Row(
                           children: [
                             ClipOval(
-                                child: profileimage == null
+                                child: post.profileimage == null
                                     ? Image.asset(
                                         "assets/illustrations/default_profile.png",
                                         height: 32,
@@ -136,7 +132,7 @@ class SearchPostingWidget extends StatelessWidget {
                                     : CachedNetworkImage(
                                         height: 32,
                                         width: 32,
-                                        imageUrl: "${profileimage}",
+                                        imageUrl: "${post.profileimage}",
                                         placeholder: (context, url) =>
                                             CircleAvatar(
                                           child: Center(
@@ -149,7 +145,7 @@ class SearchPostingWidget extends StatelessWidget {
                               width: 8,
                             ),
                             Text(
-                              "${name} · ",
+                              "${post.realname} · ",
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
@@ -157,7 +153,7 @@ class SearchPostingWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "$department",
+                        "${post.department}",
                         style: TextStyle(fontSize: 14),
                       ),
                     ],
@@ -167,17 +163,19 @@ class SearchPostingWidget extends StatelessWidget {
                       children: [
                         InkWell(
                           onTap: () {
-                            if (is_liked.value == 0) {
-                              like_count.value += 1;
-                              HomeController.to.tapLike(id, like_count.value);
-                              is_liked.value = 1;
+                            if (post.isLiked.value == 0) {
+                              post.likeCount.value += 1;
+                              HomeController.to
+                                  .tapLike(post.id, post.likeCount.value);
+                              post.isLiked.value = 1;
                             } else {
-                              like_count.value -= 1;
-                              HomeController.to.tapunLike(id, like_count.value);
-                              is_liked.value = 0;
+                              post.likeCount.value -= 1;
+                              HomeController.to
+                                  .tapunLike(post.id, post.likeCount.value);
+                              post.isLiked.value = 0;
                             }
                           },
-                          child: is_liked.value == 0
+                          child: post.isLiked.value == 0
                               ? SvgPicture.asset(
                                   "assets/icons/Favorite_Inactive.svg")
                               : SvgPicture.asset(
@@ -187,7 +185,7 @@ class SearchPostingWidget extends StatelessWidget {
                           width: 4,
                         ),
                         Text(
-                          "${like_count.value}",
+                          "${post.likeCount.value}",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         SizedBox(
@@ -195,15 +193,15 @@ class SearchPostingWidget extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            if (is_marked.value == 0) {
-                              HomeController.to.tapBookmark(id);
-                              is_marked.value = 1;
+                            if (post.isMarked.value == 0) {
+                              HomeController.to.tapBookmark(post.id);
+                              post.isMarked.value = 1;
                             } else {
-                              HomeController.to.tapunBookmark(id);
-                              is_marked.value = 0;
+                              HomeController.to.tapunBookmark(post.id);
+                              post.isMarked.value = 0;
                             }
                           },
-                          child: is_marked.value == 0
+                          child: post.isMarked.value == 0
                               ? SvgPicture.asset(
                                   "assets/icons/Mark_Default.svg",
                                   color: mainblack,

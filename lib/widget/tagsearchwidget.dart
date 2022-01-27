@@ -97,11 +97,36 @@ class TagSearchWidget extends StatelessWidget {
           height: 12,
         ),
         Obx(
-          () => Expanded(
-            child: ListView(
-              children: tagController.searchtaglist,
-            ),
-          ),
+          () => tagController.isTagSearchLoading.value
+              ? Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Image.asset(
+                      'assets/icons/loading.gif',
+                      scale: 6,
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      '검색중...',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: mainblue.withOpacity(0.6),
+                      ),
+                    ),
+                  ],
+                )
+              : Obx(
+                  () => Expanded(
+                    child: ListView(
+                      children: tagController.searchtaglist,
+                    ),
+                  ),
+                ),
         )
       ],
     );

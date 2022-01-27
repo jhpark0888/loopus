@@ -190,9 +190,7 @@ class ProjectModifyScreen extends StatelessWidget {
     tagController.selectedtaglist.clear();
     for (var tag in controller.project.value.projectTag) {
       tagController.selectedtaglist.add(SelectedTagWidget(
-        id: tag.tagId,
-        text: tag.tag,
-      ));
+          id: tag.tagId, text: tag.tag, tagtype: SelectTagtype.interesting));
     }
   }
 
@@ -200,9 +198,10 @@ class ProjectModifyScreen extends StatelessWidget {
     if (controller.project.value.looper != null) {
       projectaddcontroller.selectedpersontaglist.clear();
       for (var user in controller.project.value.looper) {
-        projectaddcontroller.selectedpersontaglist.add(SelectedPersonTagWidget(
+        projectaddcontroller.selectedpersontaglist.add(SelectedTagWidget(
           id: user.userid,
           text: user.realName,
+          tagtype: SelectTagtype.person,
         ));
       }
     }

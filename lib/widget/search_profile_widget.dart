@@ -13,16 +13,9 @@ import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 
 class SearchProfileWidget extends StatelessWidget {
-  ProfileController profileController = Get.find();
-  int id;
-  String name;
-  String department;
-  var profileimage;
+  User user;
   SearchProfileWidget({
-    required this.name,
-    required this.id,
-    required this.department,
-    required this.profileimage,
+    required this.user,
   });
 
   @override
@@ -31,9 +24,11 @@ class SearchProfileWidget extends StatelessWidget {
         onTap: () async {
           // profileController.isProfileLoading(true);
 
-          // Get.to(() => OtherProfileScreen(
-          //       userid: id,
-          //     ));
+          Get.to(() => OtherProfileScreen(
+                userid: user.userid,
+                isuser: user.isuser!,
+                realname: user.realName,
+              ));
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -42,7 +37,7 @@ class SearchProfileWidget extends StatelessWidget {
           ),
           child: Row(
             children: [
-              (profileimage == null)
+              (user.profileImage == null)
                   ? ClipOval(
                       child: Image.asset(
                         "assets/illustrations/default_profile.png",
@@ -54,7 +49,7 @@ class SearchProfileWidget extends StatelessWidget {
                       child: CachedNetworkImage(
                         height: 50,
                         width: 50,
-                        imageUrl: profileimage,
+                        imageUrl: user.profileImage!,
                         placeholder: (context, url) => const CircleAvatar(
                           child: Center(child: CircularProgressIndicator()),
                         ),
@@ -69,14 +64,14 @@ class SearchProfileWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$name',
+                      '${user.realName}',
                       style: kSubTitle2Style,
                     ),
                     SizedBox(
                       height: 8,
                     ),
                     Text(
-                      '$department',
+                      '${user.department}',
                       style: kSubTitle3Style.copyWith(
                         color: mainblack.withOpacity(0.6),
                       ),

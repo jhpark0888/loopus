@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -36,11 +37,11 @@ class OtherProfileController extends GetxController
     type: 0,
     realName: '',
     totalposting: 0,
-    loopcount: 0,
+    loopcount: 0.obs,
     profileTag: [],
     department: '',
     isuser: 0,
-    looped: 0,
+    looped: LoopState.unloop.obs,
   ).obs;
 
   RxList<User> otherlooplist = <User>[].obs;

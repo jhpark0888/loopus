@@ -25,6 +25,8 @@ class MessageRoomWidget extends StatelessWidget {
     ));
     return GestureDetector(
       onTap: () async {
+        messageRoom.notread(0);
+        controller.messageroomrefresh();
         Get.to(() => MessageDetailScreen(
               user: messageRoom.user,
             ));
@@ -67,10 +69,32 @@ class MessageRoomWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    '${messageRoom.user.realName}' +
-                        ' · ${DurationCaculator().messagedurationCaculate(startDate: controller.messagelist.first.message.date, endDate: DateTime.now())} 전',
-                    style: kSubTitle2Style,
+                  Row(
+                    children: [
+                      Text(
+                        '${messageRoom.user.realName}' +
+                            ' · ${DurationCaculator().messagedurationCaculate(startDate: controller.messagelist.first.message.date, endDate: DateTime.now())} 전',
+                        style: kSubTitle2Style,
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Obx(() => messageRoom.notread.value == 0
+                          ? Container()
+                          : Container(
+                              height: 18,
+                              width: 18,
+                              decoration: const BoxDecoration(
+                                  color: mainpink, shape: BoxShape.circle),
+                              child: Center(
+                                child: Text(
+                                  messageRoom.notread.value.toString(),
+                                  style: kSubTitle2Style.copyWith(
+                                      color: mainWhite),
+                                ),
+                              ),
+                            )),
+                    ],
                   ),
                   SizedBox(
                     height: 8,
@@ -79,10 +103,18 @@ class MessageRoomWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Expanded(
-                        child: Text(
-                          controller.messagelist.first.message.message,
-                          overflow: TextOverflow.ellipsis,
-                          style: kSubTitle3Style,
+                        child: Obx(
+                          () => Text(
+                            controller.messagelist.first.message.message
+                                    .contains('\n')
+                                ? controller.messagelist.first.message.message
+                                        .split('\n')
+                                        .first +
+                                    '...'
+                                : controller.messagelist.first.message.message,
+                            overflow: TextOverflow.ellipsis,
+                            style: kSubTitle3Style,
+                          ),
                         ),
                       ),
                     ],

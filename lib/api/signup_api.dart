@@ -56,7 +56,7 @@ Future<http.Response> signupRequest() async {
   );
 
   if (response.statusCode == 200) {
-    String token = jsonDecode(response.body)['Token'];
+    String token = jsonDecode(response.body)['token'];
     String userid = jsonDecode(response.body)['user_id'];
 
     storage.write(key: 'token', value: token);

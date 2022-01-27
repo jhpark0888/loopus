@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -50,11 +51,11 @@ class ProfileController extends GetxController
     realName: '',
     profileTag: [],
     totalposting: 0,
-    loopcount: 0,
+    loopcount: 0.obs,
     department: '',
     //0 : 다른 프로필, 1 : 내 프로필
     isuser: 1,
-    looped: 0,
+    looped: LoopState.unloop.obs,
   ).obs;
 
   RxList<User> mylooplist = <User>[].obs;

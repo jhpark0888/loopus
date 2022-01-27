@@ -95,9 +95,10 @@ class CheckBoxPersonWidget extends StatelessWidget {
                 } else {
                   isselected(true);
                   projectaddController.selectedpersontaglist.add(
-                    SelectedPersonTagWidget(
+                    SelectedTagWidget(
                       text: user.realName,
                       id: user.userid,
+                      tagtype: SelectTagtype.person,
                     ),
                   );
                 }

@@ -44,9 +44,11 @@ class MessageDetailScreen extends StatelessWidget {
                 issending: true.obs),
             user: user));
     if (controller.scrollController.hasClients) {
-      controller.scrollController.jumpTo(
-        0,
-      );
+      if (controller.scrollController.offset != 0) {
+        controller.scrollController.jumpTo(
+          0,
+        );
+      }
     }
     await postmessage(text, controller.user.userid).then((value) {
       controller.messagelist.first.message.issending(false);
@@ -124,7 +126,6 @@ class MessageDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.messageroomrefresh();
     return Scaffold(
       appBar: AppBarWidget(
         bottomBorder: false,
@@ -161,16 +162,10 @@ class MessageDetailScreen extends StatelessWidget {
                     ]),
               )
             : Obx(
-                () => Column(
-                  children: [
-                    Expanded(
-                      child: ListView(
-                        reverse: true,
-                        controller: controller.scrollController,
-                        children: controller.messagelist.value,
-                      ),
-                    ),
-                  ],
+                () => ListView(
+                  reverse: true,
+                  controller: controller.scrollController,
+                  children: controller.messagelist,
                 ),
               ),
       ),

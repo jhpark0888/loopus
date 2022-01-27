@@ -54,18 +54,19 @@ class MessageWidget extends StatelessWidget {
                   ),
                 ),
                 controller.hasTextOverflow(message.message, kBody2Style)
-                    ? Container(
-                        width: 250,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: mainblack.withOpacity(0.6)),
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "${message.message}",
-                              style: kBody2Style,
-                            )),
+                    ? Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: mainblack.withOpacity(0.6)),
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "${message.message}",
+                                style: kBody2Style,
+                              )),
+                        ),
                       )
                     : Container(
                         decoration: BoxDecoration(
@@ -105,18 +106,19 @@ class MessageWidget extends StatelessWidget {
                   width: 10,
                 ),
                 controller.hasTextOverflow(message.message, kBody2Style)
-                    ? Container(
-                        width: 250,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: mainblack.withOpacity(0.6)),
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "${message.message}",
-                              style: kBody2Style,
-                            )),
+                    ? Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: mainblack.withOpacity(0.6)),
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "${message.message}",
+                                style: kBody2Style,
+                              )),
+                        ),
                       )
                     : Container(
                         decoration: BoxDecoration(
