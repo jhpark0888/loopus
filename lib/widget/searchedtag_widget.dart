@@ -142,16 +142,17 @@ class SearchTagWidget extends StatelessWidget {
       if (id == 0) {
         SearchTag? searchTag = await postmaketag();
         if (searchTag != null) {
-          tagController.selectedtaglist
-              .add(SelectedTagWidget(id: searchTag.id, text: searchTag.tag));
+          tagController.selectedtaglist.add(SelectedTagWidget(
+            id: searchTag.id,
+            text: searchTag.tag,
+            tagtype: SelectTagtype.interesting,
+          ));
           tagController.tagsearch.clear();
           gettagsearch();
         }
       } else {
         tagController.selectedtaglist.add(SelectedTagWidget(
-          id: id,
-          text: tag,
-        ));
+            id: id, text: tag, tagtype: SelectTagtype.interesting));
         tagController.tagsearch.clear();
         gettagsearch();
       }

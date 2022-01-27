@@ -1,9 +1,14 @@
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/model/message_model.dart';
+import 'package:loopus/model/user_model.dart';
+import 'package:loopus/widget/message_widget.dart';
 
 class NotificationController extends GetxController {
   static NotificationController get to => Get.find();
@@ -15,8 +20,32 @@ class NotificationController extends GetxController {
     _initNotification();
     getToken();
     //Foreground 상태에서 알림을 받았을 때
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
       print("message recieved");
+      print(event.data["type"]);
+      if (event.data["type"] == "msg") {
+        try {
+          String? myid = await const FlutterSecureStorage().read(key: 'id');
+          Get.find<MessageDetailController>(tag: event.data["id"].toString())
+              .messagelist
+              .insert(
+                  0,
+                  MessageWidget(
+                      message: Message(
+                          roomId: 0,
+                          receiverId: int.parse(myid!),
+                          date: DateTime.now(),
+                          message: event.notification!.body!,
+                          isRead: true,
+                          issender: 0,
+                          issending: true.obs),
+                      user: Get.find<MessageDetailController>(
+                              tag: event.data["id"].toString())
+                          .user));
+        } catch (e) {
+          print(e);
+        }
+      }
       ModalController.to.showCustomSnackbar(
         event.notification!.title,
         event.notification!.body,

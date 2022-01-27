@@ -8,11 +8,14 @@ import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 
 class SelectedTagWidget extends StatelessWidget {
-  SelectedTagWidget({Key? key, required this.text, this.id}) : super(key: key);
+  SelectedTagWidget(
+      {Key? key, required this.text, this.id, required this.tagtype})
+      : super(key: key);
   TagController tagController = Get.find();
 
   String text;
   int? id;
+  SelectTagtype tagtype;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +39,18 @@ class SelectedTagWidget extends StatelessWidget {
             padding: const EdgeInsets.only(right: 4),
             child: InkWell(
               onTap: () {
-                tagController.selectedtaglist
-                    .removeWhere((element) => element.id == id);
-                gettagsearch();
+                if (tagtype == SelectTagtype.interesting) {
+                  tagController.selectedtaglist
+                      .removeWhere((element) => element.id == id);
+                  gettagsearch();
+                } else {
+                  ProjectAddController.to.selectedpersontaglist
+                      .removeWhere((element) => element.id == id);
+                  ProjectAddController.to.looppersonlist
+                      .where((element) => element.user.userid == id)
+                      .first
+                      .isselected(false);
+                }
               },
               child: SvgPicture.asset(
                 "assets/icons/Close_blue.svg",

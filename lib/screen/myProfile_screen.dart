@@ -341,8 +341,8 @@ class MyProfileScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: GestureDetector(
-                                      onTap: () =>
-                                          Get.to(ProfileTagChangeScreen()),
+                                      onTap: () => Get.to(
+                                          () => ProfileTagChangeScreen()),
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: mainlightgrey,
@@ -447,7 +447,7 @@ class MyProfileScreen extends StatelessWidget {
                                         userid: profileController
                                             .myUserInfo.value.userid,
                                         loopcount: profileController
-                                            .myUserInfo.value.loopcount,
+                                            .myUserInfo.value.loopcount.value,
                                       ));
                                 },
                                 child: Padding(

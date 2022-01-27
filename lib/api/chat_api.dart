@@ -104,10 +104,10 @@ Future<void> postmessage(String content, int userid) async {
 
   print('메세지 보내기 statuscode: ${response.statusCode}');
   if (response.statusCode == 200) {
-    var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-    print(responseBody);
+    // var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+    // print(responseBody);
 
-    Message messagelist = Message.fromJson(responseBody, myid);
+    // Message messagelist = Message.fromJson(responseBody, myid);
     return;
   } else {
     return Future.error(response.statusCode);

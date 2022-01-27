@@ -60,13 +60,13 @@ Future<void> postloopPermit(int friendid) async {
   }
 }
 
-Future<void> postloopRelease(int friendid) async {
+Future<void> deleteloopRelease(int friendid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  final uri = Uri.parse("$serverUri/loop_api/get_list/$friendid");
+  final uri = Uri.parse("$serverUri/loop_api/unloop/$friendid");
 
   http.Response response =
-      await http.post(uri, headers: {"Authorization": "Token $token"});
+      await http.delete(uri, headers: {"Authorization": "Token $token"});
 
   print('루프 해제 statusCode: ${response.statusCode}');
   if (response.statusCode == 200) {

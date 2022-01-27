@@ -19,8 +19,7 @@ class ProjectAddController extends GetxController {
   final TextEditingController projectnamecontroller = TextEditingController();
   final TextEditingController introcontroller = TextEditingController();
 
-  RxList<SelectedPersonTagWidget> selectedpersontaglist =
-      <SelectedPersonTagWidget>[].obs;
+  RxList<SelectedTagWidget> selectedpersontaglist = <SelectedTagWidget>[].obs;
 
   RxBool ontitlebutton = false.obs;
   RxBool isIntroTextEmpty = true.obs;

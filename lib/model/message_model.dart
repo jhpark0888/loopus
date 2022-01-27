@@ -51,13 +51,13 @@ class MessageRoom {
 
   Message message;
   User user;
-  int notread;
+  RxInt notread;
 
   factory MessageRoom.fromJson(Map<String, dynamic> json, String? myid) =>
       MessageRoom(
         message: Message.fromJson(json["message"], myid),
         user: User.fromJson(json["profile"]),
-        notread: json["not_read"],
+        notread: RxInt(json["not_read"]),
       );
 
   Map<String, dynamic> toJson() => {

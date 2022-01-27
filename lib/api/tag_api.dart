@@ -9,6 +9,7 @@ import '../constant.dart';
 
 void gettagsearch() async {
   TagController tagController = Get.find();
+  tagController.isTagSearchLoading(true);
   Uri uri =
       Uri.parse('$serverUri/tag_api/tag?query=${tagController.tagsearch.text}');
 
@@ -70,6 +71,7 @@ void gettagsearch() async {
             .removeWhere((element) => element.id == selectedtag.id);
       });
     }
+    tagController.isTagSearchLoading(false);
   } else if (response.statusCode == 401) {
   } else {
     print('tag status code :${response.statusCode}');

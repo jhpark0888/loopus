@@ -8,6 +8,7 @@ import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -17,6 +18,7 @@ import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
+import 'package:loopus/utils/kakao_share_manager.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -32,6 +34,12 @@ class OtherProfileScreen extends StatelessWidget {
       : super(key: key);
   late OtherProfileController controller =
       Get.put(OtherProfileController(userid), tag: userid.toString());
+
+  late MessageDetailController messagecontroller = Get.put(
+      MessageDetailController(
+        controller.otherUser.value,
+      ),
+      tag: controller.otherUser.value.userid.toString());
 
   final ImageController imageController = Get.put(ImageController());
   int userid;
@@ -359,6 +367,8 @@ class OtherProfileScreen extends StatelessWidget {
                                                 () => ProfileTagChangeScreen());
                                           }
                                         : () {
+                                            messagecontroller
+                                                .messageroomrefresh();
                                             Get.to(() => MessageDetailScreen(
                                                   user: controller
                                                       .otherUser.value,
@@ -392,59 +402,117 @@ class OtherProfileScreen extends StatelessWidget {
                                   width: 8,
                                 ),
                                 Expanded(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (controller.otherUser.value.isuser ==
-                                          1) {
-                                      } else {
-                                        controller.otherUser.value.looped == 1
-                                            ? postloopRelease(controller
-                                                .otherUser.value.userid)
-                                            : postloopRequest(controller
-                                                .otherUser.value.userid);
-                                      }
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: mainblue,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      // color: Colors.grey[400],
-
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0,
+                                  child: Obx(
+                                    () => GestureDetector(
+                                      onTap: () {
+                                        if (controller.otherUser.value.isuser ==
+                                            1) {
+                                          KakaoShareManager()
+                                              .isKakaotalkInstalled()
+                                              .then((installed) {
+                                            if (installed) {
+                                              KakaoShareManager().shareMyCode();
+                                            } else {
+                                              // show alert
+                                            }
+                                          });
+                                        } else {
+                                          if (controller.otherUser.value.looped
+                                                  .value ==
+                                              LoopState.unloop) {
+                                            postloopRequest(controller
+                                                    .otherUser.value.userid)
+                                                .then((value) {
+                                              controller.otherUser.value.looped(
+                                                  LoopState.looprequest);
+                                            });
+                                          } else if (controller.otherUser.value
+                                                  .looped.value ==
+                                              LoopState.looping) {
+                                            deleteloopRelease(controller
+                                                    .otherUser.value.userid)
+                                                .then((value) {
+                                              controller.otherUser.value
+                                                  .looped(LoopState.unloop);
+                                              ProfileController.to.myUserInfo
+                                                      .value.loopcount -
+                                                  1;
+                                            });
+                                          } else if (controller.otherUser.value
+                                                  .looped.value ==
+                                              LoopState.looprequest) {
+                                            controller.otherUser.value
+                                                .looped(LoopState.unloop);
+                                          } else if (controller.otherUser.value
+                                                  .looped.value ==
+                                              LoopState.loopreceive) {
+                                            postloopPermit(controller
+                                                    .otherUser.value.userid)
+                                                .then((value) {
+                                              controller.otherUser.value
+                                                  .looped(LoopState.looping);
+                                            });
+                                          }
+                                        }
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: mainblue,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
                                         ),
-                                        child: controller
-                                                    .otherUser.value.isuser ==
-                                                1
-                                            ? Center(
-                                                child: Text('내 프로필 공유하기',
-                                                    style:
-                                                        kButtonStyle.copyWith(
-                                                            color: mainWhite)),
-                                              )
-                                            : Center(
-                                                child: Text(
-                                                    controller.otherUser.value
-                                                                .looped ==
-                                                            0
-                                                        ? '루프 맺기'
-                                                        : controller
-                                                                    .otherUser
-                                                                    .value
-                                                                    .looped ==
-                                                                1
-                                                            ? '루프 해제'
-                                                            : '루프 요청중',
-                                                    style:
-                                                        kButtonStyle.copyWith(
-                                                            color: mainWhite)),
-                                              ),
+                                        // color: Colors.grey[400],
+
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0,
+                                          ),
+                                          child: controller
+                                                      .otherUser.value.isuser ==
+                                                  1
+                                              ? Center(
+                                                  child: Text('내 프로필 공유하기',
+                                                      style:
+                                                          kButtonStyle.copyWith(
+                                                              color:
+                                                                  mainWhite)),
+                                                )
+                                              : Center(
+                                                  child: Text(
+                                                      controller
+                                                                  .otherUser
+                                                                  .value
+                                                                  .looped
+                                                                  .value ==
+                                                              LoopState.unloop
+                                                          ? '루프 맺기'
+                                                          : controller
+                                                                      .otherUser
+                                                                      .value
+                                                                      .looped
+                                                                      .value ==
+                                                                  LoopState
+                                                                      .looping
+                                                              ? '루프 해제'
+                                                              : controller
+                                                                          .otherUser
+                                                                          .value
+                                                                          .looped
+                                                                          .value ==
+                                                                      LoopState
+                                                                          .looprequest
+                                                                  ? '루프 요청중'
+                                                                  : '수락',
+                                                      style:
+                                                          kButtonStyle.copyWith(
+                                                              color:
+                                                                  mainWhite)),
+                                                ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -491,8 +559,8 @@ class OtherProfileScreen extends StatelessWidget {
                                 controller.isLoopPeopleLoading(true);
                                 Get.to(() => LoopPeopleScreen(
                                       userid: controller.otherUser.value.userid,
-                                      loopcount:
-                                          controller.otherUser.value.loopcount,
+                                      loopcount: controller
+                                          .otherUser.value.loopcount.value,
                                     ));
                               },
                               child: Padding(

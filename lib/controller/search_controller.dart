@@ -6,9 +6,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/widget/search_posting_widget.dart';
 import 'package:loopus/widget/search_profile_widget.dart';
@@ -123,7 +125,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
 
   Future<void> tagsearch() async {
     Uri uri = Uri.parse(
-        'http://3.35.253.151:8000/tag_api/search?query=${searchtextcontroller.text}');
+        'http://3.35.253.151:8000/tag_api/tag?query=${searchtextcontroller.text}');
 
     http.Response response = await http.get(
       uri,
@@ -133,9 +135,9 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     );
 
     print(response.statusCode);
-    var responsebody = json.decode(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
+      var responsebody = json.decode(utf8.decode(response.bodyBytes));
       List responselist = responsebody["results"];
       List<SearchTag> tagmaplist =
           responselist.map((map) => SearchTag.fromJson(map)).toList();
@@ -200,12 +202,12 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
       print(searchquestionlist.value);
       print(searchprofilelist.value);
       if (searchType == SearchType.post && searchlist.isNotEmpty) {
-        if (searchlist[0]["id"] == searchpostinglist.value[0].id) {
+        if (searchlist[0]["id"] == searchpostinglist.value[0].post.id) {
           return;
         }
       }
       if (searchType == SearchType.profile && searchlist.isNotEmpty) {
-        if (searchlist[0]["user"] == searchprofilelist.value[0].id) {
+        if (searchlist[0]["user"] == searchprofilelist.value[0].user.userid) {
           return;
         }
       }
@@ -238,28 +240,19 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
       // }
 
       if (searchType == SearchType.post) {
-        searchlist.forEach((element) {
-          searchpostinglist.add(SearchPostingWidget(
-            department: element["department"],
-            name: element["real_name"],
-            id: element["id"],
-            postingtitle: element["title"],
-            profileimage: element["profile_image"],
-            projecttitle: element["project_name"],
-            is_liked: RxInt(element["is_liked"]),
-            is_marked: RxInt(element["is_marked"]),
-            like_count: RxInt(element["like_count"]),
-            user_id: element["user_id"],
-          ));
-        });
+        searchpostinglist(searchlist
+            .map((json) => Post.fromJson(json))
+            .toList()
+            .map((post) => SearchPostingWidget(post: post))
+            .toList());
       } else if (searchType == SearchType.profile) {
-        searchlist.forEach((element) {
-          searchprofilelist.add(SearchProfileWidget(
-              id: element["user_id"],
-              department: element["department"],
-              name: element["real_name"],
-              profileimage: element["profile_image"]));
-        });
+        searchprofilelist(searchlist
+            .map((json) => User.fromJson(json))
+            .toList()
+            .map((user) => SearchProfileWidget(
+                  user: user,
+                ))
+            .toList());
       } else if (searchType == SearchType.question) {
         searchquestionlist(searchlist
             .map((json) => QuestionItem.fromJson(json))
@@ -268,19 +261,6 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
                   item: question,
                 ))
             .toList());
-        // searchlist.forEach((element) {
-        //   searchquestionlist.add(SearchQuestionWidget(
-        //     answercount: element["count"],
-        //     content: element["content"],
-        //     id: element["id"],
-        //     user: element["user_id"],
-        //     real_name: element["real_name"],
-        //     department: element["department"],
-        //     tag: element["question_tag"],
-        //     profileimage: element["profile_image"],
-        //     istag: 0,
-        //   ));
-        // });
       } else if (searchType == SearchType.tag_project) {
         searchtagprojectlist(searchlist
             .map((json) => Project.fromJson(json))
@@ -289,22 +269,6 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
                   project: project,
                 ))
             .toList());
-        // searchlist.forEach((element) {
-        //   searchtagprojectlist.add(SearchTagProjectWidget(
-        //     department: element["department"],
-        //     id: element["id"],
-        //     like_count: element["project_post"]["like_count"],
-        //     name: element["real_name"],
-        //     post_count: element["project_post"]["post_count"],
-        //     profileimage: element["profile_image"],
-        //     projecttitle: element["project_name"],
-        //     user_id: element["user_id"],
-        //     end_date: element["end_date"] != null
-        //         ? DateTime.parse(element["end_date"])
-        //         : null,
-        //     start_date: DateTime.parse(element["start_date"]),
-        //   ));
-        // });
       } else if (searchType == SearchType.tag_question) {
         searchtagquestionlist(searchlist
             .map((json) => QuestionItem.fromJson(json))
@@ -313,21 +277,6 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
                   item: question,
                 ))
             .toList());
-        // searchlist.forEach((element) {
-        //   searchtagquestionlist.add(
-        //     SearchQuestionWidget(
-        //       answercount: element["count"],
-        //       content: element["content"],
-        //       id: element["id"],
-        //       user: element["user_id"],
-        //       real_name: element["real_name"],
-        //       department: element["department"],
-        //       tag: element["question_tag"],
-        //       profileimage: element["profile_image"],
-        //       istag: 1,
-        //     ),
-        //   );
-        // });
       }
     }
   }

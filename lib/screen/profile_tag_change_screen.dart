@@ -34,9 +34,7 @@ class ProfileTagChangeScreen extends StatelessWidget {
     tagController.tagsearch.text = "";
     for (var tag in profileController.myUserInfo.value.profileTag) {
       tagController.selectedtaglist.add(SelectedTagWidget(
-        id: tag.tagId,
-        text: tag.tag,
-      ));
+          id: tag.tagId, text: tag.tag, tagtype: SelectTagtype.interesting));
     }
     return Obx(
       () => Stack(

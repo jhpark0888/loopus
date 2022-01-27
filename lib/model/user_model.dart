@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/model/tag_model.dart';
 
 class User {
@@ -19,25 +21,28 @@ class User {
   int type;
   String department;
   int? isuser;
-  int loopcount;
+  RxInt loopcount;
   int totalposting;
   String? profileImage;
   List<Tag> profileTag;
-  int looped;
+  Rx<LoopState> looped;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         userid: json["user_id"],
         realName: json["real_name"],
         type: json["type"] ?? 0,
         profileImage: json["profile_image"],
-        loopcount: json["loop_count"] ?? 0,
+        loopcount:
+            json["loop_count"] != null ? RxInt(json["loop_count"]) : 0.obs,
         totalposting: json["total_post_count"] ?? 0,
         profileTag: json["profile_tag"] != null
             ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
             : [],
         department: json["department"],
         isuser: json["is_user"] ?? 1,
-        looped: json["looped"] ?? 0,
+        looped: json["looped"] != null
+            ? LoopState.values[json["looped"]].obs
+            : LoopState.unloop.obs,
       );
 
   Map<String, dynamic> toJson() => {
