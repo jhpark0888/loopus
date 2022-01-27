@@ -24,18 +24,13 @@ import 'package:loopus/widget/tagsearchwidget.dart';
 
 class ProfileTagChangeScreen extends StatelessWidget {
   ProfileController profileController = Get.find();
-  TagController tagController = Get.put(TagController());
+  TagController tagController =
+      Get.find<TagController>(tag: Tagtype.profile.toString());
 
   User? user;
 
   @override
   Widget build(BuildContext context) {
-    tagController.selectedtaglist.clear();
-    tagController.tagsearch.text = "";
-    for (var tag in profileController.myUserInfo.value.profileTag) {
-      tagController.selectedtaglist.add(SelectedTagWidget(
-          id: tag.tagId, text: tag.tag, tagtype: SelectTagtype.interesting));
-    }
     return Obx(
       () => Stack(
         children: [
@@ -97,7 +92,9 @@ class ProfileTagChangeScreen extends StatelessWidget {
                       ),
                     ];
                   },
-                  body: TagSearchWidget()),
+                  body: TagSearchWidget(
+                    tagtype: Tagtype.profile,
+                  )),
             ),
           ),
           if (tagController.isTagChanging.value == true)

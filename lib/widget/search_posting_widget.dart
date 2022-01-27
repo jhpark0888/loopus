@@ -25,7 +25,6 @@ class SearchPostingWidget extends StatelessWidget {
   SearchPostingWidget({
     required this.post,
   });
-  BookmarkController bookmarkController = Get.put(BookmarkController());
   HomeController homeController = Get.find();
 
   @override

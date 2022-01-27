@@ -12,7 +12,6 @@ import 'package:underline_indicator/underline_indicator.dart';
 import 'dart:math' as math;
 
 class TagDetailScreen extends StatelessWidget {
-  final TagController _tagController = Get.put(TagController());
   final SearchController searchController = Get.find();
   Tag tag;
 

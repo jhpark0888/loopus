@@ -18,14 +18,15 @@ class SearchTagWidget extends StatelessWidget {
       required this.id,
       required this.tag,
       this.count,
-      required this.isSearch})
+      required this.isSearch,
+      this.tagtype})
       : super(key: key);
 
-  TagController tagController = Get.put(TagController());
   int id;
   String tag;
   int? count;
   int isSearch;
+  Tagtype? tagtype;
 
   @override
   Widget build(BuildContext context) {
@@ -138,23 +139,33 @@ class SearchTagWidget extends StatelessWidget {
   }
 
   void _selectTag() async {
-    if (tagController.selectedtaglist.length < 3) {
+    if (Get.find<TagController>(tag: tagtype.toString())
+            .selectedtaglist
+            .length <
+        3) {
       if (id == 0) {
-        SearchTag? searchTag = await postmaketag();
+        SearchTag? searchTag = await postmaketag(tagtype!);
         if (searchTag != null) {
-          tagController.selectedtaglist.add(SelectedTagWidget(
-            id: searchTag.id,
-            text: searchTag.tag,
-            tagtype: SelectTagtype.interesting,
-          ));
-          tagController.tagsearch.clear();
-          gettagsearch();
+          Get.find<TagController>(tag: tagtype.toString())
+              .selectedtaglist
+              .add(SelectedTagWidget(
+                id: searchTag.id,
+                text: searchTag.tag,
+                selecttagtype: SelectTagtype.interesting,
+                tagtype: tagtype!,
+              ));
+          Get.find<TagController>(tag: tagtype.toString()).tagsearch.clear();
+          gettagsearch(tagtype!);
         }
       } else {
-        tagController.selectedtaglist.add(SelectedTagWidget(
-            id: id, text: tag, tagtype: SelectTagtype.interesting));
-        tagController.tagsearch.clear();
-        gettagsearch();
+        Get.find<TagController>(tag: tagtype.toString()).selectedtaglist.add(
+            SelectedTagWidget(
+                id: id,
+                text: tag,
+                selecttagtype: SelectTagtype.interesting,
+                tagtype: tagtype!));
+        Get.find<TagController>(tag: tagtype.toString()).tagsearch.clear();
+        gettagsearch(tagtype!);
       }
     } else {
       ModalController.to.showCustomDialog('최대 3개까지 선택할 수 있어요', 1000);

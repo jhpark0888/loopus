@@ -25,7 +25,7 @@ class User {
   int totalposting;
   String? profileImage;
   List<Tag> profileTag;
-  Rx<LoopState> looped;
+  Rx<FollowState> looped;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         userid: json["user_id"],
@@ -41,8 +41,8 @@ class User {
         department: json["department"],
         isuser: json["is_user"] ?? 1,
         looped: json["looped"] != null
-            ? LoopState.values[json["looped"]].obs
-            : LoopState.unloop.obs,
+            ? FollowState.values[json["looped"]].obs
+            : FollowState.normal.obs,
       );
 
   Map<String, dynamic> toJson() => {

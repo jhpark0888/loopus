@@ -21,7 +21,9 @@ import 'package:loopus/widget/tagsearchwidget.dart';
 
 class QuestionAddTagScreen extends StatelessWidget {
   QuestionAddController questionaddController = Get.find();
-  TagController tagController = Get.put(TagController());
+  TagController tagController = Get.put(
+      TagController(tagtype: Tagtype.question),
+      tag: Tagtype.question.toString());
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +93,9 @@ class QuestionAddTagScreen extends StatelessWidget {
                   ),
                 ];
               },
-              body: TagSearchWidget()),
+              body: TagSearchWidget(
+                tagtype: Tagtype.question,
+              )),
         ),
         if (questionaddController.isQuestionUploading.value)
           Container(

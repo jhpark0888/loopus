@@ -33,7 +33,7 @@ void emailRequest() async {
 
 Future<http.Response> signupRequest() async {
   SignupController signupController = Get.find();
-  TagController tagController = Get.find();
+  TagController tagController = Get.find(tag: Tagtype.profile.toString());
   Uri uri = Uri.parse('$serverUri/user_api/signup');
   const FlutterSecureStorage storage = FlutterSecureStorage();
 

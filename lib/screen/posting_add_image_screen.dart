@@ -44,7 +44,8 @@ class PostingAddImageScreen extends StatelessWidget {
                 TextButton(
                   onPressed: () async {
                     postingAddController.isPostingUploading.value = true;
-                    await addposting(project_id).then((value) {
+                    await addposting(project_id, postingAddController.route)
+                        .then((value) {
                       postingAddController.isPostingUploading.value = false;
                     });
                   },

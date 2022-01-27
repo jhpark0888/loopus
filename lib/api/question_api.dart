@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'dart:convert';
@@ -18,8 +19,10 @@ Future postquestion(String content) async {
   final url = Uri.parse("$serverUri/question_api/question");
   var data = {
     "content": content,
-    "tag":
-        TagController.to.selectedtaglist.map((element) => element.text).toList()
+    "tag": Get.find<TagController>(tag: Tagtype.question.toString())
+        .selectedtaglist
+        .map((element) => element.text)
+        .toList()
   };
   http.Response response = await http.post(url,
       headers: {

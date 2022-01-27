@@ -21,7 +21,7 @@ import 'package:loopus/widget/smarttextfield.dart';
 
 import '../constant.dart';
 
-Future<void> addposting(int projectId) async {
+Future<void> addposting(int projectId, PostaddRoute route) async {
   final PostingAddController postingAddController = Get.find();
   final EditorController editorController = Get.find();
 
@@ -98,16 +98,19 @@ Future<void> addposting(int projectId) async {
     // String responsebody = await response.stream.bytesToString();
     // String responsemap = json.decode(responsebody);
     // print(responsemap);
-    Get.back();
-    Get.back();
-    Get.back();
-    Get.find<ProjectDetailController>(tag: projectId.toString()).loadProject();
-    Get.to(
-      () => ProjectScreen(
-        projectid: projectId,
-        isuser: 1,
-      ),
-    );
+    if (route == PostaddRoute.project) {
+      getbacks(3);
+      Get.find<ProjectDetailController>(tag: projectId.toString())
+          .loadProject();
+      Get.to(
+        () => ProjectScreen(
+          projectid: projectId,
+          isuser: 1,
+        ),
+      );
+    } else {
+      getbacks(5);
+    }
   } else if (response.statusCode == 400) {
     if (kDebugMode) {
       print("status code : ${response.statusCode} 포스팅 업로드 실패");
@@ -120,7 +123,7 @@ Future<void> addposting(int projectId) async {
   }
 }
 
-Future<Post> getposting(int postingid) async {
+Future<Map> getposting(int postingid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   String? userid = await FlutterSecureStorage().read(key: "id");
 
@@ -131,12 +134,12 @@ Future<Post> getposting(int postingid) async {
   http.Response response = await http
       .get(specificPostingLoadUri, headers: {"Authorization": "Token $token"});
 
-  var responseBody = json.decode(utf8.decode(response.bodyBytes));
-
   if (response.statusCode == 200) {
-    Post post = Post.fromJson(responseBody['posting_info']);
+    Map responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-    return post;
+    // Post post = Post.fromJson(responseBody['posting_info']);
+
+    return responseBody;
   } else {
     return Future.error(response.statusCode);
   }

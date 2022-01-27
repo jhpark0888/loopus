@@ -7,8 +7,8 @@ import 'package:loopus/widget/searchedtag_widget.dart';
 
 import '../constant.dart';
 
-void gettagsearch() async {
-  TagController tagController = Get.find();
+void gettagsearch(Tagtype tagtype) async {
+  TagController tagController = Get.find(tag: tagtype.toString());
   tagController.isTagSearchLoading(true);
   Uri uri =
       Uri.parse('$serverUri/tag_api/tag?query=${tagController.tagsearch.text}');
@@ -38,6 +38,7 @@ void gettagsearch() async {
           tag: element.tag,
           count: element.count,
           isSearch: 0,
+          tagtype: tagtype,
         );
       }).toList());
 
@@ -54,6 +55,7 @@ void gettagsearch() async {
           tag: element.tag,
           count: element.count,
           isSearch: 0,
+          tagtype: tagtype,
         );
       }).toList());
       if (tagController.tagsearch.text != '') {
@@ -78,8 +80,8 @@ void gettagsearch() async {
   }
 }
 
-Future<SearchTag?> postmaketag() async {
-  TagController tagController = Get.find();
+Future<SearchTag?> postmaketag(Tagtype tagtype) async {
+  TagController tagController = Get.find(tag: tagtype.toString());
 
   Uri uri = Uri.parse('$serverUri/tag_api/tag');
 

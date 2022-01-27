@@ -14,6 +14,7 @@ import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/transition_animation_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/post_content_widget.dart';
 
 class PostingScreen extends StatelessWidget {
@@ -242,7 +243,11 @@ class PostingScreen extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(() => ProjectScreen(
+                          projectid: controller.post.value.project!.id,
+                          isuser: controller.post.value.isuser));
+                    },
                     child: Text(
                       '이 활동의 다른 포스팅 읽기',
                       style: kSubTitle2Style.copyWith(color: mainblue),
@@ -257,7 +262,7 @@ class PostingScreen extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16, 24, 16, 40),
+                    padding: EdgeInsets.fromLTRB(16, 24, 16, 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -270,6 +275,10 @@ class PostingScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                SliverToBoxAdapter(
+                    child: Column(
+                  children: controller.recommendposts,
+                )),
               ],
             ),
           ),

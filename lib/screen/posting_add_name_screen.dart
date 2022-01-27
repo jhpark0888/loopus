@@ -13,11 +13,14 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
 class PostingAddNameScreen extends StatelessWidget {
-  PostingAddNameScreen({Key? key, required this.project_id}) : super(key: key);
-  final PostingAddController postingAddController =
-      Get.put(PostingAddController());
+  PostingAddNameScreen(
+      {Key? key, required this.project_id, required this.route})
+      : super(key: key);
+  late PostingAddController postingAddController =
+      Get.put(PostingAddController(route: route));
   final FocusNode _focusNode = FocusNode();
   int project_id;
+  PostaddRoute route;
 
   @override
   Widget build(BuildContext context) {

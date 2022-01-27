@@ -22,7 +22,6 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
 
   final ProjectAddController projectAddController =
       Get.put(ProjectAddController());
-  final TagController tagController = Get.put(TagController());
   final ImageController imageController = Get.put(ImageController());
 
   final Screentype screenType;

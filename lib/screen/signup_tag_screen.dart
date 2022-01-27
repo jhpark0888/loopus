@@ -22,7 +22,8 @@ class SignupTagScreen extends StatelessWidget {
   SignupTagScreen({Key? key}) : super(key: key);
   SignupController signupController = Get.find();
 
-  TagController tagController = Get.put(TagController());
+  TagController tagController = Get.put(TagController(tagtype: Tagtype.profile),
+      tag: Tagtype.profile.toString());
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +83,9 @@ class SignupTagScreen extends StatelessWidget {
               ),
             ];
           },
-          body: TagSearchWidget()),
+          body: TagSearchWidget(
+            tagtype: Tagtype.profile,
+          )),
     );
   }
 }
