@@ -161,10 +161,16 @@ class MessageDetailScreen extends StatelessWidget {
                     ]),
               )
             : Obx(
-                () => ListView(
-                  reverse: true,
-                  controller: controller.scrollController,
-                  children: controller.messagelist.value,
+                () => Column(
+                  children: [
+                    Expanded(
+                      child: ListView(
+                        reverse: true,
+                        controller: controller.scrollController,
+                        children: controller.messagelist.value,
+                      ),
+                    ),
+                  ],
                 ),
               ),
       ),

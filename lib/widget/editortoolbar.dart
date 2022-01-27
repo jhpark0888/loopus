@@ -22,6 +22,7 @@ class EditorToolbar extends StatelessWidget {
       //TODO: 정확히 어떤 역할을 하는 걸까
       offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
       child: BottomAppBar(
+        elevation: 0,
         child: Container(
             height: kBottomNavigationBarHeight,
             decoration: BoxDecoration(

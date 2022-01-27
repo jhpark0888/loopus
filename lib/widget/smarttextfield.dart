@@ -43,9 +43,9 @@ extension SmartTextStyle on SmartTextType {
         );
       case SmartTextType.IMAGEINFO:
         return TextStyle(
-          fontSize: 10.0,
+          fontSize: 12.0,
           fontStyle: FontStyle.italic,
-          color: Colors.black,
+          color: mainblack,
         );
       default:
         return TextStyle(
