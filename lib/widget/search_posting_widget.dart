@@ -14,38 +14,56 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class SearchPostingWidget extends StatelessWidget {
-  Post post;
-
   SearchPostingWidget({
     required this.post,
   });
+
+  Post post;
   HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => PostingScreen(
+        //           userid: post.userid,
+        //           isuser: post.isuser,
+        //           postid: post.id,
+        //           title: post.title,
+        //           realName: post.realname,
+        //           department: post.department,
+        //           postDate: post.date,
+        //           profileImage: post.profileimage,
+        //           thumbNail: post.thumbnail,
+        //           likecount: post.likeCount,
+        //           isLiked: post.isLiked,
+        //           isMarked: post.isMarked),
+        //     ));
         Get.to(
-          () => PostingScreen(
-              userid: post.userid,
-              isuser: post.isuser,
-              postid: post.id,
-              title: post.title,
-              realName: post.realname,
-              department: post.department,
-              postDate: post.date,
-              profileImage: post.profileimage,
-              thumbNail: post.thumbnail,
-              likecount: post.likeCount,
-              isLiked: post.isLiked,
-              isMarked: post.isMarked),
-        );
+            () => PostingScreen(
+                userid: post.userid,
+                isuser: post.isuser,
+                postid: post.id,
+                title: post.title,
+                realName: post.realname,
+                department: post.department,
+                postDate: post.date,
+                profileImage: post.profileimage,
+                thumbNail: post.thumbnail,
+                likecount: post.likeCount,
+                isLiked: post.isLiked,
+                isMarked: post.isMarked),
+            preventDuplicates: false);
       },
       child: Container(
         margin: EdgeInsets.symmetric(
@@ -111,13 +129,12 @@ class SearchPostingWidget extends StatelessWidget {
                   Row(
                     children: [
                       InkWell(
-                        onTap: () async {
-                          // profileController.isProfileLoading(true);
-
-                          // Get.to(() => OtherProfileScreen(
-                          //       userid: user_id,
-                          //       isuser: ,
-                          //     ));
+                        onTap: () {
+                          Get.to(() => OtherProfileScreen(
+                                userid: post.userid,
+                                isuser: post.isuser,
+                                realname: post.realname,
+                              ));
                         },
                         child: Row(
                           children: [
@@ -160,36 +177,36 @@ class SearchPostingWidget extends StatelessWidget {
                   Obx(
                     () => Row(
                       children: [
-                        InkWell(
-                          onTap: () {
-                            if (post.isLiked.value == 0) {
-                              post.likeCount.value += 1;
-                              HomeController.to
-                                  .tapLike(post.id, post.likeCount.value);
-                              post.isLiked.value = 1;
-                            } else {
-                              post.likeCount.value -= 1;
-                              HomeController.to
-                                  .tapunLike(post.id, post.likeCount.value);
-                              post.isLiked.value = 0;
-                            }
-                          },
-                          child: post.isLiked.value == 0
-                              ? SvgPicture.asset(
-                                  "assets/icons/Favorite_Inactive.svg")
-                              : SvgPicture.asset(
-                                  "assets/icons/Favorite_Active.svg"),
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          "${post.likeCount.value}",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
+                        // InkWell(
+                        //   onTap: () {
+                        //     if (post.isLiked.value == 0) {
+                        //       post.likeCount.value += 1;
+                        //       HomeController.to
+                        //           .tapLike(post.id, post.likeCount.value);
+                        //       post.isLiked.value = 1;
+                        //     } else {
+                        //       post.likeCount.value -= 1;
+                        //       HomeController.to
+                        //           .tapunLike(post.id, post.likeCount.value);
+                        //       post.isLiked.value = 0;
+                        //     }
+                        //   },
+                        //   child: post.isLiked.value == 0
+                        //       ? SvgPicture.asset(
+                        //           "assets/icons/Favorite_Inactive.svg")
+                        //       : SvgPicture.asset(
+                        //           "assets/icons/Favorite_Active.svg"),
+                        // ),
+                        // SizedBox(
+                        //   width: 4,
+                        // ),
+                        // Text(
+                        //   "${post.likeCount.value}",
+                        //   style: TextStyle(fontWeight: FontWeight.bold),
+                        // ),
+                        // SizedBox(
+                        //   width: 16,
+                        // ),
                         InkWell(
                           onTap: () {
                             if (post.isMarked.value == 0) {

@@ -164,25 +164,27 @@ Future<void> deleteposting(int postid, int projectid) async {
     Get.find<ProjectDetailController>(tag: projectid.toString())
         .postinglist
         .removeWhere((post) => post.item.id == postid);
-    HomeController.to.postingResult.value.postingitems
+    HomeController.to.recommandpostingResult.value.postingitems
+        .removeWhere((post) => post.id == postid);
+    HomeController.to.latestpostingResult.value.postingitems
         .removeWhere((post) => post.id == postid);
   } else {
     return Future.error(response.statusCode);
   }
 }
 
-Future<dynamic> mainpost(int lastindex) async {
+Future<dynamic> latestpost(int lastindex) async {
   String? token;
   // print('메인페이지 번호 : $pageNumber');
   await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
-  final mainloadUri =
+  final latestloadUri =
       Uri.parse("$serverUri/post_api/main_load?last=$lastindex");
 
   final response =
-      await get(mainloadUri, headers: {"Authorization": "Token $token"});
+      await get(latestloadUri, headers: {"Authorization": "Token $token"});
   var responseBody = utf8.decode(response.bodyBytes);
   List<dynamic> list = jsonDecode(responseBody);
 
@@ -192,6 +194,31 @@ Future<dynamic> mainpost(int lastindex) async {
   if (response.statusCode != 200) {
     return Future.error(response.statusCode);
   } else {
+    return PostingModel.fromJson(list);
+  }
+}
+
+Future<dynamic> recommandpost(int lastindex) async {
+  String? token;
+  // print('메인페이지 번호 : $pageNumber');
+  await const FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final recommandloadUri =
+      Uri.parse("$serverUri/post_api/recommend_load?last=$lastindex");
+
+  final response =
+      await get(recommandloadUri, headers: {"Authorization": "Token $token"});
+
+  // if (kDebugMode) {
+  //   print('posting list : $list');
+  // }
+  if (response.statusCode != 200) {
+    return Future.error(response.statusCode);
+  } else {
+    var responseBody = utf8.decode(response.bodyBytes);
+    List<dynamic> list = jsonDecode(responseBody);
     return PostingModel.fromJson(list);
   }
 }

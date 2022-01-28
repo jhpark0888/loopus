@@ -19,7 +19,8 @@ class PostContentWidget extends StatelessWidget {
         alignment: SmartTextType.values[content.type].imageAlign,
         child: Padding(
           padding: SmartTextType.values[content.type].padding,
-          child: Container(child: Image.network(content.content)),
+          child: FadeInImage.assetNetwork(
+              placeholder: 'assets/icons/loading.gif', image: content.content),
         ),
       );
     } else if (SmartTextType.values[content.type] == SmartTextType.LINK) {

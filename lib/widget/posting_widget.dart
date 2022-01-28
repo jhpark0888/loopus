@@ -224,20 +224,20 @@ class PostingWidget extends StatelessWidget {
 
   void tapPosting() {
     Get.to(
-      () => PostingScreen(
-          userid: item.userid,
-          isuser: item.isuser,
-          postid: item.id,
-          title: item.title,
-          realName: item.realname,
-          department: item.department,
-          postDate: item.date,
-          profileImage: item.profileimage,
-          thumbNail: item.thumbnail,
-          likecount: item.likeCount,
-          isLiked: item.isLiked,
-          isMarked: item.isMarked),
-    );
+        () => PostingScreen(
+            userid: item.userid,
+            isuser: item.isuser,
+            postid: item.id,
+            title: item.title,
+            realName: item.realname,
+            department: item.department,
+            postDate: item.date,
+            profileImage: item.profileimage,
+            thumbNail: item.thumbnail,
+            likecount: item.likeCount,
+            isLiked: item.isLiked,
+            isMarked: item.isMarked),
+        preventDuplicates: false);
   }
 
   void tapBookmark() {

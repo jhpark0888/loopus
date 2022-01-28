@@ -39,7 +39,7 @@ class User {
             ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
             : [],
         department: json["department"],
-        isuser: json["is_user"] ?? 1,
+        isuser: json["is_user"] ?? 0,
         looped: json["looped"] != null
             ? FollowState.values[json["looped"]].obs
             : FollowState.normal.obs,
