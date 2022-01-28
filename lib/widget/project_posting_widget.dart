@@ -39,20 +39,20 @@ class ProjectPostingWidget extends StatelessWidget {
     return InkWell(
       onTap: () {
         Get.to(
-          () => PostingScreen(
-              userid: item.userid,
-              isuser: isuser,
-              postid: item.id,
-              title: item.title,
-              realName: realname,
-              department: department,
-              postDate: item.date,
-              profileImage: profileimage,
-              thumbNail: item.thumbnail,
-              likecount: item.likeCount,
-              isLiked: item.isLiked,
-              isMarked: item.isMarked),
-        );
+            () => PostingScreen(
+                userid: item.userid,
+                isuser: isuser,
+                postid: item.id,
+                title: item.title,
+                realName: realname,
+                department: department,
+                postDate: item.date,
+                profileImage: profileimage,
+                thumbNail: item.thumbnail,
+                likecount: item.likeCount,
+                isLiked: item.isLiked,
+                isMarked: item.isMarked),
+            preventDuplicates: false);
       },
       child: Padding(
         padding: const EdgeInsets.only(

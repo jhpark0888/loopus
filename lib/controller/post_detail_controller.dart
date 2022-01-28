@@ -5,6 +5,7 @@ import 'package:get/state_manager.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/widget/post_content_widget.dart';
 import 'package:loopus/widget/search_posting_widget.dart';
 
 class PostingDetailController extends GetxController {
@@ -30,7 +31,8 @@ class PostingDetailController extends GetxController {
           isMarked: 0.obs,
           isuser: 0)
       .obs;
-  RxList<SearchPostingWidget> recommendposts = <SearchPostingWidget>[].obs;
+  RxList<PostContentWidget> postcontentlist = <PostContentWidget>[].obs;
+  List<SearchPostingWidget> recommendposts = <SearchPostingWidget>[];
 
   // Future<void> loadPostingContent() async {
   //   http.Response? response = await getposting(item!.id);
@@ -44,11 +46,14 @@ class PostingDetailController extends GetxController {
     isPostingContentLoading(true);
     getposting(postid).then((value) {
       post(Post.fromJson(value['posting_info']));
-      recommendposts(List.from(value['recommend_post'])
+      postcontentlist(post.value.contents!
+          .map((content) => PostContentWidget(content: content))
+          .toList());
+      recommendposts = List.from(value['recommend_post'])
           .map((post) => Post.fromJson(post))
           .toList()
           .map((posting) => SearchPostingWidget(post: posting))
-          .toList());
+          .toList();
       isPostingContentLoading(false);
     });
     super.onInit();

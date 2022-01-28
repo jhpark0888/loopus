@@ -12,7 +12,7 @@ void gettagsearch(Tagtype tagtype) async {
   tagController.isTagSearchLoading(true);
   Uri uri =
       Uri.parse('$serverUri/tag_api/tag?query=${tagController.tagsearch.text}');
-
+  print(uri);
   http.Response response = await http.get(
     uri,
     headers: <String, String>{

@@ -56,7 +56,6 @@ class PostingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(controller.post.value.project);
     return Obx(
       () => Stack(children: [
         Scaffold(
@@ -218,67 +217,59 @@ class PostingScreen extends StatelessWidget {
                   ),
                   expandedHeight: Get.width / 3 * 2,
                 ),
-                Obx(
-                  () => SliverList(
-                    delegate: SliverChildListDelegate([
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 24,
-                        ),
-                        child:
-                            (controller.isPostingContentLoading.value == false)
-                                ? Column(
-                                    children: controller.post.value.contents!
-                                        .map((content) =>
-                                            PostContentWidget(content: content))
-                                        .toList(),
-                                  )
-                                : Image.asset(
-                                    'assets/icons/loading.gif',
-                                    scale: 9,
+                SliverToBoxAdapter(
+                  child: Obx(
+                    () => (controller.isPostingContentLoading.value == false)
+                        ? Column(children: [
+                            Obx(
+                              () => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 24,
                                   ),
-                      ),
-                    ]),
+                                  child: Column(
+                                    children: controller.postcontentlist.value,
+                                  )),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Get.to(() => ProjectScreen(
+                                    projectid:
+                                        controller.post.value.project!.id,
+                                    isuser: controller.post.value.isuser));
+                              },
+                              child: Text(
+                                '이 활동의 다른 포스팅 읽기',
+                                style:
+                                    kSubTitle2Style.copyWith(color: mainblue),
+                              ),
+                            ),
+                            Container(
+                              height: 8,
+                              color: Color(0xffF2F3F5),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(16, 24, 16, 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    '관련 포스팅',
+                                    style: kSubTitle2Style,
+                                  ),
+                                  //TODO: 관련 포스팅 리스트
+                                ],
+                              ),
+                            ),
+                            Column(
+                              children: controller.recommendposts,
+                            ),
+                          ])
+                        : Image.asset(
+                            'assets/icons/loading.gif',
+                            scale: 9,
+                          ),
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: TextButton(
-                    onPressed: () {
-                      Get.to(() => ProjectScreen(
-                          projectid: controller.post.value.project!.id,
-                          isuser: controller.post.value.isuser));
-                    },
-                    child: Text(
-                      '이 활동의 다른 포스팅 읽기',
-                      style: kSubTitle2Style.copyWith(color: mainblue),
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 8,
-                    color: Color(0xffF2F3F5),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(16, 24, 16, 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          '관련 포스팅',
-                          style: kSubTitle2Style,
-                        ),
-                        //TODO: 관련 포스팅 리스트
-                      ],
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                    child: Column(
-                  children: controller.recommendposts,
-                )),
               ],
             ),
           ),

@@ -19,6 +19,7 @@ class HomeController extends GetxController
   RxBool isPostingEmpty = false.obs;
   RxBool isAllQuestionEmpty = false.obs;
   RxBool isMyQuestionEmpty = false.obs;
+  RxBool isRecommandFull = false.obs;
 
   RxBool isPostingLoading = true.obs;
   RxBool isAllQuestionLoading = true.obs;
@@ -32,7 +33,10 @@ class HomeController extends GetxController
 
   Rx<QuestionModel> questionResult =
       QuestionModel(questionitems: <QuestionItem>[].obs).obs;
-  Rx<PostingModel> postingResult = PostingModel(postingitems: <Post>[].obs).obs;
+  Rx<PostingModel> recommandpostingResult =
+      PostingModel(postingitems: <Post>[].obs).obs;
+  Rx<PostingModel> latestpostingResult =
+      PostingModel(postingitems: <Post>[].obs).obs;
   Rx<PostingModel> loopResult = PostingModel(postingitems: <Post>[].obs).obs;
   RefreshController postingRefreshController =
       RefreshController(initialRefresh: false);
@@ -59,16 +63,16 @@ class HomeController extends GetxController
   }
 
   void onPostingRefresh() async {
+    isRecommandFull(false);
     enablePostingPullup.value = true;
-    postingResult(PostingModel(postingitems: <Post>[].obs));
+    recommandpostingResult(PostingModel(postingitems: <Post>[].obs));
+    latestpostingResult(PostingModel(postingitems: <Post>[].obs));
 
-    // pageNumber = 1;
     await postloadItem().then((value) => isPostingLoading.value = false);
     postingRefreshController.refreshCompleted();
   }
 
   void onPostingLoading() async {
-    // pageNumber += 1;
     //페이지 처리
     await postloadItem();
     postingRefreshController.loadComplete();
@@ -78,7 +82,6 @@ class HomeController extends GetxController
     enableQuestionPullup.value = true;
     questionResult(QuestionModel(questionitems: <QuestionItem>[].obs));
 
-    // pageNumber = 1;
     await questionLoadItem().then((value) {
       if (selectgroup.value == '모든 질문') {
         isAllQuestionLoading.value = false;
@@ -90,7 +93,6 @@ class HomeController extends GetxController
   }
 
   void onQuestionLoading() async {
-    // pageNumber += 1;
     //페이지 처리
     await questionLoadItem();
     questionRefreshController.loadComplete();
@@ -100,13 +102,11 @@ class HomeController extends GetxController
     enableLoopPullup.value = true;
     loopResult(PostingModel(postingitems: <Post>[].obs));
 
-    // pageNumber = 1;
     await looploadItem().then((value) => isLoopLoading.value = false);
     loopRefreshController.refreshCompleted();
   }
 
   void onLoopLoading() async {
-    // pageNumber += 1;
     //페이지 처리
     await looploadItem();
     loopRefreshController.loadComplete();
@@ -149,20 +149,36 @@ class HomeController extends GetxController
   }
 
   Future<void> postloadItem() async {
-    PostingModel postingModel = await mainpost(
-        postingResult.value.postingitems.isEmpty
-            ? 0
-            : postingResult.value.postingitems.last.id);
+    PostingModel postingModel;
+    if (isRecommandFull.value == false) {
+      postingModel = await recommandpost(
+          recommandpostingResult.value.postingitems.isEmpty
+              ? 0
+              : recommandpostingResult.value.postingitems.last.id);
+    } else {
+      postingModel = await latestpost(
+          latestpostingResult.value.postingitems.isEmpty
+              ? 0
+              : latestpostingResult.value.postingitems.last.id);
+    }
 
     if (postingModel.postingitems.isEmpty &&
-        postingResult.value.postingitems.isEmpty) {
+        recommandpostingResult.value.postingitems.isEmpty) {
       isPostingEmpty.value = true;
     } else if (postingModel.postingitems.isEmpty &&
-        postingResult.value.postingitems.isNotEmpty) {
+        recommandpostingResult.value.postingitems.isNotEmpty &&
+        latestpostingResult.value.postingitems.isEmpty) {
+      isRecommandFull(true);
+    } else if (postingModel.postingitems.isEmpty &&
+        isRecommandFull.value == true) {
       enablePostingPullup.value = false;
     }
-    postingResult.value.postingitems.addAll(postingModel.postingitems);
-    // print(postingModel.postingitems[2].thumbnail);
+    if (isRecommandFull.value == false) {
+      recommandpostingResult.value.postingitems
+          .addAll(postingModel.postingitems);
+    } else {
+      latestpostingResult.value.postingitems.addAll(postingModel.postingitems);
+    }
   }
 
   Future<void> looploadItem() async {
@@ -183,10 +199,18 @@ class HomeController extends GetxController
   }
 
   void tapBookmark(int postid) async {
-    if (postingResult.value.postingitems
+    if (recommandpostingResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      postingResult.value.postingitems
+      recommandpostingResult.value.postingitems
+          .where((post) => post.id == postid)
+          .first
+          .isMarked(1);
+    }
+    if (latestpostingResult.value.postingitems
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      latestpostingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isMarked(1);
@@ -204,10 +228,18 @@ class HomeController extends GetxController
   }
 
   void tapunBookmark(int postid) async {
-    if (postingResult.value.postingitems
+    if (recommandpostingResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      postingResult.value.postingitems
+      recommandpostingResult.value.postingitems
+          .where((post) => post.id == postid)
+          .first
+          .isMarked(0);
+    }
+    if (latestpostingResult.value.postingitems
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      latestpostingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isMarked(0);
@@ -225,14 +257,26 @@ class HomeController extends GetxController
   }
 
   void tapLike(int postid, int likecount) {
-    if (postingResult.value.postingitems
+    if (recommandpostingResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      postingResult.value.postingitems
+      recommandpostingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isLiked(1);
-      postingResult.value.postingitems
+      recommandpostingResult.value.postingitems
+          .where((post) => post.id == postid)
+          .first
+          .likeCount(likecount);
+    }
+    if (latestpostingResult.value.postingitems
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      latestpostingResult.value.postingitems
+          .where((post) => post.id == postid)
+          .first
+          .isLiked(1);
+      latestpostingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .likeCount(likecount);
@@ -254,14 +298,26 @@ class HomeController extends GetxController
   }
 
   void tapunLike(int postid, int likecount) {
-    if (postingResult.value.postingitems
+    if (recommandpostingResult.value.postingitems
         .where((post) => post.id == postid)
         .isNotEmpty) {
-      postingResult.value.postingitems
+      recommandpostingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .isLiked(0);
-      postingResult.value.postingitems
+      recommandpostingResult.value.postingitems
+          .where((post) => post.id == postid)
+          .first
+          .likeCount(likecount);
+    }
+    if (latestpostingResult.value.postingitems
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      latestpostingResult.value.postingitems
+          .where((post) => post.id == postid)
+          .first
+          .isLiked(0);
+      latestpostingResult.value.postingitems
           .where((post) => post.id == postid)
           .first
           .likeCount(likecount);

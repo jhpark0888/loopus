@@ -157,7 +157,9 @@ class HomePostingScreen extends StatelessWidget {
                             child:
                                 (homeController.isPostingLoading.value == false)
                                     ? PostingWidget(
-                                        item: homeController.postingResult.value
+                                        item: homeController
+                                            .recommandpostingResult
+                                            .value
                                             .postingitems[index],
                                       )
                                     : Padding(
@@ -181,8 +183,8 @@ class HomePostingScreen extends StatelessWidget {
                         },
                         childCount:
                             (homeController.isPostingLoading.value == false)
-                                ? homeController
-                                    .postingResult.value.postingitems.length
+                                ? homeController.recommandpostingResult.value
+                                    .postingitems.length
                                 : 1,
                       ),
                     )
@@ -233,6 +235,97 @@ class HomePostingScreen extends StatelessWidget {
                         );
                       }, childCount: 1),
                     ),
+              if (homeController.isRecommandFull.value == true)
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return Container(
+                        height: 120,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Text(
+                                '추천 포스팅을 모두 보여드렸어요',
+                                style: kSubTitle2Style.copyWith(
+                                  color: mainblack,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Center(
+                              child: Text(
+                                '이제부터는 최신 포스팅을 보여드릴게요',
+                                style: kSubTitle1Style.copyWith(
+                                  color: mainblue,
+                                ),
+                              ),
+                            ),
+                            // TextButton(
+                            //   onPressed: () {
+                            //     // homeController.hometabcontroller.animateTo(
+                            //     //   2,
+                            //     //   curve: Curves.easeInOut,
+                            //     //   duration: Duration(milliseconds: 300),
+                            //     // );
+                            //   },
+                            //   child: Text(
+                            //     '루프한 학생들의 포스팅 읽기',
+                            //     style: kButtonStyle.copyWith(
+                            //       color: mainblue,
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      );
+                    },
+                    childCount: 1,
+                  ),
+                ),
+              if (homeController.isRecommandFull.value == true)
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          right: 16,
+                          left: 16,
+                          bottom: 8,
+                          top: 8,
+                        ),
+                        child: (homeController.isPostingLoading.value == false)
+                            ? PostingWidget(
+                                item: homeController.latestpostingResult.value
+                                    .postingitems[index],
+                              )
+                            : Padding(
+                                padding: EdgeInsets.zero,
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/loading.gif',
+                                      scale: 6,
+                                    ),
+                                    const Text(
+                                      '포스팅 받아오는 중...',
+                                      style: TextStyle(
+                                          fontSize: 10, color: mainblue),
+                                    )
+                                  ],
+                                ),
+                              ),
+                      );
+                    },
+                    childCount: (homeController.isPostingLoading.value == false)
+                        ? homeController
+                            .latestpostingResult.value.postingitems.length
+                        : 1,
+                  ),
+                ),
               if (homeController.enablePostingPullup.value == false)
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
@@ -245,7 +338,7 @@ class HomePostingScreen extends StatelessWidget {
                           children: [
                             Center(
                               child: Text(
-                                '포스팅을 모두 보여드렸어요',
+                                '모든 포스팅을 보여드렸어요',
                                 style: kSubTitle2Style.copyWith(
                                   color: mainblack,
                                 ),
