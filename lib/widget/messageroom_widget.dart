@@ -74,7 +74,9 @@ class MessageRoomWidget extends StatelessWidget {
                       Text(
                         '${messageRoom.user.realName}' +
                             ' · ${DurationCaculator().messagedurationCaculate(startDate: controller.messagelist.first.message.date, endDate: DateTime.now())} 전',
-                        style: kSubTitle2Style,
+                        style: messageRoom.notread.value == 0
+                            ? kSubTitle3Style
+                            : kSubTitle2Style,
                       ),
                       const SizedBox(
                         width: 8,
@@ -85,12 +87,12 @@ class MessageRoomWidget extends StatelessWidget {
                               height: 18,
                               width: 18,
                               decoration: const BoxDecoration(
-                                  color: mainpink, shape: BoxShape.circle),
+                                  color: mainblue, shape: BoxShape.circle),
                               child: Center(
                                 child: Text(
                                   messageRoom.notread.value.toString(),
-                                  style: kSubTitle2Style.copyWith(
-                                      color: mainWhite),
+                                  style: kButtonStyle.copyWith(
+                                      color: mainWhite, height: 1.1),
                                 ),
                               ),
                             )),
@@ -113,7 +115,10 @@ class MessageRoomWidget extends StatelessWidget {
                                     '...'
                                 : controller.messagelist.first.message.message,
                             overflow: TextOverflow.ellipsis,
-                            style: kSubTitle3Style,
+                            style: messageRoom.notread.value == 0
+                                ? kSubTitle3Style.copyWith(
+                                    color: mainblack.withOpacity(0.6))
+                                : kSubTitle3Style,
                           ),
                         ),
                       ),

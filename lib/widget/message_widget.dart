@@ -40,13 +40,18 @@ class MessageWidget extends StatelessWidget {
                         child: Opacity(
                           opacity: 0.6,
                           child: Icon(
-                            Icons.reply,
+                            Icons.reply_rounded,
+                            color: mainblack,
                             size: 20,
                           ),
-                        ))
+                        ),
+                      )
                     : Container()),
+                SizedBox(
+                  width: 2,
+                ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(12.0, 18.0, 8.0, 12.0),
+                  padding: const EdgeInsets.fromLTRB(12.0, 18.0, 8.0, 0.0),
                   child: Text(
                     "${DurationCaculator().messagedurationCaculate(startDate: message.date, endDate: DateTime.now())} 전",
                     style: kCaptionStyle.copyWith(
@@ -98,7 +103,8 @@ class MessageWidget extends StatelessWidget {
                             width: 32,
                             imageUrl: user.profileImage!,
                             placeholder: (context, url) => CircleAvatar(
-                              child: Center(child: CircularProgressIndicator()),
+                              backgroundColor: Color(0xffe7e7e7),
+                              child: Container(),
                             ),
                             fit: BoxFit.cover,
                           )),
@@ -133,7 +139,7 @@ class MessageWidget extends StatelessWidget {
                             )),
                       ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(12.0, 18.0, 8.0, 12.0),
+                  padding: const EdgeInsets.fromLTRB(8.0, 18.0, 12.0, 0.0),
                   child: Text(
                     "${DurationCaculator().messagedurationCaculate(startDate: message.date, endDate: DateTime.now())} 전",
                     style: kCaptionStyle.copyWith(
