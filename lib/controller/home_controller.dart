@@ -165,7 +165,10 @@ class HomeController extends GetxController
     if (postingModel.postingitems.isEmpty &&
         recommandpostingResult.value.postingitems.isEmpty) {
       isPostingEmpty.value = true;
-    } else if (postingModel.postingitems.isEmpty &&
+    } else if (postingModel.postingitems.isNotEmpty && recommandpostingResult.value.postingitems.isEmpty &&
+        isPostingEmpty.value == true ) {
+      isPostingEmpty.value = false;
+    }else if (postingModel.postingitems.isEmpty &&
         recommandpostingResult.value.postingitems.isNotEmpty &&
         latestpostingResult.value.postingitems.isEmpty) {
       isRecommandFull(true);

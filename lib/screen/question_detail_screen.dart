@@ -4,30 +4,39 @@ import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/model/question_model.dart';
+import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/screen/report_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/message_answer_widget.dart';
-import 'package:loopus/widget/message_question_widget.dart';
+import 'package:loopus/widget/question_answer_widget.dart';
+import 'package:loopus/widget/question_detail_widget.dart';
 
 class QuestionDetailScreen extends StatelessWidget {
+  QuestionDetailScreen({
+    required this.questionid,
+    required this.isuser,
+    required this.realname,
+    Key? key,
+  }) : super(key: key);
   ModalController modalController = Get.put(ModalController());
   final _formKey = GlobalKey<FormState>();
 
-  QuestionController questionController = Get.find();
-  late Map data;
-  RxInt numLines = 0.obs;
+  late QuestionDetailController questionController = Get.put(QuestionDetailController(questionid: questionid));
+  int questionid;
+  int isuser;
+  String realname;
+  // RxInt numLines = 0.obs;
 
   void _handleSubmitted(String text) async {
-    data =
-        await answermake(text, questionController.questionModel2.questions.id);
-    questionController.messageanswerlist.add(MessageAnswerWidget(
-      content: data["content"],
-      image: "image",
-      name: data["real_name"],
-      user: data["user_id"],
+    Answer answer =
+        await answermake(text, questionController.question.value.id);
+    questionController.messageanswerlist.add(QuestionAnswerWidget(
+      answer: answer,
     ));
     questionController.answerfocus.unfocus();
     questionController.answertextController.clear();
@@ -138,7 +147,7 @@ class QuestionDetailScreen extends StatelessWidget {
               },
             ),
             title:
-                "${questionController.questionModel2.questions.realname}님의 질문",
+                "${realname}님의 질문",
             actions: [
               Obx(
                 () => IconButton(
@@ -147,15 +156,15 @@ class QuestionDetailScreen extends StatelessWidget {
                         questionController.check_alarm.value = false;
                         modalController.showCustomDialog('알림이 취소되었어요', 1000);
                         NotificationController.to.fcmQuestionUnSubscribe(
-                            questionController.questionModel2.questions.id
+                            questionController.question.value.id
                                 .toString());
                       } else {
                         questionController.check_alarm.value = true;
                         modalController.showCustomDialog(
                             '답글이 달리면 알림을 보내드려요', 1000);
-                        print(questionController.questionModel2.questions.id);
+                        print(questionController.question.value.id);
                         NotificationController.to.fcmQuestionSubscribe(
-                            questionController.questionModel2.questions.id
+                            questionController.question.value.id
                                 .toString());
                       }
                     },
@@ -171,7 +180,7 @@ class QuestionDetailScreen extends StatelessWidget {
               ),
               IconButton(
                   onPressed:
-                      questionController.questionModel2.questions.isuser == 1
+                      isuser == 1
                           ? () {
                               modalController.showModalIOS(
                                 context,
@@ -187,15 +196,15 @@ class QuestionDetailScreen extends StatelessWidget {
                                         questionController
                                             .isQuestionDeleteLoading(true);
                                         await deletequestion(questionController
-                                                .questionModel2.questions.id)
+                                                .question.value.id)
                                             .then((value) {
                                           HomeController.to.questionResult.value
                                               .questionitems
                                               .removeWhere((question) =>
                                                   question.id ==
                                                   questionController
-                                                      .questionModel2
-                                                      .questions
+                                                      
+                                                      .question.value
                                                       .id);
                                           Get.back();
                                           Get.back();
@@ -215,10 +224,13 @@ class QuestionDetailScreen extends StatelessWidget {
                           : () {
                               modalController.showModalIOS(
                                 context,
-                                func1: () {},
+                                func1: () {
+                                  Get.put(MessageDetailController(User(userid: questionController.question.value.user, realName: questionController.question.value.realname, type: 0, department: questionController.question.value.department!, loopcount: 0.obs, totalposting: 0, isuser: questionController.question.value.isuser, profileTag: [], looped: FollowState.normal.obs, profileImage: questionController.question.value.profileimage)), tag: questionController.question.value.user.toString()).messageroomrefresh();
+                                  Get.to(() => MessageDetailScreen(user: User(userid: questionController.question.value.user, realName: questionController.question.value.realname, type: 0, department: questionController.question.value.department!, loopcount: 0.obs, totalposting: 0, isuser: questionController.question.value.isuser, profileTag: [], looped: FollowState.normal.obs, profileImage: questionController.question.value.profileimage)));
+                                },
                                 func2: () {},
                                 value1:
-                                    '${questionController.questionModel2.questions.realname}님에게 메시지 보내기',
+                                    '${questionController.question.value.realname}님에게 메시지 보내기',
                                 value2: '이 질문 신고하기',
                                 isValue1Red: false,
                                 isValue2Red: true,
@@ -231,7 +243,30 @@ class QuestionDetailScreen extends StatelessWidget {
                   ))
             ],
           ),
-          body: GestureDetector(
+          body: questionController.isQuestionLoading.value ? Center(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/icons/loading.gif',
+                            scale: 9,
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            '내용을 받는 중이에요...',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: mainblue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 60,
+                          ),
+                        ]),
+                  ) : GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
               questionController.answerfocus.unfocus();
@@ -244,17 +279,28 @@ class QuestionDetailScreen extends StatelessWidget {
                       child: ListView(
                         children: [
                           Column(children: [
-                            MessageQuestionWidget(
-                              content: questionController
-                                  .questionModel2.questions.content,
-                              image: questionController
-                                      .questionModel2.questions.profileimage ??
-                                  "",
-                              name: questionController
-                                  .questionModel2.questions.realname,
-                              user: questionController
-                                  .questionModel2.questions.user,
+                            QuestionDetailWidget(
+                              question: questionController.question.value,
                             ),
+                            Container(
+          color: Color(0xffe7e7e7),
+          height: 1,
+        ),
+        Container(
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.only(
+            right: 16,
+            left: 16,
+            top: 20,
+            bottom: 12,
+          ),
+          child: Obx(
+            () => Text(
+              "답변 ${questionController.messageanswerlist.length}개",
+              style: kSubTitle2Style,
+            ),
+          ),
+        ),
                             Obx(() => Column(
                                   children: questionController
                                       .messageanswerlist.value,

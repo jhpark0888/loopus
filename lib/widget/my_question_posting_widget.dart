@@ -9,7 +9,6 @@ import 'package:loopus/screen/question_detail_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class MyQuestionPostingWidget extends StatelessWidget {
-  QuestionController questionController = Get.put(QuestionController());
   final QuestionItem item;
   final int index;
 
@@ -43,9 +42,9 @@ class MyQuestionPostingWidget extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () async {
-          await questionController.loadItem(item.id);
-          await questionController.addanswer();
-          Get.to(() => QuestionDetailScreen());
+          // await questionController.loadItem(item.id);
+          // await questionController.addanswer();
+          Get.to(() => QuestionDetailScreen(questionid: item.id, isuser: item.isuser, realname: item.realname,));
           print("click posting");
         },
         child: Padding(

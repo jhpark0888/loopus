@@ -6,14 +6,13 @@ import 'package:loopus/api/login_api.dart';
 import 'package:loopus/constant.dart';
 
 import 'package:loopus/controller/login_controller.dart';
-import 'package:loopus/screen/pw_find_screen.dart';
 
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
 import '../utils/check_form_validate.dart';
 
-class LogInScreen extends StatelessWidget {
+class PwFindScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final LogInController _loginController = Get.put(LogInController());
   static FlutterSecureStorage? storage = const FlutterSecureStorage();
@@ -25,7 +24,7 @@ class LogInScreen extends StatelessWidget {
             Scaffold(
               appBar: AppBarWidget(
                 bottomBorder: false,
-                title: '로그인',
+                title: '비밀번호 찾기',
               ),
               body: GestureDetector(
                 onTap: () => FocusScope.of(context).unfocus(),
@@ -60,31 +59,11 @@ class LogInScreen extends StatelessWidget {
                                 (CheckValidate().validateEmail(value!)),
                             maxLines: 1,
                           ),
-                          SizedBox(
-                            height: 32,
-                          ),
-                          const Text(
-                            '비밀번호',
-                            style: kSubTitle2Style,
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          CustomTextField(
-                            counterText: null,
-                            maxLength: null,
-                            textController: _loginController.passwordcontroller,
-                            hintText: '영문, 숫자, 특수문자 포함 8자리 이상',
-                            obscureText: true,
-                            validator: (value) =>
-                                CheckValidate().validatePassword(value!),
-                            maxLines: 1,
-                          ),
                           const SizedBox(
                             height: 32,
                           ),
                           InkWell(
-                              onTap: login,
+                              onTap: () {},
                               child: Container(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 12),
@@ -94,7 +73,7 @@ class LogInScreen extends StatelessWidget {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    "로그인하기",
+                                    "비밀번호 재설정 메일 보내기",
                                     style:
                                         kButtonStyle.copyWith(color: mainWhite),
                                   ),
@@ -105,11 +84,11 @@ class LogInScreen extends StatelessWidget {
                           ),
                           TextButton(
                               onPressed: () {
-                                Get.to(() => PwFindScreen());
+                                Get.back();
                               },
                               child: Center(
                                 child: Text(
-                                  "비밀번호 찾기",
+                                  "로그인 하기",
                                   style: kButtonStyle.copyWith(
                                     color: mainblack.withOpacity(0.6),
                                   ),
@@ -134,13 +113,5 @@ class LogInScreen extends StatelessWidget {
               ),
           ],
         ));
-  }
-
-  void login() async {
-    if (_formKey.currentState!.validate()) {
-      _loginController.isLogin.value = true;
-      await loginRequest()
-          .then((value) => _loginController.isLogin.value = false);
-    }
   }
 }

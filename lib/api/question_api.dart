@@ -6,7 +6,6 @@ import 'dart:convert';
 
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/question_model.dart';
-import 'package:loopus/model/question_specific_model.dart';
 
 import '../constant.dart';
 
@@ -57,7 +56,7 @@ Future<dynamic> getquestionlist(int lastindex, String type) async {
   }
 }
 
-Future<dynamic> getquestion(int questionid) async {
+Future<QuestionItem> getquestion(int questionid) async {
   String? token;
   await FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
@@ -66,16 +65,14 @@ Future<dynamic> getquestion(int questionid) async {
   final url = Uri.parse("$serverUri/question_api/question?id=$questionid");
 
   final response = await get(url, headers: {"Authorization": "Token $token"});
-  var statusCode = response.statusCode;
-  var responseHeaders = response.headers;
-  var responseBody = utf8.decode(response.bodyBytes);
-  print(statusCode);
-  Map<String, dynamic> map = jsonDecode(responseBody);
 
-  if (response.statusCode != 200) {
-    return Future.error(response.statusCode);
+  print("질문 로드 statusCode: ${response.statusCode}");
+  if (response.statusCode == 200) {
+  Map<String, dynamic>  responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+  QuestionItem question = QuestionItem.fromJson(responseBody);
+    return question;
   } else {
-    return QuestionModel2.fromJson(map);
+    return Future.error(response.statusCode);
   }
 }
 
@@ -104,13 +101,13 @@ Future<dynamic> deletequestion(int questionid) async {
   }
 }
 
-Future<Map<dynamic, dynamic>> answermake(String content, int id) async {
+Future<Answer> answermake(String content, int questionid) async {
   String? token;
   await FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
   });
 
-  final url = Uri.parse("$serverUri/question_api/answer/$id");
+  final url = Uri.parse("$serverUri/question_api/answer/$questionid");
 
   print(token);
   var data = {
@@ -122,17 +119,15 @@ Future<Map<dynamic, dynamic>> answermake(String content, int id) async {
         'Content-Type': 'application/json'
       },
       body: jsonEncode(data));
-  var responseHeaders = response.headers;
-  var responseBody = utf8.decode(response.bodyBytes);
-  List<dynamic> list = jsonDecode(responseBody);
-  // print(list);
-  Map<String, dynamic> map = jsonDecode(responseBody);
+  
+    print(response.statusCode);
+  if (response.statusCode == 200) {
+    
+  Map<String, dynamic> responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+  Answer answer = Answer.fromJson(responseBody);
 
-  print(responseBody);
-  print(response.statusCode);
-  if (response.statusCode != 200) {
-    return Future.error(response.statusCode);
+    return answer;
   } else {
-    return map;
+    return Future.error(response.statusCode);
   }
 }

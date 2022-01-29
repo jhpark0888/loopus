@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
-import 'package:loopus/model/question_specific_model.dart';
-import 'package:loopus/widget/message_answer_widget.dart';
+import 'package:loopus/widget/question_answer_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class QuestionAddController extends GetxController {
