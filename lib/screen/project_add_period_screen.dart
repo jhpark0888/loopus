@@ -30,6 +30,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
+        bottomBorder: false,
         actions: [
           screenType == Screentype.add
               ? Obx(
@@ -96,40 +97,6 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                               });
                               Get.back();
                             }
-                            // if (projectaddcontroller.isongoing.value == true) {
-                            //   if (projectaddcontroller.isvaildstartdate.value) {
-                            //     ProjectDetailController
-                            //         .to.isProjectLoading.value = true;
-                            //     await updateproject(
-                            //         ProjectDetailController.to.project.value.id,
-                            //         ProjectUpdateType.date);
-                            //     await getproject(ProjectDetailController
-                            //             .to.project.value.id)
-                            //         .then((value) {
-                            //       ProjectDetailController.to.project(value);
-                            //       ProjectDetailController
-                            //           .to.isProjectLoading.value = false;
-                            //     });
-                            //     Get.back();
-                            //   }
-                            // } else {
-                            //   if (projectaddcontroller.isvaildstartdate.value &&
-                            //       projectaddcontroller.isvaildenddate.value) {
-                            //     ProjectDetailController
-                            //         .to.isProjectLoading.value = true;
-                            //     await updateproject(
-                            //         ProjectDetailController.to.project.value.id,
-                            //         ProjectUpdateType.date);
-                            //     await getproject(ProjectDetailController
-                            //             .to.project.value.id)
-                            //         .then((value) {
-                            //       ProjectDetailController.to.project(value);
-                            //       ProjectDetailController
-                            //           .to.isProjectLoading.value = false;
-                            //     });
-                            //     Get.back();
-                            //   }
-                            // }
                           },
                           child: Text(
                             '저장',

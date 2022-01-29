@@ -26,6 +26,7 @@ class ProjectAddIntroScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
+        bottomBorder: false,
         actions: [
           screenType == Screentype.add
               ? TextButton(

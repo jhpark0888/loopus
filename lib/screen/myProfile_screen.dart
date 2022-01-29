@@ -102,17 +102,6 @@ class MyProfileScreen extends StatelessWidget {
                             'assets/icons/loading.gif',
                             scale: 6,
                           ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            '프로필 새로고침 중...',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: mainblue.withOpacity(0.6),
-                            ),
-                          ),
                         ],
                       ),
                       releaseIcon: Column(
@@ -120,17 +109,6 @@ class MyProfileScreen extends StatelessWidget {
                           Image.asset(
                             'assets/icons/loading.gif',
                             scale: 6,
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            '프로필 새로고침 중...',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: mainblue.withOpacity(0.6),
-                            ),
                           ),
                         ],
                       ),
@@ -140,17 +118,6 @@ class MyProfileScreen extends StatelessWidget {
                             Icons.check_rounded,
                             color: mainblue,
                           ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            '완료!',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: mainblue.withOpacity(0.6),
-                            ),
-                          ),
                         ],
                       ),
                       idleIcon: Column(
@@ -158,17 +125,6 @@ class MyProfileScreen extends StatelessWidget {
                           Image.asset(
                             'assets/icons/loading.png',
                             scale: 12,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            '당겨주세요',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: mainblue.withOpacity(0.6),
-                            ),
                           ),
                         ],
                       ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
@@ -79,6 +80,7 @@ class UserInfoScreen extends StatelessWidget {
                         content: '중요한 알림을 받지 못하게 돼요',
                         leftFunction: () => Get.back(),
                         rightFunction: () {
+                          AppController.to.currentIndex.value = 0;
                           _logInController.isLogout.value = true;
                           logOut().then((value) {
                             _logInController.isLogout.value = false;

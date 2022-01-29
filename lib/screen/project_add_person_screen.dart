@@ -129,7 +129,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                       height: 16,
                     ),
                     Text(
-                      '루프 중인 학생만 추가할 수 있어요',
+                      '팔로잉 중인 학생만 추가할 수 있어요',
                       style: kBody1Style,
                     ),
                   ],
@@ -176,7 +176,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '루프 중인 사람',
+                    '팔로잉 중인 사람',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Obx(

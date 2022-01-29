@@ -21,7 +21,7 @@ class App extends GetView<AppController> {
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
       HomeScreen(),
-      ExampleScreen(),
+      SearchScreen(),
       Container(
         color: mainblack.withOpacity(0.25),
       ),

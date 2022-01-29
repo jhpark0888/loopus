@@ -325,7 +325,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                                                 width: 4,
                                               ),
                                               Text(
-                                                '60',
+                                                '999+',
                                                 style: kButtonStyle,
                                               ),
                                             ],

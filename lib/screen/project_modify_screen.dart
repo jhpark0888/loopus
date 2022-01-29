@@ -45,6 +45,7 @@ class ProjectModifyScreen extends StatelessWidget {
     projectthumbnailinput();
     return Scaffold(
         appBar: AppBarWidget(
+          bottomBorder: false,
           title: '활동 편집',
           leading: IconButton(
             onPressed: () {
@@ -122,6 +123,7 @@ class ProjectModifyScreen extends StatelessWidget {
               () => updateProjectTile(
                 isSubtitleExist: true,
                 onTap: () async {
+                  print(controller.project.value.looper.first.realName);
                   projectlooperinput();
                   projectaddcontroller.isLooppersonLoading(true);
                   getfollowlist(ProfileController.to.myUserInfo.value.userid,
@@ -145,7 +147,8 @@ class ProjectModifyScreen extends StatelessWidget {
                     ? '함께 활동한 사람이 없어요'
                     : controller.project.value.looper
                         .map((user) => user.realName)
-                        .toString(),
+                        .toList()
+                        .join(','),
               ),
             ),
             updateProjectTile(

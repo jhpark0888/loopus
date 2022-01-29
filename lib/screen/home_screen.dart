@@ -42,15 +42,14 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           actions: [
-            //TODO: 검색 아이콘 수정
-            IconButton(
-              onPressed: () => Get.to(() => SearchScreen()),
-              icon: SvgPicture.asset(
-                "assets/icons/Search.svg",
-                width: 28,
-                height: 28,
-              ),
-            ),
+            // IconButton(
+            //   onPressed: () => Get.to(() => SearchScreen()),
+            //   icon: SvgPicture.asset(
+            //     "assets/icons/Search.svg",
+            //     width: 28,
+            //     height: 28,
+            //   ),
+            // ),
             IconButton(
               onPressed: () => Get.to(() => const NotificationScreen()),
               icon: SvgPicture.asset(
@@ -420,7 +419,7 @@ class HomeScreen extends StatelessWidget {
                   Tab(
                     height: 40,
                     child: Text(
-                      "루프",
+                      "팔로잉",
                     ),
                   ),
                 ],

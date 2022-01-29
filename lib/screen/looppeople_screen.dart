@@ -36,7 +36,9 @@ class LoopPeopleScreen extends StatelessWidget {
       ProfileController.to.isLoopPeopleLoading(false);
     });
     return Scaffold(
-        appBar: AppBarWidget(),
+        appBar: AppBarWidget(
+          bottomBorder: false,
+        ),
         body: DefaultTabController(
           length: 2,
           child: NestedScrollView(
@@ -48,29 +50,37 @@ class LoopPeopleScreen extends StatelessWidget {
                     expandedHeight: 43,
                     toolbarHeight: 43,
                     elevation: 0,
-                    flexibleSpace: TabBar(
-                      labelStyle: kButtonStyle,
-                      labelColor: mainblack,
-                      unselectedLabelStyle: kBody1Style,
-                      unselectedLabelColor: mainblack.withOpacity(0.6),
-                      indicator: const UnderlineIndicator(
-                        strokeCap: StrokeCap.round,
-                        borderSide: BorderSide(width: 2),
-                      ),
-                      indicatorColor: mainblack,
-                      tabs: const [
-                        Tab(
-                          height: 40,
-                          child: Text(
-                            "팔로워",
+                    flexibleSpace: Column(
+                      children: [
+                        TabBar(
+                          labelStyle: kButtonStyle,
+                          labelColor: mainblack,
+                          unselectedLabelStyle: kBody1Style,
+                          unselectedLabelColor: mainblack.withOpacity(0.6),
+                          indicator: const UnderlineIndicator(
+                            strokeCap: StrokeCap.round,
+                            borderSide: BorderSide(width: 2),
                           ),
+                          indicatorColor: mainblack,
+                          tabs: const [
+                            Tab(
+                              height: 40,
+                              child: Text(
+                                "팔로워",
+                              ),
+                            ),
+                            Tab(
+                              height: 40,
+                              child: Text(
+                                "팔로잉",
+                              ),
+                            )
+                          ],
                         ),
-                        Tab(
-                          height: 40,
-                          child: Text(
-                            "팔로잉",
-                          ),
-                        )
+                        Container(
+                          height: 1,
+                          color: const Color(0xffe7e7e7),
+                        ),
                       ],
                     ),
                   )

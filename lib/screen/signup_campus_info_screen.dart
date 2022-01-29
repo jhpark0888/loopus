@@ -38,23 +38,61 @@ class SignupCampusInfoScreen extends StatelessWidget {
             40,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
                 '어느 대학에 재학 중이신가요?',
                 style: kSubTitle1Style,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 32,
               ),
-              CustomTextField(
-                counterText: null,
-                maxLength: null,
-                textController: signupController.campusnamecontroller,
-                hintText: '학교 이름 검색',
-                obscureText: false,
-                validator: null,
-                maxLines: 1,
-              )
+              // CustomTextField(
+              //   counterText: null,
+              //   maxLength: null,
+              //   textController: signupController.campusnamecontroller,
+              //   hintText: '학교 이름 검색',
+              //   obscureText: false,
+              //   validator: null,
+              //   maxLines: 1,
+              // ),
+              TextFormField(
+                initialValue: '인천대학교',
+                readOnly: true,
+
+                style: kSubTitle3Style.copyWith(
+                  height: 1.0,
+                  color: mainblack.withOpacity(0.6),
+                ),
+
+                // controller: signupController.campusnamecontroller,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(bottom: 12),
+                  isDense: true,
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: mainblack, width: 1.2),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderRadius: BorderRadius.circular(2),
+                    borderSide: const BorderSide(color: mainblack, width: 1.2),
+                  ),
+                  disabledBorder: UnderlineInputBorder(
+                    borderRadius: BorderRadius.circular(2),
+                    borderSide: const BorderSide(color: mainblack, width: 1.2),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Text(
+                '아직은 인천대학교 학생만 가입할 수 있어요',
+                style: kCaptionStyle.copyWith(
+                  color: mainblack.withOpacity(0.6),
+                ),
+                textAlign: TextAlign.start,
+              ),
             ],
           ),
         ),
