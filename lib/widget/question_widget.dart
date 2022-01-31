@@ -11,8 +11,6 @@ import 'package:loopus/screen/question_detail_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 class QuestionWidget extends StatelessWidget {
-  final QuestionController questionController = Get.put(QuestionController());
-  final ProfileController profileController = Get.find();
   final QuestionItem item;
 
   QuestionWidget({required this.item});
@@ -89,15 +87,14 @@ class QuestionWidget extends StatelessWidget {
                                         )),
                               Text(
                                 "  ${item.realname}  · ",
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
+                                style: kBody2Style,
                               ),
                             ],
                           ),
                         ),
                         Text(
                           "${item.department}",
-                          style: TextStyle(fontSize: 14),
+                          style: kBody2Style.copyWith(color: mainblack.withOpacity(0.6)),
                         ),
                       ],
                     ),
@@ -129,10 +126,10 @@ class QuestionWidget extends StatelessWidget {
   }
 
   void tapQuestion() async {
-    questionController.messageanswerlist.clear();
-    await questionController.loadItem(item.id);
-    await questionController.addanswer();
-    Get.to(() => QuestionDetailScreen());
+    // questionController.messageanswerlist.clear();
+    // await questionController.loadItem(item.id);
+    // await questionController.addanswer();
+    Get.to(() => QuestionDetailScreen(questionid: item.id, isuser: item.isuser, realname: item.realname,));
   }
 
   void tapProfile() {

@@ -15,7 +15,6 @@ class SearchQuestionWidget extends StatelessWidget {
 
   QuestionItem item;
 
-  QuestionController questionController = Get.put(QuestionController());
   SearchQuestionWidget({
     required this.item,
   });
@@ -132,10 +131,10 @@ class SearchQuestionWidget extends StatelessWidget {
   }
 
   void tapQuestion() async {
-    questionController.messageanswerlist.clear();
-    await questionController.loadItem(item.id);
-    await questionController.addanswer();
-    Get.to(() => QuestionDetailScreen());
+    // questionController.messageanswerlist.clear();
+    // await questionController.loadItem(item.id);
+    // await questionController.addanswer();
+    Get.to(() => QuestionDetailScreen(questionid: item.id, isuser: item.isuser, realname: item.realname,));
   }
 
   void tapProfile() {

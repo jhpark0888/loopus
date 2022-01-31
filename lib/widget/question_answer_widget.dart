@@ -11,22 +11,18 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/question_controller.dart';
 import 'package:loopus/model/project_model.dart';
+import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/project_widget.dart';
 
-class MessageAnswerWidget extends StatelessWidget {
+class QuestionAnswerWidget extends StatelessWidget {
   ProfileController profileController = Get.find();
-  String content;
-  String name;
-  String image;
-  int user;
+  Answer answer;
 
-  MessageAnswerWidget({
-    required this.content,
-    required this.image,
-    required this.name,
-    required this.user,
+  QuestionAnswerWidget({
+    required this.answer,
   });
 
   @override
@@ -46,23 +42,32 @@ class MessageAnswerWidget extends StatelessWidget {
               Column(
                 children: [
                   SizedBox(height: 4),
-                  ClipOval(
-                      child: image == ""
-                          ? Image.asset(
-                              "assets/illustrations/default_profile.png",
-                              height: 32,
-                              width: 32,
-                            )
-                          : CachedNetworkImage(
-                              height: 32,
-                              width: 32,
-                              imageUrl: image,
-                              placeholder: (context, url) => CircleAvatar(
-                                child:
-                                    Center(child: CircularProgressIndicator()),
-                              ),
-                              fit: BoxFit.cover,
-                            )),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => OtherProfileScreen(
+                userid: answer.user,
+                isuser: answer.isuser,
+                realname: answer.realname!,
+              ));
+                    },
+                    child: ClipOval(
+                        child: answer.profileimage == ""
+                            ? Image.asset(
+                                "assets/illustrations/default_profile.png",
+                                height: 32,
+                                width: 32,
+                              )
+                            : CachedNetworkImage(
+                                height: 32,
+                                width: 32,
+                                imageUrl: answer.profileimage!,
+                                placeholder: (context, url) => CircleAvatar(
+                                  child:
+                                      Center(child: CircularProgressIndicator()),
+                                ),
+                                fit: BoxFit.cover,
+                              )),
+                  ),
                 ],
               ),
               SizedBox(
@@ -82,44 +87,43 @@ class MessageAnswerWidget extends StatelessWidget {
                               onTap: () async {
                                 // profileController.isProfileLoading(true);
 
-                                // Get.to(() => OtherProfileScreen(
-                                //       userid: user,
-                                //       isuser: ,
-                                //     ));
+                                Get.to(() => OtherProfileScreen(
+                userid: answer.user,
+                isuser: answer.isuser,
+                realname: answer.realname!,
+              ));
                               },
-                              child: Text(
-                                "$name",
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Row(
+                              child: Row(
                               children: [
                                 Text(
-                                  '소속 학과',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: mainblack.withOpacity(0.6),
-                                  ),
-                                ),
+                                "${answer.realname}",
+                                style: kBody2Style,
+                              ),
                                 Text(
-                                  " · 게시 시간",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: mainblack.withOpacity(0.6),
-                                  ),
+                                  " · ${DurationCaculator().messagedurationCaculate(startDate: answer.date, endDate: DateTime.now())} 전",
+                                  style: kBody2Style.copyWith(color: mainblack.withOpacity(0.6)),
                                 ),
                               ],
                             )
+                            ),
+                            
                           ],
                         ),
                         InkWell(
-                          onTap: () {
+                          onTap: answer.isuser == 1 ? () {
                             ModalController.to.showModalIOS(context,
                                 func1: () {},
                                 func2: () {},
                                 value1: '답글 삭제하기',
+                                value2: 'value2',
+                                isValue1Red: true,
+                                isValue2Red: true,
+                                isOne: true);
+                          } : () {
+                            ModalController.to.showModalIOS(context,
+                                func1: () {},
+                                func2: () {},
+                                value1: '답글 신고하기',
                                 value2: 'value2',
                                 isValue1Red: true,
                                 isValue2Red: true,
@@ -133,7 +137,7 @@ class MessageAnswerWidget extends StatelessWidget {
                       height: 8,
                     ),
                     Text(
-                      "$content",
+                      "${answer.content}",
                       style: kBody1Style,
                     ),
                   ],

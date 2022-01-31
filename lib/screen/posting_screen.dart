@@ -414,11 +414,7 @@ class _MyAppSpace extends StatelessWidget {
                                         type: MaterialType.transparency,
                                         child: Text(
                                           "$realname · ",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: mainblack,
-                                          ),
+                                          style: kBody2Style,
                                         ),
                                       ),
                                     ),
