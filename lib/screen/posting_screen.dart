@@ -239,8 +239,7 @@ class PostingScreen extends StatelessWidget {
                               },
                               child: Text(
                                 '이 활동의 다른 포스팅 읽기',
-                                style:
-                                    kSubTitle2Style.copyWith(color: mainblue),
+                                style: kButtonStyle.copyWith(color: mainblue),
                               ),
                             ),
                             Container(

@@ -12,6 +12,16 @@ class PostContentWidget extends StatelessWidget {
 
   PostContent content;
 
+  String validateUrl() {
+    var url = content.url;
+    if (content.url!.contains('https://') == false &&
+        content.url!.contains('http://') == false) {
+      url = 'https://' + content.url!;
+    }
+
+    return url!;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (SmartTextType.values[content.type] == SmartTextType.IMAGE) {
@@ -30,7 +40,7 @@ class PostContentWidget extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: InkWell(
               onTap: () {
-                Get.to(() => WebViewScreen(url: content.url));
+                Get.to(() => WebViewScreen(url: validateUrl()));
               },
               child: Text(
                 '${SmartTextType.values[content.type].prefix ?? ''}${content.content}',
