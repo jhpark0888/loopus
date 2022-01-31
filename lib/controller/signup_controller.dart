@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
+enum UserType {
+  student,
+  company,
+  professer,
+}
+
 class SignupController extends GetxController {
   TextEditingController campusnamecontroller = TextEditingController();
   TextEditingController classnumcontroller = TextEditingController();
@@ -11,8 +17,9 @@ class SignupController extends GetxController {
   TextEditingController passwordcontroller = TextEditingController();
   TextEditingController passwordcheckcontroller = TextEditingController();
   RxBool emailcheck = false.obs;
+  Rx<UserType> selectedType = UserType.student.obs;
 
-  static final FlutterSecureStorage storage = new FlutterSecureStorage();
+  static final FlutterSecureStorage storage = FlutterSecureStorage();
 
   @override
   void onInit() {

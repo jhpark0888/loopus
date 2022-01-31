@@ -23,7 +23,9 @@ class WebViewScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           //TODO : LINK 패턴 관리
-          url!.replaceFirst('https://', ''),
+          url!.contains('http://')
+              ? url!.replaceFirst('http://', '')
+              : url!.replaceFirst('https://', ''),
           style: TextStyle(fontSize: 14),
         ),
         centerTitle: true,
@@ -65,38 +67,73 @@ class WebViewScreen extends StatelessWidget {
         ),
         actions: [],
       ),
-      body: Builder(builder: (BuildContext context) {
-        return WebView(
-          initialUrl: url,
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (WebViewController webViewController) {
-            _controller.complete(webViewController);
-          },
-          onProgress: (int progress) {
-            print('WebView is loading (progress : $progress%)');
-            _webController.progressPercent.value = progress;
-          },
-          javascriptChannels: <JavascriptChannel>{
-            _toasterJavascriptChannel(context),
-          },
-          navigationDelegate: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              print('blocking navigation to $request}');
-              return NavigationDecision.prevent;
-            }
-            print('allowing navigation to $request');
-            return NavigationDecision.navigate;
-          },
-          onPageStarted: (String url) {
-            print('Page started loading: $url');
-          },
-          onPageFinished: (String url) {
-            print('Page finished loading: $url');
-          },
-          gestureNavigationEnabled: true,
-          backgroundColor: const Color(0x00000000),
-        );
-      }),
+      body: Obx(
+        () => (_webController.isWrongUrl.value == false)
+            ? Builder(builder: (BuildContext context) {
+                return WebView(
+                  onWebResourceError: (error) {
+                    _webController.isWrongUrl.value = true;
+                  },
+                  initialUrl: url,
+                  javascriptMode: JavascriptMode.unrestricted,
+                  onWebViewCreated: (WebViewController webViewController) {
+                    _controller.complete(webViewController);
+                  },
+                  onProgress: (int progress) {
+                    print('WebView is loading (progress : $progress%)');
+                    _webController.progressPercent.value = progress;
+                  },
+                  javascriptChannels: <JavascriptChannel>{
+                    _toasterJavascriptChannel(context),
+                  },
+                  navigationDelegate: (NavigationRequest request) {
+                    if (request.url.startsWith('https://www.youtube.com/')) {
+                      print('blocking navigation to $request}');
+                      return NavigationDecision.prevent;
+                    }
+                    print('allowing navigation to $request');
+                    return NavigationDecision.navigate;
+                  },
+                  onPageStarted: (String url) {
+                    print('Page started loading: $url');
+                  },
+                  onPageFinished: (String url) {
+                    print('Page finished loading: $url');
+                  },
+                  gestureNavigationEnabled: true,
+                  backgroundColor: const Color(0x00000000),
+                );
+              })
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    '유효하지 않은 링크에요',
+                    textAlign: TextAlign.center,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      ModalController.to.showCustomDialog('알려주셔서 감사합니다!', 1000);
+                    },
+                    child: Text(
+                      '이 버튼만 클릭해서 잘못된 링크인 걸 알려주세요',
+                      textAlign: TextAlign.center,
+                      style: kButtonStyle.copyWith(
+                        color: mainblue,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '상대방은 누가 버튼을 클릭했는지 알 수 없어요',
+                    textAlign: TextAlign.center,
+                    style: kCaptionStyle.copyWith(
+                      color: mainblack.withOpacity(0.6),
+                    ),
+                  ),
+                ],
+              ),
+      ),
       bottomNavigationBar: BottomAppBar(
         child: NavigationControls(_controller.future),
       ),

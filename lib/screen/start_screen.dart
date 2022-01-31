@@ -84,16 +84,7 @@ class StartScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 8,
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  "기업회원 또는 교직원입니다",
-                  style: kButtonStyle.copyWith(
-                    color: mainblack.withOpacity(0.6),
-                  ),
-                ),
+                height: 12,
               ),
             ],
           ),

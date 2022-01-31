@@ -8,6 +8,7 @@ import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/select_project_screen.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
+import 'package:loopus/screen/signup_type_screen.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
 import '../constant.dart';
@@ -544,7 +545,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                         isModalNextBtnClicked.value == false)
                     ? () {
                         isModalNextBtnClicked.value = true;
-                        Get.to(() => SignupCampusInfoScreen(),
+                        Get.to(() => SignupTypeScreen(),
                             preventDuplicates: false);
                         isModalNextBtnClicked.value = false;
                       }
