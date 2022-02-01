@@ -71,12 +71,14 @@ class MessageRoomWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        '${messageRoom.user.realName}' +
-                            ' · ${DurationCaculator().messagedurationCaculate(startDate: controller.messagelist.first.message.date, endDate: DateTime.now())} 전',
-                        style: messageRoom.notread.value == 0
-                            ? kSubTitle3Style
-                            : kSubTitle2Style,
+                      Obx(
+                        () => Text(
+                          '${messageRoom.user.realName}' +
+                              ' · ${DurationCaculator().messagedurationCaculate(startDate: controller.messagelist.first.message.date, endDate: DateTime.now())} 전',
+                          style: messageRoom.notread.value == 0
+                              ? kSubTitle3Style
+                              : kSubTitle2Style,
+                        ),
                       ),
                       const SizedBox(
                         width: 8,

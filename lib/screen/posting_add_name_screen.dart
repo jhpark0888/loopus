@@ -88,7 +88,7 @@ class PostingAddNameScreen extends StatelessWidget {
               ),
               CustomTextField(
                   counterText: null,
-                  maxLength: 40,
+                  maxLength: 60,
                   textController: postingAddController.titlecontroller,
                   hintText: '포스팅 제목...',
                   validator: null,

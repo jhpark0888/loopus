@@ -411,16 +411,21 @@ class ProjectScreen extends StatelessWidget {
                                 height: 12,
                               ),
                               Obx(
-                                () => Text(
-                                  controller.project.value.introduction ?? '',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    height: 1.5,
-                                  ),
-                                ),
+                                () => controller.project.value.introduction !=
+                                        ''
+                                    ? Text(
+                                        controller.project.value.introduction ??
+                                            '',
+                                        style: kBody1Style,
+                                      )
+                                    : Text(
+                                        '-',
+                                        style: kBody1Style.copyWith(
+                                            color: mainblack.withOpacity(0.6)),
+                                      ),
                               ),
                               SizedBox(
-                                height: 24,
+                                height: 20,
                               ),
                               Text(
                                 '활동 태그',
@@ -430,7 +435,7 @@ class ProjectScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(
-                                height: 12,
+                                height: 16,
                               ),
                               Obx(
                                 () => Row(
@@ -459,7 +464,7 @@ class ProjectScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(
-                                height: 24,
+                                height: 28,
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -511,7 +516,7 @@ class ProjectScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               SizedBox(
-                                                height: 10,
+                                                height: 16,
                                               ),
                                               Text(
                                                 '포스팅을 통해 경험한 순간들을 남겨 보세요',

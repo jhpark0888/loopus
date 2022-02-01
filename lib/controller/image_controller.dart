@@ -69,18 +69,15 @@ class ImageController extends GetxController {
         // maxHeight: 1080,
         // compressQuality: 90,
         sourcePath: pickimage.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.ratio3x2,
-        ],
         androidUiSettings: const AndroidUiSettings(
             toolbarTitle: 'Cropper',
             toolbarColor: mainblue,
             toolbarWidgetColor: mainWhite,
-            initAspectRatio: CropAspectRatioPreset.ratio3x2,
             lockAspectRatio: true),
         iosUiSettings: const IOSUiSettings(
           aspectRatioPickerButtonHidden: true,
-          minimumAspectRatio: 1.0,
+          aspectRatioLockEnabled: true,
+          minimumAspectRatio: 2 / 1,
         ));
     if (croppedFile != null) {
       return croppedFile;
