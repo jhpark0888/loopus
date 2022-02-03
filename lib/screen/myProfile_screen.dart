@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
+import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
@@ -33,6 +34,7 @@ class MyProfileScreen extends StatelessWidget {
   final ImageController imageController = Get.put(ImageController());
   final ScrollController _projectScrollController = ScrollController();
   final ScrollController _questionScrollController = ScrollController();
+  final HoverController _hoverController = Get.put(HoverController());
   TagController tagController = Get.put(TagController(tagtype: Tagtype.profile),
       tag: Tagtype.profile.toString());
 
@@ -301,6 +303,12 @@ class MyProfileScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: GestureDetector(
+                                      onTapDown: (details) =>
+                                          _hoverController.myTagOpacity(0.5),
+                                      onTapCancel: () =>
+                                          _hoverController.myTagOpacity(1.0),
+                                      onTapUp: (details) =>
+                                          _hoverController.myTagOpacity(1.0),
                                       onTap: () {
                                         tagController.selectedtaglist.clear();
                                         tagController.tagsearch.text = "";
@@ -323,13 +331,22 @@ class MyProfileScreen extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(4),
                                         ),
-                                        child: const Padding(
+                                        child: Padding(
                                           padding: EdgeInsets.symmetric(
                                               vertical: 8.0),
-                                          child: Center(
-                                            child: Text(
-                                              '관심 태그 변경하기',
-                                              style: kButtonStyle,
+                                          child: Obx(
+                                            () => AnimatedOpacity(
+                                              opacity: _hoverController
+                                                  .myTagOpacity.value,
+                                              duration:
+                                                  Duration(milliseconds: 50),
+                                              curve: kAnimationCurve,
+                                              child: Center(
+                                                child: Text(
+                                                  '관심 태그 변경하기',
+                                                  style: kButtonStyle,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -415,6 +432,13 @@ class MyProfileScreen extends StatelessWidget {
                             ),
                             Expanded(
                               child: GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTapDown: (details) =>
+                                    _hoverController.hoverButton(),
+                                onTapCancel: () =>
+                                    _hoverController.followOpacity(1.0),
+                                onTapUp: (details) =>
+                                    _hoverController.followOpacity(1.0),
                                 onTap: () {
                                   profileController.isLoopPeopleLoading(true);
                                   Get.to(() => LoopPeopleScreen(
@@ -428,20 +452,38 @@ class MyProfileScreen extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 12.0),
                                   child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
                                     children: [
-                                      Text(
-                                        '팔로워',
-                                        style: kBody1Style,
+                                      Obx(
+                                        () => AnimatedOpacity(
+                                          opacity: _hoverController
+                                              .followOpacity.value,
+                                          duration: Duration(milliseconds: 50),
+                                          curve: kAnimationCurve,
+                                          child: Text(
+                                            '팔로워',
+                                            style: kBody1Style,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
                                       ),
                                       SizedBox(
                                         height: 8,
                                       ),
                                       Obx(
-                                        () => Text(
-                                          profileController
-                                              .myUserInfo.value.loopcount
-                                              .toString(),
-                                          style: kSubTitle2Style,
+                                        () => AnimatedOpacity(
+                                          opacity: _hoverController
+                                              .followOpacity.value,
+                                          duration: Duration(milliseconds: 50),
+                                          curve: kAnimationCurve,
+                                          child: Text(
+                                            profileController
+                                                .myUserInfo.value.loopcount
+                                                .toString(),
+                                            style: kSubTitle2Style,
+                                            textAlign: TextAlign.center,
+                                          ),
                                         ),
                                       )
                                     ],

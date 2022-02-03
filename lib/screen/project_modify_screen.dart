@@ -84,7 +84,7 @@ class ProjectModifyScreen extends StatelessWidget {
                 project: controller.project.value,
                 title: '활동 기간',
                 subtitle:
-                    '${DateFormat("yy.MM.dd").format(controller.project.value.startDate!)} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate!) : ''}',
+                    '${DateFormat("yy.MM.dd").format(controller.project.value.startDate!)} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate!) : '진행중'}',
               ),
             ),
             Obx(

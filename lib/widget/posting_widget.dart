@@ -26,7 +26,8 @@ class PostingWidget extends StatelessWidget {
   PostingWidget({required this.item, Key? key}) : super(key: key);
 
   final ProfileController profileController = Get.put(ProfileController());
-  // final HoverController _hoverController = Get.put(HoverController());
+  late final HoverController _hoverController =
+      Get.put(HoverController(), tag: 'posting${item.id}');
   // final PostingDetailController postingDetailController =
   //     Get.put(PostingDetailController());
 
@@ -35,166 +36,177 @@ class PostingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTapDown: (details) => _hoverController.isHoverState(),
-      // onTapCancel: () => _hoverController.isNonHoverState(),
-      // onTapUp: (details) => _hoverController.isNonHoverState(),
+      onTapDown: (details) => _hoverController.isHoverState(),
+      onTapCancel: () => _hoverController.isNonHoverState(),
+      onTapUp: (details) => _hoverController.isNonHoverState(),
       onTap: tapPosting,
       child: Column(
         children: [
-          Container(
-            decoration: kCardStyle,
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                  ),
-                  child: (item.thumbnail == null)
-                      ? Image.asset(
-                          "assets/illustrations/default_image.png",
-                          height: Get.width / 2 * 1,
-                          width: Get.width,
-                          fit: BoxFit.cover,
-                        )
-                      : CachedNetworkImage(
-                          height: Get.width / 2 * 1,
-                          width: Get.width,
-                          imageUrl: item.thumbnail,
-                          placeholder: (context, url) => Container(
-                            color: const Color(0xffe7e7e7),
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                ),
-                Column(
+          Obx(
+            () => AnimatedScale(
+              scale: _hoverController.scale.value,
+              duration: Duration(milliseconds: 100),
+              curve: kAnimationCurve,
+              child: Container(
+                decoration: kCardStyle,
+                child: Column(
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8),
                       ),
-                      child: Container(
-                        color: mainWhite,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 16,
+                      child: (item.thumbnail == null)
+                          ? Image.asset(
+                              "assets/illustrations/default_image.png",
+                              height: Get.width / 2 * 1,
+                              width: Get.width,
+                              fit: BoxFit.cover,
+                            )
+                          : CachedNetworkImage(
+                              height: Get.width / 2 * 1,
+                              width: Get.width,
+                              imageUrl: item.thumbnail,
+                              placeholder: (context, url) => Container(
+                                color: const Color(0xffe7e7e7),
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                    Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                "${item.title}",
-                                style: kHeaderH2Style,
+                          child: Container(
+                            color: mainWhite,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 16,
                               ),
-                              SizedBox(
-                                height: 24,
-                              ),
-                              Text(
-                                "${item.project!.projectName}",
-                                style: kSubTitle2Style.copyWith(
-                                  color: mainblack.withOpacity(0.6),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              postingTag(),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
+                                  Text(
+                                    "${item.title}",
+                                    style: kHeaderH2Style,
+                                  ),
+                                  SizedBox(
+                                    height: 24,
+                                  ),
+                                  Text(
+                                    "${item.project!.projectName}",
+                                    style: kSubTitle2Style.copyWith(
+                                      color: mainblack.withOpacity(0.6),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  postingTag(),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
                                   Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      InkWell(
-                                        onTap: tapProfile,
-                                        child: Row(
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          InkWell(
+                                            onTap: tapProfile,
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  height: 32,
+                                                  width: 32,
+                                                  child: ClipOval(
+                                                    child: item.profileimage ==
+                                                            null
+                                                        ? Image.asset(
+                                                            "assets/illustrations/default_profile.png")
+                                                        : CachedNetworkImage(
+                                                            height: 32,
+                                                            width: 32,
+                                                            imageUrl:
+                                                                "${item.profileimage}",
+                                                            placeholder:
+                                                                (context,
+                                                                        url) =>
+                                                                    CircleAvatar(
+                                                              backgroundColor:
+                                                                  Color(
+                                                                      0xffe7e7e7),
+                                                              child:
+                                                                  Container(),
+                                                            ),
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 8,
+                                                ),
+                                                Text("${item.realname} · ",
+                                                    style: kButtonStyle),
+                                              ],
+                                            ),
+                                          ),
+                                          Text("${item.department}",
+                                              style: kBody2Style),
+                                        ],
+                                      ),
+                                      Obx(
+                                        () => Row(
                                           children: [
-                                            Container(
-                                              height: 32,
-                                              width: 32,
-                                              child: ClipOval(
-                                                child: item.profileimage == null
-                                                    ? Image.asset(
-                                                        "assets/illustrations/default_profile.png")
-                                                    : CachedNetworkImage(
-                                                        height: 32,
-                                                        width: 32,
-                                                        imageUrl:
-                                                            "${item.profileimage}",
-                                                        placeholder:
-                                                            (context, url) =>
-                                                                CircleAvatar(
-                                                          backgroundColor:
-                                                              Color(0xffe7e7e7),
-                                                          child: Container(),
-                                                        ),
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                              ),
+                                            InkWell(
+                                              onTap: tapLike,
+                                              child: item.isLiked.value == 0
+                                                  ? SvgPicture.asset(
+                                                      "assets/icons/Favorite_Inactive.svg")
+                                                  : SvgPicture.asset(
+                                                      "assets/icons/Favorite_Active.svg"),
                                             ),
                                             const SizedBox(
-                                              width: 8,
+                                              width: 4,
                                             ),
-                                            Text("${item.realname} · ",
-                                                style: kButtonStyle),
+                                            Text(
+                                              "${item.likeCount.value}",
+                                              style: kButtonStyle,
+                                            ),
+                                            const SizedBox(
+                                              width: 16,
+                                            ),
+                                            InkWell(
+                                              onTap: tapBookmark,
+                                              child: (item.isMarked.value == 0)
+                                                  ? SvgPicture.asset(
+                                                      "assets/icons/Mark_Default.svg",
+                                                      color: mainblack,
+                                                    )
+                                                  : SvgPicture.asset(
+                                                      "assets/icons/Mark_Saved.svg"),
+                                            ),
                                           ],
                                         ),
                                       ),
-                                      Text("${item.department}",
-                                          style: kBody2Style),
                                     ],
-                                  ),
-                                  Obx(
-                                    () => Row(
-                                      children: [
-                                        InkWell(
-                                          onTap: tapLike,
-                                          child: item.isLiked.value == 0
-                                              ? SvgPicture.asset(
-                                                  "assets/icons/Favorite_Inactive.svg")
-                                              : SvgPicture.asset(
-                                                  "assets/icons/Favorite_Active.svg"),
-                                        ),
-                                        const SizedBox(
-                                          width: 4,
-                                        ),
-                                        Text(
-                                          "${item.likeCount.value}",
-                                          style: kButtonStyle,
-                                        ),
-                                        const SizedBox(
-                                          width: 16,
-                                        ),
-                                        InkWell(
-                                          onTap: tapBookmark,
-                                          child: (item.isMarked.value == 0)
-                                              ? SvgPicture.asset(
-                                                  "assets/icons/Mark_Default.svg",
-                                                  color: mainblack,
-                                                )
-                                              : SvgPicture.asset(
-                                                  "assets/icons/Mark_Saved.svg"),
-                                        ),
-                                      ],
-                                    ),
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ],
@@ -251,6 +263,13 @@ class PostingWidget extends StatelessWidget {
   }
 
   void tapLike() {
+//     debounce(
+//   item.li,
+//   (_) {
+//     print('$_가 마지막으로 변경된 이후, 1초간 변경이 없습니다.');
+//   },
+//   time: Duration(seconds: 1),
+// );
     if (item.isLiked.value == 0) {
       item.likeCount += 1;
       homeController.tapLike(item.id, item.likeCount.value);

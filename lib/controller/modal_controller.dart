@@ -672,6 +672,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
               height: 20,
             ),
             GestureDetector(
+              behavior: HitTestBehavior.translucent,
               onTap: () {
                 Get.to(() => SelectProjectScreen());
               },
@@ -692,9 +693,11 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                   SizedBox(
                     width: 12,
                   ),
-                  Text(
-                    '포스팅 작성하기',
-                    style: kSubTitle3Style,
+                  Expanded(
+                    child: Text(
+                      '포스팅 작성하기',
+                      style: kSubTitle3Style,
+                    ),
                   ),
                 ],
               ),
@@ -703,6 +706,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
               height: 20,
             ),
             GestureDetector(
+              behavior: HitTestBehavior.translucent,
               onTap: () {
                 Get.to(() => ProjectAddTitleScreen(screenType: Screentype.add));
               },
@@ -724,9 +728,11 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                   SizedBox(
                     width: 12,
                   ),
-                  Text(
-                    '새로운 활동 추가하기',
-                    style: kSubTitle3Style,
+                  Expanded(
+                    child: Text(
+                      '새로운 활동 추가하기',
+                      style: kSubTitle3Style,
+                    ),
                   ),
                 ],
               ),

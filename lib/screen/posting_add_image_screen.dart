@@ -21,6 +21,7 @@ import 'package:flutter/rendering.dart';
 class PostingAddImageScreen extends StatelessWidget {
   PostingAddImageScreen({Key? key, required this.project_id}) : super(key: key);
   PostingAddController postingAddController = Get.find();
+  ImageController _imageController = Get.put(ImageController());
 
   int project_id;
   List<PostAddContentWidget> contentlist = [];
@@ -76,7 +77,8 @@ class PostingAddImageScreen extends StatelessWidget {
               ),
             ),
           ),
-          if (postingAddController.isPostingUploading.value == true)
+          if (postingAddController.isPostingUploading.value == true ||
+              _imageController.isThumbnailImagePickerLoading.value == true)
             Container(
               height: Get.height,
               width: Get.width,
@@ -130,12 +132,12 @@ class _MyAppSpace extends StatelessWidget {
                             child: BlueTextButton(
                               onTap: () async {
                                 imageController
-                                    .isProfileImagePickerLoading.value = true;
+                                    .isThumbnailImagePickerLoading.value = true;
                                 imageController
                                     .getcropImage(ImageType.thumbnail)
                                     .then((value) {
                                   postingAddController.thumbnail(value);
-                                  imageController.isProfileImagePickerLoading
+                                  imageController.isThumbnailImagePickerLoading
                                       .value = false;
                                 });
                               },

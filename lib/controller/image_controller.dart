@@ -41,6 +41,9 @@ class ImageController extends GetxController {
 
   Future<File?> profilecropImage(pickimage) async {
     File? croppedFile = await ImageCropper.cropImage(
+        maxWidth: 1920,
+        maxHeight: 1080,
+        compressQuality: 50,
         cropStyle: CropStyle.circle,
         sourcePath: pickimage.path,
         aspectRatioPresets: [
@@ -65,9 +68,11 @@ class ImageController extends GetxController {
 
   Future<File?> postingthumbnailcropImage(pickimage) async {
     File? croppedFile = await ImageCropper.cropImage(
-        // maxWidth: 1920,
-        // maxHeight: 1080,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        compressQuality: 50,
         // compressQuality: 90,
+        aspectRatio: CropAspectRatio(ratioX: 2, ratioY: 1),
         sourcePath: pickimage.path,
         androidUiSettings: const AndroidUiSettings(
             toolbarTitle: 'Cropper',
@@ -76,8 +81,7 @@ class ImageController extends GetxController {
             lockAspectRatio: true),
         iosUiSettings: const IOSUiSettings(
           aspectRatioPickerButtonHidden: true,
-          aspectRatioLockEnabled: true,
-          minimumAspectRatio: 2 / 1,
+          minimumAspectRatio: 1 / 2,
         ));
     if (croppedFile != null) {
       return croppedFile;
@@ -88,6 +92,9 @@ class ImageController extends GetxController {
 
   Future<File?> postingcropImage(pickimage) async {
     File? croppedFile = await ImageCropper.cropImage(
+        maxWidth: 1920,
+        maxHeight: 1080,
+        compressQuality: 50,
         sourcePath: pickimage.path,
         androidUiSettings: const AndroidUiSettings(
             toolbarTitle: 'Cropper',

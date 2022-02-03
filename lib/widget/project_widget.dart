@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
+import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
@@ -31,6 +32,8 @@ class ProjectWidget extends StatelessWidget {
   late ProjectDetailController controller = Get.put(
       ProjectDetailController(project.value.id),
       tag: project.value.id.toString());
+  late final HoverController _hoverController =
+      Get.put(HoverController(), tag: 'project${project.value.id}');
   Rx<Project> project;
 
   @override
@@ -41,6 +44,9 @@ class ProjectWidget extends StatelessWidget {
         bottom: 16,
       ),
       child: GestureDetector(
+        onTapDown: (details) => _hoverController.isHoverState(),
+        onTapCancel: () => _hoverController.isNonHoverState(),
+        onTapUp: (details) => _hoverController.isNonHoverState(),
         onTap: () async {
           if (type == ProjectWidgetType.profile) {
             Get.to(() => ProjectScreen(
@@ -54,158 +60,172 @@ class ProjectWidget extends StatelessWidget {
                 ));
           }
         },
-        child: Container(
-          decoration: kCardStyle,
-          child: Column(
-            children: [
-              type == ProjectWidgetType.profile
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        topRight: Radius.circular(8),
-                      ),
-                      child: AspectRatio(
-                        aspectRatio: 2 / 1,
-                        child: Obx(
-                          () => Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image:
-                                    controller.project.value.thumbnail != null
+        child: Obx(
+          () => AnimatedScale(
+            scale: _hoverController.scale.value,
+            duration: Duration(milliseconds: 100),
+            curve: kAnimationCurve,
+            child: Container(
+              decoration: kCardStyle,
+              child: Column(
+                children: [
+                  type == ProjectWidgetType.profile
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                          ),
+                          child: AspectRatio(
+                            aspectRatio: 2 / 1,
+                            child: Obx(
+                              () => Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: controller.project.value.thumbnail !=
+                                            null
                                         ? NetworkImage(
                                             controller.project.value.thumbnail!,
                                           ) as ImageProvider
                                         : AssetImage(
                                             "assets/illustrations/default_image.png",
                                           ),
-                                fit: BoxFit.cover,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        )
+                      : Container(),
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
+                    ),
+                    child: Container(
+                      color: mainWhite,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12.0,
+                        horizontal: 16.0,
                       ),
-                    )
-                  : Container(),
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8),
-                ),
-                child: Container(
-                  color: mainWhite,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12.0,
-                    horizontal: 16.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Obx(
-                        () => Text(
-                          controller.project.value.projectName,
-                          style: kHeaderH2Style,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Obx(
                             () => Text(
-                              '${DateFormat("yy.MM.dd").format(controller.project.value.startDate!)} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate!) : ''}',
-                              style: kSubTitle2Style,
+                              controller.project.value.projectName,
+                              style: kHeaderH2Style,
                             ),
                           ),
                           SizedBox(
-                            width: (controller.project.value.endDate == null)
-                                ? 4
-                                : 8,
+                            height: 16,
                           ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: (controller.project.value.endDate == null)
-                                  ? Color(0xffefefef)
-                                  : Color(0xff888B8C),
-                            ),
-                            child: Center(
-                              child: Obx(
+                          Row(
+                            children: [
+                              Obx(
                                 () => Text(
-                                  (controller.project.value.endDate == null)
-                                      ? '진행중'
-                                      : DurationCaculator().durationCaculate(
-                                          startDate: controller
-                                              .project.value.startDate!,
-                                          endDate:
-                                              controller.project.value.endDate!,
-                                        ),
-                                  style: kBody2Style.copyWith(
-                                      fontWeight:
-                                          (controller.project.value.endDate ==
-                                                  null)
-                                              ? FontWeight.normal
-                                              : FontWeight.bold,
+                                  '${DateFormat("yy.MM.dd").format(controller.project.value.startDate!)} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate!) : ''}',
+                                  style: kSubTitle2Style,
+                                ),
+                              ),
+                              Obx(
+                                () => SizedBox(
+                                  width:
+                                      (controller.project.value.endDate == null)
+                                          ? 4
+                                          : 8,
+                                ),
+                              ),
+                              Obx(() => Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
                                       color:
                                           (controller.project.value.endDate ==
                                                   null)
-                                              ? mainblack.withOpacity(0.6)
-                                              : mainWhite),
-                                ),
+                                              ? Color(0xffefefef)
+                                              : Color(0xff888B8C),
+                                    ),
+                                    child: Center(
+                                      child: Obx(
+                                        () => Text(
+                                          (controller.project.value.endDate ==
+                                                  null)
+                                              ? '진행중'
+                                              : DurationCaculator()
+                                                  .durationCaculate(
+                                                  startDate: controller
+                                                      .project.value.startDate!,
+                                                  endDate: controller
+                                                      .project.value.endDate!,
+                                                ),
+                                          style: kBody2Style.copyWith(
+                                              fontWeight: (controller.project
+                                                          .value.endDate ==
+                                                      null)
+                                                  ? FontWeight.normal
+                                                  : FontWeight.bold,
+                                              color: (controller.project.value
+                                                          .endDate ==
+                                                      null)
+                                                  ? mainblack.withOpacity(0.6)
+                                                  : mainWhite),
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    '포스팅',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Obx(
+                                    () => Text(
+                                      '${controller.project.value.post_count!.value}',
+                                      style: kButtonStyle,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
+                              Row(children: [
+                                SvgPicture.asset(
+                                    "assets/icons/Favorite_Active.svg"),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Obx(
+                                  () => Text(
+                                    "${controller.project.value.like_count!.value}",
+                                    style: kButtonStyle,
+                                  ),
+                                ),
+                              ])
+                            ],
                           )
                         ],
                       ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                '포스팅',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Obx(
-                                () => Text(
-                                  '${controller.project.value.post_count!.value}',
-                                  style: kButtonStyle,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(children: [
-                            SvgPicture.asset(
-                                "assets/icons/Favorite_Active.svg"),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Obx(
-                              () => Text(
-                                "${controller.project.value.like_count!.value}",
-                                style: kButtonStyle,
-                              ),
-                            ),
-                          ])
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),
