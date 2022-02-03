@@ -139,32 +139,26 @@ class SearchTagWidget extends StatelessWidget {
   }
 
   void _selectTag() async {
-    if (Get.find<TagController>(tag: tagtype.toString())
-            .selectedtaglist
-            .length <
-        3) {
+    TagController controller = Get.find<TagController>(tag: tagtype.toString());
+    if (controller.selectedtaglist.length < 3) {
       if (id == 0) {
-        SearchTag? searchTag = await postmaketag(tagtype!);
-        if (searchTag != null) {
-          Get.find<TagController>(tag: tagtype.toString())
-              .selectedtaglist
-              .add(SelectedTagWidget(
-                id: searchTag.id,
-                text: searchTag.tag,
-                selecttagtype: SelectTagtype.interesting,
-                tagtype: tagtype!,
-              ));
-          Get.find<TagController>(tag: tagtype.toString()).tagsearch.clear();
-          gettagsearch(tagtype!);
-        }
+        // SearchTag? searchTag = await postmaketag(tagtype!);
+        SearchTag searchTag = SearchTag(id: id, tag: controller.tagsearch.text);
+        controller.selectedtaglist.add(SelectedTagWidget(
+          id: searchTag.id,
+          text: searchTag.tag,
+          selecttagtype: SelectTagtype.interesting,
+          tagtype: tagtype!,
+        ));
+        controller.tagsearch.clear();
+        gettagsearch(tagtype!);
       } else {
-        Get.find<TagController>(tag: tagtype.toString()).selectedtaglist.add(
-            SelectedTagWidget(
-                id: id,
-                text: tag,
-                selecttagtype: SelectTagtype.interesting,
-                tagtype: tagtype!));
-        Get.find<TagController>(tag: tagtype.toString()).tagsearch.clear();
+        controller.selectedtaglist.add(SelectedTagWidget(
+            id: id,
+            text: tag,
+            selecttagtype: SelectTagtype.interesting,
+            tagtype: tagtype!));
+        controller.tagsearch.clear();
         gettagsearch(tagtype!);
       }
     } else {

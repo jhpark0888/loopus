@@ -47,7 +47,7 @@ class SelectedTagWidget extends StatelessWidget {
               onTap: () {
                 if (selecttagtype == SelectTagtype.interesting) {
                   tagController.selectedtaglist
-                      .removeWhere((element) => element.id == id);
+                      .removeWhere((element) => element.text == text);
                   gettagsearch(tagtype);
                 } else {
                   ProjectAddController.to.selectedpersontaglist

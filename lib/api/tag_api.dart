@@ -44,7 +44,7 @@ void gettagsearch(Tagtype tagtype) async {
 
       for (var selectedtag in tagController.selectedtaglist) {
         tagController.searchtaglist
-            .removeWhere((element) => element.id == selectedtag.id);
+            .removeWhere((element) => element.tag == selectedtag.text);
       }
     } else {
       tagController.searchtaglist.clear();
@@ -58,19 +58,23 @@ void gettagsearch(Tagtype tagtype) async {
           tagtype: tagtype,
         );
       }).toList());
-      if (tagController.tagsearch.text != '') {
+      if (tagController.tagsearch.text != '' &&
+          tagController.selectedtaglist
+              .where((tag) => tag.text == tagController.tagsearch.text)
+              .isEmpty) {
         tagController.searchtaglist.insert(
             0,
             SearchTagWidget(
               id: 0,
               tag: "처음으로 '${tagController.tagsearch.text}' 태그 사용하기",
               isSearch: 0,
+              tagtype: tagtype,
             ));
       }
 
       tagController.selectedtaglist.forEach((selectedtag) {
         tagController.searchtaglist
-            .removeWhere((element) => element.id == selectedtag.id);
+            .removeWhere((element) => element.tag == selectedtag.text);
       });
     }
     tagController.isTagSearchLoading(false);
@@ -80,26 +84,27 @@ void gettagsearch(Tagtype tagtype) async {
   }
 }
 
-Future<SearchTag?> postmaketag(Tagtype tagtype) async {
-  TagController tagController = Get.find(tag: tagtype.toString());
+// Future<SearchTag?> postmaketag(Tagtype tagtype) async {
+//   TagController tagController = Get.find(tag: tagtype.toString());
 
-  Uri uri = Uri.parse('$serverUri/tag_api/tag');
+//   Uri uri = Uri.parse('$serverUri/tag_api/tag');
 
-  var tag = {"tag": tagController.tagsearch.text};
+//   var tag = {"tag": tagController.tagsearch.text};
 
-  http.Response response = await http.post(
-    uri,
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode(tag),
-  );
+//   http.Response response = await http.post(
+//     uri,
+//     headers: <String, String>{
+//       'Content-Type': 'application/json',
+//     },
+//     body: jsonEncode(tag),
+//   );
 
-  if (response.statusCode == 201) {
-    tagController.tagsearch.clear();
-    Map responsebody = json.decode(utf8.decode(response.bodyBytes));
-    SearchTag searchtag = SearchTag.fromJson(responsebody["tag"]);
-    return searchtag;
-  } else if (response.statusCode == 401) {
-  } else {}
-}
+//   print('태그 생성: ${response.statusCode}');
+//   if (response.statusCode == 201) {
+//     tagController.tagsearch.clear();
+//     Map responsebody = json.decode(utf8.decode(response.bodyBytes));
+//     SearchTag searchtag = SearchTag.fromJson(responsebody["tag"]);
+//     return searchtag;
+//   } else if (response.statusCode == 401) {
+//   } else {}
+// }
