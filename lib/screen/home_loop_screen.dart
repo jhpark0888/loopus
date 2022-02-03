@@ -212,8 +212,8 @@ class HomeLoopScreen extends StatelessWidget {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        return Container(
-                          height: 120,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -235,7 +235,7 @@ class HomeLoopScreen extends StatelessWidget {
                                   // );
                                 },
                                 child: Text(
-                                  '루프한 학생들의 포스팅 읽기',
+                                  '팔로우를 통해 더 많은 정보를 얻어보세요',
                                   style: kButtonStyle.copyWith(
                                     color: mainblue,
                                   ),

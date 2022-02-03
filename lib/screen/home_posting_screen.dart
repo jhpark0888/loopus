@@ -239,8 +239,8 @@ class HomePostingScreen extends StatelessWidget {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      return Container(
-                        height: 120,
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -254,12 +254,12 @@ class HomePostingScreen extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 16,
                             ),
                             Center(
                               child: Text(
                                 '이제부터는 최신 포스팅을 보여드릴게요',
-                                style: kSubTitle1Style.copyWith(
+                                style: kButtonStyle.copyWith(
                                   color: mainblue,
                                 ),
                               ),
@@ -330,8 +330,8 @@ class HomePostingScreen extends StatelessWidget {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      return Container(
-                        height: 120,
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -344,16 +344,12 @@ class HomePostingScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            TextButton(
-                              onPressed: () {
-                                // homeController.hometabcontroller.animateTo(
-                                //   2,
-                                //   curve: Curves.easeInOut,
-                                //   duration: Duration(milliseconds: 300),
-                                // );
-                              },
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Center(
                               child: Text(
-                                '루프한 학생들의 포스팅 읽기',
+                                '팔로잉한 학생들의 포스팅도 확인해보세요',
                                 style: kButtonStyle.copyWith(
                                   color: mainblue,
                                 ),

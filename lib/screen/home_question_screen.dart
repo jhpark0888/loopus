@@ -391,8 +391,8 @@ class HomeQuestionScreen extends StatelessWidget {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      return Container(
-                        height: 120,
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -405,16 +405,12 @@ class HomeQuestionScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            TextButton(
-                              onPressed: () {
-                                // homeController.hometabcontroller.animateTo(
-                                //   2,
-                                //   curve: Curves.easeInOut,
-                                //   duration: Duration(milliseconds: 300),
-                                // );
-                              },
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Center(
                               child: Text(
-                                '루프한 학생들의 포스팅 읽기',
+                                '검색을 통해 더 많은 질문들을 찾아보세요',
                                 style: kButtonStyle.copyWith(
                                   color: mainblue,
                                 ),

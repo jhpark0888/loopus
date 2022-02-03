@@ -23,6 +23,7 @@ class TagDetailScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         body: NestedScrollView(
+          physics: const BouncingScrollPhysics(),
           headerSliverBuilder: (context, value) {
             return [
               SliverAppBar(
@@ -31,6 +32,7 @@ class TagDetailScreen extends StatelessWidget {
                   child: Container(),
                 ),
                 pinned: true,
+                stretch: true,
                 elevation: 0,
                 leading: IconButton(
                   onPressed: () => Get.back(),
@@ -49,6 +51,7 @@ class TagDetailScreen extends StatelessWidget {
                 handle:
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverSafeArea(
+                  top: true,
                   bottom: false,
                   sliver: SliverAppBar(
                     pinned: true,
@@ -123,14 +126,41 @@ class TagDetailScreen extends StatelessWidget {
                           ),
                         ],
                       )
-                    : SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: Obx(
-                            () => Column(
-                              children:
-                                  searchController.searchtagprojectlist.value,
-                            ),
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Obx(
+                          () => Column(
+                            children: searchController
+                                    .searchtagprojectlist.isNotEmpty
+                                ? searchController.searchtagprojectlist.value
+                                : [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                      child: Center(
+                                        child: RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              const TextSpan(
+                                                text: '아직 ',
+                                              ),
+                                              TextSpan(
+                                                text: tag.tag,
+                                                style: kSubTitle1Style.copyWith(
+                                                    color: mainblue),
+                                              ),
+                                              const TextSpan(
+                                                text: '와(과) 관련된 활동이 없어요',
+                                              ),
+                                            ],
+                                            style: kSubTitle1Style.copyWith(
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                           ),
                         ),
                       ),
@@ -166,8 +196,33 @@ class TagDetailScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Obx(
                             () => Column(
-                              children:
-                                  searchController.searchtagquestionlist.value,
+                              children: searchController
+                                      .searchtagquestionlist.isNotEmpty
+                                  ? searchController.searchtagquestionlist.value
+                                  : [
+                                      Center(
+                                        child: RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              const TextSpan(
+                                                text: '아직 ',
+                                              ),
+                                              TextSpan(
+                                                text: tag.tag,
+                                                style: kSubTitle1Style.copyWith(
+                                                    color: mainblue),
+                                              ),
+                                              const TextSpan(
+                                                text: '와(과) 관련된 질문이 없어요',
+                                              ),
+                                            ],
+                                            style: kSubTitle1Style.copyWith(
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                             ),
                           ),
                         ),
@@ -205,7 +260,7 @@ class _CustomSpace extends StatelessWidget {
                 .clamp(0.0, 1.0);
         final fadeStart = math.max(0.0, 1.0 - kToolbarHeight / deltaExtent);
         const fadeEnd = 1.0;
-        final opacity1 = 1.0 - Interval(0.0, 0.3).transform(t);
+        final opacity1 = 1.0 - Interval(0.0, 0.4).transform(t);
         final opacity2 = 1.0 - Interval(fadeStart, fadeEnd).transform(t);
 
         return Stack(
