@@ -19,6 +19,7 @@ class MessageRoomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print(messageRoom.message.date);
     controller.messagelist.add(MessageWidget(
       message: messageRoom.message,
       user: messageRoom.user,

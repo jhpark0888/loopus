@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -91,23 +92,32 @@ class MessageWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipOval(
-                    child: user.profileImage == null
-                        ? Image.asset(
-                            "assets/illustrations/default_profile.png",
-                            height: 32,
-                            width: 32,
-                          )
-                        : CachedNetworkImage(
-                            height: 32,
-                            width: 32,
-                            imageUrl: user.profileImage!,
-                            placeholder: (context, url) => CircleAvatar(
-                              backgroundColor: Color(0xffe7e7e7),
-                              child: Container(),
-                            ),
-                            fit: BoxFit.cover,
-                          )),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => OtherProfileScreen(
+                          isuser: user.isuser!,
+                          userid: user.userid,
+                          realname: user.realName,
+                        ));
+                  },
+                  child: ClipOval(
+                      child: user.profileImage == null
+                          ? Image.asset(
+                              "assets/illustrations/default_profile.png",
+                              height: 32,
+                              width: 32,
+                            )
+                          : CachedNetworkImage(
+                              height: 32,
+                              width: 32,
+                              imageUrl: user.profileImage!,
+                              placeholder: (context, url) => CircleAvatar(
+                                backgroundColor: Color(0xffe7e7e7),
+                                child: Container(),
+                              ),
+                              fit: BoxFit.cover,
+                            )),
+                ),
                 SizedBox(
                   width: 10,
                 ),
