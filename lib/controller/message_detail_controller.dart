@@ -28,6 +28,19 @@ class MessageDetailController extends GetxController {
   String username = "";
   User user;
 
+  RxDouble textFormHeight = 0.0.obs;
+  Rx<GlobalKey> textFieldBoxKey = GlobalKey().obs;
+  Rx<Size> textBoxSize = Size(Get.width, 0).obs;
+
+  getSize(GlobalKey key) {
+    if (key.currentContext != null) {
+      RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
+      Size size = renderBox.size;
+      return size;
+    }
+    return Size(Get.width, 36);
+  }
+
   void messageroomrefresh() {
     isMessageListLoading(true);
     getmessagelist(user.userid).then((value) {
@@ -46,6 +59,10 @@ class MessageDetailController extends GetxController {
 
   @override
   void onInit() {
+    messagetextController.addListener(() {
+      textBoxSize.value = getSize(textFieldBoxKey.value);
+    });
+
     keyboardController.onChange.listen((isVisible) {
       if (isVisible) {
         if (scrollController.hasClients) {

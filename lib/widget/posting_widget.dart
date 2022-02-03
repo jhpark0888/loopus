@@ -13,6 +13,7 @@ import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/screen/likepeople_screen.dart';
 
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
@@ -175,9 +176,16 @@ class PostingWidget extends StatelessWidget {
                                             const SizedBox(
                                               width: 4,
                                             ),
-                                            Text(
-                                              "${item.likeCount.value}",
-                                              style: kButtonStyle,
+                                            InkWell(
+                                              onTap: () {
+                                                Get.to(() => LikePeopleScreen(
+                                                      postid: item.id,
+                                                    ));
+                                              },
+                                              child: Text(
+                                                "${item.likeCount.value}",
+                                                style: kButtonStyle,
+                                              ),
                                             ),
                                             const SizedBox(
                                               width: 16,

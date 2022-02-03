@@ -14,6 +14,7 @@ import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -146,9 +147,16 @@ class ProjectPostingWidget extends StatelessWidget {
                           width: 4,
                         ),
                         Obx(
-                          () => Text(
-                            item.likeCount.toString(),
-                            style: kButtonStyle,
+                          () => InkWell(
+                            onTap: () {
+                              Get.to(() => LikePeopleScreen(
+                                    postid: item.id,
+                                  ));
+                            },
+                            child: Text(
+                              item.likeCount.toString(),
+                              style: kButtonStyle,
+                            ),
                           ),
                         ),
                         SizedBox(

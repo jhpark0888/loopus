@@ -329,7 +329,8 @@ class SearchScreen extends StatelessWidget {
                                                           top: 10.0),
                                                   child: Column(
                                                     children: _searchController
-                                                        .searchpostinglist,
+                                                        .searchpostinglist
+                                                        .value,
                                                   ))
                                               : Container(
                                                   height: 80,
@@ -378,7 +379,8 @@ class SearchScreen extends StatelessWidget {
                                                           top: 10.0),
                                                   child: Column(
                                                     children: _searchController
-                                                        .searchprofilelist,
+                                                        .searchprofilelist
+                                                        .value,
                                                   ))
                                               : Container(
                                                   height: 80,
@@ -427,7 +429,8 @@ class SearchScreen extends StatelessWidget {
                                                           top: 10.0),
                                                   child: Column(
                                                     children: _searchController
-                                                        .searchquestionlist,
+                                                        .searchquestionlist
+                                                        .value,
                                                   ),
                                                 )
                                               : Container(
@@ -477,7 +480,7 @@ class SearchScreen extends StatelessWidget {
                                                           top: 10.0),
                                                   child: Column(
                                                     children: _searchController
-                                                        .searchtaglist,
+                                                        .searchtaglist.value,
                                                   ),
                                                 )
                                               : Container(
