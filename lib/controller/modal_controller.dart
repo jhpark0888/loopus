@@ -507,6 +507,59 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
               SizedBox(
                 height: 16,
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      isCheckTwo.value = !isCheckTwo.value;
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          (isCheckTwo.value == true)
+                              ? 'assets/icons/Uncheck_norect_blue.svg'
+                              : 'assets/icons/Uncheck_norect.svg',
+                          color: isCheckTwo.value == true
+                              ? mainblue
+                              : mainblack.withOpacity(0.6),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          '(필수)',
+                          style: kButtonStyle.copyWith(
+                            color: isCheckTwo.value == true
+                                ? mainblue
+                                : mainblack.withOpacity(0.6),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          '개인정보수집 동의',
+                          style: kBody2Style.copyWith(
+                            color: isCheckTwo.value == true
+                                ? mainblue
+                                : mainblack.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
               GestureDetector(
                 onTap: () {
                   isCheckThree.value = !isCheckThree.value;

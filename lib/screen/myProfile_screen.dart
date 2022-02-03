@@ -336,40 +336,40 @@ class MyProfileScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        KakaoShareManager()
-                                            .isKakaotalkInstalled()
-                                            .then((installed) {
-                                          if (installed) {
-                                            KakaoShareManager().shareMyCode();
-                                          } else {
-                                            // show alert
-                                          }
-                                        });
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: mainblue,
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0,
-                                          ),
-                                          child: Center(
-                                              child: Text('내 프로필 공유하기',
-                                                  style: kButtonStyle.copyWith(
-                                                      color: mainWhite))),
-                                        ),
-                                      ),
-                                    ),
-                                  )
+                                  // const SizedBox(
+                                  //   width: 8,
+                                  // ),
+                                  // Expanded(
+                                  //   child: GestureDetector(
+                                  //     onTap: () {
+                                  //       KakaoShareManager()
+                                  //           .isKakaotalkInstalled()
+                                  //           .then((installed) {
+                                  //         if (installed) {
+                                  //           KakaoShareManager().shareMyCode();
+                                  //         } else {
+                                  //           // show alert
+                                  //         }
+                                  //       });
+                                  //     },
+                                  //     child: Container(
+                                  //       decoration: BoxDecoration(
+                                  //         color: mainblue,
+                                  //         borderRadius:
+                                  //             BorderRadius.circular(4),
+                                  //       ),
+                                  //       child: Padding(
+                                  //         padding: const EdgeInsets.symmetric(
+                                  //           vertical: 8.0,
+                                  //         ),
+                                  //         child: Center(
+                                  //             child: Text('내 프로필 공유하기',
+                                  //                 style: kButtonStyle.copyWith(
+                                  //                     color: mainWhite))),
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // )
                                 ],
                               ),
                               const SizedBox(

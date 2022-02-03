@@ -103,8 +103,7 @@ class ProjectScreen extends StatelessWidget {
                                 rightText: '신고',
                                 title:
                                     '정말 <${controller.project.value.projectName}> 활동을 신고하시겠어요?',
-                                content:
-                                    '지금까지 작성한 ${controller.project.value.post.length}개의 포스팅도 삭제됩니다',
+                                content: '관리자가 검토 후 조치하도록 하겠습니다',
                                 leftFunction: () => Get.back(),
                                 rightFunction: () {});
                           },
@@ -502,10 +501,11 @@ class ProjectScreen extends StatelessWidget {
                               ),
                               Obx(
                                 () => Column(
-                                  children:
-                                      controller.project.value.post.isNotEmpty
-                                          ? controller.postinglist
-                                          : [
+                                  children: controller
+                                          .project.value.post.isNotEmpty
+                                      ? controller.postinglist
+                                      : (controller.project.value.is_user == 1)
+                                          ? [
                                               SizedBox(
                                                 height: 20,
                                               ),
@@ -524,6 +524,20 @@ class ProjectScreen extends StatelessWidget {
                                                   color: mainblue,
                                                 ),
                                               ),
+                                            ]
+                                          : [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 12.0),
+                                                child: Text(
+                                                  '아직 작성한 포스팅이 없어요',
+                                                  style:
+                                                      kSubTitle3Style.copyWith(
+                                                    color: mainblack
+                                                        .withOpacity(0.6),
+                                                  ),
+                                                ),
+                                              )
                                             ],
                                 ),
                               )

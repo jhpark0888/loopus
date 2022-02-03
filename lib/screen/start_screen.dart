@@ -9,8 +9,6 @@ import 'package:loopus/controller/modal_controller.dart';
 
 import 'package:loopus/screen/login_screen.dart';
 
-//TODO : 일러스트 다시 만들까...
-
 class StartScreen extends StatelessWidget {
   final PageController pageController = PageController(viewportFraction: 1);
   final ModalController _modalController = Get.put(ModalController());

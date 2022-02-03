@@ -19,6 +19,7 @@ class SignupUserInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
+        bottomBorder: false,
         actions: [
           TextButton(
             onPressed: () {

@@ -98,8 +98,10 @@ class ProjectModifyScreen extends StatelessWidget {
                       ));
                 },
                 project: controller.project.value,
-                title: '활동 정보',
-                subtitle: controller.project.value.introduction!,
+                title: '활동 소개',
+                subtitle: (controller.project.value.introduction! != '')
+                    ? controller.project.value.introduction!
+                    : '아직 활동 소개를 작성하지 않았어요',
               ),
             ),
             Obx(
@@ -148,7 +150,7 @@ class ProjectModifyScreen extends StatelessWidget {
                     : controller.project.value.looper
                         .map((user) => user.realName)
                         .toList()
-                        .join(','),
+                        .join(', '),
               ),
             ),
             updateProjectTile(

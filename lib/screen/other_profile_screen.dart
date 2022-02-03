@@ -398,127 +398,118 @@ class OtherProfileScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Expanded(
-                                  child: Obx(
-                                    () => GestureDetector(
-                                      onTap: () {
-                                        if (controller.otherUser.value.isuser ==
-                                            1) {
-                                          KakaoShareManager()
-                                              .isKakaotalkInstalled()
-                                              .then((installed) {
-                                            if (installed) {
-                                              KakaoShareManager().shareMyCode();
-                                            } else {
-                                              // show alert
+                                if (controller.otherUser.value.isuser != 1)
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                if (controller.otherUser.value.isuser != 1)
+                                  Expanded(
+                                    child: Obx(
+                                      () => GestureDetector(
+                                        onTap: () {
+                                          if (controller
+                                                  .otherUser.value.isuser ==
+                                              1) {
+                                            // KakaoShareManager()
+                                            //     .isKakaotalkInstalled()
+                                            //     .then((installed) {
+                                            //   if (installed) {
+                                            //     KakaoShareManager().shareMyCode();
+                                            //   } else {
+                                            //     // show alert
+                                            //   }
+                                            // });
+                                          } else {
+                                            if (controller.otherUser.value
+                                                    .looped.value ==
+                                                FollowState.normal) {
+                                              postfollowRequest(controller
+                                                      .otherUser.value.userid)
+                                                  .then((value) {
+                                                controller.otherUser.value
+                                                    .looped(
+                                                        FollowState.following);
+                                              });
+                                            } else if (controller.otherUser
+                                                    .value.looped.value ==
+                                                FollowState.follower) {
+                                              postfollowRequest(controller
+                                                      .otherUser.value.userid)
+                                                  .then((value) {
+                                                controller.otherUser.value
+                                                    .looped(
+                                                        FollowState.wefollow);
+                                              });
+
+                                              // ProfileController.to.myUserInfo
+                                              //         .value.loopcount -
+                                              //     1;
+
+                                            } else if (controller.otherUser
+                                                    .value.looped.value ==
+                                                FollowState.following) {
+                                              deletefollow(controller
+                                                      .otherUser.value.userid)
+                                                  .then((value) {
+                                                controller.otherUser.value
+                                                    .looped(FollowState.normal);
+                                              });
+                                            } else if (controller.otherUser
+                                                    .value.looped.value ==
+                                                FollowState.wefollow) {
+                                              deletefollow(controller
+                                                      .otherUser.value.userid)
+                                                  .then((value) {
+                                                controller.otherUser.value
+                                                    .looped(
+                                                        FollowState.follower);
+                                              });
                                             }
-                                          });
-                                        } else {
-                                          if (controller.otherUser.value.looped
-                                                  .value ==
-                                              FollowState.normal) {
-                                            postfollowRequest(controller
-                                                    .otherUser.value.userid)
-                                                .then((value) {
-                                              controller.otherUser.value.looped(
-                                                  FollowState.following);
-                                            });
-                                          } else if (controller.otherUser.value
-                                                  .looped.value ==
-                                              FollowState.follower) {
-                                            postfollowRequest(controller
-                                                    .otherUser.value.userid)
-                                                .then((value) {
-                                              controller.otherUser.value
-                                                  .looped(FollowState.wefollow);
-                                            });
-
-                                            // ProfileController.to.myUserInfo
-                                            //         .value.loopcount -
-                                            //     1;
-
-                                          } else if (controller.otherUser.value
-                                                  .looped.value ==
-                                              FollowState.following) {
-                                            deletefollow(controller
-                                                    .otherUser.value.userid)
-                                                .then((value) {
-                                              controller.otherUser.value
-                                                  .looped(FollowState.normal);
-                                            });
-                                          } else if (controller.otherUser.value
-                                                  .looped.value ==
-                                              FollowState.wefollow) {
-                                            deletefollow(controller
-                                                    .otherUser.value.userid)
-                                                .then((value) {
-                                              controller.otherUser.value
-                                                  .looped(FollowState.follower);
-                                            });
                                           }
-                                        }
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: mainblue,
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                        ),
-                                        // color: Colors.grey[400],
-
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0,
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: mainblue,
+                                            borderRadius:
+                                                BorderRadius.circular(4),
                                           ),
-                                          child: controller
-                                                      .otherUser.value.isuser ==
-                                                  1
-                                              ? Center(
-                                                  child: Text('내 프로필 공유하기',
-                                                      style:
-                                                          kButtonStyle.copyWith(
-                                                              color:
-                                                                  mainWhite)),
-                                                )
-                                              : Center(
-                                                  child: Text(
-                                                      controller
+                                          // color: Colors.grey[400],
+
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                  controller.otherUser.value
+                                                              .looped.value ==
+                                                          FollowState.normal
+                                                      ? '팔로우'
+                                                      : controller
                                                                   .otherUser
                                                                   .value
                                                                   .looped
                                                                   .value ==
-                                                              FollowState.normal
-                                                          ? '팔로우'
+                                                              FollowState
+                                                                  .follower
+                                                          ? '맞팔로우'
                                                           : controller
                                                                       .otherUser
                                                                       .value
                                                                       .looped
                                                                       .value ==
                                                                   FollowState
-                                                                      .follower
-                                                              ? '맞팔로우'
-                                                              : controller
-                                                                          .otherUser
-                                                                          .value
-                                                                          .looped
-                                                                          .value ==
-                                                                      FollowState
-                                                                          .following
-                                                                  ? '팔로우 해제'
-                                                                  : '팔로우 해제',
-                                                      style:
-                                                          kButtonStyle.copyWith(
-                                                              color:
-                                                                  mainWhite)),
-                                                ),
+                                                                      .following
+                                                              ? '팔로우 해제'
+                                                              : '팔로우 해제',
+                                                  style: kButtonStyle.copyWith(
+                                                      color: mainWhite)),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
                               ],
                             ),
                             SizedBox(
@@ -633,10 +624,24 @@ class OtherProfileScreen extends StatelessWidget {
                                 child: (controller.isProfileLoading.value ==
                                         false)
                                     ? Obx(
-                                        () => Column(
-                                          children:
-                                              controller.otherProjectList.value,
-                                        ),
+                                        () => (controller.otherProjectList.value
+                                                .isNotEmpty)
+                                            ? Column(
+                                                children: controller
+                                                    .otherProjectList.value,
+                                              )
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 12.0),
+                                                child: Text(
+                                                  '아직 만들어진 활동이 없어요',
+                                                  style:
+                                                      kSubTitle3Style.copyWith(
+                                                    color: mainblack
+                                                        .withOpacity(0.6),
+                                                  ),
+                                                ),
+                                              ),
                                       )
                                     : Padding(
                                         padding: EdgeInsets.zero,
