@@ -57,6 +57,7 @@ class MessageDetailScreen extends StatelessWidget {
 
   Widget _buildTextComposer() {
     return Container(
+      key: controller.textFieldBoxKey.value,
       decoration: BoxDecoration(
         color: mainWhite,
         border: Border(
@@ -162,10 +163,16 @@ class MessageDetailScreen extends StatelessWidget {
                     ]),
               )
             : Obx(
-                () => ListView(
-                  reverse: true,
-                  controller: controller.scrollController,
-                  children: controller.messagelist,
+                () => Padding(
+                  padding: EdgeInsets.only(
+                      bottom: controller.keyboardController.isVisible
+                          ? controller.textBoxSize.value.height
+                          : 0),
+                  child: ListView(
+                    reverse: true,
+                    controller: controller.scrollController,
+                    children: controller.messagelist,
+                  ),
                 ),
               ),
       ),

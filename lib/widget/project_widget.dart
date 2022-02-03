@@ -41,7 +41,7 @@ class ProjectWidget extends StatelessWidget {
         bottom: 16,
       ),
       child: GestureDetector(
-        onTap: () async {
+        onTap: () {
           if (type == ProjectWidgetType.profile) {
             Get.to(() => ProjectScreen(
                   projectid: controller.project.value.id,

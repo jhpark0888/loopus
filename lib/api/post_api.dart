@@ -15,6 +15,7 @@ import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/smarttextfield.dart';
@@ -297,4 +298,24 @@ Future<dynamic> likepost(int postingId) async {
   var responseHeaders = response.headers;
   var responseBody = utf8.decode(response.bodyBytes);
   String result = jsonDecode(responseBody);
+}
+
+Future<List<User>> getlikepeoele(int postid) async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  final uri = Uri.parse("$serverUri/post_api/like_list_load/$postid");
+
+  http.Response response =
+      await http.get(uri, headers: {"Authorization": "Token $token"});
+
+  print('like 리스트 statusCode: ${response.statusCode}');
+  if (response.statusCode == 200) {
+    List responseBody = json.decode(utf8.decode(response.bodyBytes));
+    List<User> likepeople =
+        responseBody.map((user) => User.fromJson(user)).toList();
+
+    return likepeople;
+  } else {
+    return Future.error(response.statusCode);
+  }
 }

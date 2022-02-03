@@ -13,6 +13,7 @@ import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/transition_animation_controller.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/post_content_widget.dart';
@@ -98,9 +99,16 @@ class PostingScreen extends StatelessWidget {
                     width: 4,
                   ),
                   Obx(
-                    () => Text(
-                      likecount.toString(),
-                      style: kButtonStyle,
+                    () => InkWell(
+                      onTap: () {
+                        Get.to(() => LikePeopleScreen(
+                              postid: postid,
+                            ));
+                      },
+                      child: Text(
+                        likecount.toString(),
+                        style: kButtonStyle,
+                      ),
                     ),
                   ),
                   const SizedBox(

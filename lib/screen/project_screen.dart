@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,9 @@ import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
+import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/projectpeople_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
@@ -33,9 +37,149 @@ class ProjectScreen extends StatelessWidget {
   RxInt likecount = 0.obs;
   Project? exproject;
 
+  Widget looppersonlist() {
+    double? width;
+    List<Widget> personlist = [];
+    if (controller.project.value.looper.length == 1) {
+      personlist.add(ProjectLooperImage(
+          user: controller.project.value.looper.first, index: 0));
+      width = 30;
+    } else if (controller.project.value.looper.length == 2) {
+      for (int i = 0; i < controller.project.value.looper.length; i++) {
+        personlist.add(ProjectLooperImage(
+            user: controller.project.value.looper[i], index: i));
+      }
+      width = 50;
+    } else if (controller.project.value.looper.length >= 3) {
+      for (int i = 0; i < 3; i++) {
+        personlist.add(ProjectLooperImage(
+            user: controller.project.value.looper[i], index: i));
+      }
+      width = 70;
+    }
+    return Container(
+      width: width,
+      child: Stack(
+        children: personlist,
+      ),
+    );
+  }
+
+  Widget looppersonname() {
+    List<InlineSpan>? textspanlist = [];
+    if (controller.project.value.looper.length == 1) {
+      textspanlist.add(
+        TextSpan(
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              Get.to(() => OtherProfileScreen(
+                  userid: controller.project.value.looper.first.userid,
+                  isuser: 0,
+                  realname: controller.project.value.looper.first.realName));
+            },
+          text: controller.project.value.looper.first.realName,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      );
+      textspanlist.add(
+        TextSpan(
+          text: '님이',
+        ),
+      );
+    } else if (controller.project.value.looper.length == 2) {
+      for (int i = 0; i < controller.project.value.looper.length; i++) {
+        textspanlist.add(
+          TextSpan(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Get.to(() => OtherProfileScreen(
+                    userid: controller.project.value.looper[i].userid,
+                    isuser: 0,
+                    realname: controller.project.value.looper[i].realName));
+              },
+            text: controller.project.value.looper[i].realName,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        );
+        textspanlist.add(
+          TextSpan(
+            text: '님',
+          ),
+        );
+        if (i == 0) {
+          textspanlist.add(
+            TextSpan(
+              text: ', ',
+            ),
+          );
+        }
+      }
+      textspanlist.add(
+        TextSpan(
+          text: '이',
+        ),
+      );
+    } else if (controller.project.value.looper.length >= 3) {
+      for (int i = 0; i < 2; i++) {
+        textspanlist.add(
+          TextSpan(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Get.to(() => OtherProfileScreen(
+                    userid: controller.project.value.looper[i].userid,
+                    isuser: 0,
+                    realname: controller.project.value.looper[i].realName));
+              },
+            text: controller.project.value.looper[i].realName,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        );
+        textspanlist.add(
+          TextSpan(
+            text: '님',
+          ),
+        );
+        if (i == 0) {
+          textspanlist.add(
+            TextSpan(
+              text: ', ',
+            ),
+          );
+        }
+      }
+      textspanlist.add(
+        TextSpan(
+          text: ' 외 ',
+        ),
+      );
+      textspanlist.add(TextSpan(
+        text: '${controller.project.value.looper.length - 2}명이',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ));
+    }
+    textspanlist.add(
+      TextSpan(
+        text: ' 참여했어요',
+      ),
+    );
+
+    return RichText(
+      text: TextSpan(
+        children: textspanlist,
+        style: TextStyle(
+          fontSize: 14,
+          color: mainblack,
+          fontFamily: 'Nanum',
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    controller.loadProject();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      controller.loadProject();
+    });
     return Obx(
       () => Stack(children: [
         Scaffold(
@@ -274,118 +418,27 @@ class ProjectScreen extends StatelessWidget {
                               SizedBox(
                                 height: 20,
                               ),
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    child: Stack(
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundColor: mainblack,
-                                          radius: 15,
-                                          child: ClipOval(
-                                            child: CachedNetworkImage(
-                                              width: 28,
-                                              height: 28,
-                                              imageUrl:
-                                                  "https://i.stack.imgur.com/l60Hf.png",
-                                              placeholder: (context, url) =>
-                                                  CircleAvatar(
-                                                backgroundColor:
-                                                    Color(0xffe7e7e7),
-                                                child: Container(),
-                                              ),
-                                              fit: BoxFit.cover,
-                                            ),
+                              controller.project.value.looper.isEmpty
+                                  ? Text(
+                                      '함께 활동한 사람이 없어요',
+                                      style: kSubTitle3Style,
+                                    )
+                                  : GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => ProjectPeopleScreen(
+                                              projectid: controller.projectid,
+                                            ));
+                                      },
+                                      child: Row(
+                                        children: [
+                                          looppersonlist(),
+                                          SizedBox(
+                                            width: 8,
                                           ),
-                                        ),
-                                        Positioned(
-                                          left: 20,
-                                          child: CircleAvatar(
-                                            backgroundColor: mainblack,
-                                            radius: 15,
-                                            child: ClipOval(
-                                              child: CachedNetworkImage(
-                                                width: 28,
-                                                height: 28,
-                                                imageUrl:
-                                                    "https://i.stack.imgur.com/l60Hf.png",
-                                                placeholder: (context, url) =>
-                                                    CircleAvatar(
-                                                  backgroundColor:
-                                                      Color(0xffe7e7e7),
-                                                  child: Container(),
-                                                ),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 40,
-                                          child: CircleAvatar(
-                                            backgroundColor: mainblack,
-                                            radius: 15,
-                                            child: ClipOval(
-                                              child: CachedNetworkImage(
-                                                width: 28,
-                                                height: 28,
-                                                imageUrl:
-                                                    "https://i.stack.imgur.com/l60Hf.png",
-                                                placeholder: (context, url) =>
-                                                    CircleAvatar(
-                                                  backgroundColor:
-                                                      Color(0xffe7e7e7),
-                                                  child: Container(),
-                                                ),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: '박지환',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        TextSpan(
-                                          text: '님, ',
-                                        ),
-                                        TextSpan(
-                                          text: '김형태',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        TextSpan(
-                                          text: '님 외 ',
-                                        ),
-                                        TextSpan(
-                                          text: '4명이',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        TextSpan(
-                                          text: ' 참여했어요',
-                                        ),
-                                      ],
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: mainblack,
-                                        fontFamily: 'Nanum',
+                                          looppersonname(),
+                                        ],
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              )
+                                    )
                             ],
                           ),
                         ),
@@ -560,6 +613,42 @@ class ProjectScreen extends StatelessWidget {
             ),
           ),
       ]),
+    );
+  }
+}
+
+class ProjectLooperImage extends StatelessWidget {
+  ProjectLooperImage({Key? key, required this.user, required this.index})
+      : super(key: key);
+
+  User user;
+  int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: index == 0 ? null : index * 20,
+      child: CircleAvatar(
+        backgroundColor: mainblack,
+        radius: 15,
+        child: ClipOval(
+            child: user.profileImage != null
+                ? CachedNetworkImage(
+                    width: 28,
+                    height: 28,
+                    imageUrl: user.profileImage!,
+                    placeholder: (context, url) => CircleAvatar(
+                      backgroundColor: Color(0xffe7e7e7),
+                      child: Container(),
+                    ),
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    "assets/illustrations/default_profile.png",
+                    height: 28,
+                    width: 28,
+                  )),
+      ),
     );
   }
 }

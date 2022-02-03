@@ -125,7 +125,6 @@ class ProjectModifyScreen extends StatelessWidget {
               () => updateProjectTile(
                 isSubtitleExist: true,
                 onTap: () async {
-                  print(controller.project.value.looper.first.realName);
                   projectlooperinput();
                   projectaddcontroller.isLooppersonLoading(true);
                   getfollowlist(ProfileController.to.myUserInfo.value.userid,
