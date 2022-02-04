@@ -103,7 +103,7 @@ class MessageDetailScreen extends StatelessWidget {
                         style: kButtonStyle.copyWith(
                             color: controller.isSendButtonon.value
                                 ? mainblue
-                                : mainblack.withOpacity(0.6)),
+                                : mainblack.withOpacity(0.38)),
                       ),
                     ),
                   ),
