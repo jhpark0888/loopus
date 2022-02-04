@@ -120,9 +120,22 @@ class ProjectAddTitleScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const Text(
-                '활동명이 무엇인가요?',
-                style: kSubTitle1Style,
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '활동명',
+                      style: kSubTitle1Style.copyWith(
+                        color: mainblue,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '이 무엇인가요?',
+                      style: kSubTitle1Style,
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 16,

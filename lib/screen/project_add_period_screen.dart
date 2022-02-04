@@ -128,9 +128,22 @@ class ProjectAddPeriodScreen extends StatelessWidget {
           child: Obx(
             () => Column(
               children: [
-                Text(
-                  '언제부터 언제까지 진행하셨나요?',
-                  style: kSubTitle1Style,
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '언제부터 언제까지 ',
+                        style: kSubTitle1Style.copyWith(
+                          color: mainblue,
+                        ),
+                      ),
+                      TextSpan(
+                        text: '진행하셨나요?',
+                        style: kSubTitle1Style,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 16,

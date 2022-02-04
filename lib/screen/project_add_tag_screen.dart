@@ -133,10 +133,27 @@ class ProjectAddTagScreen extends StatelessWidget {
                     12,
                   ),
                   child: Column(
-                    children: const [
-                      Text(
-                        '활동을 대표하는 키워드가 무엇인가요?',
-                        style: kSubTitle1Style,
+                    children: [
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '활동을 대표하는 ',
+                              style: kSubTitle1Style,
+                            ),
+                            TextSpan(
+                              text: '키워드',
+                              style: kSubTitle1Style.copyWith(
+                                color: mainblue,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '가 무엇인가요?',
+                              style: kSubTitle1Style,
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 16,

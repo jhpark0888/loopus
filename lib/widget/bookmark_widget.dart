@@ -126,9 +126,9 @@ class BookmarkWidget extends StatelessWidget {
                                             imageUrl: "${item.profileimage}",
                                             placeholder: (context, url) =>
                                                 CircleAvatar(
-                                              child: Center(
-                                                  child:
-                                                      CircularProgressIndicator()),
+                                              backgroundColor:
+                                                  const Color(0xffe7e7e7),
+                                              child: Container(),
                                             ),
                                             fit: BoxFit.fill,
                                           )),

@@ -112,9 +112,26 @@ class ProjectAddIntroScreen extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Text(
-                '어떤 활동인지 간략하게 소개해주세요!',
-                style: kSubTitle1Style,
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '어떤 활동인지 ',
+                      style: kSubTitle1Style,
+                    ),
+                    TextSpan(
+                      text: '간략하게 소개',
+                      style: kSubTitle1Style.copyWith(
+                        color: mainblue,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '해주세요',
+                      style: kSubTitle1Style,
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 16,

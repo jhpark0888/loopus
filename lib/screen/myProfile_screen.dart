@@ -303,12 +303,12 @@ class MyProfileScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: GestureDetector(
-                                      onTapDown: (details) =>
-                                          _hoverController.myTagOpacity(0.5),
-                                      onTapCancel: () =>
-                                          _hoverController.myTagOpacity(1.0),
-                                      onTapUp: (details) =>
-                                          _hoverController.myTagOpacity(1.0),
+                                      // onTapDown: (details) =>
+                                      //     _hoverController.isHover(true),
+                                      // onTapCancel: () =>
+                                      //     _hoverController.isHover(false),
+                                      // onTapUp: (details) =>
+                                      //     _hoverController.isHover(false),
                                       onTap: () {
                                         tagController.selectedtaglist.clear();
                                         tagController.tagsearch.text = "";
@@ -334,19 +334,10 @@ class MyProfileScreen extends StatelessWidget {
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                               vertical: 8.0),
-                                          child: Obx(
-                                            () => AnimatedOpacity(
-                                              opacity: _hoverController
-                                                  .myTagOpacity.value,
-                                              duration:
-                                                  Duration(milliseconds: 50),
-                                              curve: kAnimationCurve,
-                                              child: Center(
-                                                child: Text(
-                                                  '관심 태그 변경하기',
-                                                  style: kButtonStyle,
-                                                ),
-                                              ),
+                                          child: Center(
+                                            child: Text(
+                                              '관심 태그 변경하기',
+                                              style: kButtonStyle,
                                             ),
                                           ),
                                         ),
@@ -434,11 +425,11 @@ class MyProfileScreen extends StatelessWidget {
                               child: GestureDetector(
                                 behavior: HitTestBehavior.translucent,
                                 onTapDown: (details) =>
-                                    _hoverController.hoverButton(),
+                                    _hoverController.isHover(true),
                                 onTapCancel: () =>
-                                    _hoverController.followOpacity(1.0),
+                                    _hoverController.isHover(false),
                                 onTapUp: (details) =>
-                                    _hoverController.followOpacity(1.0),
+                                    _hoverController.isHover(false),
                                 onTap: () {
                                   profileController.isLoopPeopleLoading(true);
                                   Get.to(() => LoopPeopleScreen(
@@ -456,34 +447,30 @@ class MyProfileScreen extends StatelessWidget {
                                         CrossAxisAlignment.stretch,
                                     children: [
                                       Obx(
-                                        () => AnimatedOpacity(
-                                          opacity: _hoverController
-                                              .followOpacity.value,
-                                          duration: Duration(milliseconds: 50),
-                                          curve: kAnimationCurve,
-                                          child: Text(
-                                            '팔로워',
-                                            style: kBody1Style,
-                                            textAlign: TextAlign.center,
-                                          ),
+                                        () => Text(
+                                          '팔로워',
+                                          style: kBody1Style.copyWith(
+                                              color: _hoverController
+                                                      .isHover.value
+                                                  ? mainblack.withOpacity(0.6)
+                                                  : mainblack),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
                                       SizedBox(
                                         height: 8,
                                       ),
                                       Obx(
-                                        () => AnimatedOpacity(
-                                          opacity: _hoverController
-                                              .followOpacity.value,
-                                          duration: Duration(milliseconds: 50),
-                                          curve: kAnimationCurve,
-                                          child: Text(
-                                            profileController
-                                                .myUserInfo.value.loopcount
-                                                .toString(),
-                                            style: kSubTitle2Style,
-                                            textAlign: TextAlign.center,
-                                          ),
+                                        () => Text(
+                                          profileController
+                                              .myUserInfo.value.loopcount
+                                              .toString(),
+                                          style: kSubTitle2Style.copyWith(
+                                              color: _hoverController
+                                                      .isHover.value
+                                                  ? mainblack.withOpacity(0.6)
+                                                  : mainblack),
+                                          textAlign: TextAlign.center,
                                         ),
                                       )
                                     ],

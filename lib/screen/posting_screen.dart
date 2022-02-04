@@ -11,6 +11,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
+import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/controller/transition_animation_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
@@ -297,18 +298,18 @@ class PostingScreen extends StatelessWidget {
 }
 
 class _MyAppSpace extends StatelessWidget {
-  _MyAppSpace(
-      {Key? key,
-      required this.id,
-      required this.title,
-      required this.realname,
-      required this.profileImage,
-      required this.postDate,
-      required this.department,
-      required this.thumbnail,
-      required this.isuser,
-      required this.userid})
-      : super(key: key);
+  _MyAppSpace({
+    Key? key,
+    required this.id,
+    required this.title,
+    required this.realname,
+    required this.profileImage,
+    required this.postDate,
+    required this.department,
+    required this.thumbnail,
+    required this.isuser,
+    required this.userid,
+  }) : super(key: key);
 
   String title;
   String realname;

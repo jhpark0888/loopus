@@ -116,9 +116,26 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  const Text(
-                    '활동의 대표 사진을 설정해주세요',
-                    style: kSubTitle1Style,
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '활동의 ',
+                          style: kSubTitle1Style,
+                        ),
+                        TextSpan(
+                          text: '대표 사진',
+                          style: kSubTitle1Style.copyWith(
+                            color: mainblue,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '을 설정해주세요',
+                          style: kSubTitle1Style,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 16,
@@ -152,7 +169,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                           vertical: 8,
                           horizontal: 16,
                         ),
-                        child: Text('대표 사진 변경하기',
+                        child: Text('지금 대표 사진 변경하기',
                             style: kButtonStyle.copyWith(color: mainWhite)),
                       ),
                     ),

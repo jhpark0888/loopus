@@ -120,10 +120,27 @@ class ProjectAddPersonScreen extends StatelessWidget {
                   12,
                 ),
                 child: Column(
-                  children: const [
-                    Text(
-                      '활동을 같이 진행한 학생이 있나요?',
-                      style: kSubTitle1Style,
+                  children: [
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '활동을 ',
+                            style: kSubTitle1Style,
+                          ),
+                          TextSpan(
+                            text: '같이 진행한 학생',
+                            style: kSubTitle1Style.copyWith(
+                              color: mainblue,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '이 있나요?',
+                            style: kSubTitle1Style,
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 16,

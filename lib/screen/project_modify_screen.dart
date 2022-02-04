@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
@@ -57,7 +58,8 @@ class ProjectModifyScreen extends StatelessWidget {
         body: ListView(
           children: [
             Obx(
-              () => updateProjectTile(
+              () => UpdateProjectTileWidget(
+                hoverTag: '활동명',
                 isSubtitleExist: true,
                 onTap: () async {
                   projectnameinput();
@@ -72,7 +74,8 @@ class ProjectModifyScreen extends StatelessWidget {
               ),
             ),
             Obx(
-              () => updateProjectTile(
+              () => UpdateProjectTileWidget(
+                hoverTag: '활동기간',
                 isSubtitleExist: true,
                 onTap: () async {
                   projectdateinput();
@@ -88,7 +91,8 @@ class ProjectModifyScreen extends StatelessWidget {
               ),
             ),
             Obx(
-              () => updateProjectTile(
+              () => UpdateProjectTileWidget(
+                hoverTag: '활동소개',
                 isSubtitleExist: true,
                 onTap: () async {
                   projectintroinput();
@@ -105,7 +109,8 @@ class ProjectModifyScreen extends StatelessWidget {
               ),
             ),
             Obx(
-              () => updateProjectTile(
+              () => UpdateProjectTileWidget(
+                hoverTag: '활동태그',
                 isSubtitleExist: true,
                 onTap: () async {
                   projecttaginput();
@@ -122,7 +127,8 @@ class ProjectModifyScreen extends StatelessWidget {
               ),
             ),
             Obx(
-              () => updateProjectTile(
+              () => UpdateProjectTileWidget(
+                hoverTag: '활동사람',
                 isSubtitleExist: true,
                 onTap: () async {
                   projectlooperinput();
@@ -152,7 +158,8 @@ class ProjectModifyScreen extends StatelessWidget {
                         .join(', '),
               ),
             ),
-            updateProjectTile(
+            UpdateProjectTileWidget(
+              hoverTag: '대표사진',
               isSubtitleExist: false,
               onTap: () async {
                 projectthumbnailinput();
@@ -224,51 +231,85 @@ class ProjectModifyScreen extends StatelessWidget {
   }
 }
 
-Widget updateProjectTile({
-  required VoidCallback onTap,
-  required Project project,
-  required String title,
-  required String subtitle,
-  required bool isSubtitleExist,
-}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: (isSubtitleExist) ? 16 : 20,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: kSubTitle2Style,
-                ),
-                if (isSubtitleExist)
-                  SizedBox(
-                    height: 12,
+class UpdateProjectTileWidget extends StatelessWidget {
+  UpdateProjectTileWidget({
+    required this.onTap,
+    required this.project,
+    required this.title,
+    required this.subtitle,
+    required this.isSubtitleExist,
+    required this.hoverTag,
+  });
+
+  VoidCallback onTap;
+  Project project;
+  String title;
+  String subtitle;
+  bool isSubtitleExist;
+  String hoverTag;
+
+  late final HoverController _hoverController =
+      Get.put(HoverController(), tag: hoverTag);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTapDown: (details) => _hoverController.isHover(true),
+      onTapCancel: () => _hoverController.isHover(false),
+      onTapUp: (details) => _hoverController.isHover(false),
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: (isSubtitleExist) ? 16 : 20,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(
+                    () => Text(
+                      title,
+                      style: kSubTitle2Style.copyWith(
+                          color: _hoverController.isHover.value
+                              ? mainblack.withOpacity(0.6)
+                              : mainblack),
+                    ),
                   ),
-                if (isSubtitleExist)
-                  Text(
-                    subtitle,
-                    style: kSubTitle3Style,
-                    overflow: TextOverflow.ellipsis,
-                  )
-              ],
+                  if (isSubtitleExist)
+                    SizedBox(
+                      height: 12,
+                    ),
+                  if (isSubtitleExist)
+                    Obx(
+                      () => Text(
+                        subtitle,
+                        style: kSubTitle3Style.copyWith(
+                            color: _hoverController.isHover.value
+                                ? mainblack.withOpacity(0.6)
+                                : mainblack),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-          Icon(
-            Icons.chevron_right_rounded,
-            color: mainblack,
-            size: 28,
-          ),
-        ],
+            Obx(
+              () => Icon(
+                Icons.chevron_right_rounded,
+                color: _hoverController.isHover.value
+                    ? mainblack.withOpacity(0.6)
+                    : mainblack,
+                size: 28,
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
