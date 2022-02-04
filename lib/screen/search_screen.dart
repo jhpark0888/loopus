@@ -32,9 +32,11 @@ class SearchScreen extends StatelessWidget {
                     onPressed: () {
                       _searchController.focusNode.unfocus();
                       Get.back();
-                      _searchController.searchpostinglist.clear();
-                      _searchController.searchprofilelist.clear();
-                      _searchController.searchquestionlist.clear();
+                      _searchController.clearSearchedList();
+                      _searchController.isnosearchpost(false);
+                      _searchController.isnosearchprofile(false);
+                      _searchController.isnosearchquestion(false);
+                      _searchController.isnosearchtag(false);
                       _searchController.searchtextcontroller.clear();
                       _searchController.postpagenumber = 1;
                       _searchController.profilepagenumber = 1;
@@ -79,15 +81,15 @@ class SearchScreen extends StatelessWidget {
                       '_searchController.tabController.index : ${_searchController.tabController.index}');
                   print(
                       '_searchController.isFocused.value : ${_searchController.isFocused.value}');
-                  _searchController.isnosearchpost(false);
-                  _searchController.isnosearchprofile(false);
-                  _searchController.isnosearchquestion(false);
-                  _searchController.isnosearchtag(false);
+                  // _searchController.isnosearchpost(false);
+                  // _searchController.isnosearchprofile(false);
+                  // _searchController.isnosearchquestion(false);
+                  // _searchController.isnosearchtag(false);
 
-                  _searchController.searchpostinglist.clear();
-                  _searchController.searchprofilelist.clear();
-                  _searchController.searchquestionlist.clear();
-                  _searchController.searchtaglist.clear();
+                  // _searchController.searchpostinglist.clear();
+                  // _searchController.searchprofilelist.clear();
+                  // _searchController.searchquestionlist.clear();
+                  // _searchController.searchtaglist.clear();
                 },
                 onSubmitted: (value) async {
                   _searchController.isSearchLoading(true);
@@ -114,7 +116,6 @@ class SearchScreen extends StatelessWidget {
                     await _searchController.tagsearch();
                   }
                   _searchController.isSearchLoading(false);
-                  print(value);
                 },
                 focusNode: _searchController.focusNode,
                 style: TextStyle(color: mainblack, fontSize: 14),
@@ -227,9 +228,7 @@ class SearchScreen extends StatelessWidget {
                       child: WillPopScope(
                         onWillPop: () async {
                           Get.back();
-                          _searchController.searchpostinglist.clear();
-                          _searchController.searchprofilelist.clear();
-                          _searchController.searchquestionlist.clear();
+                          _searchController.clearSearchedList();
                           _searchController.postpagenumber = 1;
                           _searchController.profilepagenumber = 1;
                           _searchController.questionpagenumber = 1;
@@ -343,7 +342,7 @@ class SearchScreen extends StatelessWidget {
                                                           ),
                                                           TextSpan(
                                                             text:
-                                                                '${_searchController.searchtextcontroller.text}',
+                                                                '${_searchController.searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ")}',
                                                             style: kSubTitle1Style
                                                                 .copyWith(
                                                                     color:
@@ -393,7 +392,7 @@ class SearchScreen extends StatelessWidget {
                                                           ),
                                                           TextSpan(
                                                             text:
-                                                                '${_searchController.searchtextcontroller.text}',
+                                                                '${_searchController.searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ")}',
                                                             style: kSubTitle1Style
                                                                 .copyWith(
                                                                     color:
@@ -444,7 +443,7 @@ class SearchScreen extends StatelessWidget {
                                                           ),
                                                           TextSpan(
                                                             text:
-                                                                '${_searchController.searchtextcontroller.text}',
+                                                                '${_searchController.searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ")}',
                                                             style: kSubTitle1Style
                                                                 .copyWith(
                                                                     color:
@@ -494,7 +493,7 @@ class SearchScreen extends StatelessWidget {
                                                           ),
                                                           TextSpan(
                                                             text:
-                                                                '${_searchController.searchtextcontroller.text}',
+                                                                '${_searchController.searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ")}',
                                                             style: kSubTitle1Style
                                                                 .copyWith(
                                                                     color:

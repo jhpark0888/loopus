@@ -10,8 +10,10 @@ import '../constant.dart';
 void gettagsearch(Tagtype tagtype) async {
   TagController tagController = Get.find(tag: tagtype.toString());
   tagController.isTagSearchLoading(true);
-  Uri uri =
-      Uri.parse('$serverUri/tag_api/tag?query=${tagController.tagsearch.text}');
+
+  String tagsearchword = tagController.tagsearch.text.replaceAll(" ", "");
+
+  Uri uri = Uri.parse('$serverUri/tag_api/tag?query=${tagsearchword}');
   print(uri);
   http.Response response = await http.get(
     uri,
@@ -28,7 +30,7 @@ void gettagsearch(Tagtype tagtype) async {
         responselist.map((map) => SearchTag.fromJson(map)).toList();
 
     if (tagmaplist
-        .where((element) => element.tag == tagController.tagsearch.text)
+        .where((element) => element.tag == tagsearchword)
         .isNotEmpty) {
       tagController.searchtaglist.clear();
 
@@ -58,15 +60,15 @@ void gettagsearch(Tagtype tagtype) async {
           tagtype: tagtype,
         );
       }).toList());
-      if (tagController.tagsearch.text != '' &&
+      if (tagsearchword != '' &&
           tagController.selectedtaglist
-              .where((tag) => tag.text == tagController.tagsearch.text)
+              .where((tag) => tag.text == tagsearchword)
               .isEmpty) {
         tagController.searchtaglist.insert(
             0,
             SearchTagWidget(
               id: 0,
-              tag: "처음으로 '${tagController.tagsearch.text}' 태그 사용하기",
+              tag: "처음으로 '${tagsearchword}' 태그 사용하기",
               isSearch: 0,
               tagtype: tagtype,
             ));
@@ -89,7 +91,7 @@ void gettagsearch(Tagtype tagtype) async {
 
 //   Uri uri = Uri.parse('$serverUri/tag_api/tag');
 
-//   var tag = {"tag": tagController.tagsearch.text};
+//   var tag = {"tag": tagsearchword};
 
 //   http.Response response = await http.post(
 //     uri,

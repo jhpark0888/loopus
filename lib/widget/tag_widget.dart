@@ -22,9 +22,10 @@ class Tagwidget extends StatelessWidget {
         SearchController.to.searchtagprojectlist.clear();
         SearchController.to.searchtagquestionlist.clear();
         SearchController.to.isSearchLoading(true);
-        SearchController.to.search(SearchType.tag_project, tag.tagId, 1);
         SearchController.to
-            .search(SearchType.tag_question, tag.tagId, 1)
+            .search(SearchType.tag_project, tag.tagId.toString(), 1);
+        SearchController.to
+            .search(SearchType.tag_question, tag.tagId.toString(), 1)
             .then((value) {
           SearchController.to.isSearchLoading(false);
         });
