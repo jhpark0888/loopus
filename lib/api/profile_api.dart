@@ -109,3 +109,19 @@ Future<User?> updateProfile(
     }
   }
 }
+
+Future deleteuser() async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+  print('user token: $token');
+
+  var uri = Uri.parse("$serverUri/user_api/resign");
+
+  http.Response response =
+      await http.delete(uri, headers: {"Authorization": "Token $token"});
+
+  print("회원탈퇴: ${response.statusCode}");
+  if (response.statusCode == 200) {
+  } else {
+    return Future.error(response.statusCode);
+  }
+}

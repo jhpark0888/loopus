@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/search_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/model/tag_model.dart';
@@ -19,16 +20,6 @@ class Tagwidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        SearchController.to.searchtagprojectlist.clear();
-        SearchController.to.searchtagquestionlist.clear();
-        SearchController.to.isSearchLoading(true);
-        SearchController.to
-            .search(SearchType.tag_project, tag.tagId.toString(), 1);
-        SearchController.to
-            .search(SearchType.tag_question, tag.tagId.toString(), 1)
-            .then((value) {
-          SearchController.to.isSearchLoading(false);
-        });
         Get.to(() => TagDetailScreen(
               tag: tag,
             ));

@@ -27,32 +27,34 @@ class MessageDetailScreen extends StatelessWidget {
       tag: user.userid.toString());
 
   void _handleSubmitted(String text) async {
-    controller.messagefocus.unfocus();
-    controller.messagetextController.clear();
-    controller.messagelist.insert(
-        0,
-        MessageWidget(
-            message: Message(
-                roomId: controller.messagelist.isEmpty
-                    ? 0
-                    : controller.messagelist.first.message.roomId,
-                receiverId: user.userid,
-                message: text,
-                date: DateTime.now(),
-                isRead: true,
-                issender: 1,
-                issending: true.obs),
-            user: user));
-    if (controller.scrollController.hasClients) {
-      if (controller.scrollController.offset != 0) {
-        controller.scrollController.jumpTo(
+    if (controller.isSendButtonon.value) {
+      controller.messagefocus.unfocus();
+      controller.messagetextController.clear();
+      controller.messagelist.insert(
           0,
-        );
+          MessageWidget(
+              message: Message(
+                  roomId: controller.messagelist.isEmpty
+                      ? 0
+                      : controller.messagelist.first.message.roomId,
+                  receiverId: user.userid,
+                  message: text,
+                  date: DateTime.now(),
+                  isRead: true,
+                  issender: 1,
+                  issending: true.obs),
+              user: user));
+      if (controller.scrollController.hasClients) {
+        if (controller.scrollController.offset != 0) {
+          controller.scrollController.jumpTo(
+            0,
+          );
+        }
       }
+      await postmessage(text, controller.user.userid).then((value) {
+        controller.messagelist.first.message.issending(false);
+      });
     }
-    await postmessage(text, controller.user.userid).then((value) {
-      controller.messagelist.first.message.issending(false);
-    });
   }
 
   Widget _buildTextComposer() {
@@ -95,9 +97,14 @@ class MessageDetailScreen extends StatelessWidget {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 12),
-                    child: Text(
-                      '보내기',
-                      style: kButtonStyle.copyWith(color: mainblue),
+                    child: Obx(
+                      () => Text(
+                        '보내기',
+                        style: kButtonStyle.copyWith(
+                            color: controller.isSendButtonon.value
+                                ? mainblue
+                                : mainblack.withOpacity(0.6)),
+                      ),
                     ),
                   ),
                 ),
