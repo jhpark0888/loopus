@@ -32,11 +32,11 @@ class CheckValidate {
     if (value.isEmpty) {
       return '비밀번호를 입력하세요';
     } else {
-      Pattern pattern =
-          r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,15}$';
-      RegExp regExp = new RegExp(pattern.toString());
-      if (!regExp.hasMatch(value)) {
-        return '영문, 숫자, 특수문자 포함 8자 이상이어야해요';
+      // Pattern pattern =
+      //     r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,15}$';
+      // RegExp regExp = new RegExp(pattern.toString());
+      if (value.length < 8) {
+        return '8자 이상이어야해요';
       } else {
         return null;
       }

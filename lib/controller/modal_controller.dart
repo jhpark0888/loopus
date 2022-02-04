@@ -20,6 +20,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
   RxBool isCheckOne = false.obs;
   RxBool isCheckTwo = false.obs;
   RxBool isCheckThree = false.obs;
+  RxBool isCheckFour = false.obs;
 
   @override
   void onInit() {
@@ -340,14 +341,18 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                 onTap: () {
                   if (isCheckOne.value == true &&
                       isCheckTwo.value == true &&
-                      isCheckThree.value == true) {
+                      isCheckThree.value == true &&
+                      isCheckFour.value == true) {
                     isCheckOne.value = false;
                     isCheckTwo.value = false;
                     isCheckThree.value = false;
+                    isCheckFour.value = false;
                   } else {
                     isCheckOne.value = true;
                     isCheckTwo.value = true;
                     isCheckThree.value = true;
+                    isCheckFour.value = true;
+                    Get.to(() => SignupTypeScreen(), preventDuplicates: false);
                   }
                 },
                 child: Container(
@@ -359,7 +364,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     border: Border.all(
                       color: (isCheckOne.value == true &&
                               isCheckTwo.value == true &&
-                              isCheckThree.value == true)
+                              isCheckThree.value == true &&
+                              isCheckFour.value == true)
                           ? mainblue
                           : mainblack.withOpacity(0.6),
                       width: 1.2,
@@ -370,7 +376,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     children: [
                       (isCheckOne.value == true &&
                               isCheckTwo.value == true &&
-                              isCheckThree.value == true)
+                              isCheckThree.value == true &&
+                              isCheckFour.value == true)
                           ? SvgPicture.asset(
                               'assets/icons/Check_Active_blue.svg',
                             )
@@ -382,7 +389,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                         '모두 동의합니다',
                         style: (isCheckOne.value == true &&
                                 isCheckTwo.value == true &&
-                                isCheckThree.value == true)
+                                isCheckThree.value == true &&
+                                isCheckFour.value == true)
                             ? kSubTitle2Style.copyWith(
                                 fontWeight: FontWeight.normal,
                                 color: mainblue,
@@ -406,9 +414,6 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                   GestureDetector(
                     onTap: () {
                       isCheckOne.value = !isCheckOne.value;
-                      print(isCheckOne);
-                      print(isCheckTwo);
-                      print(isCheckThree);
                     },
                     child: Row(
                       children: [
@@ -513,16 +518,16 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      isCheckTwo.value = !isCheckTwo.value;
+                      isCheckFour.value = !isCheckFour.value;
                     },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SvgPicture.asset(
-                          (isCheckTwo.value == true)
+                          (isCheckFour.value == true)
                               ? 'assets/icons/Uncheck_norect_blue.svg'
                               : 'assets/icons/Uncheck_norect.svg',
-                          color: isCheckTwo.value == true
+                          color: isCheckFour.value == true
                               ? mainblue
                               : mainblack.withOpacity(0.6),
                         ),
@@ -532,7 +537,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                         Text(
                           '(필수)',
                           style: kButtonStyle.copyWith(
-                            color: isCheckTwo.value == true
+                            color: isCheckFour.value == true
                                 ? mainblue
                                 : mainblack.withOpacity(0.6),
                           ),
@@ -543,7 +548,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                         Text(
                           '개인정보수집 동의',
                           style: kBody2Style.copyWith(
-                            color: isCheckTwo.value == true
+                            color: isCheckFour.value == true
                                 ? mainblue
                                 : mainblack.withOpacity(0.6),
                           ),

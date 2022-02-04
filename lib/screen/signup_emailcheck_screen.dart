@@ -48,6 +48,17 @@ class SignupEmailcheckScreen extends StatelessWidget {
               style: kSubTitle1Style,
             ),
             const SizedBox(
+              height: 16,
+            ),
+            //Todo: UX Writing
+            //TODO: 이메일 인증 완료 시 화면
+            //TODO: 회원가입 시 바로 로그인 되어야 함
+            const Text(
+              '왜 이메일 인증을 해야하는가?',
+              style: kBody2Style,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
               height: 24,
             ),
             Obx(

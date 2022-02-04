@@ -46,6 +46,15 @@ class SignupCampusInfoScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
+                height: 16,
+              ),
+              //Todo: UX Writing
+              const Text(
+                '재학 중인 학생들과 교류할 수 있어요',
+                style: kBody2Style,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
                 height: 32,
               ),
               // CustomTextField(

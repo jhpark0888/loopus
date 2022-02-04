@@ -42,6 +42,15 @@ class SignupDepartmentScreen extends StatelessWidget {
               style: kSubTitle1Style,
             ),
             const SizedBox(
+              height: 16,
+            ),
+            //Todo: UX Writing
+            const Text(
+              '왜 학과를 선택해야하는가?',
+              style: kBody2Style,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
               height: 32,
             ),
             CustomTextField(

@@ -53,7 +53,7 @@ class PwFindScreen extends StatelessWidget {
                             counterText: null,
                             maxLength: null,
                             textController: _loginController.idcontroller,
-                            hintText: 'loopus@inu.ac.kr',
+                            hintText: '',
                             obscureText: false,
                             validator: (value) =>
                                 (CheckValidate().validateEmail(value!)),
@@ -88,7 +88,7 @@ class PwFindScreen extends StatelessWidget {
                               },
                               child: Center(
                                 child: Text(
-                                  "로그인 하기",
+                                  "로그인 화면으로",
                                   style: kButtonStyle.copyWith(
                                     color: mainblack.withOpacity(0.6),
                                   ),

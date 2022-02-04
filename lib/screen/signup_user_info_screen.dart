@@ -55,23 +55,46 @@ class SignupUserInfoScreen extends StatelessWidget {
                   style: kSubTitle1Style,
                 ),
                 const SizedBox(
+                  height: 16,
+                ),
+                //Todo: UX Writing
+                const Text(
+                  '왜 SNS 계정을 사용하지 않고 이메일 주소로만 만들어야하는가?',
+                  style: kBody2Style,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
                   height: 32,
                 ),
+                //TODO: 학교 별 다른 UX Writing
                 const Text(
-                  '학교 이메일 주소',
+                  '인천대학교 이메일 주소',
                   style: kButtonStyle,
                 ),
                 const SizedBox(
                   height: 16,
                 ),
-                CustomTextField(
-                  counterText: null,
-                  maxLength: null,
-                  textController: signupController.emailidcontroller,
-                  hintText: 'loopus@inu.ac.kr',
-                  validator: (value) => CheckValidate().validateEmail(value!),
-                  obscureText: false,
-                  maxLines: 1,
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextField(
+                        counterText: null,
+                        maxLength: null,
+                        textController: signupController.emailidcontroller,
+                        //TODO: 선택한 학교에 따라 hintText의 Domain 주소 변경
+                        hintText: 'loopus',
+                        validator: (value) =>
+                            CheckValidate().validateEmail(value!),
+                        obscureText: false,
+                        maxLines: 1,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    //TODO: 학교 별 다른 UX Writing
+                    Text('@inu.ac.kr'),
+                  ],
                 ),
                 const SizedBox(
                   height: 32,
@@ -106,35 +129,35 @@ class SignupUserInfoScreen extends StatelessWidget {
                   counterText: null,
                   maxLength: null,
                   textController: signupController.passwordcontroller,
-                  hintText: '영문, 숫자, 특수문자 포함 8자리 이상',
+                  hintText: '8자리 이상',
                   validator: (value) =>
                       CheckValidate().validatePassword(value!),
                   obscureText: true,
                   maxLines: 1,
                 ),
-                const SizedBox(
-                  height: 32,
-                ),
-                const Text(
-                  '비밀번호 확인',
-                  style: kButtonStyle,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                CustomTextField(
-                  counterText: null,
-                  maxLength: null,
-                  textController: signupController.passwordcheckcontroller,
-                  hintText: '',
-                  validator: (value) {
-                    if (signupController.passwordcontroller.text != value) {
-                      return "입력하신 비밀번호와 일치하지 않아요";
-                    }
-                  },
-                  obscureText: true,
-                  maxLines: 1,
-                ),
+                // const SizedBox(
+                //   height: 32,
+                // ),
+                // const Text(
+                //   '비밀번호 확인',
+                //   style: kButtonStyle,
+                // ),
+                // const SizedBox(
+                //   height: 16,
+                // ),
+                // CustomTextField(
+                //   counterText: null,
+                //   maxLength: null,
+                //   textController: signupController.passwordcheckcontroller,
+                //   hintText: '',
+                //   validator: (value) {
+                //     if (signupController.passwordcontroller.text != value) {
+                //       return "입력하신 비밀번호와 일치하지 않아요";
+                //     }
+                //   },
+                //   obscureText: true,
+                //   maxLines: 1,
+                // ),
               ],
             ),
           ),

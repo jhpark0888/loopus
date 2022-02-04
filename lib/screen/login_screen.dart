@@ -54,7 +54,7 @@ class LogInScreen extends StatelessWidget {
                             counterText: null,
                             maxLength: null,
                             textController: _loginController.idcontroller,
-                            hintText: 'loopus@inu.ac.kr',
+                            hintText: '',
                             obscureText: false,
                             validator: (value) =>
                                 (CheckValidate().validateEmail(value!)),
@@ -74,7 +74,7 @@ class LogInScreen extends StatelessWidget {
                             counterText: null,
                             maxLength: null,
                             textController: _loginController.passwordcontroller,
-                            hintText: '영문, 숫자, 특수문자 포함 8자리 이상',
+                            hintText: '',
                             obscureText: true,
                             validator: (value) =>
                                 CheckValidate().validatePassword(value!),
@@ -109,7 +109,7 @@ class LogInScreen extends StatelessWidget {
                               },
                               child: Center(
                                 child: Text(
-                                  "비밀번호 찾기",
+                                  "비밀번호를 잊으셨나요?",
                                   style: kButtonStyle.copyWith(
                                     color: mainblack.withOpacity(0.6),
                                   ),

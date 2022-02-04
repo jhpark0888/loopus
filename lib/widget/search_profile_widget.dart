@@ -50,8 +50,9 @@ class SearchProfileWidget extends StatelessWidget {
                         height: 50,
                         width: 50,
                         imageUrl: user.profileImage!,
-                        placeholder: (context, url) => const CircleAvatar(
-                          child: Center(child: CircularProgressIndicator()),
+                        placeholder: (context, url) => CircleAvatar(
+                          backgroundColor: const Color(0xffe7e7e7),
+                          child: Container(),
                         ),
                         fit: BoxFit.fill,
                       ),

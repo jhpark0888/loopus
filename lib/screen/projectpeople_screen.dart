@@ -22,7 +22,7 @@ class ProjectPeopleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: "함께 활동한 사람들",
+        title: "함께 활동한 사람",
         bottomBorder: false,
       ),
       body: SingleChildScrollView(

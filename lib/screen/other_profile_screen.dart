@@ -64,7 +64,7 @@ class OtherProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: isuser == 1
           ? AppBarWidget(
-              title: '프로필',
+              title: '${realname}님의 프로필',
               actions: [
                 IconButton(
                   onPressed: () {
@@ -92,7 +92,7 @@ class OtherProfileScreen extends StatelessWidget {
                       height: 4,
                     ),
                     Text(
-                      '프로필 받는 중...',
+                      '프로필 받아오는 중...',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
@@ -611,7 +611,7 @@ class OtherProfileScreen extends StatelessWidget {
                                                 1
                                             ? Text(
                                                 '추가하기',
-                                                style: kButtonStyle.copyWith(
+                                                style: kSubTitle2Style.copyWith(
                                                     color: mainblue),
                                               )
                                             : Container())

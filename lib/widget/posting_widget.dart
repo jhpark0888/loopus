@@ -176,15 +176,23 @@ class PostingWidget extends StatelessWidget {
                                             const SizedBox(
                                               width: 4,
                                             ),
-                                            InkWell(
+                                            GestureDetector(
+                                              behavior:
+                                                  HitTestBehavior.translucent,
                                               onTap: () {
                                                 Get.to(() => LikePeopleScreen(
                                                       postid: item.id,
                                                     ));
                                               },
-                                              child: Text(
-                                                "${item.likeCount.value}",
-                                                style: kButtonStyle,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 4,
+                                                ),
+                                                child: Text(
+                                                  "${item.likeCount.value}개",
+                                                  style: kButtonStyle,
+                                                ),
                                               ),
                                             ),
                                             const SizedBox(

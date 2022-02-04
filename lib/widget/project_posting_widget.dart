@@ -147,15 +147,19 @@ class ProjectPostingWidget extends StatelessWidget {
                           width: 4,
                         ),
                         Obx(
-                          () => InkWell(
+                          () => GestureDetector(
+                            behavior: HitTestBehavior.translucent,
                             onTap: () {
                               Get.to(() => LikePeopleScreen(
                                     postid: item.id,
                                   ));
                             },
-                            child: Text(
-                              item.likeCount.toString(),
-                              style: kButtonStyle,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: Text(
+                                '${item.likeCount}개',
+                                style: kButtonStyle,
+                              ),
                             ),
                           ),
                         ),

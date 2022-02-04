@@ -44,7 +44,11 @@ class MyQuestionPostingWidget extends StatelessWidget {
         onTap: () async {
           // await questionController.loadItem(item.id);
           // await questionController.addanswer();
-          Get.to(() => QuestionDetailScreen(questionid: item.id, isuser: item.isuser, realname: item.realname,));
+          Get.to(() => QuestionDetailScreen(
+                questionid: item.id,
+                isuser: item.isuser,
+                realname: item.realname,
+              ));
           print("click posting");
         },
         child: Padding(
@@ -92,8 +96,8 @@ class MyQuestionPostingWidget extends StatelessWidget {
                                   width: 32,
                                   imageUrl: item.profileimage ?? "",
                                   placeholder: (context, url) => CircleAvatar(
-                                    child: Center(
-                                        child: CircularProgressIndicator()),
+                                    backgroundColor: const Color(0xffe7e7e7),
+                                    child: Container(),
                                   ),
                                   fit: BoxFit.cover,
                                 )),
