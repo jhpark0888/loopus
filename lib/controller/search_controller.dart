@@ -39,7 +39,12 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   RxBool isnosearchquestion = false.obs;
   RxBool isnosearchtag = false.obs;
 
-  RxBool istag = false.obs;
+  String presearchwordpost = "";
+  String presearchwordprofile = "";
+  String presearchwordquestion = "";
+  String presearchwordtag = "";
+
+  // RxBool istag = false.obs;
   int postpagenumber = 1;
   int profilepagenumber = 1;
   int questionpagenumber = 1;
@@ -72,29 +77,34 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     tabController.addListener(() {
       if (searchtextcontroller.text.isEmpty == false) {
         if (tabController.indexIsChanging == true) {
+          String searchword =
+              searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ");
           isSearchLoading(true);
-          print(searchpostinglist);
-          print(searchprofilelist);
-          print(searchquestionlist);
-          if (tabController.index == 0 && searchpostinglist.isEmpty) {
+          // print(searchpostinglist);
+          // print(searchprofilelist);
+          // print(searchquestionlist);
+          if (tabController.index == 0 && searchword != presearchwordpost) {
             search(SearchType.post, searchtextcontroller.text, postpagenumber);
-          } else if (tabController.index == 1 && searchprofilelist.isEmpty) {
+          } else if (tabController.index == 1 &&
+              searchword != presearchwordprofile) {
             search(SearchType.profile, searchtextcontroller.text,
                 profilepagenumber);
-          } else if (tabController.index == 2 && searchquestionlist.isEmpty) {
+          } else if (tabController.index == 2 &&
+              searchword != presearchwordquestion) {
             search(SearchType.question, searchtextcontroller.text,
                 questionpagenumber);
-          } else if (tabController.index == 3 && searchtaglist.isEmpty) {
+          } else if (tabController.index == 3 &&
+              searchword != presearchwordtag) {
             tagsearch();
           }
           isSearchLoading(false);
         }
       }
-      if (tabController.index == 3) {
-        istag.value = true;
-      } else {
-        istag.value = false;
-      }
+      // if (tabController.index == 3) {
+      //   istag.value = true;
+      // } else {
+      //   istag.value = false;
+      // }
     });
 
     super.onInit();
@@ -108,10 +118,10 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         isFocused.value = true;
-        isnosearchpost(false);
-        isnosearchprofile(false);
-        isnosearchquestion(false);
-        isnosearchtag(false);
+        // isnosearchpost(false);
+        // isnosearchprofile(false);
+        // isnosearchquestion(false);
+        // isnosearchtag(false);
       }
     });
   }
@@ -124,8 +134,11 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future<void> tagsearch() async {
-    Uri uri = Uri.parse(
-        'http://3.35.253.151:8000/tag_api/tag?query=${searchtextcontroller.text}');
+    String searchword =
+        searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ");
+
+    Uri uri =
+        Uri.parse('http://3.35.253.151:8000/tag_api/tag?query=${searchword}');
 
     http.Response response = await http.get(
       uri,
@@ -134,43 +147,30 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
       },
     );
 
-    print(response.statusCode);
+    print("태그 검색: ${response.statusCode}");
 
     if (response.statusCode == 200) {
+      presearchwordtag = searchword;
       var responsebody = json.decode(utf8.decode(response.bodyBytes));
       List responselist = responsebody["results"];
       List<SearchTag> tagmaplist =
           responselist.map((map) => SearchTag.fromJson(map)).toList();
 
       print(responselist);
-      if (tagmaplist
-          .where((element) => element.tag == searchtextcontroller.text)
-          .isNotEmpty) {
-        searchtaglist.clear();
+      searchtaglist.clear();
 
-        searchtaglist(tagmaplist.map((element) {
-          return SearchTagWidget(
-            id: element.id,
-            tag: element.tag,
-            count: element.count,
-            isSearch: 1,
-          );
-        }).toList());
-      } else {
-        searchtaglist.clear();
-
-        searchtaglist(tagmaplist.map((element) {
-          return SearchTagWidget(
-            id: element.id,
-            tag: element.tag,
-            count: element.count,
-            isSearch: 1,
-          );
-        }).toList());
-      }
       if (tagmaplist.isEmpty) {
         isnosearchtag(true);
       } else {
+        searchtaglist(tagmaplist.map((element) {
+          return SearchTagWidget(
+            id: element.id,
+            tag: element.tag,
+            count: element.count,
+            isSearch: 1,
+          );
+        }).toList());
+
         isnosearchtag(false);
       }
     } else if (response.statusCode == 401) {
@@ -179,21 +179,25 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
-  Future<void> search(SearchType searchType, var search, int pagenumber) async {
+  Future<void> search(
+      SearchType searchType, String searchtext, int pagenumber) async {
     String? token;
     await FlutterSecureStorage().read(key: 'token').then((value) {
       token = value;
     });
     // 수정
 
+    String searchword = searchtext.trim().replaceAll(RegExp("\\s+"), " ");
+    // print("검색어: $search");
+
     final url = Uri.parse(
-        "http://3.35.253.151:8000/search_api/search/${searchType.name}?query=${search}&page=${pagenumber}");
+        "http://3.35.253.151:8000/search_api/search/${searchType.name}?query=${searchword}&page=${pagenumber}");
 
     final response = await get(url, headers: {"Authorization": "Token $token"});
     var statusCode = response.statusCode;
     var responseHeaders = response.headers;
     var responseBody = utf8.decode(response.bodyBytes);
-    print(statusCode);
+    print("검색 : $statusCode");
     List searchlist = jsonDecode(responseBody);
     print("pagenumber$pagenumber");
     print(searchlist);
@@ -220,11 +224,20 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
 
     if (searchlist.isEmpty) {
       if (searchType == SearchType.post) {
+        presearchwordpost = searchword;
+
         isnosearchpost(true);
+        searchpostinglist.clear();
       } else if (searchType == SearchType.profile) {
+        presearchwordprofile = searchword;
+
         isnosearchprofile(true);
+        searchprofilelist.clear();
       } else if (searchType == SearchType.question) {
+        presearchwordquestion = searchword;
+
         isnosearchquestion(true);
+        searchquestionlist.clear();
       } else if (searchType == SearchType.tag_project) {
         return;
       } else if (searchType == SearchType.tag_question) {
@@ -240,12 +253,15 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
       // }
 
       if (searchType == SearchType.post) {
+        presearchwordpost = searchword;
         searchpostinglist(searchlist
             .map((json) => Post.fromJson(json))
             .toList()
             .map((post) => SearchPostingWidget(post: post))
             .toList());
+        isnosearchpost(false);
       } else if (searchType == SearchType.profile) {
+        presearchwordprofile = searchword;
         searchprofilelist(searchlist
             .map((json) => User.fromJson(json))
             .toList()
@@ -253,7 +269,9 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
                   user: user,
                 ))
             .toList());
+        isnosearchprofile(false);
       } else if (searchType == SearchType.question) {
+        presearchwordquestion = searchword;
         searchquestionlist(searchlist
             .map((json) => QuestionItem.fromJson(json))
             .toList()
@@ -261,6 +279,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
                   item: question,
                 ))
             .toList());
+        isnosearchquestion(false);
       } else if (searchType == SearchType.tag_project) {
         searchtagprojectlist(searchlist
             .map((json) => Project.fromJson(json))

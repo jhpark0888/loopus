@@ -79,10 +79,10 @@ class SearchTagWidget extends StatelessWidget {
                 onTap: () async {
                   SearchController.to.searchtagprojectlist.clear();
                   SearchController.to.searchtagquestionlist.clear();
-                  await SearchController.to.search(SearchType.tag_project, id,
-                      SearchController.to.tagpagenumber);
-                  await SearchController.to.search(SearchType.tag_question, id,
-                      SearchController.to.pagenumber);
+                  await SearchController.to.search(SearchType.tag_project,
+                      id.toString(), SearchController.to.tagpagenumber);
+                  await SearchController.to.search(SearchType.tag_question,
+                      id.toString(), SearchController.to.pagenumber);
                   Get.to(() => TagDetailScreen(
                         tag: Tag(tagId: id, tag: tag, count: count ?? 0),
                       ));
@@ -143,7 +143,8 @@ class SearchTagWidget extends StatelessWidget {
     if (controller.selectedtaglist.length < 3) {
       if (id == 0) {
         // SearchTag? searchTag = await postmaketag(tagtype!);
-        SearchTag searchTag = SearchTag(id: id, tag: controller.tagsearch.text);
+        SearchTag searchTag = SearchTag(
+            id: id, tag: controller.tagsearch.text.replaceAll(" ", ""));
         controller.selectedtaglist.add(SelectedTagWidget(
           id: searchTag.id,
           text: searchTag.tag,
