@@ -7,12 +7,15 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/controller/tag_detail_controller.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 import 'dart:math' as math;
 
 class TagDetailScreen extends StatelessWidget {
-  final SearchController searchController = Get.find();
+  // final SearchController searchController = Get.find();
+  late TagDetailController controller =
+      Get.put(TagDetailController(tag.tagId), tag: tag.tagId.toString());
   Tag tag;
 
   TagDetailScreen({required this.tag});
@@ -63,7 +66,7 @@ class TagDetailScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         TabBar(
-                          controller: searchController.tagtabController,
+                          controller: controller.tagtabController,
                           labelStyle: kButtonStyle,
                           labelColor: mainblack,
                           unselectedLabelStyle: kBody1Style,
@@ -101,9 +104,9 @@ class TagDetailScreen extends StatelessWidget {
           },
           body: Obx(
             () => TabBarView(
-              controller: searchController.tagtabController,
+              controller: controller.tagtabController,
               children: [
-                searchController.isSearchLoading.value
+                controller.istagSearchLoading.value
                     ? Column(
                         children: [
                           SizedBox(
@@ -126,45 +129,48 @@ class TagDetailScreen extends StatelessWidget {
                           ),
                         ],
                       )
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: Obx(
-                          () => Column(
-                            children: searchController
-                                    .searchtagprojectlist.isNotEmpty
-                                ? searchController.searchtagprojectlist.value
-                                : [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
-                                      child: Center(
-                                        child: RichText(
-                                          text: TextSpan(
-                                            children: [
-                                              const TextSpan(
-                                                text: '아직 ',
+                    : SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Obx(
+                            () => Column(
+                              children: controller
+                                      .searchtagprojectlist.isNotEmpty
+                                  ? controller.searchtagprojectlist.value
+                                  : [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8),
+                                        child: Center(
+                                          child: RichText(
+                                            text: TextSpan(
+                                              children: [
+                                                const TextSpan(
+                                                  text: '아직 ',
+                                                ),
+                                                TextSpan(
+                                                  text: tag.tag,
+                                                  style:
+                                                      kSubTitle1Style.copyWith(
+                                                          color: mainblue),
+                                                ),
+                                                const TextSpan(
+                                                  text: '와(과) 관련된 활동이 없어요',
+                                                ),
+                                              ],
+                                              style: kSubTitle1Style.copyWith(
+                                                fontWeight: FontWeight.normal,
                                               ),
-                                              TextSpan(
-                                                text: tag.tag,
-                                                style: kSubTitle1Style.copyWith(
-                                                    color: mainblue),
-                                              ),
-                                              const TextSpan(
-                                                text: '와(과) 관련된 활동이 없어요',
-                                              ),
-                                            ],
-                                            style: kSubTitle1Style.copyWith(
-                                              fontWeight: FontWeight.normal,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                            ),
                           ),
                         ),
                       ),
-                searchController.isSearchLoading.value
+                controller.istagSearchLoading.value
                     ? Column(
                         children: [
                           SizedBox(
@@ -196,9 +202,9 @@ class TagDetailScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Obx(
                             () => Column(
-                              children: searchController
+                              children: controller
                                       .searchtagquestionlist.isNotEmpty
-                                  ? searchController.searchtagquestionlist.value
+                                  ? controller.searchtagquestionlist.value
                                   : [
                                       Center(
                                         child: RichText(

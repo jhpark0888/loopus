@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
+import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
@@ -26,8 +28,12 @@ class WithdrawalScreen extends StatelessWidget {
                   rightText: '탈퇴',
                   title: '정말 탈퇴하시겠어요?',
                   content: '회원님의 모든 정보와 데이터들이 삭제돼요',
-                  leftFunction: () {},
-                  rightFunction: () => Get.back());
+                  leftFunction: () => Get.back(),
+                  rightFunction: () {
+                    deleteuser().then((value) {
+                      Get.offAll(() => StartScreen());
+                    });
+                  });
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 4),

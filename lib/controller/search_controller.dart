@@ -6,6 +6,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:loopus/api/search_api.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
@@ -18,8 +20,6 @@ import 'package:loopus/widget/search_question_widget.dart';
 import 'package:loopus/widget/search_tag_project_widget.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
 
-enum SearchType { post, profile, question, tag_project, tag_question }
-
 class SearchController extends GetxController with GetTickerProviderStateMixin {
   static SearchController get to => Get.find();
   TextEditingController searchtextcontroller = TextEditingController();
@@ -29,10 +29,6 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   RxList<SearchQuestionWidget> searchquestionlist =
       <SearchQuestionWidget>[].obs;
   RxList<SearchTagWidget> searchtaglist = <SearchTagWidget>[].obs;
-
-  RxList<SearchTagProjectWidget> searchtagprojectlist =
-      <SearchTagProjectWidget>[].obs;
-  RxList<QuestionWidget> searchtagquestionlist = <QuestionWidget>[].obs;
 
   RxBool isnosearchpost = false.obs;
   RxBool isnosearchprofile = false.obs;
@@ -54,7 +50,6 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   RxBool isFocused = false.obs;
   RxInt tabpage = 0.obs;
   late TabController tabController;
-  late TabController tagtabController;
 
   RxBool isSearchLoading = false.obs;
 
@@ -65,11 +60,6 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     _focusListen();
     tabController = TabController(
       length: 4,
-      initialIndex: 0,
-      vsync: this,
-    );
-    tagtabController = TabController(
-      length: 2,
       initialIndex: 0,
       vsync: this,
     );
@@ -131,172 +121,5 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     searchprofilelist.clear();
     searchquestionlist.clear();
     searchtaglist.clear();
-  }
-
-  Future<void> tagsearch() async {
-    String searchword =
-        searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ");
-
-    Uri uri =
-        Uri.parse('http://3.35.253.151:8000/tag_api/tag?query=${searchword}');
-
-    http.Response response = await http.get(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-    );
-
-    print("태그 검색: ${response.statusCode}");
-
-    if (response.statusCode == 200) {
-      presearchwordtag = searchword;
-      var responsebody = json.decode(utf8.decode(response.bodyBytes));
-      List responselist = responsebody["results"];
-      List<SearchTag> tagmaplist =
-          responselist.map((map) => SearchTag.fromJson(map)).toList();
-
-      print(responselist);
-      searchtaglist.clear();
-
-      if (tagmaplist.isEmpty) {
-        isnosearchtag(true);
-      } else {
-        searchtaglist(tagmaplist.map((element) {
-          return SearchTagWidget(
-            id: element.id,
-            tag: element.tag,
-            count: element.count,
-            isSearch: 1,
-          );
-        }).toList());
-
-        isnosearchtag(false);
-      }
-    } else if (response.statusCode == 401) {
-    } else {
-      print(response.statusCode);
-    }
-  }
-
-  Future<void> search(
-      SearchType searchType, String searchtext, int pagenumber) async {
-    String? token;
-    await FlutterSecureStorage().read(key: 'token').then((value) {
-      token = value;
-    });
-    // 수정
-
-    String searchword = searchtext.trim().replaceAll(RegExp("\\s+"), " ");
-    // print("검색어: $search");
-
-    final url = Uri.parse(
-        "http://3.35.253.151:8000/search_api/search/${searchType.name}?query=${searchword}&page=${pagenumber}");
-
-    final response = await get(url, headers: {"Authorization": "Token $token"});
-    var statusCode = response.statusCode;
-    var responseHeaders = response.headers;
-    var responseBody = utf8.decode(response.bodyBytes);
-    print("검색 : $statusCode");
-    List searchlist = jsonDecode(responseBody);
-    print("pagenumber$pagenumber");
-    print(searchlist);
-    if (pagenumber >= 2) {
-      print(searchlist);
-      print(searchquestionlist.value);
-      print(searchprofilelist.value);
-      if (searchType == SearchType.post && searchlist.isNotEmpty) {
-        if (searchlist[0]["id"] == searchpostinglist.value[0].post.id) {
-          return;
-        }
-      }
-      if (searchType == SearchType.profile && searchlist.isNotEmpty) {
-        if (searchlist[0]["user"] == searchprofilelist.value[0].user.userid) {
-          return;
-        }
-      }
-      if (searchType == SearchType.question && searchlist.isNotEmpty) {
-        if (searchlist[0]["id"] == searchquestionlist.value[0].item.id) {
-          return;
-        }
-      }
-    }
-
-    if (searchlist.isEmpty) {
-      if (searchType == SearchType.post) {
-        presearchwordpost = searchword;
-
-        isnosearchpost(true);
-        searchpostinglist.clear();
-      } else if (searchType == SearchType.profile) {
-        presearchwordprofile = searchword;
-
-        isnosearchprofile(true);
-        searchprofilelist.clear();
-      } else if (searchType == SearchType.question) {
-        presearchwordquestion = searchword;
-
-        isnosearchquestion(true);
-        searchquestionlist.clear();
-      } else if (searchType == SearchType.tag_project) {
-        return;
-      } else if (searchType == SearchType.tag_question) {
-        return;
-      }
-    } else {
-      // if (tab_index == 0) {
-      //   SearchController.to.pagenumber1 += 1;
-      // } else if (tab_index == 1) {
-      //   SearchController.to.pagenumber2 += 1;
-      // } else if (tab_index == 2) {
-      //   SearchController.to.pagenumber3 += 1;
-      // }
-
-      if (searchType == SearchType.post) {
-        presearchwordpost = searchword;
-        searchpostinglist(searchlist
-            .map((json) => Post.fromJson(json))
-            .toList()
-            .map((post) => SearchPostingWidget(post: post))
-            .toList());
-        isnosearchpost(false);
-      } else if (searchType == SearchType.profile) {
-        presearchwordprofile = searchword;
-        searchprofilelist(searchlist
-            .map((json) => User.fromJson(json))
-            .toList()
-            .map((user) => SearchProfileWidget(
-                  user: user,
-                ))
-            .toList());
-        isnosearchprofile(false);
-      } else if (searchType == SearchType.question) {
-        presearchwordquestion = searchword;
-        searchquestionlist(searchlist
-            .map((json) => QuestionItem.fromJson(json))
-            .toList()
-            .map((question) => SearchQuestionWidget(
-                  item: question,
-                ))
-            .toList());
-        isnosearchquestion(false);
-      } else if (searchType == SearchType.tag_project) {
-        searchtagprojectlist(searchlist
-            .map((json) => Project.fromJson(json))
-            .toList()
-            .map((project) => SearchTagProjectWidget(
-                  project: project,
-                ))
-            .toList());
-      } else if (searchType == SearchType.tag_question) {
-        searchtagquestionlist(searchlist
-            .map((json) => QuestionItem.fromJson(json))
-            .toList()
-            .map((question) => QuestionWidget(
-                  item: question,
-                ))
-            .toList());
-      }
-    }
   }
 }

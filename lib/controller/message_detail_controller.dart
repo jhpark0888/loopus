@@ -24,6 +24,7 @@ class MessageDetailController extends GetxController {
   KeyboardVisibilityController keyboardController =
       KeyboardVisibilityController();
   RxBool isMessageListLoading = false.obs;
+  RxBool isSendButtonon = false.obs;
 
   String username = "";
   User user;
@@ -61,6 +62,11 @@ class MessageDetailController extends GetxController {
   void onInit() {
     messagetextController.addListener(() {
       textBoxSize.value = getSize(textFieldBoxKey.value);
+      if (messagetextController.text.replaceAll(" ", "") == "") {
+        isSendButtonon(false);
+      } else {
+        isSendButtonon(true);
+      }
     });
 
     keyboardController.onChange.listen((isVisible) {

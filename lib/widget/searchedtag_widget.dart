@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/search_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
@@ -77,12 +78,6 @@ class SearchTagWidget extends StatelessWidget {
               )
             : GestureDetector(
                 onTap: () async {
-                  SearchController.to.searchtagprojectlist.clear();
-                  SearchController.to.searchtagquestionlist.clear();
-                  await SearchController.to.search(SearchType.tag_project,
-                      id.toString(), SearchController.to.tagpagenumber);
-                  await SearchController.to.search(SearchType.tag_question,
-                      id.toString(), SearchController.to.pagenumber);
                   Get.to(() => TagDetailScreen(
                         tag: Tag(tagId: id, tag: tag, count: count ?? 0),
                       ));

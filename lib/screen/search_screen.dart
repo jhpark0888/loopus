@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/search_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
@@ -93,27 +94,27 @@ class SearchScreen extends StatelessWidget {
                 },
                 onSubmitted: (value) async {
                   _searchController.isSearchLoading(true);
-                  if (_searchController.postpagenumber == 1) {
-                    _searchController.searchpostinglist.clear();
-                  } else if (_searchController.profilepagenumber == 1) {
-                    _searchController.searchprofilelist.clear();
-                  } else if (_searchController.questionpagenumber == 1) {
-                    _searchController.searchquestionlist.clear();
-                  } else if (_searchController.tagpagenumber == 1) {
-                    _searchController.searchtaglist.clear();
-                  }
+                  // if (_searchController.postpagenumber == 1) {
+                  //   _searchController.searchpostinglist.clear();
+                  // } else if (_searchController.profilepagenumber == 1) {
+                  //   _searchController.searchprofilelist.clear();
+                  // } else if (_searchController.questionpagenumber == 1) {
+                  //   _searchController.searchquestionlist.clear();
+                  // } else if (_searchController.tagpagenumber == 1) {
+                  //   _searchController.searchtaglist.clear();
+                  // }
 
                   if (_searchController.tabController.index == 0) {
-                    await _searchController.search(SearchType.post, value,
+                    await search(SearchType.post, value,
                         _searchController.postpagenumber);
                   } else if (_searchController.tabController.index == 1) {
-                    await _searchController.search(SearchType.profile, value,
+                    await search(SearchType.profile, value,
                         _searchController.profilepagenumber);
                   } else if (_searchController.tabController.index == 2) {
-                    await _searchController.search(SearchType.question, value,
+                    await search(SearchType.question, value,
                         _searchController.questionpagenumber);
                   } else if (_searchController.tabController.index == 3) {
-                    await _searchController.tagsearch();
+                    await tagsearch();
                   }
                   _searchController.isSearchLoading(false);
                 },
