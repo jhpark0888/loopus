@@ -415,14 +415,12 @@ class ProjectScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
+                              if (controller.project.value.looper.isNotEmpty)
+                                const SizedBox(
+                                  height: 20,
+                                ),
                               controller.project.value.looper.isEmpty
-                                  ? Text(
-                                      '함께 활동한 사람이 없어요',
-                                      style: kSubTitle3Style,
-                                    )
+                                  ? const SizedBox.shrink()
                                   : GestureDetector(
                                       onTap: () {
                                         Get.to(() => ProjectPeopleScreen(
@@ -460,7 +458,7 @@ class ProjectScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(
-                                height: 12,
+                                height: 8,
                               ),
                               Obx(
                                 () => controller.project.value.introduction !=
@@ -477,7 +475,7 @@ class ProjectScreen extends StatelessWidget {
                                       ),
                               ),
                               SizedBox(
-                                height: 20,
+                                height: 24,
                               ),
                               Text(
                                 '활동 태그',
@@ -487,7 +485,7 @@ class ProjectScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(
-                                height: 16,
+                                height: 12,
                               ),
                               Obx(
                                 () => Row(

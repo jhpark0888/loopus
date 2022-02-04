@@ -64,16 +64,29 @@ class SignupTagScreen extends StatelessWidget {
                     12,
                   ),
                   child: Column(
-                    children: const [
-                      Text(
-                        '관심 태그를 선택해주세요',
-                        style: kSubTitle1Style,
+                    children: [
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '관심 태그',
+                              style: kSubTitle1Style.copyWith(
+                                color: mainblue,
+                              ),
+                            ),
+                            const TextSpan(
+                              text: '를 선택해주세요',
+                              style: kSubTitle1Style,
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 16,
                       ),
                       Text(
-                        '학과 및 관심 태그와 관련된 컨텐츠를 추천해드릴게요',
+                        '전공 학과와 관심 태그를 바탕으로 홈 화면을 구성해드릴게요',
                         style: kBody1Style,
                         textAlign: TextAlign.center,
                       ),

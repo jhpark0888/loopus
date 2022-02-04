@@ -40,17 +40,30 @@ class SignupCampusInfoScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                '어느 대학에 재학 중이신가요?',
-                style: kSubTitle1Style,
+              RichText(
                 textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '어느 대학',
+                      style: kSubTitle1Style.copyWith(
+                        color: mainblue,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '에 재학 중이신가요?',
+                      style: kSubTitle1Style,
+                    ),
+                  ],
+                ),
               ),
+
               const SizedBox(
                 height: 16,
               ),
               //Todo: UX Writing
               const Text(
-                '재학 중인 학생들과 교류할 수 있어요',
+                '재학 중인 학교의 학생들과 정보를 교류할 수 있어요',
                 style: kBody2Style,
                 textAlign: TextAlign.center,
               ),
@@ -96,7 +109,7 @@ class SignupCampusInfoScreen extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                '아직은 인천대학교 학생만 가입할 수 있어요',
+                '아직은 인천대학교 학생만 가입할 수 있어요. 곧 업데이트 될 예정입니다!',
                 style: kCaptionStyle.copyWith(
                   color: mainblack.withOpacity(0.6),
                 ),

@@ -49,17 +49,29 @@ class SignupUserInfoScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  '계정을 만들어주세요',
+                RichText(
                   textAlign: TextAlign.center,
-                  style: kSubTitle1Style,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '계정',
+                        style: kSubTitle1Style.copyWith(
+                          color: mainblue,
+                        ),
+                      ),
+                      const TextSpan(
+                        text: '을 만들어주세요',
+                        style: kSubTitle1Style,
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 //Todo: UX Writing
                 const Text(
-                  '왜 SNS 계정을 사용하지 않고 이메일 주소로만 만들어야하는가?',
+                  '공정한 이용을 위해 학교 이메일 주소를 받고 있어요',
                   style: kBody2Style,
                   textAlign: TextAlign.center,
                 ),
@@ -75,6 +87,7 @@ class SignupUserInfoScreen extends StatelessWidget {
                   height: 16,
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: CustomTextField(
@@ -84,7 +97,7 @@ class SignupUserInfoScreen extends StatelessWidget {
                         //TODO: 선택한 학교에 따라 hintText의 Domain 주소 변경
                         hintText: 'loopus',
                         validator: (value) =>
-                            CheckValidate().validateEmail(value!),
+                            CheckValidate().validateSpecificWords(value!),
                         obscureText: false,
                         maxLines: 1,
                       ),
@@ -93,7 +106,10 @@ class SignupUserInfoScreen extends StatelessWidget {
                       width: 4,
                     ),
                     //TODO: 학교 별 다른 UX Writing
-                    Text('@inu.ac.kr'),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text('@inu.ac.kr'),
+                    ),
                   ],
                 ),
                 const SizedBox(

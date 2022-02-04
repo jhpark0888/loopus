@@ -151,9 +151,8 @@ class SearchPostingWidget extends StatelessWidget {
                                         imageUrl: "${post.profileimage}",
                                         placeholder: (context, url) =>
                                             CircleAvatar(
-                                          child: Center(
-                                              child:
-                                                  CircularProgressIndicator()),
+                                          backgroundColor: Color(0xffe7e7e7),
+                                          child: Container(),
                                         ),
                                         fit: BoxFit.fill,
                                       )),

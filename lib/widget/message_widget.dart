@@ -54,7 +54,7 @@ class MessageWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12.0, 18.0, 8.0, 0.0),
                   child: Text(
-                    "${DurationCaculator().messagedurationCaculate(startDate: message.date, endDate: DateTime.now())} 전",
+                    "${DurationCaculator().messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
                     style: kCaptionStyle.copyWith(
                         color: mainblack.withOpacity(0.6)),
                   ),
@@ -63,8 +63,7 @@ class MessageWidget extends StatelessWidget {
                     ? Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: mainblack.withOpacity(0.6)),
+                              color: Color(0xffe7e7e7),
                               borderRadius: BorderRadius.circular(8)),
                           child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -76,8 +75,7 @@ class MessageWidget extends StatelessWidget {
                       )
                     : Container(
                         decoration: BoxDecoration(
-                            border:
-                                Border.all(color: mainblack.withOpacity(0.6)),
+                            color: Color(0xffe7e7e7),
                             borderRadius: BorderRadius.circular(8)),
                         child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -125,8 +123,9 @@ class MessageWidget extends StatelessWidget {
                     ? Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: mainblack.withOpacity(0.6)),
+                              border: Border.all(
+                                color: Color(0xffe7e7e7),
+                              ),
                               borderRadius: BorderRadius.circular(8)),
                           child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -138,8 +137,9 @@ class MessageWidget extends StatelessWidget {
                       )
                     : Container(
                         decoration: BoxDecoration(
-                            border:
-                                Border.all(color: mainblack.withOpacity(0.6)),
+                            border: Border.all(
+                              color: Color(0xffe7e7e7),
+                            ),
                             borderRadius: BorderRadius.circular(8)),
                         child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -151,7 +151,7 @@ class MessageWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 18.0, 12.0, 0.0),
                   child: Text(
-                    "${DurationCaculator().messagedurationCaculate(startDate: message.date, endDate: DateTime.now())} 전",
+                    "${DurationCaculator().messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
                     style: kCaptionStyle.copyWith(
                         color: mainblack.withOpacity(0.6)),
                   ),

@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/intl_standalone.dart';
 import 'package:kakao_flutter_sdk/link.dart';
 import 'package:lottie/lottie.dart';
 
@@ -28,6 +30,7 @@ void main() async {
     systemNavigationBarIconBrightness: Brightness.light,
     statusBarColor: mainWhite, // status bar color
   ));
+  Intl.systemLocale = await findSystemLocale();
   String? temptoken = await const FlutterSecureStorage().read(key: 'token');
   KakaoContext.clientId = '3e0e4823d8dd690cfb48b8bcd5ad7e6c';
 

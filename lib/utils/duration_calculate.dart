@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class DurationCaculator extends GetxController {
   String durationCaculate({
@@ -43,20 +44,19 @@ class DurationCaculator extends GetxController {
     // print('분 $_dateDiffenceMinutes');
     // print('d : ${_dateDiffence / 30}');
     if ((_dateDiffence / 365).floor() > 0) {
-      durationResult.value =
-          '${((_dateDiffence / 365).floor()).toString()}년 ${((_dateDiffence - 365) / 30).floor().toString()}개월';
+      durationResult.value = DateFormat('yy.MM.dd EEEE').format(startDate);
     } else if ((_dateDiffence / 30).floor() > 0) {
-      durationResult.value = '${((_dateDiffence / 30).floor()).toString()}개월';
+      durationResult.value = DateFormat('yy.MM.dd EEEE').format(startDate);
     } else if ((_dateDiffence / 30).floor() == 0) {
-      durationResult.value = '${((_dateDiffence / 7)).floor().toString()}주일';
+      durationResult.value = DateFormat('yy.MM.dd EEEE').format(startDate);
       if (_dateDiffence <= 6) {
-        durationResult.value = '${_dateDiffence + 1}일';
+        durationResult.value = '${_dateDiffence + 1}일 전';
       }
       if ((_dateDiffenceHours / 24).floor() == 0) {
-        durationResult.value = '${(_dateDiffenceHours).toString()}시간';
+        durationResult.value = '${(_dateDiffenceHours).toString()}시간 전';
       }
       if ((_dateDiffenceMinutes / 60).floor() == 0) {
-        durationResult.value = '${(_dateDiffenceMinutes + 1).toString()}분';
+        durationResult.value = '${(_dateDiffenceMinutes + 1).toString()}분 전';
       }
     }
 

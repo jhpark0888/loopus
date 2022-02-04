@@ -75,7 +75,7 @@ class MessageRoomWidget extends StatelessWidget {
                       Obx(
                         () => Text(
                           '${messageRoom.user.realName}' +
-                              ' · ${DurationCaculator().messagedurationCaculate(startDate: controller.messagelist.first.message.date, endDate: DateTime.now())} 전',
+                              ' · ${DurationCaculator().messagedurationCaculate(startDate: controller.messagelist.first.message.date, endDate: DateTime.now())}',
                           style: messageRoom.notread.value == 0
                               ? kSubTitle3Style
                               : kSubTitle2Style,

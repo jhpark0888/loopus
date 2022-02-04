@@ -26,7 +26,7 @@ class PostingWidget extends StatelessWidget {
 
   PostingWidget({required this.item, Key? key}) : super(key: key);
 
-  final ProfileController profileController = Get.put(ProfileController());
+  final ProfileController profileController = Get.find();
   late final HoverController _hoverController =
       Get.put(HoverController(), tag: 'posting${item.id}');
   // final PostingDetailController postingDetailController =
@@ -190,7 +190,9 @@ class PostingWidget extends StatelessWidget {
                                                   vertical: 4,
                                                 ),
                                                 child: Text(
-                                                  "${item.likeCount.value}개",
+                                                  item.likeCount.value != 0
+                                                      ? "${item.likeCount.value}개"
+                                                      : '',
                                                   style: kButtonStyle,
                                                 ),
                                               ),

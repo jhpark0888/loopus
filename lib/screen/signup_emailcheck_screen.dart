@@ -43,9 +43,22 @@ class SignupEmailcheckScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            const Text(
-              '받은 메일함에서 계정을 인증해주세요',
-              style: kSubTitle1Style,
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: '받은 메일함',
+                    style: kSubTitle1Style.copyWith(
+                      color: mainblue,
+                    ),
+                  ),
+                  const TextSpan(
+                    text: '에서 학교 메일을 인증해주세요',
+                    style: kSubTitle1Style,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 16,
@@ -54,7 +67,7 @@ class SignupEmailcheckScreen extends StatelessWidget {
             //TODO: 이메일 인증 완료 시 화면
             //TODO: 회원가입 시 바로 로그인 되어야 함
             const Text(
-              '왜 이메일 인증을 해야하는가?',
+              '이제 마지막 단계만 남았어요',
               style: kBody2Style,
               textAlign: TextAlign.center,
             ),
@@ -67,7 +80,9 @@ class SignupEmailcheckScreen extends StatelessWidget {
                 style: kSubTitle1Style.copyWith(
                   color: mainblack.withOpacity(0.6),
                 ),
-                controller: signupController.emailidcontroller,
+                //TODO: 학교 도메인 확인
+                initialValue:
+                    signupController.emailidcontroller.text + '@inu.ac.kr',
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.only(bottom: 0),
                   isDense: false,

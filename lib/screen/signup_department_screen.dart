@@ -37,16 +37,29 @@ class SignupDepartmentScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            const Text(
-              '어느 학과를 전공하고 계신가요?',
-              style: kSubTitle1Style,
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: '어느 학과',
+                    style: kSubTitle1Style.copyWith(
+                      color: mainblue,
+                    ),
+                  ),
+                  const TextSpan(
+                    text: '를 전공하고 계신가요?',
+                    style: kSubTitle1Style,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 16,
             ),
             //Todo: UX Writing
             const Text(
-              '왜 학과를 선택해야하는가?',
+              '전공 학과를 바탕으로 홈 화면을 구성해드릴게요',
               style: kBody2Style,
               textAlign: TextAlign.center,
             ),

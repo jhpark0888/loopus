@@ -14,7 +14,8 @@ void emailRequest() async {
   Uri uri = Uri.parse('$serverUri/user_api/check_email');
 
   var checkemail = {
-    "email": signupController.emailidcontroller.text,
+    //TODO: 학교 도메인 확인
+    "email": signupController.emailidcontroller.text + '@inu.ac.kr',
     "password": signupController.passwordcontroller.text,
   };
 

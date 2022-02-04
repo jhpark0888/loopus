@@ -157,7 +157,9 @@ class ProjectPostingWidget extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Text(
-                                '${item.likeCount}개',
+                                item.likeCount.value != 0
+                                    ? "${item.likeCount.value}개"
+                                    : '',
                                 style: kButtonStyle,
                               ),
                             ),
