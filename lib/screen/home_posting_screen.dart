@@ -260,17 +260,13 @@ class HomePostingScreen extends StatelessWidget {
                               child: Text(
                                 '이제부터는 최신 포스팅을 보여드릴게요',
                                 style: kButtonStyle.copyWith(
-                                  color: mainblue,
+                                  color: mainblack.withOpacity(0.6),
                                 ),
                               ),
                             ),
                             // TextButton(
                             //   onPressed: () {
-                            //     // homeController.hometabcontroller.animateTo(
-                            //     //   2,
-                            //     //   curve: Curves.easeInOut,
-                            //     //   duration: Duration(milliseconds: 300),
-                            //     // );
+
                             //   },
                             //   child: Text(
                             //     '루프한 학생들의 포스팅 읽기',
@@ -344,14 +340,20 @@ class HomePostingScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 16,
-                            ),
                             Center(
-                              child: Text(
-                                '팔로잉한 학생들의 포스팅도 확인해보세요',
-                                style: kButtonStyle.copyWith(
-                                  color: mainblue,
+                              child: TextButton(
+                                onPressed: () {
+                                  homeController.hometabcontroller.animateTo(
+                                    2,
+                                    curve: Curves.easeInOut,
+                                    duration: Duration(milliseconds: 300),
+                                  );
+                                },
+                                child: Text(
+                                  '팔로잉한 학생들의 포스팅도 확인해보세요',
+                                  style: kButtonStyle.copyWith(
+                                    color: mainblue,
+                                  ),
                                 ),
                               ),
                             ),

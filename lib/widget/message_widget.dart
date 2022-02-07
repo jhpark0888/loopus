@@ -56,7 +56,8 @@ class MessageWidget extends StatelessWidget {
                   child: Text(
                     "${DurationCaculator().messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
                     style: kCaptionStyle.copyWith(
-                        color: mainblack.withOpacity(0.6)),
+                      color: mainblack.withOpacity(0.6),
+                    ),
                   ),
                 ),
                 controller.hasTextOverflow(message.message, kBody2Style)

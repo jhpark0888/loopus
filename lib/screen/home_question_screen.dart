@@ -412,7 +412,7 @@ class HomeQuestionScreen extends StatelessWidget {
                               child: Text(
                                 '검색을 통해 더 많은 질문들을 찾아보세요',
                                 style: kButtonStyle.copyWith(
-                                  color: mainblue,
+                                  color: mainblack.withOpacity(0.6),
                                 ),
                               ),
                             ),

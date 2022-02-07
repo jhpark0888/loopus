@@ -45,10 +45,10 @@ class QuestionAnswerWidget extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Get.to(() => OtherProfileScreen(
-                userid: answer.user,
-                isuser: answer.isuser,
-                realname: answer.realname!,
-              ));
+                            userid: answer.user,
+                            isuser: answer.isuser,
+                            realname: answer.realname!,
+                          ));
                     },
                     child: ClipOval(
                         child: answer.profileimage == ""
@@ -62,8 +62,8 @@ class QuestionAnswerWidget extends StatelessWidget {
                                 width: 32,
                                 imageUrl: answer.profileimage!,
                                 placeholder: (context, url) => CircleAvatar(
-                                  child:
-                                      Center(child: CircularProgressIndicator()),
+                                  child: Center(
+                                      child: CircularProgressIndicator()),
                                 ),
                                 fit: BoxFit.cover,
                               )),
@@ -84,51 +84,52 @@ class QuestionAnswerWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             InkWell(
-                              onTap: () async {
-                                // profileController.isProfileLoading(true);
+                                onTap: () async {
+                                  // profileController.isProfileLoading(true);
 
-                                Get.to(() => OtherProfileScreen(
-                userid: answer.user,
-                isuser: answer.isuser,
-                realname: answer.realname!,
-              ));
-                              },
-                              child: Row(
-                              children: [
-                                Text(
-                                "${answer.realname}",
-                                style: kBody2Style,
-                              ),
-                                Text(
-                                  " · ${DurationCaculator().messagedurationCaculate(startDate: answer.date, endDate: DateTime.now())} 전",
-                                  style: kBody2Style.copyWith(color: mainblack.withOpacity(0.6)),
-                                ),
-                              ],
-                            )
-                            ),
-                            
+                                  Get.to(() => OtherProfileScreen(
+                                        userid: answer.user,
+                                        isuser: answer.isuser,
+                                        realname: answer.realname!,
+                                      ));
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "${answer.realname}",
+                                      style: kBody2Style,
+                                    ),
+                                    Text(
+                                      " · ${DurationCaculator().messagedurationCaculate(startDate: answer.date, endDate: DateTime.now())}",
+                                      style: kBody2Style.copyWith(
+                                          color: mainblack.withOpacity(0.6)),
+                                    ),
+                                  ],
+                                )),
                           ],
                         ),
                         InkWell(
-                          onTap: answer.isuser == 1 ? () {
-                            ModalController.to.showModalIOS(context,
-                                func1: () {},
-                                func2: () {},
-                                value1: '답글 삭제하기',
-                                value2: 'value2',
-                                isValue1Red: true,
-                                isValue2Red: true,
-                                isOne: true);
-                          } : () {
-                            ModalController.to.showModalIOS(context,
-                                func1: () {},
-                                func2: () {},
-                                value1: '답글 신고하기',
-                                value2: 'value2',
-                                isValue1Red: true,
-                                isValue2Red: true,
-                                isOne: true);
-                          },
+                          onTap: answer.isuser == 1
+                              ? () {
+                                  ModalController.to.showModalIOS(context,
+                                      func1: () {},
+                                      func2: () {},
+                                      value1: '답글 삭제하기',
+                                      value2: 'value2',
+                                      isValue1Red: true,
+                                      isValue2Red: true,
+                                      isOne: true);
+                                }
+                              : () {
+                                  ModalController.to.showModalIOS(context,
+                                      func1: () {},
+                                      func2: () {},
+                                      value1: '답글 신고하기',
+                                      value2: 'value2',
+                                      isValue1Red: true,
+                                      isValue2Red: true,
+                                      isOne: true);
+                                },
                           child: SvgPicture.asset("assets/icons/More.svg"),
                         ),
                       ],

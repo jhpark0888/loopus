@@ -237,7 +237,7 @@ class HomeLoopScreen extends StatelessWidget {
                                 child: Text(
                                   '팔로우를 통해 더 많은 정보를 얻어보세요',
                                   style: kButtonStyle.copyWith(
-                                    color: mainblue,
+                                    color: mainblack.withOpacity(0.6),
                                   ),
                                 ),
                               ),

@@ -44,11 +44,11 @@ class DurationCaculator extends GetxController {
     // print('분 $_dateDiffenceMinutes');
     // print('d : ${_dateDiffence / 30}');
     if ((_dateDiffence / 365).floor() > 0) {
-      durationResult.value = DateFormat('yy.MM.dd EEEE').format(startDate);
+      durationResult.value = DateFormat('yy.MM.dd EE').format(startDate);
     } else if ((_dateDiffence / 30).floor() > 0) {
-      durationResult.value = DateFormat('yy.MM.dd EEEE').format(startDate);
+      durationResult.value = DateFormat('yy.MM.dd EE').format(startDate);
     } else if ((_dateDiffence / 30).floor() == 0) {
-      durationResult.value = DateFormat('yy.MM.dd EEEE').format(startDate);
+      durationResult.value = DateFormat('yy.MM.dd EE').format(startDate);
       if (_dateDiffence <= 6) {
         durationResult.value = '${_dateDiffence + 1}일 전';
       }

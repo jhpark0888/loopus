@@ -648,7 +648,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
   void showBottomSheet() {
     Get.bottomSheet(
       Container(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 56),
+        padding: EdgeInsets.fromLTRB(20, 20, 12, 48),
         decoration: BoxDecoration(
           color: mainWhite,
           borderRadius: BorderRadius.only(
