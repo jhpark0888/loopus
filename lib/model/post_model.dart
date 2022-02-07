@@ -83,7 +83,7 @@ class Post {
 String contentsummary(List<Map<String, dynamic>> json) {
   String summary = '';
   for (var map in json) {
-    if ([0, 1, 2, 3, 4].contains(map['type'])) {
+    if (["T", "H1", "H2", "QUOTE", "BULLET", "LINK"].contains(map['type'])) {
       summary = summary + map['content'];
     }
   }
