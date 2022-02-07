@@ -7,7 +7,7 @@ import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/controller/question_detail_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -18,9 +18,9 @@ import 'package:loopus/widget/project_widget.dart';
 class QuestionDetailWidget extends StatelessWidget {
   QuestionItem question;
 
-  QuestionDetailWidget(
-      {required this.question,
-      });
+  QuestionDetailWidget({
+    required this.question,
+  });
   // const MessageQuestionWidget({Key? key}) : super(key: key);
 
   @override
@@ -56,10 +56,10 @@ class QuestionDetailWidget extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             Get.to(() => OtherProfileScreen(
-                userid: question.user,
-                isuser: question.isuser,
-                realname: question.realname,
-              ));
+                                  userid: question.user,
+                                  isuser: question.isuser,
+                                  realname: question.realname,
+                                ));
                           },
                           child: Row(
                             children: [
@@ -95,13 +95,16 @@ class QuestionDetailWidget extends StatelessWidget {
                       ),
                       Text(
                         "${question.department}",
-                        style: kBody2Style.copyWith(color: mainblack.withOpacity(0.6)),
+                        style: kBody2Style.copyWith(
+                            color: mainblack.withOpacity(0.6)),
                       ),
                     ],
                   ),
                   Text(
-                    "${DurationCaculator().messagedurationCaculate(startDate: question.date!, endDate: DateTime.now())} 전",
-                    style: kButtonStyle.copyWith(color: mainblack.withOpacity(0.6)),
+                    DurationCaculator().messagedurationCaculate(
+                        startDate: question.date!, endDate: DateTime.now()),
+                    style: kButtonStyle.copyWith(
+                        color: mainblack.withOpacity(0.6)),
                   )
                 ],
               ),

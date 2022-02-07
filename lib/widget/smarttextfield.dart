@@ -4,7 +4,16 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 
-enum SmartTextType { T, H1, H2, QUOTE, BULLET, IMAGE, LINK, IMAGEINFO }
+enum SmartTextType {
+  T,
+  H1,
+  H2,
+  QUOTE,
+  BULLET,
+  IMAGE,
+  LINK,
+  IMAGEINFO,
+}
 
 extension SmartTextStyle on SmartTextType {
   TextStyle get textStyle {
@@ -112,23 +121,43 @@ class SmartTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return type.value == SmartTextType.IMAGE
-        ? Align(
-            alignment: type.value.imageAlign,
-            child: Stack(children: [
-              Image.file(editorController.imageindex[
-                  editorController.textcontrollers.indexOf(controller)]!),
-              IconButton(
-                onPressed: () {
-                  editorController.imagedelete(controller);
-                },
-                icon: const Icon(
-                  Icons.cancel_rounded,
-                  color: Colors.black26,
-                ),
-                iconSize: 32,
+        ? editorController.imageindex[
+                    editorController.textcontrollers.indexOf(controller)] !=
+                null
+            ? Align(
+                alignment: type.value.imageAlign,
+                child: Stack(children: [
+                  Image.file(editorController.imageindex[
+                      editorController.textcontrollers.indexOf(controller)]!),
+                  IconButton(
+                    onPressed: () {
+                      editorController.imagedelete(controller);
+                    },
+                    icon: const Icon(
+                      Icons.cancel_rounded,
+                      color: Colors.black26,
+                    ),
+                    iconSize: 32,
+                  )
+                ]),
               )
-            ]),
-          )
+            : Align(
+                alignment: type.value.imageAlign,
+                child: Stack(children: [
+                  Image.network(editorController.urlimageindex[
+                      editorController.textcontrollers.indexOf(controller)]!),
+                  IconButton(
+                    onPressed: () {
+                      editorController.imagedelete(controller);
+                    },
+                    icon: const Icon(
+                      Icons.cancel_rounded,
+                      color: Colors.black26,
+                    ),
+                    iconSize: 32,
+                  )
+                ]),
+              )
         : Focus(
             onFocusChange: (hasFocus) {
               if (hasFocus) {

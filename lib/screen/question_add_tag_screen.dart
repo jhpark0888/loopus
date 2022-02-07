@@ -9,7 +9,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/question_add_controller.dart';
-import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/controller/question_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/home_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';

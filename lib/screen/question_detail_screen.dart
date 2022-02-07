@@ -7,7 +7,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
-import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/controller/question_detail_controller.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
@@ -24,26 +24,31 @@ class QuestionDetailScreen extends StatelessWidget {
     Key? key,
   }) : super(key: key);
   ModalController modalController = Get.put(ModalController());
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
 
-  late QuestionDetailController questionController = Get.put(QuestionDetailController(questionid: questionid));
+  late QuestionDetailController questionController =
+      Get.put(QuestionDetailController(questionid: questionid));
   int questionid;
   int isuser;
   String realname;
   // RxInt numLines = 0.obs;
 
   void _handleSubmitted(String text) async {
-    Answer answer =
-        await answermake(text, questionController.question.value.id);
-    questionController.messageanswerlist.add(QuestionAnswerWidget(
-      answer: answer,
-    ));
-    questionController.answerfocus.unfocus();
-    questionController.answertextController.clear();
+    if (questionController.isSendButtonon.value) {
+      Answer answer =
+          await answermake(text, questionController.question.value.id);
+      answer.isuser = 1;
+      questionController.answerlist.add(QuestionAnswerWidget(
+        answer: answer,
+      ));
+      questionController.answerfocus.unfocus();
+      questionController.answertextController.clear();
+    }
   }
 
   Widget _buildTextComposer() {
     return Container(
+      key: questionController.textFieldBoxKey.value,
       decoration: BoxDecoration(
         color: mainWhite,
         border: Border(
@@ -57,67 +62,59 @@ class QuestionDetailScreen extends StatelessWidget {
         horizontal: 16,
         vertical: 8,
       ),
-      child: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: TextFormField(
-          autocorrect: false,
-          enableSuggestions: false,
-          cursorWidth: 1.2,
-          focusNode: questionController.answerfocus,
-          style: const TextStyle(decoration: TextDecoration.none),
-          cursorColor: mainblack.withOpacity(0.6),
-          controller: questionController.answertextController,
-          onFieldSubmitted: _handleSubmitted,
-          validator: (value) {
-            if (value!.trim().isEmpty) {
-              questionController.isemptytext.value = true;
-            } else {
-              questionController.isemptytext.value = false;
-            }
-          },
-          minLines: 1,
-          maxLines: 5,
-          decoration: InputDecoration(
-            suffixIconConstraints: BoxConstraints(minWidth: 24),
-            suffixIcon: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Flexible(
-                  child: GestureDetector(
-                    onTap: () {
-                      _handleSubmitted(
-                          questionController.answertextController.text);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: Text(
-                        '작성',
-                        style: kButtonStyle.copyWith(color: mainblue),
-                      ),
+      child: TextFormField(
+        autocorrect: false,
+        enableSuggestions: false,
+        cursorWidth: 1.2,
+        focusNode: questionController.answerfocus,
+        style: const TextStyle(decoration: TextDecoration.none),
+        cursorColor: mainblack.withOpacity(0.6),
+        controller: questionController.answertextController,
+        onFieldSubmitted: _handleSubmitted,
+        minLines: 1,
+        maxLines: 5,
+        decoration: InputDecoration(
+          suffixIconConstraints: BoxConstraints(minWidth: 24),
+          suffixIcon: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Flexible(
+                child: GestureDetector(
+                  onTap: () {
+                    _handleSubmitted(
+                        questionController.answertextController.text);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: Text(
+                      '작성',
+                      style: kButtonStyle.copyWith(
+                          color: questionController.isSendButtonon.value
+                              ? mainblue
+                              : mainblack.withOpacity(0.38)),
                     ),
                   ),
                 ),
-              ],
-            ),
-            contentPadding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
-            isDense: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 0,
-                style: BorderStyle.none,
               ),
-            ),
-            hintText: "답변을 작성해주세요...",
-            hintStyle: TextStyle(
-              fontSize: 14,
-              color: mainblack.withOpacity(0.38),
-            ),
-            fillColor: mainlightgrey,
-            filled: true,
+            ],
           ),
+          contentPadding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
+          isDense: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(
+              width: 0,
+              style: BorderStyle.none,
+            ),
+          ),
+          hintText: "답변을 작성해주세요...",
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: mainblack.withOpacity(0.38),
+          ),
+          fillColor: mainlightgrey,
+          filled: true,
         ),
       ),
     );
@@ -142,12 +139,11 @@ class QuestionDetailScreen extends StatelessWidget {
                 'assets/icons/Arrow.svg',
               ),
               onPressed: () {
-                questionController.contentcontroller.clear();
+                questionController.answertextController.clear();
                 Get.back();
               },
             ),
-            title:
-                "${realname}님의 질문",
+            title: "${realname}님의 질문",
             actions: [
               Obx(
                 () => IconButton(
@@ -156,16 +152,14 @@ class QuestionDetailScreen extends StatelessWidget {
                         questionController.check_alarm.value = false;
                         modalController.showCustomDialog('알림이 취소되었어요', 1000);
                         NotificationController.to.fcmQuestionUnSubscribe(
-                            questionController.question.value.id
-                                .toString());
+                            questionController.question.value.id.toString());
                       } else {
                         questionController.check_alarm.value = true;
                         modalController.showCustomDialog(
                             '답글이 달리면 알림을 보내드려요', 1000);
                         print(questionController.question.value.id);
                         NotificationController.to.fcmQuestionSubscribe(
-                            questionController.question.value.id
-                                .toString());
+                            questionController.question.value.id.toString());
                       }
                     },
                     icon: questionController.check_alarm.value == false
@@ -179,146 +173,182 @@ class QuestionDetailScreen extends StatelessWidget {
                           )),
               ),
               IconButton(
-                  onPressed:
-                      isuser == 1
-                          ? () {
-                              modalController.showModalIOS(
-                                context,
-                                func1: () {
-                                  modalController.showButtonDialog(
-                                      leftText: '취소',
-                                      rightText: '삭제',
-                                      title: '정말 이 질문을 삭제하시겠어요?',
-                                      content: '삭제한 질문은 복구할 수 없어요',
-                                      leftFunction: () => Get.back(),
-                                      rightFunction: () async {
-                                        Get.back();
-                                        questionController
-                                            .isQuestionDeleteLoading(true);
-                                        await deletequestion(questionController
-                                                .question.value.id)
-                                            .then((value) {
-                                          HomeController.to.questionResult.value
-                                              .questionitems
-                                              .removeWhere((question) =>
-                                                  question.id ==
-                                                  questionController
-                                                      
-                                                      .question.value
-                                                      .id);
-                                          Get.back();
-                                          Get.back();
-                                          questionController
-                                              .isQuestionDeleteLoading(false);
-                                        });
-                                      });
-                                },
-                                func2: () {},
-                                value1: '이 질문 삭제하기',
-                                value2: '',
-                                isValue1Red: true,
-                                isValue2Red: false,
-                                isOne: true,
-                              );
-                            }
-                          : () {
-                              modalController.showModalIOS(
-                                context,
-                                func1: () {
-                                  Get.put(MessageDetailController(User(userid: questionController.question.value.user, realName: questionController.question.value.realname, type: 0, department: questionController.question.value.department!, loopcount: 0.obs, totalposting: 0, isuser: questionController.question.value.isuser, profileTag: [], looped: FollowState.normal.obs, profileImage: questionController.question.value.profileimage)), tag: questionController.question.value.user.toString()).messageroomrefresh();
-                                  Get.to(() => MessageDetailScreen(user: User(userid: questionController.question.value.user, realName: questionController.question.value.realname, type: 0, department: questionController.question.value.department!, loopcount: 0.obs, totalposting: 0, isuser: questionController.question.value.isuser, profileTag: [], looped: FollowState.normal.obs, profileImage: questionController.question.value.profileimage)));
-                                },
-                                func2: () {},
-                                value1:
-                                    '${questionController.question.value.realname}님에게 메시지 보내기',
-                                value2: '이 질문 신고하기',
-                                isValue1Red: false,
-                                isValue2Red: true,
-                                isOne: false,
-                              );
+                  onPressed: isuser == 1
+                      ? () {
+                          modalController.showModalIOS(
+                            context,
+                            func1: () {
+                              modalController.showButtonDialog(
+                                  leftText: '취소',
+                                  rightText: '삭제',
+                                  title: '정말 이 질문을 삭제하시겠어요?',
+                                  content: '삭제한 질문은 복구할 수 없어요',
+                                  leftFunction: () => Get.back(),
+                                  rightFunction: () async {
+                                    Get.back();
+                                    questionController
+                                        .isQuestionDeleteLoading(true);
+                                    await deletequestion(questionController
+                                            .question.value.id)
+                                        .then((value) {
+                                      HomeController
+                                          .to.questionResult.value.questionitems
+                                          .removeWhere((question) =>
+                                              question.id ==
+                                              questionController
+                                                  .question.value.id);
+                                      Get.back();
+                                      Get.back();
+                                      questionController
+                                          .isQuestionDeleteLoading(false);
+                                    });
+                                  });
                             },
+                            func2: () {},
+                            value1: '이 질문 삭제하기',
+                            value2: '',
+                            isValue1Red: true,
+                            isValue2Red: false,
+                            isOne: true,
+                          );
+                        }
+                      : () {
+                          modalController.showModalIOS(
+                            context,
+                            func1: () {
+                              Get.put(
+                                      MessageDetailController(User(
+                                          userid: questionController
+                                              .question.value.user,
+                                          realName: questionController
+                                              .question.value.realname,
+                                          type: 0,
+                                          department: questionController
+                                              .question.value.department!,
+                                          loopcount: 0.obs,
+                                          totalposting: 0,
+                                          isuser: questionController
+                                              .question.value.isuser,
+                                          profileTag: [],
+                                          looped: FollowState.normal.obs,
+                                          profileImage: questionController
+                                              .question.value.profileimage)),
+                                      tag: questionController
+                                          .question.value.user
+                                          .toString())
+                                  .messageroomrefresh();
+                              Get.to(() => MessageDetailScreen(
+                                  user: User(
+                                      userid: questionController
+                                          .question.value.user,
+                                      realName: questionController
+                                          .question.value.realname,
+                                      type: 0,
+                                      department: questionController
+                                          .question.value.department!,
+                                      loopcount: 0.obs,
+                                      totalposting: 0,
+                                      isuser: questionController
+                                          .question.value.isuser,
+                                      profileTag: [],
+                                      looped: FollowState.normal.obs,
+                                      profileImage: questionController
+                                          .question.value.profileimage)));
+                            },
+                            func2: () {},
+                            value1:
+                                '${questionController.question.value.realname}님에게 메시지 보내기',
+                            value2: '이 질문 신고하기',
+                            isValue1Red: false,
+                            isValue2Red: true,
+                            isOne: false,
+                          );
+                        },
                   icon: SvgPicture.asset(
                     'assets/icons/More.svg',
                     width: 28,
                   ))
             ],
           ),
-          body: questionController.isQuestionLoading.value ? Center(
+          body: questionController.isQuestionLoading.value
+              ? Center(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 9,
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          '내용을 받는 중이에요...',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: mainblue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 60,
+                        ),
+                      ]),
+                )
+              : GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                    questionController.answerfocus.unfocus();
+                  },
+                  child: SingleChildScrollView(
+                    reverse: true,
+                    controller: questionController.scrollController,
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/icons/loading.gif',
-                            scale: 9,
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            '내용을 받는 중이에요...',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: mainblue,
-                              fontWeight: FontWeight.bold,
+                      children: [
+                        Obx(
+                          () => Padding(
+                            padding: EdgeInsets.only(
+                                bottom: questionController
+                                        .keyboardController.isVisible
+                                    ? questionController
+                                        .textBoxSize.value.height
+                                    : 0),
+                            child: Column(
+                              children: [
+                                QuestionDetailWidget(
+                                  question: questionController.question.value,
+                                ),
+                                Container(
+                                  color: Color(0xffe7e7e7),
+                                  height: 1,
+                                ),
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  padding: EdgeInsets.only(
+                                    right: 16,
+                                    left: 16,
+                                    top: 20,
+                                    bottom: 12,
+                                  ),
+                                  child: Obx(
+                                    () => Text(
+                                      "답변 ${questionController.answerlist.length}개",
+                                      style: kSubTitle2Style,
+                                    ),
+                                  ),
+                                ),
+                                Obx(() => Column(
+                                      children:
+                                          questionController.answerlist.value,
+                                    )),
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            height: 60,
-                          ),
-                        ]),
-                  ) : GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-              questionController.answerfocus.unfocus();
-            },
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    Flexible(
-                      child: ListView(
-                        children: [
-                          Column(children: [
-                            QuestionDetailWidget(
-                              question: questionController.question.value,
-                            ),
-                            Container(
-          color: Color(0xffe7e7e7),
-          height: 1,
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(
-            right: 16,
-            left: 16,
-            top: 20,
-            bottom: 12,
-          ),
-          child: Obx(
-            () => Text(
-              "답변 ${questionController.messageanswerlist.length}개",
-              style: kSubTitle2Style,
-            ),
-          ),
-        ),
-                            Obx(() => Column(
-                                  children: questionController
-                                      .messageanswerlist.value,
-                                )),
-                          ]),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 56,
-                    ),
-                  ],
+                  ),
                 ),
-                // Align(
-                //     alignment: Alignment.bottomCenter, child: _buildTextComposer())
-              ],
-            ),
-          ),
         ),
         if (questionController.isQuestionDeleteLoading.value)
           Container(

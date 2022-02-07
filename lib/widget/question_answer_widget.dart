@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/api/question_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/controller/question_detail_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -45,10 +46,10 @@ class QuestionAnswerWidget extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Get.to(() => OtherProfileScreen(
-                userid: answer.user,
-                isuser: answer.isuser,
-                realname: answer.realname!,
-              ));
+                            userid: answer.user,
+                            isuser: answer.isuser,
+                            realname: answer.realname!,
+                          ));
                     },
                     child: ClipOval(
                         child: answer.profileimage == ""
@@ -62,8 +63,8 @@ class QuestionAnswerWidget extends StatelessWidget {
                                 width: 32,
                                 imageUrl: answer.profileimage!,
                                 placeholder: (context, url) => CircleAvatar(
-                                  child:
-                                      Center(child: CircularProgressIndicator()),
+                                  child: Center(
+                                      child: CircularProgressIndicator()),
                                 ),
                                 fit: BoxFit.cover,
                               )),
@@ -84,51 +85,75 @@ class QuestionAnswerWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             InkWell(
-                              onTap: () async {
-                                // profileController.isProfileLoading(true);
+                                onTap: () async {
+                                  // profileController.isProfileLoading(true);
 
-                                Get.to(() => OtherProfileScreen(
-                userid: answer.user,
-                isuser: answer.isuser,
-                realname: answer.realname!,
-              ));
-                              },
-                              child: Row(
-                              children: [
-                                Text(
-                                "${answer.realname}",
-                                style: kBody2Style,
-                              ),
-                                Text(
-                                  " · ${DurationCaculator().messagedurationCaculate(startDate: answer.date, endDate: DateTime.now())} 전",
-                                  style: kBody2Style.copyWith(color: mainblack.withOpacity(0.6)),
-                                ),
-                              ],
-                            )
-                            ),
-                            
+                                  Get.to(() => OtherProfileScreen(
+                                        userid: answer.user,
+                                        isuser: answer.isuser,
+                                        realname: answer.realname!,
+                                      ));
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "${answer.realname}",
+                                      style: kBody2Style,
+                                    ),
+                                    Text(
+                                      " · ${DurationCaculator().messagedurationCaculate(startDate: answer.date, endDate: DateTime.now())}",
+                                      style: kBody2Style.copyWith(
+                                          color: mainblack.withOpacity(0.6)),
+                                    ),
+                                  ],
+                                )),
                           ],
                         ),
                         InkWell(
-                          onTap: answer.isuser == 1 ? () {
-                            ModalController.to.showModalIOS(context,
-                                func1: () {},
-                                func2: () {},
-                                value1: '답글 삭제하기',
-                                value2: 'value2',
-                                isValue1Red: true,
-                                isValue2Red: true,
-                                isOne: true);
-                          } : () {
-                            ModalController.to.showModalIOS(context,
-                                func1: () {},
-                                func2: () {},
-                                value1: '답글 신고하기',
-                                value2: 'value2',
-                                isValue1Red: true,
-                                isValue2Red: true,
-                                isOne: true);
-                          },
+                          onTap: answer.isuser == 1
+                              ? () {
+                                  ModalController.to.showModalIOS(context,
+                                      func1: () {
+                                    ModalController.to.showButtonDialog(
+                                        leftText: '취소',
+                                        rightText: '삭제',
+                                        title: '정말 답변을 삭제하시겠어요?',
+                                        content: '삭제한 답변은 복구할 수 없어요',
+                                        leftFunction: () => Get.back(),
+                                        rightFunction: () async {
+                                          await deleteanswer(
+                                                  answer.questionid, answer.id)
+                                              .then((value) {
+                                            QuestionDetailController
+                                                .to.question.value.answer
+                                                .removeWhere((element) =>
+                                                    element.id == answer.id);
+                                            QuestionDetailController
+                                                .to.answerlist
+                                                .removeWhere((element) =>
+                                                    element.answer.id ==
+                                                    answer.id);
+                                          });
+                                          getbacks(2);
+                                        });
+                                  },
+                                      func2: () {},
+                                      value1: '답글 삭제하기',
+                                      value2: 'value2',
+                                      isValue1Red: true,
+                                      isValue2Red: true,
+                                      isOne: true);
+                                }
+                              : () {
+                                  ModalController.to.showModalIOS(context,
+                                      func1: () {},
+                                      func2: () {},
+                                      value1: '답글 신고하기',
+                                      value2: 'value2',
+                                      isValue1Red: true,
+                                      isValue2Red: true,
+                                      isOne: true);
+                                },
                           child: SvgPicture.asset("assets/icons/More.svg"),
                         ),
                       ],

@@ -12,6 +12,7 @@ class PostingDetailController extends GetxController {
   PostingDetailController(this.postid);
   RxBool isPostingContentLoading = true.obs;
   RxBool isPostDeleteLoading = false.obs;
+  RxBool isPostUpdateLoading = false.obs;
 
   int postid;
 

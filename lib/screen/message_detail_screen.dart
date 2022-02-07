@@ -31,7 +31,7 @@ class MessageDetailScreen extends StatelessWidget {
       controller.messagefocus.unfocus();
       controller.messagetextController.clear();
       controller.messagelist.insert(
-          0,
+          controller.messagelist.length,
           MessageWidget(
               message: Message(
                   roomId: controller.messagelist.isEmpty
@@ -52,7 +52,7 @@ class MessageDetailScreen extends StatelessWidget {
         }
       }
       await postmessage(text, controller.user.userid).then((value) {
-        controller.messagelist.first.message.issending(false);
+        controller.messagelist.last.message.issending(false);
       });
     }
   }
@@ -178,7 +178,11 @@ class MessageDetailScreen extends StatelessWidget {
                   child: ListView(
                     reverse: true,
                     controller: controller.scrollController,
-                    children: controller.messagelist,
+                    children: [
+                      Column(
+                        children: controller.messagelist,
+                      )
+                    ],
                   ),
                 ),
               ),

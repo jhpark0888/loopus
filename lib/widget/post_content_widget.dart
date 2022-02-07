@@ -24,18 +24,18 @@ class PostContentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (SmartTextType.values[content.type] == SmartTextType.IMAGE) {
+    if (content.type == SmartTextType.IMAGE) {
       return Align(
-        alignment: SmartTextType.values[content.type].imageAlign,
+        alignment: content.type.imageAlign,
         child: Padding(
-          padding: SmartTextType.values[content.type].padding,
+          padding: content.type.padding,
           child: FadeInImage.assetNetwork(
               placeholder: 'assets/icons/loading.gif', image: content.content),
         ),
       );
-    } else if (SmartTextType.values[content.type] == SmartTextType.LINK) {
+    } else if (content.type == SmartTextType.LINK) {
       return Padding(
-        padding: SmartTextType.values[content.type].padding,
+        padding: content.type.padding,
         child: Align(
           alignment: Alignment.centerLeft,
           child: InkWell(
@@ -43,20 +43,20 @@ class PostContentWidget extends StatelessWidget {
                 Get.to(() => WebViewScreen(url: validateUrl()));
               },
               child: Text(
-                '${SmartTextType.values[content.type].prefix ?? ''}${content.content}',
-                textAlign: SmartTextType.values[content.type].align,
-                style: SmartTextType.values[content.type].textStyle,
+                '${content.type.prefix ?? ''}${content.content}',
+                textAlign: content.type.align,
+                style: content.type.textStyle,
               )),
         ),
       );
     } else {
       return Container(
-        padding: SmartTextType.values[content.type].padding,
+        padding: content.type.padding,
         width: Get.width,
         child: Text(
-          '${SmartTextType.values[content.type].prefix ?? ''}${content.content}',
-          textAlign: SmartTextType.values[content.type].align,
-          style: SmartTextType.values[content.type].textStyle,
+          '${content.type.prefix ?? ''}${content.content}',
+          textAlign: content.type.align,
+          style: content.type.textStyle,
         ),
       );
     }

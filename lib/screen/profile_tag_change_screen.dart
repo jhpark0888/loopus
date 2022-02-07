@@ -9,7 +9,7 @@ import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/controller/question_detail_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/tag_model.dart';

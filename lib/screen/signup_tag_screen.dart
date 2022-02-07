@@ -7,7 +7,7 @@ import 'package:loopus/api/question_api.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/controller/question_detail_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/login_screen.dart';

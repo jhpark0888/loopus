@@ -16,7 +16,9 @@ class EditorController extends GetxController {
   RxList<SmartTextType> types = <SmartTextType>[].obs;
   Rx<SmartTextType> selectedType = SmartTextType.T.obs;
   RxList<Obx> smarttextfieldlist = <Obx>[].obs;
+
   List<File?> imageindex = [];
+  List<String?> urlimageindex = [];
   List<String?> linkindex = [];
 
   int get length => textcontrollers.length;
@@ -32,6 +34,15 @@ class EditorController extends GetxController {
     insert(index: 0);
 
     super.onInit();
+  }
+
+  void alllistclear() {
+    types.clear();
+    nodes.clear();
+    textcontrollers.clear();
+    imageindex.clear();
+    linkindex.clear();
+    urlimageindex.clear();
   }
 
   Widget setFontSizeIcon(SmartTextType type) {
@@ -146,7 +157,7 @@ class EditorController extends GetxController {
     final TextEditingController controller =
         TextEditingController(text: '\u200B' + (text ?? ''));
     if (type == SmartTextType.IMAGEINFO) {
-      controller.text = "";
+      controller.text = text ?? "";
     }
     controller.addListener(() {
       if (controller.selection ==
@@ -178,6 +189,7 @@ class EditorController extends GetxController {
           textcontrollers.removeAt(index);
           linkindex.removeAt(index);
           imageindex.removeAt(index);
+          urlimageindex.removeAt(index);
           nodes.removeAt(index);
           types.removeAt(index);
           listupdate();
@@ -204,6 +216,7 @@ class EditorController extends GetxController {
     textcontrollers.insert(index, controller);
     linkindex.insert(index, null);
     imageindex.insert(index, null);
+    urlimageindex.insert(index, null);
     types.insert(index, type);
     nodes.insert(index, FocusNode());
     listupdate();
@@ -218,6 +231,7 @@ class EditorController extends GetxController {
       nodes.insert(index + 1, FocusNode());
       linkindex.insert(index + 1, null);
       imageindex.insert(index + 1, image);
+      urlimageindex.insert(index + 1, null);
       insert(index: index + 2, type: SmartTextType.IMAGEINFO);
       nodeAt(index + 2).requestFocus();
       // insert(index: index + 2);
@@ -232,11 +246,14 @@ class EditorController extends GetxController {
     nodes.removeAt(index + 1);
     smarttextfieldlist.removeAt(index + 1);
     imageindex.removeAt(index + 1);
+    urlimageindex.removeAt(index + 1);
     textcontrollers.removeAt(index + 1);
+    linkindex.removeAt(index + 1);
     types.removeAt(index);
     nodes.removeAt(index);
     smarttextfieldlist.removeAt(index);
     imageindex.removeAt(index);
+    urlimageindex.removeAt(index);
     linkindex.removeAt(index);
     textcontrollers.removeAt(index);
   }
