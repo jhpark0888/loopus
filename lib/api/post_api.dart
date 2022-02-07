@@ -51,39 +51,39 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
     SmartTextType type = editorController.types[i];
     Map map = {};
     if (type == SmartTextType.T) {
-      map['type'] = 0;
+      map['type'] = type.name;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     } else if (type == SmartTextType.H1) {
-      map['type'] = 1;
+      map['type'] = type.name;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     } else if (type == SmartTextType.H2) {
-      map['type'] = 2;
+      map['type'] = type.name;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     } else if (type == SmartTextType.QUOTE) {
-      map['type'] = 3;
+      map['type'] = type.name;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     } else if (type == SmartTextType.BULLET) {
-      map['type'] = 4;
+      map['type'] = type.name;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     } else if (type == SmartTextType.IMAGE) {
-      map['type'] = 5;
+      map['type'] = type.name;
       map['content'] = 'image';
       var multipartFile = await http.MultipartFile.fromPath(
           'image', editorController.imageindex[i]!.path);
       request.files.add(multipartFile);
       postcontent.add(map);
     } else if (type == SmartTextType.LINK) {
-      map['type'] = 6;
+      map['type'] = type.name;
       map['content'] = editorController.textcontrollers[i].text;
       map['url'] = editorController.linkindex[i];
       postcontent.add(map);
     } else if (type == SmartTextType.IMAGEINFO) {
-      map['type'] = 7;
+      map['type'] = type.name;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
     }
@@ -141,6 +141,116 @@ Future<Map> getposting(int postingid) async {
     // Post post = Post.fromJson(responseBody['posting_info']);
 
     return responseBody;
+  } else {
+    return Future.error(response.statusCode);
+  }
+}
+
+enum PostingUpdateType {
+  title,
+  contents,
+  thumbnail,
+}
+
+Future updateposting(int postid, PostingUpdateType updateType) async {
+  final PostingAddController postingAddController = Get.find();
+
+  String? token = await const FlutterSecureStorage().read(key: "token");
+  Uri uri = Uri.parse(
+      '$serverUri/post_api/posting?id=$postid&type=${updateType.name}');
+
+  var request = http.MultipartRequest('PUT', uri);
+
+  final headers = {
+    'Authorization': 'Token $token',
+    'Content-Type': 'multipart/form-data',
+  };
+
+  request.headers.addAll(headers);
+
+  if (updateType == PostingUpdateType.title) {
+    request.fields['title'] = postingAddController.titlecontroller.text;
+  } else if (updateType == PostingUpdateType.contents) {
+    List<Map> postcontent = [];
+
+    for (int i = 0;
+        i < postingAddController.editorController.types.length;
+        i++) {
+      SmartTextType type = postingAddController.editorController.types[i];
+      Map map = {};
+      print(type);
+      print(postingAddController.editorController.textcontrollers[i].text);
+      print(postingAddController.editorController.linkindex[i]);
+      if (type == SmartTextType.T) {
+        map['type'] = type.name;
+        map['content'] =
+            postingAddController.editorController.textcontrollers[i].text;
+        postcontent.add(map);
+      } else if (type == SmartTextType.H1) {
+        map['type'] = type.name;
+        map['content'] =
+            postingAddController.editorController.textcontrollers[i].text;
+        postcontent.add(map);
+      } else if (type == SmartTextType.H2) {
+        map['type'] = type.name;
+        map['content'] =
+            postingAddController.editorController.textcontrollers[i].text;
+        postcontent.add(map);
+      } else if (type == SmartTextType.QUOTE) {
+        map['type'] = type.name;
+        map['content'] =
+            postingAddController.editorController.textcontrollers[i].text;
+        postcontent.add(map);
+      } else if (type == SmartTextType.BULLET) {
+        map['type'] = type.name;
+        map['content'] =
+            postingAddController.editorController.textcontrollers[i].text;
+        postcontent.add(map);
+      } else if (type == SmartTextType.IMAGE) {
+        if (postingAddController.editorController.imageindex[i] != null) {
+          map['type'] = type.name;
+          map['content'] = 'image';
+          var multipartFile = await http.MultipartFile.fromPath('image',
+              postingAddController.editorController.imageindex[i]!.path);
+          request.files.add(multipartFile);
+        } else {
+          map['type'] = type.name;
+          map['content'] =
+              postingAddController.editorController.urlimageindex[i];
+        }
+        postcontent.add(map);
+      } else if (type == SmartTextType.LINK) {
+        map['type'] = type.name;
+        map['content'] =
+            postingAddController.editorController.textcontrollers[i].text;
+        map['url'] = postingAddController.editorController.linkindex[i];
+        postcontent.add(map);
+      } else if (type == SmartTextType.IMAGEINFO) {
+        map['type'] = type.name;
+        map['content'] =
+            postingAddController.editorController.textcontrollers[i].text;
+        postcontent.add(map);
+      }
+    }
+    request.fields['contents'] = json.encode(postcontent);
+  } else if (updateType == PostingUpdateType.thumbnail) {
+    if (postingAddController.thumbnail.value.path != '') {
+      var multipartFile = await http.MultipartFile.fromPath(
+          'thumbnail', postingAddController.thumbnail.value.path);
+      request.files.add(multipartFile);
+    }
+  }
+
+  http.StreamedResponse response = await request.send();
+
+  if (response.statusCode == 200) {
+    print(response.statusCode);
+    // String responsebody = await response.stream.bytesToString();
+    // print(responsebody);
+    // var responsemap = json.decode(responsebody);
+    // print(responsemap);
+    // Project project = Project.fromJson(responsemap);
+    return;
   } else {
     return Future.error(response.statusCode);
   }

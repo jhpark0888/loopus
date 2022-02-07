@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:loopus/model/project_model.dart';
+import 'package:loopus/widget/smarttextfield.dart';
 
 class Post {
   Post({
@@ -39,7 +40,7 @@ class Post {
   factory Post.fromJson(Map<String, dynamic> json) => Post(
         id: json["id"],
         userid: json["user_id"],
-        thumbnail: json["thumbnail"] == null ? null : json["thumbnail"],
+        thumbnail: json["thumbnail"],
         title: json["title"],
         date: DateTime.parse(json["date"]),
         project:
@@ -90,10 +91,10 @@ String contentsummary(List<Map<String, dynamic>> json) {
   return summary;
 }
 
-// String type = "SmartTextType.T";
-//     SmartTextType smartTextType =
-//         SmartTextType.values.firstWhere((e) => e.toString() == type);
-//     print(smartTextType);
+// String type = "T";
+// SmartTextType smartTextType =
+//     SmartTextType.values.firstWhere((e) => e.name == type);
+// print(smartTextType.name);
 
 class PostContent {
   PostContent({
@@ -102,12 +103,12 @@ class PostContent {
     this.url,
   });
 
-  int type;
+  SmartTextType type;
   String content;
   String? url;
 
   factory PostContent.fromJson(Map<String, dynamic> json) => PostContent(
-        type: json["type"],
+        type: SmartTextType.values.firstWhere((e) => e.name == json["type"]),
         content: json["content"],
         url: json["url"] ?? null,
       );

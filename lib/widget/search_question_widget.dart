@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/controller/question_controller.dart';
+import 'package:loopus/controller/question_detail_controller.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/question_detail_screen.dart';
@@ -134,7 +134,11 @@ class SearchQuestionWidget extends StatelessWidget {
     // questionController.messageanswerlist.clear();
     // await questionController.loadItem(item.id);
     // await questionController.addanswer();
-    Get.to(() => QuestionDetailScreen(questionid: item.id, isuser: item.isuser, realname: item.realname,));
+    Get.to(() => QuestionDetailScreen(
+          questionid: item.id,
+          isuser: item.isuser,
+          realname: item.realname,
+        ));
   }
 
   void tapProfile() {

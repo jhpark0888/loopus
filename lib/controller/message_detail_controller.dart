@@ -45,10 +45,9 @@ class MessageDetailController extends GetxController {
   void messageroomrefresh() {
     isMessageListLoading(true);
     getmessagelist(user.userid).then((value) {
-      messagelist(List.from(value
+      messagelist(value
           .map((message) => MessageWidget(message: message, user: user))
-          .toList()
-          .reversed));
+          .toList());
       isMessageListLoading(false);
     });
   }

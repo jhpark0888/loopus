@@ -35,7 +35,6 @@ class ProjectScreen extends StatelessWidget {
   int projectid;
   int isuser;
   RxInt likecount = 0.obs;
-  Project? exproject;
 
   Widget looppersonlist() {
     double? width;
@@ -195,15 +194,12 @@ class ProjectScreen extends StatelessWidget {
             actions: [
               (isuser == 1)
                   ? IconButton(
-                      onPressed: () async {
-                        exproject = await Get.to(
+                      onPressed: () {
+                        Get.to(
                           () => ProjectModifyScreen(
                             projectid: controller.project.value.id,
                           ),
                         );
-                        if (exproject != null) {
-                          controller.project(exproject);
-                        }
                       },
                       icon: SvgPicture.asset('assets/icons/Edit.svg'),
                     )

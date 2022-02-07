@@ -110,13 +110,13 @@ class MessageRoomWidget extends StatelessWidget {
                       Expanded(
                         child: Obx(
                           () => Text(
-                            controller.messagelist.first.message.message
+                            controller.messagelist.last.message.message
                                     .contains('\n')
-                                ? controller.messagelist.first.message.message
+                                ? controller.messagelist.last.message.message
                                         .split('\n')
                                         .first +
                                     '...'
-                                : controller.messagelist.first.message.message,
+                                : controller.messagelist.last.message.message,
                             overflow: TextOverflow.ellipsis,
                             style: messageRoom.notread.value == 0
                                 ? kSubTitle3Style.copyWith(

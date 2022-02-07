@@ -33,24 +33,17 @@ class ProjectModifyScreen extends StatelessWidget {
       tag: Tagtype.project.toString());
   //
   int projectid;
-  Project? exproject;
   late ProjectDetailController controller = Get.find(tag: projectid.toString());
 
   @override
   Widget build(BuildContext context) {
-    projectnameinput();
-    projectdateinput();
-    projectintroinput();
-    projecttaginput();
-    projectlooperinput();
-    projectthumbnailinput();
     return Scaffold(
         appBar: AppBarWidget(
           bottomBorder: false,
           title: '활동 편집',
           leading: IconButton(
             onPressed: () {
-              Get.back(result: controller.project.value);
+              Get.back();
             },
             icon: SvgPicture.asset('assets/icons/Arrow.svg'),
           ),
@@ -68,7 +61,6 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                       ));
                 },
-                project: controller.project.value,
                 title: '활동명',
                 subtitle: controller.project.value.projectName,
               ),
@@ -84,7 +76,6 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                       ));
                 },
-                project: controller.project.value,
                 title: '활동 기간',
                 subtitle:
                     '${DateFormat("yy.MM.dd").format(controller.project.value.startDate!)} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate!) : '진행중'}',
@@ -101,7 +92,6 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                       ));
                 },
-                project: controller.project.value,
                 title: '활동 소개',
                 subtitle: (controller.project.value.introduction! != '')
                     ? controller.project.value.introduction!
@@ -119,7 +109,6 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                       ));
                 },
-                project: controller.project.value,
                 title: '활동 태그',
                 subtitle: controller.project.value.projectTag.isEmpty
                     ? ''
@@ -148,7 +137,6 @@ class ProjectModifyScreen extends StatelessWidget {
                         screenType: Screentype.update,
                       ));
                 },
-                project: controller.project.value,
                 title: '함께 활동한 사람',
                 subtitle: controller.project.value.looper.isEmpty
                     ? '함께 활동한 사람이 없어요'
@@ -168,7 +156,6 @@ class ProjectModifyScreen extends StatelessWidget {
                       screenType: Screentype.update,
                     ));
               },
-              project: controller.project.value,
               title: '대표 사진 변경',
               subtitle: '',
             ),
@@ -228,13 +215,13 @@ class ProjectModifyScreen extends StatelessWidget {
   void projectthumbnailinput() {
     projectaddcontroller.projecturlthumbnail =
         controller.project.value.thumbnail;
+    projectaddcontroller.projectthumbnail.value = File("");
   }
 }
 
 class UpdateProjectTileWidget extends StatelessWidget {
   UpdateProjectTileWidget({
     required this.onTap,
-    required this.project,
     required this.title,
     required this.subtitle,
     required this.isSubtitleExist,
@@ -242,7 +229,6 @@ class UpdateProjectTileWidget extends StatelessWidget {
   });
 
   VoidCallback onTap;
-  Project project;
   String title;
   String subtitle;
   bool isSubtitleExist;

@@ -18,7 +18,10 @@ class PostingAddController extends GetxController {
   TextEditingController titlecontroller = TextEditingController();
   RxBool isPostingUploading = false.obs;
   List<File> images = [];
+
   Rx<File> thumbnail = File("").obs;
+  RxString postingurlthumbnail = "".obs;
+
   RxBool isPostingTitleEmpty = false.obs;
   RxBool isPostingContentEmpty = true.obs;
   PostaddRoute route;

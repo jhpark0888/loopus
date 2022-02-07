@@ -16,8 +16,10 @@ import 'package:loopus/controller/transition_animation_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/posting_modify_screen.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/post_content_widget.dart';
+import 'package:loopus/widget/smarttextfield.dart';
 
 class PostingScreen extends StatelessWidget {
   PostingScreen({
@@ -155,6 +157,18 @@ class PostingScreen extends StatelessWidget {
                     icon: SvgPicture.asset('assets/icons/Arrow.svg'),
                   ),
                   actions: [
+                    isuser == 1
+                        ? IconButton(
+                            onPressed: () {
+                              Get.to(
+                                () => PostingModifyScreen(
+                                  postid: controller.postid,
+                                ),
+                              );
+                            },
+                            icon: SvgPicture.asset('assets/icons/Edit.svg'),
+                          )
+                        : Container(),
                     IconButton(
                       onPressed: isuser == 1
                           ? () {
@@ -213,16 +227,30 @@ class PostingScreen extends StatelessWidget {
                     ),
                   ],
                   pinned: true,
-                  flexibleSpace: _MyAppSpace(
-                    id: postid,
-                    title: title,
-                    realname: realName,
-                    profileImage: profileImage,
-                    postDate: postDate,
-                    department: department,
-                    thumbnail: thumbNail,
-                    isuser: isuser,
-                    userid: userid,
+                  flexibleSpace: Obx(
+                    () => controller.post.value.id == 0
+                        ? _MyAppSpace(
+                            id: postid,
+                            title: title,
+                            realname: realName,
+                            profileImage: profileImage,
+                            postDate: postDate,
+                            department: department,
+                            thumbnail: thumbNail,
+                            isuser: isuser,
+                            userid: userid,
+                          )
+                        : _MyAppSpace(
+                            id: controller.post.value.id,
+                            title: controller.post.value.title,
+                            realname: realName,
+                            profileImage: profileImage,
+                            postDate: postDate,
+                            department: department,
+                            thumbnail: controller.post.value.thumbnail,
+                            isuser: isuser,
+                            userid: userid,
+                          ),
                   ),
                   expandedHeight: Get.width / 3 * 2,
                 ),

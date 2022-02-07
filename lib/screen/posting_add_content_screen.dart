@@ -4,22 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loopus/api/post_api.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
+import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/posting_add_image_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/editortoolbar.dart';
+import 'package:loopus/widget/post_content_widget.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 class PostingAddContentScreen extends StatelessWidget {
-  PostingAddContentScreen({Key? key, required this.project_id})
+  PostingAddContentScreen({Key? key, this.postid, required this.project_id})
       : super(key: key);
   final PostingAddController postingAddController = Get.find();
   final ImageController _imageController = Get.put(ImageController());
   // EditorController editorController = Get.put(EditorController());
+  int? postid;
   int project_id;
 
   @override
@@ -31,30 +36,87 @@ class PostingAddContentScreen extends StatelessWidget {
             appBar: AppBarWidget(
               bottomBorder: false,
               actions: [
-                TextButton(
-                  onPressed: () {
-                    postingAddController.editorController.checkPostingContent();
-                    if (postingAddController.isPostingContentEmpty.value ==
-                        false) {
-                      Get.to(() => PostingAddImageScreen(
-                            project_id: project_id,
-                          ));
-                    } else {
-                      ModalController.to.showCustomDialog('내용을 입력해주세요', 1000);
-                    }
-                    // postingAddController.editorController
-                    //     .nodeAt(postingAddController.editorController.focus)
-                    //     .unfocus();
-                  },
-                  child: Text(
-                    '다음',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: mainblue,
-                    ),
-                  ),
-                ),
+                postingAddController.route != PostaddRoute.update
+                    ? TextButton(
+                        onPressed: () {
+                          postingAddController.editorController
+                              .checkPostingContent();
+                          if (postingAddController
+                                  .isPostingContentEmpty.value ==
+                              false) {
+                            Get.to(() => PostingAddImageScreen(
+                                  project_id: project_id,
+                                ));
+                          } else {
+                            ModalController.to
+                                .showCustomDialog('내용을 입력해주세요', 1000);
+                          }
+                          // postingAddController.editorController
+                          //     .nodeAt(postingAddController.editorController.focus)
+                          //     .unfocus();
+                        },
+                        child: Text(
+                          '다음',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: mainblue,
+                          ),
+                        ),
+                      )
+                    : Obx(
+                        () => Get.find<PostingDetailController>(
+                                    tag: postid.toString())
+                                .isPostUpdateLoading
+                                .value
+                            ? Image.asset(
+                                'assets/icons/loading.gif',
+                                scale: 9,
+                              )
+                            : TextButton(
+                                onPressed: () async {
+                                  postingAddController.editorController
+                                      .checkPostingContent();
+                                  if (postingAddController
+                                          .isPostingContentEmpty.value ==
+                                      false) {
+                                    PostingDetailController controller =
+                                        Get.find<PostingDetailController>(
+                                            tag: postid.toString());
+                                    controller.isPostUpdateLoading.value = true;
+                                    await updateposting(
+                                        postid!, PostingUpdateType.contents);
+                                    await getposting(postid!).then((value) {
+                                      controller.post(
+                                          Post.fromJson(value['posting_info']));
+                                      controller.postcontentlist(controller
+                                          .post.value.contents!
+                                          .map((content) => PostContentWidget(
+                                              content: content))
+                                          .toList());
+
+                                      controller.isPostUpdateLoading(false);
+                                    });
+
+                                    Get.back();
+                                  } else {
+                                    ModalController.to
+                                        .showCustomDialog('내용을 입력해주세요', 1000);
+                                  }
+                                  // postingAddController.editorController
+                                  //     .nodeAt(postingAddController.editorController.focus)
+                                  //     .unfocus();
+                                },
+                                child: Text(
+                                  '저장',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: mainblue,
+                                  ),
+                                ),
+                              ),
+                      )
               ],
               title: '포스팅 내용',
             ),

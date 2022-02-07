@@ -9,6 +9,7 @@ import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
+import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
@@ -19,11 +20,13 @@ import 'package:loopus/widget/post_add_content_widget.dart';
 import 'package:flutter/rendering.dart';
 
 class PostingAddImageScreen extends StatelessWidget {
-  PostingAddImageScreen({Key? key, required this.project_id}) : super(key: key);
+  PostingAddImageScreen({Key? key, this.postid, required this.project_id})
+      : super(key: key);
   PostingAddController postingAddController = Get.find();
   ImageController _imageController = Get.put(ImageController());
 
   int project_id;
+  int? postid;
   List<PostAddContentWidget> contentlist = [];
 
   @override
@@ -42,23 +45,64 @@ class PostingAddImageScreen extends StatelessWidget {
               bottomBorder: false,
               title: '대표 사진 설정',
               actions: [
-                TextButton(
-                  onPressed: () async {
-                    postingAddController.isPostingUploading.value = true;
-                    await addposting(project_id, postingAddController.route)
-                        .then((value) {
-                      postingAddController.isPostingUploading.value = false;
-                    });
-                  },
-                  child: Text(
-                    '올리기',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: mainblue,
-                    ),
-                  ),
-                ),
+                postingAddController.route != PostaddRoute.update
+                    ? TextButton(
+                        onPressed: () async {
+                          postingAddController.isPostingUploading.value = true;
+                          await addposting(
+                                  project_id, postingAddController.route)
+                              .then((value) {
+                            postingAddController.isPostingUploading.value =
+                                false;
+                          });
+                        },
+                        child: Text(
+                          '올리기',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: mainblue,
+                          ),
+                        ),
+                      )
+                    : Obx(
+                        () => Get.find<PostingDetailController>(
+                                    tag: postid.toString())
+                                .isPostUpdateLoading
+                                .value
+                            ? Image.asset(
+                                'assets/icons/loading.gif',
+                                scale: 9,
+                              )
+                            : TextButton(
+                                onPressed: postingAddController
+                                        .isPostingTitleEmpty.value
+                                    ? () {}
+                                    : () async {
+                                        PostingDetailController controller =
+                                            Get.find<PostingDetailController>(
+                                                tag: postid.toString());
+                                        controller.isPostUpdateLoading.value =
+                                            true;
+                                        await updateposting(postid!,
+                                            PostingUpdateType.thumbnail);
+                                        await getposting(postid!).then((value) {
+                                          controller.post(Post.fromJson(
+                                              value['posting_info']));
+
+                                          controller.isPostUpdateLoading(false);
+                                        });
+
+                                        Get.back();
+                                      },
+                                child: Text(
+                                  '저장',
+                                  style: kSubTitle2Style.copyWith(
+                                    color: mainblue,
+                                  ),
+                                ),
+                              ),
+                      ),
               ],
             ),
             body: SingleChildScrollView(
@@ -164,6 +208,11 @@ class _MyAppSpace extends StatelessWidget {
           if (controller.thumbnail.value.path != "") {
             return Image.file(
               controller.thumbnail.value,
+              fit: BoxFit.cover,
+            );
+          } else if (controller.postingurlthumbnail.value != "") {
+            return Image.network(
+              controller.postingurlthumbnail.value,
               fit: BoxFit.cover,
             );
           } else if (controller.editorController.imageindex

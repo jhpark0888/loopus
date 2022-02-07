@@ -68,8 +68,9 @@ Future<QuestionItem> getquestion(int questionid) async {
 
   print("질문 로드 statusCode: ${response.statusCode}");
   if (response.statusCode == 200) {
-  Map<String, dynamic>  responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-  QuestionItem question = QuestionItem.fromJson(responseBody);
+    Map<String, dynamic> responseBody =
+        jsonDecode(utf8.decode(response.bodyBytes));
+    QuestionItem question = QuestionItem.fromJson(responseBody);
     return question;
   } else {
     return Future.error(response.statusCode);
@@ -119,14 +120,35 @@ Future<Answer> answermake(String content, int questionid) async {
         'Content-Type': 'application/json'
       },
       body: jsonEncode(data));
-  
-    print(response.statusCode);
+
+  print(response.statusCode);
   if (response.statusCode == 200) {
-    
-  Map<String, dynamic> responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-  Answer answer = Answer.fromJson(responseBody);
+    Map<String, dynamic> responseBody =
+        jsonDecode(utf8.decode(response.bodyBytes));
+    Answer answer = Answer.fromJson(responseBody);
 
     return answer;
+  } else {
+    return Future.error(response.statusCode);
+  }
+}
+
+Future<dynamic> deleteanswer(int questionid, int answerid) async {
+  String? token;
+  await FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final url =
+      Uri.parse("$serverUri/question_api/answer/questionid?id=$answerid");
+
+  final response =
+      await delete(url, headers: {"Authorization": "Token $token"});
+
+  print(' 답변 삭제 : ${response.statusCode}');
+
+  if (response.statusCode == 200) {
+    return;
   } else {
     return Future.error(response.statusCode);
   }
