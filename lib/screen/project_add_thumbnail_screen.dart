@@ -29,6 +29,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(projectAddController.isEndedProject);
     return Obx(
       () => Stack(
         children: [
@@ -169,7 +170,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                           vertical: 8,
                           horizontal: 16,
                         ),
-                        child: Text('지금 대표 사진 변경하기',
+                        child: Text('대표 사진 변경하기',
                             style: kButtonStyle.copyWith(color: mainWhite)),
                       ),
                     ),
@@ -253,10 +254,18 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                                       Row(
                                         children: [
                                           Obx(
-                                            () => Text(
-                                              '${DateFormat("yy.MM.dd").format(DateTime.parse(projectAddController.selectedStartDateTime.value))} ~ ${(projectAddController.isEndedProject.value == true) ? DateFormat("yy.MM.dd").format(DateTime.parse(projectAddController.selectedEndDateTime.value)) : ''}',
-                                              style: kSubTitle2Style,
-                                            ),
+                                            () => (projectAddController
+                                                        .selectedEndDateTime
+                                                        .value !=
+                                                    '')
+                                                ? Text(
+                                                    '${DateFormat("yy.MM.dd").format(DateTime.parse(projectAddController.selectedStartDateTime.value))} ~ ${DateFormat("yy.MM.dd").format(DateTime.parse(projectAddController.selectedEndDateTime.value))}',
+                                                    style: kSubTitle2Style,
+                                                  )
+                                                : Text(
+                                                    '${DateFormat("yy.MM.dd").format(DateTime.parse(projectAddController.selectedStartDateTime.value))} ~ ',
+                                                    style: kSubTitle2Style,
+                                                  ),
                                           ),
                                           SizedBox(
                                             width: (projectAddController
