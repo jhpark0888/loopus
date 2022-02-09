@@ -352,7 +352,6 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     isCheckTwo.value = true;
                     isCheckThree.value = true;
                     isCheckFour.value = true;
-                    Get.to(() => SignupTypeScreen(), preventDuplicates: false);
                   }
                 },
                 child: Container(
@@ -412,6 +411,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       isCheckOne.value = !isCheckOne.value;
                     },
@@ -464,6 +464,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       isCheckTwo.value = !isCheckTwo.value;
                     },
@@ -517,6 +518,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       isCheckFour.value = !isCheckFour.value;
                     },
@@ -566,6 +568,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                 height: 16,
               ),
               GestureDetector(
+                behavior: HitTestBehavior.translucent,
                 onTap: () {
                   isCheckThree.value = !isCheckThree.value;
                 },
@@ -582,6 +585,17 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     ),
                     SizedBox(
                       width: 8,
+                    ),
+                    Text(
+                      '(선택)',
+                      style: kBody2Style.copyWith(
+                        color: isCheckThree.value == true
+                            ? mainblue
+                            : mainblack.withOpacity(0.6),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 4,
                     ),
                     Text(
                       '루프어스 추천 정보 수신 동의',
@@ -611,10 +625,11 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
-                    color:
-                        (isCheckOne.value == true && isCheckTwo.value == true)
-                            ? mainblue
-                            : Color(0xffe7e7e7),
+                    color: (isCheckOne.value == true &&
+                            isCheckTwo.value == true &&
+                            isCheckFour.value == true)
+                        ? mainblue
+                        : Color(0xffe7e7e7),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Center(
@@ -622,7 +637,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                       '다음',
                       style: kButtonStyle.copyWith(
                         color: (isCheckOne.value == true &&
-                                isCheckTwo.value == true)
+                                isCheckTwo.value == true &&
+                                isCheckFour.value == true)
                             ? mainWhite
                             : mainblack.withOpacity(0.38),
                       ),

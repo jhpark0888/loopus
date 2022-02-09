@@ -11,6 +11,7 @@ import 'package:loopus/widget/my_question_posting_widget.dart';
 import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/widget/custom_refresher.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class HomeQuestionScreen extends StatelessWidget {
   final HomeController homeController = Get.find();
@@ -153,61 +154,59 @@ class HomeQuestionScreen extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Obx(
-                                    () => DropdownButtonHideUnderline(
-                                      child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButton(
-                                          itemHeight: 48,
-                                          onTap: () {},
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(8)),
-                                          elevation: 1,
-                                          underline: Container(),
-                                          icon: const Icon(
-                                            Icons.expand_more_rounded,
-                                            color: mainblack,
+                                  DropdownButtonHideUnderline(
+                                    child: DropdownButton2(
+                                      itemHeight: 48,
+                                      isDense: true,
+                                      items: ["모든 질문", "나의 질문"].map((value) {
+                                        return DropdownMenuItem(
+                                          value: value,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              right: 4,
+                                            ),
+                                            child: Text(
+                                              value,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16),
+                                            ),
                                           ),
-                                          value:
-                                              homeController.selectgroup.value,
-                                          items:
-                                              ["모든 질문", "나의 질문"].map((value) {
-                                            return DropdownMenuItem(
-                                              value: value,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 4),
-                                                child: Text(
-                                                  value,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16),
-                                                ),
-                                              ),
-                                            );
-                                          }).toList(),
-                                          onChanged: (String? value) {
-                                            homeController.selectgroup(value);
+                                        );
+                                      }).toList(),
+                                      value: homeController.selectgroup.value,
+                                      onChanged: (String? value) {
+                                        homeController.selectgroup(value);
 
-                                            homeController
-                                                .onQuestionRefresh()
-                                                .then((_) {
-                                              if (value == '모든 질문') {
-                                                homeController
-                                                    .isMyQuestionLoading
-                                                    .value = true;
-                                              } else {
-                                                homeController
-                                                    .isAllQuestionLoading
-                                                    .value = true;
-                                              }
-                                            });
-                                            print(homeController
-                                                .selectgroup.value);
-                                          },
-                                        ),
+                                        homeController
+                                            .onQuestionRefresh()
+                                            .then((_) {
+                                          if (value == '모든 질문') {
+                                            homeController.isMyQuestionLoading
+                                                .value = true;
+                                          } else {
+                                            homeController.isAllQuestionLoading
+                                                .value = true;
+                                          }
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.expand_more_rounded,
+                                        color: mainblack,
                                       ),
+                                      iconSize: 24,
+                                      buttonHeight: 48,
+                                      buttonPadding: const EdgeInsets.only(
+                                          left: 16, right: 16),
+                                      buttonElevation: 0,
+                                      dropdownMaxHeight: 200,
+                                      dropdownPadding: null,
+                                      dropdownDecoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: mainWhite,
+                                      ),
+                                      dropdownElevation: 1,
+                                      offset: const Offset(16, 0),
                                     ),
                                   ),
                                   (homeController.selectgroup.value == '모든 질문')
