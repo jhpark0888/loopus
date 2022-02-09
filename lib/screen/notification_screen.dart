@@ -8,6 +8,7 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
+        bottomBorder: false,
         title: '알림',
       ),
       body: Center(

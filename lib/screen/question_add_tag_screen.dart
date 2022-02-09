@@ -31,24 +31,11 @@ class QuestionAddTagScreen extends StatelessWidget {
       () => Stack(children: [
         Scaffold(
           appBar: AppBarWidget(
+            bottomBorder: false,
             actions: [
               Obx(
                 () => TextButton(
-                    onPressed: () async {
-                      if (tagController.selectedtaglist.length == 3) {
-                        tagController.tagsearchfocusNode.unfocus();
-                        questionaddController.isQuestionUploading(true);
-                        await postquestion(
-                                questionaddController.contentcontroller.text)
-                            .then((value) {
-                          Get.back();
-                          Get.back();
-                          questionaddController.isQuestionUploading(false);
-                        });
-
-                        HomeController.to.onQuestionRefresh();
-                      }
-                    },
+                    onPressed: postQuestion,
                     child: Text(
                       '올리기',
                       style: tagController.selectedtaglist.length == 3
@@ -60,42 +47,55 @@ class QuestionAddTagScreen extends StatelessWidget {
             ],
             title: "질문 태그",
           ),
-          body: NestedScrollView(
-              headerSliverBuilder: (context, value) {
-                return [
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Center(
+          body: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: NestedScrollView(
+                headerSliverBuilder: (context, value) {
+                  return [
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          32,
+                          24,
+                          32,
+                          12,
+                        ),
                         child: Column(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: Text(
-                                '질문 태그를 선택해주세요!',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                            RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '질문 태그',
+                                    style: kSubTitle2Style.copyWith(
+                                      color: mainblue,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '를 선택해주세요',
+                                    style: kSubTitle2Style,
+                                  ),
+                                ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: Text(
-                                '해당 태그에 관심있는 학생에게 질문을 보여드려요.',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              '해당 태그에 관심있는 학생에게 질문을 보여드릴게요',
+                              style: kBody1Style,
                             ),
                           ],
                         ),
                       ),
                     ),
-                  ),
-                ];
-              },
-              body: TagSearchWidget(
-                tagtype: Tagtype.question,
-              )),
+                  ];
+                },
+                body: TagSearchWidget(
+                  tagtype: Tagtype.question,
+                )),
+          ),
         ),
         if (questionaddController.isQuestionUploading.value)
           Container(
@@ -109,5 +109,20 @@ class QuestionAddTagScreen extends StatelessWidget {
           ),
       ]),
     );
+  }
+
+  void postQuestion() async {
+    if (tagController.selectedtaglist.length == 3) {
+      tagController.tagsearchfocusNode.unfocus();
+      questionaddController.isQuestionUploading(true);
+      await postquestion(questionaddController.contentcontroller.text)
+          .then((value) {
+        Get.back();
+        Get.back();
+        questionaddController.isQuestionUploading(false);
+      });
+
+      HomeController.to.onQuestionRefresh();
+    }
   }
 }

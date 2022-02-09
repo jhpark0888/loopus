@@ -113,11 +113,21 @@ class PostingAddNameScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Text(
-                '포스팅 제목을 작성해주세요',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '포스팅 제목',
+                      style: kSubTitle2Style.copyWith(
+                        color: mainblue,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '을 작성해주세요',
+                      style: kSubTitle2Style,
+                    ),
+                  ],
                 ),
               ),
               SizedBox(

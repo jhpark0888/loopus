@@ -34,24 +34,17 @@ class QuestionAnswerWidget extends StatelessWidget {
         vertical: 12,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                children: [
-                  SizedBox(height: 4),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => OtherProfileScreen(
-                            userid: answer.user,
-                            isuser: answer.isuser,
-                            realname: answer.realname!,
-                          ));
-                    },
-                    child: ClipOval(
+              Expanded(
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: tapProfile,
+                      child: ClipOval(
                         child: answer.profileimage == ""
                             ? Image.asset(
                                 "assets/illustrations/default_profile.png",
@@ -67,111 +60,103 @@ class QuestionAnswerWidget extends StatelessWidget {
                                   child: Container(),
                                 ),
                                 fit: BoxFit.cover,
-                              )),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: 8,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            InkWell(
-                                onTap: () async {
-                                  // profileController.isProfileLoading(true);
-
-                                  Get.to(() => OtherProfileScreen(
-                                        userid: answer.user,
-                                        isuser: answer.isuser,
-                                        realname: answer.realname!,
-                                      ));
-                                },
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "${answer.realname}",
-                                      style: kButtonStyle,
-                                    ),
-                                    Text(
-                                      " · ${DurationCaculator().messagedurationCaculate(startDate: answer.date, endDate: DateTime.now())}",
-                                      style: kBody2Style.copyWith(
-                                          color: mainblack.withOpacity(0.6)),
-                                    ),
-                                  ],
-                                )),
-                          ],
-                        ),
-                        InkWell(
-                          onTap: answer.isuser == 1
-                              ? () {
-                                  ModalController.to.showModalIOS(context,
-                                      func1: () {
-                                    ModalController.to.showButtonDialog(
-                                        leftText: '취소',
-                                        rightText: '삭제',
-                                        title: '정말 답변을 삭제하시겠어요?',
-                                        content: '삭제한 답변은 복구할 수 없어요',
-                                        leftFunction: () => Get.back(),
-                                        rightFunction: () async {
-                                          await deleteanswer(
-                                                  answer.questionid, answer.id)
-                                              .then((value) {
-                                            QuestionDetailController
-                                                .to.question.value.answer
-                                                .removeWhere((element) =>
-                                                    element.id == answer.id);
-                                            QuestionDetailController
-                                                .to.answerlist
-                                                .removeWhere((element) =>
-                                                    element.answer.id ==
-                                                    answer.id);
-                                          });
-                                          getbacks(2);
-                                        });
-                                  },
-                                      func2: () {},
-                                      value1: '답글 삭제하기',
-                                      value2: 'value2',
-                                      isValue1Red: true,
-                                      isValue2Red: true,
-                                      isOne: true);
-                                }
-                              : () {
-                                  ModalController.to.showModalIOS(context,
-                                      func1: () {},
-                                      func2: () {},
-                                      value1: '답글 신고하기',
-                                      value2: 'value2',
-                                      isValue1Red: true,
-                                      isValue2Red: true,
-                                      isOne: true);
-                                },
-                          child: SvgPicture.asset("assets/icons/More.svg"),
-                        ),
-                      ],
+                              ),
+                      ),
                     ),
                     SizedBox(
-                      height: 8,
+                      width: 8,
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: tapProfile,
+                      child: Text(
+                        "${answer.realname}",
+                        style: kButtonStyle,
+                      ),
                     ),
                     Text(
-                      "${answer.content}",
-                      style: kBody1Style,
+                      " · ${DurationCaculator().messagedurationCaculate(startDate: answer.date, endDate: DateTime.now())}",
+                      style: kBody2Style.copyWith(
+                          color: mainblack.withOpacity(0.6)),
                     ),
                   ],
                 ),
+              ),
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () => showModal(context),
+                child: SvgPicture.asset("assets/icons/More.svg"),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 4,
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 40,
+              ),
+              Expanded(
+                child: Text(
+                  "${answer.content}",
+                  style: kBody1Style,
+                ),
+              ),
+              SizedBox(
+                width: 32,
               ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  void showModal(BuildContext context) {
+    if (answer.isuser == 1) {
+      ModalController.to.showModalIOS(context, func1: () {
+        ModalController.to.showButtonDialog(
+            leftText: '취소',
+            rightText: '삭제',
+            title: '정말 답변을 삭제하시겠어요?',
+            content: '삭제한 답변은 복구할 수 없어요',
+            leftFunction: () => Get.back(),
+            rightFunction: () async {
+              await deleteanswer(answer.questionid, answer.id).then((value) {
+                QuestionDetailController.to.question.value.answer
+                    .removeWhere((element) => element.id == answer.id);
+                QuestionDetailController.to.answerlist
+                    .removeWhere((element) => element.answer.id == answer.id);
+              });
+              getbacks(2);
+            });
+      },
+          func2: () {},
+          value1: '답글 삭제하기',
+          value2: 'value2',
+          isValue1Red: true,
+          isValue2Red: true,
+          isOne: true);
+    } else {
+      ModalController.to.showModalIOS(context,
+          func1: () {},
+          func2: () {},
+          value1: '답글 신고하기',
+          value2: 'value2',
+          isValue1Red: true,
+          isValue2Red: true,
+          isOne: true);
+    }
+  }
+
+  void tapProfile() {
+    // profileController.isProfileLoading(true);
+
+    Get.to(() => OtherProfileScreen(
+          userid: answer.user,
+          isuser: answer.isuser,
+          realname: answer.realname!,
+        ));
   }
 }

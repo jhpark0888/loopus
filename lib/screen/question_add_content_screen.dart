@@ -16,6 +16,7 @@ class QuestionAddContentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
+        bottomBorder: false,
         actions: [
           TextButton(
               onPressed: () {
@@ -37,36 +38,51 @@ class QuestionAddContentScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Center(
-            child: Expanded(
-              child: Column(
-                children: [
-                  TextField(
-                    onChanged: (value) {
-                      if (value == "") {
-                        print(value);
-                        questionaddController.ignore_check_add_q.value = true;
-                        print(questionaddController.ignore_check_add_q.value);
-                      } else {
-                        if (questionaddController.ignore_check_add_q.value ==
-                            true) {
-                          questionaddController.ignore_check_add_q.value =
-                              false;
-                        }
-                      }
-                    },
-                    cursorColor: Colors.black,
-                    controller: questionaddController.contentcontroller,
-                    maxLines: 20,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '어떤 질문을 남기시겠어요?',
-                    ),
-                  )
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 40),
+          child: Column(
+            children: [
+              TextField(
+                onChanged: (value) {
+                  if (value == "") {
+                    print(value);
+                    questionaddController.ignore_check_add_q.value = true;
+                    print(questionaddController.ignore_check_add_q.value);
+                  } else {
+                    if (questionaddController.ignore_check_add_q.value ==
+                        true) {
+                      questionaddController.ignore_check_add_q.value = false;
+                    }
+                  }
+                },
+                inputFormatters: [
+                  // TextInputFormatter
                 ],
+                autocorrect: false,
+                controller: questionaddController.contentcontroller,
+                autofocus: true,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                cursorColor: mainblue,
+                cursorWidth: 1.3,
+                cursorRadius: const Radius.circular(500),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: '질문 내용을 작성해주세요',
+                ),
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: mainblack,
+                  height: 1.6,
+                ),
+                toolbarOptions: const ToolbarOptions(
+                  cut: true,
+                  copy: true,
+                  paste: true,
+                  selectAll: true,
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
