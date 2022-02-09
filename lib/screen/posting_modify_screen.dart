@@ -130,34 +130,10 @@ class PostingModifyScreen extends StatelessWidget {
   }
 
   void postingthumbnailinput() {
-    postingaddcontroller.editorController.alllistclear();
-    controller.post.value.contents?.forEach((content) {
-      if (content.type == SmartTextType.IMAGE) {
-        postingaddcontroller.editorController.types.add(content.type);
-        postingaddcontroller.editorController.urlimageindex
-            .add(content.content);
-        postingaddcontroller.editorController.imageindex.add(null);
-        postingaddcontroller.editorController.linkindex.add(null);
-        postingaddcontroller.editorController.nodes.add(FocusNode());
-        postingaddcontroller.editorController.textcontrollers
-            .add(TextEditingController());
-      } else if (content.type == SmartTextType.LINK) {
-        postingaddcontroller.editorController.insert(
-            index: controller.post.value.contents!.indexOf(content),
-            text: content.content,
-            type: content.type);
-        postingaddcontroller.editorController
-                .linkindex[controller.post.value.contents!.indexOf(content)] =
-            content.url;
-      } else {
-        postingaddcontroller.editorController.insert(
-            index: controller.post.value.contents!.indexOf(content),
-            text: content.content,
-            type: content.type);
-      }
-    });
+    postingtitleinput();
+    postingcontentsinput();
     postingaddcontroller.postingurlthumbnail.value =
-        controller.post.value.thumbnail;
+        controller.post.value.thumbnail ?? "";
     postingaddcontroller.thumbnail.value = File("");
   }
 }

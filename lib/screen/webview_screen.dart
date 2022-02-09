@@ -71,6 +71,7 @@ class WebViewScreen extends StatelessWidget {
         () => (_webController.isWrongUrl.value == false)
             ? Builder(builder: (BuildContext context) {
                 return WebView(
+                  zoomEnabled: true,
                   onWebResourceError: (error) {
                     _webController.isWrongUrl.value = true;
                   },

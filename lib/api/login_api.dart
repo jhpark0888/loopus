@@ -53,33 +53,24 @@ Future<void> loginRequest() async {
 
 Future<void> getpwfind() async {
   LogInController logInController = Get.put(LogInController());
-  const FlutterSecureStorage storage = FlutterSecureStorage();
   ModalController _modalController = Get.put(ModalController());
 
   Uri uri = Uri.parse('$serverUri/user_api/password');
 
-  final user = {
-    'username': logInController.idcontroller.text,
-    'password': logInController.passwordcontroller.text,
-    'fcm_token': await NotificationController.to.getToken(),
+  //이메일 줘야 됨
+  final email = {
+    'email': logInController.idcontroller.text,
   };
-  http.Response response = await http.get(
-    uri,
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-    },
-  );
+  http.Response response = await http.post(uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(email));
 
-  if (response.statusCode == 202) {
-    String token = jsonDecode(response.body)['token'];
-    String userid = jsonDecode(response.body)['user_id'];
-
-    storage.write(key: 'token', value: token);
-    storage.write(key: 'id', value: userid);
-
-    ProfileController.to.refresh();
-    Get.offAll(() => App());
-    print('dddd');
+  print("비밀번호 찾기 : ${response.statusCode}");
+  if (response.statusCode == 200) {
+    logInController.isPwFindCheck(true);
+    // _modalController.showCustomDialog('입력하신 이메일로 새로운 비밀번호를 알려드렸어요', 1400);
   } else if (response.statusCode == 401) {
     _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
     print('에러1');

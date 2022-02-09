@@ -13,7 +13,7 @@ import '../utils/check_form_validate.dart';
 class SignupUserInfoScreen extends StatelessWidget {
   SignupController signupController = Get.find();
   final _formKey = GlobalKey<FormState>();
-  RxBool isbutton = false.obs;
+  // RxBool isbutton = false.obs;
 
   @override
   Widget build(BuildContext context) {
