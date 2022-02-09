@@ -9,6 +9,7 @@ import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/screen/pw_find_screen.dart';
 
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
 import '../utils/check_form_validate.dart';
@@ -83,23 +84,13 @@ class LogInScreen extends StatelessWidget {
                           const SizedBox(
                             height: 32,
                           ),
-                          InkWell(
-                              onTap: login,
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
-                                decoration: BoxDecoration(
-                                  color: mainblue,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "로그인하기",
-                                    style:
-                                        kButtonStyle.copyWith(color: mainWhite),
-                                  ),
-                                ),
-                              )),
+                          CustomExpandedButton(
+                            buttonTag: '로그인하기',
+                            onTap: login,
+                            isBlue: true,
+                            isBig: true,
+                            title: '로그인하기',
+                          ),
                           const SizedBox(
                             height: 8,
                           ),

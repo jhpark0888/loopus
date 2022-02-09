@@ -8,6 +8,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/login_controller.dart';
 
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
 import '../utils/check_form_validate.dart';
@@ -62,23 +63,12 @@ class PwFindScreen extends StatelessWidget {
                           const SizedBox(
                             height: 32,
                           ),
-                          InkWell(
+                          CustomExpandedButton(
+                              buttonTag: "비밀번호 재설정 메일 보내기",
                               onTap: () {},
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
-                                decoration: BoxDecoration(
-                                  color: mainblue,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "비밀번호 재설정 메일 보내기",
-                                    style:
-                                        kButtonStyle.copyWith(color: mainWhite),
-                                  ),
-                                ),
-                              )),
+                              isBlue: true,
+                              isBig: true,
+                              title: "비밀번호 재설정 메일 보내기"),
                           const SizedBox(
                             height: 8,
                           ),

@@ -151,29 +151,29 @@ class SignupUserInfoScreen extends StatelessWidget {
                   obscureText: true,
                   maxLines: 1,
                 ),
-                // const SizedBox(
-                //   height: 32,
-                // ),
-                // const Text(
-                //   '비밀번호 확인',
-                //   style: kButtonStyle,
-                // ),
-                // const SizedBox(
-                //   height: 16,
-                // ),
-                // CustomTextField(
-                //   counterText: null,
-                //   maxLength: null,
-                //   textController: signupController.passwordcheckcontroller,
-                //   hintText: '',
-                //   validator: (value) {
-                //     if (signupController.passwordcontroller.text != value) {
-                //       return "입력하신 비밀번호와 일치하지 않아요";
-                //     }
-                //   },
-                //   obscureText: true,
-                //   maxLines: 1,
-                // ),
+                const SizedBox(
+                  height: 32,
+                ),
+                const Text(
+                  '비밀번호 확인',
+                  style: kButtonStyle,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                CustomTextField(
+                  counterText: null,
+                  maxLength: null,
+                  textController: signupController.passwordcheckcontroller,
+                  hintText: '',
+                  validator: (value) {
+                    if (signupController.passwordcontroller.text != value) {
+                      return "입력하신 비밀번호와 일치하지 않아요";
+                    }
+                  },
+                  obscureText: true,
+                  maxLines: 1,
+                ),
               ],
             ),
           ),

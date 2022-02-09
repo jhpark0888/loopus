@@ -20,6 +20,7 @@ import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/utils/kakao_share_manager.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -359,7 +360,7 @@ class OtherProfileScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  child: GestureDetector(
+                                  child: CustomExpandedButton(
                                     onTap: controller.otherUser.value.isuser ==
                                             1
                                         ? () {
@@ -374,140 +375,39 @@ class OtherProfileScreen extends StatelessWidget {
                                                       .otherUser.value,
                                                 ));
                                           },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: mainlightgrey,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8.0),
-                                          child: controller
-                                                      .otherUser.value.isuser ==
-                                                  1
-                                              ? const Center(
-                                                  child: Text(
-                                                  '관심 태그 변경하기',
-                                                  style: kButtonStyle,
-                                                ))
-                                              : const Center(
-                                                  child: Text(
-                                                  '메세지 보내기',
-                                                  style: kButtonStyle,
-                                                ))),
-                                    ),
+                                    isBlue: false,
+                                    isBig: false,
+                                    buttonTag: '메시지 보내기',
+                                    title:
+                                        controller.otherUser.value.isuser == 1
+                                            ? '관심 태그 변경하기'
+                                            : '메시지 보내기',
                                   ),
                                 ),
                                 if (controller.otherUser.value.isuser != 1)
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 8,
                                   ),
                                 if (controller.otherUser.value.isuser != 1)
                                   Expanded(
-                                    child: Obx(
-                                      () => GestureDetector(
-                                        onTap: () {
-                                          if (controller
-                                                  .otherUser.value.isuser ==
-                                              1) {
-                                            // KakaoShareManager()
-                                            //     .isKakaotalkInstalled()
-                                            //     .then((installed) {
-                                            //   if (installed) {
-                                            //     KakaoShareManager().shareMyCode();
-                                            //   } else {
-                                            //     // show alert
-                                            //   }
-                                            // });
-                                          } else {
-                                            if (controller.otherUser.value
-                                                    .looped.value ==
-                                                FollowState.normal) {
-                                              postfollowRequest(controller
-                                                      .otherUser.value.userid)
-                                                  .then((value) {
-                                                controller.otherUser.value
-                                                    .looped(
-                                                        FollowState.following);
-                                              });
-                                            } else if (controller.otherUser
-                                                    .value.looped.value ==
-                                                FollowState.follower) {
-                                              postfollowRequest(controller
-                                                      .otherUser.value.userid)
-                                                  .then((value) {
-                                                controller.otherUser.value
-                                                    .looped(
-                                                        FollowState.wefollow);
-                                              });
-
-                                              // ProfileController.to.myUserInfo
-                                              //         .value.loopcount -
-                                              //     1;
-
-                                            } else if (controller.otherUser
-                                                    .value.looped.value ==
-                                                FollowState.following) {
-                                              deletefollow(controller
-                                                      .otherUser.value.userid)
-                                                  .then((value) {
-                                                controller.otherUser.value
-                                                    .looped(FollowState.normal);
-                                              });
-                                            } else if (controller.otherUser
-                                                    .value.looped.value ==
-                                                FollowState.wefollow) {
-                                              deletefollow(controller
-                                                      .otherUser.value.userid)
-                                                  .then((value) {
-                                                controller.otherUser.value
-                                                    .looped(
-                                                        FollowState.follower);
-                                              });
-                                            }
-                                          }
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: mainblue,
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                          ),
-                                          // color: Colors.grey[400],
-
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 8.0,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                  controller.otherUser.value
-                                                              .looped.value ==
-                                                          FollowState.normal
-                                                      ? '팔로우'
-                                                      : controller
-                                                                  .otherUser
-                                                                  .value
-                                                                  .looped
-                                                                  .value ==
-                                                              FollowState
-                                                                  .follower
-                                                          ? '맞팔로우'
-                                                          : controller
-                                                                      .otherUser
-                                                                      .value
-                                                                      .looped
-                                                                      .value ==
-                                                                  FollowState
-                                                                      .following
-                                                              ? '팔로우 해제'
-                                                              : '팔로우 해제',
-                                                  style: kButtonStyle.copyWith(
-                                                      color: mainWhite)),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                    child: CustomExpandedButton(
+                                      onTap: followMotion,
+                                      isBlue: true,
+                                      isBig: false,
+                                      buttonTag: '팔로우',
+                                      title: controller.otherUser.value.looped
+                                                  .value ==
+                                              FollowState.normal
+                                          ? '팔로우'
+                                          : controller.otherUser.value.looped
+                                                      .value ==
+                                                  FollowState.follower
+                                              ? '맞팔로우'
+                                              : controller.otherUser.value
+                                                          .looped.value ==
+                                                      FollowState.following
+                                                  ? '팔로우 해제'
+                                                  : '팔로우 해제',
                                     ),
                                   ),
                               ],
@@ -680,6 +580,46 @@ class OtherProfileScreen extends StatelessWidget {
           controller.otherUser.value, image, null, ProfileUpdateType.image);
       if (user != null) {
         controller.otherUser(user);
+      }
+    }
+  }
+
+  void followMotion() {
+    if (controller.otherUser.value.isuser == 1) {
+      // KakaoShareManager()
+      //     .isKakaotalkInstalled()
+      //     .then((installed) {
+      //   if (installed) {
+      //     KakaoShareManager().shareMyCode();
+      //   } else {
+      //     // show alert
+      //   }
+      // });
+    } else {
+      if (controller.otherUser.value.looped.value == FollowState.normal) {
+        postfollowRequest(controller.otherUser.value.userid).then((value) {
+          controller.otherUser.value.looped(FollowState.following);
+        });
+      } else if (controller.otherUser.value.looped.value ==
+          FollowState.follower) {
+        postfollowRequest(controller.otherUser.value.userid).then((value) {
+          controller.otherUser.value.looped(FollowState.wefollow);
+        });
+
+        // ProfileController.to.myUserInfo
+        //         .value.loopcount -
+        //     1;
+
+      } else if (controller.otherUser.value.looped.value ==
+          FollowState.following) {
+        deletefollow(controller.otherUser.value.userid).then((value) {
+          controller.otherUser.value.looped(FollowState.normal);
+        });
+      } else if (controller.otherUser.value.looped.value ==
+          FollowState.wefollow) {
+        deletefollow(controller.otherUser.value.userid).then((value) {
+          controller.otherUser.value.looped(FollowState.follower);
+        });
       }
     }
   }

@@ -22,6 +22,7 @@ import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/utils/kakao_share_manager.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -302,48 +303,72 @@ class MyProfileScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Expanded(
-                                    child: GestureDetector(
-                                      // onTapDown: (details) =>
-                                      //     _hoverController.isHover(true),
-                                      // onTapCancel: () =>
-                                      //     _hoverController.isHover(false),
-                                      // onTapUp: (details) =>
-                                      //     _hoverController.isHover(false),
-                                      onTap: () {
-                                        tagController.selectedtaglist.clear();
-                                        tagController.tagsearch.text = "";
-                                        for (var tag in profileController
-                                            .myUserInfo.value.profileTag) {
-                                          tagController.selectedtaglist
-                                              .add(SelectedTagWidget(
-                                            id: tag.tagId,
-                                            text: tag.tag,
-                                            selecttagtype:
-                                                SelectTagtype.interesting,
-                                            tagtype: Tagtype.profile,
-                                          ));
-                                        }
-                                        Get.to(() => ProfileTagChangeScreen());
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: mainlightgrey,
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 8.0),
-                                          child: Center(
-                                            child: Text(
-                                              '관심 태그 변경하기',
-                                              style: kButtonStyle,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                    child: CustomExpandedButton(
+                                        onTap: () {
+                                          tagController.selectedtaglist.clear();
+                                          tagController.tagsearch.text = "";
+                                          for (var tag in profileController
+                                              .myUserInfo.value.profileTag) {
+                                            tagController.selectedtaglist
+                                                .add(SelectedTagWidget(
+                                              id: tag.tagId,
+                                              text: tag.tag,
+                                              selecttagtype:
+                                                  SelectTagtype.interesting,
+                                              tagtype: Tagtype.profile,
+                                            ));
+                                          }
+                                          Get.to(
+                                              () => ProfileTagChangeScreen());
+                                        },
+                                        isBlue: false,
+                                        isBig: false,
+                                        title: '관심 태그 변경하기',
+                                        buttonTag: '관심 태그 변경하기'),
                                   ),
+                                  // Expanded(
+                                  //   child: GestureDetector(
+                                  //     // onTapDown: (details) =>
+                                  //     //     _hoverController.isHover(true),
+                                  //     // onTapCancel: () =>
+                                  //     //     _hoverController.isHover(false),
+                                  //     // onTapUp: (details) =>
+                                  //     //     _hoverController.isHover(false),
+                                  //     onTap: () {
+                                  //       tagController.selectedtaglist.clear();
+                                  //       tagController.tagsearch.text = "";
+                                  //       for (var tag in profileController
+                                  //           .myUserInfo.value.profileTag) {
+                                  //         tagController.selectedtaglist
+                                  //             .add(SelectedTagWidget(
+                                  //           id: tag.tagId,
+                                  //           text: tag.tag,
+                                  //           selecttagtype:
+                                  //               SelectTagtype.interesting,
+                                  //           tagtype: Tagtype.profile,
+                                  //         ));
+                                  //       }
+                                  //       Get.to(() => ProfileTagChangeScreen());
+                                  //     },
+                                  //     child: Container(
+                                  //       decoration: BoxDecoration(
+                                  //         color: mainlightgrey,
+                                  //         borderRadius:
+                                  //             BorderRadius.circular(4),
+                                  //       ),
+                                  //       child: Padding(
+                                  //         padding: EdgeInsets.symmetric(
+                                  //             vertical: 8.0),
+                                  //         child: Center(
+                                  //           child: Text(
+                                  //             '관심 태그 변경하기',
+                                  //             style: kButtonStyle,
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                   // const SizedBox(
                                   //   width: 8,
                                   // ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -40,46 +41,24 @@ class StartScreen extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              InkWell(
-                onTap: () => _modalController.showContentModal(context),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    color: mainblue,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    "시작하기",
-                    textAlign: TextAlign.center,
-                    style: kButtonStyle.copyWith(
-                      color: mainWhite,
-                    ),
-                  ),
-                ),
+              CustomExpandedButton(
+                buttonTag: '시작하기',
+                onTap: () => ModalController.to.showContentModal(context),
+                isBlue: true,
+                isBig: true,
+                title: '시작하기',
               ),
               const SizedBox(
                 height: 12,
               ),
-              InkWell(
+              CustomExpandedButton(
+                buttonTag: '이미 계정이 있어요',
                 onTap: () => Get.to(
                   () => LogInScreen(),
                 ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xffe7e7e7),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Text(
-                    "이미 계정이 있어요",
-                    textAlign: TextAlign.center,
-                    style: kButtonStyle,
-                  ),
-                ),
+                isBlue: false,
+                isBig: true,
+                title: '이미 계정이 있어요',
               ),
               const SizedBox(
                 height: 24,
