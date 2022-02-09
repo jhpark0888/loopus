@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 import 'package:loopus/api/project_api.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
@@ -17,6 +18,7 @@ import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
@@ -92,6 +94,8 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
   request.fields['contents'] = json.encode(postcontent);
 
   http.StreamedResponse response = await request.send();
+
+  print("포스팅 업로드 statuscode:  ${response.statusCode}");
   if (response.statusCode == 200) {
     if (kDebugMode) {
       print("status code : ${response.statusCode} 포스팅 업로드 완료");
@@ -110,6 +114,15 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
         ),
       );
     } else {
+      String responsebody = await response.stream.bytesToString();
+      Map<String, dynamic> responsemap = json.decode(responsebody);
+      Post post = Post.fromJson(responsemap);
+      post.isuser = 1;
+      post.isLiked = 0.obs;
+      post.isMarked = 0.obs;
+      AppController.to.changePageIndex(0);
+      HomeController.to.recommandpostingResult.value.postingitems
+          .insert(0, post);
       getbacks(5);
     }
   } else if (response.statusCode == 400) {

@@ -44,6 +44,10 @@ class PostingAddContentScreen extends StatelessWidget {
                           if (postingAddController
                                   .isPostingContentEmpty.value ==
                               false) {
+                            postingAddController.editorController
+                                .nodeAt(
+                                    postingAddController.editorController.focus)
+                                .unfocus();
                             Get.to(() => PostingAddImageScreen(
                                   project_id: project_id,
                                 ));

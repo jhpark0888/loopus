@@ -104,10 +104,27 @@ class QuestionDetailController extends GetxController {
     await getquestion(questionid).then((value) {
       question(value);
       addanswer();
-      if (scrollController.hasClients) {
-        scrollController.jumpTo(scrollController.position.maxScrollExtent);
-      }
       isQuestionLoading(false);
     });
+  }
+}
+
+class QuestionScrollController extends GetxController {
+  ScrollController questionscrollController =
+      QuestionDetailController.to.scrollController;
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    if (questionscrollController.hasClients) {
+      questionscrollController
+          .jumpTo(questionscrollController.position.maxScrollExtent);
+    }
+    super.onReady();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
   }
 }

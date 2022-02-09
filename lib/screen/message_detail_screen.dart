@@ -180,7 +180,7 @@ class MessageDetailScreen extends StatelessWidget {
                     controller: controller.scrollController,
                     children: [
                       Column(
-                        children: controller.messagelist,
+                        children: controller.messagelist.value,
                       )
                     ],
                   ),

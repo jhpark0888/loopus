@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/question_api.dart';
+import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/widget/posting_widget.dart';
@@ -227,6 +228,15 @@ class HomeController extends GetxController
           .first
           .isMarked(1);
     }
+    if (SearchController.to.searchpostinglist
+        .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
+        .isNotEmpty) {
+      SearchController.to.searchpostinglist
+          .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
+          .first
+          .post
+          .isMarked(1);
+    }
 
     await bookmarkpost(postid);
   }
@@ -254,6 +264,15 @@ class HomeController extends GetxController
       loopResult.value.postingitems
           .where((post) => post.id == postid)
           .first
+          .isMarked(0);
+    }
+    if (SearchController.to.searchpostinglist
+        .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
+        .isNotEmpty) {
+      SearchController.to.searchpostinglist
+          .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
+          .first
+          .post
           .isMarked(0);
     }
 
@@ -297,6 +316,20 @@ class HomeController extends GetxController
           .first
           .likeCount(likecount);
     }
+    if (SearchController.to.searchpostinglist
+        .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
+        .isNotEmpty) {
+      SearchController.to.searchpostinglist
+          .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
+          .first
+          .post
+          .isLiked(1);
+      SearchController.to.searchpostinglist
+          .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
+          .first
+          .post
+          .likeCount(likecount);
+    }
 
     likepost(postid);
   }
@@ -336,6 +369,20 @@ class HomeController extends GetxController
       loopResult.value.postingitems
           .where((post) => post.id == postid)
           .first
+          .likeCount(likecount);
+    }
+    if (SearchController.to.searchpostinglist
+        .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
+        .isNotEmpty) {
+      SearchController.to.searchpostinglist
+          .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
+          .first
+          .post
+          .isLiked(0);
+      SearchController.to.searchpostinglist
+          .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
+          .first
+          .post
           .likeCount(likecount);
     }
 //

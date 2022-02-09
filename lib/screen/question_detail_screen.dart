@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
@@ -300,54 +301,7 @@ class QuestionDetailScreen extends StatelessWidget {
                     FocusScope.of(context).unfocus();
                     questionController.answerfocus.unfocus();
                   },
-                  child: SingleChildScrollView(
-                    reverse: true,
-                    controller: questionController.scrollController,
-                    child: Column(
-                      children: [
-                        Obx(
-                          () => Padding(
-                            padding: EdgeInsets.only(
-                                bottom: questionController
-                                        .keyboardController.isVisible
-                                    ? questionController
-                                        .textBoxSize.value.height
-                                    : 0),
-                            child: Column(
-                              children: [
-                                QuestionDetailWidget(
-                                  question: questionController.question.value,
-                                ),
-                                Container(
-                                  color: Color(0xffe7e7e7),
-                                  height: 1,
-                                ),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.only(
-                                    right: 16,
-                                    left: 16,
-                                    top: 20,
-                                    bottom: 12,
-                                  ),
-                                  child: Obx(
-                                    () => Text(
-                                      "답변 ${questionController.answerlist.length}개",
-                                      style: kSubTitle2Style,
-                                    ),
-                                  ),
-                                ),
-                                Obx(() => Column(
-                                      children:
-                                          questionController.answerlist.value,
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  child: QuestionListView(),
                 ),
         ),
         if (questionController.isQuestionDeleteLoading.value)
@@ -361,6 +315,63 @@ class QuestionDetailScreen extends StatelessWidget {
             ),
           ),
       ]),
+    );
+  }
+}
+
+class QuestionListView extends StatelessWidget {
+  QuestionListView({Key? key}) : super(key: key);
+
+  QuestionDetailController questionController = Get.find();
+  QuestionScrollController questionscrollController =
+      Get.put(QuestionScrollController());
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      reverse: true,
+      controller: questionscrollController.questionscrollController,
+      child: Column(
+        children: [
+          Obx(
+            () => Padding(
+              padding: EdgeInsets.only(
+                  bottom: questionController.keyboardController.isVisible
+                      ? questionController.textBoxSize.value.height
+                      : 0),
+              child: Column(
+                children: [
+                  QuestionDetailWidget(
+                    question: questionController.question.value,
+                  ),
+                  Container(
+                    color: Color(0xffe7e7e7),
+                    height: 1,
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(
+                      right: 16,
+                      left: 16,
+                      top: 20,
+                      bottom: 12,
+                    ),
+                    child: Obx(
+                      () => Text(
+                        "답변 ${questionController.answerlist.length}개",
+                        style: kSubTitle2Style,
+                      ),
+                    ),
+                  ),
+                  Obx(() => Column(
+                        children: questionController.answerlist.value,
+                      )),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
