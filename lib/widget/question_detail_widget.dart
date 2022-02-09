@@ -87,24 +87,20 @@ class QuestionDetailWidget extends StatelessWidget {
                               ),
                               Text(
                                 "${question.realname} · ",
-                                style: kBody2Style,
+                                style: kButtonStyle,
                               ),
                             ],
                           ),
                         ),
                       ),
-                      Text(
-                        "${question.department}",
-                        style: kBody2Style.copyWith(
-                            color: mainblack.withOpacity(0.6)),
-                      ),
+                      Text("${question.department}", style: kBody2Style),
                     ],
                   ),
                   Text(
                     DurationCaculator().messagedurationCaculate(
                         startDate: question.date!, endDate: DateTime.now()),
-                    style: kButtonStyle.copyWith(
-                        color: mainblack.withOpacity(0.6)),
+                    style:
+                        kBody2Style.copyWith(color: mainblack.withOpacity(0.6)),
                   )
                 ],
               ),

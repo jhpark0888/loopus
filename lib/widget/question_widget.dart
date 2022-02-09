@@ -99,15 +99,14 @@ class QuestionWidget extends StatelessWidget {
                                             )),
                                   Text(
                                     "  ${item.realname}  · ",
-                                    style: kBody2Style,
+                                    style: kButtonStyle,
                                   ),
                                 ],
                               ),
                             ),
                             Text(
                               "${item.department}",
-                              style: kBody2Style.copyWith(
-                                  color: mainblack.withOpacity(0.6)),
+                              style: kBody2Style,
                             ),
                           ],
                         ),

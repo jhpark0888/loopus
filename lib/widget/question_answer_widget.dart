@@ -63,8 +63,8 @@ class QuestionAnswerWidget extends StatelessWidget {
                                 width: 32,
                                 imageUrl: answer.profileimage!,
                                 placeholder: (context, url) => CircleAvatar(
-                                  child: Center(
-                                      child: CircularProgressIndicator()),
+                                  backgroundColor: Color(0xffe7e7e7),
+                                  child: Container(),
                                 ),
                                 fit: BoxFit.cover,
                               )),
@@ -98,7 +98,7 @@ class QuestionAnswerWidget extends StatelessWidget {
                                   children: [
                                     Text(
                                       "${answer.realname}",
-                                      style: kBody2Style,
+                                      style: kButtonStyle,
                                     ),
                                     Text(
                                       " · ${DurationCaculator().messagedurationCaculate(startDate: answer.date, endDate: DateTime.now())}",

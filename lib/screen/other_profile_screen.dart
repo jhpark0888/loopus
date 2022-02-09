@@ -392,22 +392,29 @@ class OtherProfileScreen extends StatelessWidget {
                                   Expanded(
                                     child: CustomExpandedButton(
                                       onTap: followMotion,
-                                      isBlue: true,
+                                      isBlue: controller.otherUser.value.looped
+                                                      .value ==
+                                                  FollowState.follower ||
+                                              controller.otherUser.value.looped
+                                                      .value ==
+                                                  FollowState.normal
+                                          ? true
+                                          : false,
                                       isBig: false,
                                       buttonTag: '팔로우',
                                       title: controller.otherUser.value.looped
                                                   .value ==
                                               FollowState.normal
-                                          ? '팔로우'
+                                          ? '팔로우하기'
                                           : controller.otherUser.value.looped
                                                       .value ==
                                                   FollowState.follower
-                                              ? '맞팔로우'
+                                              ? '나도 팔로우하기'
                                               : controller.otherUser.value
                                                           .looped.value ==
                                                       FollowState.following
-                                                  ? '팔로우 해제'
-                                                  : '팔로우 해제',
+                                                  ? '팔로잉 중'
+                                                  : '팔로잉 중',
                                     ),
                                   ),
                               ],
