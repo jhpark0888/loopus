@@ -108,13 +108,13 @@ class BookmarkWidget extends StatelessWidget {
                               Get.to(() => OtherProfileScreen(
                                     userid: item.userid,
                                     isuser: item.isuser,
-                                    realname: item.realname,
+                                    realname: item.user.realName,
                                   ));
                             },
                             child: Row(
                               children: [
                                 ClipOval(
-                                    child: item.profileimage == null
+                                    child: item.user.profileImage == null
                                         ? Image.asset(
                                             "assets/illustrations/default_profile.png",
                                             height: 32,
@@ -123,7 +123,8 @@ class BookmarkWidget extends StatelessWidget {
                                         : CachedNetworkImage(
                                             height: 32,
                                             width: 32,
-                                            imageUrl: "${item.profileimage}",
+                                            imageUrl:
+                                                "${item.user.profileImage}",
                                             placeholder: (context, url) =>
                                                 CircleAvatar(
                                               backgroundColor:
@@ -136,7 +137,7 @@ class BookmarkWidget extends StatelessWidget {
                                   width: 8,
                                 ),
                                 Text(
-                                  "${item.realname} · ",
+                                  "${item.user.realName} · ",
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold),
@@ -145,7 +146,7 @@ class BookmarkWidget extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${item.department}",
+                            "${item.user.department}",
                             style: TextStyle(fontSize: 14),
                           ),
                         ],
@@ -233,7 +234,7 @@ class BookmarkWidget extends StatelessWidget {
     Get.to(() => OtherProfileScreen(
           userid: item.userid,
           isuser: item.isuser,
-          realname: item.realname,
+          realname: item.user.realName,
         ));
   }
 
@@ -244,10 +245,10 @@ class BookmarkWidget extends StatelessWidget {
           isuser: item.isuser,
           postid: item.id,
           title: item.title,
-          realName: item.realname,
-          department: item.department,
+          realName: item.user.realName,
+          department: item.user.department,
           postDate: item.date,
-          profileImage: item.profileimage,
+          profileImage: item.user.profileImage,
           thumbNail: item.thumbnail,
           likecount: item.likeCount,
           isLiked: item.isLiked,

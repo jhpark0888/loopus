@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 class LogInController extends GetxController {
   RxBool isLogin = false.obs;
   RxBool isLogout = false.obs;
-  RxBool isPwFindCheck = false.obs;
 
   late TextEditingController idcontroller;
   late TextEditingController passwordcontroller;

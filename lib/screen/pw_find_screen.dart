@@ -7,6 +7,7 @@ import 'package:loopus/constant.dart';
 
 import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
 
 import 'package:loopus/widget/appbar_widget.dart';
@@ -17,6 +18,7 @@ import '../utils/check_form_validate.dart';
 
 class PwFindScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
+  final PwChangeController pwChangeController = Get.put(PwChangeController());
   final LogInController _loginController = Get.put(LogInController());
   static FlutterSecureStorage? storage = const FlutterSecureStorage();
 
@@ -31,7 +33,7 @@ class PwFindScreen extends StatelessWidget {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      if (_loginController.isPwFindCheck.value == true) {
+                      if (pwChangeController.isPwFindCheck.value == true) {
                         Get.to(() => PwChangeScreen(
                               pwType: PwType.pwfind,
                             ));
@@ -41,9 +43,10 @@ class PwFindScreen extends StatelessWidget {
                       () => Text(
                         '다음',
                         style: kSubTitle2Style.copyWith(
-                            color: _loginController.isPwFindCheck.value == true
-                                ? mainblue
-                                : mainblack.withOpacity(0.38)),
+                            color:
+                                pwChangeController.isPwFindCheck.value == true
+                                    ? mainblue
+                                    : mainblack.withOpacity(0.38)),
                       ),
                     ),
                   ),
@@ -90,7 +93,7 @@ class PwFindScreen extends StatelessWidget {
                               onTap: () {
                                 ModalController.to.showCustomDialog(
                                     '입력하신 이메일로 들어가서 링크를 클릭해 본인 인증을 해주세요', 1400);
-                                getpwfind();
+                                postpwfindemailcheck();
                               },
                               isBlue: true,
                               isBig: true,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -75,7 +76,12 @@ class WebViewScreen extends StatelessWidget {
                   onWebResourceError: (error) {
                     _webController.isWrongUrl.value = true;
                   },
-                  initialUrl: url,
+                  initialUrl: url!.endsWith(".pdf")
+                      ? Platform.isIOS
+                          ? url
+                          : "http://docs.google.com/gview?embedded=true&url=" +
+                              url!
+                      : url,
                   javascriptMode: JavascriptMode.unrestricted,
                   onWebViewCreated: (WebViewController webViewController) {
                     _controller.complete(webViewController);

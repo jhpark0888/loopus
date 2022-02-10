@@ -218,47 +218,24 @@ class QuestionDetailScreen extends StatelessWidget {
                             context,
                             func1: () {
                               Get.put(
-                                      MessageDetailController(User(
-                                          userid: questionController
-                                              .question.value.user,
-                                          realName: questionController
-                                              .question.value.realname,
-                                          type: 0,
-                                          department: questionController
-                                              .question.value.department!,
-                                          loopcount: 0.obs,
-                                          totalposting: 0,
-                                          isuser: questionController
-                                              .question.value.isuser,
-                                          profileTag: [],
-                                          looped: FollowState.normal.obs,
-                                          profileImage: questionController
-                                              .question.value.profileimage)),
+                                      MessageDetailController(
+                                        userid: questionController
+                                            .question.value.userid,
+                                      ),
                                       tag: questionController
                                           .question.value.user
                                           .toString())
                                   .messageroomrefresh();
                               Get.to(() => MessageDetailScreen(
-                                  user: User(
-                                      userid: questionController
-                                          .question.value.user,
-                                      realName: questionController
-                                          .question.value.realname,
-                                      type: 0,
-                                      department: questionController
-                                          .question.value.department!,
-                                      loopcount: 0.obs,
-                                      totalposting: 0,
-                                      isuser: questionController
-                                          .question.value.isuser,
-                                      profileTag: [],
-                                      looped: FollowState.normal.obs,
-                                      profileImage: questionController
-                                          .question.value.profileimage)));
+                                    userid: questionController
+                                        .question.value.userid,
+                                    realname: questionController
+                                        .question.value.user.realName,
+                                  ));
                             },
                             func2: () {},
                             value1:
-                                '${questionController.question.value.realname}님에게 메시지 보내기',
+                                '${questionController.question.value.user.realName}님에게 메시지 보내기',
                             value2: '이 질문 신고하기',
                             isValue1Red: false,
                             isValue2Red: true,

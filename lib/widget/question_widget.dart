@@ -77,7 +77,7 @@ class QuestionWidget extends StatelessWidget {
                               child: Row(
                                 children: [
                                   ClipOval(
-                                      child: item.profileimage == null
+                                      child: item.user.profileImage == null
                                           ? Image.asset(
                                               "assets/illustrations/default_profile.png",
                                               height: 32,
@@ -86,20 +86,21 @@ class QuestionWidget extends StatelessWidget {
                                           : CachedNetworkImage(
                                               height: 32,
                                               width: 32,
-                                              imageUrl: item.profileimage ?? "",
+                                              imageUrl:
+                                                  item.user.profileImage ?? "",
                                               placeholder: (context, url) =>
                                                   kProfilePlaceHolder(),
                                               fit: BoxFit.cover,
                                             )),
                                   Text(
-                                    "  ${item.realname}  · ",
+                                    "  ${item.user.realName}  · ",
                                     style: kButtonStyle,
                                   ),
                                 ],
                               ),
                             ),
                             Text(
-                              "${item.department}",
+                              "${item.user.department}",
                               style: kBody2Style,
                             ),
                           ],
@@ -140,15 +141,15 @@ class QuestionWidget extends StatelessWidget {
     Get.to(() => QuestionDetailScreen(
           questionid: item.id,
           isuser: item.isuser,
-          realname: item.realname,
+          realname: item.user.realName,
         ));
   }
 
   void tapProfile() {
     Get.to(() => OtherProfileScreen(
-          userid: item.user,
+          userid: item.userid,
           isuser: item.isuser,
-          realname: item.realname,
+          realname: item.user.realName,
         ));
   }
 }

@@ -13,7 +13,7 @@ class MessageRoomWidget extends StatelessWidget {
   MessageRoomWidget({Key? key, required this.messageRoom}) : super(key: key);
 
   late MessageDetailController controller = Get.put(
-      MessageDetailController(messageRoom.user),
+      MessageDetailController(userid: messageRoom.user.userid),
       tag: messageRoom.user.userid.toString());
   MessageRoom messageRoom;
 
@@ -29,8 +29,8 @@ class MessageRoomWidget extends StatelessWidget {
         messageRoom.notread(0);
         controller.messageroomrefresh();
         Get.to(() => MessageDetailScreen(
-              user: messageRoom.user,
-            ));
+            userid: messageRoom.user.userid,
+            realname: messageRoom.user.realName));
       },
       child: Container(
         padding: EdgeInsets.symmetric(

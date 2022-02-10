@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:loopus/controller/message_controller.dart';
+import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/model/message_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/message_widget.dart';
 
 import '../constant.dart';
@@ -36,9 +39,11 @@ Future<void> getmessageroomlist() async {
   }
 }
 
-Future<List<Message>> getmessagelist(int userid) async {
+Future getmessagelist(int userid) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
   String? myid = await const FlutterSecureStorage().read(key: 'id');
+  MessageDetailController messageDetailController =
+      Get.find<MessageDetailController>(tag: userid.toString());
 
   final url = Uri.parse("$serverUri/chat/chatting/$userid");
 
@@ -47,17 +52,24 @@ Future<List<Message>> getmessagelist(int userid) async {
 
   print('채팅 리스트 statuscode: ${response.statusCode}');
   if (response.statusCode == 200) {
-    List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+    Map responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+    messageDetailController.user = User.fromJson(responseBody["profile"]).obs;
+    List<Message> modelmessagelist = List.from(responseBody["message"])
+        .map((message) => Message.fromJson(message, myid))
+        .toList();
+    messageDetailController.messagelist(modelmessagelist
+        .map((message) => MessageWidget(
+            message: message, user: messageDetailController.user!.value))
+        .toList());
     print(responseBody);
 
-    List<Message> messagelist =
-        responseBody.map((message) => Message.fromJson(message, myid)).toList();
     // MessageController.to.chattingroomlist(responseBody
     //     .map((messageroom) => MessageRoom.fromJson(messageroom))
     //     .toList());
-    return messagelist;
+    return;
   } else if (response.statusCode == 404) {
-    return [];
+    messageDetailController.messagelist([]);
+    return;
   } else {
     return Future.error(response.statusCode);
   }

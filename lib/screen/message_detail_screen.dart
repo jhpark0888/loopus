@@ -14,17 +14,17 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/message_widget.dart';
 
 class MessageDetailScreen extends StatelessWidget {
-  MessageDetailScreen({
-    Key? key,
-    required this.user,
-  }) : super(key: key);
+  MessageDetailScreen(
+      {Key? key, required this.userid, required this.realname, this.user})
+      : super(key: key);
 
-  User user;
+  int userid;
+  String realname;
+  User? user;
   late MessageDetailController controller = Get.put(
       MessageDetailController(
-        user,
-      ),
-      tag: user.userid.toString());
+          userid: userid, user: user != null ? user!.obs : null),
+      tag: userid.toString());
 
   void _handleSubmitted(String text) async {
     if (controller.isSendButtonon.value) {
@@ -37,13 +37,13 @@ class MessageDetailScreen extends StatelessWidget {
                   roomId: controller.messagelist.isEmpty
                       ? 0
                       : controller.messagelist.first.message.roomId,
-                  receiverId: user.userid,
+                  receiverId: userid,
                   message: text,
                   date: DateTime.now(),
                   isRead: true,
                   issender: 1,
                   issending: true.obs),
-              user: user));
+              user: controller.user!.value));
       if (controller.scrollController.hasClients) {
         if (controller.scrollController.offset != 0) {
           controller.scrollController.jumpTo(
@@ -51,7 +51,7 @@ class MessageDetailScreen extends StatelessWidget {
           );
         }
       }
-      await postmessage(text, controller.user.userid).then((value) {
+      await postmessage(text, controller.userid).then((value) {
         controller.messagelist.last.message.issending(false);
       });
     }
@@ -137,7 +137,7 @@ class MessageDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBarWidget(
         bottomBorder: false,
-        title: '${user.realName}님',
+        title: '${realname}님',
       ),
       bottomNavigationBar: Transform.translate(
         offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),

@@ -45,7 +45,7 @@ class QuestionAnswerWidget extends StatelessWidget {
                     GestureDetector(
                       onTap: tapProfile,
                       child: ClipOval(
-                        child: answer.profileimage == ""
+                        child: answer.user.profileImage == ""
                             ? Image.asset(
                                 "assets/illustrations/default_profile.png",
                                 height: 32,
@@ -54,11 +54,9 @@ class QuestionAnswerWidget extends StatelessWidget {
                             : CachedNetworkImage(
                                 height: 32,
                                 width: 32,
-                                imageUrl: answer.profileimage!,
-                                placeholder: (context, url) => CircleAvatar(
-                                  backgroundColor: Color(0xffe7e7e7),
-                                  child: Container(),
-                                ),
+                                imageUrl: answer.user.profileImage!,
+                                placeholder: (context, url) =>
+                                    kProfilePlaceHolder(),
                                 fit: BoxFit.cover,
                               ),
                       ),
@@ -70,7 +68,7 @@ class QuestionAnswerWidget extends StatelessWidget {
                       behavior: HitTestBehavior.translucent,
                       onTap: tapProfile,
                       child: Text(
-                        "${answer.realname}",
+                        "${answer.user.realName}",
                         style: kButtonStyle,
                       ),
                     ),
@@ -154,9 +152,9 @@ class QuestionAnswerWidget extends StatelessWidget {
     // profileController.isProfileLoading(true);
 
     Get.to(() => OtherProfileScreen(
-          userid: answer.user,
+          userid: answer.userid,
           isuser: answer.isuser,
-          realname: answer.realname!,
+          realname: answer.user.realName,
         ));
   }
 }
