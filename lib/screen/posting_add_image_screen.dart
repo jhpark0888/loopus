@@ -1,29 +1,22 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/post_api.dart';
-import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/model/post_model.dart';
-import 'package:loopus/model/project_model.dart';
-import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/blue_button.dart';
 import 'package:loopus/widget/post_add_content_widget.dart';
-import 'package:flutter/rendering.dart';
 
 class PostingAddImageScreen extends StatelessWidget {
   PostingAddImageScreen({Key? key, this.postid, required this.project_id})
       : super(key: key);
-  PostingAddController postingAddController = Get.find();
-  ImageController _imageController = Get.put(ImageController());
+  final PostingAddController postingAddController = Get.find();
+  final ImageController _imageController = Get.put(ImageController());
 
   int project_id;
   int? postid;
@@ -56,14 +49,8 @@ class PostingAddImageScreen extends StatelessWidget {
                                 false;
                           });
                         },
-                        child: Text(
-                          '올리기',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: mainblue,
-                          ),
-                        ),
+                        child: Text('올리기',
+                            style: kSubTitle2Style.copyWith(color: mainblue)),
                       )
                     : Obx(
                         () => Get.find<PostingDetailController>(
@@ -174,6 +161,7 @@ class _MyAppSpace extends StatelessWidget {
                         child: Align(
                             alignment: Alignment.bottomRight,
                             child: BlueTextButton(
+                              hoverTag: '포스팅 대표 사진 변경',
                               onTap: () async {
                                 imageController
                                     .isThumbnailImagePickerLoading.value = true;
@@ -242,12 +230,7 @@ class _MyAppSpace extends StatelessWidget {
       child: Text(
         text,
         textAlign: TextAlign.start,
-        style: TextStyle(
-          height: 1.5,
-          color: mainblack,
-          fontSize: 20.0,
-          fontWeight: FontWeight.bold,
-        ),
+        style: kHeaderH2Style,
       ),
     );
   }

@@ -19,27 +19,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: mainWhite,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(8),
-          topRight: Radius.circular(8),
-          bottomLeft: Radius.circular(8),
-          bottomRight: Radius.circular(8),
-        ),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 3,
-            offset: Offset(0.0, 1.0),
-            color: Colors.black.withOpacity(0.1),
-          ),
-          BoxShadow(
-            blurRadius: 2,
-            offset: Offset(0.0, 1.0),
-            color: Colors.black.withOpacity(0.06),
-          ),
-        ],
-      ),
+      decoration: kCardStyle,
       child: InkWell(
         onTap: () async {
           // await questionController.loadItem(item.id);
@@ -49,7 +29,6 @@ class MyQuestionPostingWidget extends StatelessWidget {
                 isuser: item.isuser,
                 realname: item.realname,
               ));
-          print("click posting");
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -59,25 +38,34 @@ class MyQuestionPostingWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8),
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-                child: Container(
-                  height: 48,
-                  child: Text(
-                    "${item.content}",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: kSubTitle1Style,
-                  ),
-                ),
+              Text(
+                "${item.content}",
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: kSubTitle1Style,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 24,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: item.questionTag
+                    .map((tag) => Row(children: [
+                          Tagwidget(
+                            tag: tag,
+                            fontSize: 12,
+                          ),
+                          item.questionTag.indexOf(tag) !=
+                                  item.questionTag.length - 1
+                              ? SizedBox(
+                                  width: 4,
+                                )
+                              : Container()
+                        ]))
+                    .toList(),
+              ),
+              const SizedBox(
+                height: 16,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,12 +92,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
                       SizedBox(
                         width: 8,
                       ),
-                      Text(
-                        "${item.realname}",
-                        style: kButtonStyle.copyWith(
-                          color: mainblack.withOpacity(0.6),
-                        ),
-                      ),
+                      Text("${item.realname}", style: kButtonStyle),
                     ],
                   ),
                   Row(

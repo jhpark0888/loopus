@@ -54,17 +54,6 @@ class UserInfoScreen extends StatelessWidget {
                 ),
                 ListTile(
                   onTap: () {
-                    // ModalController.to.showTextFieldDialog(
-                    //     title: '현재 비밀번호를 입력해주세요',
-                    //     hintText: '',
-                    //     obscureText: true,
-                    //     textEditingController: TextEditingController(),
-                    //     validator: null,
-                    //     leftFunction: () => Get.back(),
-                    //     rightFunction: () {
-                    //       //비밀번호 확인하는 api 필요함
-                    //       Get.to(() => PwChangeScreen());
-                    //     });
                     Get.to(() => PwChangeScreen(
                           pwType: PwType.pwchange,
                         ));
@@ -72,10 +61,6 @@ class UserInfoScreen extends StatelessWidget {
                   title: Text(
                     '비밀번호 변경',
                     style: kSubTitle2Style,
-                  ),
-                  trailing: Text(
-                    '변경하기',
-                    style: kSubTitle2Style.copyWith(color: mainblue),
                   ),
                 ),
                 ListTile(

@@ -5,6 +5,8 @@ import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
+import '../constant.dart';
+
 class PostAddContentWidget extends StatelessWidget {
   PostAddContentWidget({Key? key, required this.index}) : super(key: key);
 

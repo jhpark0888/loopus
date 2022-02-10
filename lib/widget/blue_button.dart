@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/controller/hover_controller.dart';
 
 import '../constant.dart';
 
@@ -8,6 +9,7 @@ class BlueTextButton extends StatelessWidget {
       {Key? key,
       required this.onTap,
       required this.text,
+      required this.hoverTag,
       this.width,
       this.height})
       : super(key: key);
@@ -16,10 +18,18 @@ class BlueTextButton extends StatelessWidget {
   String text;
   double? width;
   double? height;
+  String hoverTag;
+  late final HoverController _hoverController = Get.put(
+    HoverController(),
+    tag: hoverTag,
+  );
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
+      onTapDown: (details) => _hoverController.isHover(true),
+      onTapCancel: () => _hoverController.isHover(false),
+      onTapUp: (details) => _hoverController.isHover(false),
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
@@ -27,10 +37,14 @@ class BlueTextButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
         ),
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-        child: Text(
-          text,
-          style: kButtonStyle.copyWith(
-            color: mainWhite,
+        child: Obx(
+          () => Text(
+            text,
+            style: kButtonStyle.copyWith(
+              color: _hoverController.isHover.value
+                  ? mainWhite.withOpacity(0.6)
+                  : mainWhite,
+            ),
           ),
         ),
       ),

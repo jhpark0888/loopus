@@ -191,14 +191,14 @@ class PostingWidget extends StatelessWidget {
                                                 ),
                                                 child: Text(
                                                   item.likeCount.value != 0
-                                                      ? "${item.likeCount.value}개"
-                                                      : '',
+                                                      ? "${item.likeCount.value}   \u200B"
+                                                      : ' \u200B',
                                                   style: kButtonStyle,
                                                 ),
                                               ),
                                             ),
                                             const SizedBox(
-                                              width: 16,
+                                              width: 8,
                                             ),
                                             InkWell(
                                               onTap: tapBookmark,

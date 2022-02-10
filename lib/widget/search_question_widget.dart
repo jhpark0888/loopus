@@ -84,10 +84,8 @@ class SearchQuestionWidget extends StatelessWidget {
                                     height: 32,
                                     width: 32,
                                     imageUrl: item.profileimage!,
-                                    placeholder: (context, url) => CircleAvatar(
-                                      backgroundColor: Color(0xffe7e7e7),
-                                      child: Container(),
-                                    ),
+                                    placeholder: (context, url) =>
+                                        kProfilePlaceHolder(),
                                     fit: BoxFit.cover,
                                   ),
                           ),
@@ -100,7 +98,7 @@ class SearchQuestionWidget extends StatelessWidget {
                     ),
                     Text(
                       "${item.department}",
-                      style: TextStyle(fontSize: 14),
+                      style: kBody2Style,
                     ),
                   ],
                 ),

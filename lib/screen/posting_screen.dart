@@ -102,20 +102,21 @@ class PostingScreen extends StatelessWidget {
                     width: 4,
                   ),
                   Obx(
-                    () => InkWell(
+                    () => GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Get.to(() => LikePeopleScreen(
                               postid: postid,
                             ));
                       },
                       child: Text(
-                        likecount.toString(),
+                        likecount != 0 ? '${likecount}   \u200B' : ' \u200B',
                         style: kButtonStyle,
                       ),
                     ),
                   ),
                   const SizedBox(
-                    width: 16,
+                    width: 12,
                   ),
                   Obx(() => InkWell(
                       onTap: () {
@@ -257,49 +258,42 @@ class PostingScreen extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: Obx(
                     () => (controller.isPostingContentLoading.value == false)
-                        ? Column(children: [
-                            Obx(
-                              () => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 24,
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                                Obx(
+                                  () => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 24,
+                                      ),
+                                      child: Column(
+                                        children:
+                                            controller.postcontentlist.value,
+                                      )),
+                                ),
+                                TextButton(
+                                  onPressed: tapOtherPosting,
+                                  child: Text(
+                                    '이 활동의 다른 포스팅 읽기',
+                                    style:
+                                        kButtonStyle.copyWith(color: mainblue),
                                   ),
-                                  child: Column(
-                                    children: controller.postcontentlist.value,
-                                  )),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Get.to(() => ProjectScreen(
-                                    projectid:
-                                        controller.post.value.project!.id,
-                                    isuser: controller.post.value.isuser));
-                              },
-                              child: Text(
-                                '이 활동의 다른 포스팅 읽기',
-                                style: kButtonStyle.copyWith(color: mainblue),
-                              ),
-                            ),
-                            Container(
-                              height: 8,
-                              color: Color(0xffF2F3F5),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(16, 24, 16, 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
+                                ),
+                                Container(
+                                  height: 8,
+                                  color: Color(0xffF2F3F5),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
+                                  child: Text(
                                     '관련 포스팅',
                                     style: kSubTitle2Style,
                                   ),
-                                  //TODO: 관련 포스팅 리스트
-                                ],
-                              ),
-                            ),
-                            Column(
-                              children: controller.recommendposts,
-                            ),
-                          ])
+                                ),
+                                Column(
+                                  children: controller.recommendposts,
+                                ),
+                              ])
                         : Image.asset(
                             'assets/icons/loading.gif',
                             scale: 9,
@@ -322,6 +316,12 @@ class PostingScreen extends StatelessWidget {
           ),
       ]),
     );
+  }
+
+  void tapOtherPosting() {
+    Get.to(() => ProjectScreen(
+        projectid: controller.post.value.project!.id,
+        isuser: controller.post.value.isuser));
   }
 }
 
@@ -397,7 +397,7 @@ class _MyAppSpace extends StatelessWidget {
                         ),
                         getExpendTitle(title, 'title$id'),
                         SizedBox(
-                          height: 16,
+                          height: 20,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -418,21 +418,14 @@ class _MyAppSpace extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     (profileImage != null)
-                                        ? Hero(
-                                            tag: 'profileImage$id',
-                                            child: ClipOval(
-                                              child: CachedNetworkImage(
-                                                height: 32,
-                                                width: 32,
-                                                imageUrl: profileImage,
-                                                placeholder: (context, url) =>
-                                                    CircleAvatar(
-                                                  backgroundColor:
-                                                      Color(0xffe7e7e7),
-                                                  child: Container(),
-                                                ),
-                                                fit: BoxFit.cover,
-                                              ),
+                                        ? ClipOval(
+                                            child: CachedNetworkImage(
+                                              height: 32,
+                                              width: 32,
+                                              imageUrl: profileImage,
+                                              placeholder: (context, url) =>
+                                                  kProfilePlaceHolder(),
+                                              fit: BoxFit.cover,
                                             ),
                                           )
                                         : ClipOval(
@@ -445,14 +438,11 @@ class _MyAppSpace extends StatelessWidget {
                                     SizedBox(
                                       width: 8,
                                     ),
-                                    Hero(
-                                      tag: 'realname$id',
-                                      child: Material(
-                                        type: MaterialType.transparency,
-                                        child: Text(
-                                          "$realname · ",
-                                          style: kBody2Style,
-                                        ),
+                                    Material(
+                                      type: MaterialType.transparency,
+                                      child: Text(
+                                        "$realname · ",
+                                        style: kButtonStyle,
                                       ),
                                     ),
                                     Hero(
@@ -470,15 +460,14 @@ class _MyAppSpace extends StatelessWidget {
                               ),
                               Text(
                                 '${postDate.year}.${postDate.month}.${postDate.day}',
-                                style: TextStyle(
-                                  fontSize: 14,
+                                style: kBody2Style.copyWith(
                                   color: mainblack.withOpacity(0.6),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                       ],
@@ -527,12 +516,7 @@ class _MyAppSpace extends StatelessWidget {
           child: Text(
             text,
             textAlign: TextAlign.start,
-            style: TextStyle(
-              height: 1.5,
-              color: mainblack,
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
+            style: kHeaderH2Style,
           ),
         ),
       ),
@@ -541,18 +525,12 @@ class _MyAppSpace extends StatelessWidget {
 
   Widget getCollapseTitle(String text) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 60),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        softWrap: false,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: mainblack,
-          fontSize: 14.0,
-          fontWeight: FontWeight.normal,
-        ),
-      ),
+      padding: EdgeInsets.only(right: isuser == 1 ? 100 : 60, left: 60),
+      child: Text(text,
+          textAlign: TextAlign.center,
+          softWrap: false,
+          overflow: TextOverflow.ellipsis,
+          style: kBody2Style),
     );
   }
 }

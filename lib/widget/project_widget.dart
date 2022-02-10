@@ -166,8 +166,8 @@ class ProjectWidget extends StatelessWidget {
                                               fontWeight: (controller.project
                                                           .value.endDate ==
                                                       null)
-                                                  ? FontWeight.normal
-                                                  : FontWeight.bold,
+                                                  ? FontWeight.w400
+                                                  : FontWeight.w500,
                                               color: (controller.project.value
                                                           .endDate ==
                                                       null)

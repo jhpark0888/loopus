@@ -131,14 +131,9 @@ class PostingAddNameScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 16,
+                height: 12,
               ),
-              Text(
-                '나중에 얼마든지 수정할 수 있어요',
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-              ),
+              Text('나중에 얼마든지 수정할 수 있어요', style: kBody2Style),
               SizedBox(
                 height: 32,
               ),

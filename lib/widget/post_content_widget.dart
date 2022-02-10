@@ -7,6 +7,8 @@ import 'package:loopus/screen/webview_screen.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../constant.dart';
+
 class PostContentWidget extends StatelessWidget {
   PostContentWidget({Key? key, required this.content}) : super(key: key);
 

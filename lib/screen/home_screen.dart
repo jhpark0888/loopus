@@ -243,7 +243,7 @@ class HomeScreen extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: kCaptionStyle.copyWith(
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
                             ),
                           )
                         ],
@@ -300,7 +300,7 @@ class HomeScreen extends StatelessWidget {
                             "KaKao Brain",
                             overflow: TextOverflow.ellipsis,
                             style: kCaptionStyle.copyWith(
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
                             ),
                           )
                         ],
@@ -358,7 +358,7 @@ class HomeScreen extends StatelessWidget {
                             "삼성전자",
                             overflow: TextOverflow.ellipsis,
                             style: kCaptionStyle.copyWith(
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
                             ),
                           )
                         ],
@@ -398,7 +398,7 @@ class HomeScreen extends StatelessWidget {
                 unselectedLabelColor: mainblack.withOpacity(0.6),
                 indicator: const UnderlineIndicator(
                   strokeCap: StrokeCap.round,
-                  borderSide: BorderSide(width: 2),
+                  borderSide: BorderSide(width: 1.2),
                   insets: EdgeInsets.symmetric(horizontal: 16.0),
                 ),
                 isScrollable: true,

@@ -4,46 +4,37 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 
-enum SmartTextType {
-  T,
-  H1,
-  H2,
-  QUOTE,
-  BULLET,
-  IMAGE,
-  LINK,
-  IMAGEINFO,
-}
-
 extension SmartTextStyle on SmartTextType {
   TextStyle get textStyle {
     switch (this) {
       case SmartTextType.QUOTE:
-        return TextStyle(
+        return const TextStyle(
           fontSize: 14,
           fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w400,
           color: mainblack,
           height: 1.2,
         );
       case SmartTextType.H1:
-        return TextStyle(
+        return const TextStyle(
           fontSize: 20,
           color: mainblack,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
           height: 1.5,
         );
       case SmartTextType.H2:
-        return TextStyle(
+        return const TextStyle(
           fontSize: 16,
           color: mainblack,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
           height: 1.6,
         );
 
       case SmartTextType.LINK:
-        return TextStyle(
+        return const TextStyle(
           fontSize: 16,
-          shadows: [Shadow(color: mainblue, offset: Offset(0, -4))],
+          fontWeight: FontWeight.w400,
+          shadows: [Shadow(color: mainblue, offset: Offset(0, -5))],
           color: Colors.transparent,
           decoration: TextDecoration.underline,
           decorationColor: mainblue,
@@ -51,14 +42,16 @@ extension SmartTextStyle on SmartTextType {
           decorationStyle: TextDecorationStyle.solid,
         );
       case SmartTextType.IMAGEINFO:
-        return TextStyle(
+        return const TextStyle(
           fontSize: 12.0,
+          fontWeight: FontWeight.w300,
           fontStyle: FontStyle.italic,
           color: mainblack,
         );
       default:
-        return TextStyle(
+        return const TextStyle(
           fontSize: 16.0,
+          fontWeight: FontWeight.w300,
           color: mainblack,
           height: 1.6,
         );
@@ -68,13 +61,13 @@ extension SmartTextStyle on SmartTextType {
   EdgeInsets get padding {
     switch (this) {
       case SmartTextType.H1:
-        return EdgeInsets.fromLTRB(16, 12, 16, 8);
+        return const EdgeInsets.fromLTRB(16, 12, 16, 8);
       case SmartTextType.BULLET:
-        return EdgeInsets.fromLTRB(24, 4, 16, 4);
+        return const EdgeInsets.fromLTRB(24, 4, 16, 4);
       case SmartTextType.IMAGE:
-        return EdgeInsets.only(top: 16);
+        return const EdgeInsets.only(top: 16);
       default:
-        return EdgeInsets.fromLTRB(16, 8, 16, 8);
+        return const EdgeInsets.fromLTRB(16, 8, 16, 8);
     }
   }
 

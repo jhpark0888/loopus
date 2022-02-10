@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/question_add_controller.dart';
-import 'package:loopus/controller/question_detail_controller.dart';
 import 'package:loopus/screen/question_add_tag_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
@@ -20,14 +18,14 @@ class QuestionAddContentScreen extends StatelessWidget {
         actions: [
           TextButton(
               onPressed: () {
-                if (questionaddController.ignore_check_add_q.value == false) {
+                if (questionaddController.isContentEmpty.value == false) {
                   Get.to(() => QuestionAddTagScreen());
                 }
               },
               child: Obx(
                 () => Text(
                   '다음',
-                  style: questionaddController.ignore_check_add_q.value == false
+                  style: questionaddController.isContentEmpty.value == false
                       ? kSubTitle2Style.copyWith(color: mainblue)
                       : kSubTitle2Style.copyWith(
                           color: mainblack.withOpacity(0.38)),
@@ -45,19 +43,13 @@ class QuestionAddContentScreen extends StatelessWidget {
               TextField(
                 onChanged: (value) {
                   if (value == "") {
-                    print(value);
-                    questionaddController.ignore_check_add_q.value = true;
-                    print(questionaddController.ignore_check_add_q.value);
+                    questionaddController.isContentEmpty.value = true;
                   } else {
-                    if (questionaddController.ignore_check_add_q.value ==
-                        true) {
-                      questionaddController.ignore_check_add_q.value = false;
+                    if (questionaddController.isContentEmpty.value == true) {
+                      questionaddController.isContentEmpty.value = false;
                     }
                   }
                 },
-                inputFormatters: [
-                  // TextInputFormatter
-                ],
                 autocorrect: false,
                 controller: questionaddController.contentcontroller,
                 autofocus: true,
@@ -66,11 +58,11 @@ class QuestionAddContentScreen extends StatelessWidget {
                 cursorColor: mainblue,
                 cursorWidth: 1.3,
                 cursorRadius: const Radius.circular(500),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: '질문 내용을 작성해주세요',
                 ),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16.0,
                   color: mainblack,
                   height: 1.6,

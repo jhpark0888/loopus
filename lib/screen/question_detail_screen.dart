@@ -149,13 +149,13 @@ class QuestionDetailScreen extends StatelessWidget {
               Obx(
                 () => IconButton(
                     onPressed: () {
-                      if (questionController.check_alarm.value) {
-                        questionController.check_alarm.value = false;
+                      if (questionController.checkAlert.value) {
+                        questionController.checkAlert.value = false;
                         modalController.showCustomDialog('알림이 취소되었어요', 1000);
                         NotificationController.to.fcmQuestionUnSubscribe(
                             questionController.question.value.id.toString());
                       } else {
-                        questionController.check_alarm.value = true;
+                        questionController.checkAlert.value = true;
                         modalController.showCustomDialog(
                             '답글이 달리면 알림을 보내드려요', 1000);
                         print(questionController.question.value.id);
@@ -163,7 +163,7 @@ class QuestionDetailScreen extends StatelessWidget {
                             questionController.question.value.id.toString());
                       }
                     },
-                    icon: questionController.check_alarm.value == false
+                    icon: questionController.checkAlert.value == false
                         ? SvgPicture.asset(
                             'assets/icons/Bell_Inactive.svg',
                             width: 28,

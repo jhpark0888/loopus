@@ -64,17 +64,12 @@ class SearchTagProjectWidget extends StatelessWidget {
               children: [
                 project.endDate == null
                     ? Text(
-                        "${DateFormat("yy.MM.dd").format(project.startDate!)} ~ ",
-                        style: kButtonStyle.copyWith(
-                          color: mainblack.withOpacity(0.6),
-                        ),
+                        "${DateFormat("yy.MM.dd").format(project.startDate!)} ~",
+                        style: kSubTitle2Style,
                       )
                     : Text(
                         "${DateFormat("yy.MM.dd").format(project.startDate!)} ~ ${DateFormat("yy.MM.dd").format(project.endDate!)}",
-                        style: kButtonStyle.copyWith(
-                          color: mainblack.withOpacity(0.6),
-                        ),
-                      ),
+                        style: kSubTitle2Style),
                 SizedBox(
                   width: (project.endDate == null) ? 4 : 8,
                 ),
@@ -99,8 +94,8 @@ class SearchTagProjectWidget extends StatelessWidget {
                             ),
                       style: kCaptionStyle.copyWith(
                           fontWeight: (project.endDate == null)
-                              ? FontWeight.normal
-                              : FontWeight.bold,
+                              ? FontWeight.w400
+                              : FontWeight.w500,
                           color: (project.endDate == null)
                               ? mainblack.withOpacity(0.6)
                               : mainWhite),
@@ -135,10 +130,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                                         width: 32,
                                         imageUrl: project.profileimage!,
                                         placeholder: (context, url) =>
-                                            CircleAvatar(
-                                          backgroundColor: Color(0xffe7e7e7),
-                                          child: Container(),
-                                        ),
+                                            kProfilePlaceHolder(),
                                         fit: BoxFit.cover,
                                       )),
                             SizedBox(
@@ -150,7 +142,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                       ),
                       Text(
                         "${project.department}",
-                        style: TextStyle(fontSize: 14),
+                        style: kBody2Style,
                       ),
                     ],
                   ),
@@ -162,7 +154,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                       ),
                       Text(
                         "${project.post_count}",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: kButtonStyle,
                       ),
                       const SizedBox(
                         width: 16,
@@ -173,7 +165,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                       ),
                       Text(
                         "${project.like_count}",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: kButtonStyle,
                       ),
                     ],
                   ),

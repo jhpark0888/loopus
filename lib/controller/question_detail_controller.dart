@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/widget/question_answer_widget.dart';
-import 'package:loopus/widget/selected_tag_widget.dart';
 
 class QuestionDetailController extends GetxController {
   QuestionDetailController({required this.questionid});
@@ -23,7 +21,7 @@ class QuestionDetailController extends GetxController {
   RxBool isSendButtonon = false.obs;
   RxList<QuestionAnswerWidget> answerlist = <QuestionAnswerWidget>[].obs;
   FocusNode answerfocus = FocusNode();
-  RxBool check_alarm = false.obs;
+  RxBool checkAlert = false.obs;
   RxBool isDropdown = false.obs;
   Rx<QuestionItem> question = QuestionItem(
     id: 0,
@@ -63,16 +61,13 @@ class QuestionDetailController extends GetxController {
     keyboardController.onChange.listen((isVisible) {
       if (isVisible) {
         if (scrollController.hasClients) {
-          print("키보드 on ${scrollController.offset}");
           scrollController.animateTo(scrollController.offset,
-              duration: Duration(milliseconds: 500), curve: Curves.ease);
+              duration: const Duration(milliseconds: 500), curve: Curves.ease);
         }
       } else {
         if (scrollController.hasClients) {
-          print("키보드 off ${scrollController.offset}");
-
           scrollController.animateTo(scrollController.offset,
-              duration: Duration(milliseconds: 500), curve: Curves.ease);
+              duration: const Duration(milliseconds: 500), curve: Curves.ease);
         }
       }
     });
@@ -92,11 +87,11 @@ class QuestionDetailController extends GetxController {
 
   Future<void> addanswer() async {
     answerlist.clear();
-    question.value.answer.forEach((answer) {
+    for (var answer in question.value.answer) {
       answerlist.add(QuestionAnswerWidget(
         answer: answer,
       ));
-    });
+    }
   }
 
   Future<void> loadItem(int questionid) async {
@@ -121,10 +116,5 @@ class QuestionScrollController extends GetxController {
           .jumpTo(questionscrollController.position.maxScrollExtent);
     }
     super.onReady();
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
   }
 }

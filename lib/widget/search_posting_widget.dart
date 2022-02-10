@@ -1,24 +1,12 @@
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/post_api.dart';
-import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/app_controller.dart';
-import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
-import 'package:loopus/model/project_model.dart';
-import 'package:loopus/model/user_model.dart';
-import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
-import 'package:loopus/widget/project_widget.dart';
-import 'package:loopus/widget/tag_widget.dart';
 
 class SearchPostingWidget extends StatelessWidget {
   SearchPostingWidget({
@@ -26,29 +14,12 @@ class SearchPostingWidget extends StatelessWidget {
   });
 
   Post post;
-  HomeController homeController = Get.find();
+  final HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => PostingScreen(
-        //           userid: post.userid,
-        //           isuser: post.isuser,
-        //           postid: post.id,
-        //           title: post.title,
-        //           realName: post.realname,
-        //           department: post.department,
-        //           postDate: post.date,
-        //           profileImage: post.profileimage,
-        //           thumbNail: post.thumbnail,
-        //           likecount: post.likeCount,
-        //           isLiked: post.isLiked,
-        //           isMarked: post.isMarked),
-        //     ));
         Get.to(
             () => PostingScreen(
                 userid: post.userid,
@@ -66,61 +37,37 @@ class SearchPostingWidget extends StatelessWidget {
             preventDuplicates: false);
       },
       child: Container(
-        margin: EdgeInsets.symmetric(
+        margin: const EdgeInsets.symmetric(
           vertical: 8,
           horizontal: 16,
         ),
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 16,
         ),
-        decoration: BoxDecoration(
-          color: mainWhite,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(8),
-            topRight: Radius.circular(8),
-            bottomLeft: Radius.circular(8),
-            bottomRight: Radius.circular(8),
-          ),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 3,
-              offset: Offset(0.0, 1.0),
-              color: Colors.black.withOpacity(0.1),
-            ),
-            BoxShadow(
-              blurRadius: 2,
-              offset: Offset(0.0, 1.0),
-              color: Colors.black.withOpacity(0.06),
-            ),
-          ],
-        ),
+        decoration: kCardStyle,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
               child: Text(
                 "${post.title}",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  height: 1.5,
+                style: kSubTitle4Style,
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Text(
+              "${post.project!.projectName}",
+              style: kBody2Style.copyWith(
+                color: mainblack.withOpacity(
+                  0.6,
                 ),
               ),
             ),
             SizedBox(
-              height: 20,
-            ),
-            Text(
-              "${post.project!.projectName}",
-              style: TextStyle(
-                fontSize: 14,
-                color: mainblack.withOpacity(0.6),
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-            SizedBox(
-              height: 20,
+              height: 16,
             ),
             Container(
               child: Row(
@@ -129,13 +76,7 @@ class SearchPostingWidget extends StatelessWidget {
                   Row(
                     children: [
                       InkWell(
-                        onTap: () {
-                          Get.to(() => OtherProfileScreen(
-                                userid: post.userid,
-                                isuser: post.isuser,
-                                realname: post.realname,
-                              ));
-                        },
+                        onTap: tapProfile,
                         child: Row(
                           children: [
                             ClipOval(
@@ -150,26 +91,22 @@ class SearchPostingWidget extends StatelessWidget {
                                         width: 32,
                                         imageUrl: "${post.profileimage}",
                                         placeholder: (context, url) =>
-                                            CircleAvatar(
-                                          backgroundColor: Color(0xffe7e7e7),
-                                          child: Container(),
-                                        ),
-                                        fit: BoxFit.fill,
+                                            kProfilePlaceHolder(),
+                                        fit: BoxFit.cover,
                                       )),
                             SizedBox(
                               width: 8,
                             ),
                             Text(
                               "${post.realname} · ",
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
+                              style: kButtonStyle,
                             ),
                           ],
                         ),
                       ),
                       Text(
                         "${post.department}",
-                        style: TextStyle(fontSize: 14),
+                        style: kBody2Style,
                       ),
                     ],
                   ),
@@ -207,15 +144,7 @@ class SearchPostingWidget extends StatelessWidget {
                         //   width: 16,
                         // ),
                         InkWell(
-                          onTap: () {
-                            if (post.isMarked.value == 0) {
-                              HomeController.to.tapBookmark(post.id);
-                              post.isMarked.value = 1;
-                            } else {
-                              HomeController.to.tapunBookmark(post.id);
-                              post.isMarked.value = 0;
-                            }
-                          },
+                          onTap: tapBookmark,
                           child: post.isMarked.value == 0
                               ? SvgPicture.asset(
                                   "assets/icons/Mark_Default.svg",
@@ -233,5 +162,23 @@ class SearchPostingWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void tapBookmark() {
+    if (post.isMarked.value == 0) {
+      HomeController.to.tapBookmark(post.id);
+      post.isMarked.value = 1;
+    } else {
+      HomeController.to.tapunBookmark(post.id);
+      post.isMarked.value = 0;
+    }
+  }
+
+  void tapProfile() {
+    Get.to(() => OtherProfileScreen(
+          userid: post.userid,
+          isuser: post.isuser,
+          realname: post.realname,
+        ));
   }
 }

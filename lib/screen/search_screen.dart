@@ -262,13 +262,13 @@ class SearchScreen extends StatelessWidget {
                                                   .tabController,
                                               labelStyle: kButtonStyle,
                                               labelColor: mainblack,
-                                              unselectedLabelStyle: kBody1Style,
+                                              unselectedLabelStyle: kBody2Style,
                                               unselectedLabelColor:
                                                   mainblack.withOpacity(0.6),
                                               indicator: UnderlineIndicator(
                                                   strokeCap: StrokeCap.round,
                                                   borderSide:
-                                                      BorderSide(width: 2),
+                                                      BorderSide(width: 1.2),
                                                   insets: EdgeInsets.symmetric(
                                                       horizontal: 10.0)),
                                               isScrollable: false,

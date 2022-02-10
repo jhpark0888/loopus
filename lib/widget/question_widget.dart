@@ -4,8 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/controller/question_detail_controller.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/question_detail_screen.dart';
@@ -90,11 +88,7 @@ class QuestionWidget extends StatelessWidget {
                                               width: 32,
                                               imageUrl: item.profileimage ?? "",
                                               placeholder: (context, url) =>
-                                                  CircleAvatar(
-                                                backgroundColor:
-                                                    Color(0xffe7e7e7),
-                                                child: Container(),
-                                              ),
+                                                  kProfilePlaceHolder(),
                                               fit: BoxFit.cover,
                                             )),
                                   Text(

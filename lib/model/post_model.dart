@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
+import '../constant.dart';
+
 class Post {
   Post({
     required this.id,

@@ -108,7 +108,10 @@ class SignupUserInfoScreen extends StatelessWidget {
                     //TODO: 학교 별 다른 UX Writing
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: Text('@inu.ac.kr'),
+                      child: Text(
+                        '@inu.ac.kr',
+                        style: kSubTitle3Style,
+                      ),
                     ),
                   ],
                 ),

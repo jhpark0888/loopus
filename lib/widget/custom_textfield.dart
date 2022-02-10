@@ -34,7 +34,7 @@ class CustomTextField extends StatelessWidget {
       maxLines: maxLines,
       autofocus: true,
       style: kSubTitle3Style.copyWith(height: 1.5),
-      cursorColor: mainblack,
+      cursorColor: mainblue,
       cursorWidth: 1.2,
       cursorRadius: const Radius.circular(2),
       controller: textController,

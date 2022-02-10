@@ -69,11 +69,11 @@ class TagDetailScreen extends StatelessWidget {
                           controller: controller.tagtabController,
                           labelStyle: kButtonStyle,
                           labelColor: mainblack,
-                          unselectedLabelStyle: kBody1Style,
+                          unselectedLabelStyle: kBody2Style,
                           unselectedLabelColor: mainblack.withOpacity(0.6),
                           indicator: const UnderlineIndicator(
                             strokeCap: StrokeCap.round,
-                            borderSide: BorderSide(width: 2),
+                            borderSide: BorderSide(width: 1.2),
                           ),
                           indicatorColor: mainblack,
                           tabs: const [
@@ -115,17 +115,6 @@ class TagDetailScreen extends StatelessWidget {
                           Image.asset(
                             'assets/icons/loading.gif',
                             scale: 6,
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            '검색중...',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: mainblue.withOpacity(0.6),
-                            ),
                           ),
                         ],
                       )
@@ -180,17 +169,6 @@ class TagDetailScreen extends StatelessWidget {
                             'assets/icons/loading.gif',
                             scale: 6,
                           ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            '검색중...',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: mainblue.withOpacity(0.6),
-                            ),
-                          ),
                         ],
                       )
                     : SingleChildScrollView(
@@ -223,7 +201,7 @@ class TagDetailScreen extends StatelessWidget {
                                               ),
                                             ],
                                             style: kSubTitle1Style.copyWith(
-                                              fontWeight: FontWeight.normal,
+                                              fontWeight: FontWeight.w400,
                                             ),
                                           ),
                                         ),
@@ -348,34 +326,22 @@ class _CustomSpace extends StatelessWidget {
 
   Widget getExpendTitle(String text) {
     return Padding(
-      padding: const EdgeInsets.only(right: 16, left: 16),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          height: 1.5,
-          color: mainblack,
-          fontSize: 20.0,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
+        padding: const EdgeInsets.only(right: 16, left: 16),
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: kHeaderH1Style,
+        ));
   }
 
   Widget getCollapseTitle(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 60),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        softWrap: false,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          color: mainblack,
-          fontSize: 16.0,
-          fontWeight: FontWeight.normal,
-        ),
-      ),
+      child: Text(text,
+          textAlign: TextAlign.center,
+          softWrap: false,
+          overflow: TextOverflow.ellipsis,
+          style: kSubTitle3Style),
     );
   }
 }

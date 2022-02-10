@@ -97,7 +97,7 @@ class ProjectScreen extends StatelessWidget {
                     realname: controller.project.value.looper[i].realName));
               },
             text: controller.project.value.looper[i].realName,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: kButtonStyle,
           ),
         );
         textspanlist.add(
@@ -130,7 +130,7 @@ class ProjectScreen extends StatelessWidget {
                     realname: controller.project.value.looper[i].realName));
               },
             text: controller.project.value.looper[i].realName,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: kButtonStyle,
           ),
         );
         textspanlist.add(
@@ -153,7 +153,7 @@ class ProjectScreen extends StatelessWidget {
       );
       textspanlist.add(TextSpan(
         text: '${controller.project.value.looper.length - 2}명이',
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: kButtonStyle,
       ));
     }
     textspanlist.add(
@@ -165,11 +165,7 @@ class ProjectScreen extends StatelessWidget {
     return RichText(
       text: TextSpan(
         children: textspanlist,
-        style: TextStyle(
-          fontSize: 14,
-          color: mainblack,
-          fontFamily: 'Nanum',
-        ),
+        style: kBody2Style,
       ),
     );
   }
@@ -277,7 +273,7 @@ class ProjectScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 10,
                               color: mainblue,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           SizedBox(
@@ -307,11 +303,7 @@ class ProjectScreen extends StatelessWidget {
                               Obx(
                                 () => Text(
                                   controller.project.value.projectName,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.5,
-                                  ),
+                                  style: kHeaderH2Style,
                                 ),
                               ),
                               SizedBox(
@@ -446,13 +438,7 @@ class ProjectScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Text(
-                                '활동 소개',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              Text('활동 소개', style: kSubTitle2Style),
                               SizedBox(
                                 height: 8,
                               ),
@@ -475,10 +461,7 @@ class ProjectScreen extends StatelessWidget {
                               ),
                               Text(
                                 '활동 태그',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: kSubTitle2Style,
                               ),
                               SizedBox(
                                 height: 12,
@@ -518,9 +501,7 @@ class ProjectScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     '활동 포스팅',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
+                                    style: kSubTitle2Style,
                                   ),
                                   controller.project.value.is_user == 1
                                       ? GestureDetector(
@@ -533,11 +514,8 @@ class ProjectScreen extends StatelessWidget {
                                           },
                                           child: Text(
                                             '포스팅 작성하기',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: mainblue,
-                                            ),
+                                            style: kSubTitle2Style.copyWith(
+                                                color: mainblue),
                                           ),
                                         )
                                       : Container(),
@@ -631,10 +609,7 @@ class ProjectLooperImage extends StatelessWidget {
                     width: 28,
                     height: 28,
                     imageUrl: user.profileImage!,
-                    placeholder: (context, url) => CircleAvatar(
-                      backgroundColor: Color(0xffe7e7e7),
-                      child: Container(),
-                    ),
+                    placeholder: (context, url) => kProfilePlaceHolder(),
                     fit: BoxFit.cover,
                   )
                 : Image.asset(

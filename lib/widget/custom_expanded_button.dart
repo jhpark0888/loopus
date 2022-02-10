@@ -33,7 +33,7 @@ class CustomExpandedButton extends StatelessWidget {
           vertical: isBig == true ? 12 : 8,
         ),
         decoration: BoxDecoration(
-          color: isBlue! ? mainblue : Color(0xffe7e7e7),
+          color: isBlue! ? mainblue : const Color(0xffe7e7e7),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Obx(

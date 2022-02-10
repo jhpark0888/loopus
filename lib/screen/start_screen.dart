@@ -86,14 +86,25 @@ class StartScreen extends StatelessWidget {
                 SizedBox(
                   height: 24,
                 ),
-                Text(
-                  kOnboadingText[index],
-                  style: TextStyle(
-                    fontSize: 20,
-                    height: 1.5,
-                    fontWeight: FontWeight.bold,
-                  ),
+                RichText(
                   textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: kOnboadingTextChunk1[index],
+                          style: kHeaderH2Style),
+                      TextSpan(
+                        text: kOnboadingTextChunk2[index],
+                        style: kHeaderH2Style.copyWith(
+                          color: mainblue,
+                        ),
+                      ),
+                      TextSpan(
+                        text: kOnboadingTextChunk3[index],
+                        style: kHeaderH2Style,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

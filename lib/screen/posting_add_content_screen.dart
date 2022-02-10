@@ -59,14 +59,8 @@ class PostingAddContentScreen extends StatelessWidget {
                           //     .nodeAt(postingAddController.editorController.focus)
                           //     .unfocus();
                         },
-                        child: Text(
-                          '다음',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: mainblue,
-                          ),
-                        ),
+                        child: Text('다음',
+                            style: kSubTitle2Style.copyWith(color: mainblue)),
                       )
                     : Obx(
                         () => Get.find<PostingDetailController>(
@@ -111,14 +105,9 @@ class PostingAddContentScreen extends StatelessWidget {
                                   //     .nodeAt(postingAddController.editorController.focus)
                                   //     .unfocus();
                                 },
-                                child: Text(
-                                  '저장',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: mainblue,
-                                  ),
-                                ),
+                                child: Text('저장',
+                                    style: kSubTitle2Style.copyWith(
+                                        color: mainblue)),
                               ),
                       )
               ],

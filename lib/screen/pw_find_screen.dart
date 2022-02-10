@@ -27,7 +27,7 @@ class PwFindScreen extends StatelessWidget {
             Scaffold(
               appBar: AppBarWidget(
                 bottomBorder: false,
-                title: '비밀번호 찾기',
+                title: '비밀번호 재설정',
                 actions: [
                   TextButton(
                     onPressed: () {

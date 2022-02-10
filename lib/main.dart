@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "루프어스",
       theme: ThemeData(
-        fontFamily: 'Nanum',
+        fontFamily: 'SUIT',
         appBarTheme: const AppBarTheme(
           backgroundColor: mainWhite,
           foregroundColor: mainblack,

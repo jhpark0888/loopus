@@ -50,12 +50,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
         cancelButton: CupertinoActionSheetAction(
           child: const Text(
             '닫기',
-            style: TextStyle(
-              color: mainblack,
-              fontFamily: 'Nanum',
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-            ),
+            style: kBody2Style,
           ),
           isDefaultAction: true,
           onPressed: () {
@@ -66,11 +61,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
           CupertinoActionSheetAction(
             child: Text(
               value1,
-              style: TextStyle(
+              style: kButtonStyle.copyWith(
                 color: isValue1Red ? mainpink : mainblack,
-                fontFamily: 'Nanum',
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
               ),
             ),
             onPressed: func1,
@@ -79,11 +71,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
             CupertinoActionSheetAction(
                 child: Text(
                   value2,
-                  style: TextStyle(
+                  style: kButtonStyle.copyWith(
                     color: isValue2Red ? mainpink : mainblack,
-                    fontFamily: 'Nanum',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
                   ),
                 ),
                 onPressed: func2)
@@ -96,12 +85,12 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
     Get.dialog(
       AlertDialog(
         elevation: 0,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(8.0),
           ),
         ),
-        contentPadding: EdgeInsets.fromLTRB(
+        contentPadding: const EdgeInsets.fromLTRB(
           24,
           12,
           24,
@@ -116,8 +105,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
       ),
       barrierDismissible: false,
       barrierColor: mainblack.withOpacity(0.3),
-      transitionCurve: Curves.easeInOut,
-      transitionDuration: Duration(milliseconds: 300),
+      transitionCurve: kAnimationCurve,
+      transitionDuration: kAnimationDuration,
     );
     Future.delayed(Duration(milliseconds: duration), () {
       Get.back();
@@ -143,7 +132,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                 child: GestureDetector(
                   onTap: leftFunction,
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       border: Border(
                         right: BorderSide(
                           width: 1,
@@ -159,9 +148,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     child: Center(
                       child: Text(
                         leftText,
-                        style: kBody2Style.copyWith(
+                        style: kButtonStyle.copyWith(
                           color: mainpink,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -172,7 +160,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                 child: GestureDetector(
                   onTap: rightFunction,
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       border: Border(
                         top: BorderSide(
                           width: 1,
@@ -194,13 +182,13 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
           ),
         ],
         elevation: 0,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(8),
           ),
         ),
-        contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 20),
-        titlePadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
+        contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+        titlePadding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
         backgroundColor: Colors.white,
         title: Text(
           title,
@@ -215,8 +203,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
       ),
       barrierDismissible: false,
       barrierColor: mainblack.withOpacity(0.3),
-      transitionCurve: Curves.easeInOut,
-      transitionDuration: Duration(milliseconds: 300),
+      transitionCurve: kAnimationCurve,
+      transitionDuration: kAnimationDuration,
     );
   }
 
@@ -240,7 +228,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                 child: GestureDetector(
                   onTap: leftFunction,
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       border: Border(
                         right: BorderSide(
                           width: 1,
@@ -253,13 +241,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                       ),
                     ),
                     height: 48,
-                    child: Center(
-                      child: Text(
-                        '취소',
-                        style: kBody2Style.copyWith(
-                          color: mainblack,
-                        ),
-                      ),
+                    child: const Center(
+                      child: Text('취소', style: kBody2Style),
                     ),
                   ),
                 ),
@@ -280,7 +263,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     child: Center(
                       child: Text(
                         '확인',
-                        style: kBody2Style.copyWith(
+                        style: kButtonStyle.copyWith(
                           color: mainblue,
                         ),
                       ),
@@ -292,13 +275,13 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
           ),
         ],
         elevation: 0,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(8),
           ),
         ),
-        contentPadding: EdgeInsets.fromLTRB(16, 12, 16, 24),
-        titlePadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
+        contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        titlePadding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
         backgroundColor: Colors.white,
         title: Text(
           title,
@@ -320,8 +303,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
       ),
       barrierDismissible: false,
       barrierColor: mainblack.withOpacity(0.3),
-      transitionCurve: Curves.easeInOut,
-      transitionDuration: Duration(milliseconds: 300),
+      transitionCurve: kAnimationCurve,
+      transitionDuration: kAnimationDuration,
     );
   }
 
@@ -391,11 +374,11 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                                 isCheckThree.value == true &&
                                 isCheckFour.value == true)
                             ? kSubTitle2Style.copyWith(
-                                fontWeight: FontWeight.normal,
+                                fontWeight: FontWeight.w400,
                                 color: mainblue,
                               )
                             : kSubTitle2Style.copyWith(
-                                fontWeight: FontWeight.normal,
+                                fontWeight: FontWeight.w400,
                                 color: mainblack.withOpacity(0.6),
                               ),
                       ),
@@ -723,7 +706,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             GestureDetector(

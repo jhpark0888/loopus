@@ -24,7 +24,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         title ?? '',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        style: kSubTitle2Style,
       ),
       centerTitle: true,
       bottom: bottomBorder

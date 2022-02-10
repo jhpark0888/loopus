@@ -63,15 +63,14 @@ class PersonTileWidget extends StatelessWidget {
               children: [
                 Text(
                   user.realName,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: kSubTitle2Style,
                 ),
                 SizedBox(
-                  height: 8,
+                  height: 4,
                 ),
                 Text(
                   user.department,
-                  style: TextStyle(
-                    fontSize: 16,
+                  style: kSubTitle2Style.copyWith(
                     color: mainblack.withOpacity(0.6),
                   ),
                 ),

@@ -33,6 +33,7 @@ class Tagwidget extends StatelessWidget {
         child: Text(
           tag.tag,
           style: TextStyle(
+            fontWeight: FontWeight.w300,
             fontSize: fontSize,
             color: const Color(0xff999999),
           ),
