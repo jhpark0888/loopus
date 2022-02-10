@@ -55,10 +55,10 @@ class SearchPostingWidget extends StatelessWidget {
                 isuser: post.isuser,
                 postid: post.id,
                 title: post.title,
-                realName: post.realname,
-                department: post.department,
+                realName: post.user.realName,
+                department: post.user.department,
                 postDate: post.date,
-                profileImage: post.profileimage,
+                profileImage: post.user.profileImage,
                 thumbNail: post.thumbnail,
                 likecount: post.likeCount,
                 isLiked: post.isLiked,
@@ -133,13 +133,13 @@ class SearchPostingWidget extends StatelessWidget {
                           Get.to(() => OtherProfileScreen(
                                 userid: post.userid,
                                 isuser: post.isuser,
-                                realname: post.realname,
+                                realname: post.user.realName,
                               ));
                         },
                         child: Row(
                           children: [
                             ClipOval(
-                                child: post.profileimage == null
+                                child: post.user.profileImage == null
                                     ? Image.asset(
                                         "assets/illustrations/default_profile.png",
                                         height: 32,
@@ -148,7 +148,7 @@ class SearchPostingWidget extends StatelessWidget {
                                     : CachedNetworkImage(
                                         height: 32,
                                         width: 32,
-                                        imageUrl: "${post.profileimage}",
+                                        imageUrl: "${post.user.profileImage}",
                                         placeholder: (context, url) =>
                                             CircleAvatar(
                                           backgroundColor: Color(0xffe7e7e7),
@@ -160,7 +160,7 @@ class SearchPostingWidget extends StatelessWidget {
                               width: 8,
                             ),
                             Text(
-                              "${post.realname} · ",
+                              "${post.user.realName} · ",
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
@@ -168,7 +168,7 @@ class SearchPostingWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "${post.department}",
+                        "${post.user.department}",
                         style: TextStyle(fontSize: 14),
                       ),
                     ],

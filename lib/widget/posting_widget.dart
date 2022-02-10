@@ -127,7 +127,8 @@ class PostingWidget extends StatelessWidget {
                                                   height: 32,
                                                   width: 32,
                                                   child: ClipOval(
-                                                    child: item.profileimage ==
+                                                    child: item.user
+                                                                .profileImage ==
                                                             null
                                                         ? Image.asset(
                                                             "assets/illustrations/default_profile.png")
@@ -135,7 +136,7 @@ class PostingWidget extends StatelessWidget {
                                                             height: 32,
                                                             width: 32,
                                                             imageUrl:
-                                                                "${item.profileimage}",
+                                                                "${item.user.profileImage}",
                                                             placeholder:
                                                                 (context,
                                                                         url) =>
@@ -153,12 +154,12 @@ class PostingWidget extends StatelessWidget {
                                                 const SizedBox(
                                                   width: 8,
                                                 ),
-                                                Text("${item.realname} · ",
+                                                Text("${item.user.realName} · ",
                                                     style: kButtonStyle),
                                               ],
                                             ),
                                           ),
-                                          Text("${item.department}",
+                                          Text("${item.user.department}",
                                               style: kBody2Style),
                                         ],
                                       ),
@@ -259,10 +260,10 @@ class PostingWidget extends StatelessWidget {
             isuser: item.isuser,
             postid: item.id,
             title: item.title,
-            realName: item.realname,
-            department: item.department,
+            realName: item.user.realName,
+            department: item.user.department,
             postDate: item.date,
-            profileImage: item.profileimage,
+            profileImage: item.user.profileImage,
             thumbNail: item.thumbnail,
             likecount: item.likeCount,
             isLiked: item.isLiked,
@@ -301,7 +302,7 @@ class PostingWidget extends StatelessWidget {
     Get.to(() => OtherProfileScreen(
           userid: item.userid,
           isuser: item.isuser,
-          realname: item.realname,
+          realname: item.user.realName,
         ));
   }
 }

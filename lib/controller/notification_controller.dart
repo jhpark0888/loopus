@@ -41,15 +41,20 @@ class NotificationController extends GetxController {
                           issending: true.obs),
                       user: Get.find<MessageDetailController>(
                               tag: event.data["id"].toString())
-                          .user));
+                          .user!
+                          .value));
         } catch (e) {
-          print(e);
+          ModalController.to.showCustomSnackbar(
+            event.notification!.title,
+            event.notification!.body,
+          );
         }
+      } else {
+        ModalController.to.showCustomSnackbar(
+          event.notification!.title,
+          event.notification!.body,
+        );
       }
-      ModalController.to.showCustomSnackbar(
-        event.notification!.title,
-        event.notification!.body,
-      );
 
       print(event.notification!.body);
     });

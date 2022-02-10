@@ -46,13 +46,13 @@ class QuestionAnswerWidget extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Get.to(() => OtherProfileScreen(
-                            userid: answer.user,
+                            userid: answer.userid,
                             isuser: answer.isuser,
-                            realname: answer.realname!,
+                            realname: answer.user.realName,
                           ));
                     },
                     child: ClipOval(
-                        child: answer.profileimage == ""
+                        child: answer.user.profileImage == ""
                             ? Image.asset(
                                 "assets/illustrations/default_profile.png",
                                 height: 32,
@@ -61,7 +61,7 @@ class QuestionAnswerWidget extends StatelessWidget {
                             : CachedNetworkImage(
                                 height: 32,
                                 width: 32,
-                                imageUrl: answer.profileimage!,
+                                imageUrl: answer.user.profileImage!,
                                 placeholder: (context, url) => CircleAvatar(
                                   backgroundColor: Color(0xffe7e7e7),
                                   child: Container(),
@@ -89,15 +89,15 @@ class QuestionAnswerWidget extends StatelessWidget {
                                   // profileController.isProfileLoading(true);
 
                                   Get.to(() => OtherProfileScreen(
-                                        userid: answer.user,
+                                        userid: answer.userid,
                                         isuser: answer.isuser,
-                                        realname: answer.realname!,
+                                        realname: answer.user.realName,
                                       ));
                                 },
                                 child: Row(
                                   children: [
                                     Text(
-                                      "${answer.realname}",
+                                      "${answer.user.realName}",
                                       style: kButtonStyle,
                                     ),
                                     Text(

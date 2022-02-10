@@ -36,12 +36,6 @@ class OtherProfileScreen extends StatelessWidget {
   late OtherProfileController controller =
       Get.put(OtherProfileController(userid), tag: userid.toString());
 
-  late MessageDetailController messagecontroller = Get.put(
-      MessageDetailController(
-        controller.otherUser.value,
-      ),
-      tag: controller.otherUser.value.userid.toString());
-
   final ImageController imageController = Get.put(ImageController());
   int userid;
   int isuser;
@@ -125,17 +119,6 @@ class OtherProfileScreen extends StatelessWidget {
                           'assets/icons/loading.gif',
                           scale: 6,
                         ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          '프로필 새로고침 중...',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: mainblue.withOpacity(0.6),
-                          ),
-                        ),
                       ],
                     ),
                     releaseIcon: Column(
@@ -143,17 +126,6 @@ class OtherProfileScreen extends StatelessWidget {
                         Image.asset(
                           'assets/icons/loading.gif',
                           scale: 6,
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          '프로필 새로고침 중...',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: mainblue.withOpacity(0.6),
-                          ),
                         ),
                       ],
                     ),
@@ -163,17 +135,6 @@ class OtherProfileScreen extends StatelessWidget {
                           Icons.check_rounded,
                           color: mainblue,
                         ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          '완료!',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: mainblue.withOpacity(0.6),
-                          ),
-                        ),
                       ],
                     ),
                     idleIcon: Column(
@@ -181,17 +142,6 @@ class OtherProfileScreen extends StatelessWidget {
                         Image.asset(
                           'assets/icons/loading.png',
                           scale: 12,
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          '당겨주세요',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: mainblue.withOpacity(0.6),
-                          ),
                         ),
                       ],
                     ),
@@ -368,9 +318,22 @@ class OtherProfileScreen extends StatelessWidget {
                                                 () => ProfileTagChangeScreen());
                                           }
                                         : () {
+                                            MessageDetailController
+                                                messagecontroller = Get.put(
+                                                    MessageDetailController(
+                                                        userid: userid,
+                                                        user: controller
+                                                            .otherUser),
+                                                    tag: controller
+                                                        .otherUser.value.userid
+                                                        .toString());
                                             messagecontroller
                                                 .messageroomrefresh();
                                             Get.to(() => MessageDetailScreen(
+                                                  realname: controller
+                                                      .otherUser.value.realName,
+                                                  userid: controller
+                                                      .otherUser.value.userid,
                                                   user: controller
                                                       .otherUser.value,
                                                 ));

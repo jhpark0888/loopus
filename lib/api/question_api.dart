@@ -57,6 +57,7 @@ Future<dynamic> getquestionlist(int lastindex, String type) async {
 }
 
 Future<QuestionItem> getquestion(int questionid) async {
+  print(questionid);
   String? token;
   await FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;

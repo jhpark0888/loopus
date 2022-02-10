@@ -72,7 +72,7 @@ class SearchQuestionWidget extends StatelessWidget {
                       child: Row(
                         children: [
                           ClipOval(
-                            child: item.profileimage == null
+                            child: item.user.profileImage == null
                                 ? ClipOval(
                                     child: Image.asset(
                                       "assets/illustrations/default_profile.png",
@@ -83,7 +83,7 @@ class SearchQuestionWidget extends StatelessWidget {
                                 : CachedNetworkImage(
                                     height: 32,
                                     width: 32,
-                                    imageUrl: item.profileimage!,
+                                    imageUrl: item.user.profileImage!,
                                     placeholder: (context, url) => CircleAvatar(
                                       backgroundColor: Color(0xffe7e7e7),
                                       child: Container(),
@@ -94,12 +94,12 @@ class SearchQuestionWidget extends StatelessWidget {
                           SizedBox(
                             width: 8,
                           ),
-                          Text("${item.realname} · ", style: kButtonStyle),
+                          Text("${item.user.realName} · ", style: kButtonStyle),
                         ],
                       ),
                     ),
                     Text(
-                      "${item.department}",
+                      "${item.user.department}",
                       style: TextStyle(fontSize: 14),
                     ),
                   ],
@@ -137,16 +137,16 @@ class SearchQuestionWidget extends StatelessWidget {
     Get.to(() => QuestionDetailScreen(
           questionid: item.id,
           isuser: item.isuser,
-          realname: item.realname,
+          realname: item.user.realName,
         ));
   }
 
   void tapProfile() {
     // AppController.to.ismyprofile.value = false;
     Get.to(() => OtherProfileScreen(
-          userid: item.user,
+          userid: item.userid,
           isuser: item.isuser,
-          realname: item.realname,
+          realname: item.user.realName,
         ));
   }
 }

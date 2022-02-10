@@ -124,7 +124,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                         child: Row(
                           children: [
                             ClipOval(
-                                child: project.profileimage == null
+                                child: project.user!.profileImage == null
                                     ? Image.asset(
                                         "assets/illustrations/default_profile.png",
                                         height: 32,
@@ -133,7 +133,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                                     : CachedNetworkImage(
                                         height: 32,
                                         width: 32,
-                                        imageUrl: project.profileimage!,
+                                        imageUrl: project.user!.profileImage!,
                                         placeholder: (context, url) =>
                                             CircleAvatar(
                                           backgroundColor: Color(0xffe7e7e7),
@@ -144,12 +144,13 @@ class SearchTagProjectWidget extends StatelessWidget {
                             SizedBox(
                               width: 8,
                             ),
-                            Text("${project.realname} · ", style: kButtonStyle),
+                            Text("${project.user!.realName} · ",
+                                style: kButtonStyle),
                           ],
                         ),
                       ),
                       Text(
-                        "${project.department}",
+                        "${project.user!.department}",
                         style: TextStyle(fontSize: 14),
                       ),
                     ],
@@ -191,7 +192,7 @@ class SearchTagProjectWidget extends StatelessWidget {
     Get.to(() => OtherProfileScreen(
           userid: project.userid!,
           isuser: project.is_user,
-          realname: project.realname!,
+          realname: project.user!.realName,
         ));
   }
 

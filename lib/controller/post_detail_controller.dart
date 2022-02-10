@@ -4,7 +4,9 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/constant.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/post_content_widget.dart';
 import 'package:loopus/widget/search_posting_widget.dart';
 
@@ -26,11 +28,18 @@ class PostingDetailController extends GetxController {
           contents: [],
           likeCount: 0.obs,
           isLiked: 0.obs,
-          realname: '',
-          department: '',
-          profileimage: null,
           isMarked: 0.obs,
-          isuser: 0)
+          isuser: 0,
+          user: User(
+              userid: 0,
+              realName: "",
+              type: 0,
+              department: "",
+              loopcount: 0.obs,
+              totalposting: 0,
+              isuser: 0,
+              profileTag: [],
+              looped: FollowState.normal.obs))
       .obs;
   RxList<PostContentWidget> postcontentlist = <PostContentWidget>[].obs;
   List<SearchPostingWidget> recommendposts = <SearchPostingWidget>[];

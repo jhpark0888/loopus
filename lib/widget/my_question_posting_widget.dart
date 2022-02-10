@@ -47,7 +47,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
           Get.to(() => QuestionDetailScreen(
                 questionid: item.id,
                 isuser: item.isuser,
-                realname: item.realname,
+                realname: item.user.realName,
               ));
           print("click posting");
         },
@@ -85,7 +85,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
                   Row(
                     children: [
                       ClipOval(
-                          child: item.profileimage == null
+                          child: item.user.profileImage == null
                               ? Image.asset(
                                   "assets/illustrations/default_profile.png",
                                   height: 32,
@@ -94,7 +94,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
                               : CachedNetworkImage(
                                   height: 32,
                                   width: 32,
-                                  imageUrl: item.profileimage ?? "",
+                                  imageUrl: item.user.profileImage ?? "",
                                   placeholder: (context, url) => CircleAvatar(
                                     backgroundColor: const Color(0xffe7e7e7),
                                     child: Container(),
@@ -105,7 +105,7 @@ class MyQuestionPostingWidget extends StatelessWidget {
                         width: 8,
                       ),
                       Text(
-                        "${item.realname}",
+                        "${item.user.realName}",
                         style: kButtonStyle.copyWith(
                           color: mainblack.withOpacity(0.6),
                         ),

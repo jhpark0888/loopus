@@ -7,15 +7,14 @@ import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/api/chat_api.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/message_widget.dart';
 
 class MessageDetailController extends GetxController {
   static MessageDetailController get to => Get.find();
-  MessageDetailController(
-    this.user,
-  );
+  MessageDetailController({required this.userid, this.user});
 
   RxList<MessageWidget> messagelist = <MessageWidget>[].obs;
   FocusNode messagefocus = FocusNode();
@@ -27,7 +26,18 @@ class MessageDetailController extends GetxController {
   RxBool isSendButtonon = false.obs;
 
   String username = "";
-  User user;
+  int userid;
+  Rx<User>? user = User(
+          userid: 0,
+          realName: "",
+          type: 0,
+          department: "",
+          loopcount: 0.obs,
+          totalposting: 0,
+          isuser: 0,
+          profileTag: [],
+          looped: FollowState.normal.obs)
+      .obs;
 
   RxDouble textFormHeight = 0.0.obs;
   Rx<GlobalKey> textFieldBoxKey = GlobalKey().obs;
@@ -44,10 +54,7 @@ class MessageDetailController extends GetxController {
 
   void messageroomrefresh() {
     isMessageListLoading(true);
-    getmessagelist(user.userid).then((value) {
-      messagelist(value
-          .map((message) => MessageWidget(message: message, user: user))
-          .toList());
+    getmessagelist(userid).then((value) {
       isMessageListLoading(false);
     });
   }

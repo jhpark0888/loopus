@@ -3,7 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/model/project_model.dart';
 
 import 'package:loopus/model/user_model.dart';
@@ -107,6 +110,54 @@ Future<User?> updateProfile(
     if (kDebugMode) {
       print("profile status code : ${response.statusCode}");
     }
+  }
+}
+
+Future<void> putpwchange() async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+  ModalController _modalController = Get.put(ModalController());
+  PwChangeController pwChangeController = Get.find();
+
+  Uri uri = Uri.parse('$serverUri/user_api/password?type=change');
+
+  //이메일 줘야 됨
+  final password = {
+    'origin_pw': pwChangeController.originpwcontroller.text,
+    'new_pw': pwChangeController.newpwcontroller.text,
+  };
+  http.Response response = await http.put(uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Token $token',
+      },
+      body: json.encode(password));
+
+  print("비밀번호 변경 : ${response.statusCode}");
+  if (response.statusCode == 200) {
+    Get.back();
+    _modalController.showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
+  } else if (response.statusCode == 401) {
+    _modalController.showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
+    print('에러1');
+  } else {
+    _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+    print('에러');
+  }
+}
+
+Future postlogout() async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+  print('user token: $token');
+
+  var uri = Uri.parse("$serverUri/user_api/resign");
+
+  http.Response response =
+      await http.delete(uri, headers: {"Authorization": "Token $token"});
+
+  print("로그아웃: ${response.statusCode}");
+  if (response.statusCode == 200) {
+  } else {
+    return Future.error(response.statusCode);
   }
 }
 

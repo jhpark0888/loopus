@@ -3,7 +3,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/model/question_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/question_answer_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
@@ -26,19 +28,26 @@ class QuestionDetailController extends GetxController {
   RxBool check_alarm = false.obs;
   RxBool isDropdown = false.obs;
   Rx<QuestionItem> question = QuestionItem(
-    id: 0,
-    user: 0,
-    isuser: 0,
-    content: '',
-    answercount: 0,
-    answer: [],
-    adopt: false,
-    date: DateTime.now(),
-    department: '',
-    questionTag: [],
-    realname: '',
-    profileimage: '',
-  ).obs;
+          id: 0,
+          userid: 0,
+          isuser: 0,
+          content: '',
+          answercount: 0,
+          answer: [],
+          adopt: false,
+          date: DateTime.now(),
+          questionTag: [],
+          user: User(
+              userid: 0,
+              realName: "",
+              type: 0,
+              department: "",
+              loopcount: 0.obs,
+              totalposting: 0,
+              isuser: 0,
+              profileTag: [],
+              looped: FollowState.normal.obs))
+      .obs;
 
   int questionid;
 

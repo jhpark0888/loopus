@@ -56,15 +56,15 @@ class QuestionDetailWidget extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             Get.to(() => OtherProfileScreen(
-                                  userid: question.user,
+                                  userid: question.userid,
                                   isuser: question.isuser,
-                                  realname: question.realname,
+                                  realname: question.user.realName,
                                 ));
                           },
                           child: Row(
                             children: [
                               ClipOval(
-                                  child: question.profileimage == null
+                                  child: question.user.profileImage == null
                                       ? Image.asset(
                                           "assets/illustrations/default_profile.png",
                                           height: 32,
@@ -73,7 +73,7 @@ class QuestionDetailWidget extends StatelessWidget {
                                       : CachedNetworkImage(
                                           height: 32,
                                           width: 32,
-                                          imageUrl: question.profileimage!,
+                                          imageUrl: question.user.profileImage!,
                                           placeholder: (context, url) =>
                                               CircleAvatar(
                                             child: Center(
@@ -86,14 +86,14 @@ class QuestionDetailWidget extends StatelessWidget {
                                 width: 8,
                               ),
                               Text(
-                                "${question.realname} · ",
+                                "${question.user.realName} · ",
                                 style: kButtonStyle,
                               ),
                             ],
                           ),
                         ),
                       ),
-                      Text("${question.department}", style: kBody2Style),
+                      Text("${question.user.department}", style: kBody2Style),
                     ],
                   ),
                   Text(
