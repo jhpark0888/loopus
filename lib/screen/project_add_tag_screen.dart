@@ -15,6 +15,8 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 import 'package:loopus/widget/tagsearchwidget.dart';
 
+import '../controller/modal_controller.dart';
+
 class ProjectAddTagScreen extends StatelessWidget {
   ProjectAddTagScreen({
     Key? key,
@@ -104,6 +106,8 @@ class ProjectAddTagScreen extends StatelessWidget {
                                     .value = false;
                               });
                               Get.back();
+                              ModalController.to
+                                  .showCustomDialog('변경이 완료되었어요', 1000);
                             }
                           },
                           child: Obx(
@@ -156,7 +160,7 @@ class ProjectAddTagScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 16,
+                        height: 12,
                       ),
                       Text(
                         '나중에 얼마든지 변경할 수 있어요',

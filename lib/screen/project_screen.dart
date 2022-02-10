@@ -77,7 +77,7 @@ class ProjectScreen extends StatelessWidget {
                   realname: controller.project.value.looper.first.realName));
             },
           text: controller.project.value.looper.first.realName,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: kButtonStyle,
         ),
       );
       textspanlist.add(
@@ -317,12 +317,8 @@ class ProjectScreen extends StatelessWidget {
                                     Row(
                                       children: [
                                         Text(
-                                          '${DateFormat("yy.MM.dd").format(controller.project.value.startDate ?? DateTime(2022))} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate ?? DateTime(2022)) : ''}',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+                                            '${DateFormat("yy.MM.dd").format(controller.project.value.startDate ?? DateTime(2022))} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate ?? DateTime(2022)) : ''}',
+                                            style: kSubTitle2Style),
                                         SizedBox(
                                           width: (controller
                                                       .project.value.endDate ==
@@ -331,7 +327,7 @@ class ProjectScreen extends StatelessWidget {
                                               : 8,
                                         ),
                                         Container(
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                             horizontal: 8,
                                             vertical: 4,
                                           ),
@@ -364,8 +360,8 @@ class ProjectScreen extends StatelessWidget {
                                                 fontWeight: (controller.project
                                                             .value.endDate ==
                                                         null)
-                                                    ? FontWeight.normal
-                                                    : FontWeight.bold,
+                                                    ? FontWeight.w400
+                                                    : FontWeight.w500,
                                                 fontSize: 14,
                                                 color: (controller.project.value
                                                             .endDate ==
@@ -391,12 +387,8 @@ class ProjectScreen extends StatelessWidget {
                                             width: 4,
                                           ),
                                           Text(
-                                            '${controller.project.value.like_count!.value}',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
+                                              '${controller.project.value.like_count!.value}',
+                                              style: kButtonStyle),
                                         ],
                                       ),
                                     )
@@ -438,8 +430,8 @@ class ProjectScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Text('활동 소개', style: kSubTitle2Style),
-                              SizedBox(
+                              const Text('활동 소개', style: kSubTitle2Style),
+                              const SizedBox(
                                 height: 8,
                               ),
                               Obx(
@@ -453,17 +445,18 @@ class ProjectScreen extends StatelessWidget {
                                     : Text(
                                         '-',
                                         style: kBody1Style.copyWith(
-                                            color: mainblack.withOpacity(0.6)),
+                                          color: mainblack.withOpacity(0.6),
+                                        ),
                                       ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 24,
                               ),
-                              Text(
+                              const Text(
                                 '활동 태그',
                                 style: kSubTitle2Style,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 12,
                               ),
                               Obx(
@@ -482,7 +475,7 @@ class ProjectScreen extends StatelessWidget {
                                                     controller.project.value
                                                             .projectTag.length -
                                                         1
-                                                ? SizedBox(
+                                                ? const SizedBox(
                                                     width: 8,
                                                   )
                                                 : Container()
@@ -492,14 +485,14 @@ class ProjectScreen extends StatelessWidget {
                                       .toList(),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 28,
                               ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
+                                  const Text(
                                     '활동 포스팅',
                                     style: kSubTitle2Style,
                                   ),
@@ -521,7 +514,7 @@ class ProjectScreen extends StatelessWidget {
                                       : Container(),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 16,
                               ),
                               Obx(
@@ -531,7 +524,7 @@ class ProjectScreen extends StatelessWidget {
                                       ? controller.postinglist
                                       : (controller.project.value.is_user == 1)
                                           ? [
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 20,
                                               ),
                                               Text(
@@ -540,20 +533,21 @@ class ProjectScreen extends StatelessWidget {
                                                   color: mainblack,
                                                 ),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 16,
                                               ),
                                               Text(
                                                 '포스팅을 통해 경험한 순간들을 남겨 보세요',
                                                 style: kButtonStyle.copyWith(
-                                                  color: mainblue,
+                                                  color: mainblack
+                                                      .withOpacity(0.6),
                                                 ),
                                               ),
                                             ]
                                           : [
                                               Padding(
                                                 padding: const EdgeInsets.only(
-                                                    top: 12.0),
+                                                    top: 8.0),
                                                 child: Text(
                                                   '아직 작성한 포스팅이 없어요',
                                                   style:

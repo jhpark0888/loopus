@@ -90,7 +90,7 @@ class OtherProfileScreen extends StatelessWidget {
                       '프로필 받아오는 중...',
                       style: TextStyle(
                         fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                         color: mainblue.withOpacity(0.6),
                       ),
                     ),
@@ -208,14 +208,9 @@ class OtherProfileScreen extends StatelessWidget {
                                                             .otherUser
                                                             .value
                                                             .profileImage!,
-                                                        placeholder:
-                                                            (context, url) =>
-                                                                CircleAvatar(
-                                                          backgroundColor:
-                                                              const Color(
-                                                                  0xffe7e7e7),
-                                                          child: Container(),
-                                                        ),
+                                                        placeholder: (context,
+                                                                url) =>
+                                                            kProfilePlaceHolder(),
                                                         fit: BoxFit.cover,
                                                       )
                                                     : Image.asset(
@@ -525,6 +520,7 @@ class OtherProfileScreen extends StatelessWidget {
                                               '활동 받아오는 중...',
                                               style: TextStyle(
                                                   fontSize: 10,
+                                                  fontWeight: FontWeight.w500,
                                                   color: mainblue),
                                             ),
                                           ],

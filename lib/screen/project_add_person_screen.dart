@@ -15,6 +15,8 @@ import 'package:loopus/screen/project_add_thumbnail_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 
+import '../controller/modal_controller.dart';
+
 class ProjectAddPersonScreen extends StatelessWidget {
   ProjectAddPersonScreen({
     Key? key,
@@ -50,6 +52,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                         style: kSubTitle2Style.copyWith(
                           color: mainblue,
                         ),
+                        textAlign: TextAlign.end,
                       ),
                     ),
                   ),
@@ -91,6 +94,8 @@ class ProjectAddPersonScreen extends StatelessWidget {
                                   .value = false;
                             });
                             Get.back();
+                            ModalController.to
+                                .showCustomDialog('변경이 완료되었어요', 1000);
                           },
                           child: Obx(
                             () => Text(
@@ -143,7 +148,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: 16,
+                      height: 12,
                     ),
                     Text(
                       '팔로잉 중인 학생만 추가할 수 있어요',
@@ -192,16 +197,11 @@ class ProjectAddPersonScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    '팔로잉 중인 사람',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                  Text('팔로잉 중인 사람', style: kSubTitle2Style),
                   Obx(
                     () => Text(
-                      '${projectaddcontroller.looppersonlist.value.length}명',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
+                        '${projectaddcontroller.looppersonlist.value.length}명',
+                        style: kSubTitle2Style),
                   ),
                 ],
               ),

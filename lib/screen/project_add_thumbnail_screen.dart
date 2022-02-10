@@ -5,13 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
-import 'package:loopus/controller/tag_controller.dart';
-import 'package:loopus/model/project_model.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/blue_button.dart';
 
 class ProjectAddThumbnailScreen extends StatelessWidget {
   ProjectAddThumbnailScreen({
@@ -97,6 +96,8 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                                         .value = false;
                                   });
                                   Get.back();
+                                  ModalController.to
+                                      .showCustomDialog('변경이 완료되었어요', 1000);
                                 },
                                 child: Text(
                                   '저장',
@@ -139,7 +140,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: 12,
                   ),
                   const Text(
                     '나중에 변경할 수 있어요',
@@ -148,33 +149,20 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  GestureDetector(
-                    onTap: () async {
-                      imageController.isThumbnailImagePickerLoading.value =
-                          true;
-                      await imageController
-                          .getcropImage(ImageType.thumbnail)
-                          .then((value) {
-                        projectAddController.projectthumbnail(value);
+                  BlueTextButton(
+                      onTap: () async {
                         imageController.isThumbnailImagePickerLoading.value =
-                            false;
-                      });
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: mainblue,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 16,
-                        ),
-                        child: Text('대표 사진 변경하기',
-                            style: kButtonStyle.copyWith(color: mainWhite)),
-                      ),
-                    ),
-                  ),
+                            true;
+                        await imageController
+                            .getcropImage(ImageType.thumbnail)
+                            .then((value) {
+                          projectAddController.projectthumbnail(value);
+                          imageController.isThumbnailImagePickerLoading.value =
+                              false;
+                        });
+                      },
+                      text: '대표 사진 변경하기',
+                      hoverTag: '활동 대표 사진 변경하기'),
                   const SizedBox(height: 40),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -229,7 +217,7 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                                 ),
                               ),
                               ClipRRect(
-                                borderRadius: BorderRadius.only(
+                                borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(8),
                                   bottomRight: Radius.circular(8),
                                 ),
@@ -255,9 +243,8 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                                         children: [
                                           Obx(
                                             () => (projectAddController
-                                                        .selectedEndDateTime
-                                                        .value !=
-                                                    '')
+                                                        .isEndedProject.value ==
+                                                    true)
                                                 ? Text(
                                                     '${DateFormat("yy.MM.dd").format(DateTime.parse(projectAddController.selectedStartDateTime.value))} ~ ${DateFormat("yy.MM.dd").format(DateTime.parse(projectAddController.selectedEndDateTime.value))}',
                                                     style: kSubTitle2Style,
@@ -316,9 +303,8 @@ class ProjectAddThumbnailScreen extends StatelessWidget {
                                                                       .isEndedProject
                                                                       .value ==
                                                                   false)
-                                                              ? FontWeight
-                                                                  .normal
-                                                              : FontWeight.bold,
+                                                              ? FontWeight.w400
+                                                              : FontWeight.w500,
                                                       color: (projectAddController
                                                                   .isEndedProject
                                                                   .value ==
