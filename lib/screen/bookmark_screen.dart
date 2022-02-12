@@ -157,7 +157,10 @@ class BookmarkScreen extends StatelessWidget {
                                     Text(
                                       '북마크한 포스팅 받아오는 중...',
                                       style: TextStyle(
-                                          fontSize: 10, color: mainblue),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 10,
+                                        color: mainblue,
+                                      ),
                                     )
                                   ],
                                 ),

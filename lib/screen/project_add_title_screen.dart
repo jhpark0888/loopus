@@ -11,6 +11,7 @@ import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
+import '../controller/modal_controller.dart';
 import '../utils/check_form_validate.dart';
 
 class ProjectAddTitleScreen extends StatelessWidget {
@@ -92,6 +93,8 @@ class ProjectAddTitleScreen extends StatelessWidget {
                                     .value = false;
                               });
                               Get.back();
+                              ModalController.to
+                                  .showCustomDialog('변경이 완료되었어요', 1000);
                             }
                           },
                           child: Obx(
@@ -138,7 +141,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 16,
+                height: 12,
               ),
               const Text(
                 '어떤 활동인지 잘 드러나는 이름을 입력해주세요',

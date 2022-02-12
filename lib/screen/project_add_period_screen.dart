@@ -44,9 +44,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                             : () {},
                     child: Text(
                       '다음',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      style: kSubTitle2Style.copyWith(
                         color: projectaddcontroller.isDateValidated.value
                             ? mainblue
                             : mainblack.withOpacity(0.38),
@@ -66,9 +64,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                       : TextButton(
                           onPressed: () async {
                             if (projectaddcontroller.isDateValidated.value ==
-                                    true &&
-                                projectaddcontroller.isDateChange.value ==
-                                    true) {
+                                true) {
                               Get.find<ProjectDetailController>(
                                       tag: projectid.toString())
                                   .isProjectUpdateLoading
@@ -96,20 +92,18 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                                     .value = false;
                               });
                               Get.back();
+                              ModalController.to
+                                  .showCustomDialog('변경이 완료되었어요', 1000);
                             }
                           },
                           child: Text(
                             '저장',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: (projectaddcontroller
-                                              .isDateValidated.value ==
-                                          true &&
-                                      projectaddcontroller.isDateChange.value ==
+                            style: kSubTitle2Style.copyWith(
+                              color:
+                                  (projectaddcontroller.isDateValidated.value ==
                                           true)
-                                  ? mainblue
-                                  : mainblack.withOpacity(0.38),
+                                      ? mainblue
+                                      : mainblack.withOpacity(0.38),
                             ),
                           ),
                         ),
@@ -146,7 +140,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 16,
+                  height: 12,
                 ),
                 Text(
                   '아직 종료되지 않은 활동이어도 괜찮아요',

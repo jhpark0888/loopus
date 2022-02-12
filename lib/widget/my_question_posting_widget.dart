@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/question_detail_controller.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/screen/question_detail_screen.dart';
 import 'package:loopus/widget/tag_widget.dart';

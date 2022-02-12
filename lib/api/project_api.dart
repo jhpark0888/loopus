@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
@@ -65,6 +66,7 @@ Future addproject() async {
     Get.back();
     Get.back();
     Get.back();
+
     String responsebody = await response.stream.bytesToString();
     Map<String, dynamic> responsemap = json.decode(responsebody);
     Project project = Project.fromJson(responsemap);
@@ -78,6 +80,7 @@ Future addproject() async {
           project: project.obs,
           type: ProjectWidgetType.profile,
         ));
+    ModalController.to.showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
   }
 }
 

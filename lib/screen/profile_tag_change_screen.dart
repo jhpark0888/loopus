@@ -74,13 +74,26 @@ class ProfileTagChangeScreen extends StatelessWidget {
                             12,
                           ),
                           child: Column(
-                            children: const [
-                              Text(
-                                '어떤 태그로 변경하시겠어요?',
-                                style: kSubTitle1Style,
+                            children: [
+                              RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: '어떤 태그',
+                                      style: kSubTitle2Style.copyWith(
+                                        color: mainblue,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: '로 변경하시겠어요?',
+                                      style: kSubTitle2Style,
+                                    ),
+                                  ],
+                                ),
                               ),
                               SizedBox(
-                                height: 16,
+                                height: 12,
                               ),
                               Text(
                                 '관심태그와 관련된 포스팅과 질문을 추천해드려요',

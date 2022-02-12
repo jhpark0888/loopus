@@ -11,6 +11,8 @@ import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
+import '../controller/modal_controller.dart';
+
 class ProjectAddIntroScreen extends StatelessWidget {
   ProjectAddIntroScreen({
     Key? key,
@@ -39,15 +41,10 @@ class ProjectAddIntroScreen extends StatelessWidget {
                     () => Padding(
                       padding: const EdgeInsets.only(right: 4.0),
                       child: Text(
-                        (projectaddcontroller.isIntroTextEmpty.value == true)
-                            ? '건너뛰기'
-                            : '다음',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: mainblue,
-                        ),
-                      ),
+                          (projectaddcontroller.isIntroTextEmpty.value == true)
+                              ? '건너뛰기'
+                              : '다음',
+                          style: kSubTitle2Style.copyWith(color: mainblue)),
                     ),
                   ),
                 )
@@ -88,15 +85,11 @@ class ProjectAddIntroScreen extends StatelessWidget {
                                   .value = false;
                             });
                             Get.back();
+                            ModalController.to
+                                .showCustomDialog('변경이 완료되었어요', 1000);
                           },
-                          child: Text(
-                            '저장',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: mainblue,
-                            ),
-                          ),
+                          child: Text('저장',
+                              style: kSubTitle2Style.copyWith(color: mainblue)),
                         ),
                 )
         ],
@@ -134,7 +127,7 @@ class ProjectAddIntroScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 16,
+                height: 12,
               ),
               Text(
                 '지금 적지 않아도 나중에 추가할 수 있어요',

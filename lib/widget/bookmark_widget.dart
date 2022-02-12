@@ -71,28 +71,21 @@ class BookmarkWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  child: Text(
-                    "${item.title}",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      height: 1.5,
+                  child: Text("${item.title}", style: kSubTitle4Style),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  "${item.project!.projectName}",
+                  style: kBody2Style.copyWith(
+                    color: mainblack.withOpacity(
+                      0.6,
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "${item.project!.projectName}",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: mainblack.withOpacity(0.6),
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
+                  height: 16,
                 ),
                 Container(
                   child: Row(
@@ -126,11 +119,7 @@ class BookmarkWidget extends StatelessWidget {
                                             imageUrl:
                                                 "${item.user.profileImage}",
                                             placeholder: (context, url) =>
-                                                CircleAvatar(
-                                              backgroundColor:
-                                                  const Color(0xffe7e7e7),
-                                              child: Container(),
-                                            ),
+                                                kProfilePlaceHolder(),
                                             fit: BoxFit.fill,
                                           )),
                                 SizedBox(
@@ -138,16 +127,14 @@ class BookmarkWidget extends StatelessWidget {
                                 ),
                                 Text(
                                   "${item.user.realName} · ",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
+                                  style: kButtonStyle,
                                 ),
                               ],
                             ),
                           ),
                           Text(
                             "${item.user.department}",
-                            style: TextStyle(fontSize: 14),
+                            style: kBody2Style,
                           ),
                         ],
                       ),
@@ -167,7 +154,7 @@ class BookmarkWidget extends StatelessWidget {
                             ),
                             Text(
                               "${item.likeCount.value}",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: kButtonStyle,
                             ),
                             SizedBox(
                               width: 16,

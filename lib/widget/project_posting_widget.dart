@@ -158,15 +158,15 @@ class ProjectPostingWidget extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Text(
                                 item.likeCount.value != 0
-                                    ? "${item.likeCount.value}개"
-                                    : '',
+                                    ? "${item.likeCount.value}   \u200B"
+                                    : ' \u200B',
                                 style: kButtonStyle,
                               ),
                             ),
                           ),
                         ),
                         SizedBox(
-                          width: 16,
+                          width: 8,
                         ),
                         Obx(() => InkWell(
                             onTap: () {
