@@ -7,6 +7,6 @@ class InitBinding implements Bindings {
   @override
   void dependencies() {
     Get.put(AppController());
-    Get.put(NotificationController());
+    // Get.put(NotificationController());
   }
 }

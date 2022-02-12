@@ -213,6 +213,8 @@ class ProjectModifyScreen extends StatelessWidget {
   }
 
   void projectthumbnailinput() {
+    projectnameinput();
+    projectdateinput();
     projectaddcontroller.projecturlthumbnail =
         controller.project.value.thumbnail;
     projectaddcontroller.projectthumbnail.value = File("");

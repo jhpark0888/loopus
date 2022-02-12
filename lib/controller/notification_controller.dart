@@ -1,19 +1,74 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/firebase_options.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/login_screen.dart';
+import 'package:loopus/screen/message_detail_screen.dart';
+import 'package:loopus/screen/notification_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/screen/question_detail_screen.dart';
+import 'package:loopus/screen/setting_screen.dart';
+import 'package:loopus/screen/userinfo_screen.dart';
 import 'package:loopus/widget/message_widget.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  print('Handling a backgroundddd message ${message.messageId}');
+  Get.to(() => SettingScreen());
+}
 
 class NotificationController extends GetxController {
   static NotificationController get to => Get.find();
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   RxMap<String, dynamic> message = <String, dynamic>{}.obs;
+
+  Future<void> setupInteractedMessage() async {
+    // Get any messages which caused the application to open from
+    // a terminated state.
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage != null) {
+      _backgroundMessage(initialMessage);
+    }
+
+    // Also handle any interaction when the app is in the background via a
+    // Stream listener
+    FirebaseMessaging.onMessageOpenedApp.listen(_backgroundMessage);
+  }
+
+  void _backgroundMessage(RemoteMessage message) {
+    int id = int.parse(message.data["id"]);
+    if (message.data["type"] == "msg") {
+      Get.put(MessageDetailController(userid: id)).messageroomrefresh();
+      Get.to(() =>
+          MessageDetailScreen(userid: id, realname: message.data["real_name"]));
+    } else if (message.data["type"] == "like") {
+      Get.to(() => NotificationScreen());
+    } else if (message.data["type"] == "tag") {
+      Get.to(() => ProjectScreen(projectid: id, isuser: 0));
+    } else if (message.data["type"] == "follow") {
+      Get.to(() => OtherProfileScreen(
+          userid: id, isuser: 0, realname: message.data["real_name"]));
+    } else if (message.data["type"] == "answer") {
+      Get.to(() => QuestionDetailScreen(
+          questionid: id, isuser: 1, realname: message.data["real_name"]));
+    }
+    print("message: ${message.data["type"]}");
+  }
 
   @override
   void onInit() {
@@ -28,21 +83,19 @@ class NotificationController extends GetxController {
           String? myid = await const FlutterSecureStorage().read(key: 'id');
           Get.find<MessageDetailController>(tag: event.data["id"].toString())
               .messagelist
-              .insert(
-                  0,
-                  MessageWidget(
-                      message: Message(
-                          roomId: 0,
-                          receiverId: int.parse(myid!),
-                          date: DateTime.now(),
-                          message: event.notification!.body!,
-                          isRead: true,
-                          issender: 0,
-                          issending: true.obs),
-                      user: Get.find<MessageDetailController>(
-                              tag: event.data["id"].toString())
-                          .user!
-                          .value));
+              .add(MessageWidget(
+                  message: Message(
+                      roomId: 0,
+                      receiverId: int.parse(myid!),
+                      date: DateTime.now(),
+                      message: event.notification!.body!,
+                      isRead: true,
+                      issender: 0,
+                      issending: true.obs),
+                  user: Get.find<MessageDetailController>(
+                          tag: event.data["id"].toString())
+                      .user!
+                      .value));
         } catch (e) {
           ModalController.to.showCustomSnackbar(
             event.notification!.title,
@@ -58,15 +111,12 @@ class NotificationController extends GetxController {
 
       print(event.notification!.body);
     });
-    //Background, Killed 상태에서 알림을 받고, 그 알림을 클릭해서 앱에 접근했을 때
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
-    });
 
-    FirebaseMessaging.onBackgroundMessage((message) async {
-      print('a');
-      return;
-    });
+    //Background, Killed 상태에서 알림을 받고, 그 알림을 클릭해서 앱에 접근했을 때
+    setupInteractedMessage();
+
+    // Background, Killed 상태에서 알림을 받았을 때
+    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     super.onInit();
   }
