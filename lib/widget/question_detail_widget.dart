@@ -45,52 +45,39 @@ class QuestionDetailWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      InkWell(
-                        onTap: () async {
-                          // profileController.isProfileLoading(true);
-
-                          // Get.to(() => OtherProfileScreen(
-                          //       userid: 26,
-                          //     ));
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => OtherProfileScreen(
+                                userid: question.userid,
+                                isuser: question.isuser,
+                                realname: question.user.realName,
+                              ));
                         },
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(() => OtherProfileScreen(
-                                  userid: question.userid,
-                                  isuser: question.isuser,
-                                  realname: question.user.realName,
-                                ));
-                          },
-                          child: Row(
-                            children: [
-                              ClipOval(
-                                  child: question.user.profileImage == null
-                                      ? Image.asset(
-                                          "assets/illustrations/default_profile.png",
-                                          height: 32,
-                                          width: 32,
-                                        )
-                                      : CachedNetworkImage(
-                                          height: 32,
-                                          width: 32,
-                                          imageUrl: question.user.profileImage!,
-                                          placeholder: (context, url) =>
-                                              CircleAvatar(
-                                            child: Center(
-                                                child:
-                                                    CircularProgressIndicator()),
-                                          ),
-                                          fit: BoxFit.cover,
-                                        )),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                "${question.user.realName} · ",
-                                style: kButtonStyle,
-                              ),
-                            ],
-                          ),
+                        child: Row(
+                          children: [
+                            ClipOval(
+                                child: question.user.profileImage == null
+                                    ? Image.asset(
+                                        "assets/illustrations/default_profile.png",
+                                        height: 32,
+                                        width: 32,
+                                      )
+                                    : CachedNetworkImage(
+                                        height: 32,
+                                        width: 32,
+                                        imageUrl: question.user.profileImage!,
+                                        placeholder: (context, url) =>
+                                            kProfilePlaceHolder(),
+                                        fit: BoxFit.cover,
+                                      )),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              "${question.user.realName} · ",
+                              style: kButtonStyle,
+                            ),
+                          ],
                         ),
                       ),
                       Text("${question.user.department}", style: kBody2Style),

@@ -165,12 +165,8 @@ class HomeQuestionScreen extends StatelessWidget {
                                             padding: const EdgeInsets.only(
                                               right: 4,
                                             ),
-                                            child: Text(
-                                              value,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16),
-                                            ),
+                                            child: Text(value,
+                                                style: kSubTitle2Style),
                                           ),
                                         );
                                       }).toList(),

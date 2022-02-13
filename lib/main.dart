@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +22,11 @@ import 'package:loopus/screen/start_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -30,7 +34,14 @@ void main() async {
     systemNavigationBarIconBrightness: Brightness.light,
     statusBarColor: mainWhite, // status bar color
   ));
-  Intl.systemLocale = await findSystemLocale();
+  try {
+    if (Platform.isIOS || Platform.isAndroid) {
+      Intl.systemLocale = await findSystemLocale();
+    }
+  } catch (e) {
+    print(e);
+  }
+
   String? temptoken = await const FlutterSecureStorage().read(key: 'token');
   // KakaoContext.clientId = '3e0e4823d8dd690cfb48b8bcd5ad7e6c';
 

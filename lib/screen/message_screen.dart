@@ -35,7 +35,7 @@ class MessageScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 10,
                             color: mainblue,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         )
                       ]),

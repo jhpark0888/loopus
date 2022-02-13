@@ -47,11 +47,16 @@ class MyProfileScreen extends StatelessWidget {
           children: [
             WillPopScope(
               onWillPop: () async {
-                if (Platform.isAndroid &&
-                    (AppController.to.currentIndex.value == 4)) {
-                  AppController.to.currentIndex(0);
-                  return false;
+                try {
+                  if (Platform.isAndroid &&
+                      (AppController.to.currentIndex.value == 4)) {
+                    AppController.to.currentIndex(0);
+                    return false;
+                  }
+                } catch (e) {
+                  print(e);
                 }
+
                 return true;
               },
               child: Scaffold(

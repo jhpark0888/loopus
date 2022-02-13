@@ -50,7 +50,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'loopus-bb12f.appspot.com',
     iosClientId:
         '840100932483-gfu3gepjb9fusvls2ce3r7kr0p6jujcl.apps.googleusercontent.com',
-    iosBundleId: 'com.example.loopusfrontendDesign',
+    iosBundleId: 'com.loopus.loopusfrontend',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -61,6 +61,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'loopus-bb12f.appspot.com',
     iosClientId:
         '840100932483-gfu3gepjb9fusvls2ce3r7kr0p6jujcl.apps.googleusercontent.com',
-    iosBundleId: 'com.example.loopusfrontendDesign',
+    iosBundleId: 'com.loopus.loopusfrontend',
   );
 }
