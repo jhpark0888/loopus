@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/question_api.dart';
+import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/question_model.dart';
@@ -13,6 +14,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static HomeController get to => Get.find();
+  NotificationController notificationController =
+      Get.put(NotificationController());
   List<PostingWidget> posting = [];
   // List<RecommendPostingWidget> recommend_posting = [];
   RxBool bookmark = false.obs;

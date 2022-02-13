@@ -45,7 +45,7 @@ class QuestionAnswerWidget extends StatelessWidget {
                     GestureDetector(
                       onTap: tapProfile,
                       child: ClipOval(
-                        child: answer.user.profileImage == ""
+                        child: answer.user.profileImage == null
                             ? Image.asset(
                                 "assets/illustrations/default_profile.png",
                                 height: 32,
