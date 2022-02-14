@@ -132,11 +132,23 @@ class SignupDepartmentScreen extends StatelessWidget {
                         child: ListView(
                           children: signupController.searchdeptlist
                               .map((dept) => GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
                                     onTap: () {
                                       signupController.selectdept(dept);
                                     },
-                                    child: ListTile(
-                                      title: Text(dept),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 16.0),
+                                          child: Text(
+                                            dept,
+                                          ),
+                                        ),
+                                        const Divider(),
+                                      ],
                                     ),
                                   ))
                               .toList(),
