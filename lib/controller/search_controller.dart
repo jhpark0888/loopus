@@ -23,6 +23,7 @@ import 'package:loopus/widget/searchedtag_widget.dart';
 class SearchController extends GetxController with GetTickerProviderStateMixin {
   static SearchController get to => Get.find();
   TextEditingController searchtextcontroller = TextEditingController();
+  RxString _searchword = "".obs;
 
   RxList<SearchPostingWidget> searchpostinglist = <SearchPostingWidget>[].obs;
   RxList<SearchProfileWidget> searchprofilelist = <SearchProfileWidget>[].obs;
@@ -63,6 +64,39 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
       initialIndex: 0,
       vsync: this,
     );
+
+    debounce(_searchword, (_) async {
+      if (_searchword.value != "") {
+        isSearchLoading(true);
+        // if (_searchController.postpagenumber == 1) {
+        //   _searchController.searchpostinglist.clear();
+        // } else if (_searchController.profilepagenumber == 1) {
+        //   _searchController.searchprofilelist.clear();
+        // } else if (_searchController.questionpagenumber == 1) {
+        //   _searchController.searchquestionlist.clear();
+        // } else if (_searchController.tagpagenumber == 1) {
+        //   _searchController.searchtaglist.clear();
+        // }
+
+        if (tabController.index == 0) {
+          await search(SearchType.post, _searchword.value, postpagenumber);
+        } else if (tabController.index == 1) {
+          await search(
+              SearchType.profile, _searchword.value, profilepagenumber);
+        } else if (tabController.index == 2) {
+          await search(
+              SearchType.question, _searchword.value, questionpagenumber);
+        } else if (tabController.index == 3) {
+          await tagsearch();
+        }
+        isSearchLoading(false);
+      }
+    }, time: Duration(milliseconds: 300));
+
+    searchtextcontroller.addListener(() {
+      _searchword(
+          searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " "));
+    });
 
     tabController.addListener(() {
       if (searchtextcontroller.text.isEmpty == false) {
@@ -121,5 +155,9 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     searchprofilelist.clear();
     searchquestionlist.clear();
     searchtaglist.clear();
+    presearchwordpost = "";
+    presearchwordprofile = "";
+    presearchwordquestion = "";
+    presearchwordtag = "";
   }
 }

@@ -60,12 +60,7 @@ Future addproject() async {
   http.StreamedResponse response = await request.send();
 
   if (response.statusCode == 201) {
-    Get.back();
-    Get.back();
-    Get.back();
-    Get.back();
-    Get.back();
-    Get.back();
+    getbacks(6);
 
     String responsebody = await response.stream.bytesToString();
     Map<String, dynamic> responsemap = json.decode(responsebody);

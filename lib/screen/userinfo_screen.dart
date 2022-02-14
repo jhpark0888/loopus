@@ -5,10 +5,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
@@ -72,6 +74,9 @@ class UserInfoScreen extends StatelessWidget {
                         rightFunction: () {
                           AppController.to.currentIndex.value = 0;
                           _logInController.isLogout.value = true;
+                          Get.delete<HomeController>();
+                          Get.delete<SearchController>();
+                          Get.delete<ProfileController>();
                           logOut().then((value) {
                             _logInController.isLogout.value = false;
                             Get.offAll(() => StartScreen());
