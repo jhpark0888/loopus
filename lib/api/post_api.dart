@@ -64,11 +64,13 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
       map['type'] = type.name;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
-    } else if (type == SmartTextType.QUOTE) {
-      map['type'] = type.name;
-      map['content'] = editorController.textcontrollers[i].text;
-      postcontent.add(map);
-    } else if (type == SmartTextType.BULLET) {
+    }
+    // else if (type == SmartTextType.QUOTE) {
+    //   map['type'] = type.name;
+    //   map['content'] = editorController.textcontrollers[i].text;
+    //   postcontent.add(map);
+    // }
+    else if (type == SmartTextType.BULLET) {
       map['type'] = type.name;
       map['content'] = editorController.textcontrollers[i].text;
       postcontent.add(map);
@@ -209,12 +211,14 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
         map['content'] =
             postingAddController.editorController.textcontrollers[i].text;
         postcontent.add(map);
-      } else if (type == SmartTextType.QUOTE) {
-        map['type'] = type.name;
-        map['content'] =
-            postingAddController.editorController.textcontrollers[i].text;
-        postcontent.add(map);
-      } else if (type == SmartTextType.BULLET) {
+      }
+      // else if (type == SmartTextType.QUOTE) {
+      //   map['type'] = type.name;
+      //   map['content'] =
+      //       postingAddController.editorController.textcontrollers[i].text;
+      //   postcontent.add(map);
+      // }
+      else if (type == SmartTextType.BULLET) {
         map['type'] = type.name;
         map['content'] =
             postingAddController.editorController.textcontrollers[i].text;

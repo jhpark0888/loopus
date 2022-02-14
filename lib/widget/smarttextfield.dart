@@ -7,14 +7,14 @@ import 'package:loopus/controller/editorcontroller.dart';
 extension SmartTextStyle on SmartTextType {
   TextStyle get textStyle {
     switch (this) {
-      case SmartTextType.QUOTE:
-        return const TextStyle(
-          fontSize: 14,
-          fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.w400,
-          color: mainblack,
-          height: 1.2,
-        );
+      // case SmartTextType.QUOTE:
+      //   return const TextStyle(
+      //     fontSize: 14,
+      //     fontStyle: FontStyle.italic,
+      //     fontWeight: FontWeight.w400,
+      //     color: mainblack,
+      //     height: 1.2,
+      //   );
       case SmartTextType.H1:
         return const TextStyle(
           fontSize: 20,
@@ -73,8 +73,8 @@ extension SmartTextStyle on SmartTextType {
 
   TextAlign get align {
     switch (this) {
-      case SmartTextType.QUOTE:
-        return TextAlign.center;
+      // case SmartTextType.QUOTE:
+      //   return TextAlign.center;
       case SmartTextType.IMAGEINFO:
         return TextAlign.center;
       default:

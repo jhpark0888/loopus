@@ -9,6 +9,7 @@ enum UserType {
 }
 
 class SignupController extends GetxController {
+  static SignupController get to => Get.find();
   TextEditingController campusnamecontroller = TextEditingController();
   TextEditingController classnumcontroller = TextEditingController();
   TextEditingController departmentcontroller = TextEditingController();
@@ -19,14 +20,26 @@ class SignupController extends GetxController {
   RxBool emailcheck = false.obs;
   RxBool isdeptSearchLoading = false.obs;
   RxString selectdept = "".obs;
+
   Rx<UserType> selectedType = UserType.student.obs;
 
-  RxList<String> searchdeptlist = <String>["산업경영공학과", "전자공학과", "건축공학과"].obs;
+  RxList deptlist = [].obs;
+  RxList searchdeptlist = [].obs;
 
   static final FlutterSecureStorage storage = FlutterSecureStorage();
 
   @override
   void onInit() {
+    departmentcontroller.addListener(() {
+      searchdeptlist.clear();
+      isdeptSearchLoading(true);
+      for (String dept in deptlist) {
+        if (dept.contains(departmentcontroller.text)) {
+          searchdeptlist.add(dept.toString());
+        }
+      }
+      isdeptSearchLoading(false);
+    });
     super.onInit();
   }
 

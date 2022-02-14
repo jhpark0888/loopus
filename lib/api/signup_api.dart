@@ -44,7 +44,7 @@ Future<http.Response> signupRequest() async {
     "type": 0,
     "class_num": signupController.classnumcontroller.text,
     "real_name": signupController.namecontroller.text,
-    "department": signupController.departmentcontroller.text,
+    "department": signupController.selectdept.value,
     "tag": tagController.selectedtaglist.map((tag) => tag.text).toList()
   };
 
@@ -64,4 +64,25 @@ Future<http.Response> signupRequest() async {
     storage.write(key: 'id', value: userid);
   }
   return response;
+}
+
+Future getdeptlist() async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  final uri = Uri.parse("$serverUri/user_api/department_list");
+
+  http.Response response = await http.get(
+    uri,
+  );
+
+  print('학과 리스트 statusCode: ${response.statusCode}');
+  if (response.statusCode == 200) {
+    Map<String, dynamic> responseBody =
+        json.decode(utf8.decode(response.bodyBytes));
+    responseBody
+        .forEach((key, value) => SignupController.to.deptlist.add(value));
+    return;
+  } else {
+    return Future.error(response.statusCode);
+  }
 }
