@@ -144,15 +144,16 @@ class NotificationController extends GetxController {
       badge: true,
       alert: true,
       provisional: true,
+      announcement: true,
     );
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print('User granted permission');
       try {
         if (Platform.isIOS) {
           await messaging.setForegroundNotificationPresentationOptions(
-            alert: true, // Required to display a heads up notification
-            badge: true,
-            sound: true,
+            alert: false, // Required to display a heads up notification
+            badge: false,
+            sound: false,
           );
         }
       } catch (e) {
