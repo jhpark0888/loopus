@@ -18,13 +18,15 @@ Future<void> loginRequest() async {
   LogInController logInController = Get.put(LogInController());
   const FlutterSecureStorage storage = FlutterSecureStorage();
   ModalController _modalController = Get.put(ModalController());
+  NotificationController notificationController =
+      Get.put(NotificationController());
 
   Uri uri = Uri.parse('$serverUri/user_api/login');
 
   final user = {
     'username': logInController.idcontroller.text,
     'password': logInController.passwordcontroller.text,
-    'fcm_token': await NotificationController.to.getToken(),
+    'fcm_token': await notificationController.getToken(),
   };
   http.Response response = await http.post(
     uri,

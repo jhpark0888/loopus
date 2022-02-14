@@ -9,6 +9,7 @@ import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
@@ -29,6 +30,10 @@ class ProjectPostingWidget extends StatelessWidget {
     required this.department,
   }) : super(key: key);
 
+  late final LikeController likeController = Get.put(
+      LikeController(
+          isliked: item.isLiked, id: item.id, lastisliked: item.isLiked.value),
+      tag: item.id.toString());
   Post item;
   int isuser;
   String realname;
@@ -124,6 +129,7 @@ class ProjectPostingWidget extends StatelessWidget {
                                     .tapLike(item.id, item.likeCount.value);
 
                                 item.isLiked.value = 1;
+                                likeController.isliked(1);
                               } else {
                                 Get.find<ProjectDetailController>(
                                         tag: item.project!.id.toString())
@@ -136,6 +142,7 @@ class ProjectPostingWidget extends StatelessWidget {
                                     .tapunLike(item.id, item.likeCount.value);
 
                                 item.isLiked.value = 0;
+                                likeController.isliked(0);
                               }
                             },
                             child: item.isLiked.value == 0

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/question_api.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/model/post_model.dart';
@@ -242,6 +243,7 @@ class HomeController extends GetxController
     }
 
     await bookmarkpost(postid);
+    ModalController.to.showCustomDialog('북마크 탭에 저장했어요', 1000);
   }
 
   void tapunBookmark(int postid) async {
@@ -280,6 +282,7 @@ class HomeController extends GetxController
     }
 
     await bookmarkpost(postid);
+    ModalController.to.showCustomDialog("북마크 탭에서 삭제했어요.", 1000);
   }
 
   void tapLike(int postid, int likecount) {
@@ -333,8 +336,6 @@ class HomeController extends GetxController
           .post
           .likeCount(likecount);
     }
-
-    likepost(postid);
   }
 
   void tapunLike(int postid, int likecount) {
@@ -388,7 +389,5 @@ class HomeController extends GetxController
           .post
           .likeCount(likecount);
     }
-//
-    likepost(postid);
   }
 }

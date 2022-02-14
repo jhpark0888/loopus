@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -18,16 +19,30 @@ class TagController extends GetxController {
   ScrollController _tagScrollController = ScrollController();
   RxBool isTagChanging = false.obs;
   RxBool isTagSearchLoading = false.obs;
+  RxString _searchword = "".obs;
+  // late Timer _debounce;
 
   Tagtype tagtype;
   final maxExtent = Get.height * 0.25;
   RxDouble currentExtent = 0.0.obs;
 
+  // _onSearchChanged() {
+  //   if (_debounce.isActive) _debounce.cancel();
+  //   _debounce = Timer(const Duration(milliseconds: 300), () {
+  //     //원하는 함수
+  //     gettagsearch(tagtype);
+  //   });
+  // }
+
   void onInit() {
     super.onInit();
 
-    tagsearch.addListener(() {
+    debounce(_searchword, (_) {
       gettagsearch(tagtype);
+    }, time: Duration(milliseconds: 300));
+
+    tagsearch.addListener(() {
+      _searchword(tagsearch.text);
     });
     _tagScrollController.addListener(() {
       currentExtent.value = maxExtent - _tagScrollController.offset;

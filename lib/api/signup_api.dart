@@ -39,7 +39,7 @@ Future<http.Response> signupRequest() async {
   const FlutterSecureStorage storage = FlutterSecureStorage();
 
   var user = {
-    "email": signupController.emailidcontroller.text,
+    "email": signupController.emailidcontroller.text + '@inu.ac.kr',
     "image": null,
     "type": 0,
     "class_num": signupController.classnumcontroller.text,

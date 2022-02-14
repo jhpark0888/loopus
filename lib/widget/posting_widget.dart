@@ -8,6 +8,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
+import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -27,6 +28,10 @@ class PostingWidget extends StatelessWidget {
   PostingWidget({required this.item, Key? key}) : super(key: key);
 
   final ProfileController profileController = Get.find();
+  late final LikeController likeController = Get.put(
+      LikeController(
+          isliked: item.isLiked, id: item.id, lastisliked: item.isLiked.value),
+      tag: item.id.toString());
   late final HoverController _hoverController =
       Get.put(HoverController(), tag: 'posting${item.id}');
   // final PostingDetailController postingDetailController =
@@ -274,10 +279,8 @@ class PostingWidget extends StatelessWidget {
   void tapBookmark() {
     if (item.isMarked.value == 0) {
       homeController.tapBookmark(item.id);
-      ModalController.to.showCustomDialog('북마크 탭에 저장했어요', 1000);
     } else {
       homeController.tapunBookmark(item.id);
-      ModalController.to.showCustomDialog('북마크 탭에서 삭제했어요', 1000);
     }
   }
 
@@ -290,9 +293,11 @@ class PostingWidget extends StatelessWidget {
 //   time: Duration(seconds: 1),
 // );
     if (item.isLiked.value == 0) {
+      likeController.isliked(1);
       item.likeCount += 1;
       homeController.tapLike(item.id, item.likeCount.value);
     } else {
+      likeController.isliked(0);
       item.likeCount -= 1;
       homeController.tapunLike(item.id, item.likeCount.value);
     }

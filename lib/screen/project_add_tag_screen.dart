@@ -41,7 +41,7 @@ class ProjectAddTagScreen extends StatelessWidget {
                       projectaddcontroller.isLooppersonLoading(true);
                       getfollowlist(
                               ProfileController.to.myUserInfo.value.userid,
-                              followlist.follower)
+                              followlist.following)
                           .then((value) {
                         projectaddcontroller.looplist = value;
                         projectaddcontroller.looppersonlist(projectaddcontroller

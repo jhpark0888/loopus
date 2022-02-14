@@ -12,6 +12,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -32,6 +33,10 @@ class BookmarkWidget extends StatelessWidget {
   });
   ProfileController profileController = Get.find();
   BookmarkController bookmarkController = Get.put(BookmarkController());
+  late final LikeController likeController = Get.put(
+      LikeController(
+          isliked: item.isLiked, id: item.id, lastisliked: item.isLiked.value),
+      tag: item.id.toString());
 
   HomeController homeController = Get.find();
 
@@ -193,7 +198,6 @@ class BookmarkWidget extends StatelessWidget {
       HomeController.to.tapunBookmark(bookmarkid);
       bookmarkController.bookmarkResult.value.postingitems.removeAt(index);
 
-      ModalController.to.showCustomDialog("북마크 탭에서 삭제했어요.", 1000);
       if (bookmarkController.bookmarkResult.value.postingitems.isEmpty) {
         bookmarkController.isBookmarkEmpty.value = true;
       }
@@ -209,11 +213,13 @@ class BookmarkWidget extends StatelessWidget {
 
       HomeController.to.tapLike(bookmarkid, item.likeCount.value);
       item.isLiked.value = 1;
+      likeController.isliked(1);
     } else {
       item.likeCount.value -= 1;
 
       HomeController.to.tapunLike(bookmarkid, item.likeCount.value);
       item.isLiked.value = 0;
+      likeController.isliked(0);
     }
   }
 

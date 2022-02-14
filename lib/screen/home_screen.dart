@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
             //   ),
             // ),
             IconButton(
-              onPressed: () => Get.to(() => const NotificationScreen()),
+              onPressed: () => Get.to(() => NotificationScreen()),
               icon: SvgPicture.asset(
                 "assets/icons/Bell_Inactive.svg",
                 width: 28,

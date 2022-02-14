@@ -147,7 +147,7 @@ class SearchTagWidget extends StatelessWidget {
           tagtype: tagtype!,
         ));
         controller.tagsearch.clear();
-        gettagsearch(tagtype!);
+        // gettagsearch(tagtype!);
       } else {
         controller.selectedtaglist.add(SelectedTagWidget(
             id: id,
@@ -155,7 +155,8 @@ class SearchTagWidget extends StatelessWidget {
             selecttagtype: SelectTagtype.interesting,
             tagtype: tagtype!));
         controller.tagsearch.clear();
-        gettagsearch(tagtype!);
+        controller.searchtaglist.removeWhere((element) => element.id == id);
+        // gettagsearch(tagtype!);
       }
     } else {
       ModalController.to.showCustomDialog('최대 3개까지 선택할 수 있어요', 1000);
