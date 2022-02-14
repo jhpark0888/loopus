@@ -86,7 +86,9 @@ class LogInScreen extends StatelessWidget {
                           ),
                           CustomExpandedButton(
                             buttonTag: '로그인하기',
-                            onTap: login,
+                            onTap: () {
+                              login(context);
+                            },
                             isBlue: true,
                             isBig: true,
                             title: '로그인하기',
@@ -127,8 +129,9 @@ class LogInScreen extends StatelessWidget {
         ));
   }
 
-  void login() async {
+  void login(context) async {
     if (_formKey.currentState!.validate()) {
+      FocusScope.of(context).unfocus();
       _loginController.isLogin.value = true;
       await loginRequest()
           .then((value) => _loginController.isLogin.value = false);

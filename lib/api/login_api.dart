@@ -42,11 +42,7 @@ Future<void> loginRequest() async {
 
     storage.write(key: 'token', value: token);
     storage.write(key: 'id', value: userid);
-
     Get.offAll(() => App());
-    if (ProfileController().initialized) {
-      ProfileController.to.loadmyProfile();
-    }
   } else if (response.statusCode == 401) {
     _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
     print('에러1');
