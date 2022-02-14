@@ -17,7 +17,11 @@ class SignupController extends GetxController {
   TextEditingController passwordcontroller = TextEditingController();
   TextEditingController passwordcheckcontroller = TextEditingController();
   RxBool emailcheck = false.obs;
+  RxBool isdeptSearchLoading = false.obs;
+  RxString selectdept = "".obs;
   Rx<UserType> selectedType = UserType.student.obs;
+
+  RxList<String> searchdeptlist = <String>["산업경영공학과", "전자공학과", "건축공학과"].obs;
 
   static final FlutterSecureStorage storage = FlutterSecureStorage();
 

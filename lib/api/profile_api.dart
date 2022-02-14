@@ -6,10 +6,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
+import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/project_model.dart';
 
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/widget/notification_widget.dart';
 
 import '../constant.dart';
 
@@ -172,6 +175,36 @@ Future deleteuser() async {
 
   print("회원탈퇴: ${response.statusCode}");
   if (response.statusCode == 200) {
+  } else {
+    return Future.error(response.statusCode);
+  }
+}
+
+Future getNotificationlist() async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  var uri = Uri.parse("$serverUri/user_api/alarm");
+
+  http.Response response =
+      await http.get(uri, headers: {"Authorization": "Token $token"});
+
+  print("알림 리스트 로드: ${response.statusCode}");
+  if (response.statusCode == 200) {
+    List responseBody = json.decode(utf8.decode(response.bodyBytes));
+    List<NotificationModel> notificationlist = responseBody
+        .map((project) => NotificationModel.fromJson(project))
+        .toList();
+    for (var notification in notificationlist) {
+      if (notification.type == NotificationType.follow) {
+        NotificationDetailController.to.followalarmlist
+            .add(NotificationWidget(notification: notification));
+      } else {
+        NotificationDetailController.to.alarmlist
+            .add(NotificationWidget(notification: notification));
+      }
+    }
+
+    return;
   } else {
     return Future.error(response.statusCode);
   }

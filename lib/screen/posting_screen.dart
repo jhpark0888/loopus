@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
@@ -39,6 +40,9 @@ class PostingScreen extends StatelessWidget {
   }) : super(key: key);
   late PostingDetailController controller =
       Get.put(PostingDetailController(postid), tag: postid.toString());
+  late final LikeController likeController = Get.put(
+      LikeController(isliked: isLiked, id: postid, lastisliked: isLiked.value),
+      tag: postid.toString());
 
   final ModalController modalController = Get.put(ModalController());
   final ScrollController _controller = ScrollController();
@@ -86,11 +90,13 @@ class PostingScreen extends StatelessWidget {
 
                           HomeController.to.tapLike(postid, likecount.value);
                           isLiked(1);
+                          likeController.isliked(1);
                         } else {
                           likecount -= 1;
                           HomeController.to.tapunLike(postid, likecount.value);
 
                           isLiked(0);
+                          likeController.isliked(0);
                         }
                       },
                       child: isLiked.value == 0

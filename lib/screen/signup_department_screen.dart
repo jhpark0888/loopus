@@ -64,6 +64,18 @@ class SignupDepartmentScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(
+              height: 16,
+            ),
+            Obx(
+              () => Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "선택된 학과 : ${signupController.selectdept.value}",
+                  style: kSubTitle1Style,
+                ),
+              ),
+            ),
+            const SizedBox(
               height: 32,
             ),
             CustomTextField(
@@ -75,6 +87,47 @@ class SignupDepartmentScreen extends StatelessWidget {
               obscureText: false,
               maxLines: 1,
             ),
+            Obx(
+              () => signupController.isdeptSearchLoading.value
+                  ? Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 6,
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          '검색중...',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: mainblue.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Obx(
+                      () => Expanded(
+                        child: ListView(
+                          children: signupController.searchdeptlist
+                              .map((dept) => GestureDetector(
+                                    onTap: () {
+                                      signupController.selectdept(dept);
+                                    },
+                                    child: ListTile(
+                                      title: Text(dept),
+                                    ),
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                    ),
+            )
           ],
         ),
       ),
