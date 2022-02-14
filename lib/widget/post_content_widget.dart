@@ -32,7 +32,10 @@ class PostContentWidget extends StatelessWidget {
         child: Padding(
           padding: content.type.padding,
           child: FadeInImage.assetNetwork(
-              placeholder: 'assets/icons/loading.gif', image: content.content),
+            placeholder: 'assets/icons/loading.gif',
+            placeholderScale: 9,
+            image: content.content,
+          ),
         ),
       );
     } else if (content.type == SmartTextType.LINK) {

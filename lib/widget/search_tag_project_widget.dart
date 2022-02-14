@@ -55,7 +55,7 @@ class SearchTagProjectWidget extends StatelessWidget {
           children: [
             Text(
               "${project.projectName}",
-              style: kHeaderH1Style,
+              style: kHeaderH1Style.copyWith(fontSize: 18),
             ),
             const SizedBox(
               height: 20,

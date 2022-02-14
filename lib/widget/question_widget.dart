@@ -93,7 +93,7 @@ class QuestionWidget extends StatelessWidget {
                                               fit: BoxFit.cover,
                                             )),
                                   Text(
-                                    "  ${item.user.realName}  · ",
+                                    "  ${item.user.realName} · ",
                                     style: kButtonStyle,
                                   ),
                                 ],

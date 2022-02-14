@@ -519,9 +519,9 @@ class MyProfileScreen extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(
                                 16,
-                                24,
-                                16,
                                 20,
+                                16,
+                                16,
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -529,6 +529,7 @@ class MyProfileScreen extends StatelessWidget {
                                 children: [
                                   const Text('활동', style: kSubTitle2Style),
                                   GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
                                     onTap: () {
                                       Get.to(
                                         () => ProjectAddTitleScreen(
@@ -536,10 +537,14 @@ class MyProfileScreen extends StatelessWidget {
                                         ),
                                       );
                                     },
-                                    child: Text(
-                                      '추가하기',
-                                      style: kSubTitle2Style.copyWith(
-                                          color: mainblue),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4),
+                                      child: Text(
+                                        '추가하기',
+                                        style: kSubTitle2Style.copyWith(
+                                            color: mainblue),
+                                      ),
                                     ),
                                   ),
                                 ],

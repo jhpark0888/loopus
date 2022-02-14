@@ -340,9 +340,23 @@ class QuestionListView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Obx(() => Column(
-                        children: questionController.answerlist.value,
-                      )),
+                  Obx(
+                    () => Column(
+                      children: (questionController.answerlist.value.isNotEmpty)
+                          ? questionController.answerlist.value
+                          : [
+                              SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                '아직 답변이 달리지 않았어요',
+                                style: kSubTitle3Style.copyWith(
+                                  color: mainblack.withOpacity(0.6),
+                                ),
+                              ),
+                            ],
+                    ),
+                  ),
                 ],
               ),
             ),

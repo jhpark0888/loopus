@@ -98,10 +98,11 @@ class PostingWidget extends StatelessWidget {
                                 children: [
                                   Text(
                                     "${item.title}",
-                                    style: kHeaderH2Style,
+                                    style:
+                                        kHeaderH2Style.copyWith(fontSize: 18),
                                   ),
                                   SizedBox(
-                                    height: 24,
+                                    height: 16,
                                   ),
                                   Text(
                                     "${item.project!.projectName}",
@@ -142,16 +143,9 @@ class PostingWidget extends StatelessWidget {
                                                             width: 32,
                                                             imageUrl:
                                                                 "${item.user.profileImage}",
-                                                            placeholder:
-                                                                (context,
-                                                                        url) =>
-                                                                    CircleAvatar(
-                                                              backgroundColor:
-                                                                  Color(
-                                                                      0xffe7e7e7),
-                                                              child:
-                                                                  Container(),
-                                                            ),
+                                                            placeholder: (context,
+                                                                    url) =>
+                                                                kProfilePlaceHolder(),
                                                             fit: BoxFit.cover,
                                                           ),
                                                   ),

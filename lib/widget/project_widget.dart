@@ -114,7 +114,7 @@ class ProjectWidget extends StatelessWidget {
                           Obx(
                             () => Text(
                               controller.project.value.projectName,
-                              style: kHeaderH2Style,
+                              style: kHeaderH2Style.copyWith(fontSize: 18),
                             ),
                           ),
                           SizedBox(

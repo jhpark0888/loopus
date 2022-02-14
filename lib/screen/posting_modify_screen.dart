@@ -207,13 +207,10 @@ class UpdatePostingTileWidget extends StatelessWidget {
               ),
             ),
             Obx(
-              () => Icon(
-                Icons.chevron_right_rounded,
-                color: _hoverController.isHover.value
-                    ? mainblack.withOpacity(0.6)
-                    : mainblack,
-                size: 28,
-              ),
+              () => SvgPicture.asset('assets/icons/Arrow_right.svg',
+                  color: _hoverController.isHover.value
+                      ? mainblack.withOpacity(0.6)
+                      : mainblack),
             ),
           ],
         ),

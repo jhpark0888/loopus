@@ -486,7 +486,7 @@ class ProjectScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(
-                                height: 28,
+                                height: 24,
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -498,6 +498,7 @@ class ProjectScreen extends StatelessWidget {
                                   ),
                                   controller.project.value.is_user == 1
                                       ? GestureDetector(
+                                          behavior: HitTestBehavior.translucent,
                                           onTap: () {
                                             Get.to(() => PostingAddNameScreen(
                                                   project_id: controller
@@ -505,10 +506,14 @@ class ProjectScreen extends StatelessWidget {
                                                   route: PostaddRoute.project,
                                                 ));
                                           },
-                                          child: Text(
-                                            '포스팅 작성하기',
-                                            style: kSubTitle2Style.copyWith(
-                                                color: mainblue),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4),
+                                            child: Text(
+                                              '포스팅 작성하기',
+                                              style: kSubTitle2Style.copyWith(
+                                                  color: mainblue),
+                                            ),
                                           ),
                                         )
                                       : Container(),
