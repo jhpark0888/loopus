@@ -4,7 +4,7 @@
    <application
         android:fullBackupContent="false"
         android:allowBackup="false"
-        android:label="loopus"
+        android:label="루프어스"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <activity

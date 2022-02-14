@@ -14,9 +14,11 @@ class CompanyScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         centerTitle: false,
-        title: Text(
-          '${_profileController.myUserInfo.value.realName}님께 추천드리는 기업',
-          style: kHeaderH1Style,
+        title: Obx(
+          () => Text(
+            '${_profileController.myUserInfo.value.realName}님께 추천드리는 기업',
+            style: kHeaderH1Style,
+          ),
         ),
         actions: [],
       ),
@@ -45,11 +47,11 @@ class CompanyScreen extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 12,
+            height: 16,
           ),
           Text('추후 업데이트 예정인 서비스입니다', style: kBody2Style),
           SizedBox(
-            height: 32,
+            height: 44,
           ),
           Image.asset(
             'assets/illustrations/company_image.png',

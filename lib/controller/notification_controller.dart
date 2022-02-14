@@ -143,9 +143,10 @@ class NotificationController extends GetxController {
       sound: true,
       badge: true,
       alert: true,
-      provisional: true,
+      provisional: false,
       announcement: true,
     );
+
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print('User granted permission');
       try {
