@@ -64,17 +64,33 @@ class SignupDepartmentScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(
-              height: 16,
+              height: 32,
             ),
             Obx(
-              () => Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "선택된 학과 : ${signupController.selectdept.value}",
-                  style: kSubTitle1Style,
+              () => RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '나의 전공 학과 : ',
+                      style:
+                          kSubTitle1Style.copyWith(fontWeight: FontWeight.w400),
+                    ),
+                    TextSpan(
+                      text: signupController.selectdept.value != ''
+                          ? '${signupController.selectdept.value}'
+                          : '검색 탭에서 선택해주세요',
+                      style: kSubTitle1Style.copyWith(
+                        color: signupController.selectdept.value != ''
+                            ? mainblue
+                            : mainblack.withOpacity(0.38),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
+
             const SizedBox(
               height: 32,
             ),
