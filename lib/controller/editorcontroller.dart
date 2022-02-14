@@ -271,26 +271,25 @@ class EditorController extends GetxController {
       types.insert(index, selectedType.value);
     } else {
       TextEditingController linkcontroller = TextEditingController();
-      if (textAt(index).text == '\u200B') {
-        ModalController.to.showCustomDialog('링크를 첨부할 텍스트를 먼저 입력해주세요', 1000);
-      } else {
-        ModalController.to.showTextFieldDialog(
-            title: '링크를 입력해주세요',
-            hintText: 'https//',
-            textEditingController: linkcontroller,
-            obscureText: false,
-            validator: null,
-            leftFunction: () {
-              Get.back();
-            },
-            rightFunction: () {
-              linkindex[index] = linkcontroller.text;
-              selectedType(SmartTextType.LINK);
-              types.removeAt(index);
-              types.insert(index, selectedType.value);
-              Get.back();
-            });
-      }
+      ModalController.to.showTextFieldDialog(
+          title: '링크를 입력해주세요',
+          hintText: 'https//',
+          textEditingController: linkcontroller,
+          obscureText: false,
+          validator: null,
+          leftFunction: () {
+            Get.back();
+          },
+          rightFunction: () {
+            linkindex[index] = linkcontroller.text;
+            selectedType(SmartTextType.LINK);
+            types.removeAt(index);
+            types.insert(index, selectedType.value);
+            if (textAt(index).text == '\u200B') {
+              textAt(index).text += linkcontroller.text;
+            }
+            Get.back();
+          });
     }
   }
 

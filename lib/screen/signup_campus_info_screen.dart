@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_department_screen.dart';
@@ -18,7 +19,12 @@ class SignupCampusInfoScreen extends StatelessWidget {
           TextButton(
             onPressed: () {
               //TODO: 학교 선택 시 활성화되어야 함
+              signupController.isdeptSearchLoading(true);
               Get.to(() => SignupDepartmentScreen());
+
+              getdeptlist().then((value) {
+                signupController.isdeptSearchLoading(false);
+              });
             },
             child: Text(
               '다음',

@@ -46,19 +46,19 @@ class EditorToolbar extends StatelessWidget {
                 SizedBox(
                   width: 20,
                 ),
-                GestureDetector(
-                  child: selectedType == SmartTextType.QUOTE
-                      ? SvgPicture.asset(
-                          'assets/icons/quote_active.svg',
-                        )
-                      : SvgPicture.asset(
-                          'assets/icons/quote_inactive.svg',
-                        ),
-                  onTap: () => onSelected(SmartTextType.QUOTE),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
+                // GestureDetector(
+                //   child: selectedType == SmartTextType.QUOTE
+                //       ? SvgPicture.asset(
+                //           'assets/icons/quote_active.svg',
+                //         )
+                //       : SvgPicture.asset(
+                //           'assets/icons/quote_inactive.svg',
+                //         ),
+                //   onTap: () => onSelected(SmartTextType.QUOTE),
+                // ),
+                // SizedBox(
+                //   width: 20,
+                // ),
                 GestureDetector(
                   child: SvgPicture.asset('assets/icons/bullet_point.svg',
                       color: selectedType == SmartTextType.BULLET
