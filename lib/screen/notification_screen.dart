@@ -185,53 +185,83 @@ class NotificationScreen extends StatelessWidget {
                   ),
                   onRefresh: controller.alarmRefresh,
                   onLoading: controller.alarmLoading,
-                  child: Obx(
-                    () => controller.isalarmEmpty.value
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: Text(
-                                    '알람이 없습니다',
-                                    style: kSubTitle2Style.copyWith(
-                                      color: mainblack,
+                  child: CustomScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      key: const PageStorageKey("key1"),
+                      slivers: [
+                        controller.isalarmEmpty.value
+                            ? SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 24,
                                     ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : ListView.builder(
-                            itemCount: controller.alarmlist.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              Widget item = controller.alarmlist[index];
-                              return Dismissible(
-                                background: Container(
-                                  color: Colors.red,
-                                  child: Row(children: [
-                                    Container(
-                                      padding: EdgeInsets.only(left: 30),
-                                      child: Icon(Icons.delete),
-                                    )
-                                  ]),
-                                ),
-                                direction: DismissDirection.startToEnd,
-                                onDismissed: (direction) {
-                                  deleteNotification(controller
-                                      .alarmlist[index].notification.id);
-                                  controller.alarmlist.removeAt(index);
-                                  if (controller.alarmlist.isEmpty) {
-                                    controller.isalarmEmpty(true);
-                                  }
-                                },
-                                child: item,
-                                key: item.key!,
-                              );
-                            }),
-                  ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Center(
+                                          child: Text('알람이 없어요',
+                                              style: kSubTitle2Style),
+                                        ),
+                                        SizedBox(
+                                          height: 24,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }, childCount: 1),
+                              )
+                            : SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    (context, index) {
+                                return controller.isNotificationloading.value
+                                    ? Padding(
+                                        padding: EdgeInsets.zero,
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Image.asset(
+                                              'assets/icons/loading.gif',
+                                              scale: 6,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Dismissible(
+                                        background: Container(
+                                          color: Colors.red,
+                                          child: Row(children: [
+                                            Container(
+                                              padding:
+                                                  EdgeInsets.only(left: 30),
+                                              child: Icon(Icons.delete),
+                                            )
+                                          ]),
+                                        ),
+                                        direction: DismissDirection.startToEnd,
+                                        onDismissed: (direction) {
+                                          deleteNotification(controller
+                                              .alarmlist[index]
+                                              .notification
+                                              .id);
+                                          controller.alarmlist.removeAt(index);
+                                          if (controller.alarmlist.isEmpty) {
+                                            controller.isalarmEmpty(true);
+                                          }
+                                        },
+                                        child: controller.alarmlist[index],
+                                        key: controller.alarmlist[index].key!,
+                                      );
+                              },
+                                    childCount:
+                                        controller.isNotificationloading.value
+                                            ? 1
+                                            : controller.alarmlist.length))
+                      ]),
                 ),
               ),
               Obx(() => SmartRefresher(
@@ -349,55 +379,88 @@ class NotificationScreen extends StatelessWidget {
                     ),
                     onRefresh: controller.followreqRefresh,
                     onLoading: controller.followreqLoading,
-                    child: Obx(
-                      () => controller.isfollowreqEmpty.value
-                          ? Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      '루프요청이 없습니다',
-                                      style: kSubTitle2Style.copyWith(
-                                        color: mainblack,
+                    child: CustomScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        key: const PageStorageKey("key2"),
+                        slivers: [
+                          controller.isfollowreqEmpty.value
+                              ? SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                      (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 24,
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : ListView.builder(
-                              itemCount: controller.followalarmlist.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                Widget item = controller.followalarmlist[index];
-                                return Dismissible(
-                                  background: Container(
-                                    color: Colors.red,
-                                    child: Row(children: [
-                                      Container(
-                                        padding: EdgeInsets.only(left: 30),
-                                        child: Icon(Icons.delete),
-                                      )
-                                    ]),
-                                  ),
-                                  direction: DismissDirection.startToEnd,
-                                  onDismissed: (direction) {
-                                    deleteNotification(controller
-                                        .followalarmlist[index]
-                                        .notification
-                                        .id);
-                                    controller.followalarmlist.removeAt(index);
-                                    if (controller.followalarmlist.isEmpty) {
-                                      controller.isfollowreqEmpty(true);
-                                    }
-                                  },
-                                  child: item,
-                                  key: item.key!,
-                                );
-                              }),
-                    ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          Center(
+                                            child: Text('팔로우 요청이 없어요',
+                                                style: kSubTitle2Style),
+                                          ),
+                                          SizedBox(
+                                            height: 24,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }, childCount: 1),
+                                )
+                              : SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                      (context, index) {
+                                  return controller.isfollowreqloading.value
+                                      ? Padding(
+                                          padding: EdgeInsets.zero,
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 20,
+                                              ),
+                                              Image.asset(
+                                                'assets/icons/loading.gif',
+                                                scale: 6,
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Dismissible(
+                                          background: Container(
+                                            color: Colors.red,
+                                            child: Row(children: [
+                                              Container(
+                                                padding:
+                                                    EdgeInsets.only(left: 30),
+                                                child: Icon(Icons.delete),
+                                              )
+                                            ]),
+                                          ),
+                                          direction:
+                                              DismissDirection.startToEnd,
+                                          onDismissed: (direction) {
+                                            deleteNotification(controller
+                                                .followalarmlist[index]
+                                                .notification
+                                                .id);
+                                            controller.followalarmlist
+                                                .removeAt(index);
+                                            if (controller
+                                                .followalarmlist.isEmpty) {
+                                              controller.isfollowreqEmpty(true);
+                                            }
+                                          },
+                                          child:
+                                              controller.followalarmlist[index],
+                                          key: controller
+                                              .followalarmlist[index].key!,
+                                        );
+                                },
+                                      childCount: controller
+                                              .isfollowreqloading.value
+                                          ? 1
+                                          : controller.followalarmlist.length))
+                        ]),
                   )),
             ],
           ),

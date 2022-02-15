@@ -36,7 +36,7 @@ class NotificationWidget extends StatelessWidget {
         ? GestureDetector(
             onTap: () {
               Get.to(() => OtherProfileScreen(
-                  userid: notification.userId,
+                  userid: notification.targetId,
                   isuser: 0,
                   realname: notification.user.realName));
             },
