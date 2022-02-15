@@ -179,33 +179,3 @@ Future deleteuser() async {
     return Future.error(response.statusCode);
   }
 }
-
-Future getNotificationlist() async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-
-  var uri = Uri.parse("$serverUri/user_api/alarm");
-
-  http.Response response =
-      await http.get(uri, headers: {"Authorization": "Token $token"});
-
-  print("알림 리스트 로드: ${response.statusCode}");
-  if (response.statusCode == 200) {
-    List responseBody = json.decode(utf8.decode(response.bodyBytes));
-    List<NotificationModel> notificationlist = responseBody
-        .map((project) => NotificationModel.fromJson(project))
-        .toList();
-    for (var notification in notificationlist) {
-      if (notification.type == NotificationType.follow) {
-        NotificationDetailController.to.followalarmlist
-            .add(NotificationWidget(notification: notification));
-      } else {
-        NotificationDetailController.to.alarmlist
-            .add(NotificationWidget(notification: notification));
-      }
-    }
-
-    return;
-  } else {
-    return Future.error(response.statusCode);
-  }
-}

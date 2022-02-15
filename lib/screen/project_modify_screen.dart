@@ -123,7 +123,7 @@ class ProjectModifyScreen extends StatelessWidget {
                   projectlooperinput();
                   projectaddcontroller.isLooppersonLoading(true);
                   getfollowlist(ProfileController.to.myUserInfo.value.userid,
-                          followlist.follower)
+                          followlist.following)
                       .then((value) {
                     projectaddcontroller.looplist = value;
                     projectaddcontroller.looppersonlist(projectaddcontroller

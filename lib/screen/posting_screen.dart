@@ -252,7 +252,7 @@ class PostingScreen extends StatelessWidget {
                             title: controller.post.value.title,
                             realname: realName,
                             profileImage: profileImage,
-                            postDate: postDate,
+                            postDate: controller.post.value.date,
                             department: department,
                             thumbnail: controller.post.value.thumbnail,
                             isuser: isuser,
