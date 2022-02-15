@@ -374,15 +374,18 @@ class NotificationScreen extends StatelessWidget {
                                 Widget item = controller.followalarmlist[index];
                                 return Dismissible(
                                   background: Container(
-                                    color: Colors.red,
-                                    child: Row(children: [
-                                      Container(
-                                        padding: EdgeInsets.only(left: 30),
-                                        child: Icon(Icons.delete),
-                                      )
-                                    ]),
+                                    color: mainpink,
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.only(right: 32),
+                                            child: Icon(Icons.delete),
+                                          )
+                                        ]),
                                   ),
-                                  direction: DismissDirection.startToEnd,
+                                  direction: DismissDirection.endToStart,
                                   onDismissed: (direction) {
                                     deleteNotification(controller
                                         .followalarmlist[index]
