@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
+import 'package:loopus/controller/follow_controller.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
@@ -37,6 +38,29 @@ class OtherProfileScreen extends StatelessWidget {
       : super(key: key);
   late OtherProfileController controller =
       Get.put(OtherProfileController(userid), tag: userid.toString());
+
+  late final FollowController followController = Get.put(
+      FollowController(
+          islooped: controller.otherUser.value.looped.value ==
+                  FollowState.normal
+              ? 0.obs
+              : controller.otherUser.value.looped.value == FollowState.follower
+                  ? 0.obs
+                  : controller.otherUser.value.looped.value ==
+                          FollowState.following
+                      ? 1.obs
+                      : 1.obs,
+          id: userid,
+          lastislooped: controller.otherUser.value.looped.value ==
+                  FollowState.normal
+              ? 0
+              : controller.otherUser.value.looped.value == FollowState.follower
+                  ? 0
+                  : controller.otherUser.value.looped.value ==
+                          FollowState.following
+                      ? 1
+                      : 1),
+      tag: userid.toString());
 
   final ImageController imageController = Get.put(ImageController());
   final HoverController _hoverController = Get.put(HoverController());
@@ -586,14 +610,13 @@ class OtherProfileScreen extends StatelessWidget {
       // });
     } else {
       if (controller.otherUser.value.looped.value == FollowState.normal) {
-        postfollowRequest(controller.otherUser.value.userid).then((value) {
-          controller.otherUser.value.looped(FollowState.following);
-        });
+        followController.islooped(1);
+        controller.otherUser.value.looped(FollowState.following);
       } else if (controller.otherUser.value.looped.value ==
           FollowState.follower) {
-        postfollowRequest(controller.otherUser.value.userid).then((value) {
-          controller.otherUser.value.looped(FollowState.wefollow);
-        });
+        followController.islooped(1);
+
+        controller.otherUser.value.looped(FollowState.wefollow);
 
         // ProfileController.to.myUserInfo
         //         .value.loopcount -
@@ -601,14 +624,14 @@ class OtherProfileScreen extends StatelessWidget {
 
       } else if (controller.otherUser.value.looped.value ==
           FollowState.following) {
-        deletefollow(controller.otherUser.value.userid).then((value) {
-          controller.otherUser.value.looped(FollowState.normal);
-        });
+        followController.islooped(0);
+
+        controller.otherUser.value.looped(FollowState.normal);
       } else if (controller.otherUser.value.looped.value ==
           FollowState.wefollow) {
-        deletefollow(controller.otherUser.value.userid).then((value) {
-          controller.otherUser.value.looped(FollowState.follower);
-        });
+        followController.islooped(0);
+
+        controller.otherUser.value.looped(FollowState.follower);
       }
     }
   }
