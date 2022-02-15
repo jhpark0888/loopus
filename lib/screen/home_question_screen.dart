@@ -318,13 +318,9 @@ class HomeQuestionScreen extends StatelessWidget {
                                   child: (homeController
                                               .isMyQuestionLoading.value ==
                                           false)
-                                      ? MyQuestionPostingWidget(
+                                      ? QuestionWidget(
                                           item: homeController.questionResult
                                               .value.questionitems[index],
-                                          index: index,
-                                          key: Key(
-                                            toString(),
-                                          ),
                                         )
                                       : Column(
                                           children: [

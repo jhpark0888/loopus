@@ -59,6 +59,7 @@ Future addproject() async {
 
   http.StreamedResponse response = await request.send();
 
+  print("활동 생성: ${response.statusCode}");
   if (response.statusCode == 201) {
     getbacks(6);
 

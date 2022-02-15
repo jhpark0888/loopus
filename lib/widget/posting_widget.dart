@@ -18,6 +18,7 @@ import 'package:loopus/screen/likepeople_screen.dart';
 
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/project_screen.dart';
 
 import 'package:loopus/widget/tag_widget.dart';
 
@@ -104,10 +105,13 @@ class PostingWidget extends StatelessWidget {
                                   SizedBox(
                                     height: 16,
                                   ),
-                                  Text(
-                                    "${item.project!.projectName}",
-                                    style: kSubTitle2Style.copyWith(
-                                      color: mainblack.withOpacity(0.6),
+                                  GestureDetector(
+                                    onTap: tapProjectname,
+                                    child: Text(
+                                      "${item.project!.projectName}",
+                                      style: kSubTitle2Style.copyWith(
+                                        color: mainblack.withOpacity(0.6),
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(
@@ -268,6 +272,13 @@ class PostingWidget extends StatelessWidget {
             isLiked: item.isLiked,
             isMarked: item.isMarked),
         preventDuplicates: false);
+  }
+
+  void tapProjectname() {
+    Get.to(() => ProjectScreen(
+          projectid: item.project!.id,
+          isuser: item.isuser,
+        ));
   }
 
   void tapBookmark() {

@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/search_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
@@ -101,7 +103,21 @@ class NotificationWidget extends StatelessWidget {
                 Get.to(() =>
                     ProjectScreen(projectid: notification.targetId, isuser: 0));
               } else if (notification.type == NotificationType.like) {
-                // Get.to(() => PostingScreen(userid: userid, isuser: isuser, postid: postid, title: title, realName: realName, department: department, postDate: postDate, profileImage: profileImage, thumbNail: thumbNail, likecount: likecount, isLiked: isLiked, isMarked: isMarked))
+                Get.to(() => PostingScreen(
+                    userid: ProfileController.to.myUserInfo.value.userid,
+                    isuser: 1,
+                    postid: notification.targetId,
+                    title: notification.content!,
+                    realName: ProfileController.to.myUserInfo.value.realName,
+                    department:
+                        ProfileController.to.myUserInfo.value.department,
+                    postDate: DateTime.now(),
+                    profileImage:
+                        ProfileController.to.myUserInfo.value.profileImage,
+                    thumbNail: null,
+                    likecount: 0.obs,
+                    isLiked: 0.obs,
+                    isMarked: 0.obs));
               }
             },
             child: Padding(
