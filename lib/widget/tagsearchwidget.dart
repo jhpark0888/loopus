@@ -18,16 +18,22 @@ class TagSearchWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 16, left: 16, top: 20),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 '선택한 태그',
                 style: kSubTitle2Style,
               ),
+              SizedBox(
+                width: 4,
+              ),
               Obx(
                 () => Text(
-                  '${tagController.selectedtaglist.length} / 3',
-                  style: kSubTitle2Style,
+                  '(${tagController.selectedtaglist.length} / 3)',
+                  style: kSubTitle2Style.copyWith(
+                      color: tagController.selectedtaglist.length < 3
+                          ? mainpink
+                          : mainblack),
                 ),
               ),
             ],

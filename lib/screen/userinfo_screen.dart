@@ -32,7 +32,7 @@ class UserInfoScreen extends StatelessWidget {
               bottomBorder: false,
               title: '계정 정보',
             ),
-            body: ListView(
+            body: Column(
               children: [
                 ListTile(
                   title: Text(

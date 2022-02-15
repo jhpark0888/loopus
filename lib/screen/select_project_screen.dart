@@ -17,26 +17,26 @@ class SelectProjectScreen extends StatelessWidget {
         title: '포스팅 작성하기',
         bottomBorder: false,
       ),
-      body: Obx(
-        () => Padding(
-          padding: const EdgeInsets.fromLTRB(16, 24, 16, 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                '어떤 활동에 대한 포스팅인가요?',
-                style: kSubTitle2Style,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 28,
-              ),
-              Expanded(
-                child: ListView(
-                  children: controller.selectprojectlist.value,
+      body: SingleChildScrollView(
+        child: Obx(
+          () => Padding(
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  '어떤 활동에 대한 포스팅인가요?',
+                  style: kSubTitle2Style,
+                  textAlign: TextAlign.center,
                 ),
-              )
-            ],
+                SizedBox(
+                  height: 28,
+                ),
+                Column(
+                  children: controller.selectprojectlist.value,
+                )
+              ],
+            ),
           ),
         ),
       ),

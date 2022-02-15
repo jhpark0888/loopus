@@ -58,10 +58,12 @@ class QuestionAddContentScreen extends StatelessWidget {
                 cursorColor: mainblue,
                 cursorWidth: 1.3,
                 cursorRadius: const Radius.circular(500),
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: '질문 내용을 작성해주세요',
-                ),
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: '질문 내용을 작성해주세요',
+                    hintStyle: kSubTitle3Style.copyWith(
+                      color: mainblack.withOpacity(0.38),
+                    )),
                 style: const TextStyle(
                   fontSize: 16.0,
                   color: mainblack,

@@ -22,7 +22,7 @@ class SettingScreen extends StatelessWidget {
         bottomBorder: false,
         title: '설정',
       ),
-      body: ListView(
+      body: Column(
         children: [
           CustomListTile(
             hoverTag: '계정 정보',

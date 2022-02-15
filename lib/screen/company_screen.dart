@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
@@ -12,15 +14,27 @@ class CompanyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: mainblue,
         elevation: 0,
         centerTitle: false,
         title: Obx(
           () => Text(
-            '${_profileController.myUserInfo.value.realName}님께 추천드리는 기업',
-            style: kHeaderH1Style,
+            '${_profileController.myUserInfo.value.realName}님에게 추천드리는 기업',
+            style: kHeaderH1Style.copyWith(color: mainWhite),
           ),
         ),
-        actions: [],
+        actions: [
+          IconButton(
+            onPressed: () {
+              ModalController.to
+                  .showCustomDialog('본인의 활동과 관심 태그를 기반으로\n맞춤 기업을 추천해드려요', 1500);
+            },
+            icon: SvgPicture.asset(
+              'assets/icons/Question.svg',
+              color: mainWhite,
+            ),
+          ),
+        ],
       ),
       body: Column(
         mainAxisSize: MainAxisSize.max,
@@ -40,7 +54,7 @@ class CompanyScreen extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                  text: '를 생성 중이에요',
+                  text: '를 받아오는 중이에요',
                   style: kSubTitle2Style,
                 ),
               ],

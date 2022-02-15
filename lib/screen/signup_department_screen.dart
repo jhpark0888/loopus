@@ -140,6 +140,7 @@ class SignupDepartmentScreen extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+                                        const Divider(),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 16.0),
@@ -147,7 +148,6 @@ class SignupDepartmentScreen extends StatelessWidget {
                                             dept,
                                           ),
                                         ),
-                                        const Divider(),
                                       ],
                                     ),
                                   ))

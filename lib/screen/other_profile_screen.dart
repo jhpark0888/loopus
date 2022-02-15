@@ -26,6 +26,8 @@ import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
+import '../controller/hover_controller.dart';
+
 class OtherProfileScreen extends StatelessWidget {
   OtherProfileScreen(
       {Key? key,
@@ -37,6 +39,8 @@ class OtherProfileScreen extends StatelessWidget {
       Get.put(OtherProfileController(userid), tag: userid.toString());
 
   final ImageController imageController = Get.put(ImageController());
+  final HoverController _hoverController = Get.put(HoverController());
+
   int userid;
   int isuser;
   String realname;
@@ -417,6 +421,13 @@ class OtherProfileScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTapDown: (details) =>
+                                  _hoverController.isHover(true),
+                              onTapCancel: () =>
+                                  _hoverController.isHover(false),
+                              onTapUp: (details) =>
+                                  _hoverController.isHover(false),
                               onTap: () {
                                 controller.isLoopPeopleLoading(true);
                                 Get.to(() => LoopPeopleScreen(
@@ -430,18 +441,30 @@ class OtherProfileScreen extends StatelessWidget {
                                     const EdgeInsets.symmetric(vertical: 12.0),
                                 child: Column(
                                   children: [
-                                    Text(
-                                      '팔로워',
-                                      style: kBody1Style,
+                                    Obx(
+                                      () => Text(
+                                        '팔로워',
+                                        style: kBody1Style.copyWith(
+                                            color:
+                                                _hoverController.isHover.value
+                                                    ? mainblack.withOpacity(0.6)
+                                                    : mainblack),
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 8,
                                     ),
-                                    Text(
-                                      controller.otherUser.value.loopcount
-                                          .toString(),
-                                      style: kSubTitle2Style,
-                                    )
+                                    Obx(
+                                      () => Text(
+                                        controller.otherUser.value.loopcount
+                                            .toString(),
+                                        style: kSubTitle2Style.copyWith(
+                                            color:
+                                                _hoverController.isHover.value
+                                                    ? mainblack.withOpacity(0.6)
+                                                    : mainblack),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
