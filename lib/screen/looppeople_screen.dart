@@ -49,6 +49,7 @@ class LoopPeopleScreen extends StatelessWidget {
                         context),
                     sliver: SliverSafeArea(
                       top: false,
+                      bottom: false,
                       sliver: SliverAppBar(
                         pinned: true,
                         automaticallyImplyLeading: false,

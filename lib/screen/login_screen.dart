@@ -45,7 +45,7 @@ class LogInScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           const Text(
-                            '이메일 주소',
+                            '학교 이메일 주소',
                             style: kSubTitle2Style,
                           ),
                           const SizedBox(

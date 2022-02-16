@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/api/search_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
@@ -12,6 +13,8 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/tag_detail_screen.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
+
+import '../controller/hover_controller.dart';
 
 class SearchTagWidget extends StatelessWidget {
   SearchTagWidget(
@@ -28,46 +31,77 @@ class SearchTagWidget extends StatelessWidget {
   int? count;
   int isSearch;
   Tagtype? tagtype;
+  var numberFormat = NumberFormat('###,###,###,###');
+  late final HoverController _hoverController =
+      Get.put(HoverController(), tag: id.toString());
 
   @override
   Widget build(BuildContext context) {
     return id != -1
         ? 0 == isSearch
             ? GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTapDown: (details) => _hoverController.isHover(true),
+                onTapCancel: () => _hoverController.isHover(false),
+                onTapUp: (details) => _hoverController.isHover(false),
                 onTap: _selectTag,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 16,
+                    horizontal: 24,
+                    vertical: 12,
                   ),
                   child: Row(
                     children: [
-                      SvgPicture.asset(
-                        'assets/icons/Tag.svg',
-                        width: 30,
-                        height: 30,
+                      Obx(
+                        () => SvgPicture.asset(
+                          'assets/icons/Tag.svg',
+                          width: 24,
+                          height: 24,
+                          color: _hoverController.isHover.value
+                              ? mainblack.withOpacity(0.6)
+                              : mainblack,
+                        ),
                       ),
                       const SizedBox(
-                        width: 24,
+                        width: 20,
                       ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              tag,
-                              style: kButtonStyle,
+                            Obx(
+                              () => Text(
+                                tag,
+                                style: kButtonStyle.copyWith(
+                                  color: _hoverController.isHover.value
+                                      ? mainblack.withOpacity(0.6)
+                                      : mainblack,
+                                ),
+                              ),
                             ),
                             SizedBox(
                               height: 4,
                             ),
                             (count != null)
-                                ? Text(
-                                    '관심도 ${count.toString()}',
-                                    style: kBody1Style,
+                                ? Obx(
+                                    () => Text(
+                                      '관심도 ${numberFormat.format(count)}',
+                                      style: kBody1Style.copyWith(
+                                        color: _hoverController.isHover.value
+                                            ? mainblack.withOpacity(0.6)
+                                            : mainblack,
+                                      ),
+                                    ),
                                   )
-                                : Text(
-                                    '관심도 표시 불가',
+                                : Obx(
+                                    () => Text(
+                                      '관심도 0',
+                                      style: kBody1Style.copyWith(
+                                        color: _hoverController.isHover.value
+                                            ? mainblack.withOpacity(0.6)
+                                            : mainblack,
+                                      ),
+                                    ),
                                   ),
                           ],
                         ),
@@ -77,6 +111,10 @@ class SearchTagWidget extends StatelessWidget {
                 ),
               )
             : GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTapDown: (details) => _hoverController.isHover(true),
+                onTapCancel: () => _hoverController.isHover(false),
+                onTapUp: (details) => _hoverController.isHover(false),
                 onTap: () async {
                   Get.to(() => TagDetailScreen(
                         tag: Tag(tagId: id, tag: tag, count: count ?? 0),
@@ -84,37 +122,61 @@ class SearchTagWidget extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 16,
+                    horizontal: 24,
+                    vertical: 12,
                   ),
                   child: Row(
                     children: [
-                      SvgPicture.asset(
-                        'assets/icons/Tag.svg',
-                        width: 30,
-                        height: 30,
+                      Obx(
+                        () => SvgPicture.asset(
+                          'assets/icons/Tag.svg',
+                          width: 24,
+                          height: 24,
+                          color: _hoverController.isHover.value
+                              ? mainblack.withOpacity(0.6)
+                              : mainblack,
+                        ),
                       ),
                       SizedBox(
-                        width: 24,
+                        width: 20,
                       ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              tag,
-                              style: kButtonStyle,
+                            Obx(
+                              () => Text(
+                                tag,
+                                style: kButtonStyle.copyWith(
+                                  color: _hoverController.isHover.value
+                                      ? mainblack.withOpacity(0.6)
+                                      : mainblack,
+                                ),
+                              ),
                             ),
                             SizedBox(
                               height: 4,
                             ),
                             (count != null)
-                                ? Text(
-                                    '관심도 ${count}',
-                                    style: kBody1Style,
+                                ? Obx(
+                                    () => Text(
+                                      '관심도 ${numberFormat.format(count)}',
+                                      style: kBody1Style.copyWith(
+                                        color: _hoverController.isHover.value
+                                            ? mainblack.withOpacity(0.6)
+                                            : mainblack,
+                                      ),
+                                    ),
                                   )
-                                : Text(
-                                    '관심도 표시 불가',
+                                : Obx(
+                                    () => Text(
+                                      '관심도 0',
+                                      style: kBody1Style.copyWith(
+                                        color: _hoverController.isHover.value
+                                            ? mainblack.withOpacity(0.6)
+                                            : mainblack,
+                                      ),
+                                    ),
                                   ),
                           ],
                         ),

@@ -40,11 +40,11 @@ class BookmarkScreen extends StatelessWidget {
                 Text(
                   '북마크 새로고침 중...',
                   style: TextStyle(
+                    fontWeight: FontWeight.w500,
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    color: mainblue,
                   ),
-                ),
+                )
               ],
             ),
             releaseIcon: Column(
@@ -59,11 +59,11 @@ class BookmarkScreen extends StatelessWidget {
                 Text(
                   '북마크 새로고침 중...',
                   style: TextStyle(
+                    fontWeight: FontWeight.w500,
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    color: mainblue,
                   ),
-                ),
+                )
               ],
             ),
             completeIcon: Column(
@@ -78,11 +78,11 @@ class BookmarkScreen extends StatelessWidget {
                 Text(
                   '완료!',
                   style: TextStyle(
+                    fontWeight: FontWeight.w500,
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    color: mainblue,
                   ),
-                ),
+                )
               ],
             ),
             idleIcon: Column(
@@ -97,11 +97,11 @@ class BookmarkScreen extends StatelessWidget {
                 Text(
                   '당겨주세요',
                   style: TextStyle(
+                    fontWeight: FontWeight.w500,
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    color: mainblue,
                   ),
-                ),
+                )
               ],
             ),
           ),

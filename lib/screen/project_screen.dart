@@ -210,9 +210,9 @@ class ProjectScreen extends StatelessWidget {
                                 leftText: '취소',
                                 rightText: '삭제',
                                 title:
-                                    '정말 <${controller.project.value.projectName}> 활동을 삭제하시겠어요?',
+                                    '<${controller.project.value.projectName}> 활동을 삭제하시겠어요?',
                                 content:
-                                    '지금까지 작성한 ${controller.project.value.post.length}개의 포스팅도 삭제됩니다',
+                                    '작성한 ${controller.project.value.post.length}개의 포스팅도 삭제됩니다',
                                 leftFunction: () => Get.back(),
                                 rightFunction: () async {
                                   Get.back();
@@ -238,7 +238,7 @@ class ProjectScreen extends StatelessWidget {
                                 leftText: '취소',
                                 rightText: '신고',
                                 title:
-                                    '정말 <${controller.project.value.projectName}> 활동을 신고하시겠어요?',
+                                    '<${controller.project.value.projectName}> 활동을 신고하시겠어요?',
                                 content: '관리자가 검토 후 조치하도록 하겠습니다',
                                 leftFunction: () => Get.back(),
                                 rightFunction: () {});
