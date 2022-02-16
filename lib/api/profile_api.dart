@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_detail_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/project_model.dart';
@@ -29,6 +30,10 @@ Future<User> getProfile(var userId) async {
     var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
     User user = User.fromJson(responseBody);
+    if (user.isuser == 1) {
+      ProfileController.to.isnewalarm(responseBody["new_alarm"]);
+      ProfileController.to.isnewmessage(responseBody["new_message"]);
+    }
     return user;
   } else {
     return Future.error(response.statusCode);

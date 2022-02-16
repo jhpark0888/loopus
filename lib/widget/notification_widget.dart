@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/search_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/follow_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
@@ -20,6 +21,7 @@ import 'package:loopus/screen/question_detail_screen.dart';
 import 'package:loopus/screen/tag_detail_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/blue_button.dart';
+import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class NotificationWidget extends StatelessWidget {
@@ -29,17 +31,30 @@ class NotificationWidget extends StatelessWidget {
   }) : super(key: key);
 
   NotificationModel notification;
+  late final FollowController followController = Get.put(
+      FollowController(
+          islooped: notification.looped!.value == FollowState.normal
+              ? 0.obs
+              : notification.looped!.value == FollowState.follower
+                  ? 0.obs
+                  : notification.looped!.value == FollowState.following
+                      ? 1.obs
+                      : 1.obs,
+          id: notification.targetId,
+          lastislooped: notification.looped!.value == FollowState.normal
+              ? 0
+              : notification.looped!.value == FollowState.follower
+                  ? 0
+                  : notification.looped!.value == FollowState.following
+                      ? 1
+                      : 1),
+      tag: notification.targetId.toString());
 
   @override
   Widget build(BuildContext context) {
     return notification.type == NotificationType.follow
         ? GestureDetector(
-            onTap: () {
-              Get.to(() => OtherProfileScreen(
-                  userid: notification.targetId,
-                  isuser: 0,
-                  realname: notification.user.realName));
-            },
+            onTap: clickprofile,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
@@ -87,39 +102,33 @@ class NotificationWidget extends StatelessWidget {
                   const SizedBox(
                     width: 12,
                   ),
-                  BlueTextButton(onTap: () {}, text: "루프 맺기", hoverTag: "팔로우")
+                  Obx(() => CustomExpandedButton(
+                        onTap: followMotion,
+                        title: notification.looped!.value == FollowState.normal
+                            ? "루프 맺기"
+                            : notification.looped!.value == FollowState.follower
+                                ? "루프 맺기"
+                                : notification.looped!.value ==
+                                        FollowState.following
+                                    ? "루프"
+                                    : "루프",
+                        isBlue: notification.looped!.value == FollowState.normal
+                            ? true
+                            : notification.looped!.value == FollowState.follower
+                                ? true
+                                : notification.looped!.value ==
+                                        FollowState.following
+                                    ? false
+                                    : false,
+                        isBig: true,
+                        buttonTag: notification.targetId.toString(),
+                      ))
                 ],
               ),
             ),
           )
         : GestureDetector(
-            onTap: () {
-              if (notification.type == NotificationType.question) {
-                Get.to(() => QuestionDetailScreen(
-                    questionid: notification.targetId,
-                    isuser: 1,
-                    realname: notification.user.realName));
-              } else if (notification.type == NotificationType.tag) {
-                Get.to(() =>
-                    ProjectScreen(projectid: notification.targetId, isuser: 0));
-              } else if (notification.type == NotificationType.like) {
-                Get.to(() => PostingScreen(
-                    userid: ProfileController.to.myUserInfo.value.userid,
-                    isuser: 1,
-                    postid: notification.targetId,
-                    title: notification.content!,
-                    realName: ProfileController.to.myUserInfo.value.realName,
-                    department:
-                        ProfileController.to.myUserInfo.value.department,
-                    postDate: DateTime.now(),
-                    profileImage:
-                        ProfileController.to.myUserInfo.value.profileImage,
-                    thumbNail: null,
-                    likecount: 0.obs,
-                    isLiked: 0.obs,
-                    isMarked: 0.obs));
-              }
-            },
+            onTap: clicknotice,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
@@ -178,5 +187,61 @@ class NotificationWidget extends StatelessWidget {
               ),
             ),
           );
+  }
+
+  void followMotion() {
+    if (notification.looped!.value == FollowState.normal) {
+      followController.islooped(1);
+      notification.looped!(FollowState.following);
+    } else if (notification.looped!.value == FollowState.follower) {
+      followController.islooped(1);
+
+      notification.looped!(FollowState.wefollow);
+
+      // ProfileController.to.myUserInfo
+      //         .value.loopcount -
+      //     1;
+
+    } else if (notification.looped!.value == FollowState.following) {
+      followController.islooped(0);
+
+      notification.looped!(FollowState.normal);
+    } else if (notification.looped!.value == FollowState.wefollow) {
+      followController.islooped(0);
+
+      notification.looped!(FollowState.follower);
+    }
+  }
+
+  void clickprofile() {
+    Get.to(() => OtherProfileScreen(
+        userid: notification.targetId,
+        isuser: 0,
+        realname: notification.user.realName));
+  }
+
+  void clicknotice() {
+    if (notification.type == NotificationType.question) {
+      Get.to(() => QuestionDetailScreen(
+          questionid: notification.targetId,
+          isuser: 1,
+          realname: notification.user.realName));
+    } else if (notification.type == NotificationType.tag) {
+      Get.to(() => ProjectScreen(projectid: notification.targetId, isuser: 0));
+    } else if (notification.type == NotificationType.like) {
+      Get.to(() => PostingScreen(
+          userid: ProfileController.to.myUserInfo.value.userid,
+          isuser: 1,
+          postid: notification.targetId,
+          title: notification.content!,
+          realName: ProfileController.to.myUserInfo.value.realName,
+          department: ProfileController.to.myUserInfo.value.department,
+          postDate: DateTime.now(),
+          profileImage: ProfileController.to.myUserInfo.value.profileImage,
+          thumbNail: null,
+          likecount: 0.obs,
+          isLiked: 0.obs,
+          isMarked: 0.obs));
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/controller/message_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/search_screen.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
@@ -50,23 +51,68 @@ class HomeScreen extends StatelessWidget {
             //     height: 28,
             //   ),
             // ),
-            IconButton(
-              onPressed: () => Get.to(() => NotificationScreen()),
-              icon: SvgPicture.asset(
-                "assets/icons/Bell_Inactive.svg",
-                width: 28,
-                height: 28,
-              ),
+            Stack(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    ProfileController.to.isnewalarm(false);
+
+                    Get.to(() => NotificationScreen());
+                  },
+                  icon: SvgPicture.asset(
+                    "assets/icons/Bell_Inactive.svg",
+                    width: 28,
+                    height: 28,
+                  ),
+                ),
+                Positioned(
+                  right: 12,
+                  top: 10,
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child:
+                        Obx(() => ProfileController.to.isnewalarm.value == true
+                            ? Container(
+                                height: 10,
+                                width: 10,
+                                decoration: BoxDecoration(
+                                    color: Colors.red, shape: BoxShape.circle),
+                              )
+                            : Container()),
+                  ),
+                ),
+              ],
             ),
-            IconButton(
-              onPressed: () {
-                Get.to(() => MessageScreen());
-              },
-              icon: SvgPicture.asset(
-                "assets/icons/Chat.svg",
-                width: 28,
-                height: 28,
-              ),
+            Stack(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    ProfileController.to.isnewmessage(false);
+                    Get.to(() => MessageScreen());
+                  },
+                  icon: SvgPicture.asset(
+                    "assets/icons/Chat.svg",
+                    width: 28,
+                    height: 28,
+                  ),
+                ),
+                Positioned(
+                  right: 12,
+                  top: 10,
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Obx(
+                        () => ProfileController.to.isnewmessage.value == true
+                            ? Container(
+                                height: 10,
+                                width: 10,
+                                decoration: BoxDecoration(
+                                    color: Colors.red, shape: BoxShape.circle),
+                              )
+                            : Container()),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
