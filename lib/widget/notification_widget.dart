@@ -73,10 +73,8 @@ class NotificationWidget extends StatelessWidget {
                               height: 56,
                               width: 56,
                               imageUrl: notification.user.profileImage!,
-                              placeholder: (context, url) => CircleAvatar(
-                                backgroundColor: const Color(0xffe7e7e7),
-                                child: Container(),
-                              ),
+                              placeholder: (context, url) =>
+                                  kProfilePlaceHolder(),
                               fit: BoxFit.cover,
                             )),
                   const SizedBox(
@@ -88,15 +86,21 @@ class NotificationWidget extends StatelessWidget {
                         text: TextSpan(children: [
                           TextSpan(
                               text: notification.user.realName,
-                              style: kSubTitle2Style),
-                          TextSpan(text: "님이 ", style: kSubTitle3Style),
-                          TextSpan(text: "루프를 요청했어요 ", style: kSubTitle2Style),
+                              style: kSubTitle1Style),
                           TextSpan(
-                              text: DurationCaculator().messagedurationCaculate(
-                                  startDate: notification.date,
-                                  endDate: DateTime.now()),
-                              style: kSubTitle2Style.copyWith(
-                                  color: mainblack.withOpacity(0.38)))
+                            text: "님이 팔로우하기 시작했어요 ",
+                            style: kSubTitle1Style.copyWith(
+                                fontWeight: FontWeight.w400),
+                          ),
+                          TextSpan(
+                            text: DurationCaculator().messagedurationCaculate(
+                                startDate: notification.date,
+                                endDate: DateTime.now()),
+                            style: kSubTitle1Style.copyWith(
+                              color: mainblack.withOpacity(0.38),
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )
                         ])),
                   ),
                   const SizedBox(
@@ -105,13 +109,13 @@ class NotificationWidget extends StatelessWidget {
                   Obx(() => CustomExpandedButton(
                         onTap: followMotion,
                         title: notification.looped!.value == FollowState.normal
-                            ? "루프 맺기"
+                            ? "팔로우하기"
                             : notification.looped!.value == FollowState.follower
-                                ? "루프 맺기"
+                                ? "팔로우하기"
                                 : notification.looped!.value ==
                                         FollowState.following
-                                    ? "루프"
-                                    : "루프",
+                                    ? "팔로잉 중"
+                                    : "팔로잉 중",
                         isBlue: notification.looped!.value == FollowState.normal
                             ? true
                             : notification.looped!.value == FollowState.follower
@@ -120,7 +124,7 @@ class NotificationWidget extends StatelessWidget {
                                         FollowState.following
                                     ? false
                                     : false,
-                        isBig: true,
+                        isBig: false,
                         buttonTag: notification.targetId.toString(),
                       ))
                 ],
@@ -147,10 +151,8 @@ class NotificationWidget extends StatelessWidget {
                               height: 56,
                               width: 56,
                               imageUrl: notification.user.profileImage!,
-                              placeholder: (context, url) => CircleAvatar(
-                                backgroundColor: const Color(0xffe7e7e7),
-                                child: Container(),
-                              ),
+                              placeholder: (context, url) =>
+                                  kProfilePlaceHolder(),
                               fit: BoxFit.cover,
                             )),
                   const SizedBox(
@@ -162,24 +164,29 @@ class NotificationWidget extends StatelessWidget {
                         text: TextSpan(children: [
                           TextSpan(
                               text: notification.user.realName,
-                              style: kSubTitle2Style),
-                          TextSpan(text: "님이 ", style: kSubTitle3Style),
+                              style: kSubTitle1Style),
+                          TextSpan(
+                            text: "님이 ",
+                            style: kSubTitle1Style.copyWith(
+                                fontWeight: FontWeight.w400),
+                          ),
                           TextSpan(
                               text: notification.content,
-                              style: kSubTitle2Style),
+                              style: kSubTitle1Style),
                           TextSpan(
-                              text: notification.type ==
-                                      NotificationType.question
-                                  ? " 질문에 답글을 남겼어요 "
-                                  : notification.type == NotificationType.tag
-                                      ? " 활동에 당신을 태그했어요 "
-                                      : " 포스팅에 좋아요를 남겼어요 ",
-                              style: kSubTitle3Style),
+                            text: notification.type == NotificationType.question
+                                ? " 질문에 답변을 남겼어요 "
+                                : notification.type == NotificationType.tag
+                                    ? " 활동에 당신을 태그했어요 "
+                                    : " 포스팅에 좋아요를 남겼어요 ",
+                            style: kSubTitle1Style.copyWith(
+                                fontWeight: FontWeight.w400),
+                          ),
                           TextSpan(
                               text: DurationCaculator().messagedurationCaculate(
                                   startDate: notification.date,
                                   endDate: DateTime.now()),
-                              style: kSubTitle2Style.copyWith(
+                              style: kSubTitle3Style.copyWith(
                                   color: mainblack.withOpacity(0.38)))
                         ])),
                   ),

@@ -97,7 +97,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  right: 14,
+                  right: 12,
                   top: 12,
                   child: Align(
                     alignment: Alignment.topRight,

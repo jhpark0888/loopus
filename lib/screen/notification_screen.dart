@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/constant.dart';
@@ -25,44 +26,52 @@ class NotificationScreen extends StatelessWidget {
         child: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
-              SliverAppBar(
-                pinned: true,
-                automaticallyImplyLeading: false,
-                expandedHeight: 43,
-                toolbarHeight: 43,
-                elevation: 0,
-                flexibleSpace: Column(
-                  children: [
-                    TabBar(
-                      labelStyle: kButtonStyle,
-                      labelColor: mainblack,
-                      unselectedLabelStyle: kBody1Style,
-                      unselectedLabelColor: mainblack.withOpacity(0.6),
-                      indicator: const UnderlineIndicator(
-                        strokeCap: StrokeCap.round,
-                        borderSide: BorderSide(width: 2),
-                      ),
-                      indicatorColor: mainblack,
-                      tabs: const [
-                        Tab(
-                          height: 40,
-                          child: Text(
-                            "알림",
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverSafeArea(
+                  top: false,
+                  bottom: false,
+                  sliver: SliverAppBar(
+                    pinned: true,
+                    automaticallyImplyLeading: false,
+                    expandedHeight: 43,
+                    toolbarHeight: 43,
+                    elevation: 0,
+                    flexibleSpace: Column(
+                      children: [
+                        TabBar(
+                          labelStyle: kButtonStyle,
+                          labelColor: mainblack,
+                          unselectedLabelStyle: kBody1Style,
+                          unselectedLabelColor: mainblack.withOpacity(0.6),
+                          indicator: const UnderlineIndicator(
+                            strokeCap: StrokeCap.round,
+                            borderSide: BorderSide(width: 1.2),
                           ),
+                          indicatorColor: mainblack,
+                          tabs: const [
+                            Tab(
+                              height: 40,
+                              child: Text(
+                                "알림",
+                              ),
+                            ),
+                            Tab(
+                              height: 40,
+                              child: Text(
+                                "루프 요청",
+                              ),
+                            )
+                          ],
                         ),
-                        Tab(
-                          height: 40,
-                          child: Text(
-                            "루프 요청",
-                          ),
-                        )
+                        Container(
+                          height: 1,
+                          color: const Color(0xffe7e7e7),
+                        ),
                       ],
                     ),
-                    Container(
-                      height: 1,
-                      color: const Color(0xffe7e7e7),
-                    ),
-                  ],
+                  ),
                 ),
               )
             ];
@@ -94,17 +103,6 @@ class NotificationScreen extends StatelessWidget {
                           'assets/icons/loading.gif',
                           scale: 6,
                         ),
-                        // SizedBox(
-                        //   height: 4,
-                        // ),
-                        // Text(
-                        //   '새로운 포스팅 받는 중...',
-                        //   style: TextStyle(
-                        //     fontSize: 10,
-                        //     fontWeight: FontWeight.bold,
-                        //     color: mainblue.withOpacity(0.6),
-                        //   ),
-                        // ),
                       ],
                     ),
                     releaseIcon: Column(
@@ -113,17 +111,6 @@ class NotificationScreen extends StatelessWidget {
                           'assets/icons/loading.gif',
                           scale: 6,
                         ),
-                        // SizedBox(
-                        //   height: 4,
-                        // ),
-                        // Text(
-                        //   '새로운 포스팅 받는 중...',
-                        //   style: TextStyle(
-                        //     fontSize: 10,
-                        //     fontWeight: FontWeight.bold,
-                        //     color: mainblue.withOpacity(0.6),
-                        //   ),
-                        // ),
                       ],
                     ),
                     completeIcon: Column(
@@ -132,17 +119,6 @@ class NotificationScreen extends StatelessWidget {
                           Icons.check_rounded,
                           color: mainblue,
                         ),
-                        // const SizedBox(
-                        //   height: 4,
-                        // ),
-                        // Text(
-                        //   '완료!',
-                        //   style: TextStyle(
-                        //     fontSize: 10,
-                        //     fontWeight: FontWeight.bold,
-                        //     color: mainblue.withOpacity(0.6),
-                        //   ),
-                        // ),
                       ],
                     ),
                     idleIcon: Column(
@@ -151,17 +127,6 @@ class NotificationScreen extends StatelessWidget {
                           'assets/icons/loading.png',
                           scale: 12,
                         ),
-                        // const SizedBox(
-                        //   height: 8,
-                        // ),
-                        // Text(
-                        //   '당겨주세요',
-                        //   style: TextStyle(
-                        //     fontSize: 10,
-                        //     fontWeight: FontWeight.bold,
-                        //     color: mainblue.withOpacity(0.6),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -202,8 +167,12 @@ class NotificationScreen extends StatelessWidget {
                                           CrossAxisAlignment.stretch,
                                       children: [
                                         Center(
-                                          child: Text('알람이 없어요',
-                                              style: kSubTitle2Style),
+                                          child: Text(
+                                            '새로운 알림이 없어요',
+                                            style: kSubTitle3Style.copyWith(
+                                              color: mainblack.withOpacity(0.6),
+                                            ),
+                                          ),
                                         ),
                                         SizedBox(
                                           height: 24,
@@ -233,16 +202,20 @@ class NotificationScreen extends StatelessWidget {
                                       )
                                     : Dismissible(
                                         background: Container(
-                                          color: Colors.red,
-                                          child: Row(children: [
-                                            Container(
-                                              padding:
-                                                  EdgeInsets.only(left: 30),
-                                              child: Icon(Icons.delete),
-                                            )
-                                          ]),
+                                          color: mainpink,
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      right: 16),
+                                                  child: SvgPicture.asset(
+                                                      'assets/icons/Trash.svg'),
+                                                )
+                                              ]),
                                         ),
-                                        direction: DismissDirection.startToEnd,
+                                        direction: DismissDirection.endToStart,
                                         onDismissed: (direction) {
                                           deleteNotification(controller
                                               .alarmlist[index]
@@ -288,17 +261,6 @@ class NotificationScreen extends StatelessWidget {
                             'assets/icons/loading.gif',
                             scale: 6,
                           ),
-                          // SizedBox(
-                          //   height: 4,
-                          // ),
-                          // Text(
-                          //   '새로운 포스팅 받는 중...',
-                          //   style: TextStyle(
-                          //     fontSize: 10,
-                          //     fontWeight: FontWeight.bold,
-                          //     color: mainblue.withOpacity(0.6),
-                          //   ),
-                          // ),
                         ],
                       ),
                       releaseIcon: Column(
@@ -307,17 +269,6 @@ class NotificationScreen extends StatelessWidget {
                             'assets/icons/loading.gif',
                             scale: 6,
                           ),
-                          // SizedBox(
-                          //   height: 4,
-                          // ),
-                          // Text(
-                          //   '새로운 포스팅 받는 중...',
-                          //   style: TextStyle(
-                          //     fontSize: 10,
-                          //     fontWeight: FontWeight.bold,
-                          //     color: mainblue.withOpacity(0.6),
-                          //   ),
-                          // ),
                         ],
                       ),
                       completeIcon: Column(
@@ -326,17 +277,6 @@ class NotificationScreen extends StatelessWidget {
                             Icons.check_rounded,
                             color: mainblue,
                           ),
-                          // const SizedBox(
-                          //   height: 4,
-                          // ),
-                          // Text(
-                          //   '완료!',
-                          //   style: TextStyle(
-                          //     fontSize: 10,
-                          //     fontWeight: FontWeight.bold,
-                          //     color: mainblue.withOpacity(0.6),
-                          //   ),
-                          // ),
                         ],
                       ),
                       idleIcon: Column(
@@ -345,17 +285,6 @@ class NotificationScreen extends StatelessWidget {
                             'assets/icons/loading.png',
                             scale: 12,
                           ),
-                          // const SizedBox(
-                          //   height: 8,
-                          // ),
-                          // Text(
-                          //   '당겨주세요',
-                          //   style: TextStyle(
-                          //     fontSize: 10,
-                          //     fontWeight: FontWeight.bold,
-                          //     color: mainblue.withOpacity(0.6),
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
@@ -396,8 +325,13 @@ class NotificationScreen extends StatelessWidget {
                                             CrossAxisAlignment.stretch,
                                         children: [
                                           Center(
-                                            child: Text('팔로우 요청이 없어요',
-                                                style: kSubTitle2Style),
+                                            child: Text(
+                                              '아직 팔로우 요청이 없어요',
+                                              style: kSubTitle3Style.copyWith(
+                                                color:
+                                                    mainblack.withOpacity(0.6),
+                                              ),
+                                            ),
                                           ),
                                           SizedBox(
                                             height: 24,
@@ -427,17 +361,21 @@ class NotificationScreen extends StatelessWidget {
                                         )
                                       : Dismissible(
                                           background: Container(
-                                            color: Colors.red,
-                                            child: Row(children: [
-                                              Container(
-                                                padding:
-                                                    EdgeInsets.only(left: 30),
-                                                child: Icon(Icons.delete),
-                                              )
-                                            ]),
+                                            color: mainpink,
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 16),
+                                                    child: SvgPicture.asset(
+                                                        'assets/icons/Trash.svg'),
+                                                  )
+                                                ]),
                                           ),
                                           direction:
-                                              DismissDirection.startToEnd,
+                                              DismissDirection.endToStart,
                                           onDismissed: (direction) {
                                             deleteNotification(controller
                                                 .followalarmlist[index]
