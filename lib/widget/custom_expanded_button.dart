@@ -31,6 +31,7 @@ class CustomExpandedButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(
           vertical: isBig == true ? 12 : 8,
+          horizontal: 12,
         ),
         decoration: BoxDecoration(
           color: isBlue! ? mainblue : const Color(0xffe7e7e7),

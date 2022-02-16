@@ -528,25 +528,27 @@ class MyProfileScreen extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text('활동', style: kSubTitle2Style),
-                                  GestureDetector(
-                                    behavior: HitTestBehavior.translucent,
-                                    onTap: () {
-                                      Get.to(
-                                        () => ProjectAddTitleScreen(
-                                          screenType: Screentype.add,
+                                  if (profileController
+                                      .myProjectList.value.isNotEmpty)
+                                    GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: () {
+                                        Get.to(
+                                          () => ProjectAddTitleScreen(
+                                            screenType: Screentype.add,
+                                          ),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4),
+                                        child: Text(
+                                          '추가하기',
+                                          style: kSubTitle2Style.copyWith(
+                                              color: mainblue),
                                         ),
-                                      );
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 4),
-                                      child: Text(
-                                        '추가하기',
-                                        style: kSubTitle2Style.copyWith(
-                                            color: mainblue),
                                       ),
                                     ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -554,29 +556,67 @@ class MyProfileScreen extends StatelessWidget {
                               () => Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                child:
-                                    (profileController.isProfileLoading.value ==
-                                            false)
-                                        ? Obx(
-                                            () => Column(
-                                              children: profileController
-                                                  .myProjectList.value,
-                                            ),
-                                          )
-                                        : Column(
-                                            children: [
-                                              Image.asset(
-                                                'assets/icons/loading.gif',
-                                                scale: 6,
+                                child: (profileController
+                                            .isProfileLoading.value ==
+                                        false)
+                                    ? Obx(
+                                        () => profileController
+                                                .myProjectList.value.isNotEmpty
+                                            ? Column(
+                                                children: profileController
+                                                    .myProjectList.value,
+                                              )
+                                            : Column(
+                                                children: [
+                                                  Text(
+                                                    '첫번째 활동을 기록해보세요',
+                                                    style: kSubTitle1Style,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 4,
+                                                  ),
+                                                  Text(
+                                                    '수업, 과제, 스터디 등 학교 생활과 관련있는\n다양한 경험을 남겨보세요',
+                                                    style: kBody1Style.copyWith(
+                                                      color: mainblack
+                                                          .withOpacity(0.6),
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 12,
+                                                  ),
+                                                  CustomExpandedButton(
+                                                    onTap: () {
+                                                      Get.to(
+                                                        () =>
+                                                            ProjectAddTitleScreen(
+                                                          screenType:
+                                                              Screentype.add,
+                                                        ),
+                                                      );
+                                                    },
+                                                    isBlue: true,
+                                                    title: '첫번째 활동 추가하기',
+                                                    buttonTag: '첫번째 활동 추가하기',
+                                                    isBig: false,
+                                                  )
+                                                ],
                                               ),
-                                              const Text(
-                                                '활동 받아오는 중...',
-                                                style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: mainblue),
-                                              ),
-                                            ],
+                                      )
+                                    : Column(
+                                        children: [
+                                          Image.asset(
+                                            'assets/icons/loading.gif',
+                                            scale: 6,
                                           ),
+                                          const Text(
+                                            '활동 받아오는 중...',
+                                            style: TextStyle(
+                                                fontSize: 10, color: mainblue),
+                                          ),
+                                        ],
+                                      ),
                               ),
                             ),
                           ],

@@ -44,44 +44,51 @@ class LoopPeopleScreen extends StatelessWidget {
           child: NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
-                  SliverAppBar(
-                    pinned: true,
-                    automaticallyImplyLeading: false,
-                    expandedHeight: 43,
-                    toolbarHeight: 43,
-                    elevation: 0,
-                    flexibleSpace: Column(
-                      children: [
-                        TabBar(
-                          labelStyle: kButtonStyle,
-                          labelColor: mainblack,
-                          unselectedLabelStyle: kBody1Style,
-                          unselectedLabelColor: mainblack.withOpacity(0.6),
-                          indicator: const UnderlineIndicator(
-                            strokeCap: StrokeCap.round,
-                            borderSide: BorderSide(width: 2),
-                          ),
-                          indicatorColor: mainblack,
-                          tabs: const [
-                            Tab(
-                              height: 40,
-                              child: Text(
-                                "팔로워",
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                    sliver: SliverSafeArea(
+                      top: false,
+                      sliver: SliverAppBar(
+                        pinned: true,
+                        automaticallyImplyLeading: false,
+                        expandedHeight: 43,
+                        toolbarHeight: 43,
+                        elevation: 0,
+                        flexibleSpace: Column(
+                          children: [
+                            TabBar(
+                              labelStyle: kButtonStyle,
+                              labelColor: mainblack,
+                              unselectedLabelStyle: kBody1Style,
+                              unselectedLabelColor: mainblack.withOpacity(0.6),
+                              indicator: const UnderlineIndicator(
+                                strokeCap: StrokeCap.round,
+                                borderSide: BorderSide(width: 1.2),
                               ),
+                              indicatorColor: mainblack,
+                              tabs: const [
+                                Tab(
+                                  height: 40,
+                                  child: Text(
+                                    "팔로워",
+                                  ),
+                                ),
+                                Tab(
+                                  height: 40,
+                                  child: Text(
+                                    "팔로잉",
+                                  ),
+                                )
+                              ],
                             ),
-                            Tab(
-                              height: 40,
-                              child: Text(
-                                "팔로잉",
-                              ),
-                            )
+                            Container(
+                              height: 1,
+                              color: const Color(0xffe7e7e7),
+                            ),
                           ],
                         ),
-                        Container(
-                          height: 1,
-                          color: const Color(0xffe7e7e7),
-                        ),
-                      ],
+                      ),
                     ),
                   )
                 ];
@@ -96,18 +103,14 @@ class LoopPeopleScreen extends StatelessWidget {
                           Center(
                             child: Image.asset(
                               'assets/icons/loading.gif',
-                              scale: 5,
+                              scale: 7,
                             ),
                           ),
                         ])
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 40),
-                          child: Column(
-                              children: followerlist
-                                  .map((friend) =>
-                                      PersonTileWidget(user: friend))
-                                  .toList()),
-                        ),
+                      : ListView(
+                          children: followerlist
+                              .map((friend) => PersonTileWidget(user: friend))
+                              .toList()),
                 ),
                 Obx(
                   () => ProfileController.to.isLoopPeopleLoading.value
@@ -118,18 +121,14 @@ class LoopPeopleScreen extends StatelessWidget {
                           Center(
                             child: Image.asset(
                               'assets/icons/loading.gif',
-                              scale: 5,
+                              scale: 7,
                             ),
                           ),
                         ])
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 40),
-                          child: Column(
-                              children: followinglist
-                                  .map((friend) =>
-                                      PersonTileWidget(user: friend))
-                                  .toList()),
-                        ),
+                      : ListView(
+                          children: followinglist
+                              .map((friend) => PersonTileWidget(user: friend))
+                              .toList()),
                 ),
               ])),
         ));
