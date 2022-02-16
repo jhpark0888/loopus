@@ -66,17 +66,17 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  right: 12,
-                  top: 10,
+                  right: 14,
+                  top: 12,
                   child: Align(
                     alignment: Alignment.topRight,
                     child:
                         Obx(() => ProfileController.to.isnewalarm.value == true
                             ? Container(
-                                height: 10,
-                                width: 10,
+                                height: 8,
+                                width: 8,
                                 decoration: BoxDecoration(
-                                    color: Colors.red, shape: BoxShape.circle),
+                                    color: mainpink, shape: BoxShape.circle),
                               )
                             : Container()),
                   ),
@@ -97,17 +97,17 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  right: 12,
-                  top: 10,
+                  right: 14,
+                  top: 12,
                   child: Align(
                     alignment: Alignment.topRight,
                     child: Obx(
                         () => ProfileController.to.isnewmessage.value == true
                             ? Container(
-                                height: 10,
-                                width: 10,
+                                height: 8,
+                                width: 8,
                                 decoration: BoxDecoration(
-                                    color: Colors.red, shape: BoxShape.circle),
+                                    color: mainpink, shape: BoxShape.circle),
                               )
                             : Container()),
                   ),
