@@ -19,6 +19,7 @@ import 'package:loopus/firebase_options.dart';
 
 import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
+import 'package:get_storage/get_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +44,8 @@ void main() async {
   }
 
   String? temptoken = await const FlutterSecureStorage().read(key: 'token');
+  await GetStorage.init();
+
   // KakaoContext.clientId = '3e0e4823d8dd690cfb48b8bcd5ad7e6c';
 
   runApp(

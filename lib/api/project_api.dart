@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
@@ -19,7 +21,9 @@ import 'package:loopus/widget/project_widget.dart';
 import '../constant.dart';
 
 Future addproject() async {
-  ProjectAddController projectAddController = Get.find();
+  final ProjectAddController projectAddController = Get.find();
+  final LocalDataController _localDataController =
+      Get.put(LocalDataController());
   TagController tagController = Get.find(tag: Tagtype.project.toString());
 
   String? token = await const FlutterSecureStorage().read(key: "token");
@@ -70,13 +74,26 @@ Future addproject() async {
           projectid: project.id,
           isuser: 1,
         ));
+
     ProfileController.to.myProjectList.insert(
         0,
         ProjectWidget(
           project: project.obs,
           type: ProjectWidgetType.profile,
         ));
-    ModalController.to.showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
+    if (_localDataController.firstProject.read('firstProject') == false) {
+      ModalController.to.showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
+      final InAppReview inAppReview = InAppReview.instance;
+    }
+    if (_localDataController.firstProject.read('firstProject') == true) {
+      ModalController.to.showCustomDialog('첫번째 활동 만들었을 때 리뷰 팝업', 1000);
+      final InAppReview inAppReview = InAppReview.instance;
+
+      if (await inAppReview.isAvailable()) {
+        inAppReview.requestReview();
+      }
+    }
+    _localDataController.firstProjectAdd();
   }
 }
 

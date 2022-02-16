@@ -149,6 +149,7 @@ class QuestionAnswerWidget extends StatelessWidget {
   }
 
   void tapProfile() {
+    print(answer.content.toString());
     // profileController.isProfileLoading(true);
 
     Get.to(() => OtherProfileScreen(

@@ -51,16 +51,16 @@ class PersonTileWidget extends StatelessWidget {
                         opacity: _hoverController.isHover.value ? 0.6 : 1,
                         child: Image.asset(
                           "assets/illustrations/default_profile.png",
-                          width: 56,
-                          height: 56,
+                          width: 50,
+                          height: 50,
                         ),
                       ))
                   : Obx(
                       () => Opacity(
                         opacity: _hoverController.isHover.value ? 0.6 : 1,
                         child: CachedNetworkImage(
-                          height: 56,
-                          width: 56,
+                          height: 50,
+                          width: 50,
                           imageUrl: user.profileImage!,
                           placeholder: (context, url) => kProfilePlaceHolder(),
                           fit: BoxFit.cover,
@@ -89,7 +89,7 @@ class PersonTileWidget extends StatelessWidget {
                 Obx(
                   () => Text(
                     user.department,
-                    style: kSubTitle2Style.copyWith(
+                    style: kSubTitle3Style.copyWith(
                       color: _hoverController.isHover.value
                           ? mainblack.withOpacity(0.38)
                           : mainblack.withOpacity(0.6),

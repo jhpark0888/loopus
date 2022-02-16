@@ -39,6 +39,8 @@ dependencies:
   flutter_keyboard_visibility: ^5.1.1
   dropdown_button2: ^1.1.1
   app_settings: ^4.1.1
+  get_storage:
+  in_app_review: ^2.0.4
 
 dev_dependencies:
   flutter_test:
