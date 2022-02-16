@@ -13,7 +13,8 @@ class NotificationModel {
       required this.targetId,
       required this.content,
       required this.date,
-      required this.isread});
+      required this.isread,
+      this.looped});
 
   int id;
   int userId;
@@ -23,24 +24,27 @@ class NotificationModel {
   String? content;
   DateTime date;
   RxBool isread;
+  Rx<FollowState>? looped;
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
       NotificationModel(
-        id: json["id"] ?? 0,
-        userId: json["user_id"],
-        user: User.fromJson(json["profile"]),
-        type: json["type"] == 1
-            ? NotificationType.question
-            : json["type"] == 2
-                ? NotificationType.follow
-                : json["type"] == 3
-                    ? NotificationType.tag
-                    : NotificationType.like,
-        targetId: json["target_id"],
-        content: json["content"],
-        date: DateTime.parse(json["date"]),
-        isread: RxBool(json["is_read"]),
-      );
+          id: json["id"] ?? 0,
+          userId: json["user_id"],
+          user: User.fromJson(json["profile"]),
+          type: json["type"] == 1
+              ? NotificationType.question
+              : json["type"] == 2
+                  ? NotificationType.follow
+                  : json["type"] == 3
+                      ? NotificationType.tag
+                      : NotificationType.like,
+          targetId: json["target_id"],
+          content: json["content"],
+          date: DateTime.parse(json["date"]),
+          isread: RxBool(json["is_read"]),
+          looped: json["looped"] != null
+              ? FollowState.values[json["looped"]].obs
+              : null);
 
   Map<String, dynamic> toJson() => {
         "user_id": userId,

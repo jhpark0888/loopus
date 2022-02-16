@@ -62,15 +62,19 @@ class ProfileController extends GetxController
 
   late TabController profileTabController;
 
+  RxBool isnewalarm = false.obs;
+  RxBool isnewmessage = false.obs;
+
   RxBool isProfileLoading = true.obs;
   RxBool isLoopPeopleLoading = true.obs;
 
   void loadmyProfile() async {
+    isProfileLoading.value = true;
+
     String? userId = await const FlutterSecureStorage().read(key: "id");
 
     await getProfile(userId).then((user) async {
       myUserInfo(user);
-      isProfileLoading.value = false;
     });
     await getProjectlist(userId).then((projectlist) {
       myProjectList(projectlist
@@ -80,12 +84,12 @@ class ProfileController extends GetxController
               ))
           .toList());
     });
+    isProfileLoading.value = false;
   }
 
   @override
   void onInit() {
     profileTabController = TabController(length: 2, vsync: this);
-    // isProfileLoading.value = true;
     loadmyProfile();
     super.onInit();
   }

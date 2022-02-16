@@ -27,7 +27,7 @@ class Tag {
   factory Tag.fromJson(Map<String, dynamic> json) => Tag(
         tagId: json["tag_id"],
         tag: json["tag"],
-        count: json["tag_count"] ?? 0,
+        count: json["tag_count"] ?? json["count"] ?? 0,
       );
 
   Map<String, dynamic> toJson() =>

@@ -52,10 +52,9 @@ class OtherProfileController extends GetxController
   RxBool isLoopPeopleLoading = true.obs;
 
   Future loadotherProfile(int userid) async {
+    isProfileLoading.value = true;
     await getProfile(userid).then((user) {
       otherUser(user);
-      isProfileLoading.value = false;
-      print(user.looped);
     });
     await getProjectlist(userid).then((projectlist) {
       otherProjectList(projectlist
@@ -71,7 +70,6 @@ class OtherProfileController extends GetxController
   @override
   void onInit() async {
     profileTabController = TabController(length: 2, vsync: this);
-    isProfileLoading.value = true;
     loadotherProfile(userid);
     super.onInit();
   }

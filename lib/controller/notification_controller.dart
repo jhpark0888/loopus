@@ -5,8 +5,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -81,6 +83,14 @@ class NotificationController extends GetxController {
       if (event.data["type"] == "msg") {
         try {
           String? myid = await const FlutterSecureStorage().read(key: 'id');
+          MessageController.to.chattingroomlist
+              .where((messageroom) =>
+                  messageroom.user.userid == int.parse(event.data["id"]))
+              .first
+              .notread
+              .value += 1;
+          // MessageController.to.chattingroomlist.remove(messageroom);
+          // MessageController.to.chattingroomlist.insert(0, messageroom);
           Get.find<MessageDetailController>(tag: event.data["id"].toString())
               .messagelist
               .add(MessageWidget(
@@ -97,12 +107,16 @@ class NotificationController extends GetxController {
                       .user!
                       .value));
         } catch (e) {
+          print(e);
+          ProfileController.to.isnewmessage(true);
           ModalController.to.showCustomSnackbar(
             event.notification!.title,
             event.notification!.body,
           );
         }
       } else {
+        ProfileController.to.isnewalarm(true);
+
         ModalController.to.showCustomSnackbar(
           event.notification!.title,
           event.notification!.body,
