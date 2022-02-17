@@ -95,7 +95,7 @@ class PostingWidget extends StatelessWidget {
                                 vertical: 16,
                               ),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "${item.title}",
@@ -195,14 +195,18 @@ class PostingWidget extends StatelessWidget {
                                                 ),
                                                 child: Text(
                                                   item.likeCount.value != 0
-                                                      ? "${item.likeCount.value}   \u200B"
+                                                      ? "${item.likeCount.value}     \u200B"
                                                       : ' \u200B',
                                                   style: kButtonStyle,
                                                 ),
                                               ),
                                             ),
-                                            const SizedBox(
-                                              width: 8,
+                                            Obx(
+                                              () => SizedBox(
+                                                width: item.likeCount.value != 0
+                                                    ? 0
+                                                    : 8,
+                                              ),
                                             ),
                                             InkWell(
                                               onTap: tapBookmark,

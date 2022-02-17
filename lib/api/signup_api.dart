@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/ga_controller.dart';
 
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
@@ -15,7 +16,7 @@ void emailRequest() async {
 
   var checkemail = {
     //TODO: 학교 도메인 확인
-    "email": signupController.emailidcontroller.text + '@inu.ac.kr',
+    "email": signupController.emailidcontroller.text + '@gmail.com',
     "password": signupController.passwordcontroller.text,
   };
 
@@ -33,13 +34,15 @@ void emailRequest() async {
 }
 
 Future<http.Response> signupRequest() async {
-  SignupController signupController = Get.find();
-  TagController tagController = Get.find(tag: Tagtype.profile.toString());
+  final SignupController signupController = Get.find();
+  final TagController tagController = Get.find(tag: Tagtype.profile.toString());
+  final GAController _gaController = Get.put(GAController());
+
   Uri uri = Uri.parse('$serverUri/user_api/signup');
   const FlutterSecureStorage storage = FlutterSecureStorage();
-
+  //todo : @inu.ac.kr
   var user = {
-    "email": signupController.emailidcontroller.text + '@inu.ac.kr',
+    "email": signupController.emailidcontroller.text + '@gmail.com',
     "image": null,
     "type": 0,
     "class_num": signupController.classnumcontroller.text,
@@ -62,6 +65,10 @@ Future<http.Response> signupRequest() async {
 
     storage.write(key: 'token', value: token);
     storage.write(key: 'id', value: userid);
+    //!GA
+    await _gaController.logSignup();
+    await _gaController.setUserProperties(
+        userid, signupController.selectdept.value);
   }
   return response;
 }

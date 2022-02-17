@@ -6,8 +6,11 @@ import 'package:loopus/screen/signup_user_info_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
+import '../controller/ga_controller.dart';
+
 class SignupDepartmentScreen extends StatelessWidget {
-  SignupController signupController = Get.find();
+  final SignupController signupController = Get.find();
+  final GAController _gaController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +19,10 @@ class SignupDepartmentScreen extends StatelessWidget {
         bottomBorder: false,
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               //TODO: 학과 선택 시 활성화되어야 함
               Get.to(() => SignupUserInfoScreen());
+              await _gaController.logScreenView('signup_3');
             },
             child: Text(
               '다음',

@@ -11,6 +11,7 @@ import 'package:http/http.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/editorcontroller.dart';
+import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
@@ -23,10 +24,12 @@ import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 import '../constant.dart';
+import '../controller/modal_controller.dart';
 
 Future<void> addposting(int projectId, PostaddRoute route) async {
   final PostingAddController postingAddController = Get.find();
   final EditorController editorController = Get.find();
+  final GAController _gaController = Get.put(GAController());
 
   final String? token = await const FlutterSecureStorage().read(key: 'token');
 
@@ -99,6 +102,8 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
 
   print("포스팅 업로드 statuscode:  ${response.statusCode}");
   if (response.statusCode == 200) {
+    //!GA
+    await _gaController.logPostingCreated(true);
     if (kDebugMode) {
       print("status code : ${response.statusCode} 포스팅 업로드 완료");
     }
@@ -115,6 +120,7 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
           isuser: 1,
         ),
       );
+      ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
     } else {
       String responsebody = await response.stream.bytesToString();
       Map<String, dynamic> responsemap = json.decode(responsebody);
@@ -126,12 +132,19 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
       HomeController.to.recommandpostingResult.value.postingitems
           .insert(0, post);
       getbacks(5);
+      ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
     }
   } else if (response.statusCode == 400) {
+    //!GA
+    await _gaController.logPostingCreated(false);
+
     if (kDebugMode) {
       print("status code : ${response.statusCode} 포스팅 업로드 실패");
     }
   } else {
+    //!GA
+    await _gaController.logPostingCreated(false);
+
     if (kDebugMode) {
       print("status code : ${response.statusCode} 포스팅 업로드 실패");
     }

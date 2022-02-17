@@ -7,6 +7,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -25,6 +26,7 @@ Future addproject() async {
   final LocalDataController _localDataController =
       Get.put(LocalDataController());
   TagController tagController = Get.find(tag: Tagtype.project.toString());
+  final GAController _gaController = Get.put(GAController());
 
   String? token = await const FlutterSecureStorage().read(key: "token");
   Uri uri = Uri.parse('$serverUri/project_api/project');
@@ -65,6 +67,8 @@ Future addproject() async {
 
   print("활동 생성: ${response.statusCode}");
   if (response.statusCode == 201) {
+    //!GA
+    await _gaController.logProjectCreated(true);
     getbacks(6);
 
     String responsebody = await response.stream.bytesToString();
@@ -93,6 +97,8 @@ Future addproject() async {
       }
     }
     _localDataController.firstProjectAdd();
+  } else {
+    await _gaController.logProjectCreated(false);
   }
 }
 

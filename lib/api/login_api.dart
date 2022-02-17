@@ -13,13 +13,15 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 
 import '../constant.dart';
+import '../controller/ga_controller.dart';
 
 Future<void> loginRequest() async {
-  LogInController logInController = Get.put(LogInController());
+  final LogInController logInController = Get.put(LogInController());
   const FlutterSecureStorage storage = FlutterSecureStorage();
-  ModalController _modalController = Get.put(ModalController());
-  NotificationController notificationController =
+  final ModalController _modalController = Get.put(ModalController());
+  final NotificationController notificationController =
       Get.put(NotificationController());
+  final GAController _gaController = Get.put(GAController());
 
   Uri uri = Uri.parse('$serverUri/user_api/login');
 
@@ -39,6 +41,8 @@ Future<void> loginRequest() async {
   if (response.statusCode == 202) {
     String token = jsonDecode(response.body)['token'];
     String userid = jsonDecode(response.body)['user_id'];
+    //! GA
+    await _gaController.logLogin();
 
     storage.write(key: 'token', value: token);
     storage.write(key: 'id', value: userid);

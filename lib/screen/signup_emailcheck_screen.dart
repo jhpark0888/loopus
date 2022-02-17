@@ -6,8 +6,11 @@ import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_tag_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
+import '../controller/ga_controller.dart';
+
 class SignupEmailcheckScreen extends StatelessWidget {
-  SignupController signupController = Get.find();
+  final SignupController signupController = Get.find();
+  final GAController _gaController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +19,10 @@ class SignupEmailcheckScreen extends StatelessWidget {
         bottomBorder: false,
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (signupController.emailcheck.value == true) {
                 Get.to(() => SignupTagScreen());
+                await _gaController.logScreenView('signup_5');
               }
             },
             child: Obx(

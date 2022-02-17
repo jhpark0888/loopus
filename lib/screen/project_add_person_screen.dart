@@ -195,9 +195,12 @@ class ProjectAddPersonScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 16, left: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text('팔로잉 중인 사람', style: kSubTitle2Style),
+                  Text('팔로잉 중인 학생', style: kSubTitle2Style),
+                  SizedBox(
+                    width: 4,
+                  ),
                   Obx(
                     () => Text(
                         '${projectaddcontroller.looppersonlist.value.length}명',

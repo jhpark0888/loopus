@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/question_detail_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
@@ -20,11 +21,12 @@ import 'package:loopus/widget/tagsearchwidget.dart';
 
 class SignupTagScreen extends StatelessWidget {
   SignupTagScreen({Key? key}) : super(key: key);
-  SignupController signupController = Get.find();
+  final SignupController signupController = Get.find();
 
-  TagController tagController = Get.put(TagController(tagtype: Tagtype.profile),
+  final TagController tagController = Get.put(
+      TagController(tagtype: Tagtype.profile),
       tag: Tagtype.profile.toString());
-
+  final GAController _gaController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,10 +34,11 @@ class SignupTagScreen extends StatelessWidget {
         bottomBorder: false,
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (tagController.selectedtaglist.length == 3) {
                 signupRequest();
                 Get.to(() => LogInScreen());
+                await _gaController.logScreenView('signup_6');
               }
             },
             child: Obx(

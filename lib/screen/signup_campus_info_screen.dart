@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_department_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
 class SignupCampusInfoScreen extends StatelessWidget {
-  SignupController signupController = Get.put(SignupController());
+  final SignupController signupController = Get.put(SignupController());
+  final GAController _gaController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class SignupCampusInfoScreen extends StatelessWidget {
         bottomBorder: false,
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               //TODO: 학교 선택 시 활성화되어야 함
               signupController.isdeptSearchLoading(true);
               Get.to(() => SignupDepartmentScreen());
@@ -25,6 +27,7 @@ class SignupCampusInfoScreen extends StatelessWidget {
               getdeptlist().then((value) {
                 signupController.isdeptSearchLoading(false);
               });
+              await _gaController.logScreenView('signup_2');
             },
             child: Text(
               '다음',

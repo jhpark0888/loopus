@@ -24,6 +24,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<string>NO</string>
+	<key>FirebaseAutomaticScreenReportingEnabled</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
@@ -52,12 +54,12 @@
 	<key>io.flutter.embedded_views_preview</key>
 	<string>YES</string>
 	<key>LSApplicationQueriesSchemes</key>
-    <array>
-    <string>kakao${3e0e4823d8dd690cfb48b8bcd5ad7e6c}</string>
-    <string>kakaokompassauth</string>
-    <string>storykompassauth</string>
-    <string>kakaolink</string>         
-    <string>kakaotalk-5.9.7</string>
-    </array>
+	<array>
+		<string>kakao${3e0e4823d8dd690cfb48b8bcd5ad7e6c}</string>
+		<string>kakaokompassauth</string>
+		<string>storykompassauth</string>
+		<string>kakaolink</string>
+		<string>kakaotalk-5.9.7</string>
+	</array>
 </dict>
 </plist>

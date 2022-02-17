@@ -97,6 +97,8 @@ class PostingAddContentScreen extends StatelessWidget {
                                     });
 
                                     Get.back();
+                                    ModalController.to
+                                        .showCustomDialog('변경이 완료되었어요', 1000);
                                   } else {
                                     ModalController.to
                                         .showCustomDialog('내용을 입력해주세요', 1000);

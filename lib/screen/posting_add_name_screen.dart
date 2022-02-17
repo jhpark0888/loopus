@@ -15,6 +15,8 @@ import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
+import '../controller/modal_controller.dart';
+
 class PostingAddNameScreen extends StatelessWidget {
   PostingAddNameScreen(
       {Key? key, this.postid, required this.project_id, required this.route})
@@ -89,6 +91,8 @@ class PostingAddNameScreen extends StatelessWidget {
                                     });
 
                                     Get.back();
+                                    ModalController.to
+                                        .showCustomDialog('변경이 완료되었어요', 1000);
                                   },
                             child: Text(
                               '저장',

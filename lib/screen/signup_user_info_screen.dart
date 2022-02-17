@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/signup_emailcheck_screen.dart';
@@ -11,8 +12,9 @@ import 'package:loopus/widget/custom_textfield.dart';
 import '../utils/check_form_validate.dart';
 
 class SignupUserInfoScreen extends StatelessWidget {
-  SignupController signupController = Get.find();
+  final SignupController signupController = Get.find();
   final _formKey = GlobalKey<FormState>();
+  final GAController _gaController = Get.find();
   // RxBool isbutton = false.obs;
 
   @override
@@ -22,10 +24,11 @@ class SignupUserInfoScreen extends StatelessWidget {
         bottomBorder: false,
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 emailRequest();
                 Get.to(() => SignupEmailcheckScreen());
+                await _gaController.logScreenView('signup_4');
               }
             },
             child: Text(

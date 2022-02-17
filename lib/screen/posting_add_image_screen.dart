@@ -12,6 +12,8 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/blue_button.dart';
 import 'package:loopus/widget/post_add_content_widget.dart';
 
+import '../controller/modal_controller.dart';
+
 class PostingAddImageScreen extends StatelessWidget {
   PostingAddImageScreen({Key? key, this.postid, required this.project_id})
       : super(key: key);
@@ -81,6 +83,8 @@ class PostingAddImageScreen extends StatelessWidget {
                                         });
 
                                         Get.back();
+                                        ModalController.to.showCustomDialog(
+                                            '변경이 완료되었어요', 1000);
                                       },
                                 child: Text(
                                   '저장',
