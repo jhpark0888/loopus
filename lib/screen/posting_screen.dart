@@ -116,13 +116,15 @@ class PostingScreen extends StatelessWidget {
                             ));
                       },
                       child: Text(
-                        likecount != 0 ? '${likecount}   \u200B' : ' \u200B',
+                        likecount != 0 ? "${likecount}     \u200B" : ' \u200B',
                         style: kButtonStyle,
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 12,
+                  Obx(
+                    () => SizedBox(
+                      width: likecount != 0 ? 4 : 8,
+                    ),
                   ),
                   Obx(() => InkWell(
                       onTap: () {
@@ -186,7 +188,7 @@ class PostingScreen extends StatelessWidget {
                                       leftText: '취소',
                                       rightText: '삭제',
                                       title:
-                                          '정말 <${controller.post.value.title}> 포스팅을 삭제하시겠어요?',
+                                          '<${controller.post.value.title}> 포스팅을 삭제하시겠어요?',
                                       content: '삭제한 포스팅은 복구할 수 없어요',
                                       leftFunction: () => Get.back(),
                                       rightFunction: () async {
@@ -215,8 +217,8 @@ class PostingScreen extends StatelessWidget {
                                       leftText: '',
                                       rightText: '',
                                       title:
-                                          '정말 <${controller.post.value.title}> 포스팅을 신고하시겠어요?',
-                                      content: '신고 횟수가 누적되면 포스팅은 삭제됩니다',
+                                          '<${controller.post.value.title}> 포스팅을 신고하시겠어요?',
+                                      content: '관리자가 검토할 예정이에요',
                                       leftFunction: () => Get.back(),
                                       rightFunction: () {});
                                 },
@@ -297,7 +299,23 @@ class PostingScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Column(
-                                  children: controller.recommendposts,
+                                  children: controller.recommendposts.isNotEmpty
+                                      ? controller.recommendposts
+                                      : [
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            '관련된 포스팅이 없어요',
+                                            style: kSubTitle3Style.copyWith(
+                                              color:
+                                                  mainblack.withOpacity(0.38),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 40,
+                                          ),
+                                        ],
                                 ),
                               ])
                         : Image.asset(
