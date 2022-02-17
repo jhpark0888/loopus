@@ -8,6 +8,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/onmessagescreen_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/model/message_model.dart';
@@ -83,14 +84,6 @@ class NotificationController extends GetxController {
       if (event.data["type"] == "msg") {
         try {
           String? myid = await const FlutterSecureStorage().read(key: 'id');
-          MessageController.to.chattingroomlist
-              .where((messageroom) =>
-                  messageroom.user.userid == int.parse(event.data["id"]))
-              .first
-              .notread
-              .value += 1;
-          // MessageController.to.chattingroomlist.remove(messageroom);
-          // MessageController.to.chattingroomlist.insert(0, messageroom);
           Get.find<MessageDetailController>(tag: event.data["id"].toString())
               .messagelist
               .add(MessageWidget(
@@ -106,6 +99,21 @@ class NotificationController extends GetxController {
                           tag: event.data["id"].toString())
                       .user!
                       .value));
+          print("dddd");
+          try {
+            Get.find<OnMessageScreenController>(
+                tag: event.data["id"].toString());
+          } catch (e) {
+            print(e);
+            MessageController.to.chattingroomlist
+                .where((messageroom) =>
+                    messageroom.user.userid == int.parse(event.data["id"]))
+                .first
+                .notread
+                .value += 1;
+          }
+          // MessageController.to.chattingroomlist.remove(messageroom);
+          // MessageController.to.chattingroomlist.insert(0, messageroom);
         } catch (e) {
           print(e);
           ProfileController.to.isnewmessage(true);
