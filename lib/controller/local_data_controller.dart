@@ -7,10 +7,8 @@ class LocalDataController extends GetxController {
 
   final firstProject = GetStorage();
 
+  //todo : key값에 userid 값 넣어서 개인화 시켜야함
   bool get isAddFirstProject => firstProject.read('firstProject') ?? true;
 
-  void firstProjectAdd() {
-    firstProject.write('firstProject', false);
-    print('first project : ${firstProject.read('firstProject')}');
-  }
+  void firstProjectAdd() => firstProject.write('firstProject', false);
 }

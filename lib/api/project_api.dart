@@ -81,11 +81,10 @@ Future addproject() async {
           project: project.obs,
           type: ProjectWidgetType.profile,
         ));
-    if (_localDataController.firstProject.read('firstProject') == false) {
+    if (_localDataController.isAddFirstProject == false) {
       ModalController.to.showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
-      final InAppReview inAppReview = InAppReview.instance;
     }
-    if (_localDataController.firstProject.read('firstProject') == true) {
+    if (_localDataController.isAddFirstProject == true) {
       ModalController.to.showCustomDialog('첫번째 활동 만들었을 때 리뷰 팝업', 1000);
       final InAppReview inAppReview = InAppReview.instance;
 

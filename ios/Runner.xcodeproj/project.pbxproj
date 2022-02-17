@@ -14,6 +14,7 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		D9BA820860CDD05C33E3577E /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F722876886EBD24C8BCD9B /* Pods_Runner.framework */; };
+		F4C520DA27BD4FBF009FA0B0 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C520D927BD4FBF009FA0B0 /* AdSupport.framework */; };
 		F4EDF96A2785A248009E8D50 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F4EDF9692785A248009E8D50 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +62,7 @@
 		AE9A85CD6981540193207758 /* Pods-Runner-ImageNotification.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner-ImageNotification.debug.xcconfig"; path = "Target Support Files/Pods-Runner-ImageNotification/Pods-Runner-ImageNotification.debug.xcconfig"; sourceTree = "<group>"; };
 		B92A4F02A2AFAA9944393C4C /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		EB57417DD7B884767E03BE0B /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		F4C520D927BD4FBF009FA0B0 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		F4EDF9692785A248009E8D50 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../루퍼스 디자인 /인증서/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F4F2756D278567A9006229BD /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		F5CB659A02AF4753BAB82A3F /* Pods-Runner-ImageNotification.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner-ImageNotification.release.xcconfig"; path = "Target Support Files/Pods-Runner-ImageNotification/Pods-Runner-ImageNotification.release.xcconfig"; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9BA820860CDD05C33E3577E /* Pods_Runner.framework in Frameworks */,
+				F4C520DA27BD4FBF009FA0B0 /* AdSupport.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,6 +144,7 @@
 		C22832EAEDD75176F60A5C3D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F4C520D927BD4FBF009FA0B0 /* AdSupport.framework */,
 				60F722876886EBD24C8BCD9B /* Pods_Runner.framework */,
 				2FEB5EAAB2DFE165A217308D /* Pods_Runner_ImageNotification.framework */,
 			);

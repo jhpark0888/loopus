@@ -27,9 +27,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>루퍼스 앱 내에 사진을 첨부하기 위해 동의가 필요합니다.</string>
+	<string>루프어스 앱 내에 사진을 첨부하기 위해 동의가 필요합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>루퍼스 앱 내에 사진을 첨부하기 위해 동의가 필요합니다.</string>
+	<string>루프어스 앱 내에 사진을 첨부하기 위해 동의가 필요합니다.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

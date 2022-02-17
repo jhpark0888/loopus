@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:device_preview/device_preview.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -60,7 +61,8 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final String? token;
-  const MyApp({Key? key, required this.token}) : super(key: key);
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  MyApp({Key? key, required this.token}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +74,9 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: const [
         Locale('ko'),
+      ],
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
       ],
       home: WelcomeScreen(token: token),
       locale: DevicePreview.locale(context),
@@ -128,9 +133,11 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenStete extends State<WelcomeScreen> {
   String? token;
   _WelcomeScreenStete({this.token});
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   @override
   void initState() {
+    logAppOpen();
     super.initState();
     Future.delayed(
       const Duration(seconds: 1),
@@ -142,6 +149,10 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
         ),
       ),
     );
+  }
+
+  Future logAppOpen() async {
+    await analytics.logEvent(name: 'app open');
   }
 
   @override
