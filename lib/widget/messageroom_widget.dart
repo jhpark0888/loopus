@@ -37,10 +37,12 @@ class MessageRoomWidget extends StatelessWidget {
       onTapUp: (details) => _hoverController.isHover(false),
       onTap: () async {
         messageRoom.notread(0);
-        controller.messageroomrefresh();
+        controller.firstmessagesload();
         Get.to(() => MessageDetailScreen(
-            userid: messageRoom.user.userid,
-            realname: messageRoom.user.realName));
+              userid: messageRoom.user.userid,
+              realname: messageRoom.user.realName,
+              user: messageRoom.user,
+            ));
       },
       child: Container(
         padding: EdgeInsets.symmetric(

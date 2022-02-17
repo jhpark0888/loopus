@@ -223,14 +223,16 @@ class QuestionDetailScreen extends StatelessWidget {
                                             .question.value.userid,
                                       ),
                                       tag: questionController
-                                          .question.value.user
+                                          .question.value.user.userid
                                           .toString())
-                                  .messageroomrefresh();
+                                  .firstmessagesload();
                               Get.to(() => MessageDetailScreen(
                                     userid: questionController
                                         .question.value.userid,
                                     realname: questionController
                                         .question.value.user.realName,
+                                    user:
+                                        questionController.question.value.user,
                                   ));
                             },
                             func2: () {},

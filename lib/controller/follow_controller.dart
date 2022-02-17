@@ -29,7 +29,7 @@ class FollowController extends GetxController {
       } else {
         print("아무일도 안 일어남");
       }
-    }, time: Duration(seconds: 1));
+    }, time: Duration(milliseconds: 300));
     super.onInit();
   }
 }

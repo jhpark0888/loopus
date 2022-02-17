@@ -37,7 +37,6 @@ class SignupTagScreen extends StatelessWidget {
             onPressed: () async {
               if (tagController.selectedtaglist.length == 3) {
                 signupRequest();
-                Get.to(() => LogInScreen());
                 await _gaController.logScreenView('signup_6');
               }
             },

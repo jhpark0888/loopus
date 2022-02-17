@@ -3,10 +3,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/controller/ga_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 
+import '../app.dart';
 import '../constant.dart';
 
 void emailRequest() async {
@@ -16,7 +18,7 @@ void emailRequest() async {
 
   var checkemail = {
     //TODO: 학교 도메인 확인
-    "email": signupController.emailidcontroller.text + '@gmail.com',
+    "email": signupController.emailidcontroller.text + '@inu.ac.kr',
     "password": signupController.passwordcontroller.text,
   };
 
@@ -37,12 +39,13 @@ Future<http.Response> signupRequest() async {
   final SignupController signupController = Get.find();
   final TagController tagController = Get.find(tag: Tagtype.profile.toString());
   final GAController _gaController = Get.put(GAController());
+  final ModalController _modalController = Get.put(ModalController());
 
   Uri uri = Uri.parse('$serverUri/user_api/signup');
   const FlutterSecureStorage storage = FlutterSecureStorage();
   //todo : @inu.ac.kr
   var user = {
-    "email": signupController.emailidcontroller.text + '@gmail.com',
+    "email": signupController.emailidcontroller.text + '@inu.ac.kr',
     "image": null,
     "type": 0,
     "class_num": signupController.classnumcontroller.text,
@@ -63,12 +66,15 @@ Future<http.Response> signupRequest() async {
     String token = jsonDecode(response.body)['token'];
     String userid = jsonDecode(response.body)['user_id'];
 
-    storage.write(key: 'token', value: token);
-    storage.write(key: 'id', value: userid);
+    await storage.write(key: 'token', value: token);
+    await storage.write(key: 'id', value: userid);
     //!GA
     await _gaController.logSignup();
     await _gaController.setUserProperties(
         userid, signupController.selectdept.value);
+    Get.offAll(() => App());
+    _modalController.showCustomDialog(
+        '사용자님이 선택하신 관심 태그 기반으로 포스팅들을 추천했어요', 1400);
   }
   return response;
 }

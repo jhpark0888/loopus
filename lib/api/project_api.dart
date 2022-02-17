@@ -98,6 +98,7 @@ Future addproject() async {
     }
     _localDataController.firstProjectAdd();
   } else {
+    //!GA
     await _gaController.logProjectCreated(false);
   }
 }
