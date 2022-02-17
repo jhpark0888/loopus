@@ -8,11 +8,12 @@ import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
-import 'package:loopus/controller/onmessagescreen_controller.dart';
+import 'package:loopus/controller/messagescreen_controller.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/message_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MessageDetailScreen extends StatelessWidget {
   MessageDetailScreen(
@@ -24,27 +25,39 @@ class MessageDetailScreen extends StatelessWidget {
   User? user;
   late MessageDetailController controller = Get.put(
       MessageDetailController(
-          userid: userid, user: user != null ? user!.obs : null),
+          userid: userid,
+          user: user != null
+              ? user!.obs
+              : User(
+                      userid: 0,
+                      realName: "",
+                      type: 0,
+                      department: "",
+                      loopcount: 0.obs,
+                      totalposting: 0,
+                      isuser: 0,
+                      profileTag: [],
+                      looped: FollowState.normal.obs)
+                  .obs),
       tag: userid.toString());
 
   void _handleSubmitted(String text) async {
     if (controller.isSendButtonon.value) {
       controller.messagefocus.unfocus();
       controller.messagetextController.clear();
-      controller.messagelist.insert(
-          controller.messagelist.length,
-          MessageWidget(
-              message: Message(
-                  roomId: controller.messagelist.isEmpty
-                      ? 0
-                      : controller.messagelist.first.message.roomId,
-                  receiverId: userid,
-                  message: text,
-                  date: DateTime.now(),
-                  isRead: true,
-                  issender: 1,
-                  issending: true.obs),
-              user: controller.user!.value));
+      Message message = Message(
+          id: 0,
+          roomId: controller.messagelist.isEmpty
+              ? 0
+              : controller.messagelist.first.message.roomId,
+          receiverId: userid,
+          message: text,
+          date: DateTime.now(),
+          isRead: true,
+          issender: 1,
+          issending: true.obs);
+      controller.messagelist.insert(controller.messagelist.length,
+          MessageWidget(message: message, user: controller.user!.value));
       if (controller.scrollController.hasClients) {
         if (controller.scrollController.offset != 0) {
           controller.scrollController.jumpTo(
@@ -53,7 +66,7 @@ class MessageDetailScreen extends StatelessWidget {
         }
       }
       await postmessage(text, controller.userid).then((value) {
-        controller.messagelist.last.message.issending(false);
+        message.issending(false);
       });
     }
   }
@@ -137,19 +150,18 @@ class MessageDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(OnMessageScreenController(), tag: userid.toString());
     return Scaffold(
-      appBar: AppBarWidget(
-        bottomBorder: false,
-        title: '${realname}님',
-      ),
-      bottomNavigationBar: Transform.translate(
-        offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
-        child: BottomAppBar(
-          elevation: 0,
-          child: _buildTextComposer(),
+        appBar: AppBarWidget(
+          bottomBorder: false,
+          title: '${realname}님',
         ),
-      ),
-      body: Obx(
-        () => controller.isMessageListLoading.value
+        bottomNavigationBar: Transform.translate(
+          offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+          child: BottomAppBar(
+            elevation: 0,
+            child: _buildTextComposer(),
+          ),
+        ),
+        body: Obx(() => controller.isMessageListLoading.value
             ? Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -171,24 +183,87 @@ class MessageDetailScreen extends StatelessWidget {
                       )
                     ]),
               )
-            : Obx(
-                () => Padding(
-                  padding: EdgeInsets.only(
-                      bottom: controller.keyboardController.isVisible
-                          ? controller.textBoxSize.value.height
-                          : 0),
-                  child: ListView(
-                    reverse: true,
-                    controller: controller.scrollController,
+            : SmartRefresher(
+                reverse: true,
+                controller: controller.messageRefreshController,
+                enablePullDown: false,
+                enablePullUp: controller.enablemessagePullup.value,
+                header: ClassicHeader(
+                  spacing: 0.0,
+                  height: 60,
+                  completeDuration: Duration(milliseconds: 600),
+                  textStyle: TextStyle(color: mainblack),
+                  refreshingText: '',
+                  releaseText: "",
+                  completeText: "",
+                  idleText: "",
+                  refreshingIcon: Column(
                     children: [
-                      Column(
-                        children: controller.messagelist.value,
-                      )
+                      Image.asset(
+                        'assets/icons/loading.gif',
+                        scale: 6,
+                      ),
+                    ],
+                  ),
+                  releaseIcon: Column(
+                    children: [
+                      Image.asset(
+                        'assets/icons/loading.gif',
+                        scale: 6,
+                      ),
+                    ],
+                  ),
+                  completeIcon: Column(
+                    children: [
+                      const Icon(
+                        Icons.check_rounded,
+                        color: mainblue,
+                      ),
+                    ],
+                  ),
+                  idleIcon: Column(
+                    children: [
+                      Image.asset(
+                        'assets/icons/loading.png',
+                        scale: 12,
+                      ),
                     ],
                   ),
                 ),
-              ),
-      ),
-    );
+                footer: ClassicFooter(
+                  completeDuration: Duration.zero,
+                  loadingText: "",
+                  canLoadingText: "",
+                  idleText: "",
+                  idleIcon: Container(),
+                  noMoreIcon: Container(
+                    child: Text('as'),
+                  ),
+                  loadingIcon: Image.asset(
+                    'assets/icons/loading.gif',
+                    scale: 6,
+                  ),
+                  canLoadingIcon: Image.asset(
+                    'assets/icons/loading.gif',
+                    scale: 6,
+                  ),
+                ),
+                onLoading: controller.messageLoading,
+                child: SingleChildScrollView(
+                  reverse: true,
+                  controller: controller.scrollController,
+                  child: Obx(
+                    () => Padding(
+                      padding: EdgeInsets.only(
+                          bottom: controller.keyboardController.isVisible
+                              ? controller.textBoxSize.value.height
+                              : 0),
+                      child: Column(
+                        children: controller.messagelist.value,
+                      ),
+                    ),
+                  ),
+                ),
+              )));
   }
 }

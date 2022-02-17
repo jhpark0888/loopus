@@ -11,6 +11,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/message_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MessageDetailController extends GetxController {
   static MessageDetailController get to => Get.find();
@@ -43,6 +44,11 @@ class MessageDetailController extends GetxController {
   Rx<GlobalKey> textFieldBoxKey = GlobalKey().obs;
   Rx<Size> textBoxSize = Size(Get.width, 0).obs;
 
+  RefreshController messageRefreshController =
+      RefreshController(initialRefresh: false);
+
+  RxBool enablemessagePullup = true.obs;
+
   getSize(GlobalKey key) {
     if (key.currentContext != null) {
       RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
@@ -52,9 +58,40 @@ class MessageDetailController extends GetxController {
     return Size(Get.width, 36);
   }
 
-  void messageroomrefresh() {
+  void messageLoading() async {
+    //페이지 처리
+    await loadmessage(false);
+    messageRefreshController.loadComplete();
+  }
+
+  Future<void> loadmessage(bool first) async {
+    List<MessageWidget> messagewidgetlist = await getmessagelist(
+        userid,
+        first
+            ? 0
+            : messagelist.isNotEmpty
+                ? messagelist.first.message.id
+                : 0);
+
+    if (messagewidgetlist.isEmpty && messagelist.isEmpty && first == false) {
+      enablemessagePullup.value = false;
+      // isalarmEmpty.value = true;
+    } else if (messagewidgetlist.isEmpty && messagelist.isNotEmpty) {
+      enablemessagePullup.value = false;
+    }
+
+    if (first) {
+      messagelist(messagewidgetlist);
+    } else {
+      for (var message in messagewidgetlist.reversed) {
+        messagelist.insert(0, message);
+      }
+    }
+  }
+
+  void firstmessagesload() {
     isMessageListLoading(true);
-    getmessagelist(userid).then((value) {
+    loadmessage(true).then((value) {
       isMessageListLoading(false);
     });
   }

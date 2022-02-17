@@ -39,13 +39,13 @@ Future<void> getmessageroomlist() async {
   }
 }
 
-Future getmessagelist(int userid) async {
+Future<List<MessageWidget>> getmessagelist(int userid, int lastindex) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
   String? myid = await const FlutterSecureStorage().read(key: 'id');
   MessageDetailController messageDetailController =
       Get.find<MessageDetailController>(tag: userid.toString());
 
-  final url = Uri.parse("$serverUri/chat/chatting/$userid");
+  final url = Uri.parse("$serverUri/chat/chatting?id=$userid&last=$lastindex");
 
   final response =
       await http.get(url, headers: {"Authorization": "Token $token"});
@@ -53,23 +53,24 @@ Future getmessagelist(int userid) async {
   print('채팅 리스트 statuscode: ${response.statusCode}');
   if (response.statusCode == 200) {
     Map responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-    messageDetailController.user = User.fromJson(responseBody["profile"]).obs;
-    List<Message> modelmessagelist = List.from(responseBody["message"])
+    if (lastindex == 0) {
+      messageDetailController.user = User.fromJson(responseBody["profile"]).obs;
+    }
+    List<MessageWidget> modelmessagelist = List.from(responseBody["message"])
         .map((message) => Message.fromJson(message, myid))
-        .toList();
-    messageDetailController.messagelist(modelmessagelist
+        .toList()
         .map((message) => MessageWidget(
             message: message, user: messageDetailController.user!.value))
-        .toList());
-    print(responseBody);
+        .toList();
+    // print(responseBody);
 
     // MessageController.to.chattingroomlist(responseBody
     //     .map((messageroom) => MessageRoom.fromJson(messageroom))
     //     .toList());
-    return;
+    return modelmessagelist;
   } else if (response.statusCode == 404) {
     messageDetailController.messagelist([]);
-    return;
+    return [];
   } else {
     return Future.error(response.statusCode);
   }
@@ -101,7 +102,7 @@ Future<void> postmessage(String content, int userid) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
   String? myid = await const FlutterSecureStorage().read(key: 'id');
 
-  final url = Uri.parse("$serverUri/chat/chatting/$userid");
+  final url = Uri.parse("$serverUri/chat/chatting?id=$userid");
 
   var message = {
     "message": content,
@@ -115,6 +116,32 @@ Future<void> postmessage(String content, int userid) async {
       body: jsonEncode(message));
 
   print('메세지 보내기 statuscode: ${response.statusCode}');
+  if (response.statusCode == 200) {
+    // var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+    // print(responseBody);
+
+    // Message messagelist = Message.fromJson(responseBody, myid);
+    return;
+  } else {
+    return Future.error(response.statusCode);
+  }
+}
+
+Future<void> putonmessagescreen(String userid) async {
+  String? token = await const FlutterSecureStorage().read(key: 'token');
+  String? myid = await const FlutterSecureStorage().read(key: 'id');
+
+  final url = Uri.parse("$serverUri/chat/chatting?id=$userid");
+
+  http.Response response = await http.put(
+    url,
+    headers: {
+      'Authorization': 'Token $token',
+      'Content-Type': 'application/json'
+    },
+  );
+
+  print('on 메세지 스크린 statuscode: ${response.statusCode}');
   if (response.statusCode == 200) {
     // var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
     // print(responseBody);

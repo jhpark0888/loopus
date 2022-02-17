@@ -6,6 +6,7 @@ import 'package:loopus/model/user_model.dart';
 
 class Message {
   Message({
+    required this.id,
     required this.roomId,
     required this.receiverId,
     required this.message,
@@ -15,6 +16,7 @@ class Message {
     required this.issending,
   });
 
+  int id;
   int roomId;
   int receiverId;
   String message;
@@ -24,6 +26,7 @@ class Message {
   RxBool issending;
 
   factory Message.fromJson(Map<String, dynamic> json, String? myid) => Message(
+        id: json["id"],
         roomId: json["room_id"],
         receiverId: json["receiver_id"],
         message: json["message"],

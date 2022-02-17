@@ -5,10 +5,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/onmessagescreen_controller.dart';
+import 'package:loopus/controller/messagescreen_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/model/message_model.dart';
@@ -56,7 +57,7 @@ class NotificationController extends GetxController {
   void _backgroundMessage(RemoteMessage message) {
     int id = int.parse(message.data["id"]);
     if (message.data["type"] == "msg") {
-      Get.put(MessageDetailController(userid: id)).messageroomrefresh();
+      Get.put(MessageDetailController(userid: id)).firstmessagesload();
       Get.to(() =>
           MessageDetailScreen(userid: id, realname: message.data["real_name"]));
     } else if (message.data["type"] == "like") {
@@ -88,6 +89,7 @@ class NotificationController extends GetxController {
               .messagelist
               .add(MessageWidget(
                   message: Message(
+                      id: 0,
                       roomId: 0,
                       receiverId: int.parse(myid!),
                       date: DateTime.now(),
@@ -99,10 +101,10 @@ class NotificationController extends GetxController {
                           tag: event.data["id"].toString())
                       .user!
                       .value));
-          print("dddd");
           try {
             Get.find<OnMessageScreenController>(
                 tag: event.data["id"].toString());
+            putonmessagescreen(event.data["id"].toString());
           } catch (e) {
             print(e);
             MessageController.to.chattingroomlist

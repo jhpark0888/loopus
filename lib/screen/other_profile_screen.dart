@@ -351,7 +351,7 @@ class OtherProfileScreen extends StatelessWidget {
                                                         .otherUser.value.userid
                                                         .toString());
                                             messagecontroller
-                                                .messageroomrefresh();
+                                                .firstmessagesload();
                                             Get.to(() => MessageDetailScreen(
                                                   realname: controller
                                                       .otherUser.value.realName,
