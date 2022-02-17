@@ -8,6 +8,7 @@ import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
+import 'package:loopus/controller/onmessagescreen_controller.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -134,6 +135,7 @@ class MessageDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(OnMessageScreenController(), tag: userid.toString());
     return Scaffold(
       appBar: AppBarWidget(
         bottomBorder: false,
