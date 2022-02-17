@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
@@ -52,8 +53,8 @@ class HomeLoopScreen extends StatelessWidget {
                   '새로운 포스팅 받는 중...',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    fontWeight: FontWeight.w500,
+                    color: mainblue,
                   ),
                 ),
               ],
@@ -71,8 +72,8 @@ class HomeLoopScreen extends StatelessWidget {
                   '새로운 포스팅 받는 중...',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    fontWeight: FontWeight.w500,
+                    color: mainblue,
                   ),
                 ),
               ],
@@ -90,8 +91,8 @@ class HomeLoopScreen extends StatelessWidget {
                   '완료!',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    fontWeight: FontWeight.w500,
+                    color: mainblue,
                   ),
                 ),
               ],
@@ -109,7 +110,7 @@ class HomeLoopScreen extends StatelessWidget {
                   '당겨주세요',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                     color: mainblue.withOpacity(0.6),
                   ),
                 ),
@@ -189,16 +190,16 @@ class HomeLoopScreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 Text(
-                                  '아직 루프를 한 학생이 없어요',
+                                  '아직 팔로잉 중인 학생이 없어요',
                                   style: kSubTitle2Style,
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    // Get.to(SearchTypingScreen());
+                                    AppController.to.currentIndex(1);
                                   },
                                   child: Text(
                                     '관심사가 비슷한 학생 찾아보기',
-                                    style: kButtonStyle.copyWith(
+                                    style: kSubTitle2Style.copyWith(
                                       color: mainblue,
                                     ),
                                   ),
@@ -208,7 +209,8 @@ class HomeLoopScreen extends StatelessWidget {
                           );
                         }, childCount: 1),
                       ),
-                if (homeController.enableLoopPullup.value == false)
+                if (homeController.enableLoopPullup.value == false &&
+                    (homeController.isLoopEmpty.value == false))
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {

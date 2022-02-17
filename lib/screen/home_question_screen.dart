@@ -55,8 +55,8 @@ class HomeQuestionScreen extends StatelessWidget {
                   '새로운 질문 받는 중...',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    fontWeight: FontWeight.w500,
+                    color: mainblue,
                   ),
                 ),
               ],
@@ -74,8 +74,8 @@ class HomeQuestionScreen extends StatelessWidget {
                   '새로운 질문 받는 중...',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    fontWeight: FontWeight.w500,
+                    color: mainblue,
                   ),
                 ),
               ],
@@ -93,8 +93,8 @@ class HomeQuestionScreen extends StatelessWidget {
                   '완료!',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    fontWeight: FontWeight.w500,
+                    color: mainblue,
                   ),
                 ),
               ],
@@ -112,8 +112,8 @@ class HomeQuestionScreen extends StatelessWidget {
                   '당겨주세요',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    fontWeight: FontWeight.w500,
+                    color: mainblue,
                   ),
                 ),
               ],
@@ -332,6 +332,7 @@ class HomeQuestionScreen extends StatelessWidget {
                                               '나의 질문 받아오는 중...',
                                               style: TextStyle(
                                                   fontSize: 10,
+                                                  fontWeight: FontWeight.w500,
                                                   color: mainblue),
                                             )
                                           ],
@@ -351,7 +352,7 @@ class HomeQuestionScreen extends StatelessWidget {
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               return Padding(
-                                padding: const EdgeInsets.only(top: 24),
+                                padding: const EdgeInsets.only(top: 20),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

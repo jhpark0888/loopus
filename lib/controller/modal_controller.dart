@@ -581,7 +581,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                       width: 4,
                     ),
                     Text(
-                      '루프어스 추천 정보 수신 동의',
+                      '루프어스 프로모션 정보 수신 동의',
                       style: kBody2Style.copyWith(
                         color: isCheckThree.value == true
                             ? mainblue
@@ -765,7 +765,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
         itemStyle: kSubTitle3Style,
         doneStyle: kSubTitle3Style.copyWith(
           color: mainblue,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
         ),
       ),
       onChanged: (date) {

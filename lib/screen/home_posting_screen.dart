@@ -53,8 +53,8 @@ class HomePostingScreen extends StatelessWidget {
                   '새로운 포스팅 받는 중...',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    fontWeight: FontWeight.w500,
+                    color: mainblue,
                   ),
                 ),
               ],
@@ -72,8 +72,8 @@ class HomePostingScreen extends StatelessWidget {
                   '새로운 포스팅 받는 중...',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    fontWeight: FontWeight.w500,
+                    color: mainblue,
                   ),
                 ),
               ],
@@ -91,8 +91,8 @@ class HomePostingScreen extends StatelessWidget {
                   '완료!',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    fontWeight: FontWeight.w500,
+                    color: mainblue,
                   ),
                 ),
               ],
@@ -110,8 +110,8 @@ class HomePostingScreen extends StatelessWidget {
                   '당겨주세요',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: mainblue.withOpacity(0.6),
+                    fontWeight: FontWeight.w500,
+                    color: mainblue,
                   ),
                 ),
               ],

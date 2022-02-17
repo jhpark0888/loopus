@@ -7,6 +7,8 @@ import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/local_data_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/question_detail_controller.dart';
@@ -40,10 +42,13 @@ class ProfileTagChangeScreen extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () async {
+                    LocalDataController.to.tagChange(true);
                     tagController.isTagChanging.value = true;
                     await changeMyTag().then((value) {
                       tagController.isTagChanging.value = false;
                       Get.back();
+                      ModalController.to
+                          .showCustomDialog('관심 태그 기반으로 홈 화면을 재구성했어요', 1500);
                     });
                   },
                   child: Obx(

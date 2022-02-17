@@ -20,6 +20,8 @@ import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:intl/intl.dart';
 
+import '../widget/custom_expanded_button.dart';
+
 class ProjectScreen extends StatelessWidget {
   ProjectScreen({
     required this.projectid,
@@ -497,26 +499,25 @@ class ProjectScreen extends StatelessWidget {
                                     style: kSubTitle2Style,
                                   ),
                                   controller.project.value.is_user == 1
-                                      ? GestureDetector(
-                                          behavior: HitTestBehavior.translucent,
-                                          onTap: () {
-                                            Get.to(() => PostingAddNameScreen(
-                                                  project_id: controller
-                                                      .project.value.id,
-                                                  route: PostaddRoute.project,
-                                                ));
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4),
-                                            child: Text(
-                                              '포스팅 작성하기',
-                                              style: kSubTitle2Style.copyWith(
-                                                  color: mainblue),
-                                            ),
-                                          ),
-                                        )
-                                      : Container(),
+                                      ? controller.project.value.post.isNotEmpty
+                                          ? GestureDetector(
+                                              behavior:
+                                                  HitTestBehavior.translucent,
+                                              onTap: addPosting,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4),
+                                                child: Text(
+                                                  '포스팅 작성하기',
+                                                  style:
+                                                      kSubTitle2Style.copyWith(
+                                                          color: mainblue),
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox.shrink()
+                                      : SizedBox.shrink(),
                                 ],
                               ),
                               const SizedBox(
@@ -532,22 +533,28 @@ class ProjectScreen extends StatelessWidget {
                                               const SizedBox(
                                                 height: 20,
                                               ),
-                                              Text(
-                                                '첫 포스팅을 작성해주세요',
-                                                style: kSubTitle2Style.copyWith(
-                                                  color: mainblack,
-                                                ),
-                                              ),
+                                              Text('첫번째 포스팅을 작성해주세요',
+                                                  style: kSubTitle1Style),
                                               const SizedBox(
-                                                height: 16,
+                                                height: 8,
                                               ),
                                               Text(
-                                                '포스팅을 통해 경험한 순간들을 남겨 보세요',
-                                                style: kButtonStyle.copyWith(
+                                                '활동을 통해 경험한 순간들을 남겨 보세요',
+                                                style: kBody1Style.copyWith(
                                                   color: mainblack
                                                       .withOpacity(0.6),
                                                 ),
                                               ),
+                                              SizedBox(
+                                                height: 16,
+                                              ),
+                                              CustomExpandedButton(
+                                                onTap: addPosting,
+                                                isBlue: true,
+                                                title: '첫번째 포스팅 작성하기',
+                                                buttonTag: '첫번째 포스팅 작성하기',
+                                                isBig: false,
+                                              )
                                             ]
                                           : [
                                               Padding(
@@ -585,6 +592,13 @@ class ProjectScreen extends StatelessWidget {
           ),
       ]),
     );
+  }
+
+  void addPosting() {
+    Get.to(() => PostingAddNameScreen(
+          project_id: controller.project.value.id,
+          route: PostaddRoute.project,
+        ));
   }
 }
 

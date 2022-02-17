@@ -31,7 +31,7 @@ class MessageScreen extends StatelessWidget {
                           height: 4,
                         ),
                         Text(
-                          '채팅 목록을 받아오는 중이에요...',
+                          '메시지 목록을 받아오는 중이에요...',
                           style: TextStyle(
                             fontSize: 10,
                             color: mainblue,
@@ -40,12 +40,31 @@ class MessageScreen extends StatelessWidget {
                         )
                       ]),
                 )
-              : SingleChildScrollView(
-                  child: Column(
-                      children: messageController.chattingroomlist
-                          .map((messageRoom) =>
-                              MessageRoomWidget(messageRoom: messageRoom))
-                          .toList())),
+              : messageController.chattingroomlist.isNotEmpty
+                  ? SingleChildScrollView(
+                      child: Column(
+                          children: messageController.chattingroomlist
+                              .map((messageRoom) =>
+                                  MessageRoomWidget(messageRoom: messageRoom))
+                              .toList()))
+                  : SafeArea(
+                      child: Container(
+                        width: Get.width,
+                        height: Get.height * 0.75,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              '메시지 목록이 비어있어요',
+                              style: kSubTitle3Style.copyWith(
+                                color: mainblack.withOpacity(0.38),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
         ));
   }
 }

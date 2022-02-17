@@ -163,32 +163,39 @@ class ProjectAddPersonScreen extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 16, left: 16, top: 20),
-              child: Text(
-                '선택한 학생',
-                style: kSubTitle2Style,
+            if (projectaddcontroller.looppersonlist.value.length != 0)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(right: 16, left: 16, top: 20),
+                    child: Text(
+                      '선택한 학생',
+                      style: kSubTitle2Style,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    height: 32,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 1,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                left: (index == 0) ? 16 : 0,
+                                right: (index == 0) ? 16 : 0),
+                            child: Obx(() => Row(
+                                children: projectaddcontroller
+                                    .selectedpersontaglist.value)),
+                          );
+                        }),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: 32,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 1,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                          left: (index == 0) ? 16 : 0,
-                          right: (index == 0) ? 16 : 0),
-                      child: Obx(() => Row(
-                          children: projectaddcontroller
-                              .selectedpersontaglist.value)),
-                    );
-                  }),
-            ),
             SizedBox(
               height: 16,
             ),
@@ -220,15 +227,31 @@ class ProjectAddPersonScreen extends StatelessWidget {
                         scale: 6,
                       ),
                       Text(
-                        '루프 리스트 받아오는 중...',
-                        style: TextStyle(fontSize: 10, color: mainblue),
+                        '팔로잉 리스트 받아오는 중...',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          color: mainblue,
+                        ),
                       )
                     ],
                   )
                 : Padding(
                     padding: const EdgeInsets.only(right: 16, left: 16),
                     child: Column(
-                      children: projectaddcontroller.looppersonlist,
+                      children:
+                          projectaddcontroller.looppersonlist.value.length != 0
+                              ? projectaddcontroller.looppersonlist
+                              : [
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  Text(
+                                    '아직 팔로잉 중인 학생이 없어요',
+                                    style: kSubTitle2Style.copyWith(
+                                        color: mainblack.withOpacity(0.38)),
+                                  )
+                                ],
                     ),
                   )),
           ],

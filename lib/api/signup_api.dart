@@ -73,8 +73,7 @@ Future<http.Response> signupRequest() async {
     await _gaController.setUserProperties(
         userid, signupController.selectdept.value);
     Get.offAll(() => App());
-    _modalController.showCustomDialog(
-        '사용자님이 선택하신 관심 태그 기반으로 포스팅들을 추천했어요', 1400);
+    _modalController.showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
   }
   return response;
 }

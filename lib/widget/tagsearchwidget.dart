@@ -64,6 +64,7 @@ class TagSearchWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: TextField(
+            autofocus: true,
             focusNode: tagController.tagsearchfocusNode,
             controller: tagController.tagsearch,
             style: kBody2Style,

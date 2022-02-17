@@ -60,7 +60,7 @@ class NotificationScreen extends StatelessWidget {
                             Tab(
                               height: 40,
                               child: Text(
-                                "루프 요청",
+                                "팔로우",
                               ),
                             )
                           ],
@@ -158,26 +158,16 @@ class NotificationScreen extends StatelessWidget {
                             ? SliverList(
                                 delegate: SliverChildBuilderDelegate(
                                     (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 24,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        Center(
-                                          child: Text(
-                                            '새로운 알림이 없어요',
-                                            style: kSubTitle3Style.copyWith(
-                                              color: mainblack.withOpacity(0.6),
-                                            ),
-                                          ),
+                                  return Container(
+                                    width: Get.width,
+                                    height: Get.height * 0.75,
+                                    child: Center(
+                                      child: Text(
+                                        '새로운 알림이 없어요',
+                                        style: kSubTitle3Style.copyWith(
+                                          color: mainblack.withOpacity(0.38),
                                         ),
-                                        SizedBox(
-                                          height: 24,
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   );
                                 }, childCount: 1),
@@ -316,27 +306,16 @@ class NotificationScreen extends StatelessWidget {
                               ? SliverList(
                                   delegate: SliverChildBuilderDelegate(
                                       (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 24,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          Center(
-                                            child: Text(
-                                              '아직 팔로우 요청이 없어요',
-                                              style: kSubTitle3Style.copyWith(
-                                                color:
-                                                    mainblack.withOpacity(0.6),
-                                              ),
-                                            ),
+                                    return Container(
+                                      width: Get.width,
+                                      height: Get.height * 0.75,
+                                      child: Center(
+                                        child: Text(
+                                          '아직 팔로우한 학생이 없어요',
+                                          style: kSubTitle3Style.copyWith(
+                                            color: mainblack.withOpacity(0.38),
                                           ),
-                                          SizedBox(
-                                            height: 24,
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     );
                                   }, childCount: 1),

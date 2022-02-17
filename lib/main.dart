@@ -82,6 +82,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "루프어스",
       theme: ThemeData(
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          },
+        ),
         fontFamily: 'SUIT',
         appBarTheme: const AppBarTheme(
           backgroundColor: mainWhite,

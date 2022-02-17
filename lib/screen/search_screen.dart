@@ -603,7 +603,7 @@ Widget searchloading() {
         '검색중...',
         style: TextStyle(
           fontSize: 10,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
           color: mainblue.withOpacity(0.6),
         ),
       ),

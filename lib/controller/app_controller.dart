@@ -9,6 +9,8 @@ import 'package:loopus/api/login_api.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
@@ -26,11 +28,21 @@ enum RouteName {
 
 class AppController extends GetxService {
   static AppController get to => Get.find();
+  final LocalDataController _localDataController =
+      Get.put(LocalDataController());
+  final HomeController _homeController = Get.put(HomeController());
   RxBool ismyprofile = false.obs;
   RxInt currentIndex = 0.obs;
 
   Future<void> changePageIndex(int index) async {
     if (index == 0) {
+      if (_localDataController.isTagChanged == true) {
+        _homeController.onPostingRefresh();
+        _homeController.onQuestionRefresh();
+        _localDataController.tagChange(false);
+        ModalController.to.showCustomDialog('관심 태그 변경한 뒤 홈 새로고침했다는 뜻', 1000);
+      }
+
       if (currentIndex.value == 0) {
         CustomScrollController.to.scrollToTop();
       }

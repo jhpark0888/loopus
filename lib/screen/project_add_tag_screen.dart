@@ -54,6 +54,9 @@ class ProjectAddTagScreen extends StatelessWidget {
                       Get.to(() => ProjectAddPersonScreen(
                             screenType: Screentype.add,
                           ));
+                    } else {
+                      ModalController.to
+                          .showCustomDialog('3개의 태그를 선택해주세요', 1000);
                     }
                   },
                   child: Obx(
