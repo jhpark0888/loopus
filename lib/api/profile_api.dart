@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -13,6 +14,7 @@ import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/project_model.dart';
 
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/widget/notification_widget.dart';
 
 import '../constant.dart';
@@ -35,6 +37,10 @@ Future<User> getProfile(var userId) async {
       ProfileController.to.isnewmessage(responseBody["new_message"]);
     }
     return user;
+  } else if (response.statusCode == 404) {
+    Get.back();
+    ModalController.to.showCustomDialog('이미 삭제된 유저입니다', 1400);
+    return Future.error(response.statusCode);
   } else {
     return Future.error(response.statusCode);
   }
@@ -169,17 +175,31 @@ Future postlogout() async {
   }
 }
 
-Future deleteuser() async {
+Future deleteuser(String pw) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   print('user token: $token');
 
   var uri = Uri.parse("$serverUri/user_api/resign");
 
-  http.Response response =
-      await http.delete(uri, headers: {"Authorization": "Token $token"});
+  final password = {
+    'password': pw,
+  };
+
+  http.Response response = await http.post(uri,
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Token $token"
+      },
+      body: json.encode(password));
 
   print("회원탈퇴: ${response.statusCode}");
   if (response.statusCode == 200) {
+    Get.offAll(() => StartScreen());
+
+    Get.delete<AppController>();
+  } else if (response.statusCode == 401) {
+    ModalController.to.showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
+    return Future.error(response.statusCode);
   } else {
     return Future.error(response.statusCode);
   }

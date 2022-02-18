@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -54,7 +55,9 @@ class NotificationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return notification.type == NotificationType.follow
         ? GestureDetector(
-            onTap: clickprofile,
+            onTap: () {
+              clickprofile(notification.targetId);
+            },
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
@@ -140,21 +143,26 @@ class NotificationWidget extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  ClipOval(
-                      child: notification.user.profileImage == null
-                          ? Image.asset(
-                              "assets/illustrations/default_profile.png",
-                              width: 56,
-                              height: 56,
-                            )
-                          : CachedNetworkImage(
-                              height: 56,
-                              width: 56,
-                              imageUrl: notification.user.profileImage!,
-                              placeholder: (context, url) =>
-                                  kProfilePlaceHolder(),
-                              fit: BoxFit.cover,
-                            )),
+                  GestureDetector(
+                    onTap: () {
+                      clickprofile(notification.user.userid);
+                    },
+                    child: ClipOval(
+                        child: notification.user.profileImage == null
+                            ? Image.asset(
+                                "assets/illustrations/default_profile.png",
+                                width: 56,
+                                height: 56,
+                              )
+                            : CachedNetworkImage(
+                                height: 56,
+                                width: 56,
+                                imageUrl: notification.user.profileImage!,
+                                placeholder: (context, url) =>
+                                    kProfilePlaceHolder(),
+                                fit: BoxFit.cover,
+                              )),
+                  ),
                   const SizedBox(
                     width: 12,
                   ),
@@ -163,6 +171,10 @@ class NotificationWidget extends StatelessWidget {
                         maxLines: 2,
                         text: TextSpan(children: [
                           TextSpan(
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  clickprofile(notification.user.userid);
+                                },
                               text: notification.user.realName,
                               style: kSubTitle1Style),
                           TextSpan(
@@ -220,11 +232,9 @@ class NotificationWidget extends StatelessWidget {
     }
   }
 
-  void clickprofile() {
+  void clickprofile(int userid) {
     Get.to(() => OtherProfileScreen(
-        userid: notification.targetId,
-        isuser: 0,
-        realname: notification.user.realName));
+        userid: userid, isuser: 0, realname: notification.user.realName));
   }
 
   void clicknotice() {

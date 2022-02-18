@@ -169,6 +169,10 @@ Future<Map> getposting(int postingid) async {
     // Post post = Post.fromJson(responseBody['posting_info']);
 
     return responseBody;
+  } else if (response.statusCode == 404) {
+    Get.back();
+    ModalController.to.showCustomDialog('이미 삭제된 포스팅입니다', 1400);
+    return Future.error(response.statusCode);
   } else {
     return Future.error(response.statusCode);
   }

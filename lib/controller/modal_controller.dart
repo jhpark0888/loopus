@@ -12,6 +12,7 @@ import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/select_project_screen.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
 import 'package:loopus/screen/signup_type_screen.dart';
+import 'package:loopus/screen/webview_screen.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
 import '../constant.dart';
@@ -441,7 +442,11 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => WebViewScreen(
+                          url:
+                              "https://loopusimage.s3.ap-northeast-2.amazonaws.com/static/%EC%9D%B4%EC%9A%A9%EC%95%BD%EA%B4%80.pdf"));
+                    },
                     child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
                   ),
                 ],
@@ -495,7 +500,11 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => WebViewScreen(
+                          url:
+                              "https://loopusimage.s3.ap-northeast-2.amazonaws.com/static/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%B2%98%EB%A6%AC%EB%B0%A9%EC%B9%A8.pdf"));
+                    },
                     child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
                   ),
                 ],
@@ -549,7 +558,11 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => WebViewScreen(
+                          url:
+                              "https://loopusimage.s3.ap-northeast-2.amazonaws.com/static/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4+%EC%88%98%EC%A7%91%EB%8F%99%EC%9D%98%EC%84%9C+-+%EC%88%98%EC%A0%95.pdf"));
+                    },
                     child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
                   ),
                 ],
