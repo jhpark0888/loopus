@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'dart:convert';
 
 import 'package:loopus/controller/tag_controller.dart';
@@ -73,6 +74,10 @@ Future<QuestionItem> getquestion(int questionid) async {
         jsonDecode(utf8.decode(response.bodyBytes));
     QuestionItem question = QuestionItem.fromJson(responseBody);
     return question;
+  } else if (response.statusCode == 404) {
+    Get.back();
+    ModalController.to.showCustomDialog('이미 삭제된 질문입니다', 1400);
+    return Future.error(response.statusCode);
   } else {
     return Future.error(response.statusCode);
   }

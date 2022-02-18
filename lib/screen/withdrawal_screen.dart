@@ -8,6 +8,7 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
+import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
@@ -23,16 +24,17 @@ class WithdrawalScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              ModalController.to.showButtonDialog(
-                  leftText: '취소',
-                  rightText: '탈퇴',
-                  title: '정말 탈퇴하시겠어요?',
-                  content: '회원님의 모든 정보와 데이터들이 삭제돼요',
+              TextEditingController pwcontroller = TextEditingController();
+              ModalController.to.showTextFieldDialog(
+                  title: "비밀번호를 입력해주세요\n비밀번호 입력 후 확인 클릭 시 \n바로 회원탈퇴가 진행됩니다",
+                  hintText: "8자리 이상",
+                  textEditingController: pwcontroller,
+                  obscureText: true,
+                  validator: (value) =>
+                      CheckValidate().validatePassword(value!),
                   leftFunction: () => Get.back(),
                   rightFunction: () {
-                    deleteuser().then((value) {
-                      Get.offAll(() => StartScreen());
-                    });
+                    deleteuser(pwcontroller.text);
                   });
             },
             child: Padding(

@@ -10,6 +10,7 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
@@ -74,10 +75,9 @@ Future addproject() async {
     String responsebody = await response.stream.bytesToString();
     Map<String, dynamic> responsemap = json.decode(responsebody);
     Project project = Project.fromJson(responsemap);
-    Get.to(() => ProjectScreen(
-          projectid: project.id,
-          isuser: 1,
-        ));
+    project.is_user = 1;
+
+    Get.put(ProjectDetailController(project.id), tag: project.id.toString());
 
     ProfileController.to.myProjectList.insert(
         0,
@@ -85,7 +85,14 @@ Future addproject() async {
           project: project.obs,
           type: ProjectWidgetType.profile,
         ));
+
+    Get.to(() => ProjectScreen(
+          projectid: project.id,
+          isuser: 1,
+        ));
+
     if (_localDataController.isAddFirstProject == false) {
+      // Get.snackbar("활동", "활동이 성공적으로 만들어졌어요!");
       ModalController.to.showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
     }
     if (_localDataController.isAddFirstProject == true) {
@@ -111,11 +118,15 @@ Future<Project> getproject(int projectId) async {
   http.Response response =
       await http.get(uri, headers: {"Authorization": "Token $token"});
 
-  print(response.statusCode);
+  print("활동 로드: ${response.statusCode}");
   if (response.statusCode == 200) {
     var responseBody = json.decode(utf8.decode(response.bodyBytes));
     Project project = Project.fromJson(responseBody);
     return project;
+  } else if (response.statusCode == 404) {
+    Get.back();
+    ModalController.to.showCustomDialog('이미 삭제된 활동입니다', 1400);
+    return Future.error(response.statusCode);
   } else {
     return Future.error(response.statusCode);
   }
@@ -194,6 +205,7 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
 
 Future<void> deleteproject(int projectId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
+  String? userid = await const FlutterSecureStorage().read(key: "id");
 
   final uri = Uri.parse("$serverUri/project_api/project?id=$projectId");
 
@@ -204,6 +216,14 @@ Future<void> deleteproject(int projectId) async {
   if (response.statusCode == 200) {
     ProfileController.to.myProjectList
         .removeWhere((project) => project.project.value.id == projectId);
+    try {
+      Get.find<OtherProfileController>(tag: userid)
+          .otherProjectList
+          .removeWhere((project) => project.project.value.id == projectId);
+    } catch (e) {
+      print("활동 삭제 : $e");
+    }
+    Get.delete<ProjectDetailController>(tag: projectId.toString());
   } else {
     return Future.error(response.statusCode);
   }
