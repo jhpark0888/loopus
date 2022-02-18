@@ -201,4 +201,14 @@ class NotificationController extends GetxController {
   void fcmQuestionUnSubscribe(String id) async {
     await messaging.unsubscribeFromTopic('question$id');
   }
+
+  Future<void> changePromotionAlarmState(bool isSelected) async {
+    if (isSelected) {
+      await messaging.subscribeToTopic('promotion');
+    } else {
+//특정 질문에 알림을 해제한 사람들 또는 만료된 그룹 해제
+
+      await messaging.unsubscribeFromTopic('promotion');
+    }
+  }
 }

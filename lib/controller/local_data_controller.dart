@@ -6,7 +6,6 @@ import 'package:loopus/controller/profile_controller.dart';
 
 class LocalDataController extends GetxController {
   static LocalDataController get to => Get.find();
-  //  final ProfileController _profileController = Get.find();
 
   final firstProject = GetStorage();
   final changeMyTag = GetStorage();

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/local_data_controller.dart';
+import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/select_project_screen.dart';
@@ -20,6 +21,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
   late final AnimationController _animationController;
   final LocalDataController _localDataController =
       Get.put(LocalDataController());
+  final NotificationController _notificationController =
+      Get.put(NotificationController());
   RxBool isModalNextBtnClicked = false.obs;
   RxBool isCheckOne = false.obs;
   RxBool isCheckTwo = false.obs;
@@ -608,7 +611,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                             preventDuplicates: false);
                         isModalNextBtnClicked.value = false;
                         _localDataController.agreeProNoti(isCheckThree.value);
-                        print(_localDataController.isUserAgreeProNoti);
+                        _notificationController.changePromotionAlarmState(
+                            _localDataController.isUserAgreeProNoti);
                         if (isCheckThree.value == true) {
                           ModalController.to.showCustomDialog(
                               '프로모션 알림 수신에 동의하셨습니다\n' +

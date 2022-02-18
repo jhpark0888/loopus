@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
+import 'package:loopus/screen/alert_screen.dart';
 import 'package:loopus/screen/contact_email_screen.dart';
 import 'package:loopus/screen/privacypolicy_screen.dart';
 import 'package:loopus/screen/termsofservice_screen.dart';
@@ -35,7 +36,7 @@ class SettingScreen extends StatelessWidget {
             hoverTag: '알림 설정',
             title: '알림 설정',
             onTap: () {
-              AppSettings.openNotificationSettings();
+              Get.to(() => AlertScreen());
             },
           ),
           CustomListTile(
