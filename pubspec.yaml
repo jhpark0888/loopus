@@ -41,6 +41,7 @@ dependencies:
   app_settings: ^4.1.1
   get_storage:
   in_app_review: ^2.0.4
+  device_info_plus: ^3.2.2
 
 dev_dependencies:
   flutter_test:

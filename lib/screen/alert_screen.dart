@@ -90,6 +90,16 @@ class _AlertScreenState extends State<AlertScreen> {
               ],
             ),
           ),
+          SizedBox(
+            height: 12,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              '프로모션 알림을 설정해도 알림이 오지 않는다면, 시스템 알림 설정을 확인해보세요.',
+              style: kCaptionStyle.copyWith(color: mainblack.withOpacity(0.6)),
+            ),
+          ),
         ],
       ),
     );

@@ -10,11 +10,13 @@ import 'package:loopus/screen/contact_email_screen.dart';
 import 'package:loopus/screen/privacypolicy_screen.dart';
 import 'package:loopus/screen/termsofservice_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';
+import 'package:loopus/utils/user_device_info.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:app_settings/app_settings.dart';
 
 class SettingScreen extends StatelessWidget {
   SettingScreen({Key? key}) : super(key: key);
+  final UserDeviceInfo _userDeviceInfo = Get.put(UserDeviceInfo());
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,9 @@ class SettingScreen extends StatelessWidget {
             onTap: () {
               Get.to(() => ContactEmailScreen());
             },
+          ),
+          Obx(
+            () => Text(_userDeviceInfo.deviceData.values.toString()),
           ),
         ],
       ),
