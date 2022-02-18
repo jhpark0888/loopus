@@ -77,9 +77,9 @@ class UserInfoScreen extends StatelessWidget {
                           FlutterSecureStorage().delete(key: "token");
                           FlutterSecureStorage().delete(key: "id");
                           Get.delete<AppController>();
-                          // Get.delete<HomeController>();
-                          // Get.delete<SearchController>();
-                          // Get.delete<ProfileController>();
+                          Get.delete<HomeController>();
+                          Get.delete<SearchController>();
+                          Get.delete<ProfileController>();
                           logOut().then((value) {
                             _logInController.isLogout.value = false;
                             Get.offAll(() => StartScreen());

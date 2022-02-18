@@ -301,14 +301,19 @@ Future<void> deleteposting(int postid, int projectid) async {
   print(response.statusCode);
   if (response.statusCode == 200) {
     Get.back();
-    Get.find<ProjectDetailController>(tag: projectid.toString())
-        .project
-        .value
-        .post
-        .removeWhere((post) => post.id == postid);
-    Get.find<ProjectDetailController>(tag: projectid.toString())
-        .postinglist
-        .removeWhere((post) => post.item.id == postid);
+    try {
+      Get.find<ProjectDetailController>(tag: projectid.toString())
+          .project
+          .value
+          .post
+          .removeWhere((post) => post.id == postid);
+      Get.find<ProjectDetailController>(tag: projectid.toString())
+          .postinglist
+          .removeWhere((post) => post.item.id == postid);
+    } catch (e) {
+      print(e);
+    }
+
     HomeController.to.recommandpostingResult.value.postingitems
         .removeWhere((post) => post.id == postid);
     HomeController.to.latestpostingResult.value.postingitems

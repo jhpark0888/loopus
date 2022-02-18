@@ -18,6 +18,8 @@ import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/widget/notification_widget.dart';
 
 import '../constant.dart';
+import '../controller/home_controller.dart';
+import '../controller/search_controller.dart';
 
 Future<User> getProfile(var userId) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
@@ -197,6 +199,9 @@ Future deleteuser(String pw) async {
     Get.offAll(() => StartScreen());
 
     Get.delete<AppController>();
+    Get.delete<HomeController>();
+    Get.delete<SearchController>();
+    Get.delete<ProfileController>();
   } else if (response.statusCode == 401) {
     ModalController.to.showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
     return Future.error(response.statusCode);
