@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/select_project_screen.dart';
@@ -15,7 +17,9 @@ import '../constant.dart';
 
 class ModalController extends GetxController with GetTickerProviderStateMixin {
   static ModalController get to => Get.find();
-  late AnimationController _animationController;
+  late final AnimationController _animationController;
+  final LocalDataController _localDataController =
+      Get.put(LocalDataController());
   RxBool isModalNextBtnClicked = false.obs;
   RxBool isCheckOne = false.obs;
   RxBool isCheckTwo = false.obs;
@@ -581,7 +585,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                       width: 4,
                     ),
                     Text(
-                      '루프어스 프로모션 정보 수신 동의',
+                      '루프어스 프로모션 알림 수신 동의',
                       style: kBody2Style.copyWith(
                         color: isCheckThree.value == true
                             ? mainblue
@@ -603,6 +607,14 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                         Get.to(() => SignupTypeScreen(),
                             preventDuplicates: false);
                         isModalNextBtnClicked.value = false;
+                        _localDataController.agreeProNoti(isCheckThree.value);
+                        print(_localDataController.isUserAgreeProNoti);
+                        if (isCheckThree.value == true) {
+                          ModalController.to.showCustomDialog(
+                              '프로모션 알림 수신에 동의하셨습니다\n' +
+                                  '(${DateFormat('yy.MM.dd').format(DateTime.now())})',
+                              1000);
+                        }
                       }
                     : () {},
                 child: Container(

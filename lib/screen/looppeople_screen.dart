@@ -108,10 +108,30 @@ class LoopPeopleScreen extends StatelessWidget {
                             ),
                           ),
                         ])
-                      : ListView(
-                          children: followerlist
-                              .map((friend) => PersonTileWidget(user: friend))
-                              .toList()),
+                      : followerlist.isNotEmpty
+                          ? ListView(
+                              children: followerlist
+                                  .map((friend) =>
+                                      PersonTileWidget(user: friend))
+                                  .toList())
+                          : Container(
+                              width: Get.width,
+                              height: Get.height * 0.75,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '아직 팔로워가 없어요',
+                                    style: kSubTitle3Style.copyWith(
+                                      color: mainblack.withOpacity(0.38),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.1,
+                                  ),
+                                ],
+                              ),
+                            ),
                 ),
                 Obx(
                   () => ProfileController.to.isLoopPeopleLoading.value
@@ -126,10 +146,30 @@ class LoopPeopleScreen extends StatelessWidget {
                             ),
                           ),
                         ])
-                      : ListView(
-                          children: followinglist
-                              .map((friend) => PersonTileWidget(user: friend))
-                              .toList()),
+                      : followinglist.isNotEmpty
+                          ? ListView(
+                              children: followinglist
+                                  .map((friend) =>
+                                      PersonTileWidget(user: friend))
+                                  .toList())
+                          : Container(
+                              width: Get.width,
+                              height: Get.height * 0.75,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '아직 아무도 팔로잉하지 않았어요',
+                                    style: kSubTitle3Style.copyWith(
+                                      color: mainblack.withOpacity(0.38),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.1,
+                                  ),
+                                ],
+                              ),
+                            ),
                 ),
               ])),
         ));

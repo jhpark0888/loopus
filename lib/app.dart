@@ -5,18 +5,15 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 
 import 'package:loopus/controller/app_controller.dart';
-import 'package:loopus/controller/modal_controller.dart';
 
-import 'package:loopus/screen/bookmark_screen.dart';
 import 'package:loopus/screen/company_screen.dart';
 import 'package:loopus/screen/home_screen.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/search_screen.dart';
 
-import 'screen/example_screen.dart';
-
 // ignore: use_key_in_widget_constructors
-class App extends GetView<AppController> {
+class App extends StatelessWidget {
+  final AppController controller = Get.put(AppController());
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [

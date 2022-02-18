@@ -6,26 +6,23 @@ import 'package:loopus/controller/profile_controller.dart';
 
 class LocalDataController extends GetxController {
   static LocalDataController get to => Get.find();
-  static final ProfileController _profileController = Get.find();
+  //  final ProfileController _profileController = Get.find();
 
   final firstProject = GetStorage();
   final changeMyTag = GetStorage();
+  final promotionNotification = GetStorage();
 
-  bool get isAddFirstProject =>
-      firstProject.read('firstProject' +
-          _profileController.myUserInfo.value.userid.toString()) ??
-      true;
+  bool get isAddFirstProject => firstProject.read('firstProject') ?? true;
 
-  void firstProjectAdd() => firstProject.write(
-      'firstProject' + _profileController.myUserInfo.value.userid.toString(),
-      false);
+  void firstProjectAdd() => firstProject.write('firstProject', false);
 
-  bool get isTagChanged =>
-      changeMyTag.read('changeMyTag' +
-          _profileController.myUserInfo.value.userid.toString()) ??
-      false;
+  bool get isTagChanged => changeMyTag.read('changeMyTag') ?? false;
 
-  void tagChange(bool isChanged) => changeMyTag.write(
-      'changeMyTag' + _profileController.myUserInfo.value.userid.toString(),
-      isChanged);
+  void tagChange(bool isChanged) => changeMyTag.write('changeMyTag', isChanged);
+
+  bool get isUserAgreeProNoti =>
+      promotionNotification.read('promotionNotification') ?? false;
+
+  void agreeProNoti(bool isSelected) =>
+      promotionNotification.write('promotionNotification', isSelected);
 }

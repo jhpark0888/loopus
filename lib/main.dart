@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:device_preview/device_preview.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,15 +10,11 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:loopus/controller/ga_controller.dart';
-// import 'package:kakao_flutter_sdk/link.dart';
-import 'package:lottie/lottie.dart';
-
 import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/firebase_options.dart';
 
-import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -109,7 +104,7 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
-      initialBinding: InitBinding(),
+      // initialBinding: InitBinding(),
       getPages: [
         GetPage(
           name: "/",
