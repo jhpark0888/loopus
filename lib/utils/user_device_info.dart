@@ -1,12 +1,27 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:ios_utsname_ext/extension.dart';
+
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class UserDeviceInfo extends GetxController {
   static UserDeviceInfo get to => Get.find();
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   RxMap<String, dynamic> deviceData = <String, dynamic>{}.obs;
+  RxMap<String, dynamic> appInfoData = <String, dynamic>{}.obs;
+
+  Future<Map<String, dynamic>> _getAppInfo() async {
+    try {
+      PackageInfo info = await PackageInfo.fromPlatform();
+      appInfoData.value = {"Ver": info.version + '+' + info.buildNumber};
+    } catch (error) {
+      appInfoData.value = {"Error": "Failed to get app version."};
+    }
+
+    return appInfoData.value;
+  }
 
   Future<Map<String, dynamic>> _getDeviceInfo() async {
     try {
@@ -20,7 +35,7 @@ class UserDeviceInfo extends GetxController {
       deviceData.value = {"Error": "Failed to get platform version."};
     }
 
-    return deviceData;
+    return deviceData.value;
   }
 
   Map<String, dynamic> _readAndroidDeviceInfo(AndroidDeviceInfo info) {
@@ -38,7 +53,7 @@ class UserDeviceInfo extends GetxController {
   Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo info) {
     var systemName = info.systemName;
     var version = info.systemVersion;
-    var machine = info.utsname.machine;
+    var machine = info.utsname.machine?.iOSProductName;
 
     return {"OS 버전": "$systemName $version", "기기": "$machine"};
   }
@@ -46,6 +61,7 @@ class UserDeviceInfo extends GetxController {
   @override
   void onInit() async {
     await _getDeviceInfo();
+    await _getAppInfo();
     super.onInit();
   }
 }
