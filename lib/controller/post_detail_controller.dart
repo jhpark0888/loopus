@@ -12,9 +12,11 @@ import 'package:loopus/widget/search_posting_widget.dart';
 
 class PostingDetailController extends GetxController {
   PostingDetailController(this.postid);
-  RxBool isPostingContentLoading = true.obs;
+  // RxBool isPostingContentLoading = true.obs;
   RxBool isPostDeleteLoading = false.obs;
   RxBool isPostUpdateLoading = false.obs;
+  // RxBool isNetworkConnect = false.obs;
+  Rx<ScreenState> postscreenstate = ScreenState.loading.obs;
 
   int postid;
 
@@ -53,19 +55,7 @@ class PostingDetailController extends GetxController {
 
   @override
   void onInit() {
-    isPostingContentLoading(true);
-    getposting(postid).then((value) {
-      post(Post.fromJson(value['posting_info']));
-      postcontentlist(post.value.contents!
-          .map((content) => PostContentWidget(content: content))
-          .toList());
-      recommendposts = List.from(value['recommend_post'])
-          .map((post) => Post.fromJson(post))
-          .toList()
-          .map((posting) => SearchPostingWidget(post: posting))
-          .toList();
-      isPostingContentLoading(false);
-    });
+    getposting(postid);
     super.onInit();
   }
 }

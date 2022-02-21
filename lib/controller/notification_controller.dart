@@ -23,6 +23,7 @@ import 'package:loopus/screen/question_detail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';
 import 'package:loopus/widget/message_widget.dart';
+import 'package:loopus/widget/messageroom_widget.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
@@ -108,14 +109,26 @@ class NotificationController extends GetxController {
           } catch (e) {
             print(e);
             MessageController.to.chattingroomlist
-                .where((messageroom) =>
-                    messageroom.user.userid == int.parse(event.data["id"]))
+                .where((messageroomwidget) =>
+                    messageroomwidget.messageRoom.user.userid ==
+                    int.parse(event.data["id"]))
                 .first
+                .messageRoom
                 .notread
                 .value += 1;
           }
-          // MessageController.to.chattingroomlist.remove(messageroom);
-          // MessageController.to.chattingroomlist.insert(0, messageroom);
+          try {
+            MessageRoomWidget messageroomwidget = MessageController
+                .to.chattingroomlist
+                .where((messageroomwidget) =>
+                    messageroomwidget.messageRoom.user.userid ==
+                    int.parse(event.data["id"]))
+                .first;
+            MessageController.to.chattingroomlist.remove(messageroomwidget);
+            MessageController.to.chattingroomlist.insert(0, messageroomwidget);
+          } catch (e) {
+            print(e);
+          }
         } catch (e) {
           print(e);
           ProfileController.to.isnewmessage(true);

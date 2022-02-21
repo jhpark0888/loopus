@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
@@ -126,6 +127,7 @@ class UserInfoScreen extends StatelessWidget {
   }
 
   Future<void> logOut() async {
+    // await postlogout();
     await FlutterSecureStorage().delete(key: 'token');
     await FlutterSecureStorage().delete(key: 'id');
   }

@@ -91,7 +91,8 @@ class MyProfileScreen extends StatelessWidget {
                   () => SmartRefresher(
                     controller: profileController.profilerefreshController,
                     enablePullDown:
-                        (profileController.isProfileLoading.value == true)
+                        (profileController.myprofilescreenstate.value ==
+                                ScreenState.loading)
                             ? false
                             : true,
                     enablePullUp: !profileController.profileenablepullup.value,
@@ -172,7 +173,7 @@ class MyProfileScreen extends StatelessWidget {
                                       onTap: () => ModalController.to
                                           .showModalIOS(context,
                                               func1: changeProfileImage,
-                                              func2: () {},
+                                              func2: changeDefaultImage,
                                               value1: '라이브러리에서 선택',
                                               value2: '기본 이미지로 변경',
                                               isValue1Red: false,
@@ -180,8 +181,9 @@ class MyProfileScreen extends StatelessWidget {
                                               isOne: false),
                                       child: ClipOval(
                                           child: (profileController
-                                                      .isProfileLoading.value ==
-                                                  false)
+                                                      .myprofilescreenstate
+                                                      .value !=
+                                                  ScreenState.loading)
                                               ? (profileController.myUserInfo
                                                           .value.profileImage !=
                                                       null)
@@ -233,7 +235,7 @@ class MyProfileScreen extends StatelessWidget {
                                         onTap: () => ModalController.to
                                             .showModalIOS(context,
                                                 func1: changeProfileImage,
-                                                func2: () {},
+                                                func2: changeDefaultImage,
                                                 value1: '라이브러리에서 선택',
                                                 value2: '기본 이미지로 변경',
                                                 isValue1Red: false,
@@ -554,70 +556,91 @@ class MyProfileScreen extends StatelessWidget {
                             ),
                             Obx(
                               () => Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                child: (profileController
-                                            .isProfileLoading.value ==
-                                        false)
-                                    ? Obx(
-                                        () => profileController
-                                                .myProjectList.value.isNotEmpty
-                                            ? Column(
-                                                children: profileController
-                                                    .myProjectList.value,
-                                              )
-                                            : Column(
-                                                children: [
-                                                  Text(
-                                                    '첫번째 활동을 기록해보세요',
-                                                    style: kSubTitle1Style,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 4,
-                                                  ),
-                                                  Text(
-                                                    '수업, 과제, 스터디 등 학교 생활과 관련있는\n다양한 경험을 남겨보세요',
-                                                    style: kBody1Style.copyWith(
-                                                      color: mainblack
-                                                          .withOpacity(0.6),
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 12,
-                                                  ),
-                                                  CustomExpandedButton(
-                                                    onTap: () {
-                                                      Get.to(
-                                                        () =>
-                                                            ProjectAddTitleScreen(
-                                                          screenType:
-                                                              Screentype.add,
-                                                        ),
-                                                      );
-                                                    },
-                                                    isBlue: true,
-                                                    title: '첫번째 활동 추가하기',
-                                                    buttonTag: '첫번째 활동 추가하기',
-                                                    isBig: false,
-                                                  )
-                                                ],
-                                              ),
-                                      )
-                                    : Column(
-                                        children: [
-                                          Image.asset(
-                                            'assets/icons/loading.gif',
-                                            scale: 6,
-                                          ),
-                                          const Text(
-                                            '활동 받아오는 중...',
-                                            style: TextStyle(
-                                                fontSize: 10, color: mainblue),
-                                          ),
-                                        ],
-                                      ),
-                              ),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                  child: (profileController
+                                              .myprofilescreenstate.value ==
+                                          ScreenState.loading)
+                                      ? Column(
+                                          children: [
+                                            Image.asset(
+                                              'assets/icons/loading.gif',
+                                              scale: 6,
+                                            ),
+                                            const Text(
+                                              '활동 받아오는 중...',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: mainblue),
+                                            ),
+                                          ],
+                                        )
+                                      : profileController
+                                                  .myprofilescreenstate.value ==
+                                              ScreenState.disconnect
+                                          ? Container()
+                                          : profileController
+                                                      .myprofilescreenstate
+                                                      .value ==
+                                                  ScreenState.error
+                                              ? Container()
+                                              : Obx(
+                                                  () =>
+                                                      profileController
+                                                              .myProjectList
+                                                              .value
+                                                              .isNotEmpty
+                                                          ? Column(
+                                                              children:
+                                                                  profileController
+                                                                      .myProjectList
+                                                                      .value,
+                                                            )
+                                                          : Column(
+                                                              children: [
+                                                                Text(
+                                                                  '첫번째 활동을 기록해보세요',
+                                                                  style:
+                                                                      kSubTitle1Style,
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 4,
+                                                                ),
+                                                                Text(
+                                                                  '수업, 과제, 스터디 등 학교 생활과 관련있는\n다양한 경험을 남겨보세요',
+                                                                  style: kBody1Style
+                                                                      .copyWith(
+                                                                    color: mainblack
+                                                                        .withOpacity(
+                                                                            0.6),
+                                                                  ),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 12,
+                                                                ),
+                                                                CustomExpandedButton(
+                                                                  onTap: () {
+                                                                    Get.to(
+                                                                      () =>
+                                                                          ProjectAddTitleScreen(
+                                                                        screenType:
+                                                                            Screentype.add,
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  isBlue: true,
+                                                                  title:
+                                                                      '첫번째 활동 추가하기',
+                                                                  buttonTag:
+                                                                      '첫번째 활동 추가하기',
+                                                                  isBig: false,
+                                                                )
+                                                              ],
+                                                            ),
+                                                )),
                             ),
                           ],
                         ),
@@ -655,5 +678,16 @@ class MyProfileScreen extends StatelessWidget {
         }
       });
     }
+  }
+
+  void changeDefaultImage() async {
+    User? user = await updateProfile(profileController.myUserInfo.value, null,
+            null, ProfileUpdateType.image)
+        .then((user) {
+      imageController.isProfileImagePickerLoading.value = false;
+      if (user != null) {
+        profileController.myUserInfo(user);
+      }
+    });
   }
 }

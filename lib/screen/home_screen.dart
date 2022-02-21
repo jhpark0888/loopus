@@ -87,7 +87,6 @@ class HomeScreen extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {
-                    ProfileController.to.isnewmessage(false);
                     Get.to(() => MessageScreen());
                   },
                   icon: SvgPicture.asset(

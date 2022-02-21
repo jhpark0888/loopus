@@ -78,9 +78,6 @@ class ProjectAddIntroScreen extends StatelessWidget {
                                 .then((value) {
                               Get.find<ProjectDetailController>(
                                       tag: projectid.toString())
-                                  .project(value);
-                              Get.find<ProjectDetailController>(
-                                      tag: projectid.toString())
                                   .isProjectUpdateLoading
                                   .value = false;
                             });

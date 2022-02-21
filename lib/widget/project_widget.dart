@@ -30,16 +30,16 @@ class ProjectWidget extends StatelessWidget {
       : super(key: key);
 
   ProjectWidgetType type;
-  late ProjectDetailController controller = Get.put(
-      ProjectDetailController(project.value.id),
-      tag: project.value.id.toString());
+  // late ProjectDetailController controller = Get.put(
+  //     ProjectDetailController(project.value.id),
+  //     tag: project.value.id.toString());
   late final HoverController _hoverController =
       Get.put(HoverController(), tag: 'project${project.value.id}');
   Rx<Project> project;
 
   @override
   Widget build(BuildContext context) {
-    controller.project = project;
+    // controller.project = project;
     return Padding(
       padding: const EdgeInsets.only(
         bottom: 16,
@@ -50,13 +50,13 @@ class ProjectWidget extends StatelessWidget {
         onTapUp: (details) => _hoverController.isNonHoverState(),
         onTap: () async {
           if (type == ProjectWidgetType.profile) {
-            Get.to(() => ProjectScreen(
-                  projectid: controller.project.value.id,
-                  isuser: controller.project.value.is_user,
+            project.value = await Get.to(() => ProjectScreen(
+                  projectid: project.value.id,
+                  isuser: project.value.is_user,
                 ));
           } else {
             Get.to(() => PostingAddNameScreen(
-                  project_id: controller.project.value.id,
+                  project_id: project.value.id,
                   route: PostaddRoute.bottom,
                 ));
           }
@@ -82,10 +82,9 @@ class ProjectWidget extends StatelessWidget {
                               () => Container(
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: controller.project.value.thumbnail !=
-                                            null
+                                    image: project.value.thumbnail != null
                                         ? NetworkImage(
-                                            controller.project.value.thumbnail!,
+                                            project.value.thumbnail!,
                                           ) as ImageProvider
                                         : AssetImage(
                                             "assets/illustrations/default_image.png",
@@ -114,7 +113,7 @@ class ProjectWidget extends StatelessWidget {
                         children: [
                           Obx(
                             () => Text(
-                              controller.project.value.projectName,
+                              project.value.projectName,
                               style: kHeaderH2Style.copyWith(fontSize: 18),
                             ),
                           ),
@@ -125,16 +124,14 @@ class ProjectWidget extends StatelessWidget {
                             children: [
                               Obx(
                                 () => Text(
-                                  '${DateFormat("yy.MM.dd").format(controller.project.value.startDate!)} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate!) : ''}',
+                                  '${DateFormat("yy.MM.dd").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''}',
                                   style: kSubTitle2Style,
                                 ),
                               ),
                               Obx(
                                 () => SizedBox(
                                   width:
-                                      (controller.project.value.endDate == null)
-                                          ? 4
-                                          : 8,
+                                      (project.value.endDate == null) ? 4 : 8,
                                 ),
                               ),
                               Obx(() => Container(
@@ -144,33 +141,29 @@ class ProjectWidget extends StatelessWidget {
                                     ),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(4),
-                                      color:
-                                          (controller.project.value.endDate ==
-                                                  null)
-                                              ? Color(0xffefefef)
-                                              : Color(0xff888B8C),
+                                      color: (project.value.endDate == null)
+                                          ? Color(0xffefefef)
+                                          : Color(0xff888B8C),
                                     ),
                                     child: Center(
                                       child: Obx(
                                         () => Text(
-                                          (controller.project.value.endDate ==
-                                                  null)
+                                          (project.value.endDate == null)
                                               ? '진행중'
                                               : DurationCaculator()
                                                   .durationCaculate(
-                                                  startDate: controller
-                                                      .project.value.startDate!,
-                                                  endDate: controller
-                                                      .project.value.endDate!,
+                                                  startDate:
+                                                      project.value.startDate!,
+                                                  endDate:
+                                                      project.value.endDate!,
                                                 ),
                                           style: kBody2Style.copyWith(
-                                              fontWeight: (controller.project
-                                                          .value.endDate ==
-                                                      null)
-                                                  ? FontWeight.w400
-                                                  : FontWeight.w500,
-                                              color: (controller.project.value
-                                                          .endDate ==
+                                              fontWeight:
+                                                  (project.value.endDate ==
+                                                          null)
+                                                      ? FontWeight.w400
+                                                      : FontWeight.w500,
+                                              color: (project.value.endDate ==
                                                       null)
                                                   ? mainblack.withOpacity(0.6)
                                                   : mainWhite),
@@ -199,7 +192,7 @@ class ProjectWidget extends StatelessWidget {
                                   ),
                                   Obx(
                                     () => Text(
-                                      '${controller.project.value.post_count!.value}',
+                                      '${project.value.post_count!.value}',
                                       style: kButtonStyle,
                                     ),
                                   ),
@@ -213,7 +206,7 @@ class ProjectWidget extends StatelessWidget {
                                 ),
                                 Obx(
                                   () => Text(
-                                    "${controller.project.value.like_count!.value}",
+                                    "${project.value.like_count!.value}",
                                     style: kButtonStyle,
                                   ),
                                 ),

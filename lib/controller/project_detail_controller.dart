@@ -15,9 +15,11 @@ import 'package:loopus/widget/project_posting_widget.dart';
 class ProjectDetailController extends GetxController {
   ProjectDetailController(this.projectid);
   static ProjectDetailController get to => Get.find();
-  RxBool isProjectLoading = false.obs;
+  // RxBool isProjectLoading = false.obs;
   RxBool isProjectDeleteLoading = false.obs;
   RxBool isProjectUpdateLoading = false.obs;
+  // RxBool isNetworkConnect = false.obs;
+  Rx<ScreenState> projectscreenstate = ScreenState.loading.obs;
 
   Rx<Project> project = Project(
           id: 0,
@@ -51,25 +53,12 @@ class ProjectDetailController extends GetxController {
   }
 
   void loadProject() {
-    isProjectLoading(true);
-    getproject(projectid).then((value) {
-      project(value);
-      postinglist(List.from(project.value.post
-          .map((post) => ProjectPostingWidget(
-                item: post,
-                isuser: project.value.is_user,
-                realname: project.value.user!.realName,
-                department: project.value.user!.department,
-                profileimage: project.value.user!.profileImage ?? '',
-              ))
-          .toList()
-          .reversed));
-      isProjectLoading.value = false;
-    });
+    getproject(projectid);
   }
 
   @override
   void onInit() {
+    loadProject();
     super.onInit();
   }
 }

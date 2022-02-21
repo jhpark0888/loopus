@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:loopus/api/profile_api.dart';
@@ -65,26 +67,25 @@ class ProfileController extends GetxController
   RxBool isnewalarm = false.obs;
   RxBool isnewmessage = false.obs;
 
-  RxBool isProfileLoading = true.obs;
+  // RxBool isProfileLoading = true.obs;
   RxBool isLoopPeopleLoading = true.obs;
+  // RxBool isNetworkConnect = false.obs;
+  Rx<ScreenState> myprofilescreenstate = ScreenState.loading.obs;
 
   void loadmyProfile() async {
-    isProfileLoading.value = true;
-
+    // isProfileLoading.value = true;
+    myprofilescreenstate(ScreenState.loading);
     String? userId = await const FlutterSecureStorage().read(key: "id");
 
-    await getProfile(userId).then((user) async {
-      myUserInfo(user);
-    });
-    await getProjectlist(userId).then((projectlist) {
-      myProjectList(projectlist
-          .map((project) => ProjectWidget(
-                project: project.obs,
-                type: ProjectWidgetType.profile,
-              ))
-          .toList());
-    });
-    isProfileLoading.value = false;
+    ConnectivityResult result = await initConnectivity();
+    if (result == ConnectivityResult.none) {
+      myprofilescreenstate(ScreenState.disconnect);
+      ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
+    } else {
+      await getProfile(userId, 1);
+      await getProjectlist(userId, 1);
+    }
+    // isProfileLoading.value = false;
   }
 
   @override

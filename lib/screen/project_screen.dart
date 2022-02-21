@@ -174,423 +174,507 @@ class ProjectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      controller.loadProject();
-    });
-    return Obx(
-      () => Stack(children: [
-        Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            elevation: 0,
-            leading: IconButton(
-              onPressed: () {
-                Get.back(result: controller.project.value);
-              },
-              icon: SvgPicture.asset('assets/icons/Arrow.svg'),
-            ),
-            actions: [
-              (isuser == 1)
-                  ? IconButton(
-                      onPressed: () {
-                        Get.to(
-                          () => ProjectModifyScreen(
-                            projectid: controller.project.value.id,
-                          ),
-                        );
-                      },
-                      icon: SvgPicture.asset('assets/icons/Edit.svg'),
-                    )
-                  : Container(),
-              IconButton(
+    // WidgetsBinding.instance?.addPostFrameCallback((_) {
+    //   controller.loadProject();
+    // });
+    return WillPopScope(
+      onWillPop: () async {
+        Get.back(result: controller.project.value);
+        return true;
+      },
+      child: Obx(
+        () => Stack(children: [
+          Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              leading: IconButton(
                 onPressed: () {
-                  controller.project.value.is_user == 1
-                      ? modalController.showModalIOS(
-                          context,
-                          func1: () {
-                            modalController.showButtonDialog(
-                                leftText: '취소',
-                                rightText: '삭제',
-                                title:
-                                    '<${controller.project.value.projectName}> 활동을 삭제하시겠어요?',
-                                content:
-                                    '작성한 ${controller.project.value.post.length}개의 포스팅도 삭제됩니다',
-                                leftFunction: () => Get.back(),
-                                rightFunction: () async {
-                                  Get.back();
-                                  Get.back();
-                                  controller.isProjectDeleteLoading(true);
-                                  await deleteproject(
-                                      controller.project.value.id);
-                                  controller.isProjectDeleteLoading(false);
-                                  Get.back();
-                                });
-                          },
-                          func2: () {},
-                          value1: '이 활동 삭제하기',
-                          value2: '',
-                          isValue1Red: true,
-                          isValue2Red: false,
-                          isOne: true,
-                        )
-                      : modalController.showModalIOS(
-                          context,
-                          func1: () {
-                            modalController.showButtonDialog(
-                                leftText: '취소',
-                                rightText: '신고',
-                                title:
-                                    '<${controller.project.value.projectName}> 활동을 신고하시겠어요?',
-                                content: '관리자가 검토 후 조치하도록 하겠습니다',
-                                leftFunction: () => Get.back(),
-                                rightFunction: () {});
-                          },
-                          func2: () {},
-                          value1: '이 활동 신고하기',
-                          value2: '',
-                          isValue1Red: true,
-                          isValue2Red: false,
-                          isOne: true,
-                        );
+                  Get.back(result: controller.project.value);
                 },
-                icon: SvgPicture.asset('assets/icons/More.svg'),
+                icon: SvgPicture.asset('assets/icons/Arrow.svg'),
               ),
-            ],
-          ),
-          body: Obx(
-            () => controller.isProjectLoading.value
-                ? Center(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/icons/loading.gif',
-                            scale: 9,
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            '내용을 받는 중이에요...',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: mainblue,
-                              fontWeight: FontWeight.w500,
+              actions: [
+                (isuser == 1)
+                    ? IconButton(
+                        onPressed: () {
+                          Get.to(
+                            () => ProjectModifyScreen(
+                              projectid: controller.project.value.id,
                             ),
-                          ),
-                          SizedBox(
-                            height: 60,
-                          ),
-                        ]),
-                  )
-                : SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(
-                            16,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Color(0xffe7e7e7),
-                                width: 1,
+                          );
+                        },
+                        icon: SvgPicture.asset('assets/icons/Edit.svg'),
+                      )
+                    : Container(),
+                IconButton(
+                  onPressed: () {
+                    controller.project.value.is_user == 1
+                        ? modalController.showModalIOS(
+                            context,
+                            func1: () {
+                              modalController.showButtonDialog(
+                                  leftText: '취소',
+                                  rightText: '삭제',
+                                  title:
+                                      '<${controller.project.value.projectName}> 활동을 삭제하시겠어요?',
+                                  content:
+                                      '작성한 ${controller.project.value.post.length}개의 포스팅도 삭제됩니다',
+                                  leftFunction: () => Get.back(),
+                                  rightFunction: () async {
+                                    Get.back();
+                                    Get.back();
+                                    controller.isProjectDeleteLoading(true);
+                                    await deleteproject(
+                                        controller.project.value.id);
+                                    controller.isProjectDeleteLoading(false);
+                                    Get.back();
+                                  });
+                            },
+                            func2: () {},
+                            value1: '이 활동 삭제하기',
+                            value2: '',
+                            isValue1Red: true,
+                            isValue2Red: false,
+                            isOne: true,
+                          )
+                        : modalController.showModalIOS(
+                            context,
+                            func1: () {
+                              modalController.showButtonDialog(
+                                  leftText: '취소',
+                                  rightText: '신고',
+                                  title:
+                                      '<${controller.project.value.projectName}> 활동을 신고하시겠어요?',
+                                  content: '관리자가 검토 후 조치하도록 하겠습니다',
+                                  leftFunction: () => Get.back(),
+                                  rightFunction: () {});
+                            },
+                            func2: () {},
+                            value1: '이 활동 신고하기',
+                            value2: '',
+                            isValue1Red: true,
+                            isValue2Red: false,
+                            isOne: true,
+                          );
+                  },
+                  icon: SvgPicture.asset('assets/icons/More.svg'),
+                ),
+              ],
+            ),
+            body: Obx(
+              () => controller.projectscreenstate.value == ScreenState.loading
+                  ? Center(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/icons/loading.gif',
+                              scale: 9,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              '내용을 받는 중이에요...',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: mainblue,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ),
+                            SizedBox(
+                              height: 60,
+                            ),
+                          ]),
+                    )
+                  : controller.projectscreenstate.value ==
+                          ScreenState.disconnect
+                      ? Center(
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Obx(
-                                () => Text(
-                                  controller.project.value.projectName,
-                                  style: kHeaderH2Style,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("네트워크 불안정"),
+                                IconButton(
+                                    onPressed: () {
+                                      controller.loadProject();
+                                    },
+                                    icon: Icon(Icons.refresh_rounded)),
+                                SizedBox(
+                                  height: 60,
                                 ),
-                              ),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              Obx(
-                                () => Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                              ]),
+                        )
+                      : controller.projectscreenstate.value == ScreenState.error
+                          ? Center(
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Row(
+                                    Text("에러 발생"),
+                                    IconButton(
+                                        onPressed: () {
+                                          controller.loadProject();
+                                        },
+                                        icon: Icon(Icons.refresh_rounded)),
+                                    SizedBox(
+                                      height: 60,
+                                    ),
+                                  ]),
+                            )
+                          : SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(
+                                      16,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Color(0xffe7e7e7),
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
                                       children: [
-                                        Text(
-                                            '${DateFormat("yy.MM.dd").format(controller.project.value.startDate ?? DateTime(2022))} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate ?? DateTime(2022)) : ''}',
-                                            style: kSubTitle2Style),
+                                        Obx(
+                                          () => Text(
+                                            controller
+                                                .project.value.projectName,
+                                            style: kHeaderH2Style,
+                                          ),
+                                        ),
                                         SizedBox(
-                                          width: (controller
-                                                      .project.value.endDate ==
-                                                  null)
-                                              ? 4
-                                              : 8,
+                                          height: 16,
                                         ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                            vertical: 4,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            color: (controller.project.value
-                                                        .endDate ==
-                                                    null)
-                                                ? Color(0xffefefef)
-                                                : Color(0xff888B8C),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              controller.project.value
-                                                          .endDate ==
-                                                      null
-                                                  ? '진행중'
-                                                  : DurationCaculator()
-                                                      .durationCaculate(
-                                                          startDate: controller
-                                                              .project
-                                                              .value
-                                                              .startDate!,
-                                                          endDate: controller
-                                                              .project
-                                                              .value
-                                                              .endDate!),
-                                              style: TextStyle(
-                                                fontWeight: (controller.project
-                                                            .value.endDate ==
-                                                        null)
-                                                    ? FontWeight.w400
-                                                    : FontWeight.w500,
-                                                fontSize: 14,
-                                                color: (controller.project.value
-                                                            .endDate ==
-                                                        null)
-                                                    ? mainblack.withOpacity(0.6)
-                                                    : mainWhite,
+                                        Obx(
+                                          () => Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                      '${DateFormat("yy.MM.dd").format(controller.project.value.startDate ?? DateTime(2022))} ~ ${controller.project.value.endDate != null ? DateFormat("yy.MM.dd").format(controller.project.value.endDate ?? DateTime(2022)) : ''}',
+                                                      style: kSubTitle2Style),
+                                                  SizedBox(
+                                                    width: (controller
+                                                                .project
+                                                                .value
+                                                                .endDate ==
+                                                            null)
+                                                        ? 4
+                                                        : 8,
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 4,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                      color: (controller
+                                                                  .project
+                                                                  .value
+                                                                  .endDate ==
+                                                              null)
+                                                          ? Color(0xffefefef)
+                                                          : Color(0xff888B8C),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        controller.project.value
+                                                                    .endDate ==
+                                                                null
+                                                            ? '진행중'
+                                                            : DurationCaculator()
+                                                                .durationCaculate(
+                                                                    startDate: controller
+                                                                        .project
+                                                                        .value
+                                                                        .startDate!,
+                                                                    endDate: controller
+                                                                        .project
+                                                                        .value
+                                                                        .endDate!),
+                                                        style: TextStyle(
+                                                          fontWeight: (controller
+                                                                      .project
+                                                                      .value
+                                                                      .endDate ==
+                                                                  null)
+                                                              ? FontWeight.w400
+                                                              : FontWeight.w500,
+                                                          fontSize: 14,
+                                                          color: (controller
+                                                                      .project
+                                                                      .value
+                                                                      .endDate ==
+                                                                  null)
+                                                              ? mainblack
+                                                                  .withOpacity(
+                                                                      0.6)
+                                                              : mainWhite,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  //좋아요 한 사람 리스트
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      "assets/icons/Favorite_Active.svg",
+                                                    ),
+                                                    SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    Text(
+                                                        '${controller.project.value.like_count!.value}',
+                                                        style: kButtonStyle),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ),
+                                        if (controller
+                                            .project.value.looper.isNotEmpty)
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                        controller.project.value.looper.isEmpty
+                                            ? const SizedBox.shrink()
+                                            : GestureDetector(
+                                                onTap: () {
+                                                  Get.to(
+                                                      () => ProjectPeopleScreen(
+                                                            projectid:
+                                                                controller
+                                                                    .projectid,
+                                                          ));
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    looppersonlist(),
+                                                    SizedBox(
+                                                      width: 8,
+                                                    ),
+                                                    looppersonname(),
+                                                  ],
+                                                ),
+                                              )
                                       ],
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        //좋아요 한 사람 리스트
-                                      },
-                                      child: Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                            "assets/icons/Favorite_Active.svg",
-                                          ),
-                                          SizedBox(
-                                            width: 4,
-                                          ),
-                                          Text(
-                                              '${controller.project.value.like_count!.value}',
-                                              style: kButtonStyle),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              if (controller.project.value.looper.isNotEmpty)
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                              controller.project.value.looper.isEmpty
-                                  ? const SizedBox.shrink()
-                                  : GestureDetector(
-                                      onTap: () {
-                                        Get.to(() => ProjectPeopleScreen(
-                                              projectid: controller.projectid,
-                                            ));
-                                      },
-                                      child: Row(
-                                        children: [
-                                          looppersonlist(),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          looppersonname(),
-                                        ],
-                                      ),
-                                    )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            16,
-                            16,
-                            16,
-                            16,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Text('활동 소개', style: kSubTitle2Style),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Obx(
-                                () => controller.project.value.introduction !=
-                                        ''
-                                    ? Text(
-                                        controller.project.value.introduction ??
-                                            '',
-                                        style: kBody1Style,
-                                      )
-                                    : Text(
-                                        '-',
-                                        style: kBody1Style.copyWith(
-                                          color: mainblack.withOpacity(0.6),
-                                        ),
-                                      ),
-                              ),
-                              const SizedBox(
-                                height: 24,
-                              ),
-                              const Text(
-                                '활동 태그',
-                                style: kSubTitle2Style,
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Obx(
-                                () => Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: controller.project.value.projectTag
-                                      .map(
-                                        (tag) => Row(
-                                          children: [
-                                            Tagwidget(
-                                              tag: tag,
-                                              fontSize: 14,
-                                            ),
-                                            controller.project.value.projectTag
-                                                        .indexOf(tag) !=
-                                                    controller.project.value
-                                                            .projectTag.length -
-                                                        1
-                                                ? const SizedBox(
-                                                    width: 8,
-                                                  )
-                                                : Container()
-                                          ],
-                                        ),
-                                      )
-                                      .toList(),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 24,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    '활동 포스팅',
-                                    style: kSubTitle2Style,
                                   ),
-                                  controller.project.value.is_user == 1
-                                      ? controller.project.value.post.isNotEmpty
-                                          ? GestureDetector(
-                                              behavior:
-                                                  HitTestBehavior.translucent,
-                                              onTap: addPosting,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 4),
-                                                child: Text(
-                                                  '포스팅 작성하기',
-                                                  style:
-                                                      kSubTitle2Style.copyWith(
-                                                          color: mainblue),
-                                                ),
-                                              ),
-                                            )
-                                          : SizedBox.shrink()
-                                      : SizedBox.shrink(),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Obx(
-                                () => Column(
-                                  children: controller
-                                          .project.value.post.isNotEmpty
-                                      ? controller.postinglist
-                                      : (controller.project.value.is_user == 1)
-                                          ? [
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
-                                              Text('첫번째 포스팅을 작성해주세요',
-                                                  style: kSubTitle1Style),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              Text(
-                                                '활동을 통해 경험한 순간들을 남겨 보세요',
-                                                style: kBody1Style.copyWith(
-                                                  color: mainblack
-                                                      .withOpacity(0.6),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 16,
-                                              ),
-                                              CustomExpandedButton(
-                                                onTap: addPosting,
-                                                isBlue: true,
-                                                title: '첫번째 포스팅 작성하기',
-                                                buttonTag: '첫번째 포스팅 작성하기',
-                                                isBig: false,
-                                              )
-                                            ]
-                                          : [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 8.0),
-                                                child: Text(
-                                                  '아직 작성한 포스팅이 없어요',
-                                                  style:
-                                                      kSubTitle3Style.copyWith(
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      16,
+                                      16,
+                                      16,
+                                      16,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        const Text('활동 소개',
+                                            style: kSubTitle2Style),
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                        Obx(
+                                          () => controller.project.value
+                                                      .introduction !=
+                                                  ''
+                                              ? Text(
+                                                  controller.project.value
+                                                          .introduction ??
+                                                      '',
+                                                  style: kBody1Style,
+                                                )
+                                              : Text(
+                                                  '-',
+                                                  style: kBody1Style.copyWith(
                                                     color: mainblack
                                                         .withOpacity(0.6),
                                                   ),
                                                 ),
-                                              )
-                                            ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-          ),
-        ),
-        if (controller.isProjectDeleteLoading.value)
-          Container(
-            height: Get.height,
-            width: Get.width,
-            color: mainblack.withOpacity(0.3),
-            child: Image.asset(
-              'assets/icons/loading.gif',
-              scale: 6,
+                                        ),
+                                        const SizedBox(
+                                          height: 24,
+                                        ),
+                                        const Text(
+                                          '활동 태그',
+                                          style: kSubTitle2Style,
+                                        ),
+                                        const SizedBox(
+                                          height: 12,
+                                        ),
+                                        Obx(
+                                          () => Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: controller
+                                                .project.value.projectTag
+                                                .map(
+                                                  (tag) => Row(
+                                                    children: [
+                                                      Tagwidget(
+                                                        tag: tag,
+                                                        fontSize: 14,
+                                                      ),
+                                                      controller.project.value
+                                                                  .projectTag
+                                                                  .indexOf(
+                                                                      tag) !=
+                                                              controller
+                                                                      .project
+                                                                      .value
+                                                                      .projectTag
+                                                                      .length -
+                                                                  1
+                                                          ? const SizedBox(
+                                                              width: 8,
+                                                            )
+                                                          : Container()
+                                                    ],
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 24,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              '활동 포스팅',
+                                              style: kSubTitle2Style,
+                                            ),
+                                            controller.project.value.is_user ==
+                                                    1
+                                                ? controller.project.value.post
+                                                        .isNotEmpty
+                                                    ? GestureDetector(
+                                                        behavior:
+                                                            HitTestBehavior
+                                                                .translucent,
+                                                        onTap: addPosting,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 4),
+                                                          child: Text(
+                                                            '포스팅 작성하기',
+                                                            style: kSubTitle2Style
+                                                                .copyWith(
+                                                                    color:
+                                                                        mainblue),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : SizedBox.shrink()
+                                                : SizedBox.shrink(),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        Obx(
+                                          () => Column(
+                                            children: controller.project.value
+                                                    .post.isNotEmpty
+                                                ? controller.postinglist
+                                                : (controller.project.value
+                                                            .is_user ==
+                                                        1)
+                                                    ? [
+                                                        const SizedBox(
+                                                          height: 20,
+                                                        ),
+                                                        Text('첫번째 포스팅을 작성해주세요',
+                                                            style:
+                                                                kSubTitle1Style),
+                                                        const SizedBox(
+                                                          height: 8,
+                                                        ),
+                                                        Text(
+                                                          '활동을 통해 경험한 순간들을 남겨 보세요',
+                                                          style: kBody1Style
+                                                              .copyWith(
+                                                            color: mainblack
+                                                                .withOpacity(
+                                                                    0.6),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 16,
+                                                        ),
+                                                        CustomExpandedButton(
+                                                          onTap: addPosting,
+                                                          isBlue: true,
+                                                          title: '첫번째 포스팅 작성하기',
+                                                          buttonTag:
+                                                              '첫번째 포스팅 작성하기',
+                                                          isBig: false,
+                                                        )
+                                                      ]
+                                                    : [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 8.0),
+                                                          child: Text(
+                                                            '아직 작성한 포스팅이 없어요',
+                                                            style:
+                                                                kSubTitle3Style
+                                                                    .copyWith(
+                                                              color: mainblack
+                                                                  .withOpacity(
+                                                                      0.6),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
             ),
           ),
-      ]),
+          if (controller.isProjectDeleteLoading.value)
+            Container(
+              height: Get.height,
+              width: Get.width,
+              color: mainblack.withOpacity(0.3),
+              child: Image.asset(
+                'assets/icons/loading.gif',
+                scale: 6,
+              ),
+            ),
+        ]),
+      ),
     );
   }
 

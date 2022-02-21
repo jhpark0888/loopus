@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_detail_controller.dart';
+import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/model/notification_model.dart';
@@ -16,12 +17,13 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/widget/notification_widget.dart';
+import 'package:loopus/widget/project_widget.dart';
 
 import '../constant.dart';
 import '../controller/home_controller.dart';
 import '../controller/search_controller.dart';
 
-Future<User> getProfile(var userId) async {
+Future<void> getProfile(var userId, int isuser) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   print('user token: $token');
 
@@ -34,11 +36,14 @@ Future<User> getProfile(var userId) async {
     var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
     User user = User.fromJson(responseBody);
-    if (user.isuser == 1) {
+    if (isuser == 1) {
+      ProfileController.to.myUserInfo(user);
       ProfileController.to.isnewalarm(responseBody["new_alarm"]);
       ProfileController.to.isnewmessage(responseBody["new_message"]);
+    } else {
+      Get.find<OtherProfileController>(tag: userId.toString()).otherUser(user);
     }
-    return user;
+    return;
   } else if (response.statusCode == 404) {
     Get.back();
     ModalController.to.showCustomDialog('이미 삭제된 유저입니다', 1400);
@@ -48,7 +53,7 @@ Future<User> getProfile(var userId) async {
   }
 }
 
-Future<List<Project>> getProjectlist(var userId) async {
+Future<void> getProjectlist(var userId, int isuser) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
   var uri = Uri.parse("$serverUri/user_api/project?id=$userId");
@@ -61,8 +66,33 @@ Future<List<Project>> getProjectlist(var userId) async {
     List<Project> projectlist =
         responseBody.map((project) => Project.fromJson(project)).toList();
 
-    return projectlist;
+    if (isuser == 1) {
+      ProfileController.to.myProjectList(projectlist
+          .map((project) => ProjectWidget(
+                project: project.obs,
+                type: ProjectWidgetType.profile,
+              ))
+          .toList());
+      ProfileController.to.myprofilescreenstate(ScreenState.success);
+    } else {
+      Get.find<OtherProfileController>(tag: userId.toString())
+          .otherProjectList(projectlist
+              .map((project) => ProjectWidget(
+                    project: project.obs,
+                    type: ProjectWidgetType.profile,
+                  ))
+              .toList());
+      Get.find<OtherProfileController>(tag: userId.toString())
+          .otherprofilescreenstate(ScreenState.success);
+    }
+    return;
   } else {
+    if (isuser == 1) {
+      ProfileController.to.myprofilescreenstate(ScreenState.error);
+    } else {
+      Get.find<OtherProfileController>(tag: userId.toString())
+          .otherprofilescreenstate(ScreenState.error);
+    }
     return Future.error(response.statusCode);
   }
 }
@@ -165,10 +195,10 @@ Future postlogout() async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   print('user token: $token');
 
-  var uri = Uri.parse("$serverUri/user_api/resign");
+  var uri = Uri.parse("$serverUri/user_api/logout");
 
   http.Response response =
-      await http.delete(uri, headers: {"Authorization": "Token $token"});
+      await http.post(uri, headers: {"Authorization": "Token $token"});
 
   print("로그아웃: ${response.statusCode}");
   if (response.statusCode == 200) {
@@ -205,6 +235,33 @@ Future deleteuser(String pw) async {
   } else if (response.statusCode == 401) {
     ModalController.to.showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
     return Future.error(response.statusCode);
+  } else {
+    return Future.error(response.statusCode);
+  }
+}
+
+Future userreport(int postingId) async {
+  String? token;
+  await const FlutterSecureStorage().read(key: 'token').then((value) {
+    token = value;
+  });
+
+  final Uri uri = Uri.parse("$serverUri/user_api/report");
+
+  var body = {"id": postingId, "reason": ""};
+
+  final response = await http.post(uri,
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Token $token"
+      },
+      body: json.encode(body));
+
+  print('유저 신고 statusCode: ${response.statusCode}');
+  if (response.statusCode == 200) {
+    getbacks(2);
+    ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
+    return;
   } else {
     return Future.error(response.statusCode);
   }
