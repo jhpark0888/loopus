@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/screen/contact_content_screen.dart';
+import 'package:loopus/screen/contact_finish_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
@@ -19,7 +20,7 @@ class ContactEmailScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(ContactContentScreen());
+              Get.to(ContactFinishScreen());
             },
             child: Text(
               '다음',

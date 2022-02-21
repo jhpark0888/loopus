@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/screen/alert_screen.dart';
+import 'package:loopus/screen/contact_content_screen.dart';
 import 'package:loopus/screen/contact_email_screen.dart';
 import 'package:loopus/screen/privacypolicy_screen.dart';
 import 'package:loopus/screen/termsofservice_screen.dart';
@@ -21,6 +22,29 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        elevation: 0,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(
+              () => _userDeviceInfo.appInfoData.isNotEmpty
+                  ? Text(
+                      _userDeviceInfo.appInfoData.keys.first +
+                          ' ' +
+                          _userDeviceInfo.appInfoData.values.first,
+                      style: kCaptionStyle.copyWith(
+                        color: mainblack.withOpacity(0.6),
+                      ),
+                    )
+                  : Text(''),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+          ],
+        ),
+      ),
       appBar: AppBarWidget(
         bottomBorder: false,
         title: '설정',
@@ -59,22 +83,15 @@ class SettingScreen extends StatelessWidget {
             hoverTag: '문의하기',
             title: '문의하기',
             onTap: () {
-              Get.to(() => ContactEmailScreen());
+              Get.to(() => ContactContentScreen());
             },
           ),
-          Obx(
-            () => _userDeviceInfo.deviceData.isNotEmpty
-                ? Text(
-                    "${_userDeviceInfo.deviceData.keys.first} : ${_userDeviceInfo.deviceData.values.first}\n${_userDeviceInfo.deviceData.keys.last} : ${_userDeviceInfo.deviceData.values.last}")
-                : Text(''),
-          ),
-          Obx(
-            () => _userDeviceInfo.appInfoData.isNotEmpty
-                ? Text(_userDeviceInfo.appInfoData.keys.first +
-                    ' : ' +
-                    _userDeviceInfo.appInfoData.values.first)
-                : Text('버전'),
-          ),
+          // Obx(
+          //   () => _userDeviceInfo.deviceData.isNotEmpty
+          //       ? Text(
+          //           "${_userDeviceInfo.deviceData.keys.first} : ${_userDeviceInfo.deviceData.values.first}\n${_userDeviceInfo.deviceData.keys.last} : ${_userDeviceInfo.deviceData.values.last}")
+          //       : Text(''),
+          // ),
         ],
       ),
     );

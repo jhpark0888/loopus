@@ -14,6 +14,7 @@ enum ImageType {
 
 class ImageController extends GetxController {
   static ImageController get to => Get.find();
+  final ImageCropper _imageCropper = ImageCropper();
   RxBool isProfileImagePickerLoading = false.obs;
   RxBool isPostingImagePickerLoading = false.obs;
   RxBool isThumbnailImagePickerLoading = false.obs;
@@ -40,7 +41,7 @@ class ImageController extends GetxController {
   }
 
   Future<File?> profilecropImage(pickimage) async {
-    File? croppedFile = await ImageCropper.cropImage(
+    File? croppedFile = await _imageCropper.cropImage(
         maxWidth: 1920,
         maxHeight: 1080,
         compressQuality: 50,
@@ -67,7 +68,7 @@ class ImageController extends GetxController {
   }
 
   Future<File?> postingthumbnailcropImage(pickimage) async {
-    File? croppedFile = await ImageCropper.cropImage(
+    File? croppedFile = await _imageCropper.cropImage(
         maxWidth: 1920,
         maxHeight: 1080,
         compressQuality: 50,
@@ -91,7 +92,7 @@ class ImageController extends GetxController {
   }
 
   Future<File?> postingcropImage(pickimage) async {
-    File? croppedFile = await ImageCropper.cropImage(
+    File? croppedFile = await _imageCropper.cropImage(
         maxWidth: 1920,
         maxHeight: 1080,
         compressQuality: 50,

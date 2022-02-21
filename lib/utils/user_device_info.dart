@@ -15,7 +15,7 @@ class UserDeviceInfo extends GetxController {
   Future<Map<String, dynamic>> _getAppInfo() async {
     try {
       PackageInfo info = await PackageInfo.fromPlatform();
-      appInfoData.value = {"Ver": info.version + '+' + info.buildNumber};
+      appInfoData.value = {"ver": info.version + ' + ' + info.buildNumber};
     } catch (error) {
       appInfoData.value = {"Error": "Failed to get app version."};
     }

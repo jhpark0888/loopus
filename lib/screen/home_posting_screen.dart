@@ -240,18 +240,19 @@ class HomePostingScreen extends StatelessWidget {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        padding: const EdgeInsets.only(
+                          top: 20,
+                          bottom: 4,
+                          right: 16,
+                          left: 16,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Center(
-                              child: Text(
-                                '추천 포스팅을 모두 보여드렸어요',
-                                style: kSubTitle2Style.copyWith(
-                                  color: mainblack,
-                                ),
-                              ),
+                              child: Text('추천 포스팅을 모두 보여드렸어요',
+                                  style: kSubTitle2Style),
                             ),
                             SizedBox(
                               height: 16,
@@ -264,6 +265,10 @@ class HomePostingScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            SizedBox(
+                              height: 32,
+                            ),
+                            Text('최근 포스팅', style: kSubTitle2Style),
                             // TextButton(
                             //   onPressed: () {
 
