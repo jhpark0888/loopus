@@ -223,14 +223,14 @@ class ProjectScreen extends StatelessWidget {
                                   content:
                                       '작성한 ${controller.project.value.post.length}개의 포스팅도 삭제됩니다',
                                   leftFunction: () => Get.back(),
-                                  rightFunction: () async {
-                                    Get.back();
-                                    Get.back();
+                                  rightFunction: () {
+                                    getbacks(2);
+
                                     controller.isProjectDeleteLoading(true);
-                                    await deleteproject(
-                                        controller.project.value.id);
-                                    controller.isProjectDeleteLoading(false);
-                                    Get.back();
+                                    deleteproject(controller.project.value.id)
+                                        .then((value) {
+                                      controller.isProjectDeleteLoading(false);
+                                    });
                                   });
                             },
                             func2: () {},

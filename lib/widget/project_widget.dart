@@ -36,6 +36,7 @@ class ProjectWidget extends StatelessWidget {
   late final HoverController _hoverController =
       Get.put(HoverController(), tag: 'project${project.value.id}');
   Rx<Project> project;
+  Project? exproject;
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +51,13 @@ class ProjectWidget extends StatelessWidget {
         onTapUp: (details) => _hoverController.isNonHoverState(),
         onTap: () async {
           if (type == ProjectWidgetType.profile) {
-            project.value = await Get.to(() => ProjectScreen(
+            exproject = await Get.to(() => ProjectScreen(
                   projectid: project.value.id,
                   isuser: project.value.is_user,
                 ));
+            if (exproject != null) {
+              project(exproject);
+            }
           } else {
             Get.to(() => PostingAddNameScreen(
                   project_id: project.value.id,

@@ -51,7 +51,7 @@ class OtherProfileController extends GetxController
   late TabController profileTabController;
 
   // RxBool isProfileLoading = true.obs;
-  RxBool isLoopPeopleLoading = true.obs;
+  // RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
 
   Future loadotherProfile(int userid) async {
@@ -61,7 +61,7 @@ class OtherProfileController extends GetxController
     ConnectivityResult result = await initConnectivity();
     if (result == ConnectivityResult.none) {
       otherprofilescreenstate(ScreenState.disconnect);
-      ModalController.to.showdisconnectdialog;
+      ModalController.to.showdisconnectdialog();
     } else {
       await getProfile(userid, 0);
       await getProjectlist(userid, 0);

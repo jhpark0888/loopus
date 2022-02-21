@@ -120,14 +120,8 @@ class QuestionAnswerWidget extends StatelessWidget {
             title: '정말 답변을 삭제하시겠어요?',
             content: '삭제한 답변은 복구할 수 없어요',
             leftFunction: () => Get.back(),
-            rightFunction: () async {
-              await deleteanswer(answer.questionid, answer.id).then((value) {
-                QuestionDetailController.to.question.value.answer
-                    .removeWhere((element) => element.id == answer.id);
-                QuestionDetailController.to.answerlist
-                    .removeWhere((element) => element.answer.id == answer.id);
-              });
-              getbacks(2);
+            rightFunction: () {
+              deleteanswer(answer.questionid, answer.id);
             });
       },
           func2: () {},

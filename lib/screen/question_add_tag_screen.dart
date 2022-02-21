@@ -111,18 +111,13 @@ class QuestionAddTagScreen extends StatelessWidget {
     );
   }
 
-  void postQuestion() async {
+  void postQuestion() {
     if (tagController.selectedtaglist.length == 3) {
       tagController.tagsearchfocusNode.unfocus();
       questionaddController.isQuestionUploading(true);
-      await postquestion(questionaddController.contentcontroller.text)
-          .then((value) {
-        Get.back();
-        Get.back();
+      postquestion(questionaddController.contentcontroller.text).then((value) {
         questionaddController.isQuestionUploading(false);
       });
-
-      HomeController.to.onQuestionRefresh();
     }
   }
 }

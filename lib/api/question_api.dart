@@ -1,37 +1,54 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/question_detail_controller.dart';
 import 'dart:convert';
 
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/question_model.dart';
+import 'package:loopus/widget/question_answer_widget.dart';
 
 import '../constant.dart';
 
 Future postquestion(String content) async {
-  String? token;
-  await const FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
+  } else {
+    String? token;
+    await const FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
 
-  final url = Uri.parse("$serverUri/question_api/question");
-  var data = {
-    "content": content,
-    "tag": Get.find<TagController>(tag: Tagtype.question.toString())
-        .selectedtaglist
-        .map((element) => element.text)
-        .toList()
-  };
-  http.Response response = await http.post(url,
-      headers: {
-        'Authorization': 'Token $token',
-        'Content-Type': 'application/json'
-      },
-      body: jsonEncode(data));
-  var responseHeaders = response.headers;
-  var responseBody = utf8.decode(response.bodyBytes);
+    final url = Uri.parse("$serverUri/question_api/question");
+    var data = {
+      "content": content,
+      "tag": Get.find<TagController>(tag: Tagtype.question.toString())
+          .selectedtaglist
+          .map((element) => element.text)
+          .toList()
+    };
+    http.Response response = await http.post(url,
+        headers: {
+          'Authorization': 'Token $token',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode(data));
+    var responseHeaders = response.headers;
+    var responseBody = utf8.decode(response.bodyBytes);
+
+    if (response.statusCode == 200) {
+      getbacks(2);
+      HomeController.to.onQuestionRefresh();
+      return;
+    } else {
+      return Future.error(response.statusCode);
+    }
+  }
 }
 
 Future<dynamic> getquestionlist(int lastindex, String type) async {
@@ -57,105 +74,154 @@ Future<dynamic> getquestionlist(int lastindex, String type) async {
   }
 }
 
-Future<QuestionItem> getquestion(int questionid) async {
-  print(questionid);
-  String? token;
-  await FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
-
-  final url = Uri.parse("$serverUri/question_api/question?id=$questionid");
-
-  final response = await get(url, headers: {"Authorization": "Token $token"});
-
-  print("질문 로드 statusCode: ${response.statusCode}");
-  if (response.statusCode == 200) {
-    Map<String, dynamic> responseBody =
-        jsonDecode(utf8.decode(response.bodyBytes));
-    QuestionItem question = QuestionItem.fromJson(responseBody);
-    return question;
-  } else if (response.statusCode == 404) {
-    Get.back();
-    ModalController.to.showCustomDialog('이미 삭제된 질문입니다', 1400);
-    return Future.error(response.statusCode);
+Future<void> getquestion(int questionid) async {
+  ConnectivityResult result = await initConnectivity();
+  QuestionDetailController controller =
+      Get.find<QuestionDetailController>(tag: questionid.toString());
+  if (result == ConnectivityResult.none) {
+    controller.questionscreenstate(ScreenState.disconnect);
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    print(questionid);
+    String? token;
+    await FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
+
+    final url = Uri.parse("$serverUri/question_api/question?id=$questionid");
+
+    final response = await get(url, headers: {"Authorization": "Token $token"});
+
+    print("질문 로드 statusCode: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseBody =
+          jsonDecode(utf8.decode(response.bodyBytes));
+      QuestionItem question = QuestionItem.fromJson(responseBody);
+      controller.question(question);
+      controller.addanswer();
+
+      controller.questionscreenstate(ScreenState.success);
+
+      return;
+    } else if (response.statusCode == 404) {
+      Get.back();
+      ModalController.to.showCustomDialog('이미 삭제된 질문입니다', 1400);
+      return Future.error(response.statusCode);
+    } else {
+      controller.questionscreenstate(ScreenState.error);
+      return Future.error(response.statusCode);
+    }
   }
 }
 
 Future<dynamic> deletequestion(int questionid) async {
-  String? token;
-  await FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
-
-  final url = Uri.parse("$serverUri/question_api/question?id=$questionid");
-
-  final response =
-      await delete(url, headers: {"Authorization": "Token $token"});
-
-  if (response.statusCode == 200) {
-    //   var statusCode = response.statusCode;
-    // var responseHeaders = response.headers;
-    // var responseBody = utf8.decode(response.bodyBytes);
-    // print(statusCode);
-    // Map<String, dynamic> map = jsonDecode(responseBody);
-
-    print(' 질문 삭제 성공 : ${response.statusCode}');
-    return;
+  ConnectivityResult result = await initConnectivity();
+  QuestionDetailController controller =
+      Get.find<QuestionDetailController>(tag: questionid.toString());
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    String? token;
+    await FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
+
+    final url = Uri.parse("$serverUri/question_api/question?id=$questionid");
+
+    final response =
+        await delete(url, headers: {"Authorization": "Token $token"});
+
+    if (response.statusCode == 200) {
+      //   var statusCode = response.statusCode;
+      // var responseHeaders = response.headers;
+      // var responseBody = utf8.decode(response.bodyBytes);
+      // print(statusCode);
+      // Map<String, dynamic> map = jsonDecode(responseBody);
+      HomeController.to.questionResult.value.questionitems.removeWhere(
+          (question) => question.id == controller.question.value.id);
+      Get.back();
+      controller.isQuestionDeleteLoading(false);
+
+      print(' 질문 삭제 성공 : ${response.statusCode}');
+      return;
+    } else {
+      return Future.error(response.statusCode);
+    }
   }
 }
 
-Future<Answer> answermake(String content, int questionid) async {
-  String? token;
-  await FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
-
-  final url = Uri.parse("$serverUri/question_api/answer/$questionid");
-
-  print(token);
-  var data = {
-    "content": content,
-  };
-  http.Response response = await http.post(url,
-      headers: {
-        'Authorization': 'Token $token',
-        'Content-Type': 'application/json'
-      },
-      body: jsonEncode(data));
-
-  print(response.statusCode);
-  if (response.statusCode == 200) {
-    Map<String, dynamic> responseBody =
-        jsonDecode(utf8.decode(response.bodyBytes));
-    Answer answer = Answer.fromJson(responseBody);
-
-    return answer;
+Future<void> answermake(String content, int questionid) async {
+  ConnectivityResult result = await initConnectivity();
+  QuestionDetailController controller =
+      Get.find<QuestionDetailController>(tag: questionid.toString());
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    String? token;
+    await FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
+
+    final url = Uri.parse("$serverUri/question_api/answer/$questionid");
+
+    print(token);
+    var data = {
+      "content": content,
+    };
+    http.Response response = await http.post(url,
+        headers: {
+          'Authorization': 'Token $token',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode(data));
+
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseBody =
+          jsonDecode(utf8.decode(response.bodyBytes));
+      Answer answer = Answer.fromJson(responseBody);
+      answer.isuser = 1;
+      controller.answerlist.add(QuestionAnswerWidget(
+        answer: answer,
+      ));
+      controller.answerfocus.unfocus();
+      controller.answertextController.clear();
+      return;
+    } else {
+      return Future.error(response.statusCode);
+    }
   }
 }
 
 Future<dynamic> deleteanswer(int questionid, int answerid) async {
-  String? token;
-  await FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
-
-  final url =
-      Uri.parse("$serverUri/question_api/answer/questionid?id=$answerid");
-
-  final response =
-      await delete(url, headers: {"Authorization": "Token $token"});
-
-  print(' 답변 삭제 : ${response.statusCode}');
-
-  if (response.statusCode == 200) {
-    return;
+  ConnectivityResult result = await initConnectivity();
+  QuestionDetailController controller =
+      Get.find<QuestionDetailController>(tag: questionid.toString());
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    String? token;
+    await FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
+
+    final url =
+        Uri.parse("$serverUri/question_api/answer/questionid?id=$answerid");
+
+    final response =
+        await delete(url, headers: {"Authorization": "Token $token"});
+
+    print(' 답변 삭제 : ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      controller.question.value.answer
+          .removeWhere((element) => element.id == answerid);
+      controller.answerlist
+          .removeWhere((element) => element.answer.id == answerid);
+      getbacks(2);
+      return;
+    } else {
+      return Future.error(response.statusCode);
+    }
   }
 }

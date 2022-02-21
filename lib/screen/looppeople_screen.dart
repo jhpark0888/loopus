@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/looppeople_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/model/user_model.dart';
@@ -14,6 +15,8 @@ import 'package:loopus/screen/privacypolicy_screen.dart';
 import 'package:loopus/screen/termsofservice_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/persontile_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
@@ -21,20 +24,13 @@ class LoopPeopleScreen extends StatelessWidget {
   LoopPeopleScreen({Key? key, required this.userid, required this.loopcount})
       : super(key: key);
 
+  late LoopPeopleController controller =
+      Get.put(LoopPeopleController(userid: userid), tag: userid.toString());
   int userid;
   int loopcount;
-  RxList<User> followerlist = <User>[].obs;
-  RxList<User> followinglist = <User>[].obs;
 
   @override
   Widget build(BuildContext context) {
-    getfollowlist(userid, followlist.follower).then((value) {
-      followerlist(value);
-    });
-    getfollowlist(userid, followlist.following).then((value) {
-      followinglist(value);
-      ProfileController.to.isLoopPeopleLoading(false);
-    });
     return Scaffold(
         appBar: AppBarWidget(
           bottomBorder: false,
@@ -96,7 +92,8 @@ class LoopPeopleScreen extends StatelessWidget {
               },
               body: TabBarView(children: [
                 Obx(
-                  () => ProfileController.to.isLoopPeopleLoading.value
+                  () => controller.followerscreenstate.value ==
+                          ScreenState.loading
                       ? Column(children: [
                           SizedBox(
                             height: 24,
@@ -108,33 +105,46 @@ class LoopPeopleScreen extends StatelessWidget {
                             ),
                           ),
                         ])
-                      : followerlist.isNotEmpty
-                          ? ListView(
-                              children: followerlist
-                                  .map((friend) =>
-                                      PersonTileWidget(user: friend))
-                                  .toList())
-                          : Container(
-                              width: Get.width,
-                              height: Get.height * 0.75,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '아직 팔로워가 없어요',
-                                    style: kSubTitle3Style.copyWith(
-                                      color: mainblack.withOpacity(0.38),
+                      : controller.followerscreenstate.value ==
+                              ScreenState.disconnect
+                          ? DisconnectReloadWidget(reload: () {
+                              getfollowlist(userid, followlist.follower);
+                            })
+                          : controller.followerscreenstate.value ==
+                                  ScreenState.error
+                              ? ErrorReloadWidget(reload: () {
+                                  getfollowlist(userid, followlist.follower);
+                                })
+                              : controller.followerlist.isNotEmpty
+                                  ? ListView(
+                                      children: controller.followerlist
+                                          .map((friend) =>
+                                              PersonTileWidget(user: friend))
+                                          .toList())
+                                  : Container(
+                                      width: Get.width,
+                                      height: Get.height * 0.75,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '아직 팔로워가 없어요',
+                                            style: kSubTitle3Style.copyWith(
+                                              color:
+                                                  mainblack.withOpacity(0.38),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: Get.height * 0.1,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.1,
-                                  ),
-                                ],
-                              ),
-                            ),
                 ),
                 Obx(
-                  () => ProfileController.to.isLoopPeopleLoading.value
+                  () => controller.followingscreenstate.value ==
+                          ScreenState.loading
                       ? Column(children: [
                           SizedBox(
                             height: 24,
@@ -146,30 +156,42 @@ class LoopPeopleScreen extends StatelessWidget {
                             ),
                           ),
                         ])
-                      : followinglist.isNotEmpty
-                          ? ListView(
-                              children: followinglist
-                                  .map((friend) =>
-                                      PersonTileWidget(user: friend))
-                                  .toList())
-                          : Container(
-                              width: Get.width,
-                              height: Get.height * 0.75,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '아직 아무도 팔로잉하지 않았어요',
-                                    style: kSubTitle3Style.copyWith(
-                                      color: mainblack.withOpacity(0.38),
+                      : controller.followingscreenstate.value ==
+                              ScreenState.disconnect
+                          ? DisconnectReloadWidget(reload: () {
+                              getfollowlist(userid, followlist.following);
+                            })
+                          : controller.followingscreenstate.value ==
+                                  ScreenState.error
+                              ? ErrorReloadWidget(reload: () {
+                                  getfollowlist(userid, followlist.following);
+                                })
+                              : controller.followinglist.isNotEmpty
+                                  ? ListView(
+                                      children: controller.followinglist
+                                          .map((friend) =>
+                                              PersonTileWidget(user: friend))
+                                          .toList())
+                                  : Container(
+                                      width: Get.width,
+                                      height: Get.height * 0.75,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '아직 아무도 팔로잉하지 않았어요',
+                                            style: kSubTitle3Style.copyWith(
+                                              color:
+                                                  mainblack.withOpacity(0.38),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: Get.height * 0.1,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.1,
-                                  ),
-                                ],
-                              ),
-                            ),
                 ),
               ])),
         ));

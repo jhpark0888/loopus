@@ -14,6 +14,8 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/screen/report_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/question_answer_widget.dart';
 import 'package:loopus/widget/question_detail_widget.dart';
 
@@ -27,8 +29,9 @@ class QuestionDetailScreen extends StatelessWidget {
   ModalController modalController = Get.put(ModalController());
   // final _formKey = GlobalKey<FormState>();
 
-  late QuestionDetailController questionController =
-      Get.put(QuestionDetailController(questionid: questionid));
+  late QuestionDetailController questionController = Get.put(
+      QuestionDetailController(questionid: questionid),
+      tag: questionid.toString());
   int questionid;
   int isuser;
   String realname;
@@ -36,14 +39,7 @@ class QuestionDetailScreen extends StatelessWidget {
 
   void _handleSubmitted(String text) async {
     if (questionController.isSendButtonon.value) {
-      Answer answer =
-          await answermake(text, questionController.question.value.id);
-      answer.isuser = 1;
-      questionController.answerlist.add(QuestionAnswerWidget(
-        answer: answer,
-      ));
-      questionController.answerfocus.unfocus();
-      questionController.answertextController.clear();
+      answermake(text, questionController.question.value.id);
     }
   }
 
@@ -185,21 +181,13 @@ class QuestionDetailScreen extends StatelessWidget {
                                   title: '정말 이 질문을 삭제하시겠어요?',
                                   content: '삭제한 질문은 복구할 수 없어요',
                                   leftFunction: () => Get.back(),
-                                  rightFunction: () async {
-                                    Get.back();
+                                  rightFunction: () {
+                                    getbacks(2);
                                     questionController
                                         .isQuestionDeleteLoading(true);
-                                    await deletequestion(questionController
+                                    deletequestion(questionController
                                             .question.value.id)
                                         .then((value) {
-                                      HomeController
-                                          .to.questionResult.value.questionitems
-                                          .removeWhere((question) =>
-                                              question.id ==
-                                              questionController
-                                                  .question.value.id);
-                                      Get.back();
-                                      Get.back();
                                       questionController
                                           .isQuestionDeleteLoading(false);
                                     });
@@ -250,7 +238,8 @@ class QuestionDetailScreen extends StatelessWidget {
                   ))
             ],
           ),
-          body: questionController.isQuestionLoading.value
+          body: Obx(() => questionController.questionscreenstate.value ==
+                  ScreenState.loading
               ? Center(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -275,13 +264,25 @@ class QuestionDetailScreen extends StatelessWidget {
                         ),
                       ]),
                 )
-              : GestureDetector(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                    questionController.answerfocus.unfocus();
-                  },
-                  child: QuestionListView(),
-                ),
+              : questionController.questionscreenstate.value ==
+                      ScreenState.disconnect
+                  ? DisconnectReloadWidget(reload: () {
+                      questionController.loadquestion(questionid);
+                    })
+                  : questionController.questionscreenstate.value ==
+                          ScreenState.error
+                      ? ErrorReloadWidget(reload: () {
+                          questionController.loadquestion(questionid);
+                        })
+                      : GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
+                            questionController.answerfocus.unfocus();
+                          },
+                          child: QuestionListView(
+                            questionid: questionid,
+                          ),
+                        )),
         ),
         if (questionController.isQuestionDeleteLoading.value)
           Container(
@@ -299,11 +300,13 @@ class QuestionDetailScreen extends StatelessWidget {
 }
 
 class QuestionListView extends StatelessWidget {
-  QuestionListView({Key? key}) : super(key: key);
+  QuestionListView({Key? key, required this.questionid}) : super(key: key);
 
-  QuestionDetailController questionController = Get.find();
-  QuestionScrollController questionscrollController =
-      Get.put(QuestionScrollController());
+  int questionid;
+  late QuestionDetailController questionController =
+      Get.find(tag: questionid.toString());
+  late QuestionScrollController questionscrollController =
+      Get.put(QuestionScrollController(questionid: questionid));
 
   @override
   Widget build(BuildContext context) {
