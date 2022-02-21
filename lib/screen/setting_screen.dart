@@ -23,6 +23,7 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
+        color: mainWhite,
         elevation: 0,
         child: Column(
           mainAxisSize: MainAxisSize.min,

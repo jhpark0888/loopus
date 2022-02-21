@@ -120,9 +120,8 @@ class SearchScreen extends StatelessWidget {
                 },
                 focusNode: _searchController.focusNode,
                 style: TextStyle(color: mainblack, fontSize: 14),
-                cursorColor: Colors.grey,
-                cursorWidth: 1.5,
-                cursorHeight: 14,
+                cursorColor: mainblue,
+                cursorWidth: 1.2,
                 cursorRadius: Radius.circular(5.0),
                 autofocus: false,
                 // focusNode: searchController.detailsearchFocusnode,
@@ -143,9 +142,9 @@ class SearchScreen extends StatelessWidget {
                   isDense: true,
                   hintText: "어떤 정보를 찾으시나요?",
                   hintStyle: TextStyle(
-                      fontSize: 14,
-                      color: mainblack.withOpacity(0.6),
-                      height: 1.5),
+                    fontSize: 14,
+                    color: mainblack.withOpacity(0.6),
+                  ),
                   prefixIcon: Padding(
                     padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
                     child: SvgPicture.asset(

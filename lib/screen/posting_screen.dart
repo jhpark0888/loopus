@@ -276,9 +276,16 @@ class PostingScreen extends StatelessWidget {
                         )
                       : controller.postscreenstate.value ==
                               ScreenState.disconnect
-                          ? DisconnectReloadWidget(reload: () {
-                              getposting(controller.postid);
-                            })
+                          ? Column(
+                              children: [
+                                SizedBox(
+                                  height: 24,
+                                ),
+                                DisconnectReloadWidget(reload: () {
+                                  getposting(controller.postid);
+                                }),
+                              ],
+                            )
                           : controller.postscreenstate.value ==
                                   ScreenState.error
                               ? ErrorReloadWidget(reload: () {

@@ -41,7 +41,7 @@ class ImageController extends GetxController {
   }
 
   Future<File?> profilecropImage(pickimage) async {
-    File? croppedFile = await ImageCropper.cropImage(
+    File? croppedFile = await _imageCropper.cropImage(
         maxWidth: 1920,
         maxHeight: 1080,
         compressQuality: 50,
@@ -68,7 +68,7 @@ class ImageController extends GetxController {
   }
 
   Future<File?> postingthumbnailcropImage(pickimage) async {
-    File? croppedFile = await ImageCropper.cropImage(
+    File? croppedFile = await _imageCropper.cropImage(
         maxWidth: 1920,
         maxHeight: 1080,
         compressQuality: 50,
@@ -92,7 +92,7 @@ class ImageController extends GetxController {
   }
 
   Future<File?> postingcropImage(pickimage) async {
-    File? croppedFile = await ImageCropper.cropImage(
+    File? croppedFile = await _imageCropper.cropImage(
         maxWidth: 1920,
         maxHeight: 1080,
         compressQuality: 50,

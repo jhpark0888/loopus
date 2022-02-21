@@ -45,7 +45,6 @@ extension SmartTextStyle on SmartTextType {
         return const TextStyle(
           fontSize: 12.0,
           fontWeight: FontWeight.w300,
-          fontStyle: FontStyle.italic,
           color: mainblack,
         );
       default:

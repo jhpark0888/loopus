@@ -259,7 +259,7 @@ class HomePostingScreen extends StatelessWidget {
                             ),
                             Center(
                               child: Text(
-                                '이제부터는 최신 포스팅을 보여드릴게요',
+                                '이제부터는 최근 포스팅을 보여드릴게요',
                                 style: kButtonStyle.copyWith(
                                   color: mainblack.withOpacity(0.6),
                                 ),

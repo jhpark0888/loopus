@@ -1,29 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/search_api.dart';
-import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/follow_controller.dart';
-import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/controller/search_controller.dart';
-import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/notification_model.dart';
-import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/screen/question_detail_screen.dart';
-import 'package:loopus/screen/tag_detail_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
-import 'package:loopus/widget/blue_button.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
-import 'package:loopus/widget/selected_tag_widget.dart';
 
 class NotificationWidget extends StatelessWidget {
   NotificationWidget({
@@ -178,7 +166,7 @@ class NotificationWidget extends StatelessWidget {
                               text: notification.user.realName,
                               style: kSubTitle1Style),
                           TextSpan(
-                            text: "님이 ",
+                            text: "님이",
                             style: kSubTitle1Style.copyWith(
                                 fontWeight: FontWeight.w400),
                           ),
