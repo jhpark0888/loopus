@@ -56,11 +56,10 @@ class _AlertScreenState extends State<AlertScreen> {
                       inactiveTrackColor: maingrey,
                       value: _localDataController.isUserAgreeProNoti,
                       onChanged: (bool val) {
-                        setState(() async {
+                        setState(() {
                           _localDataController.agreeProNoti(val);
-                          await _notificationController
-                              .changePromotionAlarmState(
-                                  _localDataController.isUserAgreeProNoti);
+                          _notificationController.changePromotionAlarmState(
+                              _localDataController.isUserAgreeProNoti);
                           if (_localDataController.isUserAgreeProNoti) {
                             ModalController.to.showCustomDialog(
                                 '프로모션 알림 수신에 동의하셨습니다\n' +
@@ -74,11 +73,10 @@ class _AlertScreenState extends State<AlertScreen> {
                       activeColor: mainblue,
                       value: _localDataController.isUserAgreeProNoti,
                       onChanged: (bool val) {
-                        setState(() async {
+                        setState(() {
                           _localDataController.agreeProNoti(val);
-                          await _notificationController
-                              .changePromotionAlarmState(
-                                  _localDataController.isUserAgreeProNoti);
+                          _notificationController.changePromotionAlarmState(
+                              _localDataController.isUserAgreeProNoti);
                           if (_localDataController.isUserAgreeProNoti) {
                             ModalController.to.showCustomDialog(
                                 '프로모션 알림 수신에 동의하셨습니다\n' +

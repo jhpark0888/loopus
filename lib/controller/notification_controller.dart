@@ -202,7 +202,7 @@ class NotificationController extends GetxController {
     await messaging.unsubscribeFromTopic('question$id');
   }
 
-  Future<void> changePromotionAlarmState(bool isSelected) async {
+  void changePromotionAlarmState(bool isSelected) async {
     if (isSelected) {
       await messaging.subscribeToTopic('promotion');
     } else {
