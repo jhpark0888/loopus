@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -110,25 +111,48 @@ Future addproject() async {
   }
 }
 
-Future<Project> getproject(int projectId) async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-
-  final uri = Uri.parse("$serverUri/project_api/project?id=$projectId");
-
-  http.Response response =
-      await http.get(uri, headers: {"Authorization": "Token $token"});
-
-  print("활동 로드: ${response.statusCode}");
-  if (response.statusCode == 200) {
-    var responseBody = json.decode(utf8.decode(response.bodyBytes));
-    Project project = Project.fromJson(responseBody);
-    return project;
-  } else if (response.statusCode == 404) {
-    Get.back();
-    ModalController.to.showCustomDialog('이미 삭제된 활동입니다', 1400);
-    return Future.error(response.statusCode);
+Future<void> getproject(int projectId) async {
+  ConnectivityResult result = await initConnectivity();
+  ProjectDetailController controller =
+      Get.find<ProjectDetailController>(tag: projectId.toString());
+  if (result == ConnectivityResult.none) {
+    controller.projectscreenstate(ScreenState.disconnect);
+    ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
   } else {
-    return Future.error(response.statusCode);
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+    final uri = Uri.parse("$serverUri/project_api/project?id=$projectId");
+
+    http.Response response =
+        await http.get(uri, headers: {"Authorization": "Token $token"});
+
+    print("활동 로드: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      Project project = Project.fromJson(responseBody);
+      controller.project(project);
+      controller.postinglist(List.from(project.post
+          .map((post) => ProjectPostingWidget(
+                item: post,
+                isuser: project.is_user,
+                realname: project.user!.realName,
+                department: project.user!.department,
+                profileimage: project.user!.profileImage ?? '',
+              ))
+          .toList()
+          .reversed));
+      controller.projectscreenstate(ScreenState.success);
+
+      return;
+    } else if (response.statusCode == 404) {
+      Get.back();
+      ModalController.to.showCustomDialog('이미 삭제된 활동입니다', 1400);
+      return Future.error(response.statusCode);
+    } else {
+      controller.projectscreenstate(ScreenState.error);
+
+      return Future.error(response.statusCode);
+    }
   }
 }
 

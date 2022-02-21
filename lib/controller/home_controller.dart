@@ -1,7 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/question_api.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
@@ -118,93 +120,109 @@ class HomeController extends GetxController
   }
 
   Future<void> questionLoadItem() async {
-    if (selectgroup.value == "모든 질문") {
-      QuestionModel questionModel = await getquestionlist(
-          questionResult.value.questionitems.isEmpty
-              ? 0
-              : questionResult.value.questionitems.last.id,
-          "any");
-
-      if (questionModel.questionitems.isEmpty &&
-          questionResult.value.questionitems.isEmpty) {
-        isAllQuestionEmpty.value = true;
-      } else if (questionModel.questionitems.isEmpty &&
-          questionResult.value.questionitems.isNotEmpty) {
-        enableQuestionPullup.value = false;
-      }
-
-      questionResult.value.questionitems.addAll(questionModel.questionitems);
+    ConnectivityResult result = await initConnectivity();
+    if (result == ConnectivityResult.none) {
+      ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
     } else {
-      QuestionModel questionModel = await getquestionlist(
-          questionResult.value.questionitems.isEmpty
-              ? 0
-              : questionResult.value.questionitems.last.id,
-          "my");
+      if (selectgroup.value == "모든 질문") {
+        QuestionModel questionModel = await getquestionlist(
+            questionResult.value.questionitems.isEmpty
+                ? 0
+                : questionResult.value.questionitems.last.id,
+            "any");
 
-      if (questionModel.questionitems.isEmpty &&
-          questionResult.value.questionitems.isEmpty) {
-        isMyQuestionEmpty.value = true;
-      } else if (questionModel.questionitems.isEmpty &&
-          questionResult.value.questionitems.isNotEmpty) {
-        enableQuestionPullup.value = false;
+        if (questionModel.questionitems.isEmpty &&
+            questionResult.value.questionitems.isEmpty) {
+          isAllQuestionEmpty.value = true;
+        } else if (questionModel.questionitems.isEmpty &&
+            questionResult.value.questionitems.isNotEmpty) {
+          enableQuestionPullup.value = false;
+        }
+
+        questionResult.value.questionitems.addAll(questionModel.questionitems);
+      } else {
+        QuestionModel questionModel = await getquestionlist(
+            questionResult.value.questionitems.isEmpty
+                ? 0
+                : questionResult.value.questionitems.last.id,
+            "my");
+
+        if (questionModel.questionitems.isEmpty &&
+            questionResult.value.questionitems.isEmpty) {
+          isMyQuestionEmpty.value = true;
+        } else if (questionModel.questionitems.isEmpty &&
+            questionResult.value.questionitems.isNotEmpty) {
+          enableQuestionPullup.value = false;
+        }
+
+        questionResult.value.questionitems.addAll(questionModel.questionitems);
       }
-
-      questionResult.value.questionitems.addAll(questionModel.questionitems);
     }
   }
 
   Future<void> postloadItem() async {
     PostingModel postingModel;
-    if (isRecommandFull.value == false) {
-      postingModel = await recommandpost(
-          recommandpostingResult.value.postingitems.isEmpty
-              ? 0
-              : recommandpostingResult.value.postingitems.last.id);
+    ConnectivityResult result = await initConnectivity();
+    if (result == ConnectivityResult.none) {
+      ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
     } else {
-      postingModel = await latestpost(
-          latestpostingResult.value.postingitems.isEmpty
-              ? 0
-              : latestpostingResult.value.postingitems.last.id);
-    }
+      if (isRecommandFull.value == false) {
+        postingModel = await recommandpost(
+            recommandpostingResult.value.postingitems.isEmpty
+                ? 0
+                : recommandpostingResult.value.postingitems.last.id);
+      } else {
+        postingModel = await latestpost(
+            latestpostingResult.value.postingitems.isEmpty
+                ? 0
+                : latestpostingResult.value.postingitems.last.id);
+      }
 
-    if (postingModel.postingitems.isEmpty &&
-        recommandpostingResult.value.postingitems.isEmpty) {
-      isPostingEmpty.value = true;
-    } else if (postingModel.postingitems.isNotEmpty &&
-        recommandpostingResult.value.postingitems.isEmpty &&
-        isPostingEmpty.value == true) {
-      isPostingEmpty.value = false;
-    } else if (postingModel.postingitems.isEmpty &&
-        recommandpostingResult.value.postingitems.isNotEmpty &&
-        latestpostingResult.value.postingitems.isEmpty) {
-      isRecommandFull(true);
-    } else if (postingModel.postingitems.isEmpty &&
-        isRecommandFull.value == true) {
-      enablePostingPullup.value = false;
-    }
-    if (isRecommandFull.value == false) {
-      recommandpostingResult.value.postingitems
-          .addAll(postingModel.postingitems);
-    } else {
-      latestpostingResult.value.postingitems.addAll(postingModel.postingitems);
+      if (postingModel.postingitems.isEmpty &&
+          recommandpostingResult.value.postingitems.isEmpty) {
+        isPostingEmpty.value = true;
+      } else if (postingModel.postingitems.isNotEmpty &&
+          recommandpostingResult.value.postingitems.isEmpty &&
+          isPostingEmpty.value == true) {
+        isPostingEmpty.value = false;
+      } else if (postingModel.postingitems.isEmpty &&
+          recommandpostingResult.value.postingitems.isNotEmpty &&
+          latestpostingResult.value.postingitems.isEmpty) {
+        isRecommandFull(true);
+      } else if (postingModel.postingitems.isEmpty &&
+          isRecommandFull.value == true) {
+        enablePostingPullup.value = false;
+      }
+      if (isRecommandFull.value == false) {
+        recommandpostingResult.value.postingitems
+            .addAll(postingModel.postingitems);
+      } else {
+        latestpostingResult.value.postingitems
+            .addAll(postingModel.postingitems);
+      }
     }
   }
 
   Future<void> looploadItem() async {
-    PostingModel loopModel = await looppost(
-        loopResult.value.postingitems.isEmpty
-            ? 0
-            : loopResult.value.postingitems.last.id);
+    ConnectivityResult result = await initConnectivity();
+    if (result == ConnectivityResult.none) {
+      ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
+    } else {
+      PostingModel loopModel = await looppost(
+          loopResult.value.postingitems.isEmpty
+              ? 0
+              : loopResult.value.postingitems.last.id);
 
-    if (loopModel.postingitems.isEmpty &&
-        loopResult.value.postingitems.isEmpty) {
-      isLoopEmpty.value = true;
-    } else if (loopModel.postingitems.isEmpty &&
-        loopResult.value.postingitems.isNotEmpty) {
-      enableLoopPullup.value = false;
+      if (loopModel.postingitems.isEmpty &&
+          loopResult.value.postingitems.isEmpty) {
+        isLoopEmpty.value = true;
+      } else if (loopModel.postingitems.isEmpty &&
+          loopResult.value.postingitems.isNotEmpty) {
+        enableLoopPullup.value = false;
+      }
+
+      loopResult.value.postingitems.addAll(loopModel.postingitems);
     }
-
-    loopResult.value.postingitems.addAll(loopModel.postingitems);
   }
 
   void tapBookmark(int postid) async {

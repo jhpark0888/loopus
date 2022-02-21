@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:loopus/api/profile_api.dart';
@@ -48,23 +50,22 @@ class OtherProfileController extends GetxController
 
   late TabController profileTabController;
 
-  RxBool isProfileLoading = true.obs;
+  // RxBool isProfileLoading = true.obs;
   RxBool isLoopPeopleLoading = true.obs;
+  Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
 
   Future loadotherProfile(int userid) async {
-    isProfileLoading.value = true;
-    await getProfile(userid).then((user) {
-      otherUser(user);
-    });
-    await getProjectlist(userid).then((projectlist) {
-      otherProjectList(projectlist
-          .map((project) => ProjectWidget(
-                project: project.obs,
-                type: ProjectWidgetType.profile,
-              ))
-          .toList());
-    });
-    isProfileLoading.value = false;
+    otherprofilescreenstate(ScreenState.loading);
+    // isProfileLoading.value = true;
+
+    ConnectivityResult result = await initConnectivity();
+    if (result == ConnectivityResult.none) {
+      otherprofilescreenstate(ScreenState.disconnect);
+      ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
+    } else {
+      await getProfile(userid, 0);
+      await getProjectlist(userid, 0);
+    }
   }
 
   @override

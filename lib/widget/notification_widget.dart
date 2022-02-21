@@ -56,7 +56,7 @@ class NotificationWidget extends StatelessWidget {
     return notification.type == NotificationType.follow
         ? GestureDetector(
             onTap: () {
-              clickprofile(notification.targetId);
+              clickprofile(notification.type);
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -145,7 +145,7 @@ class NotificationWidget extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      clickprofile(notification.user.userid);
+                      clickprofile(notification.type);
                     },
                     child: ClipOval(
                         child: notification.user.profileImage == null
@@ -173,7 +173,7 @@ class NotificationWidget extends StatelessWidget {
                           TextSpan(
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  clickprofile(notification.user.userid);
+                                  clickprofile(notification.type);
                                 },
                               text: notification.user.realName,
                               style: kSubTitle1Style),
@@ -232,9 +232,19 @@ class NotificationWidget extends StatelessWidget {
     }
   }
 
-  void clickprofile(int userid) {
-    Get.to(() => OtherProfileScreen(
-        userid: userid, isuser: 0, realname: notification.user.realName));
+  void clickprofile(NotificationType type) async {
+    if (type == NotificationType.follow) {
+      FollowState followState = await Get.to(() => OtherProfileScreen(
+          userid: notification.targetId,
+          isuser: 0,
+          realname: notification.user.realName));
+      notification.looped!(followState);
+    } else {
+      Get.to(() => OtherProfileScreen(
+          userid: notification.user.userid,
+          isuser: 0,
+          realname: notification.user.realName));
+    }
   }
 
   void clicknotice() {

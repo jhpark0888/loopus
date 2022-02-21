@@ -214,13 +214,15 @@ class PostingScreen extends StatelessWidget {
                                 context,
                                 func1: () {
                                   modalController.showButtonDialog(
-                                      leftText: '',
-                                      rightText: '',
+                                      leftText: '취소',
+                                      rightText: '신고',
                                       title:
                                           '<${controller.post.value.title}> 포스팅을 신고하시겠어요?',
                                       content: '관리자가 검토할 예정이에요',
                                       leftFunction: () => Get.back(),
-                                      rightFunction: () {});
+                                      rightFunction: () {
+                                        postingreport(controller.post.value.id);
+                                      });
                                 },
                                 func2: () {},
                                 value1: '이 포스팅 신고하기',
@@ -264,65 +266,98 @@ class PostingScreen extends StatelessWidget {
                   expandedHeight: Get.width / 3 * 2,
                 ),
                 SliverToBoxAdapter(
-                  child: Obx(
-                    () => (controller.isPostingContentLoading.value == false)
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                                Obx(
-                                  () => Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 24,
-                                      ),
-                                      child: Column(
-                                        children:
-                                            controller.postcontentlist.value,
-                                      )),
-                                ),
-                                TextButton(
-                                  onPressed: tapOtherPosting,
-                                  child: Text(
-                                    '이 활동의 다른 포스팅 읽기',
-                                    style:
-                                        kButtonStyle.copyWith(color: mainblue),
-                                  ),
-                                ),
-                                Container(
-                                  height: 8,
-                                  color: Color(0xffF2F3F5),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
-                                  child: Text(
-                                    '관련 포스팅',
-                                    style: kSubTitle2Style,
-                                  ),
-                                ),
-                                Column(
-                                  children: controller.recommendposts.isNotEmpty
-                                      ? controller.recommendposts
-                                      : [
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          Text(
-                                            '관련된 포스팅이 없어요',
-                                            style: kSubTitle3Style.copyWith(
-                                              color:
-                                                  mainblack.withOpacity(0.38),
+                  child: Obx(() => (controller.postscreenstate.value ==
+                          ScreenState.loading)
+                      ? Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 9,
+                        )
+                      : controller.postscreenstate.value ==
+                              ScreenState.disconnect
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("네트워크 불안정"),
+                                Center(
+                                  child: IconButton(
+                                      onPressed: () {
+                                        getposting(controller.postid);
+                                      },
+                                      icon: Icon(Icons.refresh_rounded)),
+                                )
+                              ],
+                            )
+                          : controller.postscreenstate.value ==
+                                  ScreenState.success
+                              ? Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                      Obx(
+                                        () => Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 24,
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: 40,
-                                          ),
-                                        ],
-                                ),
-                              ])
-                        : Image.asset(
-                            'assets/icons/loading.gif',
-                            scale: 9,
-                          ),
-                  ),
+                                            child: Column(
+                                              children: controller
+                                                  .postcontentlist.value,
+                                            )),
+                                      ),
+                                      TextButton(
+                                        onPressed: tapOtherPosting,
+                                        child: Text(
+                                          '이 활동의 다른 포스팅 읽기',
+                                          style: kButtonStyle.copyWith(
+                                              color: mainblue),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 8,
+                                        color: Color(0xffF2F3F5),
+                                      ),
+                                      const Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(16, 20, 16, 8),
+                                        child: Text(
+                                          '관련 포스팅',
+                                          style: kSubTitle2Style,
+                                        ),
+                                      ),
+                                      Column(
+                                        children: controller
+                                                .recommendposts.isNotEmpty
+                                            ? controller.recommendposts
+                                            : [
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                Text(
+                                                  '관련된 포스팅이 없어요',
+                                                  style:
+                                                      kSubTitle3Style.copyWith(
+                                                    color: mainblack
+                                                        .withOpacity(0.38),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 40,
+                                                ),
+                                              ],
+                                      ),
+                                    ])
+                              : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("에러 발생"),
+                                    Center(
+                                      child: IconButton(
+                                          onPressed: () {
+                                            getposting(controller.postid);
+                                          },
+                                          icon: Icon(Icons.refresh_rounded)),
+                                    )
+                                  ],
+                                )),
                 ),
               ],
             ),

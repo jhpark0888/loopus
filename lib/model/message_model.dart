@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/model/user_model.dart';
 
 class Message {
@@ -59,7 +60,18 @@ class MessageRoom {
   factory MessageRoom.fromJson(Map<String, dynamic> json, String? myid) =>
       MessageRoom(
         message: Message.fromJson(json["message"], myid),
-        user: User.fromJson(json["profile"]),
+        user: json["profile"] != null
+            ? User.fromJson(json["profile"])
+            : User(
+                userid: 0,
+                realName: "알 수 없음",
+                type: 0,
+                department: "",
+                loopcount: 0.obs,
+                totalposting: 0,
+                isuser: 0,
+                profileTag: [],
+                looped: FollowState.normal.obs),
         notread: RxInt(json["not_read"]),
       );
 
