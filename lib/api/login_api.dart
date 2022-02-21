@@ -26,7 +26,7 @@ Future<void> loginRequest() async {
   Uri uri = Uri.parse('$serverUri/user_api/login');
 
   final user = {
-    'username': logInController.idcontroller.text,
+    'username': logInController.idcontroller.text.trim(),
     'password': logInController.passwordcontroller.text,
     'fcm_token': await notificationController.getToken(),
   };

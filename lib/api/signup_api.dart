@@ -30,8 +30,13 @@ void emailRequest() async {
     body: jsonEncode(checkemail),
   );
 
+  print("이메일 체크 : ${response.statusCode}");
   if (response.statusCode == 200) {
     signupController.emailcheck(true);
+  } else if (response.statusCode == 400) {
+    Get.put(ModalController()).showCustomDialog("이미 가입된 회원입니다", 1000);
+  } else {
+    return Future.error(response.statusCode);
   }
 }
 

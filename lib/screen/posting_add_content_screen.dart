@@ -83,22 +83,10 @@ class PostingAddContentScreen extends StatelessWidget {
                                             tag: postid.toString());
                                     controller.isPostUpdateLoading.value = true;
                                     await updateposting(
-                                        postid!, PostingUpdateType.contents);
-                                    await getposting(postid!).then((value) {
-                                      controller.post(
-                                          Post.fromJson(value['posting_info']));
-                                      controller.postcontentlist(controller
-                                          .post.value.contents!
-                                          .map((content) => PostContentWidget(
-                                              content: content))
-                                          .toList());
-
+                                            postid!, PostingUpdateType.contents)
+                                        .then((value) {
                                       controller.isPostUpdateLoading(false);
                                     });
-
-                                    Get.back();
-                                    ModalController.to
-                                        .showCustomDialog('변경이 완료되었어요', 1000);
                                   } else {
                                     ModalController.to
                                         .showCustomDialog('내용을 입력해주세요', 1000);

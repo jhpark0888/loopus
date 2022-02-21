@@ -171,64 +171,74 @@ enum ProjectUpdateType {
 }
 
 Future updateproject(int projectId, ProjectUpdateType updateType) async {
-  ProjectAddController projectAddController = Get.find();
-  TagController tagController = Get.find(tag: Tagtype.project.toString());
-
-  String? token = await const FlutterSecureStorage().read(key: "token");
-  Uri uri = Uri.parse(
-      '$serverUri/project_api/project?id=$projectId&type=${updateType.name}');
-
-  var request = http.MultipartRequest('PUT', uri);
-
-  final headers = {
-    'Authorization': 'Token $token',
-    'Content-Type': 'multipart/form-data',
-  };
-
-  request.headers.addAll(headers);
-
-  if (updateType == ProjectUpdateType.project_name) {
-    request.fields['project_name'] =
-        projectAddController.projectnamecontroller.text;
-  } else if (updateType == ProjectUpdateType.introduction) {
-    request.fields['introduction'] = projectAddController.introcontroller.text;
-  } else if (updateType == ProjectUpdateType.date) {
-    request.fields['start_date'] = DateFormat('yyyy-MM-dd').format(
-        DateTime.parse(projectAddController.selectedStartDateTime.value));
-    request.fields['end_date'] = projectAddController.isEndedProject.value
-        ? DateFormat('yyyy-MM-dd').format(
-            DateTime.parse(projectAddController.selectedEndDateTime.value))
-        : '';
-  } else if (updateType == ProjectUpdateType.tag) {
-    request.fields['tag'] = json
-        .encode(tagController.selectedtaglist.map((tag) => tag.text).toList());
-  } else if (updateType == ProjectUpdateType.looper) {
-    request.fields['looper'] = json.encode(projectAddController
-        .selectedpersontaglist
-        .map((person) => person.id)
-        .toList());
-  } else if (updateType == ProjectUpdateType.thumbnail) {
-    if (projectAddController.projectthumbnail.value!.path != '') {
-      var multipartFile = await http.MultipartFile.fromPath(
-          'thumbnail', projectAddController.projectthumbnail.value!.path);
-      request.files.add(multipartFile);
-    } else {
-      request.fields['thumbnail'] = 'image';
-    }
-  }
-
-  http.StreamedResponse response = await request.send();
-
-  if (response.statusCode == 200) {
-    print(response.statusCode);
-    // String responsebody = await response.stream.bytesToString();
-    // print(responsebody);
-    // var responsemap = json.decode(responsebody);
-    // print(responsemap);
-    // Project project = Project.fromJson(responsemap);
-    return;
+  ConnectivityResult result = await initConnectivity();
+  ProjectDetailController controller =
+      Get.find<ProjectDetailController>(tag: projectId.toString());
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    ProjectAddController projectAddController = Get.find();
+    TagController tagController = Get.find(tag: Tagtype.project.toString());
+
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    Uri uri = Uri.parse(
+        '$serverUri/project_api/project?id=$projectId&type=${updateType.name}');
+
+    var request = http.MultipartRequest('PUT', uri);
+
+    final headers = {
+      'Authorization': 'Token $token',
+      'Content-Type': 'multipart/form-data',
+    };
+
+    request.headers.addAll(headers);
+
+    if (updateType == ProjectUpdateType.project_name) {
+      request.fields['project_name'] =
+          projectAddController.projectnamecontroller.text;
+    } else if (updateType == ProjectUpdateType.introduction) {
+      request.fields['introduction'] =
+          projectAddController.introcontroller.text;
+    } else if (updateType == ProjectUpdateType.date) {
+      request.fields['start_date'] = DateFormat('yyyy-MM-dd').format(
+          DateTime.parse(projectAddController.selectedStartDateTime.value));
+      request.fields['end_date'] = projectAddController.isEndedProject.value
+          ? DateFormat('yyyy-MM-dd').format(
+              DateTime.parse(projectAddController.selectedEndDateTime.value))
+          : '';
+    } else if (updateType == ProjectUpdateType.tag) {
+      request.fields['tag'] = json.encode(
+          tagController.selectedtaglist.map((tag) => tag.text).toList());
+    } else if (updateType == ProjectUpdateType.looper) {
+      request.fields['looper'] = json.encode(projectAddController
+          .selectedpersontaglist
+          .map((person) => person.id)
+          .toList());
+    } else if (updateType == ProjectUpdateType.thumbnail) {
+      if (projectAddController.projectthumbnail.value!.path != '') {
+        var multipartFile = await http.MultipartFile.fromPath(
+            'thumbnail', projectAddController.projectthumbnail.value!.path);
+        request.files.add(multipartFile);
+      } else {
+        request.fields['thumbnail'] = 'image';
+      }
+    }
+
+    http.StreamedResponse response = await request.send();
+    print("활동 수정: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      await getproject(controller.project.value.id);
+      Get.back();
+      ModalController.to.showCustomDialog('변경이 완료되었어요', 1000);
+      // String responsebody = await response.stream.bytesToString();
+      // print(responsebody);
+      // var responsemap = json.decode(responsebody);
+      // print(responsemap);
+      // Project project = Project.fromJson(responsemap);
+      return;
+    } else {
+      return Future.error(response.statusCode);
+    }
   }
 }
 

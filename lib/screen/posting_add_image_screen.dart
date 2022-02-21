@@ -74,17 +74,10 @@ class PostingAddImageScreen extends StatelessWidget {
                                         controller.isPostUpdateLoading.value =
                                             true;
                                         await updateposting(postid!,
-                                            PostingUpdateType.thumbnail);
-                                        await getposting(postid!).then((value) {
-                                          controller.post(Post.fromJson(
-                                              value['posting_info']));
-
+                                                PostingUpdateType.thumbnail)
+                                            .then((value) {
                                           controller.isPostUpdateLoading(false);
                                         });
-
-                                        Get.back();
-                                        ModalController.to.showCustomDialog(
-                                            '변경이 완료되었어요', 1000);
                                       },
                                 child: Text(
                                   '저장',

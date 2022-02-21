@@ -70,27 +70,18 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                                   .isProjectUpdateLoading
                                   .value = true;
                               await updateproject(
-                                  Get.find<ProjectDetailController>(
-                                          tag: projectid.toString())
-                                      .project
-                                      .value
-                                      .id,
-                                  ProjectUpdateType.date);
-                              await getproject(
                                       Get.find<ProjectDetailController>(
                                               tag: projectid.toString())
                                           .project
                                           .value
-                                          .id)
+                                          .id,
+                                      ProjectUpdateType.date)
                                   .then((value) {
                                 Get.find<ProjectDetailController>(
                                         tag: projectid.toString())
                                     .isProjectUpdateLoading
                                     .value = false;
                               });
-                              Get.back();
-                              ModalController.to
-                                  .showCustomDialog('변경이 완료되었어요', 1000);
                             }
                           },
                           child: Text(
