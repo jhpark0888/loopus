@@ -163,7 +163,7 @@ Future<Map> getposting(int postingid) async {
 
   if (result == ConnectivityResult.none) {
     controller.postscreenstate(ScreenState.disconnect);
-    ModalController.to.showdisconnectdialog;
+    ModalController.to.showdisconnectdialog();
     return {};
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");

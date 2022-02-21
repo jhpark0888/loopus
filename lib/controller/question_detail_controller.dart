@@ -11,7 +11,8 @@ class QuestionDetailController extends GetxController {
   QuestionDetailController({required this.questionid});
   static QuestionDetailController get to => Get.find();
   RxBool isQuestionDeleteLoading = false.obs;
-  RxBool isQuestionLoading = false.obs;
+  // RxBool isQuestionLoading = false.obs;
+  Rx<ScreenState> questionscreenstate = ScreenState.loading.obs;
 
   TextEditingController answertextController = TextEditingController();
 
@@ -55,7 +56,7 @@ class QuestionDetailController extends GetxController {
 
   @override
   void onInit() {
-    loadItem(questionid);
+    loadquestion(questionid);
 
     answertextController.addListener(() {
       textBoxSize.value = getSize(textFieldBoxKey.value);
@@ -103,19 +104,19 @@ class QuestionDetailController extends GetxController {
     }
   }
 
-  Future<void> loadItem(int questionid) async {
-    isQuestionLoading(true);
-    await getquestion(questionid).then((value) {
-      question(value);
-      addanswer();
-      isQuestionLoading(false);
-    });
+  Future<void> loadquestion(int questionid) async {
+    questionscreenstate(ScreenState.loading);
+    await getquestion(questionid);
   }
 }
 
 class QuestionScrollController extends GetxController {
-  ScrollController questionscrollController =
-      QuestionDetailController.to.scrollController;
+  QuestionScrollController({required this.questionid});
+
+  int questionid;
+  late ScrollController questionscrollController =
+      Get.find<QuestionDetailController>(tag: questionid.toString())
+          .scrollController;
 
   @override
   void onReady() {

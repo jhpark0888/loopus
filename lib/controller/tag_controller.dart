@@ -18,7 +18,8 @@ class TagController extends GetxController {
   static TagController get to => Get.find();
   ScrollController _tagScrollController = ScrollController();
   RxBool isTagChanging = false.obs;
-  RxBool isTagSearchLoading = false.obs;
+  Rx<ScreenState> tagsearchstate = ScreenState.loading.obs;
+  // RxBool isTagSearchLoading = false.obs;
   RxString _searchword = "".obs;
   // late Timer _debounce;
 

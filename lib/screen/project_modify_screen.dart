@@ -121,17 +121,10 @@ class ProjectModifyScreen extends StatelessWidget {
                 isSubtitleExist: true,
                 onTap: () async {
                   projectlooperinput();
-                  projectaddcontroller.isLooppersonLoading(true);
-                  getfollowlist(ProfileController.to.myUserInfo.value.userid,
-                          followlist.following)
-                      .then((value) {
-                    projectaddcontroller.looplist = value;
-                    projectaddcontroller.looppersonlist(projectaddcontroller
-                        .looplist
-                        .map((user) => CheckBoxPersonWidget(user: user))
-                        .toList());
-                    projectaddcontroller.isLooppersonLoading(false);
-                  });
+
+                  getprojectfollowlist(
+                      ProfileController.to.myUserInfo.value.userid,
+                      followlist.following);
                   Get.to(() => ProjectAddPersonScreen(
                         projectid: projectid,
                         screenType: Screentype.update,

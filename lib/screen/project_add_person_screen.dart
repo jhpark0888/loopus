@@ -3,8 +3,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
@@ -14,6 +16,8 @@ import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/project_add_thumbnail_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 
 import '../controller/modal_controller.dart';
 
@@ -160,39 +164,40 @@ class ProjectAddPersonScreen extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (projectaddcontroller.looppersonlist.value.length != 0)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(right: 16, left: 16, top: 20),
-                    child: Text(
-                      '선택한 학생',
-                      style: kSubTitle2Style,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    height: 32,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 1,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.only(
-                                left: (index == 0) ? 16 : 0,
-                                right: (index == 0) ? 16 : 0),
-                            child: Obx(() => Row(
-                                children: projectaddcontroller
-                                    .selectedpersontaglist.value)),
-                          );
-                        }),
-                  ),
-                ],
-              ),
+            Obx(() => projectaddcontroller.looppersonlist.value.length != 0
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(right: 16, left: 16, top: 20),
+                        child: Text(
+                          '선택한 학생',
+                          style: kSubTitle2Style,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 32,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 1,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    left: (index == 0) ? 16 : 0,
+                                    right: (index == 0) ? 16 : 0),
+                                child: Obx(() => Row(
+                                    children: projectaddcontroller
+                                        .selectedpersontaglist.value)),
+                              );
+                            }),
+                      ),
+                    ],
+                  )
+                : Container()),
             SizedBox(
               height: 16,
             ),
@@ -216,7 +221,8 @@ class ProjectAddPersonScreen extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Obx(() => projectaddcontroller.isLooppersonLoading.value
+            Obx(() => projectaddcontroller.looppersonscreenstate.value ==
+                    ScreenState.loading
                 ? Column(
                     children: [
                       Image.asset(
@@ -233,24 +239,39 @@ class ProjectAddPersonScreen extends StatelessWidget {
                       )
                     ],
                   )
-                : Padding(
-                    padding: const EdgeInsets.only(right: 16, left: 16),
-                    child: Column(
-                      children:
-                          projectaddcontroller.looppersonlist.value.length != 0
-                              ? projectaddcontroller.looppersonlist
-                              : [
-                                  SizedBox(
-                                    height: 12,
-                                  ),
-                                  Text(
-                                    '아직 팔로잉 중인 학생이 없어요',
-                                    style: kSubTitle2Style.copyWith(
-                                        color: mainblack.withOpacity(0.38)),
-                                  )
-                                ],
-                    ),
-                  )),
+                : projectaddcontroller.looppersonscreenstate.value ==
+                        ScreenState.disconnect
+                    ? DisconnectReloadWidget(reload: () {
+                        getprojectfollowlist(
+                            ProfileController.to.myUserInfo.value.userid,
+                            followlist.following);
+                      })
+                    : projectaddcontroller.looppersonscreenstate.value ==
+                            ScreenState.error
+                        ? ErrorReloadWidget(reload: () {
+                            getprojectfollowlist(
+                                ProfileController.to.myUserInfo.value.userid,
+                                followlist.following);
+                          })
+                        : Padding(
+                            padding: const EdgeInsets.only(right: 16, left: 16),
+                            child: Column(
+                              children: projectaddcontroller
+                                          .looppersonlist.value.length !=
+                                      0
+                                  ? projectaddcontroller.looppersonlist
+                                  : [
+                                      SizedBox(
+                                        height: 12,
+                                      ),
+                                      Text(
+                                        '아직 팔로잉 중인 학생이 없어요',
+                                        style: kSubTitle2Style.copyWith(
+                                            color: mainblack.withOpacity(0.38)),
+                                      )
+                                    ],
+                            ),
+                          )),
           ],
         ),
       ),

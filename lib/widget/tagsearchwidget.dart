@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 
 class TagSearchWidget extends StatelessWidget {
   TagSearchWidget({Key? key, required this.tagtype}) : super(key: key);
@@ -107,7 +110,7 @@ class TagSearchWidget extends StatelessWidget {
           height: 12,
         ),
         Obx(
-          () => tagController.isTagSearchLoading.value
+          () => tagController.tagsearchstate.value == ScreenState.loading
               ? Column(
                   children: [
                     SizedBox(
@@ -130,13 +133,21 @@ class TagSearchWidget extends StatelessWidget {
                     ),
                   ],
                 )
-              : Obx(
-                  () => Expanded(
-                    child: ListView(
-                      children: tagController.searchtaglist,
-                    ),
-                  ),
-                ),
+              : tagController.tagsearchstate.value == ScreenState.disconnect
+                  ? DisconnectReloadWidget(reload: () {
+                      gettagsearch(tagtype);
+                    })
+                  : tagController.tagsearchstate.value == ScreenState.error
+                      ? ErrorReloadWidget(reload: () {
+                          gettagsearch(tagtype);
+                        })
+                      : Obx(
+                          () => Expanded(
+                            child: ListView(
+                              children: tagController.searchtaglist,
+                            ),
+                          ),
+                        ),
         )
       ],
     );

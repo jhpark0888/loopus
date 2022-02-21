@@ -24,90 +24,95 @@ import 'package:loopus/widget/project_widget.dart';
 import '../constant.dart';
 
 Future addproject() async {
+  ConnectivityResult result = await initConnectivity();
   final ProjectAddController projectAddController = Get.find();
-  final LocalDataController _localDataController =
-      Get.put(LocalDataController());
-  TagController tagController = Get.find(tag: Tagtype.project.toString());
-  final GAController _gaController = Get.put(GAController());
-
-  String? token = await const FlutterSecureStorage().read(key: "token");
-  Uri uri = Uri.parse('$serverUri/project_api/project');
-
-  var request = http.MultipartRequest('POST', uri);
-
-  final headers = {
-    'Authorization': 'Token $token',
-    'Content-Type': 'multipart/form-data',
-  };
-
-  request.headers.addAll(headers);
-
-  if (projectAddController.projectthumbnail.value!.path != '') {
-    var multipartFile = await http.MultipartFile.fromPath(
-        'thumbnail', projectAddController.projectthumbnail.value!.path);
-    request.files.add(multipartFile);
-  }
-
-  request.fields['project_name'] =
-      projectAddController.projectnamecontroller.text;
-  request.fields['introduction'] = projectAddController.introcontroller.text;
-  request.fields['start_date'] = DateFormat('yyyy-MM-dd')
-      .format(DateTime.parse(projectAddController.selectedStartDateTime.value));
-  request.fields['end_date'] =
-      (projectAddController.isEndedProject.value == true)
-          ? DateFormat('yyyy-MM-dd').format(
-              DateTime.parse(projectAddController.selectedEndDateTime.value))
-          : '';
-  request.fields['looper'] = json.encode(projectAddController
-      .selectedpersontaglist
-      .map((person) => person.id)
-      .toList());
-  request.fields['tag'] = json
-      .encode(tagController.selectedtaglist.map((tag) => tag.text).toList());
-
-  http.StreamedResponse response = await request.send();
-
-  print("활동 생성: ${response.statusCode}");
-  if (response.statusCode == 201) {
-    //!GA
-    await _gaController.logProjectCreated(true);
-    getbacks(6);
-
-    String responsebody = await response.stream.bytesToString();
-    Map<String, dynamic> responsemap = json.decode(responsebody);
-    Project project = Project.fromJson(responsemap);
-    project.is_user = 1;
-
-    Get.put(ProjectDetailController(project.id), tag: project.id.toString());
-
-    ProfileController.to.myProjectList.insert(
-        0,
-        ProjectWidget(
-          project: project.obs,
-          type: ProjectWidgetType.profile,
-        ));
-
-    Get.to(() => ProjectScreen(
-          projectid: project.id,
-          isuser: 1,
-        ));
-
-    if (_localDataController.isAddFirstProject == false) {
-      // Get.snackbar("활동", "활동이 성공적으로 만들어졌어요!");
-      ModalController.to.showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
-    }
-    if (_localDataController.isAddFirstProject == true) {
-      ModalController.to.showCustomDialog('첫번째 활동 만들었을 때 리뷰 팝업', 1000);
-      final InAppReview inAppReview = InAppReview.instance;
-
-      if (await inAppReview.isAvailable()) {
-        inAppReview.requestReview();
-      }
-    }
-    _localDataController.firstProjectAdd();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    //!GA
-    await _gaController.logProjectCreated(false);
+    final LocalDataController _localDataController =
+        Get.put(LocalDataController());
+    TagController tagController = Get.find(tag: Tagtype.project.toString());
+    final GAController _gaController = Get.put(GAController());
+
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    Uri uri = Uri.parse('$serverUri/project_api/project');
+
+    var request = http.MultipartRequest('POST', uri);
+
+    final headers = {
+      'Authorization': 'Token $token',
+      'Content-Type': 'multipart/form-data',
+    };
+
+    request.headers.addAll(headers);
+
+    if (projectAddController.projectthumbnail.value!.path != '') {
+      var multipartFile = await http.MultipartFile.fromPath(
+          'thumbnail', projectAddController.projectthumbnail.value!.path);
+      request.files.add(multipartFile);
+    }
+
+    request.fields['project_name'] =
+        projectAddController.projectnamecontroller.text;
+    request.fields['introduction'] = projectAddController.introcontroller.text;
+    request.fields['start_date'] = DateFormat('yyyy-MM-dd').format(
+        DateTime.parse(projectAddController.selectedStartDateTime.value));
+    request.fields['end_date'] =
+        (projectAddController.isEndedProject.value == true)
+            ? DateFormat('yyyy-MM-dd').format(
+                DateTime.parse(projectAddController.selectedEndDateTime.value))
+            : '';
+    request.fields['looper'] = json.encode(projectAddController
+        .selectedpersontaglist
+        .map((person) => person.id)
+        .toList());
+    request.fields['tag'] = json
+        .encode(tagController.selectedtaglist.map((tag) => tag.text).toList());
+
+    http.StreamedResponse response = await request.send();
+
+    print("활동 생성: ${response.statusCode}");
+    if (response.statusCode == 201) {
+      //!GA
+      await _gaController.logProjectCreated(true);
+      getbacks(6);
+
+      String responsebody = await response.stream.bytesToString();
+      Map<String, dynamic> responsemap = json.decode(responsebody);
+      Project project = Project.fromJson(responsemap);
+      project.is_user = 1;
+
+      Get.put(ProjectDetailController(project.id), tag: project.id.toString());
+
+      ProfileController.to.myProjectList.insert(
+          0,
+          ProjectWidget(
+            project: project.obs,
+            type: ProjectWidgetType.profile,
+          ));
+
+      Get.to(() => ProjectScreen(
+            projectid: project.id,
+            isuser: 1,
+          ));
+
+      if (_localDataController.isAddFirstProject == false) {
+        // Get.snackbar("활동", "활동이 성공적으로 만들어졌어요!");
+        ModalController.to.showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
+      }
+      if (_localDataController.isAddFirstProject == true) {
+        ModalController.to.showCustomDialog('첫번째 활동 만들었을 때 리뷰 팝업', 1000);
+        final InAppReview inAppReview = InAppReview.instance;
+
+        if (await inAppReview.isAvailable()) {
+          inAppReview.requestReview();
+        }
+      }
+      _localDataController.firstProjectAdd();
+    } else {
+      //!GA
+      await _gaController.logProjectCreated(false);
+    }
   }
 }
 
@@ -117,7 +122,7 @@ Future<void> getproject(int projectId) async {
       Get.find<ProjectDetailController>(tag: projectId.toString());
   if (result == ConnectivityResult.none) {
     controller.projectscreenstate(ScreenState.disconnect);
-    ModalController.to.showdisconnectdialog;
+    ModalController.to.showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
@@ -228,27 +233,33 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
 }
 
 Future<void> deleteproject(int projectId) async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-  String? userid = await const FlutterSecureStorage().read(key: "id");
-
-  final uri = Uri.parse("$serverUri/project_api/project?id=$projectId");
-
-  http.Response response =
-      await http.delete(uri, headers: {"Authorization": "Token $token"});
-
-  print(response.statusCode);
-  if (response.statusCode == 200) {
-    ProfileController.to.myProjectList
-        .removeWhere((project) => project.project.value.id == projectId);
-    try {
-      Get.find<OtherProfileController>(tag: userid)
-          .otherProjectList
-          .removeWhere((project) => project.project.value.id == projectId);
-    } catch (e) {
-      print("활동 삭제 : $e");
-    }
-    Get.delete<ProjectDetailController>(tag: projectId.toString());
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    String? userid = await const FlutterSecureStorage().read(key: "id");
+
+    final uri = Uri.parse("$serverUri/project_api/project?id=$projectId");
+
+    http.Response response =
+        await http.delete(uri, headers: {"Authorization": "Token $token"});
+
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      ProfileController.to.myProjectList
+          .removeWhere((project) => project.project.value.id == projectId);
+      try {
+        Get.find<OtherProfileController>(tag: userid)
+            .otherProjectList
+            .removeWhere((project) => project.project.value.id == projectId);
+      } catch (e) {
+        print("활동 삭제 : $e");
+      }
+      Get.back();
+      Get.delete<ProjectDetailController>(tag: projectId.toString());
+    } else {
+      return Future.error(response.statusCode);
+    }
   }
 }

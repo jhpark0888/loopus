@@ -18,7 +18,7 @@ Future<void> getmessageroomlist() async {
   MessageController.to.chatroomscreenstate(ScreenState.loading);
   if (result == ConnectivityResult.none) {
     MessageController.to.chatroomscreenstate(ScreenState.disconnect);
-    ModalController.to.showdisconnectdialog;
+    ModalController.to.showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');

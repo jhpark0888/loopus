@@ -553,7 +553,7 @@ class OtherProfileScreen extends StatelessWidget {
                                         onTapUp: (details) =>
                                             _hoverController.isHover(false),
                                         onTap: () {
-                                          controller.isLoopPeopleLoading(true);
+                                          // controller.isLoopPeopleLoading(true);
                                           Get.to(() => LoopPeopleScreen(
                                                 userid: controller
                                                     .otherUser.value.userid,
