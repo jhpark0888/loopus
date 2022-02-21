@@ -117,7 +117,7 @@ Future<void> getproject(int projectId) async {
       Get.find<ProjectDetailController>(tag: projectId.toString());
   if (result == ConnectivityResult.none) {
     controller.projectscreenstate(ScreenState.disconnect);
-    ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
+    ModalController.to.showdisconnectdialog;
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 

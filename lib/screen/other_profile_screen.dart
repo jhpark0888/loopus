@@ -22,6 +22,8 @@ import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/utils/kakao_share_manager.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -165,34 +167,14 @@ class OtherProfileScreen extends StatelessWidget {
                 )
               : controller.otherprofilescreenstate.value ==
                       ScreenState.disconnect
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("네트워크 불안정"),
-                        Center(
-                          child: IconButton(
-                              onPressed: () {
-                                controller.loadotherProfile(userid);
-                              },
-                              icon: Icon(Icons.refresh_rounded)),
-                        )
-                      ],
-                    )
+                  ? DisconnectReloadWidget(reload: () {
+                      controller.loadotherProfile(userid);
+                    })
                   : controller.otherprofilescreenstate.value ==
                           ScreenState.error
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("에러 발생"),
-                            Center(
-                              child: IconButton(
-                                  onPressed: () {
-                                    controller.loadotherProfile(userid);
-                                  },
-                                  icon: Icon(Icons.refresh_rounded)),
-                            )
-                          ],
-                        )
+                      ? ErrorReloadWidget(reload: () {
+                          controller.loadotherProfile(userid);
+                        })
                       : Obx(
                           () => SmartRefresher(
                             controller: otherprofilerefreshController,

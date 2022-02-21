@@ -80,7 +80,7 @@ class ProfileController extends GetxController
     ConnectivityResult result = await initConnectivity();
     if (result == ConnectivityResult.none) {
       myprofilescreenstate(ScreenState.disconnect);
-      ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
+      ModalController.to.showdisconnectdialog;
     } else {
       await getProfile(userId, 1);
       await getProjectlist(userId, 1);

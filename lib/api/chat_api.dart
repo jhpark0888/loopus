@@ -18,7 +18,7 @@ Future<void> getmessageroomlist() async {
   MessageController.to.chatroomscreenstate(ScreenState.loading);
   if (result == ConnectivityResult.none) {
     MessageController.to.chatroomscreenstate(ScreenState.disconnect);
-    ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
+    ModalController.to.showdisconnectdialog;
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');

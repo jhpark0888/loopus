@@ -16,6 +16,8 @@ import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/screen/posting_add_content_screen.dart';
 import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:intl/intl.dart';
@@ -290,37 +292,13 @@ class ProjectScreen extends StatelessWidget {
                     )
                   : controller.projectscreenstate.value ==
                           ScreenState.disconnect
-                      ? Center(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("네트워크 불안정"),
-                                IconButton(
-                                    onPressed: () {
-                                      controller.loadProject();
-                                    },
-                                    icon: Icon(Icons.refresh_rounded)),
-                                SizedBox(
-                                  height: 60,
-                                ),
-                              ]),
-                        )
+                      ? DisconnectReloadWidget(reload: () {
+                          controller.loadProject();
+                        })
                       : controller.projectscreenstate.value == ScreenState.error
-                          ? Center(
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("에러 발생"),
-                                    IconButton(
-                                        onPressed: () {
-                                          controller.loadProject();
-                                        },
-                                        icon: Icon(Icons.refresh_rounded)),
-                                    SizedBox(
-                                      height: 60,
-                                    ),
-                                  ]),
-                            )
+                          ? ErrorReloadWidget(reload: () {
+                              controller.loadProject();
+                            })
                           : SingleChildScrollView(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

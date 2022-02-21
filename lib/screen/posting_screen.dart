@@ -19,6 +19,8 @@ import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_modify_screen.dart';
 import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/post_content_widget.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
@@ -274,22 +276,15 @@ class PostingScreen extends StatelessWidget {
                         )
                       : controller.postscreenstate.value ==
                               ScreenState.disconnect
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("네트워크 불안정"),
-                                Center(
-                                  child: IconButton(
-                                      onPressed: () {
-                                        getposting(controller.postid);
-                                      },
-                                      icon: Icon(Icons.refresh_rounded)),
-                                )
-                              ],
-                            )
+                          ? DisconnectReloadWidget(reload: () {
+                              getposting(controller.postid);
+                            })
                           : controller.postscreenstate.value ==
-                                  ScreenState.success
-                              ? Column(
+                                  ScreenState.error
+                              ? ErrorReloadWidget(reload: () {
+                                  getposting(controller.postid);
+                                })
+                              : Column(
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: [
@@ -344,20 +339,7 @@ class PostingScreen extends StatelessWidget {
                                                 ),
                                               ],
                                       ),
-                                    ])
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("에러 발생"),
-                                    Center(
-                                      child: IconButton(
-                                          onPressed: () {
-                                            getposting(controller.postid);
-                                          },
-                                          icon: Icon(Icons.refresh_rounded)),
-                                    )
-                                  ],
-                                )),
+                                    ])),
                 ),
               ],
             ),

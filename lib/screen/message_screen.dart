@@ -7,6 +7,8 @@ import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
 
 class MessageScreen extends StatelessWidget {
@@ -72,34 +74,14 @@ class MessageScreen extends StatelessWidget {
                   )
                 : messageController.chatroomscreenstate.value ==
                         ScreenState.disconnect
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("네트워크 불안정"),
-                          Center(
-                            child: IconButton(
-                                onPressed: () {
-                                  getmessageroomlist();
-                                },
-                                icon: Icon(Icons.refresh_rounded)),
-                          )
-                        ],
-                      )
+                    ? DisconnectReloadWidget(reload: () {
+                        getmessageroomlist();
+                      })
                     : messageController.chatroomscreenstate.value ==
                             ScreenState.error
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("에러 발생"),
-                              Center(
-                                child: IconButton(
-                                    onPressed: () {
-                                      getmessageroomlist();
-                                    },
-                                    icon: Icon(Icons.refresh_rounded)),
-                              )
-                            ],
-                          )
+                        ? ErrorReloadWidget(reload: () {
+                            getmessageroomlist();
+                          })
                         : messageController.chattingroomlist.isNotEmpty
                             ? SingleChildScrollView(
                                 child: Column(

@@ -122,7 +122,7 @@ class HomeController extends GetxController
   Future<void> questionLoadItem() async {
     ConnectivityResult result = await initConnectivity();
     if (result == ConnectivityResult.none) {
-      ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
+      ModalController.to.showdisconnectdialog;
     } else {
       if (selectgroup.value == "모든 질문") {
         QuestionModel questionModel = await getquestionlist(
@@ -164,7 +164,7 @@ class HomeController extends GetxController
     PostingModel postingModel;
     ConnectivityResult result = await initConnectivity();
     if (result == ConnectivityResult.none) {
-      ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
+      ModalController.to.showdisconnectdialog;
     } else {
       if (isRecommandFull.value == false) {
         postingModel = await recommandpost(
@@ -206,7 +206,7 @@ class HomeController extends GetxController
   Future<void> looploadItem() async {
     ConnectivityResult result = await initConnectivity();
     if (result == ConnectivityResult.none) {
-      ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
+      ModalController.to.showdisconnectdialog;
     } else {
       PostingModel loopModel = await looppost(
           loopResult.value.postingitems.isEmpty

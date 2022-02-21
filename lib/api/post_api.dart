@@ -163,7 +163,7 @@ Future<Map> getposting(int postingid) async {
 
   if (result == ConnectivityResult.none) {
     controller.postscreenstate(ScreenState.disconnect);
-    ModalController.to.showCustomDialog("네트워크가 불안정합니다", 1000);
+    ModalController.to.showdisconnectdialog;
     return {};
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
