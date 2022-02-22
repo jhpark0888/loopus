@@ -349,7 +349,7 @@ class HomePostingScreen extends StatelessWidget {
                               child: TextButton(
                                 onPressed: () {
                                   homeController.hometabcontroller.animateTo(
-                                    2,
+                                    1,
                                     curve: Curves.easeInOut,
                                     duration: Duration(milliseconds: 300),
                                   );

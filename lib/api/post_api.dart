@@ -389,7 +389,8 @@ Future<dynamic> latestpost(int lastindex) async {
     print('posting list : $list');
   }
   if (response.statusCode != 200) {
-    return Future.error(response.statusCode);
+    // Future.error(response.statusCode);
+    return null;
   } else {
     return PostingModel.fromJson(list);
   }
@@ -412,7 +413,8 @@ Future<dynamic> recommandpost(int lastindex) async {
   //   print('posting list : $list');
   // }
   if (response.statusCode != 200) {
-    return Future.error(response.statusCode);
+    // Future.error(response.statusCode);
+    return null;
   } else {
     var responseBody = utf8.decode(response.bodyBytes);
     List<dynamic> list = jsonDecode(responseBody);
@@ -459,7 +461,8 @@ Future<dynamic> looppost(int lastindex) async {
     HomeController.to.enableLoopPullup.value = false;
   }
   if (response.statusCode != 200) {
-    return Future.error(response.statusCode);
+    // Future.error(response.statusCode);
+    return null;
   } else {
     return PostingModel.fromJson(list);
   }

@@ -152,8 +152,12 @@ Future<void> search(
           searchController.isnosearchquestion(true);
           searchController.searchquestionlist.clear();
         } else if (searchType == SearchType.tag_project) {
+          Get.find<TagDetailController>(tag: searchtext)
+              .tagprojectscreenstate(ScreenState.success);
           return;
         } else if (searchType == SearchType.tag_question) {
+          Get.find<TagDetailController>(tag: searchtext)
+              .tagquestionscreenstate(ScreenState.success);
           return;
         }
       } else {
