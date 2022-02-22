@@ -36,10 +36,7 @@ class LikePeopleScreen extends StatelessWidget {
                     height: 24,
                   ),
                   Center(
-                    child: Image.asset(
-                      'assets/icons/loading.gif',
-                      scale: 5,
-                    ),
+                    child: Image.asset('assets/icons/loading.gif', scale: 9),
                   ),
                 ])
               : Padding(

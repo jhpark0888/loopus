@@ -248,7 +248,7 @@ class ProjectScreen extends StatelessWidget {
                                   rightText: '신고',
                                   title:
                                       '<${controller.project.value.projectName}> 활동을 신고하시겠어요?',
-                                  content: '관리자가 검토 후 조치하도록 하겠습니다',
+                                  content: '관리자가 검토 절차를 거칩니다',
                                   leftFunction: () => Get.back(),
                                   rightFunction: () {});
                             },

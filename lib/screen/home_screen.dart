@@ -132,8 +132,8 @@ class HomeScreen extends StatelessWidget {
               controller: _homeController.hometabcontroller,
               children: [
                 HomePostingScreen(),
-                HomeQuestionScreen(),
                 HomeLoopScreen(),
+                HomeQuestionScreen(),
               ]),
         ),
       ),
@@ -452,19 +452,19 @@ class HomeScreen extends StatelessWidget {
                   Tab(
                     height: 40,
                     child: Text(
-                      "포스팅",
-                    ),
-                  ),
-                  Tab(
-                    height: 40,
-                    child: Text(
-                      "질문과 답변",
+                      "추천",
                     ),
                   ),
                   Tab(
                     height: 40,
                     child: Text(
                       "팔로잉",
+                    ),
+                  ),
+                  Tab(
+                    height: 40,
+                    child: Text(
+                      "질문과 답변",
                     ),
                   ),
                 ],

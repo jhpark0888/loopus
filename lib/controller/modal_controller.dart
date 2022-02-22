@@ -443,9 +443,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.to(() => WebViewScreen(
-                          url:
-                              "https://loopusimage.s3.ap-northeast-2.amazonaws.com/static/%EC%9D%B4%EC%9A%A9%EC%95%BD%EA%B4%80.pdf"));
+                      Get.to(() => WebViewScreen(url: kTermsOfService));
                     },
                     child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
                   ),
@@ -501,9 +499,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.to(() => WebViewScreen(
-                          url:
-                              "https://loopusimage.s3.ap-northeast-2.amazonaws.com/static/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%B2%98%EB%A6%AC%EB%B0%A9%EC%B9%A8.pdf"));
+                      Get.to(() => WebViewScreen(url: kPrivacyPolicy));
                     },
                     child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
                   ),
@@ -547,7 +543,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                           width: 4,
                         ),
                         Text(
-                          '개인정보수집 동의',
+                          '개인정보 수집동의',
                           style: kBody2Style.copyWith(
                             color: isCheckFour.value == true
                                 ? mainblue
@@ -559,9 +555,8 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.to(() => WebViewScreen(
-                          url:
-                              "https://loopusimage.s3.ap-northeast-2.amazonaws.com/static/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4+%EC%88%98%EC%A7%91%EB%8F%99%EC%9D%98%EC%84%9C+-+%EC%88%98%EC%A0%95.pdf"));
+                      Get.to(() =>
+                          WebViewScreen(url: kPersonalInfoCollectionAgreement));
                     },
                     child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
                   ),

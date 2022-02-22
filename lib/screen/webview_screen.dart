@@ -22,13 +22,27 @@ class WebViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          //TODO : LINK 패턴 관리
-          url!.contains('http://')
-              ? url!.replaceFirst('http://', '')
-              : url!.replaceFirst('https://', ''),
-          style: TextStyle(fontSize: 14),
-        ),
+        title: (url == kTermsOfService ||
+                url == kPersonalInfoCollectionAgreement ||
+                url == kPrivacyPolicy)
+            ? Text(
+                //TODO : LINK 패턴 관리
+                url! == kTermsOfService
+                    ? '서비스 이용약관'
+                    : url! == kPersonalInfoCollectionAgreement
+                        ? '개인정보 수집동의'
+                        : url! == kPrivacyPolicy
+                            ? '개인정보 처리방침'
+                            : '',
+                style: TextStyle(fontSize: 14),
+              )
+            : Text(
+                //TODO : LINK 패턴 관리
+                url!.contains('http://')
+                    ? url!.replaceFirst('http://', '')
+                    : url!.replaceFirst('https://', ''),
+                style: TextStyle(fontSize: 14),
+              ),
         centerTitle: true,
         bottom: PreferredSize(
           child: Obx(

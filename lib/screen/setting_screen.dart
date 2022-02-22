@@ -11,6 +11,7 @@ import 'package:loopus/screen/contact_email_screen.dart';
 import 'package:loopus/screen/privacypolicy_screen.dart';
 import 'package:loopus/screen/termsofservice_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';
+import 'package:loopus/screen/webview_screen.dart';
 import 'package:loopus/utils/user_device_info.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:app_settings/app_settings.dart';
@@ -70,14 +71,14 @@ class SettingScreen extends StatelessWidget {
             hoverTag: '서비스 이용약관',
             title: '서비스 이용약관',
             onTap: () {
-              Get.to(() => TermsOfServiceScreen());
+              Get.to(() => WebViewScreen(url: kTermsOfService));
             },
           ),
           CustomListTile(
             hoverTag: '개인정보 처리방침',
             title: '개인정보 처리방침',
             onTap: () {
-              Get.to(() => PrivacyPolicyScreen());
+              Get.to(() => WebViewScreen(url: kPrivacyPolicy));
             },
           ),
           CustomListTile(

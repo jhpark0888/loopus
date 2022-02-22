@@ -178,7 +178,7 @@ class QuestionDetailScreen extends StatelessWidget {
                               modalController.showButtonDialog(
                                   leftText: '취소',
                                   rightText: '삭제',
-                                  title: '정말 이 질문을 삭제하시겠어요?',
+                                  title: '질문을 삭제하시겠어요?',
                                   content: '삭제한 질문은 복구할 수 없어요',
                                   leftFunction: () => Get.back(),
                                   rightFunction: () {
