@@ -14,6 +14,7 @@ import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/firebase_options.dart';
+import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 
 import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';
@@ -59,6 +60,33 @@ class MyApp extends StatelessWidget {
   final String? token;
   MyApp({Key? key, required this.token}) : super(key: key);
   final GAController _gaController = Get.put(GAController());
+  final ThemeData themeData = ThemeData(
+    pageTransitionsTheme: PageTransitionsTheme(
+      builders: {
+        TargetPlatform.iOS: CupertinoWillPopScopePageTransionsBuilder(),
+      },
+    ),
+    fontFamily: 'SUIT',
+    appBarTheme: const AppBarTheme(
+      backgroundColor: mainWhite,
+      foregroundColor: mainblack,
+    ),
+    canvasColor: mainWhite,
+    textTheme: const TextTheme(
+      bodyText1: TextStyle(color: mainblack),
+      bodyText2: TextStyle(color: mainblack),
+    ).apply(bodyColor: mainblack),
+    textSelectionTheme: const TextSelectionThemeData(cursorColor: mainblue),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        primary: mainblack,
+        splashFactory: NoSplash.splashFactory,
+      ),
+    ),
+    splashColor: Colors.transparent,
+    highlightColor: Colors.transparent,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -82,34 +110,7 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
       title: "루프어스",
-      theme: ThemeData(
-        pageTransitionsTheme: PageTransitionsTheme(
-          builders: {
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          },
-        ),
-        fontFamily: 'SUIT',
-        appBarTheme: const AppBarTheme(
-          backgroundColor: mainWhite,
-          foregroundColor: mainblack,
-        ),
-        canvasColor: mainWhite,
-        textTheme: const TextTheme(
-          bodyText1: TextStyle(color: mainblack),
-          bodyText2: TextStyle(color: mainblack),
-        ).apply(bodyColor: mainblack),
-        textSelectionTheme:
-            const TextSelectionThemeData(cursorColor: mainblack),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            primary: mainblack,
-            splashFactory: NoSplash.splashFactory,
-          ),
-        ),
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-      ),
+      theme: themeData,
       // initialBinding: InitBinding(),
       getPages: [
         GetPage(

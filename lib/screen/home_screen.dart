@@ -62,7 +62,6 @@ class HomeScreen extends StatelessWidget {
                   icon: SvgPicture.asset(
                     "assets/icons/Bell_Inactive.svg",
                     width: 28,
-                    height: 28,
                   ),
                 ),
                 Positioned(

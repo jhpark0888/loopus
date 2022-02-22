@@ -93,9 +93,47 @@ class _AlertScreenState extends State<AlertScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              '프로모션 알림을 설정해도 알림이 오지 않는다면, 시스템 알림 설정을 확인해보세요.',
-              style: kCaptionStyle.copyWith(color: mainblack.withOpacity(0.6)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '\u2219 ',
+                      style: kCaptionStyle.copyWith(
+                          color: mainblack.withOpacity(0.6)),
+                    ),
+                    Expanded(
+                      child: Text(
+                        '알림이 제대로 오지 않는다면, 로그아웃 후 다시 로그인을 시도해주세요.',
+                        style: kCaptionStyle.copyWith(
+                            color: mainblack.withOpacity(0.6)),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '\u2219 ',
+                      style: kCaptionStyle.copyWith(
+                          color: mainblack.withOpacity(0.6)),
+                    ),
+                    Expanded(
+                      child: Text(
+                        '프로모션 알림을 설정해도 알림이 오지 않는다면, 시스템 알림 설정을 확인해보세요.',
+                        style: kCaptionStyle.copyWith(
+                            color: mainblack.withOpacity(0.6)),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
