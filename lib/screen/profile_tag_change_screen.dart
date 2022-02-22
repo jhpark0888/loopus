@@ -46,9 +46,6 @@ class ProfileTagChangeScreen extends StatelessWidget {
                     tagController.isTagChanging.value = true;
                     await changeMyTag().then((value) {
                       tagController.isTagChanging.value = false;
-                      Get.back();
-                      ModalController.to
-                          .showCustomDialog('관심 태그 기반으로 홈 화면을 재구성했어요', 1500);
                     });
                   },
                   child: Obx(

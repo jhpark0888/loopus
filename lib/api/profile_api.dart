@@ -149,6 +149,11 @@ Future<User?> updateProfile(
       String responsebody = await response.stream.bytesToString();
       var responsemap = jsonDecode(responsebody);
       User edituser = User.fromJson(responsemap);
+
+      if (updateType == ProfileUpdateType.tag) {
+        Get.back();
+        ModalController.to.showCustomDialog('관심 태그 기반으로 홈 화면을 재구성했어요', 1500);
+      }
       if (kDebugMode) {
         print("profile status code : ${response.statusCode}");
       }
@@ -253,28 +258,33 @@ Future deleteuser(String pw) async {
 }
 
 Future userreport(int postingId) async {
-  String? token;
-  await const FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
-
-  final Uri uri = Uri.parse("$serverUri/user_api/report");
-
-  var body = {"id": postingId, "reason": ""};
-
-  final response = await http.post(uri,
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Token $token"
-      },
-      body: json.encode(body));
-
-  print('유저 신고 statusCode: ${response.statusCode}');
-  if (response.statusCode == 200) {
-    getbacks(2);
-    ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
-    return;
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    String? token;
+    await const FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
+
+    final Uri uri = Uri.parse("$serverUri/user_api/report");
+
+    var body = {"id": postingId, "reason": ""};
+
+    final response = await http.post(uri,
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Token $token"
+        },
+        body: json.encode(body));
+
+    print('유저 신고 statusCode: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      getbacks(2);
+      ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
+      return;
+    } else {
+      return Future.error(response.statusCode);
+    }
   }
 }

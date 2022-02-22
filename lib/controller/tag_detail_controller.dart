@@ -36,7 +36,9 @@ class TagDetailController extends GetxController
 
   int tagid;
 
-  RxBool istagSearchLoading = false.obs;
+  // RxBool istagSearchLoading = false.obs;
+  Rx<ScreenState> tagprojectscreenstate = ScreenState.loading.obs;
+  Rx<ScreenState> tagquestionscreenstate = ScreenState.loading.obs;
 
   @override
   void onInit() {
@@ -46,11 +48,18 @@ class TagDetailController extends GetxController
       vsync: this,
     );
 
-    istagSearchLoading(true);
-    search(SearchType.tag_project, tagid.toString(), 1);
-    search(SearchType.tag_question, tagid.toString(), 1).then((value) {
-      istagSearchLoading(false);
-    });
+    loadproject();
+    loadquestion();
     super.onInit();
+  }
+
+  void loadproject() {
+    tagprojectscreenstate(ScreenState.loading);
+    search(SearchType.tag_project, tagid.toString(), 1);
+  }
+
+  void loadquestion() {
+    tagquestionscreenstate(ScreenState.loading);
+    search(SearchType.tag_question, tagid.toString(), 1);
   }
 }

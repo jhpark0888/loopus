@@ -91,8 +91,6 @@ class PwFindScreen extends StatelessWidget {
                           CustomExpandedButton(
                               buttonTag: "비밀번호 재설정 메일 보내기",
                               onTap: () {
-                                ModalController.to.showCustomDialog(
-                                    '입력하신 이메일로 들어가서 링크를 클릭해 본인 인증을 해주세요', 1400);
                                 postpwfindemailcheck();
                               },
                               isBlue: true,

@@ -5,6 +5,8 @@ import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
@@ -81,11 +83,12 @@ class NotificationScreen extends StatelessWidget {
               Obx(
                 () => SmartRefresher(
                   controller: controller.alarmRefreshController,
-                  enablePullDown:
-                      (controller.isNotificationloading.value == true)
-                          ? false
-                          : true,
-                  enablePullUp: (controller.isNotificationloading.value == true)
+                  enablePullDown: (controller.notificationscreenstate.value ==
+                          ScreenState.loading)
+                      ? false
+                      : true,
+                  enablePullUp: (controller.notificationscreenstate.value ==
+                          ScreenState.loading)
                       ? false
                       : controller.enablealarmPullup.value,
                   header: ClassicHeader(
@@ -172,68 +175,96 @@ class NotificationScreen extends StatelessWidget {
                                   );
                                 }, childCount: 1),
                               )
-                            : SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                    (context, index) {
-                                return controller.isNotificationloading.value
-                                    ? Padding(
-                                        padding: EdgeInsets.zero,
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Image.asset(
-                                              'assets/icons/loading.gif',
-                                              scale: 6,
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    : Dismissible(
-                                        background: Container(
-                                          color: mainpink,
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 16),
-                                                  child: SvgPicture.asset(
-                                                      'assets/icons/Trash.svg'),
-                                                )
-                                              ]),
-                                        ),
-                                        direction: DismissDirection.endToStart,
-                                        onDismissed: (direction) {
-                                          deleteNotification(controller
-                                              .alarmlist[index]
-                                              .notification
-                                              .id);
-                                          controller.alarmlist.removeAt(index);
-                                          if (controller.alarmlist.isEmpty) {
-                                            controller.isalarmEmpty(true);
-                                          }
-                                        },
-                                        child: controller.alarmlist[index],
-                                        key: controller.alarmlist[index].key!,
-                                      );
-                              },
-                                    childCount:
-                                        controller.isNotificationloading.value
-                                            ? 1
-                                            : controller.alarmlist.length))
+                            : Obx(
+                                () => SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                        (context, index) {
+                                  return controller
+                                              .notificationscreenstate.value ==
+                                          ScreenState.loading
+                                      ? Padding(
+                                          padding: EdgeInsets.zero,
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 20,
+                                              ),
+                                              Image.asset(
+                                                'assets/icons/loading.gif',
+                                                scale: 6,
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : controller.notificationscreenstate
+                                                  .value ==
+                                              ScreenState.disconnect
+                                          ? DisconnectReloadWidget(reload: () {
+                                              controller.alarmRefresh();
+                                            })
+                                          : controller.notificationscreenstate
+                                                      .value ==
+                                                  ScreenState.disconnect
+                                              ? ErrorReloadWidget(reload: () {
+                                                  controller.alarmRefresh();
+                                                })
+                                              : Dismissible(
+                                                  background: Container(
+                                                    color: mainpink,
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    right: 16),
+                                                            child: SvgPicture.asset(
+                                                                'assets/icons/Trash.svg'),
+                                                          )
+                                                        ]),
+                                                  ),
+                                                  direction: DismissDirection
+                                                      .endToStart,
+                                                  onDismissed: (direction) {
+                                                    deleteNotification(
+                                                        controller
+                                                            .alarmlist[index]
+                                                            .notification
+                                                            .id);
+                                                    controller.alarmlist
+                                                        .removeAt(index);
+                                                    if (controller
+                                                        .alarmlist.isEmpty) {
+                                                      controller
+                                                          .isalarmEmpty(true);
+                                                    }
+                                                  },
+                                                  child: controller
+                                                      .alarmlist[index],
+                                                  key: controller
+                                                      .alarmlist[index].key!,
+                                                );
+                                },
+                                        childCount: controller
+                                                    .notificationscreenstate
+                                                    .value ==
+                                                ScreenState.success
+                                            ? controller.alarmlist.length
+                                            : 1)),
+                              )
                       ]),
                 ),
               ),
               Obx(() => SmartRefresher(
                     controller: controller.followreqRefreshController,
-                    enablePullDown:
-                        (controller.isfollowreqloading.value == true)
-                            ? false
-                            : true,
-                    enablePullUp: (controller.isfollowreqloading.value == true)
+                    enablePullDown: (controller.followreqscreenstate.value ==
+                            ScreenState.loading)
+                        ? false
+                        : true,
+                    enablePullUp: (controller.followreqscreenstate.value ==
+                            ScreenState.loading)
                         ? false
                         : controller.enablefollowreqPullup.value,
                     header: ClassicHeader(
@@ -320,63 +351,94 @@ class NotificationScreen extends StatelessWidget {
                                     );
                                   }, childCount: 1),
                                 )
-                              : SliverList(
-                                  delegate: SliverChildBuilderDelegate(
-                                      (context, index) {
-                                  return controller.isfollowreqloading.value
-                                      ? Padding(
-                                          padding: EdgeInsets.zero,
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Image.asset(
-                                                'assets/icons/loading.gif',
-                                                scale: 6,
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Dismissible(
-                                          background: Container(
-                                            color: mainpink,
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 16),
-                                                    child: SvgPicture.asset(
-                                                        'assets/icons/Trash.svg'),
-                                                  )
-                                                ]),
-                                          ),
-                                          direction:
-                                              DismissDirection.endToStart,
-                                          onDismissed: (direction) {
-                                            deleteNotification(controller
-                                                .followalarmlist[index]
-                                                .notification
-                                                .id);
-                                            controller.followalarmlist
-                                                .removeAt(index);
-                                            if (controller
-                                                .followalarmlist.isEmpty) {
-                                              controller.isfollowreqEmpty(true);
-                                            }
-                                          },
-                                          child:
-                                              controller.followalarmlist[index],
-                                          key: controller
-                                              .followalarmlist[index].key!,
-                                        );
-                                },
-                                      childCount: controller
-                                              .isfollowreqloading.value
-                                          ? 1
-                                          : controller.followalarmlist.length))
+                              : Obx(
+                                  () => SliverList(
+                                      delegate: SliverChildBuilderDelegate(
+                                          (context, index) {
+                                    return controller
+                                                .followreqscreenstate.value ==
+                                            ScreenState.loading
+                                        ? Padding(
+                                            padding: EdgeInsets.zero,
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                Image.asset(
+                                                  'assets/icons/loading.gif',
+                                                  scale: 6,
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : controller.followreqscreenstate
+                                                    .value ==
+                                                ScreenState.disconnect
+                                            ? DisconnectReloadWidget(
+                                                reload: () {
+                                                controller.followreqRefresh();
+                                              })
+                                            : controller.followreqscreenstate
+                                                        .value ==
+                                                    ScreenState.disconnect
+                                                ? ErrorReloadWidget(reload: () {
+                                                    controller
+                                                        .followreqRefresh();
+                                                  })
+                                                : Dismissible(
+                                                    background: Container(
+                                                      color: mainpink,
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      right:
+                                                                          16),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                      'assets/icons/Trash.svg'),
+                                                            )
+                                                          ]),
+                                                    ),
+                                                    direction: DismissDirection
+                                                        .endToStart,
+                                                    onDismissed: (direction) {
+                                                      deleteNotification(
+                                                          controller
+                                                              .followalarmlist[
+                                                                  index]
+                                                              .notification
+                                                              .id);
+                                                      controller.followalarmlist
+                                                          .removeAt(index);
+                                                      if (controller
+                                                          .followalarmlist
+                                                          .isEmpty) {
+                                                        controller
+                                                            .isfollowreqEmpty(
+                                                                true);
+                                                      }
+                                                    },
+                                                    child: controller
+                                                        .followalarmlist[index],
+                                                    key: controller
+                                                        .followalarmlist[index]
+                                                        .key!,
+                                                  );
+                                  },
+                                          childCount: controller
+                                                      .followreqscreenstate
+                                                      .value ==
+                                                  ScreenState.success
+                                              ? controller
+                                                  .followalarmlist.length
+                                              : 1)),
+                                )
                         ]),
                   )),
             ],
