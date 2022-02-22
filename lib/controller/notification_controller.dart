@@ -58,7 +58,7 @@ class NotificationController extends GetxController {
   void _backgroundMessage(RemoteMessage message) {
     int id = int.parse(message.data["id"]);
     if (message.data["type"] == "msg") {
-      Get.put(MessageDetailController(userid: id)).firstmessagesload();
+      // Get.put(MessageDetailController(userid: id)).firstmessagesload();
       Get.to(() =>
           MessageDetailScreen(userid: id, realname: message.data["real_name"]));
     } else if (message.data["type"] == "like") {
@@ -102,40 +102,64 @@ class NotificationController extends GetxController {
                           tag: event.data["id"].toString())
                       .user!
                       .value));
+          // 새로 추가
+          putonmessagescreen(event.data["id"].toString());
+          // try {
+          //   Get.find<OnMessageScreenController>(
+          //       tag: event.data["id"].toString());
+          //   putonmessagescreen(event.data["id"].toString());
+          // } catch (e) {
+          //   print(e);
+          //   MessageController.to.chattingroomlist
+          //       .where((messageroomwidget) =>
+          //           messageroomwidget.messageRoom.value.user.userid ==
+          //           int.parse(event.data["id"]))
+          //       .first
+          //       .messageRoom
+          //       .value
+          //       .notread
+          //       .value += 1;
+          // }
+        } catch (e) {
+          print(e);
+
           try {
-            Get.find<OnMessageScreenController>(
-                tag: event.data["id"].toString());
-            putonmessagescreen(event.data["id"].toString());
-          } catch (e) {
-            print(e);
-            MessageController.to.chattingroomlist
-                .where((messageroomwidget) =>
-                    messageroomwidget.messageRoom.user.userid ==
-                    int.parse(event.data["id"]))
-                .first
-                .messageRoom
-                .notread
-                .value += 1;
-          }
-          try {
+            // MessageController.to.chattingroomlist
+            //     .where((messageroomwidget) =>
+            //         messageroomwidget.messageRoom.value.user.userid ==
+            //         int.parse(event.data["id"]))
+            //     .first
+            //     .messageRoom
+            //     .value
+            //     .notread
+            //     .value += 1;
+            String? myid = await const FlutterSecureStorage().read(key: 'id');
             MessageRoomWidget messageroomwidget = MessageController
                 .to.chattingroomlist
                 .where((messageroomwidget) =>
-                    messageroomwidget.messageRoom.user.userid ==
+                    messageroomwidget.messageRoom.value.user.userid ==
                     int.parse(event.data["id"]))
                 .first;
+            messageroomwidget.messageRoom.value.notread.value += 1;
+            messageroomwidget.messageRoom.value.message.value = Message(
+                id: 0,
+                roomId: 0,
+                receiverId: int.parse(myid!),
+                date: DateTime.now(),
+                message: event.notification!.body!,
+                isRead: false,
+                issender: 0,
+                issending: true.obs);
             MessageController.to.chattingroomlist.remove(messageroomwidget);
             MessageController.to.chattingroomlist.insert(0, messageroomwidget);
           } catch (e) {
             print(e);
+            ProfileController.to.isnewmessage(true);
+            ModalController.to.showCustomSnackbar(
+              event.notification!.title,
+              event.notification!.body,
+            );
           }
-        } catch (e) {
-          print(e);
-          ProfileController.to.isnewmessage(true);
-          ModalController.to.showCustomSnackbar(
-            event.notification!.title,
-            event.notification!.body,
-          );
         }
       } else {
         ProfileController.to.isnewalarm(true);

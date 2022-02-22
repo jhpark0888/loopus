@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_user_info_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 
 import '../controller/ga_controller.dart';
 
@@ -20,13 +23,20 @@ class SignupDepartmentScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () async {
-              //TODO: 학과 선택 시 활성화되어야 함
-              Get.to(() => SignupUserInfoScreen());
-              await _gaController.logScreenView('signup_3');
+              if (signupController.selectdept.value != "") {
+                //TODO: 학과 선택 시 활성화되어야 함
+                Get.to(() => SignupUserInfoScreen());
+                await _gaController.logScreenView('signup_3');
+              }
             },
-            child: Text(
-              '다음',
-              style: kSubTitle2Style.copyWith(color: mainblue),
+            child: Obx(
+              () => Text(
+                '다음',
+                style: kSubTitle2Style.copyWith(
+                    color: signupController.selectdept.value != ""
+                        ? mainblue
+                        : mainblack.withOpacity(0.38)),
+              ),
             ),
           ),
         ],
@@ -108,7 +118,8 @@ class SignupDepartmentScreen extends StatelessWidget {
               maxLines: 1,
             ),
             Obx(
-              () => signupController.isdeptSearchLoading.value
+              () => signupController.deptscreenstate.value ==
+                      ScreenState.loading
                   ? Column(
                       children: [
                         SizedBox(
@@ -131,34 +142,54 @@ class SignupDepartmentScreen extends StatelessWidget {
                         ),
                       ],
                     )
-                  : Obx(
-                      () => Expanded(
-                        child: ListView(
-                          children: signupController.searchdeptlist
-                              .map((dept) => GestureDetector(
-                                    behavior: HitTestBehavior.translucent,
-                                    onTap: () {
-                                      signupController.selectdept(dept);
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Divider(),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 16.0),
-                                          child: Text(
-                                            dept,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ))
-                              .toList(),
-                        ),
-                      ),
-                    ),
+                  : signupController.deptscreenstate.value ==
+                          ScreenState.disconnect
+                      ? DisconnectReloadWidget(reload: () {
+                          signupController.deptscreenstate(ScreenState.loading);
+
+                          getdeptlist();
+                        })
+                      : signupController.deptscreenstate.value ==
+                              ScreenState.error
+                          ? ErrorReloadWidget(reload: () {
+                              signupController
+                                  .deptscreenstate(ScreenState.loading);
+
+                              getdeptlist();
+                            })
+                          : Obx(
+                              () => Expanded(
+                                child: ListView(
+                                  children: signupController.searchdeptlist
+                                      .map((dept) => GestureDetector(
+                                            behavior:
+                                                HitTestBehavior.translucent,
+                                            onTap: () {
+                                              signupController.selectdept(dept);
+                                              signupController
+                                                  .departmentcontroller
+                                                  .text = dept;
+                                            },
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Divider(),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 16.0),
+                                                  child: Text(
+                                                    dept,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ))
+                                      .toList(),
+                                ),
+                              ),
+                            ),
             )
           ],
         ),

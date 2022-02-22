@@ -53,13 +53,13 @@ class MessageRoom {
     required this.notread,
   });
 
-  Message message;
+  Rx<Message> message;
   User user;
   RxInt notread;
 
   factory MessageRoom.fromJson(Map<String, dynamic> json, String? myid) =>
       MessageRoom(
-        message: Message.fromJson(json["message"], myid),
+        message: Message.fromJson(json["message"], myid).obs,
         user: json["profile"] != null
             ? User.fromJson(json["profile"])
             : User(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -18,7 +19,7 @@ void emailRequest() async {
 
   var checkemail = {
     //TODO: 학교 도메인 확인
-    "email": signupController.emailidcontroller.text + '@inu.ac.kr',
+    "email": signupController.emailidcontroller.text + '@gmail.com',
     "password": signupController.passwordcontroller.text,
   };
 
@@ -40,66 +41,88 @@ void emailRequest() async {
   }
 }
 
-Future<http.Response> signupRequest() async {
-  final SignupController signupController = Get.find();
-  final TagController tagController = Get.find(tag: Tagtype.profile.toString());
-  final GAController _gaController = Get.put(GAController());
-  final ModalController _modalController = Get.put(ModalController());
+Future<void> signupRequest() async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    Get.put(ModalController()).showdisconnectdialog();
+  } else {
+    final SignupController signupController = Get.find();
+    final TagController tagController =
+        Get.find(tag: Tagtype.profile.toString());
+    final GAController _gaController = Get.put(GAController());
+    final ModalController _modalController = Get.put(ModalController());
 
-  Uri uri = Uri.parse('$serverUri/user_api/signup');
-  const FlutterSecureStorage storage = FlutterSecureStorage();
-  //todo : @inu.ac.kr
-  var user = {
-    "email": signupController.emailidcontroller.text + '@inu.ac.kr',
-    "image": null,
-    "type": 0,
-    "class_num": signupController.classnumcontroller.text,
-    "real_name": signupController.namecontroller.text,
-    "department": signupController.selectdept.value,
-    "tag": tagController.selectedtaglist.map((tag) => tag.text).toList()
-  };
+    Uri uri = Uri.parse('$serverUri/user_api/signup');
+    const FlutterSecureStorage storage = FlutterSecureStorage();
+    //todo : @inu.ac.kr
+    var user = {
+      "email": signupController.emailidcontroller.text + '@gmail.com',
+      "image": null,
+      "type": 0,
+      "class_num": signupController.classnumcontroller.text,
+      "real_name": signupController.namecontroller.text,
+      "department": signupController.selectdept.value,
+      "tag": tagController.selectedtaglist.map((tag) => tag.text).toList()
+    };
 
-  http.Response response = await http.post(
-    uri,
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-    },
-    body: json.encode(user),
-  );
+    http.Response response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(user),
+    );
 
-  if (response.statusCode == 200) {
-    String token = jsonDecode(response.body)['token'];
-    String userid = jsonDecode(response.body)['user_id'];
+    if (response.statusCode == 200) {
+      String token = jsonDecode(response.body)['token'];
+      String userid = jsonDecode(response.body)['user_id'];
 
-    await storage.write(key: 'token', value: token);
-    await storage.write(key: 'id', value: userid);
-    //!GA
-    await _gaController.logSignup();
-    await _gaController.setUserProperties(
-        userid, signupController.selectdept.value);
-    Get.offAll(() => App());
-    _modalController.showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
+      await storage.write(key: 'token', value: token);
+      await storage.write(key: 'id', value: userid);
+      //!GA
+      await _gaController.logSignup();
+      await _gaController.setUserProperties(
+          userid, signupController.selectdept.value);
+      Get.offAll(() => App());
+      _modalController.showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
+      await _gaController.logScreenView('signup_6');
+    } else {
+      await _gaController.logScreenView('signup_6');
+      return Future.error(response.statusCode);
+    }
   }
-  return response;
 }
 
 Future getdeptlist() async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-
-  final uri = Uri.parse("$serverUri/user_api/department_list");
-
-  http.Response response = await http.get(
-    uri,
-  );
-
-  print('학과 리스트 statusCode: ${response.statusCode}');
-  if (response.statusCode == 200) {
-    Map<String, dynamic> responseBody =
-        json.decode(utf8.decode(response.bodyBytes));
-    responseBody
-        .forEach((key, value) => SignupController.to.deptlist.add(value));
-    return;
+  ConnectivityResult result = await initConnectivity();
+  final SignupController signupController = Get.find();
+  if (result == ConnectivityResult.none) {
+    signupController.deptscreenstate(ScreenState.disconnect);
+    Get.put(ModalController()).showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    final GAController _gaController = Get.put(GAController());
+
+    final uri = Uri.parse("$serverUri/user_api/department_list");
+
+    http.Response response = await http.get(
+      uri,
+    );
+
+    print('학과 리스트 statusCode: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseBody =
+          json.decode(utf8.decode(response.bodyBytes));
+      responseBody
+          .forEach((key, value) => SignupController.to.deptlist.add(value));
+      signupController.deptscreenstate(ScreenState.success);
+      await _gaController.logScreenView('signup_2');
+
+      return;
+    } else {
+      signupController.deptscreenstate(ScreenState.error);
+      await _gaController.logScreenView('signup_2');
+      return Future.error(response.statusCode);
+    }
   }
 }

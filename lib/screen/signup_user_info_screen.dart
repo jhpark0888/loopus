@@ -1,8 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/ga_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/signup_emailcheck_screen.dart';
@@ -26,9 +28,14 @@ class SignupUserInfoScreen extends StatelessWidget {
           TextButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                emailRequest();
-                Get.to(() => SignupEmailcheckScreen());
-                await _gaController.logScreenView('signup_4');
+                ConnectivityResult result = await initConnectivity();
+                if (result == ConnectivityResult.none) {
+                  Get.put(ModalController()).showdisconnectdialog();
+                } else {
+                  emailRequest();
+                  Get.to(() => SignupEmailcheckScreen());
+                  await _gaController.logScreenView('signup_4');
+                }
               }
             },
             child: Text(

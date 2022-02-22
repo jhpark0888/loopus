@@ -411,21 +411,21 @@ class OtherProfileScreen extends StatelessWidget {
                                                           ProfileTagChangeScreen());
                                                     }
                                                   : () {
-                                                      MessageDetailController
-                                                          messagecontroller =
-                                                          Get.put(
-                                                              MessageDetailController(
-                                                                  userid:
-                                                                      userid,
-                                                                  user: controller
-                                                                      .otherUser),
-                                                              tag: controller
-                                                                  .otherUser
-                                                                  .value
-                                                                  .userid
-                                                                  .toString());
-                                                      messagecontroller
-                                                          .firstmessagesload();
+                                                      // MessageDetailController
+                                                      //     messagecontroller =
+                                                      //     Get.put(
+                                                      //         MessageDetailController(
+                                                      //             userid:
+                                                      //                 userid,
+                                                      //             user: controller
+                                                      //                 .otherUser),
+                                                      //         tag: controller
+                                                      //             .otherUser
+                                                      //             .value
+                                                      //             .userid
+                                                      //             .toString());
+                                                      // messagecontroller
+                                                      //     .firstmessagesload();
                                                       Get.to(() =>
                                                           MessageDetailScreen(
                                                             realname: controller

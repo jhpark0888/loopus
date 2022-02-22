@@ -38,7 +38,7 @@ Future<void> getmessageroomlist() async {
       List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
       MessageController.to.chattingroomlist(responseBody
           .map((messageroom) => MessageRoomWidget(
-              messageRoom: MessageRoom.fromJson(messageroom, myid)))
+              messageRoom: MessageRoom.fromJson(messageroom, myid).obs))
           .toList());
       MessageController.to.chatroomscreenstate(ScreenState.success);
       print("---------------------------");
