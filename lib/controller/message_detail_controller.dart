@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,6 +9,7 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/message_widget.dart';
@@ -23,7 +25,8 @@ class MessageDetailController extends GetxController {
   ScrollController scrollController = ScrollController();
   KeyboardVisibilityController keyboardController =
       KeyboardVisibilityController();
-  RxBool isMessageListLoading = false.obs;
+  // RxBool isMessageListLoading = false.obs;
+  Rx<ScreenState> messagescreenstate = ScreenState.loading.obs;
   RxBool isSendButtonon = false.obs;
 
   String username = "";
@@ -65,35 +68,42 @@ class MessageDetailController extends GetxController {
   }
 
   Future<void> loadmessage(bool first) async {
-    List<MessageWidget> messagewidgetlist = await getmessagelist(
-        userid,
-        first
-            ? 0
-            : messagelist.isNotEmpty
-                ? messagelist.first.message.id
-                : 0);
-
-    if (messagewidgetlist.isEmpty && messagelist.isEmpty && first == false) {
-      enablemessagePullup.value = false;
-      // isalarmEmpty.value = true;
-    } else if (messagewidgetlist.isEmpty && messagelist.isNotEmpty) {
-      enablemessagePullup.value = false;
-    }
-
-    if (first) {
-      messagelist(messagewidgetlist);
+    ConnectivityResult result = await initConnectivity();
+    if (result == ConnectivityResult.none) {
+      if (first) {
+        messagescreenstate(ScreenState.disconnect);
+      }
+      ModalController.to.showdisconnectdialog();
     } else {
-      for (var message in messagewidgetlist.reversed) {
-        messagelist.insert(0, message);
+      List<MessageWidget> messagewidgetlist = await getmessagelist(
+          userid,
+          first
+              ? 0
+              : messagelist.isNotEmpty
+                  ? messagelist.first.message.id
+                  : 0);
+
+      if (messagewidgetlist.isEmpty && messagelist.isEmpty && first == false) {
+        enablemessagePullup.value = false;
+        // isalarmEmpty.value = true;
+      } else if (messagewidgetlist.isEmpty && messagelist.isNotEmpty) {
+        enablemessagePullup.value = false;
+      }
+
+      if (first) {
+        messagelist(messagewidgetlist);
+        messagescreenstate(ScreenState.success);
+      } else {
+        for (var message in messagewidgetlist.reversed) {
+          messagelist.insert(0, message);
+        }
       }
     }
   }
 
   void firstmessagesload() {
-    isMessageListLoading(true);
-    loadmessage(true).then((value) {
-      isMessageListLoading(false);
-    });
+    messagescreenstate(ScreenState.loading);
+    loadmessage(true);
   }
 
   void bottomtoscroll() {
@@ -103,6 +113,8 @@ class MessageDetailController extends GetxController {
 
   @override
   void onInit() {
+    firstmessagesload();
+
     messagetextController.addListener(() {
       textBoxSize.value = getSize(textFieldBoxKey.value);
       if (messagetextController.text.replaceAll(" ", "") == "") {

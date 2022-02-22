@@ -31,128 +31,134 @@ import '../constant.dart';
 import '../controller/modal_controller.dart';
 
 Future<void> addposting(int projectId, PostaddRoute route) async {
-  final PostingAddController postingAddController = Get.find();
-  final EditorController editorController = Get.find();
-  final GAController _gaController = Get.put(GAController());
-
-  final String? token = await const FlutterSecureStorage().read(key: 'token');
-
-  Uri postingUploadUri = Uri.parse('$serverUri/post_api/posting?id=$projectId');
-
-  var request = http.MultipartRequest('POST', postingUploadUri);
-
-  final headers = {
-    'Authorization': 'Token $token',
-    'Content-Type': 'multipart/form-data',
-  };
-
-  request.headers.addAll(headers);
-
-  if (postingAddController.thumbnail.value.path != '') {
-    var multipartFile = await http.MultipartFile.fromPath(
-        'thumbnail', postingAddController.thumbnail.value.path);
-    request.files.add(multipartFile);
-  }
-
-  List<Map> postcontent = [];
-
-  for (int i = 0; i < editorController.types.length; i++) {
-    SmartTextType type = editorController.types[i];
-    Map map = {};
-    if (type == SmartTextType.T) {
-      map['type'] = type.name;
-      map['content'] = editorController.textcontrollers[i].text;
-      postcontent.add(map);
-    } else if (type == SmartTextType.H1) {
-      map['type'] = type.name;
-      map['content'] = editorController.textcontrollers[i].text;
-      postcontent.add(map);
-    } else if (type == SmartTextType.H2) {
-      map['type'] = type.name;
-      map['content'] = editorController.textcontrollers[i].text;
-      postcontent.add(map);
-    }
-    // else if (type == SmartTextType.QUOTE) {
-    //   map['type'] = type.name;
-    //   map['content'] = editorController.textcontrollers[i].text;
-    //   postcontent.add(map);
-    // }
-    else if (type == SmartTextType.BULLET) {
-      map['type'] = type.name;
-      map['content'] = editorController.textcontrollers[i].text;
-      postcontent.add(map);
-    } else if (type == SmartTextType.IMAGE) {
-      map['type'] = type.name;
-      map['content'] = 'image';
-      var multipartFile = await http.MultipartFile.fromPath(
-          'image', editorController.imageindex[i]!.path);
-      request.files.add(multipartFile);
-      postcontent.add(map);
-    } else if (type == SmartTextType.LINK) {
-      map['type'] = type.name;
-      map['content'] = editorController.textcontrollers[i].text;
-      map['url'] = editorController.linkindex[i];
-      postcontent.add(map);
-    } else if (type == SmartTextType.IMAGEINFO) {
-      map['type'] = type.name;
-      map['content'] = editorController.textcontrollers[i].text;
-      postcontent.add(map);
-    }
-  }
-  request.fields['title'] = postingAddController.titlecontroller.text;
-  request.fields['contents'] = json.encode(postcontent);
-
-  http.StreamedResponse response = await request.send();
-
-  print("포스팅 업로드 statuscode:  ${response.statusCode}");
-  if (response.statusCode == 200) {
-    //!GA
-    await _gaController.logPostingCreated(true);
-    if (kDebugMode) {
-      print("status code : ${response.statusCode} 포스팅 업로드 완료");
-    }
-    // String responsebody = await response.stream.bytesToString();
-    // String responsemap = json.decode(responsebody);
-    // print(responsemap);
-    if (route == PostaddRoute.project) {
-      getbacks(3);
-      Get.find<ProjectDetailController>(tag: projectId.toString())
-          .loadProject();
-      Get.to(
-        () => ProjectScreen(
-          projectid: projectId,
-          isuser: 1,
-        ),
-      );
-      ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
-    } else {
-      String responsebody = await response.stream.bytesToString();
-      Map<String, dynamic> responsemap = json.decode(responsebody);
-      Post post = Post.fromJson(responsemap);
-      post.isuser = 1;
-      post.isLiked = 0.obs;
-      post.isMarked = 0.obs;
-      AppController.to.changePageIndex(0);
-      HomeController.to.recommandpostingResult.value.postingitems
-          .insert(0, post);
-      getbacks(5);
-      ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
-    }
-  } else if (response.statusCode == 400) {
-    //!GA
-    await _gaController.logPostingCreated(false);
-
-    if (kDebugMode) {
-      print("status code : ${response.statusCode} 포스팅 업로드 실패");
-    }
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    //!GA
-    await _gaController.logPostingCreated(false);
+    final PostingAddController postingAddController = Get.find();
+    final EditorController editorController = Get.find();
+    final GAController _gaController = Get.put(GAController());
 
-    if (kDebugMode) {
-      print("status code : ${response.statusCode} 포스팅 업로드 실패");
+    final String? token = await const FlutterSecureStorage().read(key: 'token');
+
+    Uri postingUploadUri =
+        Uri.parse('$serverUri/post_api/posting?id=$projectId');
+
+    var request = http.MultipartRequest('POST', postingUploadUri);
+
+    final headers = {
+      'Authorization': 'Token $token',
+      'Content-Type': 'multipart/form-data',
+    };
+
+    request.headers.addAll(headers);
+
+    if (postingAddController.thumbnail.value.path != '') {
+      var multipartFile = await http.MultipartFile.fromPath(
+          'thumbnail', postingAddController.thumbnail.value.path);
+      request.files.add(multipartFile);
     }
-    return Future.error(response.statusCode);
+
+    List<Map> postcontent = [];
+
+    for (int i = 0; i < editorController.types.length; i++) {
+      SmartTextType type = editorController.types[i];
+      Map map = {};
+      if (type == SmartTextType.T) {
+        map['type'] = type.name;
+        map['content'] = editorController.textcontrollers[i].text;
+        postcontent.add(map);
+      } else if (type == SmartTextType.H1) {
+        map['type'] = type.name;
+        map['content'] = editorController.textcontrollers[i].text;
+        postcontent.add(map);
+      } else if (type == SmartTextType.H2) {
+        map['type'] = type.name;
+        map['content'] = editorController.textcontrollers[i].text;
+        postcontent.add(map);
+      }
+      // else if (type == SmartTextType.QUOTE) {
+      //   map['type'] = type.name;
+      //   map['content'] = editorController.textcontrollers[i].text;
+      //   postcontent.add(map);
+      // }
+      else if (type == SmartTextType.BULLET) {
+        map['type'] = type.name;
+        map['content'] = editorController.textcontrollers[i].text;
+        postcontent.add(map);
+      } else if (type == SmartTextType.IMAGE) {
+        map['type'] = type.name;
+        map['content'] = 'image';
+        var multipartFile = await http.MultipartFile.fromPath(
+            'image', editorController.imageindex[i]!.path);
+        request.files.add(multipartFile);
+        postcontent.add(map);
+      } else if (type == SmartTextType.LINK) {
+        map['type'] = type.name;
+        map['content'] = editorController.textcontrollers[i].text;
+        map['url'] = editorController.linkindex[i];
+        postcontent.add(map);
+      } else if (type == SmartTextType.IMAGEINFO) {
+        map['type'] = type.name;
+        map['content'] = editorController.textcontrollers[i].text;
+        postcontent.add(map);
+      }
+    }
+    request.fields['title'] = postingAddController.titlecontroller.text;
+    request.fields['contents'] = json.encode(postcontent);
+
+    http.StreamedResponse response = await request.send();
+
+    print("포스팅 업로드 statuscode:  ${response.statusCode}");
+    if (response.statusCode == 200) {
+      //!GA
+      await _gaController.logPostingCreated(true);
+      if (kDebugMode) {
+        print("status code : ${response.statusCode} 포스팅 업로드 완료");
+      }
+      // String responsebody = await response.stream.bytesToString();
+      // String responsemap = json.decode(responsebody);
+      // print(responsemap);
+      if (route == PostaddRoute.project) {
+        getbacks(3);
+        Get.find<ProjectDetailController>(tag: projectId.toString())
+            .loadProject();
+        Get.to(
+          () => ProjectScreen(
+            projectid: projectId,
+            isuser: 1,
+          ),
+        );
+        ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
+      } else {
+        String responsebody = await response.stream.bytesToString();
+        Map<String, dynamic> responsemap = json.decode(responsebody);
+        Post post = Post.fromJson(responsemap);
+        post.isuser = 1;
+        post.isLiked = 0.obs;
+        post.isMarked = 0.obs;
+        AppController.to.changePageIndex(0);
+        HomeController.to.recommandpostingResult.value.postingitems
+            .insert(0, post);
+        getbacks(5);
+        ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
+      }
+    } else if (response.statusCode == 400) {
+      //!GA
+      await _gaController.logPostingCreated(false);
+
+      if (kDebugMode) {
+        print("status code : ${response.statusCode} 포스팅 업로드 실패");
+      }
+    } else {
+      //!GA
+      await _gaController.logPostingCreated(false);
+
+      if (kDebugMode) {
+        print("status code : ${response.statusCode} 포스팅 업로드 실패");
+      }
+      return Future.error(response.statusCode);
+    }
   }
 }
 
@@ -209,141 +215,157 @@ enum PostingUpdateType {
 }
 
 Future updateposting(int postid, PostingUpdateType updateType) async {
-  final PostingAddController postingAddController = Get.find();
+  ConnectivityResult result = await initConnectivity();
+  PostingDetailController controller =
+      Get.find<PostingDetailController>(tag: postid.toString());
 
-  String? token = await const FlutterSecureStorage().read(key: "token");
-  Uri uri = Uri.parse(
-      '$serverUri/post_api/posting?id=$postid&type=${updateType.name}');
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
+  } else {
+    final PostingAddController postingAddController = Get.find();
 
-  var request = http.MultipartRequest('PUT', uri);
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    Uri uri = Uri.parse(
+        '$serverUri/post_api/posting?id=$postid&type=${updateType.name}');
 
-  final headers = {
-    'Authorization': 'Token $token',
-    'Content-Type': 'multipart/form-data',
-  };
+    var request = http.MultipartRequest('PUT', uri);
 
-  request.headers.addAll(headers);
+    final headers = {
+      'Authorization': 'Token $token',
+      'Content-Type': 'multipart/form-data',
+    };
 
-  if (updateType == PostingUpdateType.title) {
-    request.fields['title'] = postingAddController.titlecontroller.text;
-  } else if (updateType == PostingUpdateType.contents) {
-    List<Map> postcontent = [];
+    request.headers.addAll(headers);
 
-    for (int i = 0;
-        i < postingAddController.editorController.types.length;
-        i++) {
-      SmartTextType type = postingAddController.editorController.types[i];
-      Map map = {};
-      print(type);
-      print(postingAddController.editorController.textcontrollers[i].text);
-      print(postingAddController.editorController.linkindex[i]);
-      if (type == SmartTextType.T) {
-        map['type'] = type.name;
-        map['content'] =
-            postingAddController.editorController.textcontrollers[i].text;
-        postcontent.add(map);
-      } else if (type == SmartTextType.H1) {
-        map['type'] = type.name;
-        map['content'] =
-            postingAddController.editorController.textcontrollers[i].text;
-        postcontent.add(map);
-      } else if (type == SmartTextType.H2) {
-        map['type'] = type.name;
-        map['content'] =
-            postingAddController.editorController.textcontrollers[i].text;
-        postcontent.add(map);
-      }
-      // else if (type == SmartTextType.QUOTE) {
-      //   map['type'] = type.name;
-      //   map['content'] =
-      //       postingAddController.editorController.textcontrollers[i].text;
-      //   postcontent.add(map);
-      // }
-      else if (type == SmartTextType.BULLET) {
-        map['type'] = type.name;
-        map['content'] =
-            postingAddController.editorController.textcontrollers[i].text;
-        postcontent.add(map);
-      } else if (type == SmartTextType.IMAGE) {
-        if (postingAddController.editorController.imageindex[i] != null) {
-          map['type'] = type.name;
-          map['content'] = 'image';
-          var multipartFile = await http.MultipartFile.fromPath('image',
-              postingAddController.editorController.imageindex[i]!.path);
-          request.files.add(multipartFile);
-        } else {
+    if (updateType == PostingUpdateType.title) {
+      request.fields['title'] = postingAddController.titlecontroller.text;
+    } else if (updateType == PostingUpdateType.contents) {
+      List<Map> postcontent = [];
+
+      for (int i = 0;
+          i < postingAddController.editorController.types.length;
+          i++) {
+        SmartTextType type = postingAddController.editorController.types[i];
+        Map map = {};
+        print(type);
+        print(postingAddController.editorController.textcontrollers[i].text);
+        print(postingAddController.editorController.linkindex[i]);
+        if (type == SmartTextType.T) {
           map['type'] = type.name;
           map['content'] =
-              postingAddController.editorController.urlimageindex[i];
+              postingAddController.editorController.textcontrollers[i].text;
+          postcontent.add(map);
+        } else if (type == SmartTextType.H1) {
+          map['type'] = type.name;
+          map['content'] =
+              postingAddController.editorController.textcontrollers[i].text;
+          postcontent.add(map);
+        } else if (type == SmartTextType.H2) {
+          map['type'] = type.name;
+          map['content'] =
+              postingAddController.editorController.textcontrollers[i].text;
+          postcontent.add(map);
         }
-        postcontent.add(map);
-      } else if (type == SmartTextType.LINK) {
-        map['type'] = type.name;
-        map['content'] =
-            postingAddController.editorController.textcontrollers[i].text;
-        map['url'] = postingAddController.editorController.linkindex[i];
-        postcontent.add(map);
-      } else if (type == SmartTextType.IMAGEINFO) {
-        map['type'] = type.name;
-        map['content'] =
-            postingAddController.editorController.textcontrollers[i].text;
-        postcontent.add(map);
+        // else if (type == SmartTextType.QUOTE) {
+        //   map['type'] = type.name;
+        //   map['content'] =
+        //       postingAddController.editorController.textcontrollers[i].text;
+        //   postcontent.add(map);
+        // }
+        else if (type == SmartTextType.BULLET) {
+          map['type'] = type.name;
+          map['content'] =
+              postingAddController.editorController.textcontrollers[i].text;
+          postcontent.add(map);
+        } else if (type == SmartTextType.IMAGE) {
+          if (postingAddController.editorController.imageindex[i] != null) {
+            map['type'] = type.name;
+            map['content'] = 'image';
+            var multipartFile = await http.MultipartFile.fromPath('image',
+                postingAddController.editorController.imageindex[i]!.path);
+            request.files.add(multipartFile);
+          } else {
+            map['type'] = type.name;
+            map['content'] =
+                postingAddController.editorController.urlimageindex[i];
+          }
+          postcontent.add(map);
+        } else if (type == SmartTextType.LINK) {
+          map['type'] = type.name;
+          map['content'] =
+              postingAddController.editorController.textcontrollers[i].text;
+          map['url'] = postingAddController.editorController.linkindex[i];
+          postcontent.add(map);
+        } else if (type == SmartTextType.IMAGEINFO) {
+          map['type'] = type.name;
+          map['content'] =
+              postingAddController.editorController.textcontrollers[i].text;
+          postcontent.add(map);
+        }
+      }
+      request.fields['contents'] = json.encode(postcontent);
+    } else if (updateType == PostingUpdateType.thumbnail) {
+      if (postingAddController.thumbnail.value.path != '') {
+        var multipartFile = await http.MultipartFile.fromPath(
+            'thumbnail', postingAddController.thumbnail.value.path);
+        request.files.add(multipartFile);
       }
     }
-    request.fields['contents'] = json.encode(postcontent);
-  } else if (updateType == PostingUpdateType.thumbnail) {
-    if (postingAddController.thumbnail.value.path != '') {
-      var multipartFile = await http.MultipartFile.fromPath(
-          'thumbnail', postingAddController.thumbnail.value.path);
-      request.files.add(multipartFile);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(response.statusCode);
+      await getposting(postid);
+      Get.back();
+      ModalController.to.showCustomDialog('변경이 완료되었어요', 1000);
+      // String responsebody = await response.stream.bytesToString();
+      // print(responsebody);
+      // var responsemap = json.decode(responsebody);
+      // print(responsemap);
+      // Project project = Project.fromJson(responsemap);
+      return;
+    } else {
+      return Future.error(response.statusCode);
     }
-  }
-
-  http.StreamedResponse response = await request.send();
-
-  if (response.statusCode == 200) {
-    print(response.statusCode);
-    // String responsebody = await response.stream.bytesToString();
-    // print(responsebody);
-    // var responsemap = json.decode(responsebody);
-    // print(responsemap);
-    // Project project = Project.fromJson(responsemap);
-    return;
-  } else {
-    return Future.error(response.statusCode);
   }
 }
 
 Future<void> deleteposting(int postid, int projectid) async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-
-  final uri = Uri.parse("$serverUri/post_api/posting?id=$postid");
-
-  http.Response response =
-      await http.delete(uri, headers: {"Authorization": "Token $token"});
-
-  print(response.statusCode);
-  if (response.statusCode == 200) {
-    Get.back();
-    try {
-      Get.find<ProjectDetailController>(tag: projectid.toString())
-          .project
-          .value
-          .post
-          .removeWhere((post) => post.id == postid);
-      Get.find<ProjectDetailController>(tag: projectid.toString())
-          .postinglist
-          .removeWhere((post) => post.item.id == postid);
-    } catch (e) {
-      print(e);
-    }
-
-    HomeController.to.recommandpostingResult.value.postingitems
-        .removeWhere((post) => post.id == postid);
-    HomeController.to.latestpostingResult.value.postingitems
-        .removeWhere((post) => post.id == postid);
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+    final uri = Uri.parse("$serverUri/post_api/posting?id=$postid");
+
+    http.Response response =
+        await http.delete(uri, headers: {"Authorization": "Token $token"});
+
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      Get.back();
+      try {
+        Get.find<ProjectDetailController>(tag: projectid.toString())
+            .project
+            .value
+            .post
+            .removeWhere((post) => post.id == postid);
+        Get.find<ProjectDetailController>(tag: projectid.toString())
+            .postinglist
+            .removeWhere((post) => post.item.id == postid);
+      } catch (e) {
+        print(e);
+      }
+
+      HomeController.to.recommandpostingResult.value.postingitems
+          .removeWhere((post) => post.id == postid);
+      HomeController.to.latestpostingResult.value.postingitems
+          .removeWhere((post) => post.id == postid);
+    } else {
+      return Future.error(response.statusCode);
+    }
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:loopus/api/chat_api.dart';
@@ -12,6 +13,8 @@ import 'package:loopus/controller/messagescreen_controller.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/message_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -148,122 +151,144 @@ class MessageDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(OnMessageScreenController(), tag: userid.toString());
-    return Scaffold(
-        appBar: AppBarWidget(
-          bottomBorder: false,
-          title: '${realname}님',
-        ),
-        bottomNavigationBar: Transform.translate(
-          offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
-          child: BottomAppBar(
-            elevation: 0,
-            child: _buildTextComposer(),
+    // Get.put(OnMessageScreenController(), tag: userid.toString());
+    return WillPopScope(
+      onWillPop: () async {
+        Get.back(result: controller.messagelist.last.message);
+        return true;
+      },
+      child: Scaffold(
+          appBar: AppBarWidget(
+            leading: IconButton(
+              onPressed: () {
+                Get.back(result: controller.messagelist.last.message);
+              },
+              icon: SvgPicture.asset('assets/icons/Arrow.svg'),
+            ),
+            bottomBorder: false,
+            title: '${realname}님',
           ),
-        ),
-        body: Obx(() => controller.isMessageListLoading.value
-            ? Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/icons/loading.gif',
-                        scale: 9,
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        '메세지 목록을 받아오는 중이에요...',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: mainblue,
-                          fontWeight: FontWeight.bold,
+          bottomNavigationBar: Transform.translate(
+            offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+            child: BottomAppBar(
+              elevation: 0,
+              child: _buildTextComposer(),
+            ),
+          ),
+          body: Obx(() => controller.messagescreenstate.value ==
+                  ScreenState.loading
+              ? Center(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 9,
                         ),
-                      )
-                    ]),
-              )
-            : SmartRefresher(
-                reverse: true,
-                controller: controller.messageRefreshController,
-                enablePullDown: false,
-                enablePullUp: controller.enablemessagePullup.value,
-                header: ClassicHeader(
-                  spacing: 0.0,
-                  height: 60,
-                  completeDuration: Duration(milliseconds: 600),
-                  textStyle: TextStyle(color: mainblack),
-                  refreshingText: '',
-                  releaseText: "",
-                  completeText: "",
-                  idleText: "",
-                  refreshingIcon: Column(
-                    children: [
-                      Image.asset(
-                        'assets/icons/loading.gif',
-                        scale: 6,
-                      ),
-                    ],
-                  ),
-                  releaseIcon: Column(
-                    children: [
-                      Image.asset(
-                        'assets/icons/loading.gif',
-                        scale: 6,
-                      ),
-                    ],
-                  ),
-                  completeIcon: Column(
-                    children: [
-                      const Icon(
-                        Icons.check_rounded,
-                        color: mainblue,
-                      ),
-                    ],
-                  ),
-                  idleIcon: Column(
-                    children: [
-                      Image.asset(
-                        'assets/icons/loading.png',
-                        scale: 12,
-                      ),
-                    ],
-                  ),
-                ),
-                footer: ClassicFooter(
-                  completeDuration: Duration.zero,
-                  loadingText: "",
-                  canLoadingText: "",
-                  idleText: "",
-                  idleIcon: Container(),
-                  noMoreIcon: Container(
-                    child: Text('as'),
-                  ),
-                  loadingIcon: Image.asset(
-                    'assets/icons/loading.gif',
-                    scale: 6,
-                  ),
-                  canLoadingIcon: Image.asset(
-                    'assets/icons/loading.gif',
-                    scale: 6,
-                  ),
-                ),
-                onLoading: controller.messageLoading,
-                child: SingleChildScrollView(
-                  reverse: true,
-                  controller: controller.scrollController,
-                  child: Obx(
-                    () => Padding(
-                      padding: EdgeInsets.only(
-                          bottom: controller.keyboardController.isVisible
-                              ? controller.textBoxSize.value.height
-                              : 0),
-                      child: Column(
-                        children: controller.messagelist.value,
-                      ),
-                    ),
-                  ),
-                ),
-              )));
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          '메세지 목록을 받아오는 중이에요...',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: mainblue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ]),
+                )
+              : controller.messagescreenstate.value == ScreenState.disconnect
+                  ? DisconnectReloadWidget(reload: () {
+                      controller.firstmessagesload();
+                    })
+                  : controller.messagescreenstate.value == ScreenState.error
+                      ? ErrorReloadWidget(reload: () {
+                          controller.firstmessagesload();
+                        })
+                      : SmartRefresher(
+                          reverse: true,
+                          controller: controller.messageRefreshController,
+                          enablePullDown: false,
+                          enablePullUp: controller.enablemessagePullup.value,
+                          header: ClassicHeader(
+                            spacing: 0.0,
+                            height: 60,
+                            completeDuration: Duration(milliseconds: 600),
+                            textStyle: TextStyle(color: mainblack),
+                            refreshingText: '',
+                            releaseText: "",
+                            completeText: "",
+                            idleText: "",
+                            refreshingIcon: Column(
+                              children: [
+                                Image.asset(
+                                  'assets/icons/loading.gif',
+                                  scale: 6,
+                                ),
+                              ],
+                            ),
+                            releaseIcon: Column(
+                              children: [
+                                Image.asset(
+                                  'assets/icons/loading.gif',
+                                  scale: 6,
+                                ),
+                              ],
+                            ),
+                            completeIcon: Column(
+                              children: [
+                                const Icon(
+                                  Icons.check_rounded,
+                                  color: mainblue,
+                                ),
+                              ],
+                            ),
+                            idleIcon: Column(
+                              children: [
+                                Image.asset(
+                                  'assets/icons/loading.png',
+                                  scale: 12,
+                                ),
+                              ],
+                            ),
+                          ),
+                          footer: ClassicFooter(
+                            completeDuration: Duration.zero,
+                            loadingText: "",
+                            canLoadingText: "",
+                            idleText: "",
+                            idleIcon: Container(),
+                            noMoreIcon: Container(
+                              child: Text('as'),
+                            ),
+                            loadingIcon: Image.asset(
+                              'assets/icons/loading.gif',
+                              scale: 6,
+                            ),
+                            canLoadingIcon: Image.asset(
+                              'assets/icons/loading.gif',
+                              scale: 6,
+                            ),
+                          ),
+                          onLoading: controller.messageLoading,
+                          child: SingleChildScrollView(
+                            reverse: true,
+                            controller: controller.scrollController,
+                            child: Obx(
+                              () => Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: controller
+                                            .keyboardController.isVisible
+                                        ? controller.textBoxSize.value.height
+                                        : 0),
+                                child: Column(
+                                  children: controller.messagelist.value,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ))),
+    );
   }
 }

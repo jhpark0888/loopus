@@ -21,13 +21,10 @@ class SignupCampusInfoScreen extends StatelessWidget {
           TextButton(
             onPressed: () async {
               //TODO: 학교 선택 시 활성화되어야 함
-              signupController.isdeptSearchLoading(true);
+              signupController.deptscreenstate(ScreenState.loading);
               Get.to(() => SignupDepartmentScreen());
 
-              getdeptlist().then((value) {
-                signupController.isdeptSearchLoading(false);
-              });
-              await _gaController.logScreenView('signup_2');
+              getdeptlist();
             },
             child: Text(
               '다음',

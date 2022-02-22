@@ -195,12 +195,14 @@ class PostingScreen extends StatelessWidget {
                                       leftFunction: () => Get.back(),
                                       rightFunction: () async {
                                         controller.isPostDeleteLoading(true);
-                                        Get.back();
-                                        Get.back();
+                                        getbacks(2);
                                         await deleteposting(
-                                            controller.post.value.id,
-                                            controller.post.value.project!.id);
-                                        controller.isPostDeleteLoading(false);
+                                                controller.post.value.id,
+                                                controller
+                                                    .post.value.project!.id)
+                                            .then((value) {
+                                          controller.isPostDeleteLoading(false);
+                                        });
                                       });
                                 },
                                 func2: () {},

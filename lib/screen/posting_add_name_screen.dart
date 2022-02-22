@@ -82,17 +82,10 @@ class PostingAddNameScreen extends StatelessWidget {
                                     _focusNode.unfocus();
                                     controller.isPostUpdateLoading.value = true;
                                     await updateposting(
-                                        postid!, PostingUpdateType.title);
-                                    await getposting(postid!).then((value) {
-                                      controller.post(
-                                          Post.fromJson(value['posting_info']));
-
+                                            postid!, PostingUpdateType.title)
+                                        .then((value) {
                                       controller.isPostUpdateLoading(false);
                                     });
-
-                                    Get.back();
-                                    ModalController.to
-                                        .showCustomDialog('변경이 완료되었어요', 1000);
                                   },
                             child: Text(
                               '저장',

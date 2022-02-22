@@ -16,33 +16,34 @@ class MessageRoomWidget extends StatelessWidget {
     required this.messageRoom,
   }) : super(key: key);
 
-  late final MessageDetailController controller = Get.put(
-      MessageDetailController(userid: messageRoom.user.userid),
-      tag: messageRoom.user.userid.toString());
-  MessageRoom messageRoom;
+  // late final MessageDetailController controller = Get.put(
+  //     MessageDetailController(userid: messageRoom.user.userid),
+  //     tag: messageRoom.user.userid.toString());
+  Rx<MessageRoom> messageRoom;
   late final HoverController _hoverController =
-      Get.put(HoverController(), tag: messageRoom.user.userid.toString());
+      Get.put(HoverController(), tag: messageRoom.value.user.userid.toString());
 
   @override
   Widget build(BuildContext context) {
     // print(messageRoom.message.date);
-    controller.messagelist.add(MessageWidget(
-      message: messageRoom.message,
-      user: messageRoom.user,
-    ));
+    // controller.messagelist.add(MessageWidget(
+    //   message: messageRoom.message,
+    //   user: messageRoom.user,
+    // ));
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTapDown: (details) => _hoverController.isHover(true),
       onTapCancel: () => _hoverController.isHover(false),
       onTapUp: (details) => _hoverController.isHover(false),
       onTap: () async {
-        messageRoom.notread(0);
-        controller.firstmessagesload();
-        Get.to(() => MessageDetailScreen(
-              userid: messageRoom.user.userid,
-              realname: messageRoom.user.realName,
-              user: messageRoom.user,
-            ));
+        messageRoom.value.notread(0);
+        // controller.firstmessagesload();
+        messageRoom.value.message.value =
+            await Get.to(() => MessageDetailScreen(
+                  userid: messageRoom.value.user.userid,
+                  realname: messageRoom.value.user.realName,
+                  user: messageRoom.value.user,
+                ));
       },
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -52,14 +53,14 @@ class MessageRoomWidget extends StatelessWidget {
         child: Row(
           children: [
             ClipOval(
-              child: messageRoom.user.profileImage != null
+              child: messageRoom.value.user.profileImage != null
                   ? Obx(
                       () => Opacity(
                         opacity: _hoverController.isHover.value ? 0.6 : 1,
                         child: CachedNetworkImage(
                           width: 60,
                           height: 60,
-                          imageUrl: messageRoom.user.profileImage!
+                          imageUrl: messageRoom.value.user.profileImage!
                               .replaceAll('https', 'http'),
                           placeholder: (context, url) => kProfilePlaceHolder(),
                           errorWidget: (context, url, error) =>
@@ -91,9 +92,9 @@ class MessageRoomWidget extends StatelessWidget {
                     children: [
                       Obx(
                         () => Text(
-                          '${messageRoom.user.realName}' +
-                              ' · ${DurationCaculator().messagedurationCaculate(startDate: controller.messagelist.last.message.date, endDate: DateTime.now())}',
-                          style: messageRoom.notread.value == 0
+                          '${messageRoom.value.user.realName}' +
+                              ' · ${DurationCaculator().messagedurationCaculate(startDate: messageRoom.value.message.value.date, endDate: DateTime.now())}',
+                          style: messageRoom.value.notread.value == 0
                               ? kSubTitle3Style.copyWith(
                                   color: _hoverController.isHover.value
                                       ? mainblack.withOpacity(0.6)
@@ -107,7 +108,7 @@ class MessageRoomWidget extends StatelessWidget {
                       const SizedBox(
                         width: 8,
                       ),
-                      Obx(() => messageRoom.notread.value == 0
+                      Obx(() => messageRoom.value.notread.value == 0
                           ? Container()
                           : Container(
                               height: 18,
@@ -118,7 +119,7 @@ class MessageRoomWidget extends StatelessWidget {
                                   shape: BoxShape.circle),
                               child: Center(
                                 child: Text(
-                                  messageRoom.notread.value.toString(),
+                                  messageRoom.value.notread.value.toString(),
                                   style: kButtonStyle.copyWith(
                                       color: mainWhite, height: 1.1),
                                 ),
@@ -135,15 +136,15 @@ class MessageRoomWidget extends StatelessWidget {
                       Expanded(
                         child: Obx(
                           () => Text(
-                            controller.messagelist.last.message.message
+                            messageRoom.value.message.value.message
                                     .contains('\n')
-                                ? controller.messagelist.last.message.message
+                                ? messageRoom.value.message.value.message
                                         .split('\n')
                                         .first +
                                     '...'
-                                : controller.messagelist.last.message.message,
+                                : messageRoom.value.message.value.message,
                             overflow: TextOverflow.ellipsis,
-                            style: messageRoom.notread.value == 0
+                            style: messageRoom.value.notread.value == 0
                                 ? kSubTitle3Style.copyWith(
                                     color: _hoverController.isHover.value
                                         ? mainblack.withOpacity(0.38)

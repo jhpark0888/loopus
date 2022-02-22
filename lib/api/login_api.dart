@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,43 +17,48 @@ import '../constant.dart';
 import '../controller/ga_controller.dart';
 
 Future<void> loginRequest() async {
-  final LogInController logInController = Get.put(LogInController());
-  const FlutterSecureStorage storage = FlutterSecureStorage();
+  ConnectivityResult result = await initConnectivity();
   final ModalController _modalController = Get.put(ModalController());
-  final NotificationController notificationController =
-      Get.put(NotificationController());
-  final GAController _gaController = Get.put(GAController());
-
-  Uri uri = Uri.parse('$serverUri/user_api/login');
-
-  final user = {
-    'username': logInController.idcontroller.text,
-    'password': logInController.passwordcontroller.text,
-    'fcm_token': await notificationController.getToken(),
-  };
-  http.Response response = await http.post(
-    uri,
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode(user),
-  );
-
-  if (response.statusCode == 202) {
-    String token = jsonDecode(response.body)['token'];
-    String userid = jsonDecode(response.body)['user_id'];
-    //! GA
-    await _gaController.logLogin();
-
-    storage.write(key: 'token', value: token);
-    storage.write(key: 'id', value: userid);
-    Get.offAll(() => App());
-  } else if (response.statusCode == 401) {
-    _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-    print('에러1');
+  if (result == ConnectivityResult.none) {
+    _modalController.showdisconnectdialog();
   } else {
-    _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-    print('에러');
+    final LogInController logInController = Get.put(LogInController());
+    const FlutterSecureStorage storage = FlutterSecureStorage();
+    final NotificationController notificationController =
+        Get.put(NotificationController());
+    final GAController _gaController = Get.put(GAController());
+
+    Uri uri = Uri.parse('$serverUri/user_api/login');
+
+    final user = {
+      'username': logInController.idcontroller.text.trim(),
+      'password': logInController.passwordcontroller.text,
+      'fcm_token': await notificationController.getToken(),
+    };
+    http.Response response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(user),
+    );
+
+    if (response.statusCode == 202) {
+      String token = jsonDecode(response.body)['token'];
+      String userid = jsonDecode(response.body)['user_id'];
+      //! GA
+      await _gaController.logLogin();
+
+      storage.write(key: 'token', value: token);
+      storage.write(key: 'id', value: userid);
+      Get.offAll(() => App());
+    } else if (response.statusCode == 401) {
+      _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+      print('에러1');
+    } else {
+      _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+      print('에러');
+    }
   }
 }
 

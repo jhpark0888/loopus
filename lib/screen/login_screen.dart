@@ -58,7 +58,7 @@ class LogInScreen extends StatelessWidget {
                             hintText: '',
                             obscureText: false,
                             validator: (value) =>
-                                (CheckValidate().validateEmail(value!)),
+                                (CheckValidate().validateEmail(value!.trim())),
                             maxLines: 1,
                           ),
                           SizedBox(

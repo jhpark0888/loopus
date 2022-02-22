@@ -77,26 +77,18 @@ class ProjectAddPersonScreen extends StatelessWidget {
                                 .isProjectUpdateLoading
                                 .value = true;
                             await updateproject(
-                                Get.find<ProjectDetailController>(
-                                        tag: projectid.toString())
-                                    .project
-                                    .value
-                                    .id,
-                                ProjectUpdateType.looper);
-                            await getproject(Get.find<ProjectDetailController>(
-                                        tag: projectid.toString())
-                                    .project
-                                    .value
-                                    .id)
+                                    Get.find<ProjectDetailController>(
+                                            tag: projectid.toString())
+                                        .project
+                                        .value
+                                        .id,
+                                    ProjectUpdateType.looper)
                                 .then((value) {
                               Get.find<ProjectDetailController>(
                                       tag: projectid.toString())
                                   .isProjectUpdateLoading
                                   .value = false;
                             });
-                            Get.back();
-                            ModalController.to
-                                .showCustomDialog('변경이 완료되었어요', 1000);
                           },
                           child: Obx(
                             () => Text(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 
 enum UserType {
   student,
@@ -18,7 +19,8 @@ class SignupController extends GetxController {
   TextEditingController passwordcontroller = TextEditingController();
   TextEditingController passwordcheckcontroller = TextEditingController();
   RxBool emailcheck = false.obs;
-  RxBool isdeptSearchLoading = false.obs;
+  // RxBool isdeptSearchLoading = false.obs;
+  Rx<ScreenState> deptscreenstate = ScreenState.loading.obs;
   RxString selectdept = "".obs;
 
   Rx<UserType> selectedType = UserType.student.obs;
@@ -32,13 +34,13 @@ class SignupController extends GetxController {
   void onInit() {
     departmentcontroller.addListener(() {
       searchdeptlist.clear();
-      isdeptSearchLoading(true);
+      deptscreenstate(ScreenState.loading);
       for (String dept in deptlist) {
         if (dept.contains(departmentcontroller.text)) {
           searchdeptlist.add(dept.toString());
         }
       }
-      isdeptSearchLoading(false);
+      deptscreenstate(ScreenState.success);
     });
     super.onInit();
   }

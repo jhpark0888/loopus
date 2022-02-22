@@ -71,27 +71,18 @@ class ProjectAddTitleScreen extends StatelessWidget {
                                   .isProjectUpdateLoading
                                   .value = true;
                               await updateproject(
-                                  Get.find<ProjectDetailController>(
-                                          tag: projectid.toString())
-                                      .project
-                                      .value
-                                      .id,
-                                  ProjectUpdateType.project_name);
-                              await getproject(
                                       Get.find<ProjectDetailController>(
                                               tag: projectid.toString())
                                           .project
                                           .value
-                                          .id)
+                                          .id,
+                                      ProjectUpdateType.project_name)
                                   .then((value) {
                                 Get.find<ProjectDetailController>(
                                         tag: projectid.toString())
                                     .isProjectUpdateLoading
                                     .value = false;
                               });
-                              Get.back();
-                              ModalController.to
-                                  .showCustomDialog('변경이 완료되었어요', 1000);
                             }
                           },
                           child: Obx(

@@ -205,15 +205,15 @@ class QuestionDetailScreen extends StatelessWidget {
                           modalController.showModalIOS(
                             context,
                             func1: () {
-                              Get.put(
-                                      MessageDetailController(
-                                        userid: questionController
-                                            .question.value.userid,
-                                      ),
-                                      tag: questionController
-                                          .question.value.user.userid
-                                          .toString())
-                                  .firstmessagesload();
+                              // Get.put(
+                              //         MessageDetailController(
+                              //           userid: questionController
+                              //               .question.value.userid,
+                              //         ),
+                              //         tag: questionController
+                              //             .question.value.user.userid
+                              //             .toString())
+                              //     .firstmessagesload();
                               Get.to(() => MessageDetailScreen(
                                     userid: questionController
                                         .question.value.userid,

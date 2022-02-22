@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -105,89 +106,100 @@ enum ProfileUpdateType {
 
 Future<User?> updateProfile(
     User user, File? image, List? taglist, ProfileUpdateType updateType) async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-  print(taglist);
-  final uri = Uri.parse("$serverUri/user_api/profile?type=${updateType.name}");
-
-  var request = http.MultipartRequest('PUT', uri);
-
-  final headers = {
-    'Authorization': 'Token $token',
-    'Content-Type': 'multipart/form-data',
-  };
-
-  request.headers.addAll(headers);
-
-  if (updateType == ProfileUpdateType.image) {
-    if (image != null) {
-      print('api image : ${image.path}');
-      var multipartFile =
-          await http.MultipartFile.fromPath('image', image.path);
-      request.files.add(multipartFile);
-      print('multipartFile : $multipartFile');
-    } else {
-      print('api error image : $image');
-
-      request.fields['image'] = user.profileImage ?? json.encode(null);
-    }
-  } else if (updateType == ProfileUpdateType.department) {
-    request.fields['department'] = user.department;
-  } else if (updateType == ProfileUpdateType.tag) {
-    request.fields['tag'] =
-        json.encode(taglist ?? user.profileTag.map((tag) => tag.tag).toList());
-  }
-
-  http.StreamedResponse response = await request.send();
-  print(response.statusCode);
-  if (response.statusCode == 200) {
-    String responsebody = await response.stream.bytesToString();
-    var responsemap = jsonDecode(responsebody);
-    User edituser = User.fromJson(responsemap);
-    if (kDebugMode) {
-      print("profile status code : ${response.statusCode}");
-    }
-
-    return edituser;
-  } else if (response.statusCode == 400) {
-    if (kDebugMode) {
-      print("profile status code : ${response.statusCode}");
-    }
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    if (kDebugMode) {
-      print("profile status code : ${response.statusCode}");
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    print(taglist);
+    final uri =
+        Uri.parse("$serverUri/user_api/profile?type=${updateType.name}");
+
+    var request = http.MultipartRequest('PUT', uri);
+
+    final headers = {
+      'Authorization': 'Token $token',
+      'Content-Type': 'multipart/form-data',
+    };
+
+    request.headers.addAll(headers);
+
+    if (updateType == ProfileUpdateType.image) {
+      if (image != null) {
+        print('api image : ${image.path}');
+        var multipartFile =
+            await http.MultipartFile.fromPath('image', image.path);
+        request.files.add(multipartFile);
+        print('multipartFile : $multipartFile');
+      } else {
+        print('api error image : $image');
+
+        request.fields['image'] = user.profileImage ?? json.encode(null);
+      }
+    } else if (updateType == ProfileUpdateType.department) {
+      request.fields['department'] = user.department;
+    } else if (updateType == ProfileUpdateType.tag) {
+      request.fields['tag'] = json
+          .encode(taglist ?? user.profileTag.map((tag) => tag.tag).toList());
+    }
+
+    http.StreamedResponse response = await request.send();
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      String responsebody = await response.stream.bytesToString();
+      var responsemap = jsonDecode(responsebody);
+      User edituser = User.fromJson(responsemap);
+      if (kDebugMode) {
+        print("profile status code : ${response.statusCode}");
+      }
+
+      return edituser;
+    } else if (response.statusCode == 400) {
+      if (kDebugMode) {
+        print("profile status code : ${response.statusCode}");
+      }
+    } else {
+      if (kDebugMode) {
+        print("profile status code : ${response.statusCode}");
+      }
     }
   }
 }
 
 Future<void> putpwchange() async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-  ModalController _modalController = Get.put(ModalController());
-  PwChangeController pwChangeController = Get.find();
-
-  Uri uri = Uri.parse('$serverUri/user_api/password?type=change');
-
-  //이메일 줘야 됨
-  final password = {
-    'origin_pw': pwChangeController.originpwcontroller.text,
-    'new_pw': pwChangeController.newpwcontroller.text,
-  };
-  http.Response response = await http.put(uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Token $token',
-      },
-      body: json.encode(password));
-
-  print("비밀번호 변경 : ${response.statusCode}");
-  if (response.statusCode == 200) {
-    Get.back();
-    _modalController.showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
-  } else if (response.statusCode == 401) {
-    _modalController.showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
-    print('에러1');
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-    print('에러');
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    ModalController _modalController = Get.put(ModalController());
+    PwChangeController pwChangeController = Get.find();
+
+    Uri uri = Uri.parse('$serverUri/user_api/password?type=change');
+
+    //이메일 줘야 됨
+    final password = {
+      'origin_pw': pwChangeController.originpwcontroller.text,
+      'new_pw': pwChangeController.newpwcontroller.text,
+    };
+    http.Response response = await http.put(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Token $token',
+        },
+        body: json.encode(password));
+
+    print("비밀번호 변경 : ${response.statusCode}");
+    if (response.statusCode == 200) {
+      Get.back();
+      _modalController.showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
+    } else if (response.statusCode == 401) {
+      _modalController.showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
+      print('에러1');
+    } else {
+      _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+      print('에러');
+    }
   }
 }
 

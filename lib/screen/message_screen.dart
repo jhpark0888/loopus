@@ -20,7 +20,7 @@ class MessageScreen extends StatelessWidget {
       onWillPop: () async {
         if (messageController.chattingroomlist
             .where((messageroomwidget) =>
-                messageroomwidget.messageRoom.notread.value != 0)
+                messageroomwidget.messageRoom.value.notread.value != 0)
             .isNotEmpty) {
           ProfileController.to.isnewmessage(true);
         } else {
@@ -35,7 +35,7 @@ class MessageScreen extends StatelessWidget {
               onPressed: () {
                 if (messageController.chattingroomlist
                     .where((messageroomwidget) =>
-                        messageroomwidget.messageRoom.notread.value != 0)
+                        messageroomwidget.messageRoom.value.notread.value != 0)
                     .isNotEmpty) {
                   ProfileController.to.isnewmessage(true);
                 } else {
