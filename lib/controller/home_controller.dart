@@ -198,6 +198,7 @@ class HomeController extends GetxController
           getpopulartag();
           isPostingEmpty.value = true;
           isRecommandFull(true);
+          postloadItem();
         } else if (postingModel.postingitems.isNotEmpty &&
             recommandpostingResult.value.postingitems.isEmpty &&
             isPostingEmpty.value == true &&

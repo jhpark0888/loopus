@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
@@ -11,6 +12,8 @@ import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/screen/home_loop_screen.dart';
 import 'package:loopus/screen/question_add_content_screen.dart';
 import 'package:loopus/screen/question_detail_screen.dart';
+import 'package:loopus/screen/tag_detail_screen.dart';
+import 'package:loopus/widget/blue_button.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
@@ -22,6 +25,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomePostingScreen extends StatelessWidget {
   final HomeController homeController = Get.find();
+
   // final HoverController _hoverController = Get.put(HoverController());
 
   @override
@@ -206,55 +210,73 @@ class HomePostingScreen extends StatelessWidget {
                                     style: kSubTitle2Style),
                               ),
                               SizedBox(
-                                height: 24,
+                                height: 20,
                               ),
                               Obx(
-                                () => homeController.populartagstate.value ==
-                                        ScreenState.loading
-                                    ? Image.asset(
-                                        'assets/icons/loading.gif',
-                                        scale: 6,
-                                      )
-                                    : homeController.populartagstate.value ==
-                                            ScreenState.disconnect
-                                        ? DisconnectReloadWidget(reload: () {
-                                            getpopulartag();
-                                          })
+                                () =>
+                                    homeController.populartagstate.value ==
+                                            ScreenState.loading
+                                        ? Image.asset(
+                                            'assets/icons/loading.gif',
+                                            scale: 6,
+                                          )
                                         : homeController
                                                     .populartagstate.value ==
-                                                ScreenState.error
-                                            ? ErrorReloadWidget(reload: () {
+                                                ScreenState.disconnect
+                                            ? DisconnectReloadWidget(
+                                                reload: () {
                                                 getpopulartag();
                                               })
-                                            : Container(
-                                                height: 30,
-                                                child: ListView(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  children: homeController
-                                                      .populartaglist
-                                                      .map((tag) =>
-                                                          Row(children: [
-                                                            Tagwidget(
-                                                              tag: tag,
-                                                              fontSize: 12,
-                                                            ),
-                                                            homeController
-                                                                        .populartaglist
-                                                                        .indexOf(
-                                                                            tag) !=
-                                                                    homeController
-                                                                            .populartaglist
-                                                                            .length -
-                                                                        1
-                                                                ? const SizedBox(
-                                                                    width: 4,
-                                                                  )
-                                                                : Container()
-                                                          ]))
-                                                      .toList(),
-                                                ),
-                                              ),
+                                            : homeController.populartagstate
+                                                        .value ==
+                                                    ScreenState.error
+                                                ? ErrorReloadWidget(reload: () {
+                                                    getpopulartag();
+                                                  })
+                                                : Container(
+                                                    height: 88,
+                                                    child: ListView(
+                                                      shrinkWrap: true,
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      children: homeController
+                                                          .populartaglist
+                                                          .map((tag) => Row(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    (homeController.populartaglist.indexOf(tag) ==
+                                                                            0)
+                                                                        ? const SizedBox(
+                                                                            width:
+                                                                                16,
+                                                                          )
+                                                                        : Container(),
+                                                                    HomeTagWidget(
+                                                                      onTap:
+                                                                          () {
+                                                                        Get.to(() =>
+                                                                            TagDetailScreen(
+                                                                              tag: tag,
+                                                                            ));
+                                                                      },
+                                                                      tagTitle:
+                                                                          tag.tag,
+                                                                      tagCount:
+                                                                          tag.count,
+                                                                    ),
+                                                                    (homeController.populartaglist.indexOf(tag) !=
+                                                                            homeController.populartaglist.length)
+                                                                        ? const SizedBox(
+                                                                            width:
+                                                                                16,
+                                                                          )
+                                                                        : Container()
+                                                                  ]))
+                                                          .toList(),
+                                                    ),
+                                                  ),
                               )
                             ],
                           ),
@@ -294,11 +316,11 @@ class HomePostingScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                                SizedBox(
+                                  height: 32,
+                                ),
                               ]),
 
-                            SizedBox(
-                              height: 32,
-                            ),
                             Text('최근 포스팅', style: kSubTitle2Style),
                             // TextButton(
                             //   onPressed: () {
@@ -402,6 +424,69 @@ class HomePostingScreen extends StatelessWidget {
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeTagWidget extends StatelessWidget {
+  HomeTagWidget({
+    Key? key,
+    required this.tagTitle,
+    required this.tagCount,
+    required this.onTap,
+  }) : super(key: key);
+
+  var numberFormat = NumberFormat('###,###,###,###');
+
+  final String tagTitle;
+  final int tagCount;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        decoration: kCardStyle,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              tagTitle,
+              style: kSubTitle2Style,
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Text(
+              '관심도 ' + numberFormat.format(tagCount),
+              style: kBody2Style.copyWith(
+                color: mainblack.withOpacity(0.6),
+              ),
+            ),
+            // SizedBox(
+            //   height: 12,
+            // ),
+            // GestureDetector(
+            //   onTap: onTap,
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //       color: mainblue,
+            //       borderRadius: BorderRadius.circular(4),
+            //     ),
+            //     padding: const EdgeInsets.fromLTRB(20, 6, 20, 6),
+            //     child: Text(
+            //       '자세히 보기',
+            //       style: kButtonStyle.copyWith(
+            //         color: mainWhite,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+          ],
         ),
       ),
     );

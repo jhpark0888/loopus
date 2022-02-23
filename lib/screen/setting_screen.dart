@@ -7,7 +7,6 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/screen/alert_screen.dart';
 import 'package:loopus/screen/contact_content_screen.dart';
-import 'package:loopus/screen/contact_email_screen.dart';
 import 'package:loopus/screen/privacypolicy_screen.dart';
 import 'package:loopus/screen/termsofservice_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';
@@ -88,12 +87,6 @@ class SettingScreen extends StatelessWidget {
               Get.to(() => ContactContentScreen());
             },
           ),
-          // Obx(
-          //   () => _userDeviceInfo.deviceData.isNotEmpty
-          //       ? Text(
-          //           "${_userDeviceInfo.deviceData.keys.first} : ${_userDeviceInfo.deviceData.values.first}\n${_userDeviceInfo.deviceData.keys.last} : ${_userDeviceInfo.deviceData.values.last}")
-          //       : Text(''),
-          // ),
         ],
       ),
     );
