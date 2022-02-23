@@ -108,58 +108,60 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
     request.fields['title'] = postingAddController.titlecontroller.text;
     request.fields['contents'] = json.encode(postcontent);
 
-    http.StreamedResponse response = await request.send();
+    try {
+      http.StreamedResponse response = await request.send();
 
-    print("포스팅 업로드 statuscode:  ${response.statusCode}");
-    if (response.statusCode == 200) {
-      //!GA
-      await _gaController.logPostingCreated(true);
-      if (kDebugMode) {
-        print("status code : ${response.statusCode} 포스팅 업로드 완료");
-      }
-      // String responsebody = await response.stream.bytesToString();
-      // String responsemap = json.decode(responsebody);
-      // print(responsemap);
-      if (route == PostaddRoute.project) {
-        getbacks(3);
-        Get.find<ProjectDetailController>(tag: projectId.toString())
-            .loadProject();
-        Get.to(
-          () => ProjectScreen(
-            projectid: projectId,
-            isuser: 1,
-          ),
-        );
-        ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
+      print("포스팅 업로드 statuscode:  ${response.statusCode}");
+      if (response.statusCode == 200) {
+        //!GA
+        await _gaController.logPostingCreated(true);
+        if (kDebugMode) {
+          print("status code : ${response.statusCode} 포스팅 업로드 완료");
+        }
+        // String responsebody = await response.stream.bytesToString();
+        // String responsemap = json.decode(responsebody);
+        // print(responsemap);
+        if (route == PostaddRoute.project) {
+          getbacks(3);
+          Get.find<ProjectDetailController>(tag: projectId.toString())
+              .loadProject();
+          Get.to(
+            () => ProjectScreen(
+              projectid: projectId,
+              isuser: 1,
+            ),
+          );
+          ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
+        } else {
+          String responsebody = await response.stream.bytesToString();
+          Map<String, dynamic> responsemap = json.decode(responsebody);
+          Post post = Post.fromJson(responsemap);
+          post.isuser = 1;
+          post.isLiked = 0.obs;
+          post.isMarked = 0.obs;
+          AppController.to.changePageIndex(0);
+          HomeController.to.recommandpostingResult.value.postingitems
+              .insert(0, post);
+          getbacks(5);
+          ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
+        }
+      } else if (response.statusCode == 400) {
+        //!GA
+        await _gaController.logPostingCreated(false);
+
+        if (kDebugMode) {
+          print("status code : ${response.statusCode} 포스팅 업로드 실패");
+        }
       } else {
-        String responsebody = await response.stream.bytesToString();
-        Map<String, dynamic> responsemap = json.decode(responsebody);
-        Post post = Post.fromJson(responsemap);
-        post.isuser = 1;
-        post.isLiked = 0.obs;
-        post.isMarked = 0.obs;
-        AppController.to.changePageIndex(0);
-        HomeController.to.recommandpostingResult.value.postingitems
-            .insert(0, post);
-        getbacks(5);
-        ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
-      }
-    } else if (response.statusCode == 400) {
-      //!GA
-      await _gaController.logPostingCreated(false);
+        //!GA
+        await _gaController.logPostingCreated(false);
 
-      if (kDebugMode) {
-        print("status code : ${response.statusCode} 포스팅 업로드 실패");
+        if (kDebugMode) {
+          print("status code : ${response.statusCode} 포스팅 업로드 실패");
+        }
+        return Future.error(response.statusCode);
       }
-    } else {
-      //!GA
-      await _gaController.logPostingCreated(false);
-
-      if (kDebugMode) {
-        print("status code : ${response.statusCode} 포스팅 업로드 실패");
-      }
-      return Future.error(response.statusCode);
-    }
+    } catch (e) {}
   }
 }
 
@@ -180,31 +182,35 @@ Future<Map> getposting(int postingid) async {
     final specificPostingLoadUri =
         Uri.parse("$serverUri/post_api/posting?id=$postingid");
 
-    http.Response response = await http.get(specificPostingLoadUri,
-        headers: {"Authorization": "Token $token"});
+    try {
+      http.Response response = await http.get(specificPostingLoadUri,
+          headers: {"Authorization": "Token $token"});
 
-    if (response.statusCode == 200) {
-      Map responseBody = json.decode(utf8.decode(response.bodyBytes));
-      controller.post(Post.fromJson(responseBody['posting_info']));
-      controller.postcontentlist(controller.post.value.contents!
-          .map((content) => PostContentWidget(content: content))
-          .toList());
-      controller.recommendposts = List.from(responseBody['recommend_post'])
-          .map((post) => Post.fromJson(post))
-          .toList()
-          .map((posting) => SearchPostingWidget(post: posting))
-          .toList();
+      if (response.statusCode == 200) {
+        Map responseBody = json.decode(utf8.decode(response.bodyBytes));
+        controller.post(Post.fromJson(responseBody['posting_info']));
+        controller.postcontentlist(controller.post.value.contents!
+            .map((content) => PostContentWidget(content: content))
+            .toList());
+        controller.recommendposts = List.from(responseBody['recommend_post'])
+            .map((post) => Post.fromJson(post))
+            .toList()
+            .map((posting) => SearchPostingWidget(post: posting))
+            .toList();
 
-      // Post post = Post.fromJson(responseBody['posting_info']);
-      controller.postscreenstate(ScreenState.success);
-      return responseBody;
-    } else if (response.statusCode == 404) {
-      Get.back();
-      ModalController.to.showCustomDialog('이미 삭제된 포스팅입니다', 1400);
-      return Future.error(response.statusCode);
-    } else {
-      controller.postscreenstate(ScreenState.error);
-      return Future.error(response.statusCode);
+        // Post post = Post.fromJson(responseBody['posting_info']);
+        controller.postscreenstate(ScreenState.success);
+        return responseBody;
+      } else if (response.statusCode == 404) {
+        Get.back();
+        ModalController.to.showCustomDialog('이미 삭제된 포스팅입니다', 1400);
+        return Future.error(response.statusCode);
+      } else {
+        controller.postscreenstate(ScreenState.error);
+        return Future.error(response.statusCode);
+      }
+    } catch (e) {
+      return {};
     }
   }
 }
@@ -313,22 +319,24 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
       }
     }
 
-    http.StreamedResponse response = await request.send();
+    try {
+      http.StreamedResponse response = await request.send();
 
-    if (response.statusCode == 200) {
-      print(response.statusCode);
-      await getposting(postid);
-      Get.back();
-      ModalController.to.showCustomDialog('변경이 완료되었어요', 1000);
-      // String responsebody = await response.stream.bytesToString();
-      // print(responsebody);
-      // var responsemap = json.decode(responsebody);
-      // print(responsemap);
-      // Project project = Project.fromJson(responsemap);
-      return;
-    } else {
-      return Future.error(response.statusCode);
-    }
+      if (response.statusCode == 200) {
+        print(response.statusCode);
+        await getposting(postid);
+        Get.back();
+        ModalController.to.showCustomDialog('변경이 완료되었어요', 1000);
+        // String responsebody = await response.stream.bytesToString();
+        // print(responsebody);
+        // var responsemap = json.decode(responsebody);
+        // print(responsemap);
+        // Project project = Project.fromJson(responsemap);
+        return;
+      } else {
+        return Future.error(response.statusCode);
+      }
+    } catch (e) {}
   }
 }
 
@@ -341,32 +349,34 @@ Future<void> deleteposting(int postid, int projectid) async {
 
     final uri = Uri.parse("$serverUri/post_api/posting?id=$postid");
 
-    http.Response response =
-        await http.delete(uri, headers: {"Authorization": "Token $token"});
+    try {
+      http.Response response =
+          await http.delete(uri, headers: {"Authorization": "Token $token"});
 
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      Get.back();
-      try {
-        Get.find<ProjectDetailController>(tag: projectid.toString())
-            .project
-            .value
-            .post
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        Get.back();
+        try {
+          Get.find<ProjectDetailController>(tag: projectid.toString())
+              .project
+              .value
+              .post
+              .removeWhere((post) => post.id == postid);
+          Get.find<ProjectDetailController>(tag: projectid.toString())
+              .postinglist
+              .removeWhere((post) => post.item.id == postid);
+        } catch (e) {
+          print(e);
+        }
+
+        HomeController.to.recommandpostingResult.value.postingitems
             .removeWhere((post) => post.id == postid);
-        Get.find<ProjectDetailController>(tag: projectid.toString())
-            .postinglist
-            .removeWhere((post) => post.item.id == postid);
-      } catch (e) {
-        print(e);
+        HomeController.to.latestpostingResult.value.postingitems
+            .removeWhere((post) => post.id == postid);
+      } else {
+        return Future.error(response.statusCode);
       }
-
-      HomeController.to.recommandpostingResult.value.postingitems
-          .removeWhere((post) => post.id == postid);
-      HomeController.to.latestpostingResult.value.postingitems
-          .removeWhere((post) => post.id == postid);
-    } else {
-      return Future.error(response.statusCode);
-    }
+    } catch (e) {}
   }
 }
 
@@ -380,20 +390,22 @@ Future<dynamic> latestpost(int lastindex) async {
   final latestloadUri =
       Uri.parse("$serverUri/post_api/main_load?last=$lastindex");
 
-  final response =
-      await get(latestloadUri, headers: {"Authorization": "Token $token"});
-  var responseBody = utf8.decode(response.bodyBytes);
-  List<dynamic> list = jsonDecode(responseBody);
+  try {
+    final response =
+        await get(latestloadUri, headers: {"Authorization": "Token $token"});
+    var responseBody = utf8.decode(response.bodyBytes);
+    List<dynamic> list = jsonDecode(responseBody);
 
-  if (kDebugMode) {
-    print('posting list : $list');
-  }
-  if (response.statusCode != 200) {
-    // Future.error(response.statusCode);
-    return null;
-  } else {
-    return PostingModel.fromJson(list);
-  }
+    if (kDebugMode) {
+      print('posting list : $list');
+    }
+    if (response.statusCode != 200) {
+      // Future.error(response.statusCode);
+      return null;
+    } else {
+      return PostingModel.fromJson(list);
+    }
+  } catch (e) {}
 }
 
 Future<dynamic> recommandpost(int lastindex) async {
@@ -406,20 +418,22 @@ Future<dynamic> recommandpost(int lastindex) async {
   final recommandloadUri =
       Uri.parse("$serverUri/post_api/recommend_load?last=$lastindex");
 
-  final response =
-      await get(recommandloadUri, headers: {"Authorization": "Token $token"});
+  try {
+    final response =
+        await get(recommandloadUri, headers: {"Authorization": "Token $token"});
 
-  // if (kDebugMode) {
-  //   print('posting list : $list');
-  // }
-  if (response.statusCode != 200) {
-    // Future.error(response.statusCode);
-    return null;
-  } else {
-    var responseBody = utf8.decode(response.bodyBytes);
-    List<dynamic> list = jsonDecode(responseBody);
-    return PostingModel.fromJson(list);
-  }
+    // if (kDebugMode) {
+    //   print('posting list : $list');
+    // }
+    if (response.statusCode != 200) {
+      // Future.error(response.statusCode);
+      return null;
+    } else {
+      var responseBody = utf8.decode(response.bodyBytes);
+      List<dynamic> list = jsonDecode(responseBody);
+      return PostingModel.fromJson(list);
+    }
+  } catch (e) {}
 }
 
 Future<dynamic> bookmarklist(int pageNumber) async {
@@ -432,16 +446,18 @@ Future<dynamic> bookmarklist(int pageNumber) async {
   final bookmarkListUri =
       Uri.parse("$serverUri/post_api/bookmark_list?page=$pageNumber");
 
-  final response =
-      await get(bookmarkListUri, headers: {"Authorization": "Token $token"});
-  var responseBody = utf8.decode(response.bodyBytes);
-  List<dynamic> list = jsonDecode(responseBody);
+  try {
+    final response =
+        await get(bookmarkListUri, headers: {"Authorization": "Token $token"});
+    var responseBody = utf8.decode(response.bodyBytes);
+    List<dynamic> list = jsonDecode(responseBody);
 
-  if (response.statusCode != 200) {
-    return Future.error(response.statusCode);
-  } else {
-    return PostingModel.fromJson(list);
-  }
+    if (response.statusCode != 200) {
+      return Future.error(response.statusCode);
+    } else {
+      return PostingModel.fromJson(list);
+    }
+  } catch (e) {}
 }
 
 Future<dynamic> looppost(int lastindex) async {
@@ -453,19 +469,21 @@ Future<dynamic> looppost(int lastindex) async {
 
   final loopUri = Uri.parse("$serverUri/post_api/loop_load?last=$lastindex");
 
-  final response =
-      await get(loopUri, headers: {"Authorization": "Token $token"});
-  var responseBody = utf8.decode(response.bodyBytes);
-  List<dynamic> list = jsonDecode(responseBody);
-  if (list.isEmpty) {
-    HomeController.to.enableLoopPullup.value = false;
-  }
-  if (response.statusCode != 200) {
-    // Future.error(response.statusCode);
-    return null;
-  } else {
-    return PostingModel.fromJson(list);
-  }
+  try {
+    final response =
+        await get(loopUri, headers: {"Authorization": "Token $token"});
+    var responseBody = utf8.decode(response.bodyBytes);
+    List<dynamic> list = jsonDecode(responseBody);
+    if (list.isEmpty) {
+      HomeController.to.enableLoopPullup.value = false;
+    }
+    if (response.statusCode != 200) {
+      // Future.error(response.statusCode);
+      return null;
+    } else {
+      return PostingModel.fromJson(list);
+    }
+  } catch (e) {}
 }
 
 Future<dynamic> bookmarkpost(int postingId) async {
@@ -510,24 +528,26 @@ Future<void> getlikepeoele(int postid) async {
 
     final uri = Uri.parse("$serverUri/post_api/like_list_load/$postid");
 
-    http.Response response =
-        await http.get(uri, headers: {"Authorization": "Token $token"});
+    try {
+      http.Response response =
+          await http.get(uri, headers: {"Authorization": "Token $token"});
 
-    print('like 리스트 statusCode: ${response.statusCode}');
-    if (response.statusCode == 200) {
-      List responseBody = json.decode(utf8.decode(response.bodyBytes));
-      List<User> likepeople =
-          responseBody.map((user) => User.fromJson(user)).toList();
-      controller.likelist(likepeople);
+      print('like 리스트 statusCode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        List responseBody = json.decode(utf8.decode(response.bodyBytes));
+        List<User> likepeople =
+            responseBody.map((user) => User.fromJson(user)).toList();
+        controller.likelist(likepeople);
 
-      controller.likepeoplescreenstate(ScreenState.success);
+        controller.likepeoplescreenstate(ScreenState.success);
 
-      return;
-    } else {
-      controller.likepeoplescreenstate(ScreenState.error);
+        return;
+      } else {
+        controller.likepeoplescreenstate(ScreenState.error);
 
-      return Future.error(response.statusCode);
-    }
+        return Future.error(response.statusCode);
+      }
+    } catch (e) {}
   }
 }
 
@@ -545,20 +565,22 @@ Future postingreport(int postingId) async {
 
     var body = {"id": postingId, "reason": ""};
 
-    final response = await post(uri,
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Token $token"
-        },
-        body: json.encode(body));
+    try {
+      final response = await post(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": "Token $token"
+          },
+          body: json.encode(body));
 
-    print('포스팅 신고 statusCode: ${response.statusCode}');
-    if (response.statusCode == 200) {
-      getbacks(2);
-      ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
-      return;
-    } else {
-      return Future.error(response.statusCode);
-    }
+      print('포스팅 신고 statusCode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        getbacks(2);
+        ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
+        return;
+      } else {
+        return Future.error(response.statusCode);
+      }
+    } catch (e) {}
   }
 }

@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/contact_content_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/contact_finish_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -12,7 +14,8 @@ import '../utils/user_device_info.dart';
 
 class ContactContentScreen extends StatelessWidget {
   ContactContentScreen({Key? key}) : super(key: key);
-  final UserDeviceInfo _userDeviceInfo = Get.put(UserDeviceInfo());
+  final ContactContentController _contactContentController =
+      Get.put(ContactContentController());
   final ProfileController _profileController = Get.find();
 
   @override
@@ -24,6 +27,7 @@ class ContactContentScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
+              inquiry();
               Get.to(ContactFinishScreen());
             },
             child: Text(
@@ -49,7 +53,7 @@ class ContactContentScreen extends StatelessWidget {
             CustomTextField(
               counterText: null,
               maxLength: null,
-              textController: null,
+              textController: _contactContentController.emailcontroller,
               hintText: '이메일 주소',
               validator: null,
               obscureText: false,
@@ -68,7 +72,7 @@ class ContactContentScreen extends StatelessWidget {
             CustomTextField(
               counterText: null,
               maxLength: null,
-              textController: null,
+              textController: _contactContentController.contentcontroller,
               hintText: '문의 내용...',
               validator: null,
               obscureText: false,
@@ -76,17 +80,21 @@ class ContactContentScreen extends StatelessWidget {
             ),
             //todo: 아래 정보들을 메일에 함께 보내야 함
             Obx(
-              () => _userDeviceInfo.deviceData.isNotEmpty
+              () => _contactContentController
+                      .userDeviceInfo.deviceData.isNotEmpty
                   ? Text(
-                      "${_userDeviceInfo.deviceData.keys.first} : ${_userDeviceInfo.deviceData.values.first}\n${_userDeviceInfo.deviceData.keys.last} : ${_userDeviceInfo.deviceData.values.last}")
+                      "${_contactContentController.userDeviceInfo.deviceData.keys.first} : ${_contactContentController.userDeviceInfo.deviceData.values.first}\n${_contactContentController.userDeviceInfo.deviceData.keys.last} : ${_contactContentController.userDeviceInfo.deviceData.values.last}")
                   : Text(''),
             ),
             Obx(
-              () => _userDeviceInfo.appInfoData.isNotEmpty
+              () => _contactContentController
+                      .userDeviceInfo.appInfoData.isNotEmpty
                   ? Text(
-                      _userDeviceInfo.appInfoData.keys.first +
+                      _contactContentController
+                              .userDeviceInfo.appInfoData.keys.first +
                           ' ' +
-                          _userDeviceInfo.appInfoData.values.first,
+                          _contactContentController
+                              .userDeviceInfo.appInfoData.values.first,
                       style: kCaptionStyle.copyWith(
                         color: mainblack.withOpacity(0.6),
                       ),
