@@ -279,7 +279,11 @@ Future deleteuser(String pw) async {
       }
     }
 
-    final password = {'password': pw, 'reason': reason};
+    final password = {
+      'password': pw,
+      'reason': reason,
+      "department": ProfileController.to.myUserInfo.value.department
+    };
 
     try {
       http.Response response = await http.post(uri,

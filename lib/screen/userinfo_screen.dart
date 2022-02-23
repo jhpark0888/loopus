@@ -21,7 +21,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 
 class UserInfoScreen extends StatelessWidget {
   final LogInController _logInController = Get.put(LogInController());
-  ProfileController profileController = Get.find();
+  ProfileController profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
