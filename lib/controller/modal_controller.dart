@@ -224,6 +224,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
     required String? Function(String?)? validator,
     required Function() leftFunction,
     required Function() rightFunction,
+    required bool isWithdrawal,
   }) {
     Get.dialog(
       AlertDialog(
@@ -270,9 +271,9 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     height: 48,
                     child: Center(
                       child: Text(
-                        '확인',
+                        isWithdrawal ? '탈퇴' : '확인',
                         style: kButtonStyle.copyWith(
-                          color: mainblue,
+                          color: isWithdrawal ? mainpink : mainblue,
                         ),
                       ),
                     ),

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
@@ -26,7 +27,8 @@ class WithdrawalScreen extends StatelessWidget {
             onPressed: () {
               TextEditingController pwcontroller = TextEditingController();
               ModalController.to.showTextFieldDialog(
-                  title: "비밀번호를 입력해주세요\n비밀번호 입력 후 확인 클릭 시 \n바로 회원탈퇴가 진행됩니다",
+                  isWithdrawal: true,
+                  title: "현재 비밀번호를 입력해주세요",
                   hintText: "8자리 이상",
                   textEditingController: pwcontroller,
                   obscureText: true,
@@ -59,31 +61,79 @@ class WithdrawalScreen extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                '탈퇴하시는 이유가 무엇인가요?',
+                '탈퇴 사유를 선택해주세요',
                 style: kSubTitle1Style,
               ),
               SizedBox(
-                height: 16,
+                height: 20,
               ),
-              Text(
-                '적어주신 내용들을 적극적으로 개선하겠습니다',
-                style: kBody1Style,
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: kWithdrawalOptions.length,
+                itemBuilder: (context, index) => Column(
+                  children: [
+                    SelectedOptionWidget(
+                      text: kWithdrawalOptions[index],
+                    ),
+                    Divider(),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: 32,
-              ),
-              CustomTextField(
-                counterText: null,
-                maxLength: null,
-                textController: null,
-                hintText: '탈퇴 사유...',
-                validator: null,
-                obscureText: false,
-                maxLines: 5,
-              ),
+
+              // CustomTextField(
+              //   counterText: null,
+              //   maxLength: null,
+              //   textController: null,
+              //   hintText: '탈퇴 사유...',
+              //   validator: null,
+              //   obscureText: false,
+              //   maxLines: 5,
+              // ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SelectedOptionWidget extends StatelessWidget {
+  SelectedOptionWidget({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
+
+  final String text;
+  RxBool isSelected = false.obs;
+  void selectOption() {
+    isSelected.value = !isSelected.value;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(text),
+          Obx(
+            () => GestureDetector(
+              onTap: selectOption,
+              child: isSelected.value
+                  ? SvgPicture.asset(
+                      "assets/icons/check_box_active.svg",
+                      width: 24,
+                      height: 24,
+                    )
+                  : SvgPicture.asset(
+                      "assets/icons/check_box_inactive.svg",
+                      width: 24,
+                      height: 24,
+                    ),
+            ),
+          ),
+        ],
       ),
     );
   }

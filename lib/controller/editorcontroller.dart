@@ -272,6 +272,7 @@ class EditorController extends GetxController {
     } else {
       TextEditingController linkcontroller = TextEditingController();
       ModalController.to.showTextFieldDialog(
+          isWithdrawal: false,
           title: '링크를 입력해주세요',
           hintText: 'https//',
           textEditingController: linkcontroller,

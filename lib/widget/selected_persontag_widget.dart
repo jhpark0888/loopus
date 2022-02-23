@@ -8,7 +8,7 @@
 // class SelectedPersonTagWidget extends StatelessWidget {
 //   SelectedPersonTagWidget({Key? key, required this.text, this.id})
 //       : super(key: key);
-//   ProjectAddController projectaddController = Get.find();
+
 //   // ProjectAddPersonController projectAddPersonController = Get.find();
 
 //   String text;
@@ -36,14 +36,7 @@
 //           Padding(
 //             padding: const EdgeInsets.only(right: 4),
 //             child: InkWell(
-//               onTap: () {
-//                 projectaddController.selectedpersontaglist
-//                     .removeWhere((element) => element.id == id);
-//                 projectaddController.looppersonlist
-//                     .where((element) => element.user.userid == id)
-//                     .first
-//                     .isselected(false);
-//               },
+//               onTap: () {},
 //               child: SvgPicture.asset(
 //                 "assets/icons/Close_blue.svg",
 //                 width: 24,
