@@ -886,12 +886,7 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
                     ),
                     height: 48,
                     child: Center(
-                      child: Text(
-                        '닫기',
-                        style: kButtonStyle.copyWith(
-                          color: mainpink,
-                        ),
-                      ),
+                      child: Text('닫기', style: kButtonStyle),
                     ),
                   ),
                 ),

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:loopus/controller/modal_controller.dart';
@@ -16,7 +19,12 @@ class ErrorController extends GetxController {
             title: '현재 서버가 점검 중이에요',
             content: '나중에 다시 접속해주세요',
             leftFunction: () {
-              Get.back();
+              print('asd');
+              if (Platform.isIOS) {
+                exit(0);
+              } else if (Platform.isAndroid) {
+                SystemNavigator.pop();
+              }
             });
       },
       time: Duration(seconds: 1),
