@@ -1,4 +1,3 @@
-import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -153,13 +152,10 @@ class MessageDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Get.put(OnMessageScreenController(), tag: userid.toString());
-    return GestureDetector(
-      onVerticalDragUpdate: (details) {},
-      onHorizontalDragUpdate: (details) {
-        if (details.delta.direction > 0) {
-          print("dddd");
-          Get.back(result: controller.messagelist.last.message);
-        }
+    return WillPopScope(
+      onWillPop: () async {
+        Get.back(result: controller.messagelist.last.message);
+        return true;
       },
       child: Scaffold(
           appBar: AppBarWidget(

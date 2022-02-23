@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
 import 'package:loopus/screen/signup_company_screen.dart';
@@ -27,9 +28,11 @@ class SignupTypeScreen extends StatelessWidget {
                 Get.to(() => SignupCampusInfoScreen());
               } else if (signupController.selectedType.value ==
                   UserType.professer) {
-                Get.to(() => SignupCompanyScreen());
+                // Get.to(() => SignupCompanyScreen());
+                ModalController.to.showCustomDialog('추후 업데이트 될 예정입니다', 1000);
               } else {
-                Get.to(() => SignupCompanyScreen());
+                // Get.to(() => SignupCompanyScreen());
+                ModalController.to.showCustomDialog('추후 업데이트 될 예정입니다', 1000);
               }
               await _gaController.logScreenView('signup_1');
             },

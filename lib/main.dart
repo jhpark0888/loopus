@@ -14,7 +14,6 @@ import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/firebase_options.dart';
-import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 
 import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';
@@ -61,11 +60,6 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key, required this.token}) : super(key: key);
   final GAController _gaController = Get.put(GAController());
   final ThemeData themeData = ThemeData(
-    pageTransitionsTheme: PageTransitionsTheme(
-      builders: {
-        TargetPlatform.iOS: CupertinoWillPopScopePageTransionsBuilder(),
-      },
-    ),
     fontFamily: 'SUIT',
     appBarTheme: const AppBarTheme(
       backgroundColor: mainWhite,
