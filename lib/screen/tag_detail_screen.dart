@@ -132,8 +132,10 @@ class TagDetailScreen extends StatelessWidget {
                               })
                             : SingleChildScrollView(
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.only(
+                                    top: 16,
+                                    bottom: 40,
+                                  ),
                                   child: Obx(
                                     () => Column(
                                       children: controller
@@ -206,8 +208,8 @@ class TagDetailScreen extends StatelessWidget {
                                     vertical: 8,
                                     horizontal: 16,
                                   ),
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.only(
+                                      top: 16, bottom: 32),
                                   child: Obx(
                                     () => Column(
                                       children: controller

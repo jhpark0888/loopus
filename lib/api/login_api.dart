@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/app.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/error_controller.dart';
 import 'package:loopus/controller/login_controller.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -61,7 +62,9 @@ Future<void> loginRequest() async {
         _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -99,7 +102,9 @@ Future<void> postpwfindemailcheck() async {
         _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -137,7 +142,9 @@ Future<void> putpwfindchange() async {
         _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 

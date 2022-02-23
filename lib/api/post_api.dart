@@ -29,6 +29,7 @@ import 'package:loopus/widget/search_posting_widget.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 import '../constant.dart';
+import '../controller/error_controller.dart';
 import '../controller/modal_controller.dart';
 
 Future<void> addposting(int projectId, PostaddRoute route) async {
@@ -161,7 +162,9 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
         }
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -210,6 +213,7 @@ Future<Map> getposting(int postingid) async {
         return Future.error(response.statusCode);
       }
     } catch (e) {
+      ErrorController.to.isServerClosed(true);
       return {};
     }
   }
@@ -336,7 +340,9 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -376,7 +382,9 @@ Future<void> deleteposting(int postid, int projectid) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -405,7 +413,9 @@ Future<dynamic> latestpost(int lastindex) async {
     } else {
       return PostingModel.fromJson(list);
     }
-  } catch (e) {}
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
+  }
 }
 
 Future<dynamic> recommandpost(int lastindex) async {
@@ -433,7 +443,9 @@ Future<dynamic> recommandpost(int lastindex) async {
       List<dynamic> list = jsonDecode(responseBody);
       return PostingModel.fromJson(list);
     }
-  } catch (e) {}
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
+  }
 }
 
 Future<dynamic> bookmarklist(int pageNumber) async {
@@ -457,7 +469,9 @@ Future<dynamic> bookmarklist(int pageNumber) async {
     } else {
       return PostingModel.fromJson(list);
     }
-  } catch (e) {}
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
+  }
 }
 
 Future<dynamic> looppost(int lastindex) async {
@@ -483,7 +497,9 @@ Future<dynamic> looppost(int lastindex) async {
     } else {
       return PostingModel.fromJson(list);
     }
-  } catch (e) {}
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
+  }
 }
 
 Future<dynamic> bookmarkpost(int postingId) async {
@@ -493,12 +509,15 @@ Future<dynamic> bookmarkpost(int postingId) async {
   });
 
   final bookmarkUri = Uri.parse("$serverUri/post_api/bookmark/$postingId");
+  try {
+    final response =
+        await post(bookmarkUri, headers: {"Authorization": "Token $token"});
 
-  final response =
-      await post(bookmarkUri, headers: {"Authorization": "Token $token"});
-
-  var responseBody = utf8.decode(response.bodyBytes);
-  String result = jsonDecode(responseBody);
+    var responseBody = utf8.decode(response.bodyBytes);
+    String result = jsonDecode(responseBody);
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
+  }
 }
 
 Future<dynamic> likepost(int postingId) async {
@@ -508,13 +527,16 @@ Future<dynamic> likepost(int postingId) async {
   });
 
   final likeUri = Uri.parse("$serverUri/post_api/like/$postingId");
-
-  final response =
-      await post(likeUri, headers: {"Authorization": "Token $token"});
-  var statusCode = response.statusCode;
-  var responseHeaders = response.headers;
-  var responseBody = utf8.decode(response.bodyBytes);
-  String result = jsonDecode(responseBody);
+  try {
+    final response =
+        await post(likeUri, headers: {"Authorization": "Token $token"});
+    var statusCode = response.statusCode;
+    var responseHeaders = response.headers;
+    var responseBody = utf8.decode(response.bodyBytes);
+    String result = jsonDecode(responseBody);
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
+  }
 }
 
 Future<void> getlikepeoele(int postid) async {
@@ -547,7 +569,9 @@ Future<void> getlikepeoele(int postid) async {
 
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -581,6 +605,8 @@ Future postingreport(int postingId) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }

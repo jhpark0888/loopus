@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/error_controller.dart';
 import 'package:loopus/controller/looppeople_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
@@ -61,7 +62,9 @@ Future<void> getfollowlist(int userid, followlist followtype) async {
         }
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -99,7 +102,9 @@ Future<void> getprojectfollowlist(int userid, followlist followtype) async {
         controller.looppersonscreenstate(ScreenState.error);
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 

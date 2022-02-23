@@ -23,6 +23,7 @@ import 'package:loopus/widget/notification_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
 
 import '../constant.dart';
+import '../controller/error_controller.dart';
 import '../controller/home_controller.dart';
 import '../controller/search_controller.dart';
 
@@ -31,7 +32,6 @@ Future<void> getProfile(var userId, int isuser) async {
   print('user token: $token');
 
   var uri = Uri.parse("$serverUri/user_api/profile?id=$userId");
-
   try {
     http.Response response =
         await http.get(uri, headers: {"Authorization": "Token $token"});
@@ -56,7 +56,9 @@ Future<void> getProfile(var userId, int isuser) async {
     } else {
       return Future.error(response.statusCode);
     }
-  } catch (e) {}
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
+  }
 }
 
 Future<void> getProjectlist(var userId, int isuser) async {
@@ -102,7 +104,9 @@ Future<void> getProjectlist(var userId, int isuser) async {
       }
       return Future.error(response.statusCode);
     }
-  } catch (e) {}
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
+  }
 }
 
 enum ProfileUpdateType {
@@ -176,7 +180,9 @@ Future<User?> updateProfile(
           print("profile status code : ${response.statusCode}");
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -216,7 +222,9 @@ Future<void> putpwchange() async {
         _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -247,7 +255,9 @@ Future postlogout() async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -293,7 +303,9 @@ Future deleteuser(String pw) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -327,7 +339,9 @@ Future userreport(int postingId) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -378,6 +392,8 @@ Future inquiry() async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }

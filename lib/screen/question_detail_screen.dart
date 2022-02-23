@@ -280,6 +280,7 @@ class QuestionDetailScreen extends StatelessWidget {
                             questionController.answerfocus.unfocus();
                           },
                           child: QuestionListView(
+                            isUser: isuser,
                             questionid: questionid,
                           ),
                         )),
@@ -300,9 +301,14 @@ class QuestionDetailScreen extends StatelessWidget {
 }
 
 class QuestionListView extends StatelessWidget {
-  QuestionListView({Key? key, required this.questionid}) : super(key: key);
+  QuestionListView({
+    Key? key,
+    required this.questionid,
+    required this.isUser,
+  }) : super(key: key);
 
   int questionid;
+  int isUser;
   late QuestionDetailController questionController =
       Get.find(tag: questionid.toString());
   late QuestionScrollController questionscrollController =
@@ -354,7 +360,9 @@ class QuestionListView extends StatelessWidget {
                                 height: 12,
                               ),
                               Text(
-                                '아직 답변이 달리지 않았어요',
+                                isUser == 1
+                                    ? '아직 답변이 달리지 않았어요'
+                                    : '첫번째 답변을 남겨보세요',
                                 style: kSubTitle3Style.copyWith(
                                   color: mainblack.withOpacity(0.6),
                                 ),

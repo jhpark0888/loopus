@@ -40,7 +40,7 @@ class AppController extends GetxService {
         _homeController.onPostingRefresh();
         _homeController.onQuestionRefresh();
         _localDataController.tagChange(false);
-        ModalController.to.showCustomDialog('관심 태그 변경한 뒤 홈 새로고침했다는 뜻', 1000);
+        // ModalController.to.showCustomDialog('관심 태그 변경한 뒤 홈 새로고침했다는 뜻', 1000);
       }
 
       if (currentIndex.value == 0) {

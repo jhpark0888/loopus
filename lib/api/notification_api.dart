@@ -12,6 +12,8 @@ import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/widget/notification_widget.dart';
 
+import '../controller/error_controller.dart';
+
 Future<void> getNotificationlist(String type, int lastindex) async {
   ConnectivityResult result = await initConnectivity();
   NotificationDetailController controller = Get.find();
@@ -76,7 +78,9 @@ Future<void> getNotificationlist(String type, int lastindex) async {
         }
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -95,5 +99,7 @@ Future deleteNotification(int noticeid) async {
     } else {
       return Future.error(response.statusCode);
     }
-  } catch (e) {}
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
+  }
 }

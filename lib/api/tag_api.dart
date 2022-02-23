@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/error_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
@@ -23,76 +24,80 @@ void gettagsearch(Tagtype tagtype) async {
 
     Uri uri = Uri.parse('$serverUri/tag_api/tag?query=${tagsearchword}');
     print(uri);
-    http.Response response = await http.get(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-    );
+    try {
+      http.Response response = await http.get(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
 
-    var responsebody = json.decode(utf8.decode(response.bodyBytes));
+      var responsebody = json.decode(utf8.decode(response.bodyBytes));
 
-    if (response.statusCode == 200) {
-      List responselist = responsebody["results"];
-      List<SearchTag> tagmaplist =
-          responselist.map((map) => SearchTag.fromJson(map)).toList();
+      if (response.statusCode == 200) {
+        List responselist = responsebody["results"];
+        List<SearchTag> tagmaplist =
+            responselist.map((map) => SearchTag.fromJson(map)).toList();
 
-      if (tagmaplist
-          .where((element) => element.tag == tagsearchword)
-          .isNotEmpty) {
-        tagController.searchtaglist.clear();
+        if (tagmaplist
+            .where((element) => element.tag == tagsearchword)
+            .isNotEmpty) {
+          tagController.searchtaglist.clear();
 
-        tagController.searchtaglist(tagmaplist.map((element) {
-          return SearchTagWidget(
-            id: element.id,
-            tag: element.tag,
-            count: element.count,
-            isSearch: 0,
-            tagtype: tagtype,
-          );
-        }).toList());
+          tagController.searchtaglist(tagmaplist.map((element) {
+            return SearchTagWidget(
+              id: element.id,
+              tag: element.tag,
+              count: element.count,
+              isSearch: 0,
+              tagtype: tagtype,
+            );
+          }).toList());
 
-        for (var selectedtag in tagController.selectedtaglist) {
-          tagController.searchtaglist
-              .removeWhere((element) => element.tag == selectedtag.text);
+          for (var selectedtag in tagController.selectedtaglist) {
+            tagController.searchtaglist
+                .removeWhere((element) => element.tag == selectedtag.text);
+          }
+        } else {
+          tagController.searchtaglist.clear();
+
+          tagController.searchtaglist(tagmaplist.map((element) {
+            return SearchTagWidget(
+              id: element.id,
+              tag: element.tag,
+              count: element.count,
+              isSearch: 0,
+              tagtype: tagtype,
+            );
+          }).toList());
+          if (tagsearchword != '' &&
+              tagController.selectedtaglist
+                  .where((tag) => tag.text == tagsearchword)
+                  .isEmpty) {
+            tagController.searchtaglist.insert(
+                0,
+                SearchTagWidget(
+                  id: 0,
+                  tag: "처음으로 '${tagsearchword}' 태그 사용하기",
+                  isSearch: 0,
+                  tagtype: tagtype,
+                ));
+          }
+
+          tagController.selectedtaglist.forEach((selectedtag) {
+            tagController.searchtaglist
+                .removeWhere((element) => element.tag == selectedtag.text);
+          });
         }
+        tagController.tagsearchstate(ScreenState.success);
+      } else if (response.statusCode == 401) {
+        tagController.tagsearchstate(ScreenState.error);
       } else {
-        tagController.searchtaglist.clear();
-
-        tagController.searchtaglist(tagmaplist.map((element) {
-          return SearchTagWidget(
-            id: element.id,
-            tag: element.tag,
-            count: element.count,
-            isSearch: 0,
-            tagtype: tagtype,
-          );
-        }).toList());
-        if (tagsearchword != '' &&
-            tagController.selectedtaglist
-                .where((tag) => tag.text == tagsearchword)
-                .isEmpty) {
-          tagController.searchtaglist.insert(
-              0,
-              SearchTagWidget(
-                id: 0,
-                tag: "처음으로 '${tagsearchword}' 태그 사용하기",
-                isSearch: 0,
-                tagtype: tagtype,
-              ));
-        }
-
-        tagController.selectedtaglist.forEach((selectedtag) {
-          tagController.searchtaglist
-              .removeWhere((element) => element.tag == selectedtag.text);
-        });
+        tagController.tagsearchstate(ScreenState.error);
+        print('tag status code :${response.statusCode}');
       }
-      tagController.tagsearchstate(ScreenState.success);
-    } else if (response.statusCode == 401) {
-      tagController.tagsearchstate(ScreenState.error);
-    } else {
-      tagController.tagsearchstate(ScreenState.error);
-      print('tag status code :${response.statusCode}');
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -107,31 +112,35 @@ void getpopulartag() async {
   } else {
     Uri uri = Uri.parse('$serverUri/tag_api/tag?query=');
     print(uri);
-    http.Response response = await http.get(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-    );
 
-    var responsebody = json.decode(utf8.decode(response.bodyBytes));
+    try {
+      http.Response response = await http.get(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+      var responsebody = json.decode(utf8.decode(response.bodyBytes));
 
-    print("인기 태그 리스트: ${response.statusCode}");
-    if (response.statusCode == 200) {
-      List responselist = responsebody["results"];
-      List<SearchTag> tagmaplist =
-          responselist.map((map) => SearchTag.fromJson(map)).toList();
+      print("인기 태그 리스트: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        List responselist = responsebody["results"];
+        List<SearchTag> tagmaplist =
+            responselist.map((map) => SearchTag.fromJson(map)).toList();
 
-      controller.populartaglist(tagmaplist
-          .map((tag) => Tag(tagId: tag.id, tag: tag.tag, count: tag.count!))
-          .toList());
+        controller.populartaglist(tagmaplist
+            .map((tag) => Tag(tagId: tag.id, tag: tag.tag, count: tag.count!))
+            .toList());
 
-      controller.populartagstate(ScreenState.success);
-    } else if (response.statusCode == 401) {
-      controller.populartagstate(ScreenState.error);
-    } else {
-      controller.populartagstate(ScreenState.error);
-      print('tag status code :${response.statusCode}');
+        controller.populartagstate(ScreenState.success);
+      } else if (response.statusCode == 401) {
+        controller.populartagstate(ScreenState.error);
+      } else {
+        controller.populartagstate(ScreenState.error);
+        print('tag status code :${response.statusCode}');
+      }
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
     }
   }
 }

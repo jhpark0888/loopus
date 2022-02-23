@@ -12,6 +12,7 @@ import 'package:loopus/widget/message_widget.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
 
 import '../constant.dart';
+import '../controller/error_controller.dart';
 
 Future<void> getmessageroomlist() async {
   ConnectivityResult result = await initConnectivity();
@@ -24,7 +25,6 @@ Future<void> getmessageroomlist() async {
     String? myid = await const FlutterSecureStorage().read(key: 'id');
 
     final url = Uri.parse("$serverUri/chat/get_list");
-
     try {
       http.Response response = await http.get(
         url,
@@ -50,7 +50,9 @@ Future<void> getmessageroomlist() async {
         MessageController.to.chatroomscreenstate(ScreenState.error);
         return Future.error(response.statusCode);
       }
-    } catch (e) {}
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
+    }
   }
 }
 
@@ -92,6 +94,7 @@ Future<List<MessageWidget>> getmessagelist(int userid, int lastindex) async {
       return Future.error(response.statusCode);
     }
   } catch (e) {
+    ErrorController.to.isServerClosed(true);
     return [];
   }
 
