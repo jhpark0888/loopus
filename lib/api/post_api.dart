@@ -14,6 +14,7 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/likepeople_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
@@ -388,7 +389,8 @@ Future<dynamic> latestpost(int lastindex) async {
     print('posting list : $list');
   }
   if (response.statusCode != 200) {
-    return Future.error(response.statusCode);
+    // Future.error(response.statusCode);
+    return null;
   } else {
     return PostingModel.fromJson(list);
   }
@@ -411,7 +413,8 @@ Future<dynamic> recommandpost(int lastindex) async {
   //   print('posting list : $list');
   // }
   if (response.statusCode != 200) {
-    return Future.error(response.statusCode);
+    // Future.error(response.statusCode);
+    return null;
   } else {
     var responseBody = utf8.decode(response.bodyBytes);
     List<dynamic> list = jsonDecode(responseBody);
@@ -458,7 +461,8 @@ Future<dynamic> looppost(int lastindex) async {
     HomeController.to.enableLoopPullup.value = false;
   }
   if (response.statusCode != 200) {
-    return Future.error(response.statusCode);
+    // Future.error(response.statusCode);
+    return null;
   } else {
     return PostingModel.fromJson(list);
   }
@@ -495,49 +499,66 @@ Future<dynamic> likepost(int postingId) async {
   String result = jsonDecode(responseBody);
 }
 
-Future<List<User>> getlikepeoele(int postid) async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-
-  final uri = Uri.parse("$serverUri/post_api/like_list_load/$postid");
-
-  http.Response response =
-      await http.get(uri, headers: {"Authorization": "Token $token"});
-
-  print('like 리스트 statusCode: ${response.statusCode}');
-  if (response.statusCode == 200) {
-    List responseBody = json.decode(utf8.decode(response.bodyBytes));
-    List<User> likepeople =
-        responseBody.map((user) => User.fromJson(user)).toList();
-
-    return likepeople;
+Future<void> getlikepeoele(int postid) async {
+  ConnectivityResult result = await initConnectivity();
+  LikePeopleController controller = Get.find(tag: postid.toString());
+  if (result == ConnectivityResult.none) {
+    controller.likepeoplescreenstate(ScreenState.disconnect);
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+    final uri = Uri.parse("$serverUri/post_api/like_list_load/$postid");
+
+    http.Response response =
+        await http.get(uri, headers: {"Authorization": "Token $token"});
+
+    print('like 리스트 statusCode: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      List responseBody = json.decode(utf8.decode(response.bodyBytes));
+      List<User> likepeople =
+          responseBody.map((user) => User.fromJson(user)).toList();
+      controller.likelist(likepeople);
+
+      controller.likepeoplescreenstate(ScreenState.success);
+
+      return;
+    } else {
+      controller.likepeoplescreenstate(ScreenState.error);
+
+      return Future.error(response.statusCode);
+    }
   }
 }
 
 Future postingreport(int postingId) async {
-  String? token;
-  await const FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
-
-  final Uri uri = Uri.parse("$serverUri/post_api/report");
-
-  var body = {"id": postingId, "reason": ""};
-
-  final response = await post(uri,
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Token $token"
-      },
-      body: json.encode(body));
-
-  print('포스팅 신고 statusCode: ${response.statusCode}');
-  if (response.statusCode == 200) {
-    getbacks(2);
-    ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
-    return;
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    String? token;
+    await const FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
+
+    final Uri uri = Uri.parse("$serverUri/post_api/report");
+
+    var body = {"id": postingId, "reason": ""};
+
+    final response = await post(uri,
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Token $token"
+        },
+        body: json.encode(body));
+
+    print('포스팅 신고 statusCode: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      getbacks(2);
+      ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
+      return;
+    } else {
+      return Future.error(response.statusCode);
+    }
   }
 }

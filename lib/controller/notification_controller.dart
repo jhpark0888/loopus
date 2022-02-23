@@ -104,6 +104,27 @@ class NotificationController extends GetxController {
                       .value));
           // 새로 추가
           putonmessagescreen(event.data["id"].toString());
+          try {
+            MessageRoomWidget messageroomwidget = MessageController
+                .to.chattingroomlist
+                .where((messageroomwidget) =>
+                    messageroomwidget.messageRoom.value.user.userid ==
+                    int.parse(event.data["id"]))
+                .first;
+            messageroomwidget.messageRoom.value.message.value = Message(
+                id: 0,
+                roomId: 0,
+                receiverId: int.parse(myid),
+                date: DateTime.now(),
+                message: event.notification!.body!,
+                isRead: false,
+                issender: 0,
+                issending: true.obs);
+            MessageController.to.chattingroomlist.remove(messageroomwidget);
+            MessageController.to.chattingroomlist.insert(0, messageroomwidget);
+          } catch (e) {
+            print(e);
+          }
           // try {
           //   Get.find<OnMessageScreenController>(
           //       tag: event.data["id"].toString());

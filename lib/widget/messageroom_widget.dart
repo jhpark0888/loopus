@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
+import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
@@ -37,6 +39,14 @@ class MessageRoomWidget extends StatelessWidget {
       onTapUp: (details) => _hoverController.isHover(false),
       onTap: () async {
         messageRoom.value.notread(0);
+        if (MessageController.to.chattingroomlist
+            .where((messageroomwidget) =>
+                messageroomwidget.messageRoom.value.notread.value != 0)
+            .isNotEmpty) {
+          ProfileController.to.isnewmessage(true);
+        } else {
+          ProfileController.to.isnewmessage(false);
+        }
         // controller.firstmessagesload();
         // messageRoom.value.message.value =
         //     await

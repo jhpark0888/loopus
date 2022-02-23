@@ -222,11 +222,10 @@ class NotificationWidget extends StatelessWidget {
 
   void clickprofile(NotificationType type) async {
     if (type == NotificationType.follow) {
-      FollowState followState = await Get.to(() => OtherProfileScreen(
+      Get.to(() => OtherProfileScreen(
           userid: notification.targetId,
           isuser: 0,
           realname: notification.user.realName));
-      notification.looped!(followState);
     } else {
       Get.to(() => OtherProfileScreen(
           userid: notification.user.userid,

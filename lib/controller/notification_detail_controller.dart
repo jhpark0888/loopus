@@ -8,8 +8,11 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class NotificationDetailController extends GetxController {
   static NotificationDetailController get to => Get.find();
-  RxBool isNotificationloading = true.obs;
-  RxBool isfollowreqloading = true.obs;
+  // RxBool isNotificationloading = true.obs;
+  // RxBool isfollowreqloading = true.obs;
+
+  Rx<ScreenState> notificationscreenstate = ScreenState.loading.obs;
+  Rx<ScreenState> followreqscreenstate = ScreenState.loading.obs;
 
   RxList<NotificationWidget> followalarmlist = <NotificationWidget>[].obs;
   RxList<NotificationWidget> alarmlist = <NotificationWidget>[].obs;
@@ -33,13 +36,12 @@ class NotificationDetailController extends GetxController {
   }
 
   void alarmRefresh() async {
+    notificationscreenstate(ScreenState.loading);
     alarmlist.clear();
     isalarmEmpty(false);
     enablealarmPullup.value = true;
 
-    await alarmloadItem().then((value) {
-      isNotificationloading(false);
-    });
+    await alarmloadItem();
     alarmRefreshController.refreshCompleted();
   }
 
@@ -50,13 +52,13 @@ class NotificationDetailController extends GetxController {
   }
 
   void followreqRefresh() async {
+    followreqscreenstate(ScreenState.loading);
+
     followalarmlist.clear();
     isfollowreqEmpty(false);
     enablefollowreqPullup.value = true;
 
-    await followreqloadItem().then((value) {
-      isfollowreqloading(false);
-    });
+    await followreqloadItem();
     followreqRefreshController.refreshCompleted();
   }
 
@@ -67,35 +69,12 @@ class NotificationDetailController extends GetxController {
   }
 
   Future<void> alarmloadItem() async {
-    List notificationlist = await getNotificationlist(
+    await getNotificationlist(
         "", alarmlist.isEmpty ? 0 : alarmlist.last.notification.id);
-
-    if (notificationlist.isEmpty && alarmlist.isEmpty) {
-      isalarmEmpty.value = true;
-    } else if (notificationlist.isEmpty && alarmlist.isNotEmpty) {
-      enablealarmPullup.value = false;
-    }
-
-    for (var notification in notificationlist) {
-      NotificationDetailController.to.alarmlist.add(
-          NotificationWidget(key: UniqueKey(), notification: notification));
-    }
   }
 
   Future<void> followreqloadItem() async {
-    List notificationlist = await getNotificationlist(
-        NotificationType.follow.name,
+    await getNotificationlist(NotificationType.follow.name,
         followalarmlist.isEmpty ? 0 : followalarmlist.last.notification.id);
-
-    if (notificationlist.isEmpty && followalarmlist.isEmpty) {
-      isfollowreqEmpty.value = true;
-    } else if (notificationlist.isEmpty && followalarmlist.isNotEmpty) {
-      enablefollowreqPullup.value = false;
-    }
-
-    for (var notification in notificationlist) {
-      NotificationDetailController.to.followalarmlist.add(
-          NotificationWidget(key: UniqueKey(), notification: notification));
-    }
   }
 }

@@ -125,13 +125,14 @@ class HomeController extends GetxController
       ModalController.to.showdisconnectdialog();
     } else {
       if (selectgroup.value == "모든 질문") {
-        QuestionModel questionModel = await getquestionlist(
+        QuestionModel? questionModel = await getquestionlist(
             questionResult.value.questionitems.isEmpty
                 ? 0
                 : questionResult.value.questionitems.last.id,
             "any");
 
-        if (questionModel.questionitems.isEmpty &&
+        if(questionModel != null) {
+          if (questionModel.questionitems.isEmpty &&
             questionResult.value.questionitems.isEmpty) {
           isAllQuestionEmpty.value = true;
         } else if (questionModel.questionitems.isEmpty &&
@@ -140,14 +141,16 @@ class HomeController extends GetxController
         }
 
         questionResult.value.questionitems.addAll(questionModel.questionitems);
+        }
       } else {
-        QuestionModel questionModel = await getquestionlist(
+        QuestionModel? questionModel = await getquestionlist(
             questionResult.value.questionitems.isEmpty
                 ? 0
                 : questionResult.value.questionitems.last.id,
             "my");
 
-        if (questionModel.questionitems.isEmpty &&
+        if(questionModel != null) {
+          if (questionModel.questionitems.isEmpty &&
             questionResult.value.questionitems.isEmpty) {
           isMyQuestionEmpty.value = true;
         } else if (questionModel.questionitems.isEmpty &&
@@ -156,12 +159,13 @@ class HomeController extends GetxController
         }
 
         questionResult.value.questionitems.addAll(questionModel.questionitems);
+        }
       }
     }
   }
 
   Future<void> postloadItem() async {
-    PostingModel postingModel;
+    PostingModel? postingModel;
     ConnectivityResult result = await initConnectivity();
     if (result == ConnectivityResult.none) {
       ModalController.to.showdisconnectdialog();
@@ -178,7 +182,8 @@ class HomeController extends GetxController
                 : latestpostingResult.value.postingitems.last.id);
       }
 
-      if (postingModel.postingitems.isEmpty &&
+      if(postingModel != null) {
+        if (postingModel.postingitems.isEmpty &&
           recommandpostingResult.value.postingitems.isEmpty) {
         isPostingEmpty.value = true;
       } else if (postingModel.postingitems.isNotEmpty &&
@@ -200,6 +205,9 @@ class HomeController extends GetxController
         latestpostingResult.value.postingitems
             .addAll(postingModel.postingitems);
       }
+      }
+
+      
     }
   }
 
@@ -208,12 +216,13 @@ class HomeController extends GetxController
     if (result == ConnectivityResult.none) {
       ModalController.to.showdisconnectdialog();
     } else {
-      PostingModel loopModel = await looppost(
+      PostingModel? loopModel = await looppost(
           loopResult.value.postingitems.isEmpty
               ? 0
               : loopResult.value.postingitems.last.id);
 
-      if (loopModel.postingitems.isEmpty &&
+      if(loopModel != null) {
+        if (loopModel.postingitems.isEmpty &&
           loopResult.value.postingitems.isEmpty) {
         isLoopEmpty.value = true;
       } else if (loopModel.postingitems.isEmpty &&
@@ -222,6 +231,8 @@ class HomeController extends GetxController
       }
 
       loopResult.value.postingitems.addAll(loopModel.postingitems);
+      }
+      
     }
   }
 

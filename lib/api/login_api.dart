@@ -63,61 +63,72 @@ Future<void> loginRequest() async {
 }
 
 Future<void> postpwfindemailcheck() async {
+  ConnectivityResult result = await initConnectivity();
   LogInController logInController = Get.put(LogInController());
   ModalController _modalController = Get.put(ModalController());
-
-  Uri uri = Uri.parse('$serverUri/user_api/password');
-
-  //이메일 줘야 됨
-  final email = {
-    'email': logInController.idcontroller.text,
-  };
-  http.Response response = await http.post(uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: json.encode(email));
-
-  print("비밀번호 찾기 이메일 체크 : ${response.statusCode}");
-  if (response.statusCode == 200) {
-    PwChangeController.to.isPwFindCheck(true);
-    // _modalController.showCustomDialog('입력하신 이메일로 새로운 비밀번호를 알려드렸어요', 1400);
-  } else if (response.statusCode == 401) {
-    _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-    print('에러1');
+  if (result == ConnectivityResult.none) {
+    _modalController.showdisconnectdialog();
   } else {
-    _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-    print('에러');
+    ModalController.to
+        .showCustomDialog('입력하신 이메일로 들어가서 링크를 클릭해 본인 인증을 해주세요', 1400);
+    Uri uri = Uri.parse('$serverUri/user_api/password');
+
+    //이메일 줘야 됨
+    final email = {
+      'email': logInController.idcontroller.text,
+    };
+    http.Response response = await http.post(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(email));
+
+    print("비밀번호 찾기 이메일 체크 : ${response.statusCode}");
+    if (response.statusCode == 200) {
+      PwChangeController.to.isPwFindCheck(true);
+      // _modalController.showCustomDialog('입력하신 이메일로 새로운 비밀번호를 알려드렸어요', 1400);
+    } else if (response.statusCode == 401) {
+      _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+      print('에러1');
+    } else {
+      _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+      print('에러');
+    }
   }
 }
 
 Future<void> putpwfindchange() async {
+  ConnectivityResult result = await initConnectivity();
   ModalController _modalController = Get.put(ModalController());
   PwChangeController pwChangeController = Get.find();
   LogInController logInController = Get.find();
 
-  Uri uri = Uri.parse('$serverUri/user_api/password?type=find');
-
-  final user = {
-    "email": logInController.idcontroller.text,
-    'password': pwChangeController.newpwcontroller.text,
-  };
-  http.Response response = await http.put(uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: json.encode(user));
-
-  print("비밀번호 찾기 : ${response.statusCode}");
-  if (response.statusCode == 200) {
-    getbacks(2);
-    _modalController.showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
-  } else if (response.statusCode == 401) {
-    _modalController.showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
-    print('에러1');
+  if (result == ConnectivityResult.none) {
+    _modalController.showdisconnectdialog();
   } else {
-    _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-    print('에러');
+    Uri uri = Uri.parse('$serverUri/user_api/password?type=find');
+
+    final user = {
+      "email": logInController.idcontroller.text,
+      'password': pwChangeController.newpwcontroller.text,
+    };
+    http.Response response = await http.put(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(user));
+
+    print("비밀번호 찾기 : ${response.statusCode}");
+    if (response.statusCode == 200) {
+      getbacks(2);
+      _modalController.showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
+    } else if (response.statusCode == 401) {
+      _modalController.showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
+      print('에러1');
+    } else {
+      _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+      print('에러');
+    }
   }
 }
 
