@@ -29,6 +29,7 @@ import 'package:loopus/widget/search_posting_widget.dart';
 import 'package:loopus/widget/smarttextfield.dart';
 
 import '../constant.dart';
+import '../controller/error_controller.dart';
 import '../controller/modal_controller.dart';
 
 Future<void> addposting(int projectId, PostaddRoute route) async {
@@ -406,19 +407,23 @@ Future<dynamic> recommandpost(int lastindex) async {
   final recommandloadUri =
       Uri.parse("$serverUri/post_api/recommend_load?last=$lastindex");
 
-  final response =
-      await get(recommandloadUri, headers: {"Authorization": "Token $token"});
+  try {
+    final response =
+        await get(recommandloadUri, headers: {"Authorization": "Token $token"});
 
-  // if (kDebugMode) {
-  //   print('posting list : $list');
-  // }
-  if (response.statusCode != 200) {
-    // Future.error(response.statusCode);
-    return null;
-  } else {
-    var responseBody = utf8.decode(response.bodyBytes);
-    List<dynamic> list = jsonDecode(responseBody);
-    return PostingModel.fromJson(list);
+    // if (kDebugMode) {
+    //   print('posting list : $list');
+    // }
+    if (response.statusCode != 200) {
+      // Future.error(response.statusCode);
+      return null;
+    } else {
+      var responseBody = utf8.decode(response.bodyBytes);
+      List<dynamic> list = jsonDecode(responseBody);
+      return PostingModel.fromJson(list);
+    }
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -453,18 +458,22 @@ Future<dynamic> looppost(int lastindex) async {
 
   final loopUri = Uri.parse("$serverUri/post_api/loop_load?last=$lastindex");
 
-  final response =
-      await get(loopUri, headers: {"Authorization": "Token $token"});
-  var responseBody = utf8.decode(response.bodyBytes);
-  List<dynamic> list = jsonDecode(responseBody);
-  if (list.isEmpty) {
-    HomeController.to.enableLoopPullup.value = false;
-  }
-  if (response.statusCode != 200) {
-    // Future.error(response.statusCode);
-    return null;
-  } else {
-    return PostingModel.fromJson(list);
+  try {
+    final response =
+        await get(loopUri, headers: {"Authorization": "Token $token"});
+    var responseBody = utf8.decode(response.bodyBytes);
+    List<dynamic> list = jsonDecode(responseBody);
+    if (list.isEmpty) {
+      HomeController.to.enableLoopPullup.value = false;
+    }
+    if (response.statusCode != 200) {
+      // Future.error(response.statusCode);
+      return null;
+    } else {
+      return PostingModel.fromJson(list);
+    }
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -475,12 +484,15 @@ Future<dynamic> bookmarkpost(int postingId) async {
   });
 
   final bookmarkUri = Uri.parse("$serverUri/post_api/bookmark/$postingId");
+  try {
+    final response =
+        await post(bookmarkUri, headers: {"Authorization": "Token $token"});
 
-  final response =
-      await post(bookmarkUri, headers: {"Authorization": "Token $token"});
-
-  var responseBody = utf8.decode(response.bodyBytes);
-  String result = jsonDecode(responseBody);
+    var responseBody = utf8.decode(response.bodyBytes);
+    String result = jsonDecode(responseBody);
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
+  }
 }
 
 Future<dynamic> likepost(int postingId) async {
@@ -490,13 +502,16 @@ Future<dynamic> likepost(int postingId) async {
   });
 
   final likeUri = Uri.parse("$serverUri/post_api/like/$postingId");
-
-  final response =
-      await post(likeUri, headers: {"Authorization": "Token $token"});
-  var statusCode = response.statusCode;
-  var responseHeaders = response.headers;
-  var responseBody = utf8.decode(response.bodyBytes);
-  String result = jsonDecode(responseBody);
+  try {
+    final response =
+        await post(likeUri, headers: {"Authorization": "Token $token"});
+    var statusCode = response.statusCode;
+    var responseHeaders = response.headers;
+    var responseBody = utf8.decode(response.bodyBytes);
+    String result = jsonDecode(responseBody);
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
+  }
 }
 
 Future<void> getlikepeoele(int postid) async {

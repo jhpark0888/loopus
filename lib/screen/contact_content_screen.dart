@@ -75,27 +75,27 @@ class ContactContentScreen extends StatelessWidget {
               maxLines: 12,
             ),
             //todo: 아래 정보들을 메일에 함께 보내야 함
-            Obx(
-              () => _userDeviceInfo.deviceData.isNotEmpty
-                  ? Text(
-                      "${_userDeviceInfo.deviceData.keys.first} : ${_userDeviceInfo.deviceData.values.first}\n${_userDeviceInfo.deviceData.keys.last} : ${_userDeviceInfo.deviceData.values.last}")
-                  : Text(''),
-            ),
-            Obx(
-              () => _userDeviceInfo.appInfoData.isNotEmpty
-                  ? Text(
-                      _userDeviceInfo.appInfoData.keys.first +
-                          ' ' +
-                          _userDeviceInfo.appInfoData.values.first,
-                      style: kCaptionStyle.copyWith(
-                        color: mainblack.withOpacity(0.6),
-                      ),
-                    )
-                  : Text(''),
-            ),
-            Text(_profileController.myUserInfo.value.realName),
-            Text(_profileController.myUserInfo.value.department),
-            Text(_profileController.myUserInfo.value.userid.toString()),
+            // Obx(
+            //   () => _userDeviceInfo.deviceData.isNotEmpty
+            //       ? Text(
+            //           "${_userDeviceInfo.deviceData.keys.first} : ${_userDeviceInfo.deviceData.values.first}\n${_userDeviceInfo.deviceData.keys.last} : ${_userDeviceInfo.deviceData.values.last}")
+            //       : Text(''),
+            // ),
+            // Obx(
+            //   () => _userDeviceInfo.appInfoData.isNotEmpty
+            //       ? Text(
+            //           _userDeviceInfo.appInfoData.keys.first +
+            //               ' ' +
+            //               _userDeviceInfo.appInfoData.values.first,
+            //           style: kCaptionStyle.copyWith(
+            //             color: mainblack.withOpacity(0.6),
+            //           ),
+            //         )
+            //       : Text(''),
+            // ),
+            // Text(_profileController.myUserInfo.value.realName),
+            // Text(_profileController.myUserInfo.value.department),
+            // Text(_profileController.myUserInfo.value.userid.toString()),
           ],
         ),
       ),

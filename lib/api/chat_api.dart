@@ -12,6 +12,7 @@ import 'package:loopus/widget/message_widget.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
 
 import '../constant.dart';
+import '../controller/error_controller.dart';
 
 Future<void> getmessageroomlist() async {
   ConnectivityResult result = await initConnectivity();
@@ -24,30 +25,33 @@ Future<void> getmessageroomlist() async {
     String? myid = await const FlutterSecureStorage().read(key: 'id');
 
     final url = Uri.parse("$serverUri/chat/get_list");
+    try {
+      http.Response response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Token $token',
+          'Content-Type': 'application/json'
+        },
+      );
 
-    http.Response response = await http.get(
-      url,
-      headers: {
-        'Authorization': 'Token $token',
-        'Content-Type': 'application/json'
-      },
-    );
-
-    print('채팅방 리스트 statuscode: ${response.statusCode}');
-    if (response.statusCode == 200) {
-      List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-      MessageController.to.chattingroomlist(responseBody
-          .map((messageroom) => MessageRoomWidget(
-              messageRoom: MessageRoom.fromJson(messageroom, myid).obs))
-          .toList());
-      MessageController.to.chatroomscreenstate(ScreenState.success);
-      print("---------------------------");
-      print(responseBody);
-      print(response.statusCode);
-      return;
-    } else {
-      MessageController.to.chatroomscreenstate(ScreenState.error);
-      return Future.error(response.statusCode);
+      print('채팅방 리스트 statuscode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+        MessageController.to.chattingroomlist(responseBody
+            .map((messageroom) => MessageRoomWidget(
+                messageRoom: MessageRoom.fromJson(messageroom, myid).obs))
+            .toList());
+        MessageController.to.chatroomscreenstate(ScreenState.success);
+        print("---------------------------");
+        print(responseBody);
+        print(response.statusCode);
+        return;
+      } else {
+        MessageController.to.chatroomscreenstate(ScreenState.error);
+        return Future.error(response.statusCode);
+      }
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
     }
   }
 }

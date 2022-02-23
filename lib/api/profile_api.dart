@@ -22,6 +22,7 @@ import 'package:loopus/widget/notification_widget.dart';
 import 'package:loopus/widget/project_widget.dart';
 
 import '../constant.dart';
+import '../controller/error_controller.dart';
 import '../controller/home_controller.dart';
 import '../controller/search_controller.dart';
 
@@ -30,28 +31,32 @@ Future<void> getProfile(var userId, int isuser) async {
   print('user token: $token');
 
   var uri = Uri.parse("$serverUri/user_api/profile?id=$userId");
+  try {
+    http.Response response =
+        await http.get(uri, headers: {"Authorization": "Token $token"});
 
-  http.Response response =
-      await http.get(uri, headers: {"Authorization": "Token $token"});
+    if (response.statusCode == 200) {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-  if (response.statusCode == 200) {
-    var responseBody = json.decode(utf8.decode(response.bodyBytes));
-
-    User user = User.fromJson(responseBody);
-    if (isuser == 1) {
-      ProfileController.to.myUserInfo(user);
-      ProfileController.to.isnewalarm(responseBody["new_alarm"]);
-      ProfileController.to.isnewmessage(responseBody["new_message"]);
+      User user = User.fromJson(responseBody);
+      if (isuser == 1) {
+        ProfileController.to.myUserInfo(user);
+        ProfileController.to.isnewalarm(responseBody["new_alarm"]);
+        ProfileController.to.isnewmessage(responseBody["new_message"]);
+      } else {
+        Get.find<OtherProfileController>(tag: userId.toString())
+            .otherUser(user);
+      }
+      return;
+    } else if (response.statusCode == 404) {
+      Get.back();
+      ModalController.to.showCustomDialog('이미 삭제된 유저입니다', 1400);
+      return Future.error(response.statusCode);
     } else {
-      Get.find<OtherProfileController>(tag: userId.toString()).otherUser(user);
+      return Future.error(response.statusCode);
     }
-    return;
-  } else if (response.statusCode == 404) {
-    Get.back();
-    ModalController.to.showCustomDialog('이미 삭제된 유저입니다', 1400);
-    return Future.error(response.statusCode);
-  } else {
-    return Future.error(response.statusCode);
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -60,42 +65,46 @@ Future<void> getProjectlist(var userId, int isuser) async {
 
   var uri = Uri.parse("$serverUri/user_api/project?id=$userId");
 
-  http.Response response =
-      await http.get(uri, headers: {"Authorization": "Token $token"});
+  try {
+    http.Response response =
+        await http.get(uri, headers: {"Authorization": "Token $token"});
 
-  if (response.statusCode == 200) {
-    List responseBody = json.decode(utf8.decode(response.bodyBytes));
-    List<Project> projectlist =
-        responseBody.map((project) => Project.fromJson(project)).toList();
+    if (response.statusCode == 200) {
+      List responseBody = json.decode(utf8.decode(response.bodyBytes));
+      List<Project> projectlist =
+          responseBody.map((project) => Project.fromJson(project)).toList();
 
-    if (isuser == 1) {
-      ProfileController.to.myProjectList(projectlist
-          .map((project) => ProjectWidget(
-                project: project.obs,
-                type: ProjectWidgetType.profile,
-              ))
-          .toList());
-      ProfileController.to.myprofilescreenstate(ScreenState.success);
+      if (isuser == 1) {
+        ProfileController.to.myProjectList(projectlist
+            .map((project) => ProjectWidget(
+                  project: project.obs,
+                  type: ProjectWidgetType.profile,
+                ))
+            .toList());
+        ProfileController.to.myprofilescreenstate(ScreenState.success);
+      } else {
+        Get.find<OtherProfileController>(tag: userId.toString())
+            .otherProjectList(projectlist
+                .map((project) => ProjectWidget(
+                      project: project.obs,
+                      type: ProjectWidgetType.profile,
+                    ))
+                .toList());
+        Get.find<OtherProfileController>(tag: userId.toString())
+            .otherprofilescreenstate(ScreenState.success);
+      }
+      return;
     } else {
-      Get.find<OtherProfileController>(tag: userId.toString())
-          .otherProjectList(projectlist
-              .map((project) => ProjectWidget(
-                    project: project.obs,
-                    type: ProjectWidgetType.profile,
-                  ))
-              .toList());
-      Get.find<OtherProfileController>(tag: userId.toString())
-          .otherprofilescreenstate(ScreenState.success);
+      if (isuser == 1) {
+        ProfileController.to.myprofilescreenstate(ScreenState.error);
+      } else {
+        Get.find<OtherProfileController>(tag: userId.toString())
+            .otherprofilescreenstate(ScreenState.error);
+      }
+      return Future.error(response.statusCode);
     }
-    return;
-  } else {
-    if (isuser == 1) {
-      ProfileController.to.myprofilescreenstate(ScreenState.error);
-    } else {
-      Get.find<OtherProfileController>(tag: userId.toString())
-          .otherprofilescreenstate(ScreenState.error);
-    }
-    return Future.error(response.statusCode);
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
   }
 }
 

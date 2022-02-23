@@ -13,6 +13,7 @@ import 'package:loopus/model/question_model.dart';
 import 'package:loopus/widget/question_answer_widget.dart';
 
 import '../constant.dart';
+import '../controller/error_controller.dart';
 
 Future postquestion(String content) async {
   ConnectivityResult result = await initConnectivity();
@@ -32,21 +33,25 @@ Future postquestion(String content) async {
           .map((element) => element.text)
           .toList()
     };
-    http.Response response = await http.post(url,
-        headers: {
-          'Authorization': 'Token $token',
-          'Content-Type': 'application/json'
-        },
-        body: jsonEncode(data));
-    var responseHeaders = response.headers;
-    var responseBody = utf8.decode(response.bodyBytes);
+    try {
+      http.Response response = await http.post(url,
+          headers: {
+            'Authorization': 'Token $token',
+            'Content-Type': 'application/json'
+          },
+          body: jsonEncode(data));
+      var responseHeaders = response.headers;
+      var responseBody = utf8.decode(response.bodyBytes);
 
-    if (response.statusCode == 200) {
-      getbacks(2);
-      HomeController.to.onQuestionRefresh();
-      return;
-    } else {
-      return Future.error(response.statusCode);
+      if (response.statusCode == 200) {
+        getbacks(2);
+        HomeController.to.onQuestionRefresh();
+        return;
+      } else {
+        return Future.error(response.statusCode);
+      }
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -59,18 +64,22 @@ Future<dynamic> getquestionlist(int lastindex, String type) async {
   print(lastindex);
   final url = Uri.parse(
       "$serverUri/question_api/question_list_load/$type?last=$lastindex");
-  final response = await get(url, headers: {"Authorization": "Token $token"});
-  var statusCode = response.statusCode;
-  var responseHeaders = response.headers;
-  if (response.statusCode == 200) {
-    var responseBody = utf8.decode(response.bodyBytes);
-    print(responseBody);
+  try {
+    final response = await get(url, headers: {"Authorization": "Token $token"});
+    var statusCode = response.statusCode;
+    var responseHeaders = response.headers;
+    if (response.statusCode == 200) {
+      var responseBody = utf8.decode(response.bodyBytes);
+      print(responseBody);
 
-    List<dynamic> list = jsonDecode(responseBody);
-    // print(list);
-    return QuestionModel.fromJson(list);
-  } else {
-    return Future.error(response.statusCode);
+      List<dynamic> list = jsonDecode(responseBody);
+      // print(list);
+      return QuestionModel.fromJson(list);
+    } else {
+      return Future.error(response.statusCode);
+    }
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -127,25 +136,28 @@ Future<dynamic> deletequestion(int questionid) async {
     });
 
     final url = Uri.parse("$serverUri/question_api/question?id=$questionid");
+    try {
+      final response =
+          await delete(url, headers: {"Authorization": "Token $token"});
 
-    final response =
-        await delete(url, headers: {"Authorization": "Token $token"});
+      if (response.statusCode == 200) {
+        //   var statusCode = response.statusCode;
+        // var responseHeaders = response.headers;
+        // var responseBody = utf8.decode(response.bodyBytes);
+        // print(statusCode);
+        // Map<String, dynamic> map = jsonDecode(responseBody);
+        HomeController.to.questionResult.value.questionitems.removeWhere(
+            (question) => question.id == controller.question.value.id);
+        Get.back();
+        controller.isQuestionDeleteLoading(false);
 
-    if (response.statusCode == 200) {
-      //   var statusCode = response.statusCode;
-      // var responseHeaders = response.headers;
-      // var responseBody = utf8.decode(response.bodyBytes);
-      // print(statusCode);
-      // Map<String, dynamic> map = jsonDecode(responseBody);
-      HomeController.to.questionResult.value.questionitems.removeWhere(
-          (question) => question.id == controller.question.value.id);
-      Get.back();
-      controller.isQuestionDeleteLoading(false);
-
-      print(' 질문 삭제 성공 : ${response.statusCode}');
-      return;
-    } else {
-      return Future.error(response.statusCode);
+        print(' 질문 삭제 성공 : ${response.statusCode}');
+        return;
+      } else {
+        return Future.error(response.statusCode);
+      }
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -168,27 +180,31 @@ Future<void> answermake(String content, int questionid) async {
     var data = {
       "content": content,
     };
-    http.Response response = await http.post(url,
-        headers: {
-          'Authorization': 'Token $token',
-          'Content-Type': 'application/json'
-        },
-        body: jsonEncode(data));
+    try {
+      http.Response response = await http.post(url,
+          headers: {
+            'Authorization': 'Token $token',
+            'Content-Type': 'application/json'
+          },
+          body: jsonEncode(data));
 
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      Map<String, dynamic> responseBody =
-          jsonDecode(utf8.decode(response.bodyBytes));
-      Answer answer = Answer.fromJson(responseBody);
-      answer.isuser = 1;
-      controller.answerlist.add(QuestionAnswerWidget(
-        answer: answer,
-      ));
-      controller.answerfocus.unfocus();
-      controller.answertextController.clear();
-      return;
-    } else {
-      return Future.error(response.statusCode);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseBody =
+            jsonDecode(utf8.decode(response.bodyBytes));
+        Answer answer = Answer.fromJson(responseBody);
+        answer.isuser = 1;
+        controller.answerlist.add(QuestionAnswerWidget(
+          answer: answer,
+        ));
+        controller.answerfocus.unfocus();
+        controller.answertextController.clear();
+        return;
+      } else {
+        return Future.error(response.statusCode);
+      }
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -207,21 +223,24 @@ Future<dynamic> deleteanswer(int questionid, int answerid) async {
 
     final url =
         Uri.parse("$serverUri/question_api/answer/questionid?id=$answerid");
+    try {
+      final response =
+          await delete(url, headers: {"Authorization": "Token $token"});
 
-    final response =
-        await delete(url, headers: {"Authorization": "Token $token"});
+      print(' 답변 삭제 : ${response.statusCode}');
 
-    print(' 답변 삭제 : ${response.statusCode}');
-
-    if (response.statusCode == 200) {
-      controller.question.value.answer
-          .removeWhere((element) => element.id == answerid);
-      controller.answerlist
-          .removeWhere((element) => element.answer.id == answerid);
-      getbacks(2);
-      return;
-    } else {
-      return Future.error(response.statusCode);
+      if (response.statusCode == 200) {
+        controller.question.value.answer
+            .removeWhere((element) => element.id == answerid);
+        controller.answerlist
+            .removeWhere((element) => element.answer.id == answerid);
+        getbacks(2);
+        return;
+      } else {
+        return Future.error(response.statusCode);
+      }
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
     }
   }
 }

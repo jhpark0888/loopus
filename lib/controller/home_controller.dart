@@ -69,6 +69,7 @@ class HomeController extends GetxController
     // for (int i = 0; i < 4; i++) {
     //   recommend_posting.add(RecommendPostingWidget());
     // }
+    getpopulartag();
     onPostingRefresh();
     onQuestionRefresh();
     onLoopRefresh();

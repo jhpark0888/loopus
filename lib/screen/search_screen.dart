@@ -3,16 +3,24 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/search_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/screen/home_posting_screen.dart';
+import 'package:loopus/screen/tag_detail_screen.dart';
 import 'package:loopus/widget/search_student_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
+import '../api/tag_api.dart';
+import '../widget/disconnect_reload_widget.dart';
+import '../widget/error_reload_widget.dart';
+
 class SearchScreen extends StatelessWidget {
   final SearchController _searchController = Get.put(SearchController());
   final ModalController _modalController = Get.put(ModalController());
+  final HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -183,33 +191,70 @@ class SearchScreen extends StatelessWidget {
                             style: kSubTitle2Style,
                           ),
                         ),
-                        Container(
-                          height: 24,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 7,
-                              itemBuilder: (BuildContext context, index) {
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      left: (index == 0) ? 16 : 0,
-                                      right: (index == 6) ? 16 : 0),
-                                  child: Row(
-                                    children: [
-                                      Tagwidget(
-                                        tag:
-                                            Tag(tagId: 0, tag: '공모전', count: 0),
-                                        fontSize: 14,
-                                      ),
-                                      index != 6
-                                          ? SizedBox(
-                                              width: 8,
-                                            )
-                                          : Container(),
-                                    ],
-                                  ),
-                                );
-                              }),
-                        ),
+                        Obx(
+                          () => homeController.populartagstate.value ==
+                                  ScreenState.loading
+                              ? Image.asset(
+                                  'assets/icons/loading.gif',
+                                  scale: 6,
+                                )
+                              : homeController.populartagstate.value ==
+                                      ScreenState.disconnect
+                                  ? DisconnectReloadWidget(reload: () {
+                                      getpopulartag();
+                                    })
+                                  : homeController.populartagstate.value ==
+                                          ScreenState.error
+                                      ? ErrorReloadWidget(reload: () {
+                                          getpopulartag();
+                                        })
+                                      : Container(
+                                          height: 88,
+                                          child: ListView(
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.horizontal,
+                                            children: homeController
+                                                .populartaglist
+                                                .map((tag) => Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          (homeController
+                                                                      .populartaglist
+                                                                      .indexOf(
+                                                                          tag) ==
+                                                                  0)
+                                                              ? const SizedBox(
+                                                                  width: 16,
+                                                                )
+                                                              : Container(),
+                                                          HomeTagWidget(
+                                                            onTap: () {
+                                                              Get.to(() =>
+                                                                  TagDetailScreen(
+                                                                    tag: tag,
+                                                                  ));
+                                                            },
+                                                            tagTitle: tag.tag,
+                                                            tagCount: tag.count,
+                                                          ),
+                                                          (homeController
+                                                                      .populartaglist
+                                                                      .indexOf(
+                                                                          tag) !=
+                                                                  homeController
+                                                                      .populartaglist
+                                                                      .length)
+                                                              ? const SizedBox(
+                                                                  width: 16,
+                                                                )
+                                                              : Container()
+                                                        ]))
+                                                .toList(),
+                                          ),
+                                        ),
+                        )
+
                         // weekendStudent(_modalController),
                       ],
                     ),
