@@ -418,7 +418,7 @@ Future<dynamic> recommandpost(int lastindex) async {
   } else {
     var responseBody = utf8.decode(response.bodyBytes);
     List<dynamic> list = jsonDecode(responseBody);
-    return PostingModel.fromJson(list);
+    return PostingModel.fromJson([]);
   }
 }
 

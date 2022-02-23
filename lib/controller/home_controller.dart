@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/question_api.dart';
+import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/question_model.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/widget/recommend_posting_widget.dart';
+import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomeController extends GetxController
@@ -51,6 +54,9 @@ class HomeController extends GetxController
       RefreshController(initialRefresh: false);
   RefreshController loopRefreshController =
       RefreshController(initialRefresh: false);
+
+  Rx<ScreenState> populartagstate = ScreenState.loading.obs;
+  RxList<Tag> populartaglist = <Tag>[].obs;
 
   late TabController hometabcontroller;
 
@@ -131,16 +137,17 @@ class HomeController extends GetxController
                 : questionResult.value.questionitems.last.id,
             "any");
 
-        if(questionModel != null) {
+        if (questionModel != null) {
           if (questionModel.questionitems.isEmpty &&
-            questionResult.value.questionitems.isEmpty) {
-          isAllQuestionEmpty.value = true;
-        } else if (questionModel.questionitems.isEmpty &&
-            questionResult.value.questionitems.isNotEmpty) {
-          enableQuestionPullup.value = false;
-        }
+              questionResult.value.questionitems.isEmpty) {
+            isAllQuestionEmpty.value = true;
+          } else if (questionModel.questionitems.isEmpty &&
+              questionResult.value.questionitems.isNotEmpty) {
+            enableQuestionPullup.value = false;
+          }
 
-        questionResult.value.questionitems.addAll(questionModel.questionitems);
+          questionResult.value.questionitems
+              .addAll(questionModel.questionitems);
         }
       } else {
         QuestionModel? questionModel = await getquestionlist(
@@ -149,16 +156,17 @@ class HomeController extends GetxController
                 : questionResult.value.questionitems.last.id,
             "my");
 
-        if(questionModel != null) {
+        if (questionModel != null) {
           if (questionModel.questionitems.isEmpty &&
-            questionResult.value.questionitems.isEmpty) {
-          isMyQuestionEmpty.value = true;
-        } else if (questionModel.questionitems.isEmpty &&
-            questionResult.value.questionitems.isNotEmpty) {
-          enableQuestionPullup.value = false;
-        }
+              questionResult.value.questionitems.isEmpty) {
+            isMyQuestionEmpty.value = true;
+          } else if (questionModel.questionitems.isEmpty &&
+              questionResult.value.questionitems.isNotEmpty) {
+            enableQuestionPullup.value = false;
+          }
 
-        questionResult.value.questionitems.addAll(questionModel.questionitems);
+          questionResult.value.questionitems
+              .addAll(questionModel.questionitems);
         }
       }
     }
@@ -182,32 +190,40 @@ class HomeController extends GetxController
                 : latestpostingResult.value.postingitems.last.id);
       }
 
-      if(postingModel != null) {
+      if (postingModel != null) {
         if (postingModel.postingitems.isEmpty &&
-          recommandpostingResult.value.postingitems.isEmpty) {
-        isPostingEmpty.value = true;
-      } else if (postingModel.postingitems.isNotEmpty &&
-          recommandpostingResult.value.postingitems.isEmpty &&
-          isPostingEmpty.value == true) {
-        isPostingEmpty.value = false;
-      } else if (postingModel.postingitems.isEmpty &&
-          recommandpostingResult.value.postingitems.isNotEmpty &&
-          latestpostingResult.value.postingitems.isEmpty) {
-        isRecommandFull(true);
-      } else if (postingModel.postingitems.isEmpty &&
-          isRecommandFull.value == true) {
-        enablePostingPullup.value = false;
-      }
-      if (isRecommandFull.value == false) {
-        recommandpostingResult.value.postingitems
-            .addAll(postingModel.postingitems);
-      } else {
-        latestpostingResult.value.postingitems
-            .addAll(postingModel.postingitems);
-      }
-      }
+            recommandpostingResult.value.postingitems.isEmpty &&
+            isRecommandFull.value == false) {
+          print("1");
+          getpopulartag();
+          isPostingEmpty.value = true;
+          isRecommandFull(true);
+        } else if (postingModel.postingitems.isNotEmpty &&
+            recommandpostingResult.value.postingitems.isEmpty &&
+            isPostingEmpty.value == true &&
+            isRecommandFull.value == false) {
+          print("2");
 
-      
+          isPostingEmpty.value = false;
+        } else if (postingModel.postingitems.isEmpty &&
+            recommandpostingResult.value.postingitems.isNotEmpty &&
+            latestpostingResult.value.postingitems.isEmpty) {
+          print("3");
+
+          isRecommandFull(true);
+        } else if (postingModel.postingitems.isEmpty &&
+            isRecommandFull.value == true) {
+          print("4");
+          enablePostingPullup.value = false;
+        }
+        if (isRecommandFull.value == false) {
+          recommandpostingResult.value.postingitems
+              .addAll(postingModel.postingitems);
+        } else {
+          latestpostingResult.value.postingitems
+              .addAll(postingModel.postingitems);
+        }
+      }
     }
   }
 
@@ -221,18 +237,17 @@ class HomeController extends GetxController
               ? 0
               : loopResult.value.postingitems.last.id);
 
-      if(loopModel != null) {
+      if (loopModel != null) {
         if (loopModel.postingitems.isEmpty &&
-          loopResult.value.postingitems.isEmpty) {
-        isLoopEmpty.value = true;
-      } else if (loopModel.postingitems.isEmpty &&
-          loopResult.value.postingitems.isNotEmpty) {
-        enableLoopPullup.value = false;
-      }
+            loopResult.value.postingitems.isEmpty) {
+          isLoopEmpty.value = true;
+        } else if (loopModel.postingitems.isEmpty &&
+            loopResult.value.postingitems.isNotEmpty) {
+          enableLoopPullup.value = false;
+        }
 
-      loopResult.value.postingitems.addAll(loopModel.postingitems);
+        loopResult.value.postingitems.addAll(loopModel.postingitems);
       }
-      
     }
   }
 

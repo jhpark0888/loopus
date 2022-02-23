@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
@@ -10,10 +11,13 @@ import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/screen/home_loop_screen.dart';
 import 'package:loopus/screen/question_add_content_screen.dart';
 import 'package:loopus/screen/question_detail_screen.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/my_question_posting_widget.dart';
 import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/widget/custom_refresher.dart';
+import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomePostingScreen extends StatelessWidget {
@@ -204,31 +208,53 @@ class HomePostingScreen extends StatelessWidget {
                               SizedBox(
                                 height: 24,
                               ),
-                              Container(
-                                height: 200,
-                                child: PageView(
-                                  controller: PageController(
-                                    viewportFraction: 0.9,
-                                    initialPage: 0,
-                                  ),
-                                  children: [
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 8),
-                                      color: Colors.red,
-                                    ),
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 8),
-                                      color: Colors.yellow,
-                                    ),
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 8),
-                                      color: Colors.green,
-                                    ),
-                                  ],
-                                ),
+                              Obx(
+                                () => homeController.populartagstate.value ==
+                                        ScreenState.loading
+                                    ? Image.asset(
+                                        'assets/icons/loading.gif',
+                                        scale: 6,
+                                      )
+                                    : homeController.populartagstate.value ==
+                                            ScreenState.disconnect
+                                        ? DisconnectReloadWidget(reload: () {
+                                            getpopulartag();
+                                          })
+                                        : homeController
+                                                    .populartagstate.value ==
+                                                ScreenState.error
+                                            ? ErrorReloadWidget(reload: () {
+                                                getpopulartag();
+                                              })
+                                            : Container(
+                                                height: 30,
+                                                child: ListView(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  children: homeController
+                                                      .populartaglist
+                                                      .map((tag) =>
+                                                          Row(children: [
+                                                            Tagwidget(
+                                                              tag: tag,
+                                                              fontSize: 12,
+                                                            ),
+                                                            homeController
+                                                                        .populartaglist
+                                                                        .indexOf(
+                                                                            tag) !=
+                                                                    homeController
+                                                                            .populartaglist
+                                                                            .length -
+                                                                        1
+                                                                ? const SizedBox(
+                                                                    width: 4,
+                                                                  )
+                                                                : Container()
+                                                          ]))
+                                                      .toList(),
+                                                ),
+                                              ),
                               )
                             ],
                           ),
@@ -250,21 +276,26 @@ class HomePostingScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Center(
-                              child: Text('추천 포스팅을 모두 보여드렸어요',
-                                  style: kSubTitle2Style),
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Center(
-                              child: Text(
-                                '이제부터는 최근 포스팅을 보여드릴게요',
-                                style: kButtonStyle.copyWith(
-                                  color: mainblack.withOpacity(0.6),
+                            if (homeController.isPostingEmpty.value == false &&
+                                homeController.isRecommandFull.value == true)
+                              Column(children: [
+                                Center(
+                                  child: Text('추천 포스팅을 모두 보여드렸어요',
+                                      style: kSubTitle2Style),
                                 ),
-                              ),
-                            ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Center(
+                                  child: Text(
+                                    '이제부터는 최근 포스팅을 보여드릴게요',
+                                    style: kButtonStyle.copyWith(
+                                      color: mainblack.withOpacity(0.6),
+                                    ),
+                                  ),
+                                ),
+                              ]),
+
                             SizedBox(
                               height: 32,
                             ),
