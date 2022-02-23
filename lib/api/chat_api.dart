@@ -64,33 +64,40 @@ Future<List<MessageWidget>> getmessagelist(int userid, int lastindex) async {
 
   final url = Uri.parse("$serverUri/chat/chatting?id=$userid&last=$lastindex");
 
-  final response =
-      await http.get(url, headers: {"Authorization": "Token $token"});
+  try {
+    final response =
+        await http.get(url, headers: {"Authorization": "Token $token"});
 
-  print('채팅 리스트 statuscode: ${response.statusCode}');
-  if (response.statusCode == 200) {
-    Map responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-    if (lastindex == 0) {
-      messageDetailController.user = User.fromJson(responseBody["profile"]).obs;
+    print('채팅 리스트 statuscode: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      Map responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+      if (lastindex == 0) {
+        messageDetailController.user =
+            User.fromJson(responseBody["profile"]).obs;
+      }
+      List<MessageWidget> modelmessagelist = List.from(responseBody["message"])
+          .map((message) => Message.fromJson(message, myid))
+          .toList()
+          .map((message) => MessageWidget(
+              message: message, user: messageDetailController.user!.value))
+          .toList();
+      // print(responseBody);
+
+      // MessageController.to.chattingroomlist(responseBody
+      //     .map((messageroom) => MessageRoom.fromJson(messageroom))
+      //     .toList());
+      return modelmessagelist;
+    } else if (response.statusCode == 404) {
+      messageDetailController.messagelist([]);
+      return [];
+    } else {
+      return Future.error(response.statusCode);
     }
-    List<MessageWidget> modelmessagelist = List.from(responseBody["message"])
-        .map((message) => Message.fromJson(message, myid))
-        .toList()
-        .map((message) => MessageWidget(
-            message: message, user: messageDetailController.user!.value))
-        .toList();
-    // print(responseBody);
-
-    // MessageController.to.chattingroomlist(responseBody
-    //     .map((messageroom) => MessageRoom.fromJson(messageroom))
-    //     .toList());
-    return modelmessagelist;
-  } else if (response.statusCode == 404) {
-    messageDetailController.messagelist([]);
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
     return [];
-  } else {
-    return Future.error(response.statusCode);
   }
+
   // print(map);
   // String username = map["real_name"];
   // userid = map["user_id"];

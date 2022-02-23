@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/error_controller.dart';
 import 'package:loopus/controller/looppeople_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
@@ -31,34 +32,38 @@ Future<void> getfollowlist(int userid, followlist followtype) async {
     final uri = Uri.parse(
         "$serverUri/loop_api/get_list/${describeEnum(followtype)}/$userid");
 
-    http.Response response =
-        await http.get(uri, headers: {"Authorization": "Token $token"});
+    try {
+      http.Response response =
+          await http.get(uri, headers: {"Authorization": "Token $token"});
 
-    print('루프 리스트 statusCode: ${response.statusCode}');
-    if (response.statusCode == 200) {
-      var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      List<User> looplist = List.from(responseBody["follow"])
-          .map((friend) => User.fromJson(friend))
-          .toList();
+      print('루프 리스트 statusCode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+        List<User> looplist = List.from(responseBody["follow"])
+            .map((friend) => User.fromJson(friend))
+            .toList();
 
-      if (followtype == followlist.follower) {
-        controller.followerlist(looplist);
+        if (followtype == followlist.follower) {
+          controller.followerlist(looplist);
+        } else {
+          controller.followinglist(looplist);
+        }
+        if (followtype == followlist.follower) {
+          controller.followerscreenstate(ScreenState.success);
+        } else {
+          controller.followingscreenstate(ScreenState.success);
+        }
+        return;
       } else {
-        controller.followinglist(looplist);
+        if (followtype == followlist.follower) {
+          controller.followerscreenstate(ScreenState.error);
+        } else {
+          controller.followingscreenstate(ScreenState.error);
+        }
+        return Future.error(response.statusCode);
       }
-      if (followtype == followlist.follower) {
-        controller.followerscreenstate(ScreenState.success);
-      } else {
-        controller.followingscreenstate(ScreenState.success);
-      }
-      return;
-    } else {
-      if (followtype == followlist.follower) {
-        controller.followerscreenstate(ScreenState.error);
-      } else {
-        controller.followingscreenstate(ScreenState.error);
-      }
-      return Future.error(response.statusCode);
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -75,26 +80,30 @@ Future<void> getprojectfollowlist(int userid, followlist followtype) async {
     final uri = Uri.parse(
         "$serverUri/loop_api/get_list/${describeEnum(followtype)}/$userid");
 
-    http.Response response =
-        await http.get(uri, headers: {"Authorization": "Token $token"});
+    try {
+      http.Response response =
+          await http.get(uri, headers: {"Authorization": "Token $token"});
 
-    print('루프 리스트 statusCode: ${response.statusCode}');
-    if (response.statusCode == 200) {
-      var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      List<User> looplist = List.from(responseBody["follow"])
-          .map((friend) => User.fromJson(friend))
-          .toList();
+      print('루프 리스트 statusCode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+        List<User> looplist = List.from(responseBody["follow"])
+            .map((friend) => User.fromJson(friend))
+            .toList();
 
-      controller.looplist = looplist;
-      controller.looppersonlist(controller.looplist
-          .map((user) => CheckBoxPersonWidget(user: user))
-          .toList());
+        controller.looplist = looplist;
+        controller.looppersonlist(controller.looplist
+            .map((user) => CheckBoxPersonWidget(user: user))
+            .toList());
 
-      controller.looppersonscreenstate(ScreenState.success);
-      return;
-    } else {
-      controller.looppersonscreenstate(ScreenState.error);
-      return Future.error(response.statusCode);
+        controller.looppersonscreenstate(ScreenState.success);
+        return;
+      } else {
+        controller.looppersonscreenstate(ScreenState.error);
+        return Future.error(response.statusCode);
+      }
+    } catch (e) {
+      ErrorController.to.isServerClosed(true);
     }
   }
 }

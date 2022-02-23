@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/contact_content_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/contact_finish_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -12,7 +14,8 @@ import '../utils/user_device_info.dart';
 
 class ContactContentScreen extends StatelessWidget {
   ContactContentScreen({Key? key}) : super(key: key);
-  final UserDeviceInfo _userDeviceInfo = Get.put(UserDeviceInfo());
+  final ContactContentController _contactContentController =
+      Get.put(ContactContentController());
   final ProfileController _profileController = Get.find();
 
   @override
@@ -24,6 +27,7 @@ class ContactContentScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
+              inquiry();
               Get.to(ContactFinishScreen());
             },
             child: Text(
@@ -49,7 +53,7 @@ class ContactContentScreen extends StatelessWidget {
             CustomTextField(
               counterText: null,
               maxLength: null,
-              textController: null,
+              textController: _contactContentController.emailcontroller,
               hintText: '이메일 주소',
               validator: null,
               obscureText: false,
@@ -68,7 +72,7 @@ class ContactContentScreen extends StatelessWidget {
             CustomTextField(
               counterText: null,
               maxLength: null,
-              textController: null,
+              textController: _contactContentController.contentcontroller,
               hintText: '문의 내용...',
               validator: null,
               obscureText: false,

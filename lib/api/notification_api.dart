@@ -89,13 +89,17 @@ Future deleteNotification(int noticeid) async {
 
   var uri = Uri.parse("$serverUri/user_api/alarm?id=$noticeid");
 
-  http.Response response =
-      await http.delete(uri, headers: {"Authorization": "Token $token"});
+  try {
+    http.Response response =
+        await http.delete(uri, headers: {"Authorization": "Token $token"});
 
-  print("알림 삭제: ${response.statusCode}");
-  if (response.statusCode == 200) {
-    return;
-  } else {
-    return Future.error(response.statusCode);
+    print("알림 삭제: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return Future.error(response.statusCode);
+    }
+  } catch (e) {
+    ErrorController.to.isServerClosed(true);
   }
 }
