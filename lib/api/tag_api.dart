@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
+import 'package:loopus/widget/tag_widget.dart';
 
 import '../constant.dart';
 
@@ -90,6 +92,45 @@ void gettagsearch(Tagtype tagtype) async {
       tagController.tagsearchstate(ScreenState.error);
     } else {
       tagController.tagsearchstate(ScreenState.error);
+      print('tag status code :${response.statusCode}');
+    }
+  }
+}
+
+void getpopulartag() async {
+  ConnectivityResult result = await initConnectivity();
+  HomeController controller = Get.find();
+  controller.populartagstate(ScreenState.loading);
+  if (result == ConnectivityResult.none) {
+    controller.populartagstate(ScreenState.disconnect);
+    ModalController.to.showdisconnectdialog();
+  } else {
+    Uri uri = Uri.parse('$serverUri/tag_api/tag?query=');
+    print(uri);
+    http.Response response = await http.get(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+    );
+
+    var responsebody = json.decode(utf8.decode(response.bodyBytes));
+
+    print("인기 태그 리스트: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      List responselist = responsebody["results"];
+      List<SearchTag> tagmaplist =
+          responselist.map((map) => SearchTag.fromJson(map)).toList();
+
+      controller.populartaglist(tagmaplist
+          .map((tag) => Tag(tagId: tag.id, tag: tag.tag, count: tag.count!))
+          .toList());
+
+      controller.populartagstate(ScreenState.success);
+    } else if (response.statusCode == 401) {
+      controller.populartagstate(ScreenState.error);
+    } else {
+      controller.populartagstate(ScreenState.error);
       print('tag status code :${response.statusCode}');
     }
   }
