@@ -73,17 +73,10 @@ class UserInfoScreen extends StatelessWidget {
                         content: '중요한 알림을 받지 못하게 돼요',
                         leftFunction: () => Get.back(),
                         rightFunction: () {
-                          AppController.to.currentIndex.value = 0;
                           _logInController.isLogout.value = true;
-                          FlutterSecureStorage().delete(key: "token");
-                          FlutterSecureStorage().delete(key: "id");
-                          Get.delete<AppController>();
-                          Get.delete<HomeController>();
-                          Get.delete<SearchController>();
-                          Get.delete<ProfileController>();
-                          logOut().then((value) {
+
+                          postlogout().then((value) {
                             _logInController.isLogout.value = false;
-                            Get.offAll(() => StartScreen());
                           });
                         },
                         rightText: '로그아웃',
@@ -127,7 +120,7 @@ class UserInfoScreen extends StatelessWidget {
   }
 
   Future<void> logOut() async {
-    // await postlogout();
+    await postlogout();
     await FlutterSecureStorage().delete(key: 'token');
     await FlutterSecureStorage().delete(key: 'id');
   }

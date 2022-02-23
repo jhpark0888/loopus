@@ -221,7 +221,7 @@ class PostingScreen extends StatelessWidget {
                                       leftText: '취소',
                                       rightText: '신고',
                                       title:
-                                          '<${controller.post.value.title}> 포스팅을 신고하시겠어요?',
+                                          '정말 <${controller.post.value.title}> 포스팅을 신고하시겠어요?',
                                       content: '관리자가 검토 절차를 거칩니다',
                                       leftFunction: () => Get.back(),
                                       rightFunction: () {

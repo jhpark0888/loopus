@@ -12,6 +12,7 @@ import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
+import 'package:loopus/controller/withdrawal_controller.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/project_model.dart';
 
@@ -209,51 +210,75 @@ Future<void> putpwchange() async {
 }
 
 Future postlogout() async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-  print('user token: $token');
-
-  var uri = Uri.parse("$serverUri/user_api/logout");
-
-  http.Response response =
-      await http.post(uri, headers: {"Authorization": "Token $token"});
-
-  print("로그아웃: ${response.statusCode}");
-  if (response.statusCode == 200) {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    print('user token: $token');
+
+    var uri = Uri.parse("$serverUri/user_api/logout");
+
+    http.Response response =
+        await http.post(uri, headers: {"Authorization": "Token $token"});
+
+    print("로그아웃: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      AppController.to.currentIndex.value = 0;
+      FlutterSecureStorage().delete(key: "token");
+      FlutterSecureStorage().delete(key: "id");
+      Get.delete<AppController>();
+      Get.delete<HomeController>();
+      Get.delete<SearchController>();
+      Get.delete<ProfileController>();
+      Get.offAll(() => StartScreen());
+    } else {
+      return Future.error(response.statusCode);
+    }
   }
 }
 
 Future deleteuser(String pw) async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-  print('user token: $token');
+  ConnectivityResult result = await initConnectivity();
 
-  var uri = Uri.parse("$serverUri/user_api/resign");
-
-  final password = {
-    'password': pw,
-  };
-
-  http.Response response = await http.post(uri,
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Token $token"
-      },
-      body: json.encode(password));
-
-  print("회원탈퇴: ${response.statusCode}");
-  if (response.statusCode == 200) {
-    Get.offAll(() => StartScreen());
-
-    Get.delete<AppController>();
-    Get.delete<HomeController>();
-    Get.delete<SearchController>();
-    Get.delete<ProfileController>();
-  } else if (response.statusCode == 401) {
-    ModalController.to.showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
-    return Future.error(response.statusCode);
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
   } else {
-    return Future.error(response.statusCode);
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    print('user token: $token');
+
+    var uri = Uri.parse("$serverUri/user_api/resign");
+
+    String reason = "";
+    for (var reasonwidget in WithDrawalController.to.reasonlist) {
+      if (reasonwidget.isSelected.value == true) {
+        reason += reasonwidget.text;
+      }
+    }
+
+    final password = {'password': pw, 'reason': reason};
+
+    http.Response response = await http.post(uri,
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Token $token"
+        },
+        body: json.encode(password));
+
+    print("회원탈퇴: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      Get.offAll(() => StartScreen());
+
+      Get.delete<AppController>();
+      Get.delete<HomeController>();
+      Get.delete<SearchController>();
+      Get.delete<ProfileController>();
+    } else if (response.statusCode == 401) {
+      ModalController.to.showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
+      return Future.error(response.statusCode);
+    } else {
+      return Future.error(response.statusCode);
+    }
   }
 }
 

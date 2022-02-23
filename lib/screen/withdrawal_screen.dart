@@ -7,6 +7,7 @@ import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/controller/withdrawal_controller.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/utils/check_form_validate.dart';
@@ -14,7 +15,9 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
 class WithdrawalScreen extends StatelessWidget {
-  const WithdrawalScreen({Key? key}) : super(key: key);
+  WithdrawalScreen({Key? key}) : super(key: key);
+
+  WithDrawalController _controller = Get.put(WithDrawalController());
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,10 @@ class WithdrawalScreen extends StatelessWidget {
                       CheckValidate().validatePassword(value!),
                   leftFunction: () => Get.back(),
                   rightFunction: () {
-                    deleteuser(pwcontroller.text);
+                    _controller.iswithdrawalloading(true);
+                    deleteuser(pwcontroller.text).then((value) {
+                      _controller.iswithdrawalloading(false);
+                    });
                   });
             },
             child: Padding(
@@ -67,17 +73,9 @@ class WithdrawalScreen extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              ListView.builder(
+              ListView(
                 shrinkWrap: true,
-                itemCount: kWithdrawalOptions.length,
-                itemBuilder: (context, index) => Column(
-                  children: [
-                    SelectedOptionWidget(
-                      text: kWithdrawalOptions[index],
-                    ),
-                    Divider(),
-                  ],
-                ),
+                children: _controller.reasonlist,
               ),
 
               // CustomTextField(
@@ -111,30 +109,33 @@ class SelectedOptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(text),
-          Obx(
-            () => GestureDetector(
-              onTap: selectOption,
-              child: isSelected.value
-                  ? SvgPicture.asset(
-                      "assets/icons/check_box_active.svg",
-                      width: 24,
-                      height: 24,
-                    )
-                  : SvgPicture.asset(
-                      "assets/icons/check_box_inactive.svg",
-                      width: 24,
-                      height: 24,
-                    ),
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(text),
+            Obx(
+              () => GestureDetector(
+                onTap: selectOption,
+                child: isSelected.value
+                    ? SvgPicture.asset(
+                        "assets/icons/check_box_active.svg",
+                        width: 24,
+                        height: 24,
+                      )
+                    : SvgPicture.asset(
+                        "assets/icons/check_box_inactive.svg",
+                        width: 24,
+                        height: 24,
+                      ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    );
+      Divider()
+    ]);
   }
 }
