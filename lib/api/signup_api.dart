@@ -20,7 +20,7 @@ void emailRequest() async {
 
   var checkemail = {
     //TODO: 학교 도메인 확인
-    "email": signupController.emailidcontroller.text + '@gmail.com',
+    "email": signupController.emailidcontroller.text + '@inu.ac.kr',
     "password": signupController.passwordcontroller.text,
   };
   try {
@@ -60,7 +60,7 @@ Future<void> signupRequest() async {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     //todo : @inu.ac.kr
     var user = {
-      "email": signupController.emailidcontroller.text + '@gmail.com',
+      "email": signupController.emailidcontroller.text + '@inu.ac.kr',
       "image": null,
       "type": 0,
       "class_num": signupController.classnumcontroller.text,
