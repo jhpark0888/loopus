@@ -1,15 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/screen/question_add_content_screen.dart';
-import 'package:loopus/screen/question_detail_screen.dart';
-import 'package:loopus/widget/my_question_posting_widget.dart';
 import 'package:loopus/widget/question_widget.dart';
-import 'package:loopus/widget/custom_refresher.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 

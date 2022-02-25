@@ -12,7 +12,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 
 import '../constant.dart';

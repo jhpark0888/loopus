@@ -10,7 +10,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
-import 'package:loopus/api/project_api.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/ga_controller.dart';
@@ -20,14 +19,10 @@ import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/model/post_model.dart';
-import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/post_content_widget.dart';
-import 'package:loopus/widget/posting_widget.dart';
-import 'package:loopus/widget/project_posting_widget.dart';
 import 'package:loopus/widget/search_posting_widget.dart';
-import 'package:loopus/widget/smarttextfield.dart';
 
 import '../constant.dart';
 import '../controller/error_controller.dart';

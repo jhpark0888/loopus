@@ -1,26 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
-import 'package:loopus/controller/messagescreen_controller.dart';
-import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
-import 'package:loopus/widget/project_posting_widget.dart';
-import 'package:loopus/widget/tag_widget.dart';
 import 'package:intl/intl.dart';
 
 enum ProjectWidgetType { profile, addposting }

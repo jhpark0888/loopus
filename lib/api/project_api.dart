@@ -20,8 +20,6 @@ import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
-import 'package:loopus/widget/project_posting_widget.dart';
-import 'package:loopus/widget/project_widget.dart';
 
 import '../constant.dart';
 

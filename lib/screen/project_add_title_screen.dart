@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
-import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
-import '../controller/modal_controller.dart';
 import '../utils/check_form_validate.dart';
 
 class ProjectAddTitleScreen extends StatelessWidget {
@@ -31,122 +28,126 @@ class ProjectAddTitleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        bottomBorder: false,
-        actions: [
-          screenType == Screentype.add
-              ? TextButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      Get.to(() => ProjectAddIntroScreen(
-                            screenType: Screentype.add,
-                          ));
-                    }
-                  },
-                  child: Obx(
-                    () => Text(
-                      '다음',
-                      style: kSubTitle2Style.copyWith(
-                        color: projectaddcontroller.ontitlebutton.value
-                            ? mainblue
-                            : mainblack.withOpacity(0.38),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBarWidget(
+          bottomBorder: false,
+          actions: [
+            screenType == Screentype.add
+                ? TextButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        Get.to(() => ProjectAddIntroScreen(
+                              screenType: Screentype.add,
+                            ));
+                      }
+                    },
+                    child: Obx(
+                      () => Text(
+                        '다음',
+                        style: kSubTitle2Style.copyWith(
+                          color: projectaddcontroller.ontitlebutton.value
+                              ? mainblue
+                              : mainblack.withOpacity(0.38),
+                        ),
                       ),
                     ),
-                  ),
-                )
-              : Obx(() =>
-                  Get.find<ProjectDetailController>(tag: projectid.toString())
-                          .isProjectUpdateLoading
-                          .value
-                      ? Image.asset(
-                          'assets/icons/loading.gif',
-                          scale: 9,
-                        )
-                      : TextButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              Get.find<ProjectDetailController>(
-                                      tag: projectid.toString())
-                                  .isProjectUpdateLoading
-                                  .value = true;
-                              await updateproject(
-                                      Get.find<ProjectDetailController>(
-                                              tag: projectid.toString())
-                                          .project
-                                          .value
-                                          .id,
-                                      ProjectUpdateType.project_name)
-                                  .then((value) {
+                  )
+                : Obx(() =>
+                    Get.find<ProjectDetailController>(tag: projectid.toString())
+                            .isProjectUpdateLoading
+                            .value
+                        ? Image.asset(
+                            'assets/icons/loading.gif',
+                            scale: 9,
+                          )
+                        : TextButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
                                 Get.find<ProjectDetailController>(
                                         tag: projectid.toString())
                                     .isProjectUpdateLoading
-                                    .value = false;
-                              });
-                            }
-                          },
-                          child: Obx(
-                            () => Text(
-                              '저장',
-                              style: kSubTitle2Style.copyWith(
-                                color: projectaddcontroller.ontitlebutton.value
-                                    ? mainblue
-                                    : mainblack.withOpacity(0.38),
+                                    .value = true;
+                                await updateproject(
+                                        Get.find<ProjectDetailController>(
+                                                tag: projectid.toString())
+                                            .project
+                                            .value
+                                            .id,
+                                        ProjectUpdateType.project_name)
+                                    .then((value) {
+                                  Get.find<ProjectDetailController>(
+                                          tag: projectid.toString())
+                                      .isProjectUpdateLoading
+                                      .value = false;
+                                });
+                              }
+                            },
+                            child: Obx(
+                              () => Text(
+                                '저장',
+                                style: kSubTitle2Style.copyWith(
+                                  color:
+                                      projectaddcontroller.ontitlebutton.value
+                                          ? mainblue
+                                          : mainblack.withOpacity(0.38),
+                                ),
                               ),
                             ),
-                          ),
-                        ))
-        ],
-        title: '활동명',
-      ),
-      body: Form(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            32,
-            24,
-            32,
-            40,
-          ),
-          child: Column(
-            children: [
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '활동명',
-                      style: kSubTitle1Style.copyWith(
-                        color: mainblue,
+                          ))
+          ],
+          title: '활동명',
+        ),
+        body: Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              32,
+              24,
+              32,
+              40,
+            ),
+            child: Column(
+              children: [
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '활동명',
+                        style: kSubTitle1Style.copyWith(
+                          color: mainblue,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: '이 무엇인가요?',
-                      style: kSubTitle1Style,
-                    ),
-                  ],
+                      TextSpan(
+                        text: '이 무엇인가요?',
+                        style: kSubTitle1Style,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              const Text(
-                '어떤 활동인지 잘 드러나는 이름을 입력해주세요',
-                style: kBody2Style,
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              CustomTextField(
-                  counterText: null,
-                  maxLength: 32,
-                  textController: projectaddcontroller.projectnamecontroller,
-                  hintText: 'OO 스터디, OO 공모전, OO 프로젝트...',
-                  validator: (value) => CheckValidate().validateName(value!),
-                  obscureText: false,
-                  maxLines: 2),
-            ],
+                const SizedBox(
+                  height: 12,
+                ),
+                const Text(
+                  '어떤 활동인지 잘 드러나는 이름을 입력해주세요',
+                  style: kBody2Style,
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                CustomTextField(
+                    counterText: null,
+                    maxLength: 32,
+                    textController: projectaddcontroller.projectnamecontroller,
+                    hintText: 'OO 스터디, OO 공모전, OO 프로젝트...',
+                    validator: (value) => CheckValidate().validateName(value!),
+                    obscureText: false,
+                    maxLines: 2),
+              ],
+            ),
           ),
         ),
       ),

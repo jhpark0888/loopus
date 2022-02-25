@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/screen/signup_campus_info_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
 class SignupCompanyScreen extends StatelessWidget {

@@ -1,10 +1,7 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/project_model.dart';
-import 'package:loopus/widget/project_widget.dart';
 
 class SelectProjectController extends GetxController {
   // SelectProjectController(this.projectid);

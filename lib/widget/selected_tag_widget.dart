@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 

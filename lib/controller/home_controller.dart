@@ -12,9 +12,6 @@ import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/posting_widget.dart';
-import 'package:loopus/widget/question_widget.dart';
-import 'package:loopus/widget/recommend_posting_widget.dart';
-import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomeController extends GetxController
@@ -23,7 +20,7 @@ class HomeController extends GetxController
   NotificationController notificationController =
       Get.put(NotificationController());
   List<PostingWidget> posting = [];
-  // List<RecommendPostingWidget> recommend_posting = [];
+
   RxBool bookmark = false.obs;
   RxBool isLoopEmpty = false.obs;
   RxBool isPostingEmpty = false.obs;
@@ -68,9 +65,6 @@ class HomeController extends GetxController
   void onInit() {
     hometabcontroller = TabController(length: 3, vsync: this);
 
-    // for (int i = 0; i < 4; i++) {
-    //   recommend_posting.add(RecommendPostingWidget());
-    // }
     getpopulartag();
     onPostingRefresh();
     onQuestionRefresh();

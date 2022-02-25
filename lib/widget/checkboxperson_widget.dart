@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/project_add_person_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/widget/selected_persontag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 
 class CheckBoxPersonWidget extends StatelessWidget {
-  // ProjectAddPersonController projectaddpersoncontroller = Get.find();
   ProjectAddController projectaddController = Get.find();
 
   CheckBoxPersonWidget({

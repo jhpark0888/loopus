@@ -6,11 +6,9 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
-import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/home_posting_screen.dart';
 import 'package:loopus/screen/tag_detail_screen.dart';
 import 'package:loopus/widget/search_student_widget.dart';
-import 'package:loopus/widget/tag_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 import '../api/tag_api.dart';

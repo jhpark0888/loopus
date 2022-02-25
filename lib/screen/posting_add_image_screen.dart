@@ -7,12 +7,9 @@ import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
-import 'package:loopus/model/post_model.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/blue_button.dart';
 import 'package:loopus/widget/post_add_content_widget.dart';
-
-import '../controller/modal_controller.dart';
 
 class PostingAddImageScreen extends StatelessWidget {
   PostingAddImageScreen({Key? key, this.postid, required this.project_id})

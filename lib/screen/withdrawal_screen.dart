@@ -6,13 +6,9 @@ import 'package:get/get.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/withdrawal_controller.dart';
-import 'package:loopus/screen/project_add_period_screen.dart';
-import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/custom_textfield.dart';
 
 class WithdrawalScreen extends StatelessWidget {
   WithdrawalScreen({Key? key}) : super(key: key);

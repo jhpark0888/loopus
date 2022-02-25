@@ -11,18 +11,12 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
-import 'package:loopus/controller/project_detail_controller.dart';
-import 'package:loopus/controller/scroll_controller.dart';
-import 'package:loopus/controller/transition_animation_controller.dart';
-import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_modify_screen.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
-import 'package:loopus/widget/post_content_widget.dart';
-import 'package:loopus/widget/smarttextfield.dart';
 
 class PostingScreen extends StatelessWidget {
   PostingScreen({

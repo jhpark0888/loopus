@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
-import 'package:loopus/api/post_api.dart';
-import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/widget/posting_widget.dart';
 
 class FollowController extends GetxController {
   FollowController(

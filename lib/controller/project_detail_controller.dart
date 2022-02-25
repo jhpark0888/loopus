@@ -1,16 +1,10 @@
-import 'dart:convert';
-
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/state_manager.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/post_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/widget/project_posting_widget.dart';
 
 class ProjectDetailController extends GetxController {
   ProjectDetailController(this.projectid);

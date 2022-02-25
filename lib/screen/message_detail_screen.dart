@@ -1,15 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
-import 'package:loopus/controller/messagescreen_controller.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/appbar_widget.dart';

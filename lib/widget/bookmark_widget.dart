@@ -1,27 +1,17 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:loopus/api/post_api.dart';
-import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/like_controller.dart';
-import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
-import 'package:loopus/model/project_model.dart';
-import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
-import 'package:loopus/widget/project_widget.dart';
 
 class BookmarkWidget extends StatelessWidget {
   final int index;

@@ -1,22 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/login_api.dart';
-import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
-import 'package:loopus/model/project_model.dart';
-import 'package:loopus/model/user_model.dart';
-import 'package:loopus/widget/project_widget.dart';
 
 enum RouteName {
   home,

@@ -1,27 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/profile_api.dart';
-import 'package:loopus/api/question_api.dart';
-import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/local_data_controller.dart';
-import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/controller/question_detail_controller.dart';
-import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
-import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/screen/login_screen.dart';
-import 'package:loopus/screen/project_add_period_screen.dart';
-import 'package:loopus/screen/project_add_person_screen.dart';
-import 'package:loopus/screen/search_typing_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/tagsearchwidget.dart';
 
 class ProfileTagChangeScreen extends StatelessWidget {

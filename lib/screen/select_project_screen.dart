@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/select_project_controller.dart';
-import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/project_widget.dart';

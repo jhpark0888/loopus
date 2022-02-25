@@ -2,15 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 
-import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/like_controller.dart';
-import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 
 import 'package:loopus/model/post_model.dart';

@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
 
 class LocalDataController extends GetxController {
   static LocalDataController get to => Get.find();

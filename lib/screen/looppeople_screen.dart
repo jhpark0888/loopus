@@ -1,18 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/looppeople_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/model/user_model.dart';
-import 'package:loopus/screen/project_add_period_screen.dart';
-import 'package:loopus/screen/privacypolicy_screen.dart';
-import 'package:loopus/screen/termsofservice_screen.dart';
-import 'package:loopus/screen/userinfo_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';

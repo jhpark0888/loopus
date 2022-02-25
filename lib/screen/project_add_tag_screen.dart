@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/api/project_api.dart';
@@ -12,7 +11,6 @@ import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/project_add_person_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/checkboxperson_widget.dart';
 import 'package:loopus/widget/tagsearchwidget.dart';
 
 import '../controller/modal_controller.dart';
@@ -107,56 +105,59 @@ class ProjectAddTagScreen extends StatelessWidget {
         ],
         title: "활동 태그",
       ),
-      body: NestedScrollView(
-          headerSliverBuilder: (context, value) {
-            return [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    32,
-                    24,
-                    32,
-                    12,
-                  ),
-                  child: Column(
-                    children: [
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '활동을 대표하는 ',
-                              style: kSubTitle1Style,
-                            ),
-                            TextSpan(
-                              text: '키워드',
-                              style: kSubTitle1Style.copyWith(
-                                color: mainblue,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: NestedScrollView(
+            headerSliverBuilder: (context, value) {
+              return [
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      32,
+                      24,
+                      32,
+                      12,
+                    ),
+                    child: Column(
+                      children: [
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '활동을 대표하는 ',
+                                style: kSubTitle1Style,
                               ),
-                            ),
-                            TextSpan(
-                              text: '가 무엇인가요?',
-                              style: kSubTitle1Style,
-                            ),
-                          ],
+                              TextSpan(
+                                text: '키워드',
+                                style: kSubTitle1Style.copyWith(
+                                  color: mainblue,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '가 무엇인가요?',
+                                style: kSubTitle1Style,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        '나중에 얼마든지 변경할 수 있어요',
-                        style: kBody1Style,
-                      ),
-                    ],
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Text(
+                          '나중에 얼마든지 변경할 수 있어요',
+                          style: kBody1Style,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ];
-          },
-          body: TagSearchWidget(
-            tagtype: Tagtype.project,
-          )),
+              ];
+            },
+            body: TagSearchWidget(
+              tagtype: Tagtype.project,
+            )),
+      ),
     );
   }
 }

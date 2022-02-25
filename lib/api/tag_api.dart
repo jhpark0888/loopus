@@ -9,7 +9,6 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
-import 'package:loopus/widget/tag_widget.dart';
 
 import '../constant.dart';
 

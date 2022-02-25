@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';

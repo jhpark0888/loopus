@@ -1,14 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:loopus/api/search_api.dart';
-import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/tag_detail_screen.dart';

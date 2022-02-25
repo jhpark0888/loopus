@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -6,15 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/widget/project_widget.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProfileController extends GetxController
     with GetSingleTickerProviderStateMixin {

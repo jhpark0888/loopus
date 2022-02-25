@@ -6,7 +6,6 @@ import 'package:loopus/api/login_api.dart';
 import 'package:loopus/constant.dart';
 
 import 'package:loopus/controller/login_controller.dart';
-import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
 

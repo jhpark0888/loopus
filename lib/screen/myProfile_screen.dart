@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
@@ -18,16 +17,12 @@ import 'package:loopus/screen/bookmark_screen.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
-import 'package:loopus/screen/project_modify_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
-import 'package:loopus/utils/kakao_share_manager.dart';
-import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:underline_indicator/underline_indicator.dart';
 
 class MyProfileScreen extends StatelessWidget {
   MyProfileScreen({Key? key}) : super(key: key);

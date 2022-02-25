@@ -6,7 +6,6 @@ import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_department_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/custom_textfield.dart';
 
 class SignupCampusInfoScreen extends StatelessWidget {
   final SignupController signupController = Get.put(SignupController());
@@ -21,6 +20,7 @@ class SignupCampusInfoScreen extends StatelessWidget {
           TextButton(
             onPressed: () async {
               //TODO: 학교 선택 시 활성화되어야 함
+              signupController.deptlist.clear();
               signupController.deptscreenstate(ScreenState.loading);
               Get.to(() => SignupDepartmentScreen());
 

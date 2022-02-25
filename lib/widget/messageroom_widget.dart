@@ -1,16 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
-import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
-import 'package:loopus/widget/message_widget.dart';
 
 class MessageRoomWidget extends StatelessWidget {
   MessageRoomWidget({

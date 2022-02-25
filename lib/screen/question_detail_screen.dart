@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/question_detail_controller.dart';
-import 'package:loopus/model/question_model.dart';
-import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
-import 'package:loopus/screen/report_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
-import 'package:loopus/widget/question_answer_widget.dart';
 import 'package:loopus/widget/question_detail_widget.dart';
 
 class QuestionDetailScreen extends StatelessWidget {

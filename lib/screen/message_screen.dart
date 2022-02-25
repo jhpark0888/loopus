@@ -5,11 +5,9 @@ import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
-import 'package:loopus/widget/messageroom_widget.dart';
 
 class MessageScreen extends StatelessWidget {
   MessageController messageController = Get.put(MessageController());

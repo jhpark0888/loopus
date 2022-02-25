@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/webview_screen.dart';
 import 'package:loopus/widget/smarttextfield.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../constant.dart';
 

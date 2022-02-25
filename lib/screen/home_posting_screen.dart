@@ -1,26 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/controller/hover_controller.dart';
-import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/controller/scroll_controller.dart';
-import 'package:loopus/screen/home_loop_screen.dart';
-import 'package:loopus/screen/question_add_content_screen.dart';
-import 'package:loopus/screen/question_detail_screen.dart';
 import 'package:loopus/screen/tag_detail_screen.dart';
-import 'package:loopus/widget/blue_button.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
-import 'package:loopus/widget/my_question_posting_widget.dart';
-import 'package:loopus/widget/question_widget.dart';
-import 'package:loopus/widget/custom_refresher.dart';
-import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomePostingScreen extends StatelessWidget {

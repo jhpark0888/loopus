@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/widget/notification_widget.dart';
-import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class NotificationDetailController extends GetxController {

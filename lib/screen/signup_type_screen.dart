@@ -6,10 +6,7 @@ import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_campus_info_screen.dart';
-import 'package:loopus/screen/signup_company_screen.dart';
-import 'package:loopus/screen/signup_department_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/custom_textfield.dart';
 
 class SignupTypeScreen extends StatelessWidget {
   final SignupController signupController = Get.put(SignupController());

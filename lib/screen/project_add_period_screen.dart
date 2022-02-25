@@ -9,10 +9,8 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
-import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_tag_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class ProjectAddPeriodScreen extends StatelessWidget {
   ProjectAddPeriodScreen({

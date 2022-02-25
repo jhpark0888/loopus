@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/image_controller.dart';
-import 'package:loopus/widget/smarttextfield.dart';
 
 class EditorToolbar extends StatelessWidget {
   EditorToolbar(

@@ -10,8 +10,6 @@ import 'package:loopus/screen/contact_finish_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
-import '../utils/user_device_info.dart';
-
 class ContactContentScreen extends StatelessWidget {
   ContactContentScreen({Key? key}) : super(key: key);
   final ContactContentController _contactContentController =

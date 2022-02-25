@@ -1,15 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
-import 'package:loopus/widget/searchedtag_widget.dart';
-import 'package:loopus/widget/selected_persontag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:http/http.dart' as http;
 

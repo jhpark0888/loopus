@@ -7,13 +7,10 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/screen/alert_screen.dart';
 import 'package:loopus/screen/contact_content_screen.dart';
-import 'package:loopus/screen/privacypolicy_screen.dart';
-import 'package:loopus/screen/termsofservice_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';
 import 'package:loopus/screen/webview_screen.dart';
 import 'package:loopus/utils/user_device_info.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:app_settings/app_settings.dart';
 
 class SettingScreen extends StatelessWidget {
   SettingScreen({Key? key}) : super(key: key);

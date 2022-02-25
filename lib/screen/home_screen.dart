@@ -2,10 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/chat_api.dart';
-import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/screen/search_screen.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 import 'package:loopus/constant.dart';

@@ -3,10 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/screen/contact_content_screen.dart';
-import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/custom_textfield.dart';
 
 class ContactFinishScreen extends StatelessWidget {
   const ContactFinishScreen({Key? key}) : super(key: key);

@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/utils/duration_calculate.dart';

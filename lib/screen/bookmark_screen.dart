@@ -4,7 +4,6 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/bookmark_widget.dart';
-import 'package:loopus/widget/custom_refresher.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class BookmarkScreen extends StatelessWidget {
