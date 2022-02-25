@@ -326,7 +326,7 @@ Future deleteuser(String pw) async {
   }
 }
 
-Future userreport(int postingId) async {
+Future userreport(int userid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     ModalController.to.showdisconnectdialog();
@@ -338,7 +338,7 @@ Future userreport(int postingId) async {
 
     final Uri uri = Uri.parse("$serverUri/user_api/report");
 
-    var body = {"id": postingId, "reason": ""};
+    var body = {"id": userid, "reason": ""};
 
     try {
       final response = await http.post(uri,
