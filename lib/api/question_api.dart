@@ -261,3 +261,81 @@ Future<dynamic> deleteanswer(int questionid, int answerid) async {
     }
   }
 }
+
+Future questionreport(int questionid) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
+  } else {
+    String? token;
+    await const FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
+
+    final Uri uri = Uri.parse("$serverUri/question_api/report");
+
+    var body = {"id": questionid, "reason": ""};
+
+    try {
+      final response = await http.post(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": "Token $token"
+          },
+          body: json.encode(body));
+
+      print('질문 신고 statusCode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        getbacks(2);
+        ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
+        return;
+      } else {
+        return Future.error(response.statusCode);
+      }
+    } on SocketException {
+      ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
+    }
+  }
+}
+
+Future answerreport(int answerid) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
+  } else {
+    String? token;
+    await const FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
+
+    final Uri uri = Uri.parse("$serverUri/question_api/answer_report");
+
+    var body = {"id": answerid, "reason": ""};
+
+    try {
+      final response = await http.post(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": "Token $token"
+          },
+          body: json.encode(body));
+
+      print('답변 신고 statusCode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        getbacks(2);
+        ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
+        return;
+      } else {
+        return Future.error(response.statusCode);
+      }
+    } on SocketException {
+      ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
+    }
+  }
+}

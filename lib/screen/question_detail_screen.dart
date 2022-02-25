@@ -216,7 +216,18 @@ class QuestionDetailScreen extends StatelessWidget {
                                         questionController.question.value.user,
                                   ));
                             },
-                            func2: () {},
+                            func2: () {
+                              modalController.showButtonDialog(
+                                  leftText: '취소',
+                                  rightText: '신고',
+                                  title: '정말 이 질문을 신고하시겠어요?',
+                                  content: '관리자가 검토 절차를 거칩니다',
+                                  leftFunction: () => Get.back(),
+                                  rightFunction: () {
+                                    questionreport(
+                                        questionController.question.value.id);
+                                  });
+                            },
                             value1:
                                 '${questionController.question.value.user.realName}님에게 메시지 보내기',
                             value2: '이 질문 신고하기',

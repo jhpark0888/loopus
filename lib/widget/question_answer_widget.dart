@@ -123,8 +123,17 @@ class QuestionAnswerWidget extends StatelessWidget {
           isValue2Red: true,
           isOne: true);
     } else {
-      ModalController.to.showModalIOS(context,
-          func1: () {},
+      ModalController.to.showModalIOS(context, func1: () {
+        ModalController.to.showButtonDialog(
+            leftText: '취소',
+            rightText: '신고',
+            title: '정말 이 답변을 신고하시겠어요?',
+            content: '관리자가 검토 절차를 거칩니다',
+            leftFunction: () => Get.back(),
+            rightFunction: () {
+              answerreport(answer.id);
+            });
+      },
           func2: () {},
           value1: '답글 신고하기',
           value2: 'value2',
