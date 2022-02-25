@@ -591,10 +591,15 @@ class MyProfileScreen extends StatelessWidget {
                                                               .value
                                                               .isNotEmpty
                                                           ? Column(
-                                                              children:
-                                                                  profileController
-                                                                      .myProjectList
-                                                                      .value,
+                                                              children: profileController
+                                                                  .myProjectList
+                                                                  .map((project) => ProjectWidget(
+                                                                      project:
+                                                                          project
+                                                                              .obs,
+                                                                      type: ProjectWidgetType
+                                                                          .profile))
+                                                                  .toList(),
                                                             )
                                                           : Column(
                                                               children: [

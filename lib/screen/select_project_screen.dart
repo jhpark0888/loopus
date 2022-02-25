@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/select_project_controller.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/project_widget.dart';
 
 import '../widget/custom_expanded_button.dart';
 
@@ -39,7 +41,11 @@ class SelectProjectScreen extends StatelessWidget {
                   ),
                 Column(
                   children: controller.selectprojectlist.value.isNotEmpty
-                      ? controller.selectprojectlist.value
+                      ? controller.selectprojectlist
+                          .map((project) => ProjectWidget(
+                              project: project.obs,
+                              type: ProjectWidgetType.addposting))
+                          .toList()
                       : [
                           Text(
                             '첫번째 활동을 기록해보세요',

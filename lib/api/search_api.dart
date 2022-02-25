@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -27,18 +28,24 @@ Future<void> tagsearch() async {
   if (result == ConnectivityResult.none) {
     ModalController.to.showdisconnectdialog();
   } else {
+    String? token;
+    await FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
+
     SearchController searchController = Get.find();
     String searchword = searchController.searchtextcontroller.text
         .trim()
         .replaceAll(RegExp("\\s+"), " ");
 
-    Uri uri =
-        Uri.parse('http://3.35.253.151:8000/tag_api/tag?query=${searchword}');
+    Uri uri = Uri.parse(
+        'http://3.35.253.151:8000/tag_api/search_tag?query=${searchword}');
     try {
       http.Response response = await http.get(
         uri,
         headers: <String, String>{
           'Content-Type': 'application/json',
+          "Authorization": "Token $token"
         },
       );
 
@@ -73,8 +80,11 @@ Future<void> tagsearch() async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -237,8 +247,11 @@ Future<void> search(
         }
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }

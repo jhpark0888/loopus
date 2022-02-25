@@ -209,17 +209,17 @@ class BookmarkWidget extends StatelessWidget {
     int bookmarkid =
         bookmarkController.bookmarkResult.value.postingitems[index].id;
     if (item.isLiked.value == 0) {
+      likeController.isliked(1);
       item.likeCount.value += 1;
 
       HomeController.to.tapLike(bookmarkid, item.likeCount.value);
       item.isLiked.value = 1;
-      likeController.isliked(1);
     } else {
+      likeController.isliked(0);
       item.likeCount.value -= 1;
 
       HomeController.to.tapunLike(bookmarkid, item.likeCount.value);
       item.isLiked.value = 0;
-      likeController.isliked(0);
     }
   }
 

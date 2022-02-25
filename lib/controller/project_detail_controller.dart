@@ -25,7 +25,7 @@ class ProjectDetailController extends GetxController {
           id: 0,
           userid: 0,
           projectName: '',
-          post: [],
+          post: <Post>[].obs,
           projectTag: [],
           looper: [],
           like_count: 0.obs,
@@ -42,7 +42,7 @@ class ProjectDetailController extends GetxController {
               looped: FollowState.normal.obs))
       .obs;
   int projectid;
-  RxList<ProjectPostingWidget> postinglist = <ProjectPostingWidget>[].obs;
+  // RxList<ProjectPostingWidget> postinglist = <ProjectPostingWidget>[].obs;
 
   RxInt likesum(RxInt likecount, List<int> list) {
     likecount(0);

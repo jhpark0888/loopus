@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -50,8 +51,13 @@ Future<void> getmessageroomlist() async {
         MessageController.to.chatroomscreenstate(ScreenState.error);
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
+      print("서버에러 발생");
+
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -93,9 +99,13 @@ Future<List<MessageWidget>> getmessagelist(int userid, int lastindex) async {
     } else {
       return Future.error(response.statusCode);
     }
-  } catch (e) {
+  } on SocketException {
     ErrorController.to.isServerClosed(true);
     return [];
+  } catch (e) {
+    print(e);
+    return [];
+    // ErrorController.to.isServerClosed(true);
   }
 
   // print(map);

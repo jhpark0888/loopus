@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -87,12 +88,7 @@ Future addproject() async {
         Get.put(ProjectDetailController(project.id),
             tag: project.id.toString());
 
-        ProfileController.to.myProjectList.insert(
-            0,
-            ProjectWidget(
-              project: project.obs,
-              type: ProjectWidgetType.profile,
-            ));
+        ProfileController.to.myProjectList.insert(0, project);
 
         Get.to(() => ProjectScreen(
               projectid: project.id,
@@ -116,13 +112,16 @@ Future addproject() async {
         //!GA
         await _gaController.logProjectCreated(false);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
 
-Future<void> getproject(int projectId) async {
+Future<Project?> getproject(int projectId) async {
   ConnectivityResult result = await initConnectivity();
   ProjectDetailController controller =
       Get.find<ProjectDetailController>(tag: projectId.toString());
@@ -142,19 +141,9 @@ Future<void> getproject(int projectId) async {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         Project project = Project.fromJson(responseBody);
         controller.project(project);
-        controller.postinglist(List.from(project.post
-            .map((post) => ProjectPostingWidget(
-                  item: post,
-                  isuser: project.is_user,
-                  realname: project.user!.realName,
-                  department: project.user!.department,
-                  profileimage: project.user!.profileImage ?? '',
-                ))
-            .toList()
-            .reversed));
         controller.projectscreenstate(ScreenState.success);
 
-        return;
+        return project;
       } else if (response.statusCode == 404) {
         Get.back();
         ModalController.to.showCustomDialog('이미 삭제된 활동입니다', 1400);
@@ -164,8 +153,11 @@ Future<void> getproject(int projectId) async {
 
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -236,7 +228,16 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
       http.StreamedResponse response = await request.send();
       print("활동 수정: ${response.statusCode}");
       if (response.statusCode == 200) {
-        await getproject(controller.project.value.id);
+        Project? project = await getproject(controller.project.value.id);
+        if (project != null) {
+          if (Get.isRegistered<ProfileController>()) {
+            int projectindex = ProfileController.to.myProjectList
+                .indexWhere((inproject) => inproject.id == project.id);
+            ProfileController.to.myProjectList.removeAt(projectindex);
+            ProfileController.to.myProjectList.insert(projectindex, project);
+          }
+        }
+
         Get.back();
         ModalController.to.showCustomDialog('변경이 완료되었어요', 1000);
         // String responsebody = await response.stream.bytesToString();
@@ -248,8 +249,11 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -271,7 +275,7 @@ Future<void> deleteproject(int projectId) async {
       print(response.statusCode);
       if (response.statusCode == 200) {
         ProfileController.to.myProjectList
-            .removeWhere((project) => project.project.value.id == projectId);
+            .removeWhere((project) => project.id == projectId);
         try {
           Get.find<OtherProfileController>(tag: userid)
               .otherProjectList
@@ -284,8 +288,11 @@ Future<void> deleteproject(int projectId) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }

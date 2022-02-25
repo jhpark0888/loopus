@@ -27,7 +27,7 @@ class Project {
   String? introduction;
   DateTime? startDate;
   DateTime? endDate;
-  List<Post> post;
+  RxList<Post> post;
   List<Tag> projectTag;
   List<User> looper;
   RxInt? post_count;
@@ -47,8 +47,8 @@ class Project {
       endDate:
           json["end_date"] != null ? DateTime.parse(json["end_date"]) : null,
       post: json["post"] != null
-          ? List<Post>.from(json["post"].map((x) => Post.fromJson(x)))
-          : [],
+          ? RxList<Post>.from(json["post"].map((x) => Post.fromJson(x)))
+          : <Post>[].obs,
       projectTag:
           List<Tag>.from(json["project_tag"].map((x) => Tag.fromJson(x))),
       looper: json["looper"] != null

@@ -71,7 +71,8 @@ class MessageDetailScreen extends StatelessWidget {
       }
       await postmessage(text, controller.userid).then((value) {
         message.issending(false);
-        try {
+
+        if (Get.isRegistered<MessageController>()) {
           MessageController messageController = Get.find<MessageController>();
           MessageRoomWidget messageroomwidget = messageController
               .chattingroomlist
@@ -92,8 +93,6 @@ class MessageDetailScreen extends StatelessWidget {
               issending: true.obs);
           messageController.chattingroomlist.remove(messageroomwidget);
           messageController.chattingroomlist.insert(0, messageroomwidget);
-        } catch (e) {
-          print(e);
         }
       });
     }

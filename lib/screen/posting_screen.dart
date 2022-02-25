@@ -88,17 +88,17 @@ class PostingScreen extends StatelessWidget {
                   Obx(() => InkWell(
                       onTap: () {
                         if (isLiked.value == 0) {
+                          likeController.isliked(1);
                           likecount += 1;
 
                           HomeController.to.tapLike(postid, likecount.value);
                           isLiked(1);
-                          likeController.isliked(1);
                         } else {
+                          likeController.isliked(0);
                           likecount -= 1;
                           HomeController.to.tapunLike(postid, likecount.value);
 
                           isLiked(0);
-                          likeController.isliked(0);
                         }
                       },
                       child: isLiked.value == 0

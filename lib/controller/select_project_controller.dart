@@ -13,14 +13,11 @@ class SelectProjectController extends GetxController {
 
   List<Project> projectlist = <Project>[].obs;
 
-  RxList<ProjectWidget> selectprojectlist = <ProjectWidget>[].obs;
+  RxList<Project> selectprojectlist = <Project>[].obs;
 
   void loadProjectList() async {
     // isSelectProjectLoading(true);
-    selectprojectlist(ProfileController.to.myProjectList
-        .map((projectwidget) => ProjectWidget(
-            project: projectwidget.project, type: ProjectWidgetType.addposting))
-        .toList());
+    selectprojectlist(ProfileController.to.myProjectList);
 
     // String? userId = await const FlutterSecureStorage().read(key: "id");
     // getProjectlist(userId).then((value) {

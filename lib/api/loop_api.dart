@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -62,8 +63,11 @@ Future<void> getfollowlist(int userid, followlist followtype) async {
         }
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -102,8 +106,11 @@ Future<void> getprojectfollowlist(int userid, followlist followtype) async {
         controller.looppersonscreenstate(ScreenState.error);
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }

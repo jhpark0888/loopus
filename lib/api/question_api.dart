@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -50,8 +52,11 @@ Future postquestion(String content) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -78,8 +83,11 @@ Future<dynamic> getquestionlist(int lastindex, String type) async {
     } else {
       return Future.error(response.statusCode);
     }
-  } catch (e) {
+  } on SocketException {
     ErrorController.to.isServerClosed(true);
+  } catch (e) {
+    print(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -156,8 +164,11 @@ Future<dynamic> deletequestion(int questionid) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -203,8 +214,11 @@ Future<void> answermake(String content, int questionid) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -239,8 +253,11 @@ Future<dynamic> deleteanswer(int questionid, int answerid) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }

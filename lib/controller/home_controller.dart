@@ -55,6 +55,8 @@ class HomeController extends GetxController
   RefreshController loopRefreshController =
       RefreshController(initialRefresh: false);
 
+  int recommandpagenum = 1;
+
   Rx<ScreenState> populartagstate = ScreenState.loading.obs;
   RxList<Tag> populartaglist = <Tag>[].obs;
 
@@ -77,6 +79,7 @@ class HomeController extends GetxController
   }
 
   void onPostingRefresh() async {
+    recommandpagenum = 1;
     isRecommandFull(false);
     enablePostingPullup.value = true;
     recommandpostingResult(PostingModel(postingitems: <Post>[].obs));
@@ -180,10 +183,7 @@ class HomeController extends GetxController
       ModalController.to.showdisconnectdialog();
     } else {
       if (isRecommandFull.value == false) {
-        postingModel = await recommandpost(
-            recommandpostingResult.value.postingitems.isEmpty
-                ? 0
-                : recommandpostingResult.value.postingitems.last.id);
+        postingModel = await recommandpost(recommandpagenum);
       } else {
         postingModel = await latestpost(
             latestpostingResult.value.postingitems.isEmpty
@@ -219,6 +219,11 @@ class HomeController extends GetxController
           enablePostingPullup.value = false;
         }
         if (isRecommandFull.value == false) {
+          for (var originpost in recommandpostingResult.value.postingitems) {
+            postingModel.postingitems
+                .removeWhere((post) => post.id == originpost.id);
+          }
+
           recommandpostingResult.value.postingitems
               .addAll(postingModel.postingitems);
         } else {
