@@ -418,7 +418,6 @@ class _MyAppSpace extends StatelessWidget {
         const fadeEnd = 1.0;
         final opacity1 = 1.0 - Interval(0.0, 0.75).transform(t);
         final opacity2 = 1.0 - Interval(fadeStart, fadeEnd).transform(t);
-
         return Stack(
           children: [
             SafeArea(

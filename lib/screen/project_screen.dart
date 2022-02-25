@@ -593,11 +593,10 @@ class ProjectScreen extends StatelessWidget {
                                                             .user!
                                                             .department,
                                                         profileimage: controller
-                                                                .project
-                                                                .value
-                                                                .user!
-                                                                .profileImage ??
-                                                            '',
+                                                            .project
+                                                            .value
+                                                            .user!
+                                                            .profileImage,
                                                       ))
                                                   .toList()
                                                   .reversed)
