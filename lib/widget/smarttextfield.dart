@@ -135,20 +135,23 @@ class SmartTextField extends StatelessWidget {
               )
             : Align(
                 alignment: type.value.imageAlign,
-                child: Stack(children: [
-                  Image.network(editorController.urlimageindex[
-                      editorController.textcontrollers.indexOf(controller)]!),
-                  IconButton(
-                    onPressed: () {
-                      editorController.imagedelete(controller);
-                    },
-                    icon: const Icon(
-                      Icons.cancel_rounded,
-                      color: Colors.black26,
-                    ),
-                    iconSize: 32,
-                  )
-                ]),
+                child: Padding(
+                  padding: type.value.padding,
+                  child: Stack(children: [
+                    Image.network(editorController.urlimageindex[
+                        editorController.textcontrollers.indexOf(controller)]!),
+                    IconButton(
+                      onPressed: () {
+                        editorController.imagedelete(controller);
+                      },
+                      icon: const Icon(
+                        Icons.cancel_rounded,
+                        color: Colors.black26,
+                      ),
+                      iconSize: 32,
+                    )
+                  ]),
+                ),
               )
         : Focus(
             onFocusChange: (hasFocus) {
