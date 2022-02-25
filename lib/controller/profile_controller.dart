@@ -41,8 +41,7 @@ class ProfileController extends GetxController
     profilerefreshController.loadComplete();
   }
 
-  RxList<ProjectWidget> myProjectList = <ProjectWidget>[].obs;
-  RxList<ProjectWidget> otherProjectList = <ProjectWidget>[].obs;
+  RxList<Project> myProjectList = <Project>[].obs;
 
   Rx<File> profileimage = File('').obs;
   Rx<User> myUserInfo = User(

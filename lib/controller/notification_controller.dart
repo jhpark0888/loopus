@@ -84,7 +84,8 @@ class NotificationController extends GetxController {
       print("message recieved");
       print(event.data["type"]);
       if (event.data["type"] == "msg") {
-        try {
+        if (Get.isRegistered<MessageDetailController>(
+            tag: event.data["id"].toString())) {
           String? myid = await const FlutterSecureStorage().read(key: 'id');
           Get.find<MessageDetailController>(tag: event.data["id"].toString())
               .messagelist
@@ -104,7 +105,7 @@ class NotificationController extends GetxController {
                       .value));
           // 새로 추가
           putonmessagescreen(event.data["id"].toString());
-          try {
+          if (Get.isRegistered<MessageController>()) {
             MessageRoomWidget messageroomwidget = MessageController
                 .to.chattingroomlist
                 .where((messageroomwidget) =>
@@ -122,38 +123,9 @@ class NotificationController extends GetxController {
                 issending: true.obs);
             MessageController.to.chattingroomlist.remove(messageroomwidget);
             MessageController.to.chattingroomlist.insert(0, messageroomwidget);
-          } catch (e) {
-            print(e);
           }
-          // try {
-          //   Get.find<OnMessageScreenController>(
-          //       tag: event.data["id"].toString());
-          //   putonmessagescreen(event.data["id"].toString());
-          // } catch (e) {
-          //   print(e);
-          //   MessageController.to.chattingroomlist
-          //       .where((messageroomwidget) =>
-          //           messageroomwidget.messageRoom.value.user.userid ==
-          //           int.parse(event.data["id"]))
-          //       .first
-          //       .messageRoom
-          //       .value
-          //       .notread
-          //       .value += 1;
-          // }
-        } catch (e) {
-          print(e);
-
-          try {
-            // MessageController.to.chattingroomlist
-            //     .where((messageroomwidget) =>
-            //         messageroomwidget.messageRoom.value.user.userid ==
-            //         int.parse(event.data["id"]))
-            //     .first
-            //     .messageRoom
-            //     .value
-            //     .notread
-            //     .value += 1;
+        } else {
+          if (Get.isRegistered<MessageController>()) {
             String? myid = await const FlutterSecureStorage().read(key: 'id');
             MessageRoomWidget messageroomwidget = MessageController
                 .to.chattingroomlist
@@ -173,8 +145,7 @@ class NotificationController extends GetxController {
                 issending: true.obs);
             MessageController.to.chattingroomlist.remove(messageroomwidget);
             MessageController.to.chattingroomlist.insert(0, messageroomwidget);
-          } catch (e) {
-            print(e);
+          } else {
             ProfileController.to.isnewmessage(true);
             ModalController.to.showCustomSnackbar(
               event.notification!.title,

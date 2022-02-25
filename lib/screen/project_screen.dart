@@ -40,6 +40,14 @@ class ProjectScreen extends StatelessWidget {
   int isuser;
   RxInt likecount = 0.obs;
 
+  int projectlikecount() {
+    int likecount = 0;
+    controller.project.value.post.forEach((post) {
+      likecount += post.likeCount.value;
+    });
+    return likecount;
+  }
+
   Widget looppersonlist() {
     double? width;
     List<Widget> personlist = [];
@@ -410,8 +418,7 @@ class ProjectScreen extends StatelessWidget {
                                                   SizedBox(
                                                     width: 4,
                                                   ),
-                                                  Text(
-                                                      '${controller.project.value.like_count!.value}',
+                                                  Text('${projectlikecount()}',
                                                       style: kButtonStyle),
                                                 ],
                                               ),
@@ -566,7 +573,34 @@ class ProjectScreen extends StatelessWidget {
                                         () => Column(
                                           children: controller
                                                   .project.value.post.isNotEmpty
-                                              ? controller.postinglist
+                                              ? List.from(controller
+                                                  .project.value.post
+                                                  .map((post) =>
+                                                      ProjectPostingWidget(
+                                                        item: post.obs,
+                                                        isuser: controller
+                                                            .project
+                                                            .value
+                                                            .is_user,
+                                                        realname: controller
+                                                            .project
+                                                            .value
+                                                            .user!
+                                                            .realName,
+                                                        department: controller
+                                                            .project
+                                                            .value
+                                                            .user!
+                                                            .department,
+                                                        profileimage: controller
+                                                                .project
+                                                                .value
+                                                                .user!
+                                                                .profileImage ??
+                                                            '',
+                                                      ))
+                                                  .toList()
+                                                  .reversed)
                                               : (controller.project.value
                                                           .is_user ==
                                                       1)

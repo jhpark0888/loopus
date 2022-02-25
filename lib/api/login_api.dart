@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -62,8 +63,11 @@ Future<void> loginRequest() async {
         _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -102,8 +106,11 @@ Future<void> postpwfindemailcheck() async {
         _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -142,8 +149,11 @@ Future<void> putpwfindchange() async {
         _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }

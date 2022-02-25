@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:core';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -162,13 +163,16 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
         }
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
 
-Future<Map> getposting(int postingid) async {
+Future<Post?> getposting(int postingid) async {
   ConnectivityResult result = await initConnectivity();
   PostingDetailController controller =
       Get.find<PostingDetailController>(tag: postingid.toString());
@@ -176,7 +180,7 @@ Future<Map> getposting(int postingid) async {
   if (result == ConnectivityResult.none) {
     controller.postscreenstate(ScreenState.disconnect);
     ModalController.to.showdisconnectdialog();
-    return {};
+    return null;
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     String? userid = await FlutterSecureStorage().read(key: "id");
@@ -203,7 +207,7 @@ Future<Map> getposting(int postingid) async {
 
         // Post post = Post.fromJson(responseBody['posting_info']);
         controller.postscreenstate(ScreenState.success);
-        return responseBody;
+        return Post.fromJson(responseBody['posting_info']);
       } else if (response.statusCode == 404) {
         Get.back();
         ModalController.to.showCustomDialog('이미 삭제된 포스팅입니다', 1400);
@@ -212,9 +216,13 @@ Future<Map> getposting(int postingid) async {
         controller.postscreenstate(ScreenState.error);
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
-      return {};
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -328,7 +336,30 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
 
       if (response.statusCode == 200) {
         print(response.statusCode);
-        await getposting(postid);
+        Post? post = await getposting(postid);
+        if (post != null) {
+          if (Get.isRegistered<ProjectDetailController>(
+              tag: post.project!.id.toString())) {
+            ProjectDetailController projectDetailController =
+                Get.find<ProjectDetailController>(
+                    tag: post.project!.id.toString());
+            int postindex = projectDetailController.project.value.post
+                .indexWhere((pjinpost) => pjinpost.id == post.id);
+            projectDetailController.project.value.post.removeAt(postindex);
+            projectDetailController.project.value.post.insert(postindex, post);
+            // int widgetindex = projectDetailController.postinglist.indexWhere(
+            //     (postwidget) => postwidget.item.value.id == post.id);
+            // projectDetailController.postinglist.removeAt(widgetindex);
+            // projectDetailController.postinglist.insert(
+            //     widgetindex,
+            //     ProjectPostingWidget(
+            //         isuser: 1,
+            //         item: post.obs,
+            //         realname: post.user.realName,
+            //         profileimage: post.user.profileImage,
+            //         department: post.user.department));
+          }
+        }
         Get.back();
         ModalController.to.showCustomDialog('변경이 완료되었어요', 1000);
         // String responsebody = await response.stream.bytesToString();
@@ -340,8 +371,11 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -362,17 +396,16 @@ Future<void> deleteposting(int postid, int projectid) async {
       print(response.statusCode);
       if (response.statusCode == 200) {
         Get.back();
-        try {
+        if (Get.isRegistered<ProjectDetailController>(
+            tag: projectid.toString())) {
           Get.find<ProjectDetailController>(tag: projectid.toString())
               .project
               .value
               .post
               .removeWhere((post) => post.id == postid);
-          Get.find<ProjectDetailController>(tag: projectid.toString())
-              .postinglist
-              .removeWhere((post) => post.item.id == postid);
-        } catch (e) {
-          print(e);
+          // Get.find<ProjectDetailController>(tag: projectid.toString())
+          //     .postinglist
+          //     .removeWhere((post) => post.item.value.id == postid);
         }
 
         HomeController.to.recommandpostingResult.value.postingitems
@@ -382,8 +415,11 @@ Future<void> deleteposting(int postid, int projectid) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -413,12 +449,15 @@ Future<dynamic> latestpost(int lastindex) async {
     } else {
       return PostingModel.fromJson(list);
     }
-  } catch (e) {
+  } on SocketException {
     ErrorController.to.isServerClosed(true);
+  } catch (e) {
+    print(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }
 
-Future<dynamic> recommandpost(int lastindex) async {
+Future<dynamic> recommandpost(int pagenum) async {
   String? token;
   // print('메인페이지 번호 : $pageNumber');
   await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -426,7 +465,7 @@ Future<dynamic> recommandpost(int lastindex) async {
   });
 
   final recommandloadUri =
-      Uri.parse("$serverUri/post_api/recommend_load?last=$lastindex");
+      Uri.parse("$serverUri/post_api/recommend_load?page=$pagenum");
 
   try {
     final response =
@@ -441,10 +480,16 @@ Future<dynamic> recommandpost(int lastindex) async {
     } else {
       var responseBody = utf8.decode(response.bodyBytes);
       List<dynamic> list = jsonDecode(responseBody);
+      HomeController.to.recommandpagenum += 1;
       return PostingModel.fromJson(list);
     }
-  } catch (e) {
+  } on SocketException {
+    print("서버에러 발생");
+
     ErrorController.to.isServerClosed(true);
+  } catch (e) {
+    print(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -469,8 +514,11 @@ Future<dynamic> bookmarklist(int pageNumber) async {
     } else {
       return PostingModel.fromJson(list);
     }
-  } catch (e) {
+  } on SocketException {
     ErrorController.to.isServerClosed(true);
+  } catch (e) {
+    print(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -497,8 +545,11 @@ Future<dynamic> looppost(int lastindex) async {
     } else {
       return PostingModel.fromJson(list);
     }
-  } catch (e) {
+  } on SocketException {
     ErrorController.to.isServerClosed(true);
+  } catch (e) {
+    print(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -515,8 +566,11 @@ Future<dynamic> bookmarkpost(int postingId) async {
 
     var responseBody = utf8.decode(response.bodyBytes);
     String result = jsonDecode(responseBody);
-  } catch (e) {
+  } on SocketException {
     ErrorController.to.isServerClosed(true);
+  } catch (e) {
+    print(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -534,8 +588,11 @@ Future<dynamic> likepost(int postingId) async {
     var responseHeaders = response.headers;
     var responseBody = utf8.decode(response.bodyBytes);
     String result = jsonDecode(responseBody);
-  } catch (e) {
+  } on SocketException {
     ErrorController.to.isServerClosed(true);
+  } catch (e) {
+    print(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -569,8 +626,11 @@ Future<void> getlikepeoele(int postid) async {
 
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -605,8 +665,11 @@ Future postingreport(int postingId) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }

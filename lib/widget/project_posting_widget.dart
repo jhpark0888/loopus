@@ -30,11 +30,13 @@ class ProjectPostingWidget extends StatelessWidget {
     required this.department,
   }) : super(key: key);
 
-  late final LikeController likeController = Get.put(
+  late LikeController likeController = Get.put(
       LikeController(
-          isliked: item.isLiked, id: item.id, lastisliked: item.isLiked.value),
-      tag: item.id.toString());
-  Post item;
+          isliked: item.value.isLiked,
+          id: item.value.id,
+          lastisliked: item.value.isLiked.value),
+      tag: item.value.id.toString());
+  Rx<Post> item;
   int isuser;
   String realname;
   var profileimage;
@@ -46,18 +48,18 @@ class ProjectPostingWidget extends StatelessWidget {
       onTap: () {
         Get.to(
             () => PostingScreen(
-                userid: item.userid,
+                userid: item.value.userid,
                 isuser: isuser,
-                postid: item.id,
-                title: item.title,
+                postid: item.value.id,
+                title: item.value.title,
                 realName: realname,
                 department: department,
-                postDate: item.date,
+                postDate: item.value.date,
                 profileImage: profileimage,
-                thumbNail: item.thumbnail,
-                likecount: item.likeCount,
-                isLiked: item.isLiked,
-                isMarked: item.isMarked),
+                thumbNail: item.value.thumbnail,
+                likecount: item.value.likeCount,
+                isLiked: item.value.isLiked,
+                isMarked: item.value.isMarked),
             preventDuplicates: false);
       },
       child: Padding(
@@ -69,34 +71,40 @@ class ProjectPostingWidget extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  width: Get.width,
-                  height: Get.width / 2,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                          image: item.thumbnail != null
-                              ? NetworkImage(item.thumbnail)
-                              : const AssetImage(
-                                  "assets/illustrations/default_image.png",
-                                ) as ImageProvider,
-                          fit: BoxFit.cover)),
+                Obx(
+                  () => Container(
+                    width: Get.width,
+                    height: Get.width / 2,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                            image: item.value.thumbnail != null
+                                ? NetworkImage(item.value.thumbnail)
+                                : const AssetImage(
+                                    "assets/illustrations/default_image.png",
+                                  ) as ImageProvider,
+                            fit: BoxFit.cover)),
+                  ),
                 ),
                 SizedBox(
                   height: 16,
                 ),
-                Text(
-                  item.title,
-                  style: kSubTitle1Style,
+                Obx(
+                  () => Text(
+                    item.value.title,
+                    style: kSubTitle1Style,
+                  ),
                 ),
                 SizedBox(
                   height: 8,
                 ),
-                Text(
-                  item.content_summary ?? '',
-                  style: kBody1Style,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                Obx(
+                  () => Text(
+                    item.value.content_summary ?? '',
+                    style: kBody1Style,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 SizedBox(
                   height: 12,
@@ -106,7 +114,7 @@ class ProjectPostingWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      '${DateFormat('yy.MM.dd').format(item.date)}',
+                      '${DateFormat('yy.MM.dd').format(item.value.date)}',
                       style: kBody2Style.copyWith(
                         color: mainblack.withOpacity(
                           0.6,
@@ -117,35 +125,35 @@ class ProjectPostingWidget extends StatelessWidget {
                       children: [
                         Obx(() => InkWell(
                             onTap: () {
-                              if (item.isLiked.value == 0) {
+                              if (item.value.isLiked.value == 0) {
+                                likeController.isliked(1);
                                 Get.find<ProjectDetailController>(
-                                        tag: item.project!.id.toString())
+                                        tag: item.value.project!.id.toString())
                                     .project
                                     .value
                                     .like_count!
                                     .value += 1;
-                                item.likeCount += 1;
-                                HomeController.to
-                                    .tapLike(item.id, item.likeCount.value);
+                                item.value.likeCount += 1;
+                                HomeController.to.tapLike(
+                                    item.value.id, item.value.likeCount.value);
 
-                                item.isLiked.value = 1;
-                                likeController.isliked(1);
+                                item.value.isLiked.value = 1;
                               } else {
+                                likeController.isliked(0);
                                 Get.find<ProjectDetailController>(
-                                        tag: item.project!.id.toString())
+                                        tag: item.value.project!.id.toString())
                                     .project
                                     .value
                                     .like_count!
                                     .value -= 1;
-                                item.likeCount -= 1;
-                                HomeController.to
-                                    .tapunLike(item.id, item.likeCount.value);
+                                item.value.likeCount -= 1;
+                                HomeController.to.tapunLike(
+                                    item.value.id, item.value.likeCount.value);
 
-                                item.isLiked.value = 0;
-                                likeController.isliked(0);
+                                item.value.isLiked.value = 0;
                               }
                             },
-                            child: item.isLiked.value == 0
+                            child: item.value.isLiked.value == 0
                                 ? SvgPicture.asset(
                                     "assets/icons/Favorite_Inactive.svg")
                                 : SvgPicture.asset(
@@ -158,14 +166,14 @@ class ProjectPostingWidget extends StatelessWidget {
                             behavior: HitTestBehavior.translucent,
                             onTap: () {
                               Get.to(() => LikePeopleScreen(
-                                    postid: item.id,
+                                    postid: item.value.id,
                                   ));
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Text(
-                                item.likeCount.value != 0
-                                    ? "${item.likeCount.value}   \u200B"
+                                item.value.likeCount.value != 0
+                                    ? "${item.value.likeCount.value}   \u200B"
                                     : ' \u200B',
                                 style: kButtonStyle,
                               ),
@@ -177,15 +185,15 @@ class ProjectPostingWidget extends StatelessWidget {
                         ),
                         Obx(() => InkWell(
                             onTap: () {
-                              if (item.isMarked.value == 0) {
-                                HomeController.to.tapBookmark(item.id);
-                                item.isMarked(1);
+                              if (item.value.isMarked.value == 0) {
+                                HomeController.to.tapBookmark(item.value.id);
+                                item.value.isMarked(1);
                               } else {
-                                HomeController.to.tapunBookmark(item.id);
-                                item.isMarked(0);
+                                HomeController.to.tapunBookmark(item.value.id);
+                                item.value.isMarked(0);
                               }
                             },
-                            child: item.isMarked.value == 0
+                            child: item.value.isMarked.value == 0
                                 ? SvgPicture.asset(
                                     "assets/icons/Mark_Default.svg")
                                 : SvgPicture.asset(

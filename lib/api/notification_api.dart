@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
@@ -78,8 +79,11 @@ Future<void> getNotificationlist(String type, int lastindex) async {
         }
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -99,7 +103,10 @@ Future deleteNotification(int noticeid) async {
     } else {
       return Future.error(response.statusCode);
     }
-  } catch (e) {
+  } on SocketException {
     ErrorController.to.isServerClosed(true);
+  } catch (e) {
+    print(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }

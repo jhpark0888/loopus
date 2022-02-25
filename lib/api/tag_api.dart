@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -96,8 +97,11 @@ void gettagsearch(Tagtype tagtype) async {
         tagController.tagsearchstate(ScreenState.error);
         print('tag status code :${response.statusCode}');
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -139,8 +143,11 @@ void getpopulartag() async {
         controller.populartagstate(ScreenState.error);
         print('tag status code :${response.statusCode}');
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }

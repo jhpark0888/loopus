@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -40,8 +41,11 @@ void emailRequest() async {
     } else {
       return Future.error(response.statusCode);
     }
-  } catch (e) {
+  } on SocketException {
     ErrorController.to.isServerClosed(true);
+  } catch (e) {
+    print(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -94,9 +98,11 @@ Future<void> signupRequest() async {
         await _gaController.logScreenView('signup_6');
         return Future.error(response.statusCode);
       }
+    } on SocketException {
+      ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -132,8 +138,11 @@ Future getdeptlist() async {
         await _gaController.logScreenView('signup_2');
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }

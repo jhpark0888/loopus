@@ -56,8 +56,11 @@ Future<void> getProfile(var userId, int isuser) async {
     } else {
       return Future.error(response.statusCode);
     }
-  } catch (e) {
+  } on SocketException {
     ErrorController.to.isServerClosed(true);
+  } catch (e) {
+    print(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -76,12 +79,7 @@ Future<void> getProjectlist(var userId, int isuser) async {
           responseBody.map((project) => Project.fromJson(project)).toList();
 
       if (isuser == 1) {
-        ProfileController.to.myProjectList(projectlist
-            .map((project) => ProjectWidget(
-                  project: project.obs,
-                  type: ProjectWidgetType.profile,
-                ))
-            .toList());
+        ProfileController.to.myProjectList(projectlist);
         ProfileController.to.myprofilescreenstate(ScreenState.success);
       } else {
         Get.find<OtherProfileController>(tag: userId.toString())
@@ -104,8 +102,11 @@ Future<void> getProjectlist(var userId, int isuser) async {
       }
       return Future.error(response.statusCode);
     }
-  } catch (e) {
+  } on SocketException {
     ErrorController.to.isServerClosed(true);
+  } catch (e) {
+    print(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -180,8 +181,11 @@ Future<User?> updateProfile(
           print("profile status code : ${response.statusCode}");
         }
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -222,8 +226,11 @@ Future<void> putpwchange() async {
         _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -255,8 +262,11 @@ Future postlogout() async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -307,8 +317,11 @@ Future deleteuser(String pw) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -343,8 +356,11 @@ Future userreport(int postingId) async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
@@ -396,8 +412,11 @@ Future inquiry() async {
       } else {
         return Future.error(response.statusCode);
       }
-    } catch (e) {
+    } on SocketException {
       ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
   }
 }
