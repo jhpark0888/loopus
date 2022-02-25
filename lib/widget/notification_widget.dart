@@ -99,22 +99,11 @@ class NotificationWidget extends StatelessWidget {
                   ),
                   Obx(() => CustomExpandedButton(
                         onTap: followMotion,
-                        title: notification.looped!.value == FollowState.normal
+                        title: followController.islooped.value == 0
                             ? "팔로우하기"
-                            : notification.looped!.value == FollowState.follower
-                                ? "팔로우하기"
-                                : notification.looped!.value ==
-                                        FollowState.following
-                                    ? "팔로잉 중"
-                                    : "팔로잉 중",
-                        isBlue: notification.looped!.value == FollowState.normal
-                            ? true
-                            : notification.looped!.value == FollowState.follower
-                                ? true
-                                : notification.looped!.value ==
-                                        FollowState.following
-                                    ? false
-                                    : false,
+                            : "팔로잉 중",
+                        isBlue:
+                            followController.islooped.value == 0 ? true : false,
                         isBig: false,
                         buttonTag: notification.targetId.toString(),
                       ))
