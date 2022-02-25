@@ -71,7 +71,7 @@ class ContactContentScreen extends StatelessWidget {
               counterText: null,
               maxLength: null,
               textController: _contactContentController.contentcontroller,
-              hintText: '문의 내용...',
+              hintText: '문의 내용',
               validator: null,
               obscureText: false,
               maxLines: 12,

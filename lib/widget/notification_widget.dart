@@ -155,7 +155,7 @@ class NotificationWidget extends StatelessWidget {
                               text: notification.user.realName,
                               style: kSubTitle1Style),
                           TextSpan(
-                            text: "님이",
+                            text: "님이 ",
                             style: kSubTitle1Style.copyWith(
                                 fontWeight: FontWeight.w400),
                           ),
@@ -166,7 +166,7 @@ class NotificationWidget extends StatelessWidget {
                             text: notification.type == NotificationType.question
                                 ? " 질문에 답변을 남겼어요 "
                                 : notification.type == NotificationType.tag
-                                    ? " 활동에 당신을 태그했어요 "
+                                    ? " 활동에 회원님을 태그했어요 "
                                     : " 포스팅에 좋아요를 남겼어요 ",
                             style: kSubTitle1Style.copyWith(
                                 fontWeight: FontWeight.w400),

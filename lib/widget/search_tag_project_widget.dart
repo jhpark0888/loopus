@@ -158,6 +158,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                           const SizedBox(
                             width: 16,
                           ),
+                          // Text('관심도'),
                           SvgPicture.asset("assets/icons/Favorite_Active.svg"),
                           const SizedBox(
                             width: 4,

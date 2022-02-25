@@ -329,6 +329,8 @@ class ProjectScreen extends StatelessWidget {
                                       ),
                                       Obx(
                                         () => Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
@@ -409,8 +411,12 @@ class ProjectScreen extends StatelessWidget {
                                               },
                                               child: Row(
                                                 children: [
-                                                  SvgPicture.asset(
-                                                    "assets/icons/Favorite_Active.svg",
+                                                  // SvgPicture.asset(
+                                                  //   "assets/icons/Favorite_Active.svg",
+                                                  // ),
+                                                  Text(
+                                                    '관심도',
+                                                    style: kBody2Style,
                                                   ),
                                                   SizedBox(
                                                     width: 4,

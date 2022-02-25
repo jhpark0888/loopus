@@ -174,7 +174,7 @@ class MessageDetailScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBarWidget(
           bottomBorder: false,
-          title: '${realname}님',
+          title: '${realname}',
         ),
         bottomNavigationBar: Transform.translate(
           offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),

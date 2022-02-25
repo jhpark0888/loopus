@@ -145,7 +145,7 @@ class ProjectAddTagScreen extends StatelessWidget {
                           height: 12,
                         ),
                         Text(
-                          '나중에 얼마든지 변경할 수 있어요',
+                          '나중에 변경할 수 있어요',
                           style: kBody1Style,
                         ),
                       ],

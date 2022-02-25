@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
 
 class CustomScrollController extends GetxController {
   static CustomScrollController get to => Get.put(CustomScrollController());

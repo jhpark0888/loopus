@@ -40,7 +40,7 @@ class CompanyScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
-            height: 28,
+            height: 44,
           ),
           RichText(
             textAlign: TextAlign.center,

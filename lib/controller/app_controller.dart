@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -37,6 +38,14 @@ class AppController extends GetxService {
 
       if (currentIndex.value == 0) {
         CustomScrollController.to.scrollToTop();
+        if (CustomScrollController.to.customScrollController.value.offset ==
+            0.0) {
+          HomeController.to.hometabcontroller.animateTo(
+            0,
+            curve: Curves.easeInOut,
+            duration: Duration(milliseconds: 300),
+          );
+        }
       }
       currentIndex(index);
     }

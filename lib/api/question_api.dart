@@ -56,6 +56,7 @@ Future postquestion(String content) async {
       ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
+
       // ErrorController.to.isServerClosed(true);
     }
   }
