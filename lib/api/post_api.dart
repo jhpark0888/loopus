@@ -176,8 +176,7 @@ Future<HTTPResponse> getposting(int postingid) async {
   if (result == ConnectivityResult.none) {
     controller.postscreenstate(ScreenState.disconnect);
     ModalController.to.showdisconnectdialog();
-    return HTTPResponse(
-        isError: true, errorData: {"message": '네트워크 오류입니다', "statusCode": 500});
+    return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     String? userid = await FlutterSecureStorage().read(key: "id");
@@ -204,30 +203,23 @@ Future<HTTPResponse> getposting(int postingid) async {
 
         // Post post = Post.fromJson(responseBody['posting_info']);
         controller.postscreenstate(ScreenState.success);
-        return HTTPResponse(
-            isError: false, data: Post.fromJson(responseBody['posting_info']));
+        return HTTPResponse.success(
+            Post.fromJson(responseBody['posting_info']));
       } else if (response.statusCode == 404) {
         Get.back();
         ModalController.to.showCustomDialog('이미 삭제된 포스팅입니다', 1400);
-        return HTTPResponse(isError: true, errorData: {
-          "message": '이미 삭제된 포스팅입니다',
-          "statusCode": response.statusCode
-        });
+        return HTTPResponse.apiError('이미 삭제된 포스팅입니다', response.statusCode);
       } else {
         controller.postscreenstate(ScreenState.error);
-        return HTTPResponse(
-            isError: true,
-            errorData: {"message": '', "statusCode": response.statusCode});
+        return HTTPResponse.apiError('', response.statusCode);
       }
     } on SocketException {
       ErrorController.to.isServerClosed(true);
-      return HTTPResponse(
-          isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
       controller.postscreenstate(ScreenState.error);
-      return HTTPResponse(
-          isError: true, errorData: {"message": e, "statusCode": 500});
+      return HTTPResponse.unexpectedError(e);
       // ErrorController.to.isServerClosed(true);
     }
   }
@@ -452,20 +444,16 @@ Future<HTTPResponse> latestpost(int lastindex) async {
     }
     if (response.statusCode != 200) {
       // Future.error(response.statusCode);
-      return HTTPResponse(
-          isError: true,
-          errorData: {"message": '', "statusCode": response.statusCode});
+      return HTTPResponse.apiError('', response.statusCode);
     } else {
-      return HTTPResponse(isError: false, data: PostingModel.fromJson(list));
+      return HTTPResponse.success(PostingModel.fromJson(list));
     }
   } on SocketException {
     ErrorController.to.isServerClosed(true);
-    return HTTPResponse(
-        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
+    return HTTPResponse.serverError();
   } catch (e) {
     print(e);
-    return HTTPResponse(
-        isError: true, errorData: {"message": '', "statusCode": 500});
+    return HTTPResponse.unexpectedError(e);
     // ErrorController.to.isServerClosed(true);
   }
 }
@@ -489,25 +477,21 @@ Future<HTTPResponse> recommandpost(int pagenum) async {
     // }
     if (response.statusCode != 200) {
       // Future.error(response.statusCode);
-      return HTTPResponse(
-          isError: true,
-          errorData: {"message": '', "statusCode": response.statusCode});
+      return HTTPResponse.apiError('', response.statusCode);
     } else {
       var responseBody = utf8.decode(response.bodyBytes);
       List<dynamic> list = jsonDecode(responseBody);
       HomeController.to.recommandpagenum += 1;
-      return HTTPResponse(isError: false, data: PostingModel.fromJson(list));
+      return HTTPResponse.success(PostingModel.fromJson(list));
     }
   } on SocketException {
     print("서버에러 발생");
 
     ErrorController.to.isServerClosed(true);
-    return HTTPResponse(
-        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
+    return HTTPResponse.serverError();
   } catch (e) {
     print(e);
-    return HTTPResponse(
-        isError: true, errorData: {"message": e, "statusCode": 500});
+    return HTTPResponse.unexpectedError(e);
     // ErrorController.to.isServerClosed(true);
   }
 }
@@ -529,20 +513,16 @@ Future<HTTPResponse> bookmarklist(int pageNumber) async {
     List<dynamic> list = jsonDecode(responseBody);
 
     if (response.statusCode != 200) {
-      return HTTPResponse(
-          isError: true,
-          errorData: {"message": '', "statusCode": response.statusCode});
+      return HTTPResponse.apiError('', response.statusCode);
     } else {
-      return HTTPResponse(isError: false, data: PostingModel.fromJson(list));
+      return HTTPResponse.success(PostingModel.fromJson(list));
     }
   } on SocketException {
     ErrorController.to.isServerClosed(true);
-    return HTTPResponse(
-        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
+    return HTTPResponse.serverError();
   } catch (e) {
     print(e);
-    return HTTPResponse(
-        isError: true, errorData: {"message": e, "statusCode": 500});
+    return HTTPResponse.unexpectedError(e);
     // ErrorController.to.isServerClosed(true);
   }
 }
@@ -566,20 +546,16 @@ Future<HTTPResponse> looppost(int lastindex) async {
     }
     if (response.statusCode != 200) {
       // Future.error(response.statusCode);
-      return HTTPResponse(
-          isError: true,
-          errorData: {"message": '', "statusCode": response.statusCode});
+      return HTTPResponse.apiError('', response.statusCode);
     } else {
-      return HTTPResponse(isError: false, data: PostingModel.fromJson(list));
+      return HTTPResponse.success(PostingModel.fromJson(list));
     }
   } on SocketException {
     ErrorController.to.isServerClosed(true);
-    return HTTPResponse(
-        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
+    return HTTPResponse.serverError();
   } catch (e) {
     print(e);
-    return HTTPResponse(
-        isError: true, errorData: {"message": e, "statusCode": 500});
+    return HTTPResponse.unexpectedError(e);
     // ErrorController.to.isServerClosed(true);
   }
 }

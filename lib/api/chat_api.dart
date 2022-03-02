@@ -63,6 +63,38 @@ Future<void> getmessageroomlist() async {
   }
 }
 
+Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    ModalController.to.showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+    final uri = Uri.parse("$serverUri/post_api/posting?id=$postid");
+
+    try {
+      http.Response response =
+          await http.delete(uri, headers: {"Authorization": "Token $token"});
+
+      print("채팅방 삭제: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        Get.back();
+        return HTTPResponse.success(null);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+      // ErrorController.to.isServerClosed(true);
+    }
+  }
+}
+
 Future<HTTPResponse> getmessagelist(int userid, int lastindex) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
   String? myid = await const FlutterSecureStorage().read(key: 'id');
@@ -93,23 +125,19 @@ Future<HTTPResponse> getmessagelist(int userid, int lastindex) async {
       // MessageController.to.chattingroomlist(responseBody
       //     .map((messageroom) => MessageRoom.fromJson(messageroom))
       //     .toList());
-      return HTTPResponse(isError: false, data: modelmessagelist);
+      return HTTPResponse.success(modelmessagelist);
     } else if (response.statusCode == 404) {
       messageDetailController.messagelist([]);
-      return HTTPResponse(isError: false, data: <MessageWidget>[]);
+      return HTTPResponse.success(<MessageWidget>[]);
     } else {
-      return HTTPResponse(
-          isError: true,
-          errorData: {"message": '', "statusCode": response.statusCode});
+      return HTTPResponse.apiError('', response.statusCode);
     }
   } on SocketException {
     ErrorController.to.isServerClosed(true);
-    return HTTPResponse(
-        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
+    return HTTPResponse.serverError();
   } catch (e) {
     print(e);
-    return HTTPResponse(
-        isError: true, errorData: {"message": e, "statusCode": 500});
+    return HTTPResponse.unexpectedError(e);
     // ErrorController.to.isServerClosed(true);
   }
 

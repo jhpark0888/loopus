@@ -81,20 +81,16 @@ Future<HTTPResponse> getquestionlist(int lastindex, String type) async {
 
       List<dynamic> list = jsonDecode(responseBody);
       // print(list);
-      return HTTPResponse(isError: false, data: QuestionModel.fromJson(list));
+      return HTTPResponse.success(QuestionModel.fromJson(list));
     } else {
-      return HTTPResponse(
-          isError: true,
-          errorData: {"message": '', "statusCode": response.statusCode});
+      return HTTPResponse.apiError('', response.statusCode);
     }
   } on SocketException {
     ErrorController.to.isServerClosed(true);
-    return HTTPResponse(
-        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
+    return HTTPResponse.serverError();
   } catch (e) {
     print(e);
-    return HTTPResponse(
-        isError: true, errorData: {"message": e, "statusCode": 500});
+    return HTTPResponse.unexpectedError(e);
     // ErrorController.to.isServerClosed(true);
   }
 }
