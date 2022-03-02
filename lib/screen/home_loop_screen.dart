@@ -15,11 +15,11 @@ class HomeLoopScreen extends StatelessWidget {
       body: Obx(
         () => SmartRefresher(
           controller: homeController.loopRefreshController,
-          enablePullDown: !homeController.isLoopEmpty.value
+          enablePullDown: homeController.isLoopEmpty.value == false
               ? (homeController.isLoopLoading.value == true)
                   ? false
                   : true
-              : false,
+              : true,
           enablePullUp: (homeController.isLoopLoading.value == true)
               ? false
               : homeController.enableLoopPullup.value,

@@ -8,6 +8,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/tag_model.dart';
@@ -128,64 +129,52 @@ class HomeController extends GetxController
     if (result == ConnectivityResult.none) {
       ModalController.to.showdisconnectdialog();
     } else {
+      HTTPResponse httpresult;
       if (selectgroup.value == "모든 질문") {
-        QuestionModel? questionModel = await getquestionlist(
+        httpresult = await getquestionlist(
             questionResult.value.questionitems.isEmpty
                 ? 0
                 : questionResult.value.questionitems.last.id,
             "any");
-
-        if (questionModel != null) {
-          if (questionModel.questionitems.isEmpty &&
-              questionResult.value.questionitems.isEmpty) {
-            isAllQuestionEmpty.value = true;
-          } else if (questionModel.questionitems.isEmpty &&
-              questionResult.value.questionitems.isNotEmpty) {
-            enableQuestionPullup.value = false;
-          }
-
-          questionResult.value.questionitems
-              .addAll(questionModel.questionitems);
-        }
       } else {
-        QuestionModel? questionModel = await getquestionlist(
+        httpresult = await getquestionlist(
             questionResult.value.questionitems.isEmpty
                 ? 0
                 : questionResult.value.questionitems.last.id,
             "my");
-
-        if (questionModel != null) {
-          if (questionModel.questionitems.isEmpty &&
-              questionResult.value.questionitems.isEmpty) {
-            isMyQuestionEmpty.value = true;
-          } else if (questionModel.questionitems.isEmpty &&
-              questionResult.value.questionitems.isNotEmpty) {
-            enableQuestionPullup.value = false;
-          }
-
-          questionResult.value.questionitems
-              .addAll(questionModel.questionitems);
+      }
+      if (httpresult.isError == false) {
+        QuestionModel questionModel = httpresult.data;
+        if (questionModel.questionitems.isEmpty &&
+            questionResult.value.questionitems.isEmpty) {
+          isAllQuestionEmpty.value = true;
+        } else if (questionModel.questionitems.isEmpty &&
+            questionResult.value.questionitems.isNotEmpty) {
+          enableQuestionPullup.value = false;
         }
+
+        questionResult.value.questionitems.addAll(questionModel.questionitems);
       }
     }
   }
 
   Future<void> postloadItem() async {
-    PostingModel? postingModel;
+    HTTPResponse httpresult;
     ConnectivityResult result = await initConnectivity();
     if (result == ConnectivityResult.none) {
       ModalController.to.showdisconnectdialog();
     } else {
       if (isRecommandFull.value == false) {
-        postingModel = await recommandpost(recommandpagenum);
+        httpresult = await recommandpost(recommandpagenum);
       } else {
-        postingModel = await latestpost(
+        httpresult = await latestpost(
             latestpostingResult.value.postingitems.isEmpty
                 ? 0
                 : latestpostingResult.value.postingitems.last.id);
       }
 
-      if (postingModel != null) {
+      if (httpresult.isError == false) {
+        PostingModel postingModel = httpresult.data;
         if (postingModel.postingitems.isEmpty &&
             recommandpostingResult.value.postingitems.isEmpty &&
             isRecommandFull.value == false) {
@@ -233,18 +222,23 @@ class HomeController extends GetxController
     if (result == ConnectivityResult.none) {
       ModalController.to.showdisconnectdialog();
     } else {
-      PostingModel? loopModel = await looppost(
+      HTTPResponse httpresult = await looppost(
           loopResult.value.postingitems.isEmpty
               ? 0
               : loopResult.value.postingitems.last.id);
 
-      if (loopModel != null) {
+      if (httpresult.isError == false) {
+        PostingModel loopModel = httpresult.data;
         if (loopModel.postingitems.isEmpty &&
             loopResult.value.postingitems.isEmpty) {
           isLoopEmpty.value = true;
         } else if (loopModel.postingitems.isEmpty &&
             loopResult.value.postingitems.isNotEmpty) {
           enableLoopPullup.value = false;
+        } else if (loopModel.postingitems.isNotEmpty &&
+            loopResult.value.postingitems.isEmpty &&
+            isLoopEmpty.value == true) {
+          isLoopEmpty.value = false;
         }
 
         loopResult.value.postingitems.addAll(loopModel.postingitems);

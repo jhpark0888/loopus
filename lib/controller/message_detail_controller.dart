@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/message_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -73,7 +74,7 @@ class MessageDetailController extends GetxController {
       }
       ModalController.to.showdisconnectdialog();
     } else {
-      List<MessageWidget> messagewidgetlist = await getmessagelist(
+      HTTPResponse httpresult = await getmessagelist(
           userid,
           first
               ? 0
@@ -81,19 +82,24 @@ class MessageDetailController extends GetxController {
                   ? messagelist.first.message.id
                   : 0);
 
-      if (messagewidgetlist.isEmpty && messagelist.isEmpty && first == false) {
-        enablemessagePullup.value = false;
-        // isalarmEmpty.value = true;
-      } else if (messagewidgetlist.isEmpty && messagelist.isNotEmpty) {
-        enablemessagePullup.value = false;
-      }
+      if (httpresult.isError == false) {
+        List<MessageWidget> messagewidgetlist = httpresult.data;
+        if (messagewidgetlist.isEmpty &&
+            messagelist.isEmpty &&
+            first == false) {
+          enablemessagePullup.value = false;
+          // isalarmEmpty.value = true;
+        } else if (messagewidgetlist.isEmpty && messagelist.isNotEmpty) {
+          enablemessagePullup.value = false;
+        }
 
-      if (first) {
-        messagelist(messagewidgetlist);
-        messagescreenstate(ScreenState.success);
-      } else {
-        for (var message in messagewidgetlist.reversed) {
-          messagelist.insert(0, message);
+        if (first) {
+          messagelist(messagewidgetlist);
+          messagescreenstate(ScreenState.success);
+        } else {
+          for (var message in messagewidgetlist.reversed) {
+            messagelist.insert(0, message);
+          }
         }
       }
     }

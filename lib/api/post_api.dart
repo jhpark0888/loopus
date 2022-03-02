@@ -18,6 +18,7 @@ import 'package:loopus/controller/likepeople_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/project_screen.dart';
@@ -167,7 +168,7 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
   }
 }
 
-Future<Post?> getposting(int postingid) async {
+Future<HTTPResponse> getposting(int postingid) async {
   ConnectivityResult result = await initConnectivity();
   PostingDetailController controller =
       Get.find<PostingDetailController>(tag: postingid.toString());
@@ -175,7 +176,8 @@ Future<Post?> getposting(int postingid) async {
   if (result == ConnectivityResult.none) {
     controller.postscreenstate(ScreenState.disconnect);
     ModalController.to.showdisconnectdialog();
-    return null;
+    return HTTPResponse(
+        isError: true, errorData: {"message": '네트워크 오류입니다', "statusCode": 500});
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     String? userid = await FlutterSecureStorage().read(key: "id");
@@ -202,21 +204,30 @@ Future<Post?> getposting(int postingid) async {
 
         // Post post = Post.fromJson(responseBody['posting_info']);
         controller.postscreenstate(ScreenState.success);
-        return Post.fromJson(responseBody['posting_info']);
+        return HTTPResponse(
+            isError: false, data: Post.fromJson(responseBody['posting_info']));
       } else if (response.statusCode == 404) {
         Get.back();
         ModalController.to.showCustomDialog('이미 삭제된 포스팅입니다', 1400);
-        return Future.error(response.statusCode);
+        return HTTPResponse(isError: true, errorData: {
+          "message": '이미 삭제된 포스팅입니다',
+          "statusCode": response.statusCode
+        });
       } else {
         controller.postscreenstate(ScreenState.error);
-        return Future.error(response.statusCode);
+        return HTTPResponse(
+            isError: true,
+            errorData: {"message": '', "statusCode": response.statusCode});
       }
     } on SocketException {
       ErrorController.to.isServerClosed(true);
-      return null;
+      return HTTPResponse(
+          isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
     } catch (e) {
       print(e);
-      return null;
+      controller.postscreenstate(ScreenState.error);
+      return HTTPResponse(
+          isError: true, errorData: {"message": e, "statusCode": 500});
       // ErrorController.to.isServerClosed(true);
     }
   }
@@ -331,17 +342,18 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
 
       if (response.statusCode == 200) {
         print(response.statusCode);
-        Post? post = await getposting(postid);
-        if (post != null) {
+        HTTPResponse? result = await getposting(postid);
+        if (result.isError == false) {
           if (Get.isRegistered<ProjectDetailController>(
-              tag: post.project!.id.toString())) {
+              tag: result.data.project!.id.toString())) {
             ProjectDetailController projectDetailController =
                 Get.find<ProjectDetailController>(
-                    tag: post.project!.id.toString());
+                    tag: result.data.project!.id.toString());
             int postindex = projectDetailController.project.value.post
-                .indexWhere((pjinpost) => pjinpost.id == post.id);
+                .indexWhere((pjinpost) => pjinpost.id == result.data.id);
             projectDetailController.project.value.post.removeAt(postindex);
-            projectDetailController.project.value.post.insert(postindex, post);
+            projectDetailController.project.value.post
+                .insert(postindex, result.data);
             // int widgetindex = projectDetailController.postinglist.indexWhere(
             //     (postwidget) => postwidget.item.value.id == post.id);
             // projectDetailController.postinglist.removeAt(widgetindex);
@@ -419,7 +431,7 @@ Future<void> deleteposting(int postid, int projectid) async {
   }
 }
 
-Future<dynamic> latestpost(int lastindex) async {
+Future<HTTPResponse> latestpost(int lastindex) async {
   String? token;
   // print('메인페이지 번호 : $pageNumber');
   await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -440,19 +452,25 @@ Future<dynamic> latestpost(int lastindex) async {
     }
     if (response.statusCode != 200) {
       // Future.error(response.statusCode);
-      return null;
+      return HTTPResponse(
+          isError: true,
+          errorData: {"message": '', "statusCode": response.statusCode});
     } else {
-      return PostingModel.fromJson(list);
+      return HTTPResponse(isError: false, data: PostingModel.fromJson(list));
     }
   } on SocketException {
     ErrorController.to.isServerClosed(true);
+    return HTTPResponse(
+        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
   } catch (e) {
     print(e);
+    return HTTPResponse(
+        isError: true, errorData: {"message": '', "statusCode": 500});
     // ErrorController.to.isServerClosed(true);
   }
 }
 
-Future<dynamic> recommandpost(int pagenum) async {
+Future<HTTPResponse> recommandpost(int pagenum) async {
   String? token;
   // print('메인페이지 번호 : $pageNumber');
   await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -471,24 +489,30 @@ Future<dynamic> recommandpost(int pagenum) async {
     // }
     if (response.statusCode != 200) {
       // Future.error(response.statusCode);
-      return null;
+      return HTTPResponse(
+          isError: true,
+          errorData: {"message": '', "statusCode": response.statusCode});
     } else {
       var responseBody = utf8.decode(response.bodyBytes);
       List<dynamic> list = jsonDecode(responseBody);
       HomeController.to.recommandpagenum += 1;
-      return PostingModel.fromJson(list);
+      return HTTPResponse(isError: false, data: PostingModel.fromJson(list));
     }
   } on SocketException {
     print("서버에러 발생");
 
     ErrorController.to.isServerClosed(true);
+    return HTTPResponse(
+        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
   } catch (e) {
     print(e);
+    return HTTPResponse(
+        isError: true, errorData: {"message": e, "statusCode": 500});
     // ErrorController.to.isServerClosed(true);
   }
 }
 
-Future<dynamic> bookmarklist(int pageNumber) async {
+Future<HTTPResponse> bookmarklist(int pageNumber) async {
   // print('북마크페이지 번호 : $pageNumber');
   String? token;
   await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -505,19 +529,25 @@ Future<dynamic> bookmarklist(int pageNumber) async {
     List<dynamic> list = jsonDecode(responseBody);
 
     if (response.statusCode != 200) {
-      return Future.error(response.statusCode);
+      return HTTPResponse(
+          isError: true,
+          errorData: {"message": '', "statusCode": response.statusCode});
     } else {
-      return PostingModel.fromJson(list);
+      return HTTPResponse(isError: false, data: PostingModel.fromJson(list));
     }
   } on SocketException {
     ErrorController.to.isServerClosed(true);
+    return HTTPResponse(
+        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
   } catch (e) {
     print(e);
+    return HTTPResponse(
+        isError: true, errorData: {"message": e, "statusCode": 500});
     // ErrorController.to.isServerClosed(true);
   }
 }
 
-Future<dynamic> looppost(int lastindex) async {
+Future<HTTPResponse> looppost(int lastindex) async {
   // print('루프페이지 번호 : $pageNumber');
   String? token;
   await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -536,14 +566,20 @@ Future<dynamic> looppost(int lastindex) async {
     }
     if (response.statusCode != 200) {
       // Future.error(response.statusCode);
-      return null;
+      return HTTPResponse(
+          isError: true,
+          errorData: {"message": '', "statusCode": response.statusCode});
     } else {
-      return PostingModel.fromJson(list);
+      return HTTPResponse(isError: false, data: PostingModel.fromJson(list));
     }
   } on SocketException {
     ErrorController.to.isServerClosed(true);
+    return HTTPResponse(
+        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
   } catch (e) {
     print(e);
+    return HTTPResponse(
+        isError: true, errorData: {"message": e, "statusCode": 500});
     // ErrorController.to.isServerClosed(true);
   }
 }

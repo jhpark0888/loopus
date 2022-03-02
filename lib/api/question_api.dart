@@ -11,6 +11,7 @@ import 'package:loopus/controller/question_detail_controller.dart';
 import 'dart:convert';
 
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/widget/question_answer_widget.dart';
 
@@ -62,7 +63,7 @@ Future postquestion(String content) async {
   }
 }
 
-Future<dynamic> getquestionlist(int lastindex, String type) async {
+Future<HTTPResponse> getquestionlist(int lastindex, String type) async {
   String? token;
   await const FlutterSecureStorage().read(key: 'token').then((value) {
     token = value;
@@ -80,14 +81,20 @@ Future<dynamic> getquestionlist(int lastindex, String type) async {
 
       List<dynamic> list = jsonDecode(responseBody);
       // print(list);
-      return QuestionModel.fromJson(list);
+      return HTTPResponse(isError: false, data: QuestionModel.fromJson(list));
     } else {
-      return Future.error(response.statusCode);
+      return HTTPResponse(
+          isError: true,
+          errorData: {"message": '', "statusCode": response.statusCode});
     }
   } on SocketException {
     ErrorController.to.isServerClosed(true);
+    return HTTPResponse(
+        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
   } catch (e) {
     print(e);
+    return HTTPResponse(
+        isError: true, errorData: {"message": e, "statusCode": 500});
     // ErrorController.to.isServerClosed(true);
   }
 }
