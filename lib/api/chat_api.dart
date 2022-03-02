@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/message_widget.dart';
@@ -62,7 +63,7 @@ Future<void> getmessageroomlist() async {
   }
 }
 
-Future<List<MessageWidget>> getmessagelist(int userid, int lastindex) async {
+Future<HTTPResponse> getmessagelist(int userid, int lastindex) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
   String? myid = await const FlutterSecureStorage().read(key: 'id');
   MessageDetailController messageDetailController =
@@ -92,19 +93,23 @@ Future<List<MessageWidget>> getmessagelist(int userid, int lastindex) async {
       // MessageController.to.chattingroomlist(responseBody
       //     .map((messageroom) => MessageRoom.fromJson(messageroom))
       //     .toList());
-      return modelmessagelist;
+      return HTTPResponse(isError: false, data: modelmessagelist);
     } else if (response.statusCode == 404) {
       messageDetailController.messagelist([]);
-      return [];
+      return HTTPResponse(isError: false, data: <MessageWidget>[]);
     } else {
-      return Future.error(response.statusCode);
+      return HTTPResponse(
+          isError: true,
+          errorData: {"message": '', "statusCode": response.statusCode});
     }
   } on SocketException {
     ErrorController.to.isServerClosed(true);
-    return [];
+    return HTTPResponse(
+        isError: true, errorData: {"message": '서버 오류', "statusCode": 500});
   } catch (e) {
     print(e);
-    return [];
+    return HTTPResponse(
+        isError: true, errorData: {"message": e, "statusCode": 500});
     // ErrorController.to.isServerClosed(true);
   }
 
