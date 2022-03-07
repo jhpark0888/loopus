@@ -31,16 +31,7 @@ class PostingDetailController extends GetxController {
           isLiked: 0.obs,
           isMarked: 0.obs,
           isuser: 0,
-          user: User(
-              userid: 0,
-              realName: "",
-              type: 0,
-              department: "",
-              loopcount: 0.obs,
-              totalposting: 0,
-              isuser: 0,
-              profileTag: [],
-              looped: FollowState.normal.obs))
+          user: User.defaultuser())
       .obs;
   RxList<PostContentWidget> postcontentlist = <PostContentWidget>[].obs;
   List<SearchPostingWidget> recommendposts = <SearchPostingWidget>[];

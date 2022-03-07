@@ -1,12 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/error_controller.dart';
 import 'package:loopus/controller/ga_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/search_controller.dart';
 
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
@@ -91,8 +96,13 @@ Future<void> signupRequest() async {
         await _gaController.logSignup();
         await _gaController.setUserProperties(
             userid, signupController.selectdept.value);
+
         Get.offAll(() => App());
-        _modalController.showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
+
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          _modalController.showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
+        });
+
         await _gaController.logScreenView('signup_6');
       } else {
         await _gaController.logScreenView('signup_6');

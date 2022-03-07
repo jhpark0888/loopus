@@ -62,16 +62,9 @@ class MessageRoom {
         message: Message.fromJson(json["message"], myid).obs,
         user: json["profile"] != null
             ? User.fromJson(json["profile"])
-            : User(
-                userid: 0,
+            : User.defaultuser(
                 realName: "알 수 없음",
-                type: 0,
-                department: "",
-                loopcount: 0.obs,
-                totalposting: 0,
-                isuser: 0,
-                profileTag: [],
-                looped: FollowState.normal.obs),
+              ),
         notread: RxInt(json["not_read"]),
       );
 

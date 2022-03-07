@@ -17,76 +17,92 @@ class WithdrawalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        bottomBorder: false,
-        title: '회원탈퇴',
-        actions: [
-          TextButton(
-            onPressed: () {
-              TextEditingController pwcontroller = TextEditingController();
-              ModalController.to.showTextFieldDialog(
-                  isWithdrawal: true,
-                  title: "현재 비밀번호를 입력해주세요",
-                  hintText: "8자리 이상",
-                  textEditingController: pwcontroller,
-                  obscureText: true,
-                  validator: (value) =>
-                      CheckValidate().validatePassword(value!),
-                  leftFunction: () => Get.back(),
-                  rightFunction: () {
-                    _controller.iswithdrawalloading(true);
-                    deleteuser(pwcontroller.text).then((value) {
-                      _controller.iswithdrawalloading(false);
-                    });
-                  });
-            },
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBarWidget(
+            bottomBorder: false,
+            title: '회원탈퇴',
+            actions: [
+              TextButton(
+                onPressed: () {
+                  TextEditingController pwcontroller = TextEditingController();
+                  ModalController.to.showTextFieldDialog(
+                      isWithdrawal: true,
+                      title: "현재 비밀번호를 입력해주세요",
+                      hintText: "8자리 이상",
+                      textEditingController: pwcontroller,
+                      obscureText: true,
+                      validator: (value) =>
+                          CheckValidate().validatePassword(value!),
+                      leftFunction: () => Get.back(),
+                      rightFunction: () {
+                        FocusScope.of(context).unfocus();
+                        _controller.iswithdrawalloading(true);
+                        Get.back();
+                        deleteuser(pwcontroller.text).then((value) {
+                          _controller.iswithdrawalloading(false);
+                        });
+                      });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: Text(
+                    '탈퇴하기',
+                    style: kSubTitle2Style.copyWith(color: mainpink),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          body: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
             child: Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: Text(
-                '탈퇴하기',
-                style: kSubTitle2Style.copyWith(color: mainpink),
+              padding: const EdgeInsets.fromLTRB(
+                32,
+                24,
+                32,
+                40,
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    '탈퇴 사유를 선택해주세요',
+                    style: kSubTitle1Style,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ListView(
+                    shrinkWrap: true,
+                    children: _controller.reasonlist,
+                  ),
+
+                  // CustomTextField(
+                  //   counterText: null,
+                  //   maxLength: null,
+                  //   textController: null,
+                  //   hintText: '탈퇴 사유...',
+                  //   validator: null,
+                  //   obscureText: false,
+                  //   maxLines: 5,
+                  // ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            32,
-            24,
-            32,
-            40,
-          ),
-          child: Column(
-            children: [
-              Text(
-                '탈퇴 사유를 선택해주세요',
-                style: kSubTitle1Style,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              ListView(
-                shrinkWrap: true,
-                children: _controller.reasonlist,
-              ),
-
-              // CustomTextField(
-              //   counterText: null,
-              //   maxLength: null,
-              //   textController: null,
-              //   hintText: '탈퇴 사유...',
-              //   validator: null,
-              //   obscureText: false,
-              //   maxLines: 5,
-              // ),
-            ],
-          ),
         ),
-      ),
+        if (_controller.iswithdrawalloading.value == true)
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: mainblack.withOpacity(0.3),
+            child: Image.asset(
+              'assets/icons/loading.gif',
+              scale: 6,
+            ),
+          ),
+      ],
     );
   }
 }

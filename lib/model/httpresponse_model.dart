@@ -14,7 +14,7 @@ class HTTPResponse {
       isError: true, errorData: {"message": message, "statusCode": statuscode});
 
   factory HTTPResponse.networkError() => HTTPResponse(
-      isError: true, errorData: {"message": '네트워크 오류입니다', "statusCode": 500});
+      isError: true, errorData: {"message": '네트워크 오류입니다', "statusCode": 59});
 
   factory HTTPResponse.serverError() => HTTPResponse(
       isError: true, errorData: {"message": '서버 오류입니다', "statusCode": 500});

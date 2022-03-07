@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/ban_api.dart';
 import 'package:loopus/controller/follow_controller.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
@@ -115,12 +116,22 @@ class OtherProfileScreen extends StatelessWidget {
                               userreport(controller.userid);
                             });
                       },
-                      func2: () {},
+                      func2: () {
+                        modalController.showButtonDialog(
+                            leftText: '취소',
+                            rightText: '차단',
+                            title: '<${realname}> 유저를 차단하시겠어요?',
+                            content: '차단하면 <${realname}> 유저와의 팔로우도 해제됩니다',
+                            leftFunction: () => Get.back(),
+                            rightFunction: () {
+                              userban(controller.userid);
+                            });
+                      },
                       value1: '이 유저 신고하기',
-                      value2: '',
+                      value2: '이 유저 차단하기',
                       isValue1Red: true,
-                      isValue2Red: false,
-                      isOne: true,
+                      isValue2Red: true,
+                      isOne: false,
                     );
                   },
                   icon: SvgPicture.asset(
@@ -342,7 +353,11 @@ class OtherProfileScreen extends StatelessWidget {
                                     ),
                                     Obx(
                                       () => Text(
-                                        controller.otherUser.value.department,
+                                        controller.otherUser.value.banned !=
+                                                BanState.normal
+                                            ? ''
+                                            : controller
+                                                .otherUser.value.department,
                                         style: kBody1Style,
                                       ),
                                     ),
@@ -354,27 +369,34 @@ class OtherProfileScreen extends StatelessWidget {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: controller
-                                              .otherUser.value.profileTag
-                                              .map((tag) => Row(children: [
-                                                    Tagwidget(
-                                                      tag: tag,
-                                                      fontSize: 14,
-                                                    ),
-                                                    controller.otherUser.value
-                                                                .profileTag
-                                                                .indexOf(tag) !=
-                                                            controller
+                                                      .otherUser.value.banned !=
+                                                  BanState.normal
+                                              ? []
+                                              : controller
+                                                  .otherUser.value.profileTag
+                                                  .map((tag) => Row(children: [
+                                                        Tagwidget(
+                                                          tag: tag,
+                                                          fontSize: 14,
+                                                        ),
+                                                        controller
                                                                     .otherUser
                                                                     .value
                                                                     .profileTag
-                                                                    .length -
-                                                                1
-                                                        ? SizedBox(
-                                                            width: 8,
-                                                          )
-                                                        : Container()
-                                                  ]))
-                                              .toList()),
+                                                                    .indexOf(
+                                                                        tag) !=
+                                                                controller
+                                                                        .otherUser
+                                                                        .value
+                                                                        .profileTag
+                                                                        .length -
+                                                                    1
+                                                            ? SizedBox(
+                                                                width: 8,
+                                                              )
+                                                            : Container()
+                                                      ]))
+                                                  .toList()),
                                     ),
                                     SizedBox(
                                       height: 16,
@@ -448,28 +470,39 @@ class OtherProfileScreen extends StatelessWidget {
                                                               .follower ||
                                                       controller.otherUser.value
                                                               .looped.value ==
-                                                          FollowState.normal
+                                                          FollowState.normal ||
+                                                      controller.otherUser.value
+                                                              .banned ==
+                                                          BanState.ban
                                                   ? true
                                                   : false,
                                               isBig: false,
                                               buttonTag: '팔로우',
                                               title: controller.otherUser.value
-                                                          .looped.value ==
-                                                      FollowState.normal
-                                                  ? '팔로우하기'
+                                                          .banned ==
+                                                      BanState.ban
+                                                  ? '차단 해제'
                                                   : controller.otherUser.value
                                                               .looped.value ==
-                                                          FollowState.follower
-                                                      ? '나도 팔로우하기'
+                                                          FollowState.normal
+                                                      ? '팔로우하기'
                                                       : controller
                                                                   .otherUser
                                                                   .value
                                                                   .looped
                                                                   .value ==
                                                               FollowState
-                                                                  .following
-                                                          ? '팔로잉 중'
-                                                          : '팔로잉 중',
+                                                                  .follower
+                                                          ? '나도 팔로우하기'
+                                                          : controller
+                                                                      .otherUser
+                                                                      .value
+                                                                      .looped
+                                                                      .value ==
+                                                                  FollowState
+                                                                      .following
+                                                              ? '팔로잉 중'
+                                                              : '팔로잉 중',
                                             ),
                                           ),
                                       ],
@@ -524,12 +557,15 @@ class OtherProfileScreen extends StatelessWidget {
                                           _hoverController.isHover(false),
                                       onTap: () {
                                         // controller.isLoopPeopleLoading(true);
-                                        Get.to(() => LoopPeopleScreen(
-                                              userid: controller
-                                                  .otherUser.value.userid,
-                                              loopcount: controller.otherUser
-                                                  .value.loopcount.value,
-                                            ));
+                                        if (controller.otherUser.value.banned ==
+                                            BanState.normal) {
+                                          Get.to(() => LoopPeopleScreen(
+                                                userid: controller
+                                                    .otherUser.value.userid,
+                                                loopcount: controller.otherUser
+                                                    .value.loopcount.value,
+                                              ));
+                                        }
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -552,9 +588,13 @@ class OtherProfileScreen extends StatelessWidget {
                                             ),
                                             Obx(
                                               () => Text(
-                                                controller
-                                                    .otherUser.value.loopcount
-                                                    .toString(),
+                                                controller.otherUser.value
+                                                            .banned !=
+                                                        BanState.normal
+                                                    ? '0'
+                                                    : controller.otherUser.value
+                                                        .loopcount
+                                                        .toString(),
                                                 style: kSubTitle2Style.copyWith(
                                                     color: _hoverController
                                                             .isHover.value
@@ -615,101 +655,109 @@ class OtherProfileScreen extends StatelessWidget {
                                       () => Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             16, 0, 16, 0),
-                                        child: (controller
-                                                    .otherprofilescreenstate
-                                                    .value !=
-                                                ScreenState.loading)
-                                            ? Obx(
-                                                () => (controller
-                                                        .otherProjectList
-                                                        .value
-                                                        .isNotEmpty)
-                                                    ? Column(
-                                                        children: controller
-                                                            .otherProjectList
-                                                            .value,
-                                                      )
-                                                    : controller.otherUser.value
-                                                                .isuser ==
-                                                            1
-                                                        ? Column(
-                                                            children: [
-                                                              Text(
-                                                                '첫번째 활동을 기록해보세요',
-                                                                style:
-                                                                    kSubTitle1Style,
-                                                              ),
-                                                              SizedBox(
-                                                                height: 4,
-                                                              ),
-                                                              Text(
-                                                                '수업, 과제, 스터디 등 학교 생활과 관련있는\n다양한 경험을 남겨보세요',
-                                                                style: kBody1Style
-                                                                    .copyWith(
-                                                                  color: mainblack
-                                                                      .withOpacity(
-                                                                          0.6),
-                                                                ),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                              ),
-                                                              SizedBox(
-                                                                height: 12,
-                                                              ),
-                                                              CustomExpandedButton(
-                                                                onTap: () {
-                                                                  Get.to(() =>
-                                                                      ProjectAddTitleScreen(
-                                                                        screenType:
-                                                                            Screentype.add,
-                                                                      ));
-                                                                },
-                                                                isBlue: true,
-                                                                title:
-                                                                    '첫번째 활동 추가하기',
-                                                                buttonTag:
-                                                                    '첫번째 활동 추가하기',
-                                                                isBig: false,
+                                        child:
+                                            (controller.otherprofilescreenstate
+                                                        .value !=
+                                                    ScreenState.loading)
+                                                ? controller.otherUser.value
+                                                            .banned ==
+                                                        BanState.normal
+                                                    ? Obx(
+                                                        () => (controller
+                                                                .otherProjectList
+                                                                .value
+                                                                .isNotEmpty)
+                                                            ? Column(
+                                                                children: controller
+                                                                    .otherProjectList
+                                                                    .value,
                                                               )
-                                                            ],
-                                                          )
-                                                        : Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    top: 12.0),
-                                                            child: Text(
-                                                              '아직 만들어진 활동이 없어요',
-                                                              style:
-                                                                  kSubTitle3Style
-                                                                      .copyWith(
-                                                                color: mainblack
-                                                                    .withOpacity(
-                                                                        0.38),
-                                                              ),
-                                                            ),
-                                                          ),
-                                              )
-                                            : Padding(
-                                                padding: EdgeInsets.zero,
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                      'assets/icons/loading.gif',
-                                                      scale: 6,
+                                                            : controller
+                                                                        .otherUser
+                                                                        .value
+                                                                        .isuser ==
+                                                                    1
+                                                                ? Column(
+                                                                    children: [
+                                                                      Text(
+                                                                        '첫번째 활동을 기록해보세요',
+                                                                        style:
+                                                                            kSubTitle1Style,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            4,
+                                                                      ),
+                                                                      Text(
+                                                                        '수업, 과제, 스터디 등 학교 생활과 관련있는\n다양한 경험을 남겨보세요',
+                                                                        style: kBody1Style
+                                                                            .copyWith(
+                                                                          color:
+                                                                              mainblack.withOpacity(0.6),
+                                                                        ),
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            12,
+                                                                      ),
+                                                                      CustomExpandedButton(
+                                                                        onTap:
+                                                                            () {
+                                                                          Get.to(() =>
+                                                                              ProjectAddTitleScreen(
+                                                                                screenType: Screentype.add,
+                                                                              ));
+                                                                        },
+                                                                        isBlue:
+                                                                            true,
+                                                                        title:
+                                                                            '첫번째 활동 추가하기',
+                                                                        buttonTag:
+                                                                            '첫번째 활동 추가하기',
+                                                                        isBig:
+                                                                            false,
+                                                                      )
+                                                                    ],
+                                                                  )
+                                                                : Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        top:
+                                                                            12.0),
+                                                                    child: Text(
+                                                                      '아직 만들어진 활동이 없어요',
+                                                                      style: kSubTitle3Style
+                                                                          .copyWith(
+                                                                        color: mainblack
+                                                                            .withOpacity(0.38),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                      )
+                                                    //상대를 밴 했거나 밴 되어 있거나
+                                                    : Container()
+                                                : Padding(
+                                                    padding: EdgeInsets.zero,
+                                                    child: Column(
+                                                      children: [
+                                                        Image.asset(
+                                                          'assets/icons/loading.gif',
+                                                          scale: 6,
+                                                        ),
+                                                        Text(
+                                                          '활동 받아오는 중...',
+                                                          style: TextStyle(
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color: mainblue),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Text(
-                                                      '활동 받아오는 중...',
-                                                      style: TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: mainblue),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
+                                                  ),
                                       ),
                                     ),
                                   ],
@@ -757,29 +805,33 @@ class OtherProfileScreen extends StatelessWidget {
       //   }
       // });
     } else {
-      if (controller.otherUser.value.looped.value == FollowState.normal) {
-        followController.islooped(1);
-        controller.otherUser.value.looped(FollowState.following);
-      } else if (controller.otherUser.value.looped.value ==
-          FollowState.follower) {
-        followController.islooped(1);
+      if (controller.otherUser.value.banned == BanState.ban) {
+        userbancancel(userid);
+      } else {
+        if (controller.otherUser.value.looped.value == FollowState.normal) {
+          followController.islooped(1);
+          controller.otherUser.value.looped(FollowState.following);
+        } else if (controller.otherUser.value.looped.value ==
+            FollowState.follower) {
+          followController.islooped(1);
 
-        controller.otherUser.value.looped(FollowState.wefollow);
+          controller.otherUser.value.looped(FollowState.wefollow);
 
-        // ProfileController.to.myUserInfo
-        //         .value.loopcount -
-        //     1;
+          // ProfileController.to.myUserInfo
+          //         .value.loopcount -
+          //     1;
 
-      } else if (controller.otherUser.value.looped.value ==
-          FollowState.following) {
-        followController.islooped(0);
+        } else if (controller.otherUser.value.looped.value ==
+            FollowState.following) {
+          followController.islooped(0);
 
-        controller.otherUser.value.looped(FollowState.normal);
-      } else if (controller.otherUser.value.looped.value ==
-          FollowState.wefollow) {
-        followController.islooped(0);
+          controller.otherUser.value.looped(FollowState.normal);
+        } else if (controller.otherUser.value.looped.value ==
+            FollowState.wefollow) {
+          followController.islooped(0);
 
-        controller.otherUser.value.looped(FollowState.follower);
+          controller.otherUser.value.looped(FollowState.follower);
+        }
       }
     }
   }

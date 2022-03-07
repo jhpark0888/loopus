@@ -30,17 +30,7 @@ class MessageDetailController extends GetxController {
 
   String username = "";
   int userid;
-  Rx<User>? user = User(
-          userid: 0,
-          realName: "",
-          type: 0,
-          department: "",
-          loopcount: 0.obs,
-          totalposting: 0,
-          isuser: 0,
-          profileTag: [],
-          looped: FollowState.normal.obs)
-      .obs;
+  Rx<User>? user = User.defaultuser().obs;
 
   RxDouble textFormHeight = 0.0.obs;
   Rx<GlobalKey> textFieldBoxKey = GlobalKey().obs;

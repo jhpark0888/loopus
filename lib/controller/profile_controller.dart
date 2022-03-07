@@ -40,20 +40,7 @@ class ProfileController extends GetxController
   RxList<Project> myProjectList = <Project>[].obs;
 
   Rx<File> profileimage = File('').obs;
-  Rx<User> myUserInfo = User(
-    //id
-    userid: 0,
-    //0 : 학생, 1: 기업
-    type: 0,
-    realName: '',
-    profileTag: [],
-    totalposting: 0,
-    loopcount: 0.obs,
-    department: '',
-    //0 : 다른 프로필, 1 : 내 프로필
-    isuser: 1,
-    looped: FollowState.normal.obs,
-  ).obs;
+  Rx<User> myUserInfo = User.defaultuser().obs;
 
   RxList<User> mylooplist = <User>[].obs;
 

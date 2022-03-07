@@ -24,23 +24,32 @@ class SignupTagScreen extends StatelessWidget {
       appBar: AppBarWidget(
         bottomBorder: false,
         actions: [
-          TextButton(
-            onPressed: () async {
-              if (tagController.selectedtaglist.length == 3) {
-                signupRequest();
-              }
-            },
-            child: Obx(
-              () => Text(
-                '완료',
-                style: kSubTitle2Style.copyWith(
-                  color: tagController.selectedtaglist.length == 3
-                      ? mainblue
-                      : mainblack.withOpacity(0.38),
-                ),
-              ),
-            ),
-          )
+          Obx(() => signupController.tagscreenstate == ScreenState.loading
+              ? Image.asset(
+                  'assets/icons/loading.gif',
+                  scale: 9,
+                )
+              : TextButton(
+                  onPressed: () async {
+                    if (tagController.selectedtaglist.length == 3) {
+                      FocusScope.of(context).unfocus();
+                      signupController.tagscreenstate(ScreenState.loading);
+                      signupRequest().then((value) {
+                        signupController.tagscreenstate(ScreenState.success);
+                      });
+                    }
+                  },
+                  child: Obx(
+                    () => Text(
+                      '완료',
+                      style: kSubTitle2Style.copyWith(
+                        color: tagController.selectedtaglist.length == 3
+                            ? mainblue
+                            : mainblack.withOpacity(0.38),
+                      ),
+                    ),
+                  ),
+                ))
         ],
         title: "회원 가입",
       ),

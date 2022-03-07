@@ -36,16 +36,7 @@ class QuestionDetailController extends GetxController {
           adopt: false,
           date: DateTime.now(),
           questionTag: [],
-          user: User(
-              userid: 0,
-              realName: "",
-              type: 0,
-              department: "",
-              loopcount: 0.obs,
-              totalposting: 0,
-              isuser: 0,
-              profileTag: [],
-              looped: FollowState.normal.obs))
+          user: User.defaultuser())
       .obs;
 
   int questionid;

@@ -475,6 +475,7 @@ Future<HTTPResponse> recommandpost(int pagenum) async {
     // if (kDebugMode) {
     //   print('posting list : $list');
     // }
+    print("추천 포스팅 리스트 :${response.statusCode}");
     if (response.statusCode != 200) {
       // Future.error(response.statusCode);
       return HTTPResponse.apiError('', response.statusCode);

@@ -24,16 +24,7 @@ class ProjectDetailController extends GetxController {
           looper: [],
           like_count: 0.obs,
           is_user: 0,
-          user: User(
-              userid: 0,
-              realName: "",
-              type: 0,
-              department: "",
-              loopcount: 0.obs,
-              totalposting: 0,
-              isuser: 0,
-              profileTag: [],
-              looped: FollowState.normal.obs))
+          user: User.defaultuser())
       .obs;
   int projectid;
   // RxList<ProjectPostingWidget> postinglist = <ProjectPostingWidget>[].obs;

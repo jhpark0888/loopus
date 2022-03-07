@@ -21,6 +21,7 @@ class SignupController extends GetxController {
   RxBool emailcheck = false.obs;
   // RxBool isdeptSearchLoading = false.obs;
   Rx<ScreenState> deptscreenstate = ScreenState.loading.obs;
+  Rx<ScreenState> tagscreenstate = ScreenState.success.obs;
   RxString selectdept = "".obs;
 
   Rx<UserType> selectedType = UserType.student.obs;

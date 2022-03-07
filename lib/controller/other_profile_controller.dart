@@ -29,17 +29,7 @@ class OtherProfileController extends GetxController
 
   RxList<ProjectWidget> otherProjectList = <ProjectWidget>[].obs;
 
-  Rx<User> otherUser = User(
-    userid: 0,
-    type: 0,
-    realName: '',
-    totalposting: 0,
-    loopcount: 0.obs,
-    profileTag: [],
-    department: '',
-    isuser: 0,
-    looped: FollowState.normal.obs,
-  ).obs;
+  Rx<User> otherUser = User.defaultuser().obs;
 
   RxList<User> otherlooplist = <User>[].obs;
 

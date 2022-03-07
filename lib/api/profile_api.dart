@@ -14,6 +14,7 @@ import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/controller/withdrawal_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/project_model.dart';
 
@@ -36,6 +37,7 @@ Future<void> getProfile(var userId, int isuser) async {
     http.Response response =
         await http.get(uri, headers: {"Authorization": "Token $token"});
 
+    print("프로필 로드: ${response.statusCode}");
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
@@ -271,11 +273,12 @@ Future postlogout() async {
   }
 }
 
-Future deleteuser(String pw) async {
+Future<HTTPResponse> deleteuser(String pw) async {
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {
     ModalController.to.showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     print('user token: $token');
@@ -307,20 +310,27 @@ Future deleteuser(String pw) async {
       if (response.statusCode == 200) {
         Get.offAll(() => StartScreen());
 
+        FlutterSecureStorage().delete(key: "token");
+        FlutterSecureStorage().delete(key: "id");
         Get.delete<AppController>();
         Get.delete<HomeController>();
         Get.delete<SearchController>();
         Get.delete<ProfileController>();
+
+        return HTTPResponse.success('success');
       } else if (response.statusCode == 401) {
         ModalController.to.showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError('', response.statusCode);
       } else {
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError('', response.statusCode);
+        ;
       }
     } on SocketException {
       ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
+      return HTTPResponse.unexpectedError(e);
       // ErrorController.to.isServerClosed(true);
     }
   }

@@ -8,6 +8,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/screen/banpeople_screen.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
 import 'package:loopus/screen/withdrawal_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -46,6 +47,15 @@ class UserInfoScreen extends StatelessWidget {
                   trailing: Text(
                     profileController.myUserInfo.value.department,
                     style: kSubTitle3Style,
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    Get.to(() => BanPeopleScreen());
+                  },
+                  title: Text(
+                    '차단 목록',
+                    style: kSubTitle2Style,
                   ),
                 ),
                 ListTile(

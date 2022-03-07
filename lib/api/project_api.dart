@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -83,17 +85,20 @@ Future addproject() async {
         Project project = Project.fromJson(responsemap);
         project.is_user = 1;
 
-        Get.put(ProjectDetailController(project.id),
-            tag: project.id.toString());
-
-        ProfileController.to.myProjectList.insert(0, project);
+        // Get.put(ProjectDetailController(project.id),
+        //     tag: project.id.toString());
 
         Get.to(() => ProjectScreen(
               projectid: project.id,
               isuser: 1,
             ));
 
-        ModalController.to.showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
+        ProfileController.to.myProjectList.insert(0, project);
+
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          ModalController.to.showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
+        });
+
         if (_localDataController.isAddFirstProject == true) {
           final InAppReview inAppReview = InAppReview.instance;
 

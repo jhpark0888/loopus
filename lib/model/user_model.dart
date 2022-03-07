@@ -14,6 +14,7 @@ class User {
     this.profileImage,
     required this.profileTag,
     required this.looped,
+    required this.banned,
   });
 
   int userid;
@@ -26,6 +27,32 @@ class User {
   String? profileImage;
   List<Tag> profileTag;
   Rx<FollowState> looped;
+  Rx<BanState> banned;
+
+  factory User.defaultuser({
+    int? userid,
+    String? realName,
+    int? type,
+    String? department,
+    int? isuser,
+    RxInt? loopcount,
+    int? totalposting,
+    String? profileImage,
+    List<Tag>? profileTag,
+    Rx<FollowState>? looped,
+    Rx<BanState>? banned,
+  }) =>
+      User(
+          userid: userid ?? 0,
+          realName: realName ?? "",
+          type: type ?? 0,
+          department: department ?? "",
+          loopcount: loopcount ?? 0.obs,
+          totalposting: totalposting ?? 0,
+          isuser: isuser ?? 0,
+          profileTag: profileTag ?? [],
+          looped: looped ?? FollowState.normal.obs,
+          banned: banned ?? BanState.normal.obs);
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         userid: json["user_id"],
@@ -43,6 +70,9 @@ class User {
         looped: json["looped"] != null
             ? FollowState.values[json["looped"]].obs
             : FollowState.normal.obs,
+        banned: json["is_banned"] != null
+            ? BanState.values[json["is_banned"]].obs
+            : BanState.normal.obs,
       );
 
   Map<String, dynamic> toJson() => {
