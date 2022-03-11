@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
+import 'package:loopus/screen/pwchange_screen.dart';
 
 import '../constant.dart';
 import '../controller/ga_controller.dart';
@@ -97,6 +98,9 @@ Future<void> postpwfindemailcheck() async {
       print("비밀번호 찾기 이메일 체크 : ${response.statusCode}");
       if (response.statusCode == 200) {
         PwChangeController.to.isPwFindCheck(true);
+        Get.to(() => PwChangeScreen(
+              pwType: PwType.pwfind,
+            ));
         // _modalController.showCustomDialog('입력하신 이메일로 새로운 비밀번호를 알려드렸어요', 1400);
       } else if (response.statusCode == 401) {
         _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
