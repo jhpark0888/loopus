@@ -214,6 +214,82 @@ class ModalController extends GetxController with GetTickerProviderStateMixin {
     );
   }
 
+  void showoneButtonDialog({
+    required String title,
+    required String content,
+    required Function() oneFunction,
+    required String oneText,
+  }) {
+    Get.dialog(
+      WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: AlertDialog(
+          buttonPadding: EdgeInsets.zero,
+          actionsAlignment: MainAxisAlignment.spaceBetween,
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: oneFunction,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          right: BorderSide(
+                            width: 1,
+                            color: Color(0xffe7e7e7),
+                          ),
+                          top: BorderSide(
+                            width: 1,
+                            color: Color(0xffe7e7e7),
+                          ),
+                        ),
+                      ),
+                      height: 48,
+                      child: Center(
+                        child: Text(
+                          oneText,
+                          style: kButtonStyle.copyWith(
+                            color: mainpink,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+          elevation: 0,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(8),
+            ),
+          ),
+          contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+          titlePadding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
+          backgroundColor: Colors.white,
+          title: Text(
+            title,
+            style: kSubTitle4Style,
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+            content,
+            style: kBody1Style,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+      barrierDismissible: false,
+      barrierColor: mainblack.withOpacity(0.3),
+      transitionCurve: kAnimationCurve,
+      transitionDuration: kAnimationDuration,
+    );
+  }
+
   void showTextFieldDialog({
     required String title,
     required String hintText,

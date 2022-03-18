@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
@@ -70,6 +71,7 @@ class HomeController extends GetxController
     onPostingRefresh();
     onQuestionRefresh();
     onLoopRefresh();
+    logindetect();
     super.onInit();
   }
 

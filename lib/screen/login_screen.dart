@@ -133,8 +133,10 @@ class LogInScreen extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       FocusScope.of(context).unfocus();
       _loginController.isLogin.value = true;
-      await loginRequest()
-          .then((value) => _loginController.isLogin.value = false);
+      await loginRequest(
+        _loginController.idcontroller.text,
+        _loginController.passwordcontroller.text,
+      ).then((value) => _loginController.isLogin.value = false);
     }
   }
 }

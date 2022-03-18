@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/api/login_api.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/error_controller.dart';
 import 'package:loopus/controller/ga_controller.dart';
@@ -20,37 +22,57 @@ import '../app.dart';
 import '../constant.dart';
 
 void emailRequest() async {
+  ConnectivityResult result = await initConnectivity();
   SignupController signupController = Get.put(SignupController());
+  ModalController modalController = Get.put(ModalController());
+  if (result == ConnectivityResult.none) {
+    signupController.signupcertification(Emailcertification.fail);
+    modalController.showdisconnectdialog();
+  } else {
+    Uri uri = Uri.parse('$serverUri/user_api/check_email');
 
-  Uri uri = Uri.parse('$serverUri/user_api/check_email');
+    var checkemail = {
+      //TODO: 학교 도메인 확인
+      "email": signupController.emailidcontroller.text + '@inu.ac.kr',
+      "password": signupController.passwordcontroller.text,
+    };
+    try {
+      signupController.sec(180);
+      signupController.timer =
+          Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (signupController.sec.value != 0) {
+          signupController.sec.value -= 1;
+        }
+      });
+      signupController.signupcertification(Emailcertification.waiting);
+      http.Response response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(checkemail),
+      );
 
-  var checkemail = {
-    //TODO: 학교 도메인 확인
-    "email": signupController.emailidcontroller.text + '@inu.ac.kr',
-    "password": signupController.passwordcontroller.text,
-  };
-  try {
-    http.Response response = await http.post(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(checkemail),
-    );
-
-    print("이메일 체크 : ${response.statusCode}");
-    if (response.statusCode == 200) {
-      signupController.emailcheck(true);
-    } else if (response.statusCode == 400) {
-      Get.put(ModalController()).showCustomDialog("이미 가입된 회원입니다", 1000);
-    } else {
-      return Future.error(response.statusCode);
+      print("이메일 체크 : ${response.statusCode}");
+      if (response.statusCode == 200) {
+        signupController.timer!.cancel();
+        signupController.signupcertification(Emailcertification.success);
+      } else if (response.statusCode == 400) {
+        // Get.back();
+        signupController.timer!.cancel();
+        signupController.signupcertification(Emailcertification.fail);
+        modalController.showCustomDialog("이미 가입된 회원입니다", 1000);
+      } else {
+        signupController.signupcertification(Emailcertification.fail);
+        ModalController.to.showCustomDialog("인증에 실패하였습니다", 1000);
+        signupController.timer!.cancel();
+      }
+    } on SocketException {
+      ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
     }
-  } on SocketException {
-    ErrorController.to.isServerClosed(true);
-  } catch (e) {
-    print(e);
-    // ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -87,17 +109,20 @@ Future<void> signupRequest() async {
       );
 
       if (response.statusCode == 200) {
-        String token = jsonDecode(response.body)['token'];
+        await loginRequest(
+            signupController.emailidcontroller.text + '@inu.ac.kr',
+            signupController.passwordcontroller.text);
+        // String token = jsonDecode(response.body)['token'];
         String userid = jsonDecode(response.body)['user_id'];
 
-        await storage.write(key: 'token', value: token);
-        await storage.write(key: 'id', value: userid);
+        // await storage.write(key: 'token', value: token);
+        // await storage.write(key: 'id', value: userid);
         //!GA
         await _gaController.logSignup();
         await _gaController.setUserProperties(
             userid, signupController.selectdept.value);
 
-        Get.offAll(() => App());
+        // Get.offAll(() => App());
 
         SchedulerBinding.instance!.addPostFrameCallback((_) {
           _modalController.showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);

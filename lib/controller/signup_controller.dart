@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 
 enum UserType {
   student,
@@ -18,7 +21,8 @@ class SignupController extends GetxController {
   TextEditingController namecontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
   TextEditingController passwordcheckcontroller = TextEditingController();
-  RxBool emailcheck = false.obs;
+
+  Rx<Emailcertification> signupcertification = Emailcertification.fail.obs;
   // RxBool isdeptSearchLoading = false.obs;
   Rx<ScreenState> deptscreenstate = ScreenState.loading.obs;
   Rx<ScreenState> tagscreenstate = ScreenState.success.obs;
@@ -28,6 +32,8 @@ class SignupController extends GetxController {
 
   RxList deptlist = [].obs;
   RxList searchdeptlist = [].obs;
+  Timer? timer;
+  RxInt sec = 180.obs;
 
   static final FlutterSecureStorage storage = FlutterSecureStorage();
 

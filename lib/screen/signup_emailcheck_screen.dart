@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_tag_screen.dart';
@@ -20,7 +22,8 @@ class SignupEmailcheckScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () async {
-              if (signupController.emailcheck.value == true) {
+              if (signupController.signupcertification.value ==
+                  Emailcertification.success) {
                 Get.to(() => SignupTagScreen());
                 await _gaController.logScreenView('signup_5');
               }
@@ -29,7 +32,8 @@ class SignupEmailcheckScreen extends StatelessWidget {
               () => Text(
                 '다음',
                 style: kSubTitle2Style.copyWith(
-                    color: signupController.emailcheck.value == true
+                    color: signupController.signupcertification.value ==
+                            Emailcertification.success
                         ? mainblue
                         : mainblack.withOpacity(0.38)),
               ),
@@ -100,21 +104,30 @@ class SignupEmailcheckScreen extends StatelessWidget {
                   ),
                   suffixIconConstraints:
                       BoxConstraints(minHeight: 24, minWidth: 24),
-                  suffixIcon: signupController.emailcheck.value != false
+                  suffixIcon: signupController.signupcertification.value ==
+                          Emailcertification.success
                       ? Padding(
                           padding: const EdgeInsets.only(top: 0, left: 0),
                           child: SvgPicture.asset(
                             'assets/icons/Check_Active_blue.svg',
                           ),
                         )
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 6, bottom: 0),
-                          child: Text(
-                            '인증 대기 중...',
-                            style: kButtonStyle.copyWith(
-                                color: mainblack.withOpacity(0.38)),
-                          ),
-                        ),
+                      : signupController.signupcertification.value ==
+                              Emailcertification.waiting
+                          ? Obx(
+                              () => Text(
+                                '0${signupController.sec.value ~/ 60}:${NumberFormat('00', "ko").format(signupController.sec.value % 60)}',
+                                style: kButtonStyle.copyWith(color: mainblack),
+                              ),
+                            )
+                          : InkWell(
+                              onTap: () {
+                                emailRequest();
+                              },
+                              child: Text(
+                                '재전송',
+                                style: kButtonStyle.copyWith(color: mainblue),
+                              )),
                 ),
               ),
             ),

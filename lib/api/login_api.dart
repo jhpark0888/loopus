@@ -18,7 +18,7 @@ import 'package:loopus/screen/pwchange_screen.dart';
 import '../constant.dart';
 import '../controller/ga_controller.dart';
 
-Future<void> loginRequest() async {
+Future<void> loginRequest(String email, String pw) async {
   ConnectivityResult result = await initConnectivity();
   final ModalController _modalController = Get.put(ModalController());
   if (result == ConnectivityResult.none) {
@@ -33,8 +33,8 @@ Future<void> loginRequest() async {
     Uri uri = Uri.parse('$serverUri/user_api/login');
 
     final user = {
-      'username': logInController.idcontroller.text.trim(),
-      'password': logInController.passwordcontroller.text,
+      'username': email.trim(),
+      'password': pw,
       'fcm_token': await notificationController.getToken(),
     };
 
@@ -76,16 +76,18 @@ Future<void> postpwfindemailcheck() async {
   ConnectivityResult result = await initConnectivity();
   LogInController logInController = Get.put(LogInController());
   ModalController _modalController = Get.put(ModalController());
+  PwChangeController pwChangeController = Get.find();
   if (result == ConnectivityResult.none) {
     _modalController.showdisconnectdialog();
   } else {
     ModalController.to
         .showCustomDialog('입력하신 이메일로 들어가서 링크를 클릭해 본인 인증을 해주세요', 1400);
+    pwChangeController.pwcertification(Emailcertification.waiting);
     Uri uri = Uri.parse('$serverUri/user_api/password');
 
     //이메일 줘야 됨
     final email = {
-      'email': logInController.idcontroller.text,
+      'email': logInController.idcontroller.text.trim(),
     };
 
     try {
@@ -97,15 +99,17 @@ Future<void> postpwfindemailcheck() async {
 
       print("비밀번호 찾기 이메일 체크 : ${response.statusCode}");
       if (response.statusCode == 200) {
-        PwChangeController.to.isPwFindCheck(true);
+        pwChangeController.pwcertification(Emailcertification.success);
         Get.to(() => PwChangeScreen(
               pwType: PwType.pwfind,
             ));
         // _modalController.showCustomDialog('입력하신 이메일로 새로운 비밀번호를 알려드렸어요', 1400);
       } else if (response.statusCode == 401) {
-        _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+        pwChangeController.pwcertification(Emailcertification.fail);
+        _modalController.showCustomDialog('아직 가입 되지 않은 이메일입니다', 1400);
         print('에러1');
       } else {
+        pwChangeController.pwcertification(Emailcertification.fail);
         _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }

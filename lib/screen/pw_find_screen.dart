@@ -32,7 +32,8 @@ class PwFindScreen extends StatelessWidget {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      if (pwChangeController.isPwFindCheck.value == true) {
+                      if (pwChangeController.pwcertification.value ==
+                          Emailcertification.success) {
                         Get.to(() => PwChangeScreen(
                               pwType: PwType.pwfind,
                             ));
@@ -42,10 +43,10 @@ class PwFindScreen extends StatelessWidget {
                       () => Text(
                         '다음',
                         style: kSubTitle2Style.copyWith(
-                            color:
-                                pwChangeController.isPwFindCheck.value == true
-                                    ? mainblue
-                                    : mainblack.withOpacity(0.38)),
+                            color: pwChangeController.pwcertification.value ==
+                                    Emailcertification.success
+                                ? mainblue
+                                : mainblack.withOpacity(0.38)),
                       ),
                     ),
                   ),
@@ -87,14 +88,24 @@ class PwFindScreen extends StatelessWidget {
                           const SizedBox(
                             height: 32,
                           ),
-                          CustomExpandedButton(
-                              buttonTag: "비밀번호 재설정 메일 보내기",
-                              onTap: () {
-                                postpwfindemailcheck();
-                              },
-                              isBlue: true,
-                              isBig: true,
-                              title: "비밀번호 재설정 메일 보내기"),
+                          Obx(
+                            () => CustomExpandedButton(
+                                buttonTag: "비밀번호 재설정 메일 보내기",
+                                onTap: () {
+                                  if (pwChangeController
+                                          .pwcertification.value ==
+                                      Emailcertification.fail) {
+                                    postpwfindemailcheck();
+                                  }
+                                },
+                                isBlue:
+                                    pwChangeController.pwcertification.value ==
+                                            Emailcertification.fail
+                                        ? true
+                                        : false,
+                                isBig: true,
+                                title: "비밀번호 재설정 메일 보내기"),
+                          ),
                           const SizedBox(
                             height: 8,
                           ),

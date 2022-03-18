@@ -27,14 +27,13 @@ class SignupUserInfoScreen extends StatelessWidget {
           TextButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                ConnectivityResult result = await initConnectivity();
-                if (result == ConnectivityResult.none) {
-                  Get.put(ModalController()).showdisconnectdialog();
-                } else {
+                if (signupController.signupcertification.value ==
+                    Emailcertification.fail) {
                   emailRequest();
-                  Get.to(() => SignupEmailcheckScreen());
-                  await _gaController.logScreenView('signup_4');
                 }
+
+                Get.to(() => SignupEmailcheckScreen());
+                await _gaController.logScreenView('signup_4');
               }
             },
             child: Text(
