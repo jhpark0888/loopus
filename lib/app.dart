@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/search_controller.dart';
 
 import 'package:loopus/screen/company_screen.dart';
 import 'package:loopus/screen/home_screen.dart';
@@ -18,7 +19,13 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
       HomeScreen(),
-      SearchScreen(),
+      Navigator(
+          key: controller.searcnPageNaviationKey,
+          onGenerateRoute: (routeSettings) {
+            return MaterialPageRoute(
+              builder: (context) => SearchScreen(),
+            );
+          }),
       Container(
         color: mainblack.withOpacity(0.25),
       ),
@@ -26,81 +33,110 @@ class App extends StatelessWidget {
       MyProfileScreen(),
     ];
 
-    return Scaffold(
-      extendBody: false,
-      body: Obx(
-        () => IndexedStack(
-          index: controller.currentIndex.value,
-          children: _screens,
-        ),
-      ),
-      bottomNavigationBar: Obx(
-        () => Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(20),
-              topLeft: Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: mainblack.withOpacity(0.1),
-                blurRadius: 1,
-                offset: const Offset(
-                  0.0,
-                  -1.0,
-                ),
-              ),
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        if (controller.currentIndex.value == 1) {
+          var value = await AppController
+              .to.searcnPageNaviationKey.currentState!
+              .maybePop();
+          print(value);
+          if (value) {
+            AppController.to.searcnPageNaviationKey.currentState!.pop();
+            SearchController.to.clearSearchedList();
+            SearchController.to.isnosearchpost(false);
+            SearchController.to.isnosearchprofile(false);
+            SearchController.to.isnosearchquestion(false);
+            SearchController.to.isnosearchtag(false);
+            SearchController.to.searchtextcontroller.clear();
+            SearchController.to.postpagenumber = 1;
+            SearchController.to.profilepagenumber = 1;
+            SearchController.to.questionpagenumber = 1;
+            SearchController.to.tagpagenumber = 1;
+            SearchController.to.pagenumber = 1;
+          }
+
+          return !value;
+        } else {
+          return true;
+        }
+      },
+      child: Scaffold(
+        extendBody: false,
+        body: Obx(
+          () => IndexedStack(
+            index: controller.currentIndex.value,
+            children: _screens,
           ),
-          child: ClipRRect(
-            clipBehavior: Clip.hardEdge,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(0),
-              bottomRight: Radius.circular(0),
-            ),
-            child: BottomNavigationBar(
-              backgroundColor: mainWhite,
-              type: BottomNavigationBarType.fixed,
-              currentIndex: controller.currentIndex.value,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              enableFeedback: false,
-              onTap: controller.changePageIndex,
-              items: [
-                BottomNavigationBarItem(
-                    tooltip: '',
-                    icon: SvgPicture.asset("assets/icons/Home_Inactive.svg"),
-                    activeIcon:
-                        SvgPicture.asset("assets/icons/Home_Active.svg"),
-                    label: "홈"),
-                BottomNavigationBarItem(
-                    tooltip: '',
-                    icon: SvgPicture.asset("assets/icons/Search_Inactive.svg"),
-                    activeIcon:
-                        SvgPicture.asset("assets/icons/Search_Active.svg"),
-                    label: "검색"),
-                BottomNavigationBarItem(
-                    tooltip: '',
-                    icon: SvgPicture.asset("assets/icons/Plus_inactive.svg"),
-                    activeIcon:
-                        SvgPicture.asset("assets/icons/Plus_active.svg"),
-                    label: "기업"),
-                BottomNavigationBarItem(
-                    tooltip: '',
-                    icon: SvgPicture.asset("assets/icons/Paper_Inactive.svg"),
-                    activeIcon:
-                        SvgPicture.asset("assets/icons/Paper_Active.svg"),
-                    label: "공고"),
-                BottomNavigationBarItem(
-                  tooltip: '',
-                  icon: SvgPicture.asset("assets/icons/Profile_Inactive.svg"),
-                  activeIcon:
-                      SvgPicture.asset("assets/icons/Profile_Active.svg"),
-                  label: "프로필",
+        ),
+        bottomNavigationBar: Obx(
+          () => Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(20),
+                topLeft: Radius.circular(20),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: mainblack.withOpacity(0.1),
+                  blurRadius: 1,
+                  offset: const Offset(
+                    0.0,
+                    -1.0,
+                  ),
                 ),
               ],
+            ),
+            child: ClipRRect(
+              clipBehavior: Clip.hardEdge,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+                bottomLeft: Radius.circular(0),
+                bottomRight: Radius.circular(0),
+              ),
+              child: BottomNavigationBar(
+                backgroundColor: mainWhite,
+                type: BottomNavigationBarType.fixed,
+                currentIndex: controller.currentIndex.value,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                enableFeedback: false,
+                onTap: controller.changePageIndex,
+                items: [
+                  BottomNavigationBarItem(
+                      tooltip: '',
+                      icon: SvgPicture.asset("assets/icons/Home_Inactive.svg"),
+                      activeIcon:
+                          SvgPicture.asset("assets/icons/Home_Active.svg"),
+                      label: "홈"),
+                  BottomNavigationBarItem(
+                      tooltip: '',
+                      icon:
+                          SvgPicture.asset("assets/icons/Search_Inactive.svg"),
+                      activeIcon:
+                          SvgPicture.asset("assets/icons/Search_Active.svg"),
+                      label: "검색"),
+                  BottomNavigationBarItem(
+                      tooltip: '',
+                      icon: SvgPicture.asset("assets/icons/Plus_inactive.svg"),
+                      activeIcon:
+                          SvgPicture.asset("assets/icons/Plus_active.svg"),
+                      label: "기업"),
+                  BottomNavigationBarItem(
+                      tooltip: '',
+                      icon: SvgPicture.asset("assets/icons/Paper_Inactive.svg"),
+                      activeIcon:
+                          SvgPicture.asset("assets/icons/Paper_Active.svg"),
+                      label: "공고"),
+                  BottomNavigationBarItem(
+                    tooltip: '',
+                    icon: SvgPicture.asset("assets/icons/Profile_Inactive.svg"),
+                    activeIcon:
+                        SvgPicture.asset("assets/icons/Profile_Active.svg"),
+                    label: "프로필",
+                  ),
+                ],
+              ),
             ),
           ),
         ),

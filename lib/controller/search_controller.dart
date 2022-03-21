@@ -36,7 +36,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   int tagpagenumber = 1;
   int pagenumber = 1;
 
-  RxBool isFocused = false.obs;
+  // RxBool isFocused = false.obs;
   RxInt tabpage = 0.obs;
   late TabController tabController;
 
@@ -46,7 +46,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
 
   @override
   void onInit() {
-    _focusListen();
+    // _focusListen();
     tabController = TabController(
       length: 4,
       initialIndex: 0,
@@ -122,21 +122,21 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     super.onInit();
   }
 
-  void focusChange() {
-    isFocused.value = false;
-  }
+  // void focusChange() {
+  //   isFocused.value = false;
+  // }
 
-  void _focusListen() {
-    focusNode.addListener(() {
-      if (focusNode.hasFocus) {
-        isFocused.value = true;
-        // isnosearchpost(false);
-        // isnosearchprofile(false);
-        // isnosearchquestion(false);
-        // isnosearchtag(false);
-      }
-    });
-  }
+  // void _focusListen() {
+  //   focusNode.addListener(() {
+  //     if (focusNode.hasFocus) {
+  //       isFocused.value = true;
+  //       // isnosearchpost(false);
+  //       // isnosearchprofile(false);
+  //       // isnosearchquestion(false);
+  //       // isnosearchtag(false);
+  //     }
+  //   });
+  // }
 
   void clearSearchedList() {
     searchpostinglist.clear();

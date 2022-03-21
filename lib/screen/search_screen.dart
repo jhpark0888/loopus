@@ -7,6 +7,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/screen/home_posting_screen.dart';
+import 'package:loopus/screen/search_focus_screen.dart';
 import 'package:loopus/screen/tag_detail_screen.dart';
 import 'package:loopus/widget/search_student_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
@@ -32,542 +33,150 @@ class SearchScreen extends StatelessWidget {
         backgroundColor: mainWhite,
         leading: Text(''),
         leadingWidth: 16,
-        actions: [
-          Obx(
-            () => (_searchController.isFocused.value == true)
-                ? TextButton(
-                    onPressed: () {
-                      _searchController.focusNode.unfocus();
-                      Get.back();
-                      _searchController.clearSearchedList();
-                      _searchController.isnosearchpost(false);
-                      _searchController.isnosearchprofile(false);
-                      _searchController.isnosearchquestion(false);
-                      _searchController.isnosearchtag(false);
-                      _searchController.searchtextcontroller.clear();
-                      _searchController.postpagenumber = 1;
-                      _searchController.profilepagenumber = 1;
-                      _searchController.questionpagenumber = 1;
-                      _searchController.tagpagenumber = 1;
-                      _searchController.pagenumber = 1;
-                      _searchController.focusChange();
-                    },
-                    child: Center(
-                      child: Text(
-                        '닫기',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: mainblue,
-                        ),
-                      ),
-                    ),
-                  )
-                : Container(
-                    width: 16,
-                  ),
-          )
-
-          // if (searchController.isFocused.value == false)
-          //   SizedBox(
-          //     width: 16,
-          //   ),
-        ],
-        title: Obx(
-          () => AnimatedContainer(
-            duration: const Duration(milliseconds: 400),
-            width: _searchController.isFocused.value
-                ? MediaQuery.of(context).size.width - 70
-                : MediaQuery.of(context).size.width,
-            curve: Curves.easeInOut,
-            height: 36,
-            child: TextField(
-                autocorrect: false,
-                controller: _searchController.searchtextcontroller,
-                onTap: () {
-                  print(
-                      '_searchController.tabController.index : ${_searchController.tabController.index}');
-                  print(
-                      '_searchController.isFocused.value : ${_searchController.isFocused.value}');
-                  // _searchController.isnosearchpost(false);
-                  // _searchController.isnosearchprofile(false);
-                  // _searchController.isnosearchquestion(false);
-                  // _searchController.isnosearchtag(false);
-
-                  // _searchController.searchpostinglist.clear();
-                  // _searchController.searchprofilelist.clear();
-                  // _searchController.searchquestionlist.clear();
-                  // _searchController.searchtaglist.clear();
-                },
-                onSubmitted: (value) async {
-                  _searchController.isSearchLoading(true);
-                  // if (_searchController.postpagenumber == 1) {
-                  //   _searchController.searchpostinglist.clear();
-                  // } else if (_searchController.profilepagenumber == 1) {
-                  //   _searchController.searchprofilelist.clear();
-                  // } else if (_searchController.questionpagenumber == 1) {
-                  //   _searchController.searchquestionlist.clear();
-                  // } else if (_searchController.tagpagenumber == 1) {
-                  //   _searchController.searchtaglist.clear();
-                  // }
-
-                  if (_searchController.tabController.index == 0) {
-                    await search(SearchType.post, value,
-                        _searchController.postpagenumber);
-                  } else if (_searchController.tabController.index == 1) {
-                    await search(SearchType.profile, value,
-                        _searchController.profilepagenumber);
-                  } else if (_searchController.tabController.index == 2) {
-                    await search(SearchType.question, value,
-                        _searchController.questionpagenumber);
-                  } else if (_searchController.tabController.index == 3) {
-                    await tagsearch();
-                  }
-                  _searchController.isSearchLoading(false);
-                },
-                focusNode: _searchController.focusNode,
-                style: TextStyle(color: mainblack, fontSize: 14),
-                cursorColor: mainblue,
-                cursorWidth: 1.2,
-                cursorRadius: Radius.circular(5.0),
-                autofocus: false,
-                // focusNode: searchController.detailsearchFocusnode,
-                textAlign: TextAlign.start,
-                // selectionHeightStyle: BoxHeightStyle.tight,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: mainlightgrey,
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(8)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(8)),
-                  // focusColor: Colors.black,
-                  // border: OutlineInputBorder(borderSide: BorderSide.none),
-                  contentPadding: EdgeInsets.only(right: 16),
-                  isDense: true,
-                  hintText: "어떤 정보를 찾으시나요?",
-                  hintStyle: TextStyle(
-                    fontSize: 14,
-                    color: mainblack.withOpacity(0.6),
-                  ),
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
-                    child: SvgPicture.asset(
-                      "assets/icons/Search_Inactive.svg",
-                      width: 16,
-                      height: 16,
-                      color: mainblack.withOpacity(0.6),
-                    ),
-                  ),
-                )),
+        actions: const [
+          SizedBox(
+            width: 16,
           ),
-        ),
-      ),
-      body: Stack(
-        children: [
-          GestureDetector(
-              onTap: () => _searchController.focusNode.unfocus(),
-              child: Obx(
-                () => AnimatedOpacity(
-                  opacity: _searchController.isFocused.value ? 0.0 : 1.0,
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            right: 16,
-                            left: 16,
-                            top: 24,
-                            bottom: 16,
-                          ),
-                          child: Text(
-                            "인기 태그",
-                            style: kSubTitle2Style,
-                          ),
-                        ),
-                        Obx(
-                          () => homeController.populartagstate.value ==
-                                  ScreenState.loading
-                              ? Image.asset(
-                                  'assets/icons/loading.gif',
-                                  scale: 6,
-                                )
-                              : homeController.populartagstate.value ==
-                                      ScreenState.disconnect
-                                  ? DisconnectReloadWidget(reload: () {
-                                      getpopulartag();
-                                    })
-                                  : homeController.populartagstate.value ==
-                                          ScreenState.error
-                                      ? ErrorReloadWidget(reload: () {
-                                          getpopulartag();
-                                        })
-                                      : Container(
-                                          height: 88,
-                                          child: ListView(
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            children: homeController
-                                                .populartaglist
-                                                .map((tag) => Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          (homeController
-                                                                      .populartaglist
-                                                                      .indexOf(
-                                                                          tag) ==
-                                                                  0)
-                                                              ? const SizedBox(
-                                                                  width: 16,
-                                                                )
-                                                              : Container(),
-                                                          HomeTagWidget(
-                                                            onTap: () {
-                                                              Get.to(() =>
-                                                                  TagDetailScreen(
-                                                                    tag: tag,
-                                                                  ));
-                                                            },
-                                                            tagTitle: tag.tag,
-                                                            tagCount: tag.count,
-                                                          ),
-                                                          (homeController
-                                                                      .populartaglist
-                                                                      .indexOf(
-                                                                          tag) !=
-                                                                  homeController
-                                                                      .populartaglist
-                                                                      .length)
-                                                              ? const SizedBox(
-                                                                  width: 16,
-                                                                )
-                                                              : Container()
-                                                        ]))
-                                                .toList(),
-                                          ),
-                                        ),
-                        )
-
-                        // weekendStudent(_modalController),
-                      ],
-                    ),
+        ],
+        title: Container(
+          width: MediaQuery.of(context).size.width,
+          height: 36,
+          child: TextField(
+              autocorrect: false,
+              readOnly: true,
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SearchFocusScreen()));
+              },
+              focusNode: _searchController.focusNode,
+              style: TextStyle(color: mainblack, fontSize: 14),
+              cursorColor: mainblue,
+              cursorWidth: 1.2,
+              cursorRadius: Radius.circular(5.0),
+              autofocus: false,
+              // focusNode: searchController.detailsearchFocusnode,
+              textAlign: TextAlign.start,
+              // selectionHeightStyle: BoxHeightStyle.tight,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: mainlightgrey,
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(8)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(8)),
+                // focusColor: Colors.black,
+                // border: OutlineInputBorder(borderSide: BorderSide.none),
+                contentPadding: EdgeInsets.only(right: 16),
+                isDense: true,
+                hintText: "어떤 정보를 찾으시나요?",
+                hintStyle: TextStyle(
+                  fontSize: 14,
+                  color: mainblack.withOpacity(0.6),
+                ),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
+                  child: SvgPicture.asset(
+                    "assets/icons/Search_Inactive.svg",
+                    width: 16,
+                    height: 16,
+                    color: mainblack.withOpacity(0.6),
                   ),
                 ),
               )),
-          Obx(
-            () => (_searchController.isFocused.value == true)
-                ? AnimatedOpacity(
-                    opacity: _searchController.isFocused.value ? 1.0 : 0.0,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    child: DefaultTabController(
-                      length: 4,
-                      initialIndex: 0,
-                      child: WillPopScope(
-                        onWillPop: () async {
-                          Get.back();
-                          _searchController.clearSearchedList();
-                          _searchController.postpagenumber = 1;
-                          _searchController.profilepagenumber = 1;
-                          _searchController.questionpagenumber = 1;
-                          _searchController.tabController.index = 0;
-                          _searchController.searchtextcontroller.clear();
-                          return false;
-                        },
-                        child: GestureDetector(
-                          onTap: () {
-                            _searchController.focusNode.unfocus();
-                          },
-                          child: NestedScrollView(
-                            headerSliverBuilder: (context, value) {
-                              return [
-                                SliverOverlapAbsorber(
-                                  handle: NestedScrollView
-                                      .sliverOverlapAbsorberHandleFor(context),
-                                  sliver: SliverSafeArea(
-                                    top: false,
-                                    sliver: SliverAppBar(
-                                      backgroundColor: mainWhite,
-                                      toolbarHeight: 43,
-                                      pinned: true,
-                                      elevation: 0,
-                                      automaticallyImplyLeading: false,
-                                      flexibleSpace: Column(
-                                        children: [
-                                          TabBar(
-                                              controller: _searchController
-                                                  .tabController,
-                                              labelStyle: kButtonStyle,
-                                              labelColor: mainblack,
-                                              unselectedLabelStyle: kBody2Style,
-                                              unselectedLabelColor:
-                                                  mainblack.withOpacity(0.6),
-                                              indicator: UnderlineIndicator(
-                                                  strokeCap: StrokeCap.round,
-                                                  borderSide:
-                                                      BorderSide(width: 1.2),
-                                                  insets: EdgeInsets.symmetric(
-                                                      horizontal: 10.0)),
-                                              isScrollable: false,
-                                              indicatorColor: mainblack,
-                                              tabs: [
-                                                Tab(
-                                                  height: 40,
-                                                  child: Text(
-                                                    "포스팅",
-                                                  ),
-                                                ),
-                                                Tab(
-                                                  height: 40,
-                                                  child: Text(
-                                                    "프로필",
-                                                  ),
-                                                ),
-                                                Tab(
-                                                  height: 40,
-                                                  child: Text(
-                                                    "질문",
-                                                  ),
-                                                ),
-                                                Tab(
-                                                  height: 40,
-                                                  child: Text(
-                                                    "태그",
-                                                  ),
-                                                ),
-                                              ]),
-                                          Container(
-                                            height: 1,
-                                            color: Color(0xffe7e7e7),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                // SliverToBoxAdapter(child: de\,)
-                              ];
-                            },
-                            body: TabBarView(
-                                physics: NeverScrollableScrollPhysics(),
-                                controller: _searchController.tabController,
-                                children: [
-                                  SingleChildScrollView(
-                                    child: Obx(
-                                      () => _searchController
-                                              .isSearchLoading.value
-                                          ? searchloading()
-                                          : _searchController
-                                                      .isnosearchpost.value ==
-                                                  false
-                                              ? Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 10.0),
-                                                  child: Column(
-                                                    children: _searchController
-                                                        .searchpostinglist
-                                                        .value,
-                                                  ))
-                                              : Container(
-                                                  height: 80,
-                                                  child: Center(
-                                                    child: RichText(
-                                                      text: TextSpan(
-                                                        children: [
-                                                          const TextSpan(
-                                                            text: '아직 ',
-                                                          ),
-                                                          TextSpan(
-                                                            text:
-                                                                '${_searchController.searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ")}',
-                                                            style: kSubTitle1Style
-                                                                .copyWith(
-                                                                    color:
-                                                                        mainblue),
-                                                          ),
-                                                          const TextSpan(
-                                                            text:
-                                                                '에 대한 포스팅이 없어요',
-                                                          ),
-                                                        ],
-                                                        style: kSubTitle1Style
-                                                            .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                    ),
-                                  ),
-                                  SingleChildScrollView(
-                                    child: Obx(
-                                      () => _searchController
-                                              .isSearchLoading.value
-                                          ? searchloading()
-                                          : _searchController.isnosearchprofile
-                                                      .value ==
-                                                  false
-                                              ? Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 10.0),
-                                                  child: Column(
-                                                    children: _searchController
-                                                        .searchprofilelist
-                                                        .value,
-                                                  ))
-                                              : Container(
-                                                  height: 80,
-                                                  child: Center(
-                                                    child: RichText(
-                                                      text: TextSpan(
-                                                        children: [
-                                                          const TextSpan(
-                                                            text: '아직 ',
-                                                          ),
-                                                          TextSpan(
-                                                            text:
-                                                                '${_searchController.searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ")}',
-                                                            style: kSubTitle1Style
-                                                                .copyWith(
-                                                                    color:
-                                                                        mainblue),
-                                                          ),
-                                                          const TextSpan(
-                                                            text:
-                                                                '(이)란 학생이 없어요',
-                                                          ),
-                                                        ],
-                                                        style: kSubTitle1Style
-                                                            .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                    ),
-                                  ),
-                                  SingleChildScrollView(
-                                    child: Obx(
-                                      () => _searchController
-                                              .isSearchLoading.value
-                                          ? searchloading()
-                                          : _searchController.isnosearchquestion
-                                                      .value ==
-                                                  false
-                                              ? Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 10.0),
-                                                  child: Column(
-                                                    children: _searchController
-                                                        .searchquestionlist
-                                                        .value,
-                                                  ),
-                                                )
-                                              : Container(
-                                                  height: 80,
-                                                  child: Center(
-                                                    child: RichText(
-                                                      text: TextSpan(
-                                                        children: [
-                                                          const TextSpan(
-                                                            text: '아직 ',
-                                                          ),
-                                                          TextSpan(
-                                                            text:
-                                                                '${_searchController.searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ")}',
-                                                            style: kSubTitle1Style
-                                                                .copyWith(
-                                                                    color:
-                                                                        mainblue),
-                                                          ),
-                                                          const TextSpan(
-                                                            text:
-                                                                '에 대한 질문이 없어요',
-                                                          ),
-                                                        ],
-                                                        style: kSubTitle1Style
-                                                            .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                    ),
-                                  ),
-                                  SingleChildScrollView(
-                                    child: Obx(
-                                      () => _searchController
-                                              .isSearchLoading.value
-                                          ? searchloading()
-                                          : _searchController
-                                                      .isnosearchtag.value ==
-                                                  false
-                                              ? Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 10.0),
-                                                  child: Column(
-                                                    children: _searchController
-                                                        .searchtaglist.value,
-                                                  ),
-                                                )
-                                              : Container(
-                                                  height: 80,
-                                                  child: Center(
-                                                    child: RichText(
-                                                      text: TextSpan(
-                                                        children: [
-                                                          const TextSpan(
-                                                            text: '아직 ',
-                                                          ),
-                                                          TextSpan(
-                                                            text:
-                                                                '${_searchController.searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ")}',
-                                                            style: kSubTitle1Style
-                                                                .copyWith(
-                                                                    color:
-                                                                        mainblue),
-                                                          ),
-                                                          const TextSpan(
-                                                            text:
-                                                                '(와)과 관련된 태그가 없어요',
-                                                          ),
-                                                        ],
-                                                        style: kSubTitle1Style
-                                                            .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : Container(),
-          )
-        ],
+        ),
       ),
+      body: GestureDetector(
+          onTap: () => _searchController.focusNode.unfocus(),
+          child: AnimatedOpacity(
+            opacity: 1.0,
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: 16,
+                      left: 16,
+                      top: 24,
+                      bottom: 16,
+                    ),
+                    child: Text(
+                      "인기 태그",
+                      style: kSubTitle2Style,
+                    ),
+                  ),
+                  Obx(
+                    () => homeController.populartagstate.value ==
+                            ScreenState.loading
+                        ? Image.asset(
+                            'assets/icons/loading.gif',
+                            scale: 6,
+                          )
+                        : homeController.populartagstate.value ==
+                                ScreenState.disconnect
+                            ? DisconnectReloadWidget(reload: () {
+                                getpopulartag();
+                              })
+                            : homeController.populartagstate.value ==
+                                    ScreenState.error
+                                ? ErrorReloadWidget(reload: () {
+                                    getpopulartag();
+                                  })
+                                : Container(
+                                    height: 88,
+                                    child: ListView(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      children: homeController.populartaglist
+                                          .map((tag) => Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    (homeController
+                                                                .populartaglist
+                                                                .indexOf(tag) ==
+                                                            0)
+                                                        ? const SizedBox(
+                                                            width: 16,
+                                                          )
+                                                        : Container(),
+                                                    HomeTagWidget(
+                                                      onTap: () {
+                                                        Get.to(() =>
+                                                            TagDetailScreen(
+                                                              tag: tag,
+                                                            ));
+                                                      },
+                                                      tagTitle: tag.tag,
+                                                      tagCount: tag.count,
+                                                    ),
+                                                    (homeController
+                                                                .populartaglist
+                                                                .indexOf(tag) !=
+                                                            homeController
+                                                                .populartaglist
+                                                                .length)
+                                                        ? const SizedBox(
+                                                            width: 16,
+                                                          )
+                                                        : Container()
+                                                  ]))
+                                          .toList(),
+                                    ),
+                                  ),
+                  )
+
+                  // weekendStudent(_modalController),
+                ],
+              ),
+            ),
+          )),
     );
   }
 }
