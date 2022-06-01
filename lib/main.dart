@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,6 +15,7 @@ import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/firebase_options.dart';
+import 'package:loopus/screen/project_add_title_screen.dart';
 
 import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';
@@ -44,7 +46,11 @@ void main() async {
   await GetStorage.init();
 
   // KakaoContext.clientId = '3e0e4823d8dd690cfb48b8bcd5ad7e6c';
-
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    print('error catch');
+    // if (kReleaseMode) exit(1);
+  };
   runApp(
     // DevicePreview(
     // enabled: !kReleaseMode,
@@ -144,6 +150,9 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
         MaterialPageRoute(
           builder:
               token == null ? (context) => StartScreen() : (context) => App(),
+          //     (context) => ProjectAddTitleScreen(
+          //   screenType: Screentype.add,
+          // ),
         ),
       ),
     );

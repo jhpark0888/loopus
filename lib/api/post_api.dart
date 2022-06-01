@@ -528,38 +528,38 @@ Future<HTTPResponse> bookmarklist(int pageNumber) async {
   }
 }
 
-Future<HTTPResponse> looppost(int lastindex) async {
-  // print('루프페이지 번호 : $pageNumber');
-  String? token;
-  await const FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
+// Future<HTTPResponse> looppost(int lastindex) async {
+//   // print('루프페이지 번호 : $pageNumber');
+//   String? token;
+//   await const FlutterSecureStorage().read(key: 'token').then((value) {
+//     token = value;
+//   });
 
-  final loopUri = Uri.parse("$serverUri/post_api/loop_load?last=$lastindex");
+//   final loopUri = Uri.parse("$serverUri/post_api/loop_load?last=$lastindex");
 
-  try {
-    final response =
-        await get(loopUri, headers: {"Authorization": "Token $token"});
-    var responseBody = utf8.decode(response.bodyBytes);
-    List<dynamic> list = jsonDecode(responseBody);
-    if (list.isEmpty) {
-      HomeController.to.enableLoopPullup.value = false;
-    }
-    if (response.statusCode != 200) {
-      // Future.error(response.statusCode);
-      return HTTPResponse.apiError('', response.statusCode);
-    } else {
-      return HTTPResponse.success(PostingModel.fromJson(list));
-    }
-  } on SocketException {
-    ErrorController.to.isServerClosed(true);
-    return HTTPResponse.serverError();
-  } catch (e) {
-    print(e);
-    return HTTPResponse.unexpectedError(e);
-    // ErrorController.to.isServerClosed(true);
-  }
-}
+//   try {
+//     final response =
+//         await get(loopUri, headers: {"Authorization": "Token $token"});
+//     var responseBody = utf8.decode(response.bodyBytes);
+//     List<dynamic> list = jsonDecode(responseBody);
+//     if (list.isEmpty) {
+//       HomeController.to.enableLoopPullup.value = false;
+//     }
+//     if (response.statusCode != 200) {
+//       // Future.error(response.statusCode);
+//       return HTTPResponse.apiError('', response.statusCode);
+//     } else {
+//       return HTTPResponse.success(PostingModel.fromJson(list));
+//     }
+//   } on SocketException {
+//     ErrorController.to.isServerClosed(true);
+//     return HTTPResponse.serverError();
+//   } catch (e) {
+//     print(e);
+//     return HTTPResponse.unexpectedError(e);
+//     // ErrorController.to.isServerClosed(true);
+//   }
+// }
 
 Future<dynamic> bookmarkpost(int postingId) async {
   String? token;

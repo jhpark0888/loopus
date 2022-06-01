@@ -9,6 +9,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
+import 'package:loopus/screen/project_add_person_screen.dart';
 import 'package:loopus/screen/project_add_tag_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
@@ -36,7 +37,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     onPressed:
                         (projectaddcontroller.isDateValidated.value == true)
                             ? () {
-                                Get.to(() => ProjectAddTagScreen(
+                                Get.to(() => ProjectAddPersonScreen(
                                     screenType: Screentype.add));
                               }
                             : () {},

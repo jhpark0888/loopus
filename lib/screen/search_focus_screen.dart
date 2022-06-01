@@ -322,47 +322,47 @@ class SearchFocusScreen extends StatelessWidget {
                                     ),
                         ),
                       ),
-                      SingleChildScrollView(
-                        child: Obx(
-                          () => _searchController.isSearchLoading.value
-                              ? searchloading()
-                              : _searchController.isnosearchquestion.value ==
-                                      false
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: Column(
-                                        children: _searchController
-                                            .searchquestionlist.value,
-                                      ),
-                                    )
-                                  : Container(
-                                      height: 80,
-                                      child: Center(
-                                        child: RichText(
-                                          text: TextSpan(
-                                            children: [
-                                              const TextSpan(
-                                                text: '아직 ',
-                                              ),
-                                              TextSpan(
-                                                text:
-                                                    '${_searchController.searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ")}',
-                                                style: kSubTitle1Style.copyWith(
-                                                    color: mainblue),
-                                              ),
-                                              const TextSpan(
-                                                text: '에 대한 질문이 없어요',
-                                              ),
-                                            ],
-                                            style: kSubTitle1Style.copyWith(
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                        ),
-                      ),
+                      // SingleChildScrollView(
+                      //   child: Obx(
+                      //     () => _searchController.isSearchLoading.value
+                      //         ? searchloading()
+                      //         : _searchController.isnosearchquestion.value ==
+                      //                 false
+                      //             ? Padding(
+                      //                 padding: const EdgeInsets.only(top: 10.0),
+                      //                 child: Column(
+                      //                   children: _searchController
+                      //                       .searchquestionlist.value,
+                      //                 ),
+                      //               )
+                      //             : Container(
+                      //                 height: 80,
+                      //                 child: Center(
+                      //                   child: RichText(
+                      //                     text: TextSpan(
+                      //                       children: [
+                      //                         const TextSpan(
+                      //                           text: '아직 ',
+                      //                         ),
+                      //                         TextSpan(
+                      //                           text:
+                      //                               '${_searchController.searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ")}',
+                      //                           style: kSubTitle1Style.copyWith(
+                      //                               color: mainblue),
+                      //                         ),
+                      //                         const TextSpan(
+                      //                           text: '에 대한 질문이 없어요',
+                      //                         ),
+                      //                       ],
+                      //                       style: kSubTitle1Style.copyWith(
+                      //                         fontWeight: FontWeight.normal,
+                      //                       ),
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //   ),
+                      // ),
                       SingleChildScrollView(
                         child: Obx(
                           () => _searchController.isSearchLoading.value

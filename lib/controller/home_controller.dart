@@ -24,53 +24,53 @@ class HomeController extends GetxController
   List<PostingWidget> posting = [];
 
   RxBool bookmark = false.obs;
-  RxBool isLoopEmpty = false.obs;
+  // RxBool isLoopEmpty = false.obs;
   RxBool isPostingEmpty = false.obs;
-  RxBool isAllQuestionEmpty = false.obs;
-  RxBool isMyQuestionEmpty = false.obs;
+  // RxBool isAllQuestionEmpty = false.obs;
+  // RxBool isMyQuestionEmpty = false.obs;
   RxBool isRecommandFull = false.obs;
 
   RxBool isPostingLoading = true.obs;
-  RxBool isAllQuestionLoading = true.obs;
-  RxBool isMyQuestionLoading = true.obs;
-  RxBool isLoopLoading = true.obs;
+  // RxBool isAllQuestionLoading = true.obs;
+  // RxBool isMyQuestionLoading = true.obs;
+  // RxBool isLoopLoading = true.obs;
 
   RxBool enablePostingPullup = true.obs;
-  RxBool enableQuestionPullup = true.obs;
-  RxBool enableLoopPullup = true.obs;
-  RxString selectgroup = '모든 질문'.obs;
+  // RxBool enableQuestionPullup = true.obs;
+  // RxBool enableLoopPullup = true.obs;
+  // RxString selectgroup = '모든 질문'.obs;
 
-  Rx<QuestionModel> questionResult =
-      QuestionModel(questionitems: <QuestionItem>[].obs).obs;
+  // Rx<QuestionModel> questionResult =
+  //     QuestionModel(questionitems: <QuestionItem>[].obs).obs;
   Rx<PostingModel> recommandpostingResult =
       PostingModel(postingitems: <Post>[].obs).obs;
   Rx<PostingModel> latestpostingResult =
       PostingModel(postingitems: <Post>[].obs).obs;
-  Rx<PostingModel> loopResult = PostingModel(postingitems: <Post>[].obs).obs;
+  // Rx<PostingModel> loopResult = PostingModel(postingitems: <Post>[].obs).obs;
   RefreshController postingRefreshController =
       RefreshController(initialRefresh: false);
-  RefreshController questionRefreshController =
-      RefreshController(initialRefresh: false);
-  RefreshController loopRefreshController =
-      RefreshController(initialRefresh: false);
+  // RefreshController questionRefreshController =
+  //     RefreshController(initialRefresh: false);
+  // RefreshController loopRefreshController =
+  //     RefreshController(initialRefresh: false);
 
   int recommandpagenum = 1;
 
   Rx<ScreenState> populartagstate = ScreenState.loading.obs;
   RxList<Tag> populartaglist = <Tag>[].obs;
 
-  late TabController hometabcontroller;
+  // late TabController hometabcontroller;
 
   // int pageNumber = 1;
 
   @override
   void onInit() {
-    hometabcontroller = TabController(length: 3, vsync: this);
+    // hometabcontroller = TabController(length: 3, vsync: this);
 
     getpopulartag();
     onPostingRefresh();
-    onQuestionRefresh();
-    onLoopRefresh();
+    // onQuestionRefresh();
+    // onLoopRefresh();
     logindetect();
     super.onInit();
   }
@@ -92,73 +92,73 @@ class HomeController extends GetxController
     postingRefreshController.loadComplete();
   }
 
-  Future<void> onQuestionRefresh() async {
-    enableQuestionPullup.value = true;
-    questionResult(QuestionModel(questionitems: <QuestionItem>[].obs));
+  // Future<void> onQuestionRefresh() async {
+  //   enableQuestionPullup.value = true;
+  //   questionResult(QuestionModel(questionitems: <QuestionItem>[].obs));
 
-    await questionLoadItem().then((value) {
-      if (selectgroup.value == '모든 질문') {
-        isAllQuestionLoading.value = false;
-      } else {
-        isMyQuestionLoading.value = false;
-      }
-    });
-    questionRefreshController.refreshCompleted();
-  }
+  //   await questionLoadItem().then((value) {
+  //     if (selectgroup.value == '모든 질문') {
+  //       isAllQuestionLoading.value = false;
+  //     } else {
+  //       isMyQuestionLoading.value = false;
+  //     }
+  //   });
+  //   questionRefreshController.refreshCompleted();
+  // }
 
-  void onQuestionLoading() async {
-    //페이지 처리
-    await questionLoadItem();
-    questionRefreshController.loadComplete();
-  }
+  // void onQuestionLoading() async {
+  //   //페이지 처리
+  //   await questionLoadItem();
+  //   questionRefreshController.loadComplete();
+  // }
 
-  void onLoopRefresh() async {
-    enableLoopPullup.value = true;
-    loopResult(PostingModel(postingitems: <Post>[].obs));
+  // void onLoopRefresh() async {
+  //   enableLoopPullup.value = true;
+  //   loopResult(PostingModel(postingitems: <Post>[].obs));
 
-    await looploadItem().then((value) => isLoopLoading.value = false);
-    loopRefreshController.refreshCompleted();
-  }
+  //   await looploadItem().then((value) => isLoopLoading.value = false);
+  //   loopRefreshController.refreshCompleted();
+  // }
 
-  void onLoopLoading() async {
-    //페이지 처리
-    await looploadItem();
-    loopRefreshController.loadComplete();
-  }
+  // void onLoopLoading() async {
+  //   //페이지 처리
+  //   await looploadItem();
+  //   loopRefreshController.loadComplete();
+  // }
 
-  Future<void> questionLoadItem() async {
-    ConnectivityResult result = await initConnectivity();
-    if (result == ConnectivityResult.none) {
-      ModalController.to.showdisconnectdialog();
-    } else {
-      HTTPResponse httpresult;
-      if (selectgroup.value == "모든 질문") {
-        httpresult = await getquestionlist(
-            questionResult.value.questionitems.isEmpty
-                ? 0
-                : questionResult.value.questionitems.last.id,
-            "any");
-      } else {
-        httpresult = await getquestionlist(
-            questionResult.value.questionitems.isEmpty
-                ? 0
-                : questionResult.value.questionitems.last.id,
-            "my");
-      }
-      if (httpresult.isError == false) {
-        QuestionModel questionModel = httpresult.data;
-        if (questionModel.questionitems.isEmpty &&
-            questionResult.value.questionitems.isEmpty) {
-          isAllQuestionEmpty.value = true;
-        } else if (questionModel.questionitems.isEmpty &&
-            questionResult.value.questionitems.isNotEmpty) {
-          enableQuestionPullup.value = false;
-        }
+  // Future<void> questionLoadItem() async {
+  //   ConnectivityResult result = await initConnectivity();
+  //   if (result == ConnectivityResult.none) {
+  //     ModalController.to.showdisconnectdialog();
+  //   } else {
+  //     HTTPResponse httpresult;
+  //     if (selectgroup.value == "모든 질문") {
+  //       httpresult = await getquestionlist(
+  //           questionResult.value.questionitems.isEmpty
+  //               ? 0
+  //               : questionResult.value.questionitems.last.id,
+  //           "any");
+  //     } else {
+  //       httpresult = await getquestionlist(
+  //           questionResult.value.questionitems.isEmpty
+  //               ? 0
+  //               : questionResult.value.questionitems.last.id,
+  //           "my");
+  //     }
+  //     if (httpresult.isError == false) {
+  //       QuestionModel questionModel = httpresult.data;
+  //       if (questionModel.questionitems.isEmpty &&
+  //           questionResult.value.questionitems.isEmpty) {
+  //         isAllQuestionEmpty.value = true;
+  //       } else if (questionModel.questionitems.isEmpty &&
+  //           questionResult.value.questionitems.isNotEmpty) {
+  //         enableQuestionPullup.value = false;
+  //       }
 
-        questionResult.value.questionitems.addAll(questionModel.questionitems);
-      }
-    }
-  }
+  //       questionResult.value.questionitems.addAll(questionModel.questionitems);
+  //     }
+  //   }
+  // }
 
   Future<void> postloadItem() async {
     HTTPResponse httpresult;
@@ -219,34 +219,34 @@ class HomeController extends GetxController
     }
   }
 
-  Future<void> looploadItem() async {
-    ConnectivityResult result = await initConnectivity();
-    if (result == ConnectivityResult.none) {
-      ModalController.to.showdisconnectdialog();
-    } else {
-      HTTPResponse httpresult = await looppost(
-          loopResult.value.postingitems.isEmpty
-              ? 0
-              : loopResult.value.postingitems.last.id);
+  // Future<void> looploadItem() async {
+  //   ConnectivityResult result = await initConnectivity();
+  //   if (result == ConnectivityResult.none) {
+  //     ModalController.to.showdisconnectdialog();
+  //   } else {
+  //     HTTPResponse httpresult = await looppost(
+  //         loopResult.value.postingitems.isEmpty
+  //             ? 0
+  //             : loopResult.value.postingitems.last.id);
 
-      if (httpresult.isError == false) {
-        PostingModel loopModel = httpresult.data;
-        if (loopModel.postingitems.isEmpty &&
-            loopResult.value.postingitems.isEmpty) {
-          isLoopEmpty.value = true;
-        } else if (loopModel.postingitems.isEmpty &&
-            loopResult.value.postingitems.isNotEmpty) {
-          enableLoopPullup.value = false;
-        } else if (loopModel.postingitems.isNotEmpty &&
-            loopResult.value.postingitems.isEmpty &&
-            isLoopEmpty.value == true) {
-          isLoopEmpty.value = false;
-        }
+  //     if (httpresult.isError == false) {
+  //       PostingModel loopModel = httpresult.data;
+  //       if (loopModel.postingitems.isEmpty &&
+  //           loopResult.value.postingitems.isEmpty) {
+  //         isLoopEmpty.value = true;
+  //       } else if (loopModel.postingitems.isEmpty &&
+  //           loopResult.value.postingitems.isNotEmpty) {
+  //         enableLoopPullup.value = false;
+  //       } else if (loopModel.postingitems.isNotEmpty &&
+  //           loopResult.value.postingitems.isEmpty &&
+  //           isLoopEmpty.value == true) {
+  //         isLoopEmpty.value = false;
+  //       }
 
-        loopResult.value.postingitems.addAll(loopModel.postingitems);
-      }
-    }
-  }
+  //       loopResult.value.postingitems.addAll(loopModel.postingitems);
+  //     }
+  //   }
+  // }
 
   void tapBookmark(int postid) async {
     if (recommandpostingResult.value.postingitems
@@ -265,14 +265,14 @@ class HomeController extends GetxController
           .first
           .isMarked(1);
     }
-    if (loopResult.value.postingitems
-        .where((post) => post.id == postid)
-        .isNotEmpty) {
-      loopResult.value.postingitems
-          .where((post) => post.id == postid)
-          .first
-          .isMarked(1);
-    }
+    // if (loopResult.value.postingitems
+    //     .where((post) => post.id == postid)
+    //     .isNotEmpty) {
+    //   loopResult.value.postingitems
+    //       .where((post) => post.id == postid)
+    //       .first
+    //       .isMarked(1);
+    // }
     if (SearchController.to.searchpostinglist
         .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
         .isNotEmpty) {
@@ -304,14 +304,14 @@ class HomeController extends GetxController
           .first
           .isMarked(0);
     }
-    if (loopResult.value.postingitems
-        .where((post) => post.id == postid)
-        .isNotEmpty) {
-      loopResult.value.postingitems
-          .where((post) => post.id == postid)
-          .first
-          .isMarked(0);
-    }
+    // if (loopResult.value.postingitems
+    //     .where((post) => post.id == postid)
+    //     .isNotEmpty) {
+    //   loopResult.value.postingitems
+    //       .where((post) => post.id == postid)
+    //       .first
+    //       .isMarked(0);
+    // }
     if (SearchController.to.searchpostinglist
         .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
         .isNotEmpty) {
@@ -351,18 +351,18 @@ class HomeController extends GetxController
           .first
           .likeCount(likecount);
     }
-    if (loopResult.value.postingitems
-        .where((post) => post.id == postid)
-        .isNotEmpty) {
-      loopResult.value.postingitems
-          .where((post) => post.id == postid)
-          .first
-          .isLiked(1);
-      loopResult.value.postingitems
-          .where((post) => post.id == postid)
-          .first
-          .likeCount(likecount);
-    }
+    // if (loopResult.value.postingitems
+    //     .where((post) => post.id == postid)
+    //     .isNotEmpty) {
+    //   loopResult.value.postingitems
+    //       .where((post) => post.id == postid)
+    //       .first
+    //       .isLiked(1);
+    //   loopResult.value.postingitems
+    //       .where((post) => post.id == postid)
+    //       .first
+    //       .likeCount(likecount);
+    // }
     if (SearchController.to.searchpostinglist
         .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
         .isNotEmpty) {
@@ -404,18 +404,18 @@ class HomeController extends GetxController
           .first
           .likeCount(likecount);
     }
-    if (loopResult.value.postingitems
-        .where((post) => post.id == postid)
-        .isNotEmpty) {
-      loopResult.value.postingitems
-          .where((post) => post.id == postid)
-          .first
-          .isLiked(0);
-      loopResult.value.postingitems
-          .where((post) => post.id == postid)
-          .first
-          .likeCount(likecount);
-    }
+    // if (loopResult.value.postingitems
+    //     .where((post) => post.id == postid)
+    //     .isNotEmpty) {
+    //   loopResult.value.postingitems
+    //       .where((post) => post.id == postid)
+    //       .first
+    //       .isLiked(0);
+    //   loopResult.value.postingitems
+    //       .where((post) => post.id == postid)
+    //       .first
+    //       .likeCount(likecount);
+    // }
     if (SearchController.to.searchpostinglist
         .where((searchpostingwidget) => searchpostingwidget.post.id == postid)
         .isNotEmpty) {

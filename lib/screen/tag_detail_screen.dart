@@ -177,75 +177,75 @@ class TagDetailScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                controller.tagquestionscreenstate.value == ScreenState.loading
-                    ? Column(
-                        children: [
-                          SizedBox(
-                            height: 24,
-                          ),
-                          Image.asset(
-                            'assets/icons/loading.gif',
-                            scale: 6,
-                          ),
-                        ],
-                      )
-                    : controller.tagquestionscreenstate.value ==
-                            ScreenState.disconnect
-                        ? DisconnectReloadWidget(reload: () {
-                            controller.loadquestion();
-                          })
-                        : controller.tagquestionscreenstate.value ==
-                                ScreenState.error
-                            ? ErrorReloadWidget(reload: () {
-                                controller.loadquestion();
-                              })
-                            : SingleChildScrollView(
-                                child: Container(
-                                  margin: const EdgeInsets.symmetric(
-                                    vertical: 8,
-                                    horizontal: 16,
-                                  ),
-                                  padding: const EdgeInsets.only(
-                                      top: 16, bottom: 32),
-                                  child: Obx(
-                                    () => Column(
-                                      children: controller
-                                              .searchtagquestionlist.isNotEmpty
-                                          ? controller
-                                              .searchtagquestionlist.value
-                                          : [
-                                              Center(
-                                                child: RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      const TextSpan(
-                                                        text: '아직 ',
-                                                      ),
-                                                      TextSpan(
-                                                        text: tag.tag,
-                                                        style: kSubTitle1Style
-                                                            .copyWith(
-                                                                color:
-                                                                    mainblue),
-                                                      ),
-                                                      const TextSpan(
-                                                        text:
-                                                            '와(과) 관련된 질문이 없어요',
-                                                      ),
-                                                    ],
-                                                    style: kSubTitle1Style
-                                                        .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                // controller.tagquestionscreenstate.value == ScreenState.loading
+                //     ? Column(
+                //         children: [
+                //           SizedBox(
+                //             height: 24,
+                //           ),
+                //           Image.asset(
+                //             'assets/icons/loading.gif',
+                //             scale: 6,
+                //           ),
+                //         ],
+                //       )
+                //     : controller.tagquestionscreenstate.value ==
+                //             ScreenState.disconnect
+                //         ? DisconnectReloadWidget(reload: () {
+                //             controller.loadquestion();
+                //           })
+                //         : controller.tagquestionscreenstate.value ==
+                //                 ScreenState.error
+                //             ? ErrorReloadWidget(reload: () {
+                //                 controller.loadquestion();
+                //               })
+                //             : SingleChildScrollView(
+                //                 child: Container(
+                //                   margin: const EdgeInsets.symmetric(
+                //                     vertical: 8,
+                //                     horizontal: 16,
+                //                   ),
+                //                   padding: const EdgeInsets.only(
+                //                       top: 16, bottom: 32),
+                //                   child: Obx(
+                //                     () => Column(
+                //                       children: controller
+                //                               .searchtagquestionlist.isNotEmpty
+                //                           ? controller
+                //                               .searchtagquestionlist.value
+                //                           : [
+                //                               Center(
+                //                                 child: RichText(
+                //                                   text: TextSpan(
+                //                                     children: [
+                //                                       const TextSpan(
+                //                                         text: '아직 ',
+                //                                       ),
+                //                                       TextSpan(
+                //                                         text: tag.tag,
+                //                                         style: kSubTitle1Style
+                //                                             .copyWith(
+                //                                                 color:
+                //                                                     mainblue),
+                //                                       ),
+                //                                       const TextSpan(
+                //                                         text:
+                //                                             '와(과) 관련된 질문이 없어요',
+                //                                       ),
+                //                                     ],
+                //                                     style: kSubTitle1Style
+                //                                         .copyWith(
+                //                                       fontWeight:
+                //                                           FontWeight.w400,
+                //                                     ),
+                //                                   ),
+                //                                 ),
+                //                               ),
+                //                             ],
+                //                     ),
+                //                   ),
+                //                 ),
+                //               ),
               ],
             ),
           ),

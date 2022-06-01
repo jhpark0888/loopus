@@ -13,7 +13,7 @@ class TagDetailController extends GetxController
 
   RxList<SearchTagProjectWidget> searchtagprojectlist =
       <SearchTagProjectWidget>[].obs;
-  RxList<QuestionWidget> searchtagquestionlist = <QuestionWidget>[].obs;
+  // RxList<QuestionWidget> searchtagquestionlist = <QuestionWidget>[].obs;
 
   // RxBool istag = false.obs;
 

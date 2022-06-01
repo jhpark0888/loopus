@@ -84,8 +84,8 @@ class NotificationController extends GetxController {
       Get.to(() => OtherProfileScreen(
           userid: id, isuser: 0, realname: message.data["real_name"]));
     } else if (message.data["type"] == "answer") {
-      Get.to(() => QuestionDetailScreen(
-          questionid: id, isuser: 1, realname: message.data["real_name"]));
+      // Get.to(() => QuestionDetailScreen(
+      //     questionid: id, isuser: 1, realname: message.data["real_name"]));
     }
     print("message: ${message.data["type"]}");
   }

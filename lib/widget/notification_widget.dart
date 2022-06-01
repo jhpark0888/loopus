@@ -224,12 +224,7 @@ class NotificationWidget extends StatelessWidget {
   }
 
   void clicknotice() {
-    if (notification.type == NotificationType.question) {
-      Get.to(() => QuestionDetailScreen(
-          questionid: notification.targetId,
-          isuser: 1,
-          realname: notification.user.realName));
-    } else if (notification.type == NotificationType.tag) {
+    if (notification.type == NotificationType.tag) {
       Get.to(() => ProjectScreen(projectid: notification.targetId, isuser: 0));
     } else if (notification.type == NotificationType.like) {
       Get.to(() => PostingScreen(

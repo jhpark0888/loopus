@@ -129,7 +129,7 @@ Future<void> search(
         print(searchlist);
         if (pagenumber >= 2) {
           print(searchlist);
-          print(searchController.searchquestionlist.value);
+          // print(searchController.searchquestionlist.value);
           print(searchController.searchprofilelist.value);
           if (searchType == SearchType.post && searchlist.isNotEmpty) {
             if (searchlist[0]["id"] ==
@@ -144,10 +144,10 @@ Future<void> search(
             }
           }
           if (searchType == SearchType.question && searchlist.isNotEmpty) {
-            if (searchlist[0]["id"] ==
-                searchController.searchquestionlist.value[0].item.id) {
-              return;
-            }
+            // if (searchlist[0]["id"] ==
+            //     searchController.searchquestionlist.value[0].item.id) {
+            //   return;
+            // }
           }
         }
 
@@ -166,7 +166,7 @@ Future<void> search(
             searchController.presearchwordquestion = searchword;
 
             searchController.isnosearchquestion(true);
-            searchController.searchquestionlist.clear();
+            // searchController.searchquestionlist.clear();
           } else if (searchType == SearchType.tag_project) {
             Get.find<TagDetailController>(tag: searchtext)
                 .tagprojectscreenstate(ScreenState.success);
@@ -205,13 +205,13 @@ Future<void> search(
             searchController.isnosearchprofile(false);
           } else if (searchType == SearchType.question) {
             searchController.presearchwordquestion = searchword;
-            searchController.searchquestionlist(searchlist
-                .map((json) => QuestionItem.fromJson(json))
-                .toList()
-                .map((question) => SearchQuestionWidget(
-                      item: question,
-                    ))
-                .toList());
+            // searchController.searchquestionlist(searchlist
+            //     .map((json) => QuestionItem.fromJson(json))
+            //     .toList()
+            //     .map((question) => SearchQuestionWidget(
+            //           item: question,
+            //         ))
+            //     .toList());
             searchController.isnosearchquestion(false);
           } else if (searchType == SearchType.tag_project) {
             Get.find<TagDetailController>(tag: searchtext)
@@ -225,14 +225,14 @@ Future<void> search(
             Get.find<TagDetailController>(tag: searchtext)
                 .tagprojectscreenstate(ScreenState.success);
           } else if (searchType == SearchType.tag_question) {
-            Get.find<TagDetailController>(tag: searchtext)
-                .searchtagquestionlist(searchlist
-                    .map((json) => QuestionItem.fromJson(json))
-                    .toList()
-                    .map((question) => QuestionWidget(
-                          item: question,
-                        ))
-                    .toList());
+            // Get.find<TagDetailController>(tag: searchtext)
+            //     .searchtagquestionlist(searchlist
+            //         .map((json) => QuestionItem.fromJson(json))
+            //         .toList()
+            //         .map((question) => QuestionWidget(
+            //               item: question,
+            //             ))
+            //         .toList());
             Get.find<TagDetailController>(tag: searchtext)
                 .tagquestionscreenstate(ScreenState.success);
           }

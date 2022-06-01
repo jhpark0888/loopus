@@ -6,6 +6,7 @@ import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/project_add_intro_screen.dart';
+import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
@@ -38,7 +39,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 ? TextButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        Get.to(() => ProjectAddIntroScreen(
+                        Get.to(() => ProjectAddPeriodScreen(
                               screenType: Screentype.add,
                             ));
                       }

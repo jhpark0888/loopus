@@ -18,50 +18,50 @@ import 'package:loopus/widget/question_answer_widget.dart';
 import '../constant.dart';
 import '../controller/error_controller.dart';
 
-Future postquestion(String content) async {
-  ConnectivityResult result = await initConnectivity();
-  if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
-  } else {
-    String? token;
-    await const FlutterSecureStorage().read(key: 'token').then((value) {
-      token = value;
-    });
+// Future postquestion(String content) async {
+//   ConnectivityResult result = await initConnectivity();
+//   if (result == ConnectivityResult.none) {
+//     ModalController.to.showdisconnectdialog();
+//   } else {
+//     String? token;
+//     await const FlutterSecureStorage().read(key: 'token').then((value) {
+//       token = value;
+//     });
 
-    final url = Uri.parse("$serverUri/question_api/question");
-    var data = {
-      "content": content,
-      "tag": Get.find<TagController>(tag: Tagtype.question.toString())
-          .selectedtaglist
-          .map((element) => element.text)
-          .toList()
-    };
-    try {
-      http.Response response = await http.post(url,
-          headers: {
-            'Authorization': 'Token $token',
-            'Content-Type': 'application/json'
-          },
-          body: jsonEncode(data));
-      var responseHeaders = response.headers;
-      var responseBody = utf8.decode(response.bodyBytes);
+//     final url = Uri.parse("$serverUri/question_api/question");
+//     var data = {
+//       "content": content,
+//       "tag": Get.find<TagController>(tag: Tagtype.question.toString())
+//           .selectedtaglist
+//           .map((element) => element.text)
+//           .toList()
+//     };
+//     try {
+//       http.Response response = await http.post(url,
+//           headers: {
+//             'Authorization': 'Token $token',
+//             'Content-Type': 'application/json'
+//           },
+//           body: jsonEncode(data));
+//       var responseHeaders = response.headers;
+//       var responseBody = utf8.decode(response.bodyBytes);
 
-      if (response.statusCode == 200) {
-        getbacks(2);
-        HomeController.to.onQuestionRefresh();
-        return;
-      } else {
-        return Future.error(response.statusCode);
-      }
-    } on SocketException {
-      ErrorController.to.isServerClosed(true);
-    } catch (e) {
-      print(e);
+//       if (response.statusCode == 200) {
+//         getbacks(2);
+//         HomeController.to.onQuestionRefresh();
+//         return;
+//       } else {
+//         return Future.error(response.statusCode);
+//       }
+//     } on SocketException {
+//       ErrorController.to.isServerClosed(true);
+//     } catch (e) {
+//       print(e);
 
-      // ErrorController.to.isServerClosed(true);
-    }
-  }
-}
+//       // ErrorController.to.isServerClosed(true);
+//     }
+//   }
+// }
 
 Future<HTTPResponse> getquestionlist(int lastindex, String type) async {
   String? token;
@@ -135,47 +135,47 @@ Future<void> getquestion(int questionid) async {
   }
 }
 
-Future<dynamic> deletequestion(int questionid) async {
-  ConnectivityResult result = await initConnectivity();
-  QuestionDetailController controller =
-      Get.find<QuestionDetailController>(tag: questionid.toString());
-  if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
-  } else {
-    String? token;
-    await FlutterSecureStorage().read(key: 'token').then((value) {
-      token = value;
-    });
+// Future<dynamic> deletequestion(int questionid) async {
+//   ConnectivityResult result = await initConnectivity();
+//   QuestionDetailController controller =
+//       Get.find<QuestionDetailController>(tag: questionid.toString());
+//   if (result == ConnectivityResult.none) {
+//     ModalController.to.showdisconnectdialog();
+//   } else {
+//     String? token;
+//     await FlutterSecureStorage().read(key: 'token').then((value) {
+//       token = value;
+//     });
 
-    final url = Uri.parse("$serverUri/question_api/question?id=$questionid");
-    try {
-      final response =
-          await delete(url, headers: {"Authorization": "Token $token"});
+//     final url = Uri.parse("$serverUri/question_api/question?id=$questionid");
+//     try {
+//       final response =
+//           await delete(url, headers: {"Authorization": "Token $token"});
 
-      if (response.statusCode == 200) {
-        //   var statusCode = response.statusCode;
-        // var responseHeaders = response.headers;
-        // var responseBody = utf8.decode(response.bodyBytes);
-        // print(statusCode);
-        // Map<String, dynamic> map = jsonDecode(responseBody);
-        HomeController.to.questionResult.value.questionitems.removeWhere(
-            (question) => question.id == controller.question.value.id);
-        Get.back();
-        controller.isQuestionDeleteLoading(false);
+//       if (response.statusCode == 200) {
+//         //   var statusCode = response.statusCode;
+//         // var responseHeaders = response.headers;
+//         // var responseBody = utf8.decode(response.bodyBytes);
+//         // print(statusCode);
+//         // Map<String, dynamic> map = jsonDecode(responseBody);
+//         HomeController.to.questionResult.value.questionitems.removeWhere(
+//             (question) => question.id == controller.question.value.id);
+//         Get.back();
+//         controller.isQuestionDeleteLoading(false);
 
-        print(' 질문 삭제 성공 : ${response.statusCode}');
-        return;
-      } else {
-        return Future.error(response.statusCode);
-      }
-    } on SocketException {
-      ErrorController.to.isServerClosed(true);
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-    }
-  }
-}
+//         print(' 질문 삭제 성공 : ${response.statusCode}');
+//         return;
+//       } else {
+//         return Future.error(response.statusCode);
+//       }
+//     } on SocketException {
+//       ErrorController.to.isServerClosed(true);
+//     } catch (e) {
+//       print(e);
+//       // ErrorController.to.isServerClosed(true);
+//     }
+//   }
+// }
 
 Future<void> answermake(String content, int questionid) async {
   ConnectivityResult result = await initConnectivity();

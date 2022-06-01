@@ -15,8 +15,8 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
 
   RxList<SearchPostingWidget> searchpostinglist = <SearchPostingWidget>[].obs;
   RxList<SearchProfileWidget> searchprofilelist = <SearchProfileWidget>[].obs;
-  RxList<SearchQuestionWidget> searchquestionlist =
-      <SearchQuestionWidget>[].obs;
+  // RxList<SearchQuestionWidget> searchquestionlist =
+  //     <SearchQuestionWidget>[].obs;
   RxList<SearchTagWidget> searchtaglist = <SearchTagWidget>[].obs;
 
   RxBool isnosearchpost = false.obs;
@@ -141,7 +141,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   void clearSearchedList() {
     searchpostinglist.clear();
     searchprofilelist.clear();
-    searchquestionlist.clear();
+    // searchquestionlist.clear();
     searchtaglist.clear();
     presearchwordpost = "";
     presearchwordprofile = "";

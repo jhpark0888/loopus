@@ -25,113 +25,101 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      initialIndex: _homeController.hometabcontroller.index,
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: GestureDetector(
-            onTap: () => CustomScrollController.to.scrollToTop(),
-            child: Image.asset(
-              'assets/illustrations/Home_Logo.png',
-              width: 54,
-              height: 30,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        title: GestureDetector(
+          onTap: () => CustomScrollController.to.scrollToTop(),
+          child: Image.asset(
+            'assets/illustrations/Home_Logo.png',
+            width: 54,
+            height: 30,
           ),
-          actions: [
-            // IconButton(
-            //   onPressed: () => Get.to(() => SearchScreen()),
-            //   icon: SvgPicture.asset(
-            //     "assets/icons/Search.svg",
-            //     width: 28,
-            //     height: 28,
-            //   ),
-            // ),
-            Stack(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    ProfileController.to.isnewalarm(false);
+        ),
+        actions: [
+          // IconButton(
+          //   onPressed: () => Get.to(() => SearchScreen()),
+          //   icon: SvgPicture.asset(
+          //     "assets/icons/Search.svg",
+          //     width: 28,
+          //     height: 28,
+          //   ),
+          // ),
+          Stack(
+            children: [
+              IconButton(
+                onPressed: () {
+                  ProfileController.to.isnewalarm(false);
 
-                    Get.to(() => NotificationScreen());
-                  },
-                  icon: SvgPicture.asset(
-                    "assets/icons/Bell_Inactive.svg",
-                    width: 28,
-                  ),
+                  Get.to(() => NotificationScreen());
+                },
+                icon: SvgPicture.asset(
+                  "assets/icons/Bell_Inactive.svg",
+                  width: 28,
                 ),
-                Positioned(
-                  right: 14,
-                  top: 12,
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child:
-                        Obx(() => ProfileController.to.isnewalarm.value == true
-                            ? Container(
-                                height: 8,
-                                width: 8,
-                                decoration: BoxDecoration(
-                                    color: mainpink, shape: BoxShape.circle),
-                              )
-                            : Container()),
-                  ),
+              ),
+              Positioned(
+                right: 14,
+                top: 12,
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Obx(() => ProfileController.to.isnewalarm.value == true
+                      ? Container(
+                          height: 8,
+                          width: 8,
+                          decoration: BoxDecoration(
+                              color: mainpink, shape: BoxShape.circle),
+                        )
+                      : Container()),
                 ),
-              ],
-            ),
-            Stack(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Get.to(() => MessageScreen());
-                  },
-                  icon: SvgPicture.asset(
-                    "assets/icons/Chat.svg",
-                    width: 28,
-                    height: 28,
-                  ),
+              ),
+            ],
+          ),
+          Stack(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Get.to(() => MessageScreen());
+                },
+                icon: SvgPicture.asset(
+                  "assets/icons/Chat.svg",
+                  width: 28,
+                  height: 28,
                 ),
-                Positioned(
-                  right: 12,
-                  top: 12,
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Obx(
-                        () => ProfileController.to.isnewmessage.value == true
-                            ? Container(
-                                height: 8,
-                                width: 8,
-                                decoration: BoxDecoration(
-                                    color: mainpink, shape: BoxShape.circle),
-                              )
-                            : Container()),
-                  ),
+              ),
+              Positioned(
+                right: 12,
+                top: 12,
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child:
+                      Obx(() => ProfileController.to.isnewmessage.value == true
+                          ? Container(
+                              height: 8,
+                              width: 8,
+                              decoration: BoxDecoration(
+                                  color: mainpink, shape: BoxShape.circle),
+                            )
+                          : Container()),
                 ),
-              ],
-            ),
-          ],
-        ),
-        body: NestedScrollView(
-          controller: CustomScrollController.to.customScrollController.value,
-          headerSliverBuilder: (context, value) {
-            return [
-              //홈 검색 탭
-              // homeSearchBar(_searchController),
-              //활동중인 공식계정
-              // activatedOfficialAccount(_modalController),
-              //탭 바
-              sliverTabBar(context, _homeController),
-            ];
-          },
-          body: TabBarView(
-              physics: const PageScrollPhysics(),
-              controller: _homeController.hometabcontroller,
-              children: [
-                HomePostingScreen(),
-                HomeLoopScreen(),
-                HomeQuestionScreen(),
-              ]),
-        ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      body: NestedScrollView(
+        controller: CustomScrollController.to.customScrollController.value,
+        headerSliverBuilder: (context, value) {
+          return [
+            //홈 검색 탭
+            // homeSearchBar(_searchController),
+            //활동중인 공식계정
+            // activatedOfficialAccount(_modalController),
+            //탭 바
+            // sliverTabBar(context, _homeController),
+          ];
+        },
+        body: HomePostingScreen(),
       ),
     );
   }
@@ -145,8 +133,8 @@ class HomeScreen extends StatelessWidget {
           print('search posting list : ${_searchController.searchpostinglist}');
           print('search profile list : ${_searchController.searchprofilelist}');
 
-          print(
-              'search question list : ${_searchController.searchquestionlist}');
+          // print(
+          //     'search question list : ${_searchController.searchquestionlist}');
 
           print('search tag list : ${_searchController.searchtaglist}');
         },
@@ -415,64 +403,64 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget sliverTabBar(BuildContext context, HomeController homeController) {
-    return SliverOverlapAbsorber(
-      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-      sliver: SliverSafeArea(
-        top: false,
-        sliver: SliverAppBar(
-          expandedHeight: 43,
-          toolbarHeight: 43,
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          pinned: true,
-          floating: false,
-          backgroundColor: mainWhite,
-          flexibleSpace: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TabBar(
-                controller: _homeController.hometabcontroller,
-                labelStyle: kButtonStyle,
-                labelColor: mainblack,
-                unselectedLabelStyle: kBody2Style,
-                unselectedLabelColor: mainblack.withOpacity(0.6),
-                indicator: const UnderlineIndicator(
-                  strokeCap: StrokeCap.round,
-                  borderSide: BorderSide(width: 1.2),
-                  insets: EdgeInsets.symmetric(horizontal: 16.0),
-                ),
-                isScrollable: true,
-                indicatorColor: mainblack,
-                tabs: const [
-                  Tab(
-                    height: 40,
-                    child: Text(
-                      "추천",
-                    ),
-                  ),
-                  Tab(
-                    height: 40,
-                    child: Text(
-                      "팔로잉",
-                    ),
-                  ),
-                  Tab(
-                    height: 40,
-                    child: Text(
-                      "질문과 답변",
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                height: 1,
-                color: const Color(0xffe7e7e7),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget sliverTabBar(BuildContext context, HomeController homeController) {
+  //   return SliverOverlapAbsorber(
+  //     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+  //     sliver: SliverSafeArea(
+  //       top: false,
+  //       sliver: SliverAppBar(
+  //         expandedHeight: 43,
+  //         toolbarHeight: 43,
+  //         automaticallyImplyLeading: false,
+  //         elevation: 0,
+  //         pinned: true,
+  //         floating: false,
+  //         backgroundColor: mainWhite,
+  //         flexibleSpace: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.stretch,
+  //           children: [
+  //             TabBar(
+  //               controller: _homeController.hometabcontroller,
+  //               labelStyle: kButtonStyle,
+  //               labelColor: mainblack,
+  //               unselectedLabelStyle: kBody2Style,
+  //               unselectedLabelColor: mainblack.withOpacity(0.6),
+  //               indicator: const UnderlineIndicator(
+  //                 strokeCap: StrokeCap.round,
+  //                 borderSide: BorderSide(width: 1.2),
+  //                 insets: EdgeInsets.symmetric(horizontal: 16.0),
+  //               ),
+  //               isScrollable: true,
+  //               indicatorColor: mainblack,
+  //               tabs: const [
+  //                 Tab(
+  //                   height: 40,
+  //                   child: Text(
+  //                     "추천",
+  //                   ),
+  //                 ),
+  //                 Tab(
+  //                   height: 40,
+  //                   child: Text(
+  //                     "팔로잉",
+  //                   ),
+  //                 ),
+  //                 Tab(
+  //                   height: 40,
+  //                   child: Text(
+  //                     "질문과 답변",
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //             Container(
+  //               height: 1,
+  //               color: const Color(0xffe7e7e7),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

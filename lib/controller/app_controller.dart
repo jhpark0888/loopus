@@ -33,21 +33,21 @@ class AppController extends GetxService {
     if (index == 0) {
       if (_localDataController.isTagChanged == true) {
         _homeController.onPostingRefresh();
-        _homeController.onQuestionRefresh();
+        // _homeController.onQuestionRefresh();
         _localDataController.tagChange(false);
         // ModalController.to.showCustomDialog('관심 태그 변경한 뒤 홈 새로고침했다는 뜻', 1000);
       }
 
       if (currentIndex.value == 0) {
         CustomScrollController.to.scrollToTop();
-        if (CustomScrollController.to.customScrollController.value.offset ==
-            0.0) {
-          HomeController.to.hometabcontroller.animateTo(
-            0,
-            curve: Curves.easeInOut,
-            duration: Duration(milliseconds: 300),
-          );
-        }
+        // if (CustomScrollController.to.customScrollController.value.offset ==
+        //     0.0) {
+        //   HomeController.to.hometabcontroller.animateTo(
+        //     0,
+        //     curve: Curves.easeInOut,
+        //     duration: Duration(milliseconds: 300),
+        //   );
+        // }
       }
       currentIndex(index);
     }

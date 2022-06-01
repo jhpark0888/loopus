@@ -385,23 +385,23 @@ class HomePostingScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Center(
-                              child: TextButton(
-                                onPressed: () {
-                                  homeController.hometabcontroller.animateTo(
-                                    1,
-                                    curve: Curves.easeInOut,
-                                    duration: Duration(milliseconds: 300),
-                                  );
-                                },
-                                child: Text(
-                                  '팔로잉한 학생들의 포스팅도 확인해보세요',
-                                  style: kButtonStyle.copyWith(
-                                    color: mainblue,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // Center(
+                            //   child: TextButton(
+                            //     onPressed: () {
+                            //       homeController.hometabcontroller.animateTo(
+                            //         1,
+                            //         curve: Curves.easeInOut,
+                            //         duration: Duration(milliseconds: 300),
+                            //       );
+                            //     },
+                            //     child: Text(
+                            //       '팔로잉한 학생들의 포스팅도 확인해보세요',
+                            //       style: kButtonStyle.copyWith(
+                            //         color: mainblue,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       );
