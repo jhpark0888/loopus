@@ -19,6 +19,7 @@ import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
+import 'package:loopus/widget/careertile_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/project_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
@@ -673,6 +674,80 @@ class MyProfileScreen extends StatelessWidget {
                                                         ),
                                                 )),
                             ),
+                            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Divider(thickness: 1, color: cardGray),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text('커리어 분석', style: k18Semibold),
+                    const SizedBox(width: 7),
+                    SvgPicture.asset(
+                      'assets/icons/Question.svg',
+                      width: 20,
+                      height: 20,
+                      color: mainblack.withOpacity(0.6),
+                    )
+                  ],
+                ),
+                Column(children: profileController.careerAnalysis),
+                const SizedBox(height: 24),
+                const Divider(thickness: 1, color: cardGray),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    const Text('커리어', style: k18Semibold),
+                    const SizedBox(width: 7),
+                    SvgPicture.asset(
+                      'assets/icons/Question.svg',
+                      width: 20,
+                      height: 20,
+                      color: mainblack.withOpacity(0.6),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                        onPressed: () {
+                          profileController.isDelete(false);
+                          profileController.isUpdate(false);
+                          showDialogs(
+                              title: '추가하기',
+                              controller: profileController.careerAddController,
+                              leftFunction: () {
+                                Get.back();
+                              },
+                              rightFunction: () {
+                                ProfileController.to.careerwidget.add(
+                                    CareerTile(
+                                        title: ProfileController
+                                            .to.careerAddController.text.obs,
+                                        time: DateTime.now()));
+
+                                profileController.careerAddController.clear();
+                                Get.back();
+                              });
+                        },
+                        icon: const Text('추가')),
+                    IconButton(
+                        onPressed: () {
+                          profileController.isUpdate(true);
+                          profileController.isDelete(false);
+                        },
+                        icon: const Text('수정')),
+                    IconButton(
+                        onPressed: () {
+                          profileController.isDelete(true);
+                          profileController.isUpdate(false);
+                        },
+                        icon: const Text('삭제'))
+                  ],
+                ),
+                Column(children: profileController.careerwidget.toList()),
+                const SizedBox(height: 24),
+                const Divider(thickness: 1, color: cardGray),
+              ],
+            )
                           ],
                         ),
                       ],
