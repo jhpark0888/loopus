@@ -19,11 +19,12 @@ class ErrorController extends GetxController {
             content: '나중에 다시 접속해주세요',
             leftFunction: () {
               print('asd');
-              if (Platform.isIOS) {
-                exit(0);
-              } else if (Platform.isAndroid) {
-                SystemNavigator.pop();
-              }
+              Get.back();
+              // if (Platform.isIOS) {
+              //   exit(0);
+              // } else if (Platform.isAndroid) {
+              //   SystemNavigator.pop();
+              // }
             });
       },
       time: Duration(seconds: 1),

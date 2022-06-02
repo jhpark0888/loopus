@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:loopus/api/profile_api.dart';
@@ -65,6 +66,11 @@ class ProfileController extends GetxController
       ModalController.to.showdisconnectdialog();
     } else {
       await getProfile(userId, 1);
+      myUserInfo.value.profileTag = [
+        Tag(tagId: 1, tag: '인공지능', count: 3),
+        Tag(tagId: 1, tag: '데이터분석', count: 3),
+        Tag(tagId: 1, tag: '앱개발', count: 3),
+      ];
       await getProjectlist(userId, 1);
     }
     // isProfileLoading.value = false;
