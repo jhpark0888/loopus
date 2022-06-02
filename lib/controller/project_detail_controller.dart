@@ -18,11 +18,9 @@ class ProjectDetailController extends GetxController {
   Rx<Project> project = Project(
           id: 0,
           userid: 0,
-          projectName: '',
-          post: <Post>[].obs,
-          projectTag: [],
-          looper: [],
-          like_count: 0.obs,
+          careerName: '',
+          posts: <Post>[].obs,
+          members: [],
           is_user: 0,
           user: User.defaultuser())
       .obs;

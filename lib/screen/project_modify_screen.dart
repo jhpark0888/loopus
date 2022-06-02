@@ -25,8 +25,6 @@ class ProjectModifyScreen extends StatelessWidget {
 
   ProjectAddController projectaddcontroller = Get.put(ProjectAddController());
   // ProjectDetailController projectDetailController = Get.find();
-  TagController tagController = Get.put(TagController(tagtype: Tagtype.project),
-      tag: Tagtype.project.toString());
   //
   int projectid;
   late ProjectDetailController controller = Get.find(tag: projectid.toString());
@@ -58,7 +56,7 @@ class ProjectModifyScreen extends StatelessWidget {
                       ));
                 },
                 title: '활동명',
-                subtitle: controller.project.value.projectName,
+                subtitle: controller.project.value.careerName,
               ),
             ),
             Obx(
@@ -79,40 +77,6 @@ class ProjectModifyScreen extends StatelessWidget {
             ),
             Obx(
               () => UpdateProjectTileWidget(
-                hoverTag: '활동소개',
-                isSubtitleExist: true,
-                onTap: () async {
-                  projectintroinput();
-                  Get.to(() => ProjectAddIntroScreen(
-                        projectid: projectid,
-                        screenType: Screentype.update,
-                      ));
-                },
-                title: '활동 소개',
-                subtitle: (controller.project.value.introduction! != '')
-                    ? controller.project.value.introduction!
-                    : '아직 활동 소개를 작성하지 않았어요',
-              ),
-            ),
-            Obx(
-              () => UpdateProjectTileWidget(
-                hoverTag: '활동태그',
-                isSubtitleExist: true,
-                onTap: () async {
-                  projecttaginput();
-                  Get.to(() => ProjectAddTagScreen(
-                        projectid: projectid,
-                        screenType: Screentype.update,
-                      ));
-                },
-                title: '활동 태그',
-                subtitle: controller.project.value.projectTag.isEmpty
-                    ? ''
-                    : '${controller.project.value.projectTag[0].tag}, ${controller.project.value.projectTag[1].tag}, ${controller.project.value.projectTag[2].tag}',
-              ),
-            ),
-            Obx(
-              () => UpdateProjectTileWidget(
                 hoverTag: '활동사람',
                 isSubtitleExist: true,
                 onTap: () async {
@@ -127,26 +91,13 @@ class ProjectModifyScreen extends StatelessWidget {
                       ));
                 },
                 title: '함께 활동한 사람',
-                subtitle: controller.project.value.looper.isEmpty
+                subtitle: controller.project.value.members.isEmpty
                     ? '함께 활동한 사람이 없어요'
-                    : controller.project.value.looper
+                    : controller.project.value.members
                         .map((user) => user.realName)
                         .toList()
                         .join(', '),
               ),
-            ),
-            UpdateProjectTileWidget(
-              hoverTag: '대표사진',
-              isSubtitleExist: false,
-              onTap: () async {
-                projectthumbnailinput();
-                Get.to(() => ProjectAddThumbnailScreen(
-                      projectid: projectid,
-                      screenType: Screentype.update,
-                    ));
-              },
-              title: '대표 사진 변경',
-              subtitle: '',
             ),
           ],
         ));
@@ -154,12 +105,7 @@ class ProjectModifyScreen extends StatelessWidget {
 
   void projectnameinput() {
     projectaddcontroller.projectnamecontroller.text =
-        controller.project.value.projectName;
-  }
-
-  void projectintroinput() {
-    projectaddcontroller.introcontroller.text =
-        controller.project.value.introduction ?? '';
+        controller.project.value.careerName;
   }
 
   void projectdateinput() {
@@ -175,38 +121,18 @@ class ProjectModifyScreen extends StatelessWidget {
     }
   }
 
-  void projecttaginput() {
-    tagController.selectedtaglist.clear();
-    for (var tag in controller.project.value.projectTag) {
-      tagController.selectedtaglist.add(SelectedTagWidget(
-        id: tag.tagId,
-        text: tag.tag,
-        selecttagtype: SelectTagtype.interesting,
-        tagtype: Tagtype.project,
-      ));
-    }
-  }
-
   void projectlooperinput() {
-    if (controller.project.value.looper != null) {
+    if (controller.project.value.members != null) {
       projectaddcontroller.selectedpersontaglist.clear();
-      for (var user in controller.project.value.looper) {
+      for (var user in controller.project.value.members) {
         projectaddcontroller.selectedpersontaglist.add(SelectedTagWidget(
           id: user.userid,
           text: user.realName,
           selecttagtype: SelectTagtype.person,
-          tagtype: Tagtype.project,
+          tagtype: Tagtype.Posting,
         ));
       }
     }
-  }
-
-  void projectthumbnailinput() {
-    projectnameinput();
-    projectdateinput();
-    projectaddcontroller.projecturlthumbnail =
-        controller.project.value.thumbnail;
-    projectaddcontroller.projectthumbnail.value = File("");
   }
 }
 

@@ -7,6 +7,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/screen/posting_add_content_screen.dart';
+import 'package:loopus/screen/posting_add_tag_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
@@ -43,8 +44,9 @@ class PostingAddNameScreen extends StatelessWidget {
                               postingAddController.isPostingContentEmpty.value =
                                   false;
 
-                              Get.to(() => PostingAddContentScreen(
-                                    project_id: project_id,
+                              Get.to(() => PostingAddTagScreen(
+                                    projectId: project_id,
+                                    screenType: Screentype.add,
                                   ));
                             },
                       child: Text(
@@ -94,7 +96,7 @@ class PostingAddNameScreen extends StatelessWidget {
                           ),
                   ),
           ],
-          title: '포스팅 제목',
+          title: '포스팅 내용',
         ),
         body: Padding(
           padding: const EdgeInsets.fromLTRB(
@@ -110,7 +112,7 @@ class PostingAddNameScreen extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: '포스팅 제목',
+                      text: '포스팅 내용',
                       style: kSubTitle2Style.copyWith(
                         color: mainblue,
                       ),
@@ -132,8 +134,8 @@ class PostingAddNameScreen extends StatelessWidget {
               CustomTextField(
                   counterText: null,
                   maxLength: 60,
-                  textController: postingAddController.titlecontroller,
-                  hintText: '포스팅 제목...',
+                  textController: postingAddController.textcontroller,
+                  hintText: '포스팅 내용...',
                   validator: null,
                   obscureText: false,
                   maxLines: 2),

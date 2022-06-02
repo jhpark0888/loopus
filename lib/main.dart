@@ -15,7 +15,7 @@ import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/firebase_options.dart';
-import 'package:loopus/screen/project_add_title_screen.dart';
+import 'package:loopus/screen/posting_add_images_screen.dart';
 
 import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';

@@ -66,13 +66,13 @@ class BookmarkWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  child: Text("${item.title}", style: kSubTitle4Style),
+                  child: Text(item.content, style: kSubTitle4Style),
                 ),
                 SizedBox(
                   height: 16,
                 ),
                 Text(
-                  "${item.project!.projectName}",
+                  item.project!.careerName,
                   style: kBody2Style.copyWith(
                     color: mainblack.withOpacity(
                       0.6,
@@ -227,12 +227,12 @@ class BookmarkWidget extends StatelessWidget {
           userid: item.userid,
           isuser: item.isuser,
           postid: item.id,
-          title: item.title,
+          title: item.content,
           realName: item.user.realName,
           department: item.user.department,
           postDate: item.date,
           profileImage: item.user.profileImage,
-          thumbNail: item.thumbnail,
+          thumbNail: item.images[0],
           likecount: item.likeCount,
           isLiked: item.isLiked,
           isMarked: item.isMarked),

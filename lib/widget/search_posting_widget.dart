@@ -32,12 +32,12 @@ class SearchPostingWidget extends StatelessWidget {
                 userid: post.userid,
                 isuser: post.isuser,
                 postid: post.id,
-                title: post.title,
+                title: post.content,
                 realName: post.user.realName,
                 department: post.user.department,
                 postDate: post.date,
                 profileImage: post.user.profileImage,
-                thumbNail: post.thumbnail,
+                thumbNail: post.images[0],
                 likecount: post.likeCount,
                 isLiked: post.isLiked,
                 isMarked: post.isMarked),
@@ -63,7 +63,7 @@ class SearchPostingWidget extends StatelessWidget {
               children: [
                 Container(
                   child: Text(
-                    "${post.title}",
+                    post.content,
                     style: kSubTitle4Style,
                   ),
                 ),
@@ -71,7 +71,7 @@ class SearchPostingWidget extends StatelessWidget {
                   height: 16,
                 ),
                 Text(
-                  "${post.project!.projectName}",
+                  post.project!.careerName,
                   style: kBody2Style.copyWith(
                     color: mainblack.withOpacity(
                       0.6,

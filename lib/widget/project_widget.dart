@@ -58,33 +58,33 @@ class ProjectWidget extends StatelessWidget {
               decoration: kCardStyle,
               child: Column(
                 children: [
-                  type == ProjectWidgetType.profile
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            topRight: Radius.circular(8),
-                          ),
-                          child: AspectRatio(
-                            aspectRatio: 2 / 1,
-                            child: Obx(
-                              () => Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: project.value.thumbnail != null
-                                        ? NetworkImage(
-                                            project.value.thumbnail!,
-                                          ) as ImageProvider
-                                        : AssetImage(
-                                            "assets/illustrations/default_image.png",
-                                          ),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(),
+                  // type == ProjectWidgetType.profile
+                  //     ? ClipRRect(
+                  //         borderRadius: BorderRadius.only(
+                  //           topLeft: Radius.circular(8),
+                  //           topRight: Radius.circular(8),
+                  //         ),
+                  //         child: AspectRatio(
+                  //           aspectRatio: 2 / 1,
+                  //           child: Obx(
+                  //             () => Container(
+                  //               decoration: BoxDecoration(
+                  //                 image: DecorationImage(
+                  //                   image: project.value.thumbnail != null
+                  //                       ? NetworkImage(
+                  //                           project.value.thumbnail!,
+                  //                         ) as ImageProvider
+                  //                       : AssetImage(
+                  //                           "assets/illustrations/default_image.png",
+                  //                         ),
+                  //                   fit: BoxFit.cover,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       )
+                  //     : Container(),
                   ClipRRect(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),
@@ -101,7 +101,7 @@ class ProjectWidget extends StatelessWidget {
                         children: [
                           Obx(
                             () => Text(
-                              project.value.projectName,
+                              project.value.careerName,
                               style: kHeaderH2Style.copyWith(fontSize: 18),
                             ),
                           ),
@@ -186,23 +186,6 @@ class ProjectWidget extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              Row(children: [
-                                // SvgPicture.asset(
-                                //     "assets/icons/Favorite_Active.svg"),
-                                Text(
-                                  '관심도',
-                                  style: kBody2Style,
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Obx(
-                                  () => Text(
-                                    "${project.value.like_count!.value}",
-                                    style: kButtonStyle,
-                                  ),
-                                ),
-                              ])
                             ],
                           )
                         ],

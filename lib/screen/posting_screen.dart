@@ -165,11 +165,11 @@ class PostingScreen extends StatelessWidget {
                     isuser == 1
                         ? IconButton(
                             onPressed: () {
-                              Get.to(
-                                () => PostingModifyScreen(
-                                  postid: controller.postid,
-                                ),
-                              );
+                              // Get.to(
+                              //   () => PostingModifyScreen(
+                              //     postid: controller.postid,
+                              //   ),
+                              // );
                             },
                             icon: SvgPicture.asset('assets/icons/Edit.svg'),
                           )
@@ -184,7 +184,7 @@ class PostingScreen extends StatelessWidget {
                                       leftText: '취소',
                                       rightText: '삭제',
                                       title:
-                                          '<${controller.post.value.title}> 포스팅을 삭제하시겠어요?',
+                                          '<${controller.post.value.content}> 포스팅을 삭제하시겠어요?',
                                       content: '삭제한 포스팅은 복구할 수 없어요',
                                       leftFunction: () => Get.back(),
                                       rightFunction: () async {
@@ -215,7 +215,7 @@ class PostingScreen extends StatelessWidget {
                                       leftText: '취소',
                                       rightText: '신고',
                                       title:
-                                          '정말 <${controller.post.value.title}> 포스팅을 신고하시겠어요?',
+                                          '정말 <${controller.post.value.content}> 포스팅을 신고하시겠어요?',
                                       content: '관리자가 검토 절차를 거칩니다',
                                       leftFunction: () => Get.back(),
                                       rightFunction: () {
@@ -251,12 +251,12 @@ class PostingScreen extends StatelessWidget {
                           )
                         : _MyAppSpace(
                             id: controller.post.value.id,
-                            title: controller.post.value.title,
+                            title: controller.post.value.content,
                             realname: realName,
                             profileImage: profileImage,
                             postDate: controller.post.value.date,
                             department: department,
-                            thumbnail: controller.post.value.thumbnail,
+                            thumbnail: controller.post.value.images[0],
                             isuser: isuser,
                             userid: userid,
                           ),
@@ -291,16 +291,16 @@ class PostingScreen extends StatelessWidget {
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: [
-                                      Obx(
-                                        () => Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 24,
-                                            ),
-                                            child: Column(
-                                              children: controller
-                                                  .postcontentlist.value,
-                                            )),
-                                      ),
+                                      // Obx(
+                                      //   () => Padding(
+                                      //       padding: const EdgeInsets.symmetric(
+                                      //         vertical: 24,
+                                      //       ),
+                                      //       child: Column(
+                                      //         children: controller
+                                      //             .postcontentlist.value,
+                                      //       )),
+                                      // ),
                                       TextButton(
                                         onPressed: tapOtherPosting,
                                         child: Text(

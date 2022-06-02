@@ -7,51 +7,45 @@ class Project {
   Project(
       {required this.id,
       required this.userid,
-      required this.projectName,
-      this.thumbnail,
-      this.introduction,
+      this.field,
+      this.allcareerpersent,
+      required this.careerName,
       this.startDate,
       this.endDate,
-      required this.post,
-      required this.projectTag,
-      required this.looper,
+      required this.posts,
+      required this.members,
       this.post_count,
-      this.like_count,
       required this.is_user,
+      this.isTop,
       required this.user});
 
   int id;
   int? userid;
-  String projectName;
-  String? thumbnail;
-  String? introduction;
+  int? allcareerpersent;
+  String careerName;
+  String? field;
   DateTime? startDate;
   DateTime? endDate;
-  RxList<Post> post;
-  List<Tag> projectTag;
-  List<User> looper;
+  RxList<Post> posts;
+  List<User> members;
   RxInt? post_count;
-  RxInt? like_count;
-  int is_user;
   User? user;
+  bool? isTop;
+  int is_user;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
       id: json["project_id"] ?? json["id"],
       userid: json["user_id"],
-      projectName: json["project_name"],
-      thumbnail: json["pj_thumbnail"],
-      introduction: json["introduction"],
+      careerName: json["project_name"],
       startDate: json["start_date"] != null
           ? DateTime.parse(json["start_date"])
           : null,
       endDate:
           json["end_date"] != null ? DateTime.parse(json["end_date"]) : null,
-      post: json["post"] != null
+      posts: json["post"] != null
           ? RxList<Post>.from(json["post"].map((x) => Post.fromJson(x)))
           : <Post>[].obs,
-      projectTag:
-          List<Tag>.from(json["project_tag"].map((x) => Tag.fromJson(x))),
-      looper: json["looper"] != null
+      members: json["looper"] != null
           ? List<User>.from(
               json["looper"].map((x) => User.fromJson(x["profile"])))
           : [],
@@ -60,28 +54,22 @@ class Project {
           : json["post"] != null
               ? RxInt(List.from(json["post"]).length)
               : RxInt(0),
-      like_count: json["count"] != null
-          ? RxInt(json["count"]["like_count"])
-          : RxInt(json["like_count"] ?? 0),
       is_user: json['is_user'] ?? 0,
       user: json["profile"] != null ? User.fromJson(json["profile"]) : null);
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "user_id": userid,
-        "project_name": projectName,
-        "thumbnail": thumbnail,
-        "introduction": introduction,
+        "careerName": careerName,
         "start_date": startDate,
         "end_date": endDate,
-        "post":
-            post != null ? List<dynamic>.from(post.map((x) => x.toJson())) : [],
-        "looper": looper != null
-            ? List<dynamic>.from(post.map((x) => x.toJson()))
+        "posts": posts != null
+            ? List<dynamic>.from(posts.map((x) => x.toJson()))
             : [],
-        "project_tag": List<dynamic>.from(projectTag.map((x) => x.toJson())),
+        "members": members != null
+            ? List<dynamic>.from(posts.map((x) => x.toJson()))
+            : [],
         "post_count": post_count,
-        "like_count": like_count,
         "is_user": is_user,
       };
 }

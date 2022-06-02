@@ -23,7 +23,7 @@ class ProjectPeopleScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 40),
           child: Column(
-              children: controller.project.value.looper
+              children: controller.project.value.members
                   .map((user) => PersonTileWidget(user: user))
                   .toList()),
         ),

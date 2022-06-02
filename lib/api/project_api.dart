@@ -33,7 +33,7 @@ Future addproject() async {
   } else {
     final LocalDataController _localDataController =
         Get.put(LocalDataController());
-    TagController tagController = Get.find(tag: Tagtype.project.toString());
+    TagController tagController = Get.find(tag: Tagtype.Posting.toString());
     final GAController _gaController = Get.put(GAController());
 
     String? token = await const FlutterSecureStorage().read(key: "token");
@@ -178,7 +178,7 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
     ModalController.to.showdisconnectdialog();
   } else {
     ProjectAddController projectAddController = Get.find();
-    TagController tagController = Get.find(tag: Tagtype.project.toString());
+    TagController tagController = Get.find(tag: Tagtype.Posting.toString());
 
     String? token = await const FlutterSecureStorage().read(key: "token");
     Uri uri = Uri.parse(

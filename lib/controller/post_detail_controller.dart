@@ -22,18 +22,18 @@ class PostingDetailController extends GetxController {
   Rx<Post> post = Post(
           id: 0,
           userid: 0,
-          thumbnail: '',
-          title: '',
+          content: '',
+          images: [],
+          tags: [],
           date: DateTime.now(),
           project: null,
-          contents: [],
           likeCount: 0.obs,
           isLiked: 0.obs,
           isMarked: 0.obs,
           isuser: 0,
           user: User.defaultuser())
       .obs;
-  RxList<PostContentWidget> postcontentlist = <PostContentWidget>[].obs;
+  // RxList<PostContentWidget> postcontentlist = <PostContentWidget>[].obs;
   List<SearchPostingWidget> recommendposts = <SearchPostingWidget>[];
 
   // Future<void> loadPostingContent() async {

@@ -72,45 +72,46 @@ Future<void> getProjectlist(var userId, int isuser) async {
 
   var uri = Uri.parse("$serverUri/user_api/project?id=$userId");
 
-  try {
-    http.Response response =
-        await http.get(uri, headers: {"Authorization": "Token $token"});
+  // try {
+  http.Response response =
+      await http.get(uri, headers: {"Authorization": "Token $token"});
 
-    if (response.statusCode == 200) {
-      List responseBody = json.decode(utf8.decode(response.bodyBytes));
-      List<Project> projectlist =
-          responseBody.map((project) => Project.fromJson(project)).toList();
+  print("프로젝트 리스트 get: ${response.statusCode}");
+  if (response.statusCode == 200) {
+    List responseBody = json.decode(utf8.decode(response.bodyBytes));
+    List<Project> projectlist =
+        responseBody.map((project) => Project.fromJson(project)).toList();
 
-      if (isuser == 1) {
-        ProfileController.to.myProjectList(projectlist);
-        ProfileController.to.myprofilescreenstate(ScreenState.success);
-      } else {
-        Get.find<OtherProfileController>(tag: userId.toString())
-            .otherProjectList(projectlist
-                .map((project) => ProjectWidget(
-                      project: project.obs,
-                      type: ProjectWidgetType.profile,
-                    ))
-                .toList());
-        Get.find<OtherProfileController>(tag: userId.toString())
-            .otherprofilescreenstate(ScreenState.success);
-      }
-      return;
+    if (isuser == 1) {
+      ProfileController.to.myProjectList(projectlist);
+      ProfileController.to.myprofilescreenstate(ScreenState.success);
     } else {
-      if (isuser == 1) {
-        ProfileController.to.myprofilescreenstate(ScreenState.error);
-      } else {
-        Get.find<OtherProfileController>(tag: userId.toString())
-            .otherprofilescreenstate(ScreenState.error);
-      }
-      return Future.error(response.statusCode);
+      Get.find<OtherProfileController>(tag: userId.toString())
+          .otherProjectList(projectlist
+              .map((project) => ProjectWidget(
+                    project: project.obs,
+                    type: ProjectWidgetType.profile,
+                  ))
+              .toList());
+      Get.find<OtherProfileController>(tag: userId.toString())
+          .otherprofilescreenstate(ScreenState.success);
     }
-  } on SocketException {
-    ErrorController.to.isServerClosed(true);
-  } catch (e) {
-    print(e);
-    // ErrorController.to.isServerClosed(true);
+    return;
+  } else {
+    if (isuser == 1) {
+      ProfileController.to.myprofilescreenstate(ScreenState.error);
+    } else {
+      Get.find<OtherProfileController>(tag: userId.toString())
+          .otherprofilescreenstate(ScreenState.error);
+    }
+    return Future.error(response.statusCode);
   }
+  // } on SocketException {
+  //   ErrorController.to.isServerClosed(true);
+  // } catch (e) {
+  //   print(e);
+  //   // ErrorController.to.isServerClosed(true);
+  // }
 }
 
 enum ProfileUpdateType {

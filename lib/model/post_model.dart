@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:loopus/model/project_model.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
 
 import '../constant.dart';
@@ -8,26 +9,26 @@ class Post {
   Post(
       {required this.id,
       required this.userid,
-      required this.thumbnail,
-      required this.title,
+      required this.content,
+      required this.images,
+      required this.tags,
       required this.date,
       required this.project,
-      required this.contents,
       required this.likeCount,
       required this.isLiked,
-      this.content_summary,
       required this.isMarked,
       required this.isuser,
       required this.user});
 
   int id;
   int userid;
-  var thumbnail;
-  String title;
-  List<PostContent>? contents;
+  String content;
+  List<String> images;
+  // List<Scrap> scraps 입력값 10개까지
+  // List<Comment> comments 댓글
+  List<Tag> tags;
   DateTime date;
   Project? project;
-  String? content_summary;
   RxInt likeCount;
   RxInt isLiked;
   RxInt isMarked;
@@ -37,24 +38,16 @@ class Post {
   factory Post.fromJson(Map<String, dynamic> json) => Post(
         id: json["id"],
         userid: json["user_id"],
-        thumbnail: json["thumbnail"],
-        title: json["title"],
+        content: json["title"],
+        images: [],
+        tags: [],
         date: DateTime.parse(json["date"]),
         project:
             json["project"] != null ? Project.fromJson(json["project"]) : null,
         likeCount: RxInt(json["like_count"]),
         isLiked: json["is_liked"] != null ? RxInt(json["is_liked"]) : RxInt(0),
-        contents: json["contents"] != null
-            ? List<Map<String, dynamic>>.from(json["contents"])
-                .map((content) => PostContent.fromJson(content))
-                .toList()
-            : null,
         isMarked:
             json["is_marked"] != null ? RxInt(json["is_marked"]) : RxInt(0),
-        content_summary: json["contents"] != null
-            ? contentsummary(
-                List<Map<String, dynamic>>.from(json["contents"].map((x) => x)))
-            : null,
         isuser: json["is_user"] ?? 0,
         user: User.fromJson(json["profile"]),
       );
@@ -62,8 +55,7 @@ class Post {
   Map<String, dynamic> toJson() => {
         "id": id,
         "user_id": userid,
-        "thumbnail": thumbnail == null ? null : thumbnail,
-        "title": title,
+        "title": content,
         "date": date.toIso8601String(),
         "project": project!.toJson(),
         "like_count": likeCount,

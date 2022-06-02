@@ -39,7 +39,7 @@ class ProjectScreen extends StatelessWidget {
 
   int projectlikecount() {
     int likecount = 0;
-    controller.project.value.post.forEach((post) {
+    controller.project.value.posts.forEach((post) {
       likecount += post.likeCount.value;
     });
     return likecount;
@@ -48,20 +48,20 @@ class ProjectScreen extends StatelessWidget {
   Widget looppersonlist() {
     double? width;
     List<Widget> personlist = [];
-    if (controller.project.value.looper.length == 1) {
+    if (controller.project.value.members.length == 1) {
       personlist.add(ProjectLooperImage(
-          user: controller.project.value.looper.first, index: 0));
+          user: controller.project.value.members.first, index: 0));
       width = 30;
-    } else if (controller.project.value.looper.length == 2) {
-      for (int i = 0; i < controller.project.value.looper.length; i++) {
+    } else if (controller.project.value.members.length == 2) {
+      for (int i = 0; i < controller.project.value.members.length; i++) {
         personlist.add(ProjectLooperImage(
-            user: controller.project.value.looper[i], index: i));
+            user: controller.project.value.members[i], index: i));
       }
       width = 50;
-    } else if (controller.project.value.looper.length >= 3) {
+    } else if (controller.project.value.members.length >= 3) {
       for (int i = 0; i < 3; i++) {
         personlist.add(ProjectLooperImage(
-            user: controller.project.value.looper[i], index: i));
+            user: controller.project.value.members[i], index: i));
       }
       width = 70;
     }
@@ -75,17 +75,17 @@ class ProjectScreen extends StatelessWidget {
 
   Widget looppersonname() {
     List<InlineSpan>? textspanlist = [];
-    if (controller.project.value.looper.length == 1) {
+    if (controller.project.value.members.length == 1) {
       textspanlist.add(
         TextSpan(
           recognizer: TapGestureRecognizer()
             ..onTap = () {
               Get.to(() => OtherProfileScreen(
-                  userid: controller.project.value.looper.first.userid,
+                  userid: controller.project.value.members.first.userid,
                   isuser: 0,
-                  realname: controller.project.value.looper.first.realName));
+                  realname: controller.project.value.members.first.realName));
             },
-          text: controller.project.value.looper.first.realName,
+          text: controller.project.value.members.first.realName,
           style: kButtonStyle,
         ),
       );
@@ -94,18 +94,18 @@ class ProjectScreen extends StatelessWidget {
           text: '님이',
         ),
       );
-    } else if (controller.project.value.looper.length == 2) {
-      for (int i = 0; i < controller.project.value.looper.length; i++) {
+    } else if (controller.project.value.members.length == 2) {
+      for (int i = 0; i < controller.project.value.members.length; i++) {
         textspanlist.add(
           TextSpan(
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 Get.to(() => OtherProfileScreen(
-                    userid: controller.project.value.looper[i].userid,
+                    userid: controller.project.value.members[i].userid,
                     isuser: 0,
-                    realname: controller.project.value.looper[i].realName));
+                    realname: controller.project.value.members[i].realName));
               },
-            text: controller.project.value.looper[i].realName,
+            text: controller.project.value.members[i].realName,
             style: kButtonStyle,
           ),
         );
@@ -127,18 +127,18 @@ class ProjectScreen extends StatelessWidget {
           text: '이',
         ),
       );
-    } else if (controller.project.value.looper.length >= 3) {
+    } else if (controller.project.value.members.length >= 3) {
       for (int i = 0; i < 2; i++) {
         textspanlist.add(
           TextSpan(
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 Get.to(() => OtherProfileScreen(
-                    userid: controller.project.value.looper[i].userid,
+                    userid: controller.project.value.members[i].userid,
                     isuser: 0,
-                    realname: controller.project.value.looper[i].realName));
+                    realname: controller.project.value.members[i].realName));
               },
-            text: controller.project.value.looper[i].realName,
+            text: controller.project.value.members[i].realName,
             style: kButtonStyle,
           ),
         );
@@ -161,7 +161,7 @@ class ProjectScreen extends StatelessWidget {
         ),
       );
       textspanlist.add(TextSpan(
-        text: '${controller.project.value.looper.length - 2}명이',
+        text: '${controller.project.value.members.length - 2}명이',
         style: kButtonStyle,
       ));
     }
@@ -219,9 +219,9 @@ class ProjectScreen extends StatelessWidget {
                                 leftText: '취소',
                                 rightText: '삭제',
                                 title:
-                                    '<${controller.project.value.projectName}> 활동을 삭제하시겠어요?',
+                                    '<${controller.project.value.careerName}> 활동을 삭제하시겠어요?',
                                 content:
-                                    '작성한 ${controller.project.value.post.length}개의 포스팅도 삭제됩니다',
+                                    '작성한 ${controller.project.value.posts.length}개의 포스팅도 삭제됩니다',
                                 leftFunction: () => Get.back(),
                                 rightFunction: () {
                                   getbacks(2);
@@ -247,7 +247,7 @@ class ProjectScreen extends StatelessWidget {
                                 leftText: '취소',
                                 rightText: '신고',
                                 title:
-                                    '<${controller.project.value.projectName}> 활동을 신고하시겠어요?',
+                                    '<${controller.project.value.careerName}> 활동을 신고하시겠어요?',
                                 content: '관리자가 검토 절차를 거칩니다',
                                 leftFunction: () => Get.back(),
                                 rightFunction: () {});
@@ -320,7 +320,7 @@ class ProjectScreen extends StatelessWidget {
                                     children: [
                                       Obx(
                                         () => Text(
-                                          controller.project.value.projectName,
+                                          controller.project.value.careerName,
                                           style: kHeaderH2Style,
                                         ),
                                       ),
@@ -430,11 +430,11 @@ class ProjectScreen extends StatelessWidget {
                                         ),
                                       ),
                                       if (controller
-                                          .project.value.looper.isNotEmpty)
+                                          .project.value.members.isNotEmpty)
                                         const SizedBox(
                                           height: 20,
                                         ),
-                                      controller.project.value.looper.isEmpty
+                                      controller.project.value.members.isEmpty
                                           ? const SizedBox.shrink()
                                           : GestureDetector(
                                               onTap: () {
@@ -468,74 +468,6 @@ class ProjectScreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,
                                     children: [
-                                      const Text('활동 소개',
-                                          style: kSubTitle2Style),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      Obx(
-                                        () => controller.project.value
-                                                    .introduction !=
-                                                ''
-                                            ? Text(
-                                                controller.project.value
-                                                        .introduction ??
-                                                    '',
-                                                style: kBody1Style,
-                                              )
-                                            : Text(
-                                                '-',
-                                                style: kBody1Style.copyWith(
-                                                  color: mainblack
-                                                      .withOpacity(0.6),
-                                                ),
-                                              ),
-                                      ),
-                                      const SizedBox(
-                                        height: 24,
-                                      ),
-                                      const Text(
-                                        '활동 태그',
-                                        style: kSubTitle2Style,
-                                      ),
-                                      const SizedBox(
-                                        height: 12,
-                                      ),
-                                      Obx(
-                                        () => Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: controller
-                                              .project.value.projectTag
-                                              .map(
-                                                (tag) => Row(
-                                                  children: [
-                                                    Tagwidget(
-                                                      tag: tag,
-                                                      fontSize: 14,
-                                                    ),
-                                                    controller.project.value
-                                                                .projectTag
-                                                                .indexOf(tag) !=
-                                                            controller
-                                                                    .project
-                                                                    .value
-                                                                    .projectTag
-                                                                    .length -
-                                                                1
-                                                        ? const SizedBox(
-                                                            width: 8,
-                                                          )
-                                                        : Container()
-                                                  ],
-                                                ),
-                                              )
-                                              .toList(),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 24,
-                                      ),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -545,7 +477,7 @@ class ProjectScreen extends StatelessWidget {
                                             style: kSubTitle2Style,
                                           ),
                                           controller.project.value.is_user == 1
-                                              ? controller.project.value.post
+                                              ? controller.project.value.posts
                                                       .isNotEmpty
                                                   ? GestureDetector(
                                                       behavior: HitTestBehavior
@@ -574,10 +506,10 @@ class ProjectScreen extends StatelessWidget {
                                       ),
                                       Obx(
                                         () => Column(
-                                          children: controller
-                                                  .project.value.post.isNotEmpty
+                                          children: controller.project.value
+                                                  .posts.isNotEmpty
                                               ? List.from(controller
-                                                  .project.value.post
+                                                  .project.value.posts
                                                   .map((post) =>
                                                       ProjectPostingWidget(
                                                         item: post.obs,

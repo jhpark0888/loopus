@@ -31,11 +31,20 @@ class ImageController extends GetxController {
         isThumbnailImagePickerLoading.value = true;
 
         return await postingthumbnailcropImage(pickedFile);
-      } else if (type == ImageType.post) {
-        isPostingImagePickerLoading.value = true;
-
-        return await postingcropImage(pickedFile);
       }
+    }
+  }
+
+  Future<List<File>> getMultiImage(ImageType type) async {
+    List<XFile>? pickedFiles = await ImagePicker().pickMultiImage();
+    print('pickedFile : $pickedFiles');
+    isProfileImagePickerLoading.value = false;
+    if (pickedFiles != null) {
+      isPostingImagePickerLoading.value = true;
+
+      return await postingcropImage(pickedFiles);
+    } else {
+      return [];
     }
   }
 
@@ -90,30 +99,41 @@ class ImageController extends GetxController {
     }
   }
 
-  Future<File?> postingcropImage(pickimage) async {
-    File? croppedFile = await _imageCropper.cropImage(
-        maxWidth: 1920,
-        maxHeight: 1080,
-        compressQuality: 50,
-        sourcePath: pickimage.path,
-        androidUiSettings: const AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: mainblue,
-            toolbarWidgetColor: mainWhite,
-            lockAspectRatio: false),
-        iosUiSettings: const IOSUiSettings(
-          // resetAspectRatioEnabled: false,
-          aspectRatioLockDimensionSwapEnabled: true,
-          aspectRatioLockEnabled: true,
-          aspectRatioPickerButtonHidden: false,
-          minimumAspectRatio: 1.0,
-        ));
-    if (croppedFile != null) {
-      // isImagePickerLoading.value = false;
-      print(croppedFile);
-      return croppedFile;
-    } else {
-      isPostingImagePickerLoading.value = false;
+  Future<List<File>> postingcropImage(pickimages) async {
+    List<File> images = [];
+    for (XFile image in pickimages) {
+      File? croppedFile = await _imageCropper.cropImage(
+          aspectRatioPresets: [
+            CropAspectRatioPreset.ratio16x9,
+            CropAspectRatioPreset.ratio3x2,
+            CropAspectRatioPreset.ratio4x3,
+            CropAspectRatioPreset.ratio5x4
+          ],
+          maxWidth: 1920,
+          maxHeight: 1080,
+          compressQuality: 50,
+          sourcePath: image.path,
+          androidUiSettings: const AndroidUiSettings(
+              toolbarTitle: 'Cropper',
+              toolbarColor: mainblue,
+              toolbarWidgetColor: mainWhite,
+              lockAspectRatio: false),
+          iosUiSettings: const IOSUiSettings(
+            // resetAspectRatioEnabled: false,
+            aspectRatioLockDimensionSwapEnabled: true,
+            aspectRatioLockEnabled: true,
+            aspectRatioPickerButtonHidden: false,
+            minimumAspectRatio: 1.0,
+          ));
+      if (croppedFile != null) {
+        // isImagePickerLoading.value = false;
+        print(croppedFile);
+        images.add(croppedFile);
+      } else {
+        isPostingImagePickerLoading.value = false;
+      }
     }
+    isPostingImagePickerLoading.value = false;
+    return images;
   }
 }

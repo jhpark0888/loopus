@@ -22,7 +22,7 @@ class ProjectAddTagScreen extends StatelessWidget {
     required this.screenType,
   }) : super(key: key);
   final ProjectAddController projectaddcontroller = Get.find();
-  final TagController tagController = Get.find(tag: Tagtype.project.toString());
+  final TagController tagController = Get.find(tag: Tagtype.Posting.toString());
   final Screentype screenType;
   int? projectid;
 
@@ -155,7 +155,7 @@ class ProjectAddTagScreen extends StatelessWidget {
               ];
             },
             body: TagSearchWidget(
-              tagtype: Tagtype.project,
+              tagtype: Tagtype.Posting,
             )),
       ),
     );

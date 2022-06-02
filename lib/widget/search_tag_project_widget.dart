@@ -51,7 +51,7 @@ class SearchTagProjectWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "${project.projectName}",
+                  project.careerName,
                   style: kHeaderH1Style.copyWith(fontSize: 18),
                 ),
                 const SizedBox(
@@ -153,18 +153,6 @@ class SearchTagProjectWidget extends StatelessWidget {
                           ),
                           Text(
                             "${project.post_count}",
-                            style: kButtonStyle,
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          // Text('관심도'),
-                          SvgPicture.asset("assets/icons/Favorite_Active.svg"),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                            "${project.like_count}",
                             style: kButtonStyle,
                           ),
                         ],

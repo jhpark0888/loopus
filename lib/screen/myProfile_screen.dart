@@ -14,6 +14,7 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
+import 'package:loopus/screen/posting_add_images_screen.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
@@ -568,6 +569,27 @@ class MyProfileScreen extends StatelessWidget {
                                                   fontSize: 10,
                                                   color: mainblue),
                                             ),
+                                            CustomExpandedButton(
+                                              onTap: () {
+                                                // Get.to(
+                                                //   () =>
+                                                //       ProjectAddTitleScreen(
+                                                //     screenType:
+                                                //         Screentype.add,
+                                                //   ),
+                                                // );
+                                                Get.to(
+                                                  () => PostingAddImagesScreen(
+                                                    project_id: 1,
+                                                    route: PostaddRoute.project,
+                                                  ),
+                                                );
+                                              },
+                                              isBlue: true,
+                                              title: '첫번째 활동 추가하기',
+                                              buttonTag: '첫번째 활동 추가하기',
+                                              isBig: false,
+                                            )
                                           ],
                                         )
                                       : profileController
@@ -580,66 +602,75 @@ class MyProfileScreen extends StatelessWidget {
                                                   ScreenState.error
                                               ? Container()
                                               : Obx(
-                                                  () =>
-                                                      profileController
+                                                  () => profileController
+                                                          .myProjectList
+                                                          .value
+                                                          .isNotEmpty
+                                                      ? Column(
+                                                          children: profileController
                                                               .myProjectList
-                                                              .value
-                                                              .isNotEmpty
-                                                          ? Column(
-                                                              children: profileController
-                                                                  .myProjectList
-                                                                  .map((project) => ProjectWidget(
+                                                              .map((project) =>
+                                                                  ProjectWidget(
                                                                       project:
                                                                           project
                                                                               .obs,
                                                                       type: ProjectWidgetType
                                                                           .profile))
-                                                                  .toList(),
-                                                            )
-                                                          : Column(
-                                                              children: [
-                                                                Text(
-                                                                  '첫번째 활동을 기록해보세요',
-                                                                  style:
-                                                                      kSubTitle1Style,
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 4,
-                                                                ),
-                                                                Text(
-                                                                  '수업, 과제, 스터디 등 학교 생활과 관련있는\n다양한 경험을 남겨보세요',
-                                                                  style: kBody1Style
-                                                                      .copyWith(
-                                                                    color: mainblack
-                                                                        .withOpacity(
-                                                                            0.6),
-                                                                  ),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 12,
-                                                                ),
-                                                                CustomExpandedButton(
-                                                                  onTap: () {
-                                                                    Get.to(
-                                                                      () =>
-                                                                          ProjectAddTitleScreen(
-                                                                        screenType:
-                                                                            Screentype.add,
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                  isBlue: true,
-                                                                  title:
-                                                                      '첫번째 활동 추가하기',
-                                                                  buttonTag:
-                                                                      '첫번째 활동 추가하기',
-                                                                  isBig: false,
-                                                                )
-                                                              ],
+                                                              .toList(),
+                                                        )
+                                                      : Column(
+                                                          children: [
+                                                            Text(
+                                                              '첫번째 활동을 기록해보세요',
+                                                              style:
+                                                                  kSubTitle1Style,
                                                             ),
+                                                            SizedBox(
+                                                              height: 4,
+                                                            ),
+                                                            Text(
+                                                              '수업, 과제, 스터디 등 학교 생활과 관련있는\n다양한 경험을 남겨보세요',
+                                                              style: kBody1Style
+                                                                  .copyWith(
+                                                                color: mainblack
+                                                                    .withOpacity(
+                                                                        0.6),
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                            SizedBox(
+                                                              height: 12,
+                                                            ),
+                                                            CustomExpandedButton(
+                                                              onTap: () {
+                                                                // Get.to(
+                                                                //   () =>
+                                                                //       ProjectAddTitleScreen(
+                                                                //     screenType:
+                                                                //         Screentype.add,
+                                                                //   ),
+                                                                // );
+                                                                Get.to(
+                                                                  () =>
+                                                                      PostingAddImagesScreen(
+                                                                    project_id:
+                                                                        1,
+                                                                    route: PostaddRoute
+                                                                        .project,
+                                                                  ),
+                                                                );
+                                                              },
+                                                              isBlue: true,
+                                                              title:
+                                                                  '첫번째 활동 추가하기',
+                                                              buttonTag:
+                                                                  '첫번째 활동 추가하기',
+                                                              isBig: false,
+                                                            )
+                                                          ],
+                                                        ),
                                                 )),
                             ),
                           ],

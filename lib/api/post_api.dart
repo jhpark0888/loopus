@@ -18,6 +18,7 @@ import 'package:loopus/controller/likepeople_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
+import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -29,13 +30,14 @@ import '../constant.dart';
 import '../controller/error_controller.dart';
 import '../controller/modal_controller.dart';
 
-Future<void> addposting(int projectId, PostaddRoute route) async {
+Future<HTTPResponse> addposting(int projectId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     ModalController.to.showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     final PostingAddController postingAddController = Get.find();
-    final EditorController editorController = Get.find();
+    TagController tagController = Get.find(tag: Tagtype.Posting.toString());
     final GAController _gaController = Get.put(GAController());
 
     final String? token = await const FlutterSecureStorage().read(key: 'token');
@@ -52,59 +54,16 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
 
     request.headers.addAll(headers);
 
-    if (postingAddController.thumbnail.value.path != '') {
-      var multipartFile = await http.MultipartFile.fromPath(
-          'thumbnail', postingAddController.thumbnail.value.path);
+    for (File image in postingAddController.images) {
+      var multipartFile =
+          await http.MultipartFile.fromPath('image', image.path);
       request.files.add(multipartFile);
+      print(request.files);
     }
 
-    List<Map> postcontent = [];
-
-    for (int i = 0; i < editorController.types.length; i++) {
-      SmartTextType type = editorController.types[i];
-      Map map = {};
-      if (type == SmartTextType.T) {
-        map['type'] = type.name;
-        map['content'] = editorController.textcontrollers[i].text;
-        postcontent.add(map);
-      } else if (type == SmartTextType.H1) {
-        map['type'] = type.name;
-        map['content'] = editorController.textcontrollers[i].text;
-        postcontent.add(map);
-      } else if (type == SmartTextType.H2) {
-        map['type'] = type.name;
-        map['content'] = editorController.textcontrollers[i].text;
-        postcontent.add(map);
-      }
-      // else if (type == SmartTextType.QUOTE) {
-      //   map['type'] = type.name;
-      //   map['content'] = editorController.textcontrollers[i].text;
-      //   postcontent.add(map);
-      // }
-      else if (type == SmartTextType.BULLET) {
-        map['type'] = type.name;
-        map['content'] = editorController.textcontrollers[i].text;
-        postcontent.add(map);
-      } else if (type == SmartTextType.IMAGE) {
-        map['type'] = type.name;
-        map['content'] = 'image';
-        var multipartFile = await http.MultipartFile.fromPath(
-            'image', editorController.imageindex[i]!.path);
-        request.files.add(multipartFile);
-        postcontent.add(map);
-      } else if (type == SmartTextType.LINK) {
-        map['type'] = type.name;
-        map['content'] = editorController.textcontrollers[i].text;
-        map['url'] = editorController.linkindex[i];
-        postcontent.add(map);
-      } else if (type == SmartTextType.IMAGEINFO) {
-        map['type'] = type.name;
-        map['content'] = editorController.textcontrollers[i].text;
-        postcontent.add(map);
-      }
-    }
-    request.fields['title'] = postingAddController.titlecontroller.text;
-    request.fields['contents'] = json.encode(postcontent);
+    request.fields['contents'] = postingAddController.textcontroller.text;
+    request.fields['tag'] = json
+        .encode(tagController.selectedtaglist.map((tag) => tag.text).toList());
 
     try {
       http.StreamedResponse response = await request.send();
@@ -119,30 +78,31 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
         // String responsebody = await response.stream.bytesToString();
         // String responsemap = json.decode(responsebody);
         // print(responsemap);
-        if (route == PostaddRoute.project) {
-          getbacks(3);
-          Get.find<ProjectDetailController>(tag: projectId.toString())
-              .loadProject();
-          Get.to(
-            () => ProjectScreen(
-              projectid: projectId,
-              isuser: 1,
-            ),
-          );
-          ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
-        } else {
-          String responsebody = await response.stream.bytesToString();
-          Map<String, dynamic> responsemap = json.decode(responsebody);
-          Post post = Post.fromJson(responsemap);
-          post.isuser = 1;
-          post.isLiked = 0.obs;
-          post.isMarked = 0.obs;
-          AppController.to.changePageIndex(0);
-          HomeController.to.recommandpostingResult.value.postingitems
-              .insert(0, post);
-          getbacks(5);
-          ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
-        }
+        // if (route == PostaddRoute.project) {
+        //   getbacks(3);
+        //   Get.find<ProjectDetailController>(tag: projectId.toString())
+        //       .loadProject();
+        //   Get.to(
+        //     () => ProjectScreen(
+        //       projectid: projectId,
+        //       isuser: 1,
+        //     ),
+        //   );
+        //   ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
+        // } else {
+        //   String responsebody = await response.stream.bytesToString();
+        //   Map<String, dynamic> responsemap = json.decode(responsebody);
+        //   Post post = Post.fromJson(responsemap);
+        //   post.isuser = 1;
+        //   post.isLiked = 0.obs;
+        //   post.isMarked = 0.obs;
+        //   AppController.to.changePageIndex(0);
+        //   HomeController.to.recommandpostingResult.value.postingitems
+        //       .insert(0, post);
+        //   getbacks(5);
+        //   ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
+        // }
+        return HTTPResponse.success('success');
       } else if (response.statusCode == 400) {
         //!GA
         await _gaController.logPostingCreated(false);
@@ -150,6 +110,7 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
         if (kDebugMode) {
           print("status code : ${response.statusCode} 포스팅 업로드 실패");
         }
+        return HTTPResponse.apiError('False', response.statusCode);
       } else {
         //!GA
         await _gaController.logPostingCreated(false);
@@ -157,13 +118,15 @@ Future<void> addposting(int projectId, PostaddRoute route) async {
         if (kDebugMode) {
           print("status code : ${response.statusCode} 포스팅 업로드 실패");
         }
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError('False', response.statusCode);
       }
     } on SocketException {
       ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }
@@ -191,15 +154,15 @@ Future<HTTPResponse> getposting(int postingid) async {
 
       if (response.statusCode == 200) {
         Map responseBody = json.decode(utf8.decode(response.bodyBytes));
-        controller.post(Post.fromJson(responseBody['posting_info']));
-        controller.postcontentlist(controller.post.value.contents!
-            .map((content) => PostContentWidget(content: content))
-            .toList());
-        controller.recommendposts = List.from(responseBody['recommend_post'])
-            .map((post) => Post.fromJson(post))
-            .toList()
-            .map((posting) => SearchPostingWidget(post: posting))
-            .toList();
+        // controller.post(Post.fromJson(responseBody['posting_info']));
+        // controller.postcontentlist(controller.post.value.contents!
+        //     .map((content) => PostContentWidget(content: content))
+        //     .toList());
+        // controller.recommendposts = List.from(responseBody['recommend_post'])
+        //     .map((post) => Post.fromJson(post))
+        //     .toList()
+        //     .map((posting) => SearchPostingWidget(post: posting))
+        //     .toList();
 
         // Post post = Post.fromJson(responseBody['posting_info']);
         controller.postscreenstate(ScreenState.success);
@@ -254,80 +217,80 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
 
     request.headers.addAll(headers);
 
-    if (updateType == PostingUpdateType.title) {
-      request.fields['title'] = postingAddController.titlecontroller.text;
-    } else if (updateType == PostingUpdateType.contents) {
-      List<Map> postcontent = [];
+    // if (updateType == PostingUpdateType.title) {
+    //   request.fields['title'] = postingAddController.titlecontroller.text;
+    // } else if (updateType == PostingUpdateType.contents) {
+    //   List<Map> postcontent = [];
 
-      for (int i = 0;
-          i < postingAddController.editorController.types.length;
-          i++) {
-        SmartTextType type = postingAddController.editorController.types[i];
-        Map map = {};
-        print(type);
-        print(postingAddController.editorController.textcontrollers[i].text);
-        print(postingAddController.editorController.linkindex[i]);
-        if (type == SmartTextType.T) {
-          map['type'] = type.name;
-          map['content'] =
-              postingAddController.editorController.textcontrollers[i].text;
-          postcontent.add(map);
-        } else if (type == SmartTextType.H1) {
-          map['type'] = type.name;
-          map['content'] =
-              postingAddController.editorController.textcontrollers[i].text;
-          postcontent.add(map);
-        } else if (type == SmartTextType.H2) {
-          map['type'] = type.name;
-          map['content'] =
-              postingAddController.editorController.textcontrollers[i].text;
-          postcontent.add(map);
-        }
-        // else if (type == SmartTextType.QUOTE) {
-        //   map['type'] = type.name;
-        //   map['content'] =
-        //       postingAddController.editorController.textcontrollers[i].text;
-        //   postcontent.add(map);
-        // }
-        else if (type == SmartTextType.BULLET) {
-          map['type'] = type.name;
-          map['content'] =
-              postingAddController.editorController.textcontrollers[i].text;
-          postcontent.add(map);
-        } else if (type == SmartTextType.IMAGE) {
-          if (postingAddController.editorController.imageindex[i] != null) {
-            map['type'] = type.name;
-            map['content'] = 'image';
-            var multipartFile = await http.MultipartFile.fromPath('image',
-                postingAddController.editorController.imageindex[i]!.path);
-            request.files.add(multipartFile);
-          } else {
-            map['type'] = type.name;
-            map['content'] =
-                postingAddController.editorController.urlimageindex[i];
-          }
-          postcontent.add(map);
-        } else if (type == SmartTextType.LINK) {
-          map['type'] = type.name;
-          map['content'] =
-              postingAddController.editorController.textcontrollers[i].text;
-          map['url'] = postingAddController.editorController.linkindex[i];
-          postcontent.add(map);
-        } else if (type == SmartTextType.IMAGEINFO) {
-          map['type'] = type.name;
-          map['content'] =
-              postingAddController.editorController.textcontrollers[i].text;
-          postcontent.add(map);
-        }
-      }
-      request.fields['contents'] = json.encode(postcontent);
-    } else if (updateType == PostingUpdateType.thumbnail) {
-      if (postingAddController.thumbnail.value.path != '') {
-        var multipartFile = await http.MultipartFile.fromPath(
-            'thumbnail', postingAddController.thumbnail.value.path);
-        request.files.add(multipartFile);
-      }
-    }
+    //   for (int i = 0;
+    //       i < postingAddController.editorController.types.length;
+    //       i++) {
+    //     SmartTextType type = postingAddController.editorController.types[i];
+    //     Map map = {};
+    //     print(type);
+    //     print(postingAddController.editorController.textcontrollers[i].text);
+    //     print(postingAddController.editorController.linkindex[i]);
+    //     if (type == SmartTextType.T) {
+    //       map['type'] = type.name;
+    //       map['content'] =
+    //           postingAddController.editorController.textcontrollers[i].text;
+    //       postcontent.add(map);
+    //     } else if (type == SmartTextType.H1) {
+    //       map['type'] = type.name;
+    //       map['content'] =
+    //           postingAddController.editorController.textcontrollers[i].text;
+    //       postcontent.add(map);
+    //     } else if (type == SmartTextType.H2) {
+    //       map['type'] = type.name;
+    //       map['content'] =
+    //           postingAddController.editorController.textcontrollers[i].text;
+    //       postcontent.add(map);
+    //     }
+    //     // else if (type == SmartTextType.QUOTE) {
+    //     //   map['type'] = type.name;
+    //     //   map['content'] =
+    //     //       postingAddController.editorController.textcontrollers[i].text;
+    //     //   postcontent.add(map);
+    //     // }
+    //     else if (type == SmartTextType.BULLET) {
+    //       map['type'] = type.name;
+    //       map['content'] =
+    //           postingAddController.editorController.textcontrollers[i].text;
+    //       postcontent.add(map);
+    //     } else if (type == SmartTextType.IMAGE) {
+    //       if (postingAddController.editorController.imageindex[i] != null) {
+    //         map['type'] = type.name;
+    //         map['content'] = 'image';
+    //         var multipartFile = await http.MultipartFile.fromPath('image',
+    //             postingAddController.editorController.imageindex[i]!.path);
+    //         request.files.add(multipartFile);
+    //       } else {
+    //         map['type'] = type.name;
+    //         map['content'] =
+    //             postingAddController.editorController.urlimageindex[i];
+    //       }
+    //       postcontent.add(map);
+    //     } else if (type == SmartTextType.LINK) {
+    //       map['type'] = type.name;
+    //       map['content'] =
+    //           postingAddController.editorController.textcontrollers[i].text;
+    //       map['url'] = postingAddController.editorController.linkindex[i];
+    //       postcontent.add(map);
+    //     } else if (type == SmartTextType.IMAGEINFO) {
+    //       map['type'] = type.name;
+    //       map['content'] =
+    //           postingAddController.editorController.textcontrollers[i].text;
+    //       postcontent.add(map);
+    //     }
+    //   }
+    //   request.fields['contents'] = json.encode(postcontent);
+    // } else if (updateType == PostingUpdateType.thumbnail) {
+    //   if (postingAddController.thumbnail.value.path != '') {
+    //     var multipartFile = await http.MultipartFile.fromPath(
+    //         'thumbnail', postingAddController.thumbnail.value.path);
+    //     request.files.add(multipartFile);
+    //   }
+    // }
 
     try {
       http.StreamedResponse response = await request.send();
@@ -341,10 +304,10 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
             ProjectDetailController projectDetailController =
                 Get.find<ProjectDetailController>(
                     tag: result.data.project!.id.toString());
-            int postindex = projectDetailController.project.value.post
+            int postindex = projectDetailController.project.value.posts
                 .indexWhere((pjinpost) => pjinpost.id == result.data.id);
-            projectDetailController.project.value.post.removeAt(postindex);
-            projectDetailController.project.value.post
+            projectDetailController.project.value.posts.removeAt(postindex);
+            projectDetailController.project.value.posts
                 .insert(postindex, result.data);
             // int widgetindex = projectDetailController.postinglist.indexWhere(
             //     (postwidget) => postwidget.item.value.id == post.id);
@@ -400,7 +363,7 @@ Future<void> deleteposting(int postid, int projectid) async {
           Get.find<ProjectDetailController>(tag: projectid.toString())
               .project
               .value
-              .post
+              .posts
               .removeWhere((post) => post.id == postid);
           // Get.find<ProjectDetailController>(tag: projectid.toString())
           //     .postinglist

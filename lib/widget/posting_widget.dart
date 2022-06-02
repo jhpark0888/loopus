@@ -59,7 +59,7 @@ class PostingWidget extends StatelessWidget {
                         topLeft: Radius.circular(8),
                         topRight: Radius.circular(8),
                       ),
-                      child: (item.thumbnail == null)
+                      child: (item.images[0] == null)
                           ? Image.asset(
                               "assets/illustrations/default_image.png",
                               height: Get.width / 2 * 1,
@@ -69,7 +69,7 @@ class PostingWidget extends StatelessWidget {
                           : CachedNetworkImage(
                               height: Get.width / 2 * 1,
                               width: Get.width,
-                              imageUrl: item.thumbnail,
+                              imageUrl: item.images[0],
                               placeholder: (context, url) => Container(
                                 color: const Color(0xffe7e7e7),
                               ),
@@ -94,7 +94,7 @@ class PostingWidget extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${item.title}",
+                                    item.content,
                                     style:
                                         kHeaderH2Style.copyWith(fontSize: 18),
                                   ),
@@ -104,7 +104,7 @@ class PostingWidget extends StatelessWidget {
                                   GestureDetector(
                                     onTap: tapProjectname,
                                     child: Text(
-                                      "${item.project!.projectName}",
+                                      item.project!.careerName,
                                       style: kSubTitle2Style.copyWith(
                                         color: mainblack.withOpacity(0.6),
                                       ),
@@ -113,7 +113,7 @@ class PostingWidget extends StatelessWidget {
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  postingTag(),
+                                  // postingTag(),
                                   const SizedBox(
                                     height: 16,
                                   ),
@@ -236,25 +236,25 @@ class PostingWidget extends StatelessWidget {
     );
   }
 
-  Widget postingTag() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: item.project!.projectTag
-          .map((tag) => Row(children: [
-                Tagwidget(
-                  tag: tag,
-                  fontSize: 12,
-                ),
-                item.project!.projectTag.indexOf(tag) !=
-                        item.project!.projectTag.length - 1
-                    ? const SizedBox(
-                        width: 4,
-                      )
-                    : Container()
-              ]))
-          .toList(),
-    );
-  }
+  // Widget postingTag() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.start,
+  //     children: item.project!.projectTag
+  //         .map((tag) => Row(children: [
+  //               Tagwidget(
+  //                 tag: tag,
+  //                 fontSize: 12,
+  //               ),
+  //               item.project!.projectTag.indexOf(tag) !=
+  //                       item.project!.projectTag.length - 1
+  //                   ? const SizedBox(
+  //                       width: 4,
+  //                     )
+  //                   : Container()
+  //             ]))
+  //         .toList(),
+  //   );
+  // }
 
   void tapPosting() {
     Get.to(
@@ -262,12 +262,12 @@ class PostingWidget extends StatelessWidget {
             userid: item.userid,
             isuser: item.isuser,
             postid: item.id,
-            title: item.title,
+            title: item.content,
             realName: item.user.realName,
             department: item.user.department,
             postDate: item.date,
             profileImage: item.user.profileImage,
-            thumbNail: item.thumbnail,
+            thumbNail: item.images[0],
             likecount: item.likeCount,
             isLiked: item.isLiked,
             isMarked: item.isMarked),

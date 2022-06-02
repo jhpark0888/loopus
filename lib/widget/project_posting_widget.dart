@@ -41,12 +41,12 @@ class ProjectPostingWidget extends StatelessWidget {
                 userid: item.value.userid,
                 isuser: isuser,
                 postid: item.value.id,
-                title: item.value.title,
+                title: item.value.content,
                 realName: realname,
                 department: department,
                 postDate: item.value.date,
                 profileImage: profileimage,
-                thumbNail: item.value.thumbnail,
+                thumbNail: item.value.images[0],
                 likecount: item.value.likeCount,
                 isLiked: item.value.isLiked,
                 isMarked: item.value.isMarked),
@@ -68,8 +68,8 @@ class ProjectPostingWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         image: DecorationImage(
-                            image: item.value.thumbnail != null
-                                ? NetworkImage(item.value.thumbnail)
+                            image: item.value.images[0] != null
+                                ? NetworkImage(item.value.images[0])
                                 : const AssetImage(
                                     "assets/illustrations/default_image.png",
                                   ) as ImageProvider,
@@ -81,20 +81,12 @@ class ProjectPostingWidget extends StatelessWidget {
                 ),
                 Obx(
                   () => Text(
-                    item.value.title,
+                    item.value.content,
                     style: kSubTitle1Style,
                   ),
                 ),
                 SizedBox(
                   height: 8,
-                ),
-                Obx(
-                  () => Text(
-                    item.value.content_summary ?? '',
-                    style: kBody1Style,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
                 ),
                 SizedBox(
                   height: 12,
@@ -117,12 +109,7 @@ class ProjectPostingWidget extends StatelessWidget {
                             onTap: () {
                               if (item.value.isLiked.value == 0) {
                                 likeController.isliked(1);
-                                Get.find<ProjectDetailController>(
-                                        tag: item.value.project!.id.toString())
-                                    .project
-                                    .value
-                                    .like_count!
-                                    .value += 1;
+
                                 item.value.likeCount += 1;
                                 HomeController.to.tapLike(
                                     item.value.id, item.value.likeCount.value);
@@ -130,12 +117,7 @@ class ProjectPostingWidget extends StatelessWidget {
                                 item.value.isLiked.value = 1;
                               } else {
                                 likeController.isliked(0);
-                                Get.find<ProjectDetailController>(
-                                        tag: item.value.project!.id.toString())
-                                    .project
-                                    .value
-                                    .like_count!
-                                    .value -= 1;
+
                                 item.value.likeCount -= 1;
                                 HomeController.to.tapunLike(
                                     item.value.id, item.value.likeCount.value);

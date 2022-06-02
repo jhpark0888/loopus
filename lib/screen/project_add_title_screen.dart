@@ -23,8 +23,8 @@ class ProjectAddTitleScreen extends StatelessWidget {
   final Screentype screenType;
   final ProjectAddController projectaddcontroller =
       Get.put(ProjectAddController());
-  TagController tagController = Get.put(TagController(tagtype: Tagtype.project),
-      tag: Tagtype.project.toString());
+  TagController tagController = Get.put(TagController(tagtype: Tagtype.Posting),
+      tag: Tagtype.Posting.toString());
   int? projectid;
 
   @override

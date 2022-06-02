@@ -122,7 +122,7 @@ class CheckBoxPersonWidget extends StatelessWidget {
           text: user.realName,
           id: user.userid,
           selecttagtype: SelectTagtype.person,
-          tagtype: Tagtype.project,
+          tagtype: Tagtype.Posting,
         ),
       );
     }
