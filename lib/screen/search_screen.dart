@@ -18,7 +18,6 @@ import '../widget/error_reload_widget.dart';
 
 class SearchScreen extends StatelessWidget {
   final SearchController _searchController = Get.put(SearchController());
-  final ModalController _modalController = Get.put(ModalController());
   final HomeController homeController = Get.find();
 
   @override
@@ -181,7 +180,7 @@ class SearchScreen extends StatelessWidget {
   }
 }
 
-Widget weekendStudent(ModalController _modalController) {
+Widget weekendStudent() {
   return Padding(
     padding: const EdgeInsets.only(
       right: 16,
@@ -200,7 +199,7 @@ Widget weekendStudent(ModalController _modalController) {
             ),
             GestureDetector(
               onTap: () {
-                _modalController.showCustomDialog(
+                showCustomDialog(
                   '이 주의 활동 수, 포스팅 수, 답변 수 등을 점수로 환산해 매긴 순위입니다 (매 주 금요일마다 갱신됩니다)',
                   1500,
                 );

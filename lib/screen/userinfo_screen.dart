@@ -71,7 +71,9 @@ class UserInfoScreen extends StatelessWidget {
                 ),
                 ListTile(
                   onTap: () {
-                    ModalController.to.showButtonDialog(
+                    // FlutterSecureStorage().delete(key: "token");
+                    // FlutterSecureStorage().delete(key: "id");
+                    showButtonDialog(
                         title: '로그아웃하시겠어요?',
                         content: '중요한 알림을 받지 못하게 돼요',
                         leftFunction: () => Get.back(),

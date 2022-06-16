@@ -18,7 +18,7 @@ void gettagsearch(Tagtype tagtype) async {
   tagController.tagsearchstate(ScreenState.loading);
   if (result == ConnectivityResult.none) {
     tagController.tagsearchstate(ScreenState.disconnect);
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String tagsearchword = tagController.tagsearch.text.replaceAll(" ", "");
 
@@ -111,7 +111,7 @@ void getpopulartag() async {
   controller.populartagstate(ScreenState.loading);
   if (result == ConnectivityResult.none) {
     controller.populartagstate(ScreenState.disconnect);
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     Uri uri = Uri.parse('$serverUri/tag_api/tag?query=');
     print(uri);

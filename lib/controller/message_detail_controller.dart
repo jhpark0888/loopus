@@ -62,7 +62,7 @@ class MessageDetailController extends GetxController {
       if (first) {
         messagescreenstate(ScreenState.disconnect);
       }
-      ModalController.to.showdisconnectdialog();
+      showdisconnectdialog();
     } else {
       HTTPResponse httpresult = await getmessagelist(
           userid,

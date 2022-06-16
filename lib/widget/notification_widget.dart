@@ -9,7 +9,7 @@ import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/project_screen.dart';
-import 'package:loopus/screen/question_detail_screen.dart';
+import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 

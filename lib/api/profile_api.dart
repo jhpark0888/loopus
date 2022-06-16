@@ -17,6 +17,7 @@ import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/controller/withdrawal_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/notification_model.dart';
+import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 
 import 'package:loopus/model/user_model.dart';
@@ -54,7 +55,7 @@ Future<void> getProfile(var userId, int isuser) async {
       return;
     } else if (response.statusCode == 404) {
       Get.back();
-      ModalController.to.showCustomDialog('이미 삭제된 유저입니다', 1400);
+      showCustomDialog('이미 삭제된 유저입니다', 1400);
       return Future.error(response.statusCode);
     } else {
       return Future.error(response.statusCode);
@@ -84,7 +85,6 @@ Future<void> getProjectlist(var userId, int isuser) async {
 
     if (isuser == 1) {
       ProfileController.to.myProjectList(projectlist);
-      ProfileController.to.myprofilescreenstate(ScreenState.success);
     } else {
       Get.find<OtherProfileController>(tag: userId.toString())
           .otherProjectList(projectlist
@@ -93,18 +93,18 @@ Future<void> getProjectlist(var userId, int isuser) async {
                     type: ProjectWidgetType.profile,
                   ))
               .toList());
-      Get.find<OtherProfileController>(tag: userId.toString())
-          .otherprofilescreenstate(ScreenState.success);
+      // Get.find<OtherProfileController>(tag: userId.toString())
+      //     .otherprofilescreenstate(ScreenState.success);
     }
     return;
   } else {
-    if (isuser == 1) {
-      ProfileController.to.myprofilescreenstate(ScreenState.error);
-    } else {
-      Get.find<OtherProfileController>(tag: userId.toString())
-          .otherprofilescreenstate(ScreenState.error);
-    }
-    return Future.error(response.statusCode);
+    // if (isuser == 1) {
+    //   ProfileController.to.myprofilescreenstate(ScreenState.error);
+    // } else {
+    //   Get.find<OtherProfileController>(tag: userId.toString())
+    //       .otherprofilescreenstate(ScreenState.error);
+    // }
+    // return Future.error(response.statusCode);
   }
   // } on SocketException {
   //   ErrorController.to.isServerClosed(true);
@@ -112,6 +112,39 @@ Future<void> getProjectlist(var userId, int isuser) async {
   //   print(e);
   //   // ErrorController.to.isServerClosed(true);
   // }
+}
+
+Future<HTTPResponse> getCareerPosting(int careerId, int page) async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  var uri = Uri.parse("$serverUri/user_api/posting?id=$careerId&page=$page");
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    try {
+      http.Response response =
+          await http.get(uri, headers: {"Authorization": "Token $token"});
+
+      print("커리어 안 포스팅 리스트 get: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        List responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+        List<Post> postlist =
+            responseBody.map((post) => Post.fromJson(post)).toList();
+        return HTTPResponse.success(postlist);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
 }
 
 enum ProfileUpdateType {
@@ -124,7 +157,7 @@ Future<User?> updateProfile(
     User user, File? image, List? taglist, ProfileUpdateType updateType) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     print(taglist);
@@ -169,7 +202,7 @@ Future<User?> updateProfile(
 
         if (updateType == ProfileUpdateType.tag) {
           Get.back();
-          ModalController.to.showCustomDialog('관심 태그 기반으로 홈 화면을 재구성했어요', 1500);
+          showCustomDialog('관심 태그 기반으로 홈 화면을 재구성했어요', 1500);
         }
         if (kDebugMode) {
           print("profile status code : ${response.statusCode}");
@@ -197,10 +230,9 @@ Future<User?> updateProfile(
 Future<void> putpwchange() async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    ModalController _modalController = Get.put(ModalController());
     PwChangeController pwChangeController = Get.find();
 
     Uri uri = Uri.parse('$serverUri/user_api/password?type=change');
@@ -222,12 +254,12 @@ Future<void> putpwchange() async {
       print("비밀번호 변경 : ${response.statusCode}");
       if (response.statusCode == 200) {
         Get.back();
-        _modalController.showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
+        showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
       } else if (response.statusCode == 401) {
-        _modalController.showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
+        showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
         print('에러1');
       } else {
-        _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }
     } on SocketException {
@@ -242,7 +274,7 @@ Future<void> putpwchange() async {
 Future postlogout() async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     print('user token: $token');
@@ -279,7 +311,7 @@ Future<HTTPResponse> deleteuser(String pw) async {
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
@@ -314,6 +346,7 @@ Future<HTTPResponse> deleteuser(String pw) async {
 
         FlutterSecureStorage().delete(key: "token");
         FlutterSecureStorage().delete(key: "id");
+        FlutterSecureStorage().delete(key: "login detect");
         Get.delete<AppController>();
         Get.delete<HomeController>();
         Get.delete<SearchController>();
@@ -321,7 +354,7 @@ Future<HTTPResponse> deleteuser(String pw) async {
 
         return HTTPResponse.success('success');
       } else if (response.statusCode == 401) {
-        ModalController.to.showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
+        showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
         return HTTPResponse.apiError('', response.statusCode);
       } else {
         return HTTPResponse.apiError('', response.statusCode);
@@ -341,7 +374,7 @@ Future<HTTPResponse> deleteuser(String pw) async {
 Future userreport(int userid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token;
     await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -363,7 +396,7 @@ Future userreport(int userid) async {
       print('유저 신고 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         getbacks(2);
-        ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
+        showCustomDialog("신고가 접수되었습니다", 1000);
         return;
       } else {
         return Future.error(response.statusCode);
@@ -381,7 +414,7 @@ Future inquiry() async {
   ConnectivityResult result = await initConnectivity();
   ContactContentController controller = Get.find();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token;
     await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -419,7 +452,7 @@ Future inquiry() async {
 
       print('문의하기 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
-        ModalController.to.showCustomDialog("문의가 접수되었습니다", 1000);
+        showCustomDialog("문의가 접수되었습니다", 1000);
         return;
       } else {
         return Future.error(response.statusCode);
@@ -433,54 +466,54 @@ Future inquiry() async {
   }
 }
 
-Future logindetect() async {
-  ConnectivityResult result = await initConnectivity();
-  NotificationController notificationController =
-      Get.put(NotificationController());
-  if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
-  } else {
-    String? token;
-    await const FlutterSecureStorage().read(key: 'token').then((value) {
-      token = value;
-    });
+// Future logindetect() async {
+//   ConnectivityResult result = await initConnectivity();
+//   NotificationController notificationController =
+//       Get.put(NotificationController());
+//   if (result == ConnectivityResult.none) {
+//     showdisconnectdialog();
+//   } else {
+//     String? token;
+//     await const FlutterSecureStorage().read(key: 'token').then((value) {
+//       token = value;
+//     });
 
-    final Uri uri = Uri.parse("$serverUri/user_api/check_token");
+//     final Uri uri = Uri.parse("$serverUri/user_api/check_token");
 
-    var body = {"fcm_token": await notificationController.getToken()};
+//     var body = {"fcm_token": await notificationController.getToken()};
 
-    try {
-      final response = await http.post(uri,
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": "Token $token"
-          },
-          body: json.encode(body));
+//     try {
+//       final response = await http.post(uri,
+//           headers: {
+//             'Content-Type': 'application/json',
+//             "Authorization": "Token $token"
+//           },
+//           body: json.encode(body));
 
-      print('토큰 검사 statusCode: ${response.statusCode}');
-      if (response.statusCode == 200) {
-      } else {
-        ModalController.to.showoneButtonDialog(
-          title: '로그인 감지',
-          content: '다른 기기에서 해당 계정으로 로그인 하여 로그아웃합니다',
-          oneFunction: () {
-            AppController.to.currentIndex.value = 0;
-            FlutterSecureStorage().delete(key: "token");
-            FlutterSecureStorage().delete(key: "id");
-            Get.delete<AppController>();
-            Get.delete<HomeController>();
-            Get.delete<SearchController>();
-            Get.delete<ProfileController>();
-            Get.offAll(() => StartScreen());
-          },
-          oneText: '확인',
-        );
-      }
-    } on SocketException {
-      ErrorController.to.isServerClosed(true);
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-    }
-  }
-}
+//       print('토큰 검사 statusCode: ${response.statusCode}');
+//       if (response.statusCode == 200) {
+//       } else {
+//         showoneButtonDialog(
+//           title: '로그인 감지',
+//           content: '다른 기기에서 해당 계정으로 로그인 하여 로그아웃합니다',
+//           oneFunction: () {
+//             AppController.to.currentIndex.value = 0;
+//             FlutterSecureStorage().delete(key: "token");
+//             FlutterSecureStorage().delete(key: "id");
+//             Get.delete<AppController>();
+//             Get.delete<HomeController>();
+//             Get.delete<SearchController>();
+//             Get.delete<ProfileController>();
+//             Get.offAll(() => StartScreen());
+//           },
+//           oneText: '확인',
+//         );
+//       }
+//     } on SocketException {
+//       ErrorController.to.isServerClosed(true);
+//     } catch (e) {
+//       print(e);
+//       // ErrorController.to.isServerClosed(true);
+//     }
+//   }
+// }

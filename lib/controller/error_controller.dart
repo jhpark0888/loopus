@@ -14,7 +14,7 @@ class ErrorController extends GetxController {
     debounce(
       isServerClosed,
       (_) {
-        ModalController.to.showErrorDialog(
+        showErrorDialog(
             title: '현재 서버가 점검 중이에요',
             content: '나중에 다시 접속해주세요',
             leftFunction: () {

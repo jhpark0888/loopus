@@ -16,7 +16,7 @@ import 'package:loopus/model/user_model.dart';
 Future<HTTPResponse> getbanlist() async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
@@ -54,7 +54,7 @@ Future<HTTPResponse> getbanlist() async {
 Future userban(int userid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token;
     await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -81,7 +81,7 @@ Future userban(int userid) async {
               .value
               .banned(BanState.ban);
         }
-        ModalController.to.showCustomDialog("해당 유저가 차단 되었습니다", 1000);
+        showCustomDialog("해당 유저가 차단 되었습니다", 1000);
         return;
       } else {
         return Future.error(response.statusCode);
@@ -98,7 +98,7 @@ Future userban(int userid) async {
 Future userbancancel(int userid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token;
     await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -130,7 +130,7 @@ Future userbancancel(int userid) async {
               .banlist
               .removeWhere((banuser) => banuser.userid == userid);
         }
-        ModalController.to.showCustomDialog("해당 유저가 차단해제 되었습니다", 1000);
+        showCustomDialog("해당 유저가 차단해제 되었습니다", 1000);
         return;
       } else {
         return Future.error(response.statusCode);

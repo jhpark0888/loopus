@@ -14,7 +14,6 @@ class ProjectAddController extends GetxController {
   static ProjectAddController get to => Get.find();
 
   final TextEditingController projectnamecontroller = TextEditingController();
-  final TextEditingController introcontroller = TextEditingController();
 
   RxList<SelectedTagWidget> selectedpersontaglist = <SelectedTagWidget>[].obs;
 
@@ -25,11 +24,6 @@ class ProjectAddController extends GetxController {
   RxList<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
   // RxBool isLooppersonLoading = true.obs;
   Rx<ScreenState> looppersonscreenstate = ScreenState.loading.obs;
-
-  RxBool isProjectUploading = false.obs;
-
-  Rx<File?> projectthumbnail = File('').obs;
-  String? projecturlthumbnail;
 
   //새로운 datepicker
   RxBool isEndedProject = true.obs;
@@ -56,13 +50,6 @@ class ProjectAddController extends GetxController {
         }
       }
     });
-    introcontroller.addListener(() {
-      if (introcontroller.text.trim().isNotEmpty) {
-        isIntroTextEmpty(false);
-      } else {
-        isIntroTextEmpty(true);
-      }
-    });
   }
 
   @override
@@ -73,7 +60,6 @@ class ProjectAddController extends GetxController {
   @override
   void onClose() {
     projectnamecontroller.dispose();
-    introcontroller.dispose();
   }
 
   //새로운 datepicker

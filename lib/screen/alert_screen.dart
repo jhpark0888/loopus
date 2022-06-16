@@ -60,7 +60,7 @@ class _AlertScreenState extends State<AlertScreen> {
                           _notificationController.changePromotionAlarmState(
                               _localDataController.isUserAgreeProNoti);
                           if (_localDataController.isUserAgreeProNoti) {
-                            ModalController.to.showCustomDialog(
+                            showCustomDialog(
                                 '프로모션 알림 수신에 동의하셨습니다\n' +
                                     '(${DateFormat('yy.MM.dd').format(DateTime.now())})',
                                 1000);
@@ -77,7 +77,7 @@ class _AlertScreenState extends State<AlertScreen> {
                           _notificationController.changePromotionAlarmState(
                               _localDataController.isUserAgreeProNoti);
                           if (_localDataController.isUserAgreeProNoti) {
-                            ModalController.to.showCustomDialog(
+                            showCustomDialog(
                                 '프로모션 알림 수신에 동의하셨습니다\n' +
                                     '(${DateFormat('yy.MM.dd').format(DateTime.now())})',
                                 1000);

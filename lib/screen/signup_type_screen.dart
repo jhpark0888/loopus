@@ -26,10 +26,10 @@ class SignupTypeScreen extends StatelessWidget {
               } else if (signupController.selectedType.value ==
                   UserType.professer) {
                 // Get.to(() => SignupCompanyScreen());
-                ModalController.to.showCustomDialog('추후 업데이트 될 예정입니다', 1000);
+                showCustomDialog('추후 업데이트 될 예정입니다', 1000);
               } else {
                 // Get.to(() => SignupCompanyScreen());
-                ModalController.to.showCustomDialog('추후 업데이트 될 예정입니다', 1000);
+                showCustomDialog('추후 업데이트 될 예정입니다', 1000);
               }
               await _gaController.logScreenView('signup_1');
             },

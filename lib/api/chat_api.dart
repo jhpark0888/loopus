@@ -21,7 +21,7 @@ Future<void> getmessageroomlist() async {
   MessageController.to.chatroomscreenstate(ScreenState.loading);
   if (result == ConnectivityResult.none) {
     MessageController.to.chatroomscreenstate(ScreenState.disconnect);
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
@@ -66,7 +66,7 @@ Future<void> getmessageroomlist() async {
 Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");

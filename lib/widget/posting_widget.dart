@@ -336,14 +336,6 @@ import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 
-// import 'package:hello_world/model/post_model.dart';
-// import 'package:hello_world/screen/likepeople_screen.dart';
-
-// import 'package:hello_world/screen/posting_screen.dart';
-// import 'package:hello_world/screen/other_profile_screen.dart';
-// import 'package:hello_world/screen/project_screen.dart';
-
-// import 'package:hello_world/widget/tag_widget.dart';
 
 class PostingWidget extends StatelessWidget {
   // final int index;

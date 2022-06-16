@@ -21,7 +21,7 @@ import '../controller/error_controller.dart';
 // Future postquestion(String content) async {
 //   ConnectivityResult result = await initConnectivity();
 //   if (result == ConnectivityResult.none) {
-//     ModalController.to.showdisconnectdialog();
+//     .showdisconnectdialog();
 //   } else {
 //     String? token;
 //     await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -101,7 +101,7 @@ Future<void> getquestion(int questionid) async {
       Get.find<QuestionDetailController>(tag: questionid.toString());
   if (result == ConnectivityResult.none) {
     controller.questionscreenstate(ScreenState.disconnect);
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     print(questionid);
     String? token;
@@ -126,7 +126,7 @@ Future<void> getquestion(int questionid) async {
       return;
     } else if (response.statusCode == 404) {
       Get.back();
-      ModalController.to.showCustomDialog('이미 삭제된 질문입니다', 1400);
+      showCustomDialog('이미 삭제된 질문입니다', 1400);
       return Future.error(response.statusCode);
     } else {
       controller.questionscreenstate(ScreenState.error);
@@ -140,7 +140,7 @@ Future<void> getquestion(int questionid) async {
 //   QuestionDetailController controller =
 //       Get.find<QuestionDetailController>(tag: questionid.toString());
 //   if (result == ConnectivityResult.none) {
-//     ModalController.to.showdisconnectdialog();
+//     .showdisconnectdialog();
 //   } else {
 //     String? token;
 //     await FlutterSecureStorage().read(key: 'token').then((value) {
@@ -182,7 +182,7 @@ Future<void> answermake(String content, int questionid) async {
   QuestionDetailController controller =
       Get.find<QuestionDetailController>(tag: questionid.toString());
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token;
     await FlutterSecureStorage().read(key: 'token').then((value) {
@@ -232,7 +232,7 @@ Future<dynamic> deleteanswer(int questionid, int answerid) async {
   QuestionDetailController controller =
       Get.find<QuestionDetailController>(tag: questionid.toString());
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token;
     await FlutterSecureStorage().read(key: 'token').then((value) {
@@ -269,7 +269,7 @@ Future<dynamic> deleteanswer(int questionid, int answerid) async {
 Future questionreport(int questionid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token;
     await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -291,7 +291,7 @@ Future questionreport(int questionid) async {
       print('질문 신고 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         getbacks(2);
-        ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
+        showCustomDialog("신고가 접수되었습니다", 1000);
         return;
       } else {
         return Future.error(response.statusCode);
@@ -308,7 +308,7 @@ Future questionreport(int questionid) async {
 Future answerreport(int answerid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token;
     await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -330,7 +330,7 @@ Future answerreport(int answerid) async {
       print('답변 신고 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         getbacks(2);
-        ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
+        showCustomDialog("신고가 접수되었습니다", 1000);
         return;
       } else {
         return Future.error(response.statusCode);

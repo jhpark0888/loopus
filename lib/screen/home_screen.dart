@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/widget/user_image_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 import 'package:loopus/constant.dart';
@@ -13,14 +14,11 @@ import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 
 import 'package:loopus/screen/home_posting_screen.dart';
-import 'package:loopus/screen/home_loop_screen.dart';
 import 'package:loopus/screen/message_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
-import 'package:loopus/screen/home_question_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
-  final ModalController _modalController = Get.put(ModalController());
   final SearchController _searchController = Get.put(SearchController());
 
   @override
@@ -105,6 +103,21 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(
+            width: 5,
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: UserImageWidget(
+              imageUrl:
+                  ProfileController.to.myUserInfo.value.profileImage ?? '',
+              width: 35,
+              height: 35,
+            ),
+          ),
+          const SizedBox(
+            width: 15,
+          ),
         ],
       ),
       body: NestedScrollView(
@@ -179,7 +192,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget activatedOfficialAccount(ModalController _modalController) {
+  Widget activatedOfficialAccount() {
     return SliverToBoxAdapter(
       child: Column(
         children: [
@@ -200,8 +213,8 @@ class HomeScreen extends StatelessWidget {
                   width: 4,
                 ),
                 GestureDetector(
-                  onTap: () => _modalController.showCustomDialog(
-                      '최근 한 달 내에 학생 프로필을 열람한 기업들입니다 ', 1400),
+                  onTap: () =>
+                      showCustomDialog('최근 한 달 내에 학생 프로필을 열람한 기업들입니다 ', 1400),
                   child: SvgPicture.asset(
                     'assets/icons/Question.svg',
                     width: 20,
@@ -222,7 +235,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   GestureDetector(
-                    onTap: () => _modalController.showCustomDialog(
+                    onTap: () => showCustomDialog(
                       '해당 기업들로부터 오퍼를 받을 수도 있어요 (추후 업데이트 예정)',
                       1400,
                     ),
@@ -280,7 +293,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => _modalController.showCustomDialog(
+                    onTap: () => showCustomDialog(
                       '해당 기업들로부터 오퍼를 받을 수도 있어요 (추후 업데이트 예정)',
                       1400,
                     ),
@@ -337,7 +350,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => _modalController.showCustomDialog(
+                    onTap: () => showCustomDialog(
                       '해당 기업들로부터 오퍼를 받을 수도 있어요 (추후 업데이트 예정)',
                       1400,
                     ),

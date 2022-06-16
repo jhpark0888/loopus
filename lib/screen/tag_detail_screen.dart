@@ -327,7 +327,7 @@ class _CustomSpace extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                ModalController.to.showCustomDialog(
+                                showCustomDialog(
                                     '얼마나 많은 학생들이 관심을 가지고 있는지 알 수 있어요', 1400);
                               },
                               child: SvgPicture.asset(

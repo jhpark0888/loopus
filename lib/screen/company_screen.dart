@@ -29,8 +29,6 @@ class CompanyScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 10, 24, 0),
                 child: IconButton(
                   onPressed: () {
-                    ModalController.to
-                        .showCustomDialog('본인의 활동과 관심 태그를 기반으로\n맞춤 기업을 추천해드려요', 1500);
                   },
                   icon: SvgPicture.asset(
                     'assets/icons/Question copy.svg',

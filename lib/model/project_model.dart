@@ -8,7 +8,7 @@ class Project {
       {required this.id,
       required this.userid,
       this.field,
-      this.allcareerpersent,
+      this.postRatio,
       required this.careerName,
       this.startDate,
       this.endDate,
@@ -21,7 +21,7 @@ class Project {
 
   int id;
   int? userid;
-  int? allcareerpersent;
+  double? postRatio;
   String careerName;
   String? field;
   DateTime? startDate;
@@ -49,6 +49,7 @@ class Project {
           ? List<User>.from(
               json["looper"].map((x) => User.fromJson(x["profile"])))
           : [],
+      postRatio: json['ratio'],
       post_count: json["count"] != null
           ? RxInt(json["count"]["post_count"])
           : json["post"] != null

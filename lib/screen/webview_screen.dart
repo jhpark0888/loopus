@@ -134,7 +134,7 @@ class WebViewScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      ModalController.to.showCustomDialog('알려주셔서 감사합니다!', 1000);
+                      showCustomDialog('알려주셔서 감사합니다!', 1000);
                     },
                     child: Text(
                       '이 버튼만 클릭해서 잘못된 링크인 걸 알려주세요',
@@ -197,8 +197,7 @@ class NavigationControls extends StatelessWidget {
                         await controller.goBack();
                       } else {
                         // ignore: deprecated_member_use
-                        ModalController.to
-                            .showCustomDialog('이전 페이지가 없어요', 1000);
+                        showCustomDialog('이전 페이지가 없어요', 1000);
                         return;
                       }
                     },
@@ -215,8 +214,7 @@ class NavigationControls extends StatelessWidget {
                         await controller.goForward();
                       } else {
                         // ignore: deprecated_member_use
-                        ModalController.to
-                            .showCustomDialog('다음 페이지가 없어요', 1000);
+                        showCustomDialog('다음 페이지가 없어요', 1000);
                         return;
                       }
                     },

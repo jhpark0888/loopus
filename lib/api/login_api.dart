@@ -13,19 +13,19 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
 
 import '../constant.dart';
 import '../controller/ga_controller.dart';
 
-Future<void> loginRequest(String email, String pw) async {
+Future<HTTPResponse> loginRequest(String email, String pw) async {
   ConnectivityResult result = await initConnectivity();
-  final ModalController _modalController = Get.put(ModalController());
   if (result == ConnectivityResult.none) {
-    _modalController.showdisconnectdialog();
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     final LogInController logInController = Get.put(LogInController());
-    const FlutterSecureStorage storage = FlutterSecureStorage();
     final NotificationController notificationController =
         Get.put(NotificationController());
     final GAController _gaController = Get.put(GAController());
@@ -48,26 +48,25 @@ Future<void> loginRequest(String email, String pw) async {
         body: jsonEncode(user),
       );
 
-      if (response.statusCode == 202) {
-        String token = jsonDecode(response.body)['token'];
-        String userid = jsonDecode(response.body)['user_id'];
-        //! GA
-        await _gaController.logLogin();
+      print('로그인 : ${response.statusCode}');
 
-        storage.write(key: 'token', value: token);
-        storage.write(key: 'id', value: userid);
-        Get.offAll(() => App());
+      if (response.statusCode == 202) {
+        return HTTPResponse.success(response);
       } else if (response.statusCode == 401) {
-        _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러1');
+        return HTTPResponse.apiError('fail', response.statusCode);
       } else {
-        _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
+        return HTTPResponse.apiError('fail', response.statusCode);
       }
     } on SocketException {
       ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
+      return HTTPResponse.success('success');
       // ErrorController.to.isServerClosed(true);
     }
   }
@@ -76,13 +75,11 @@ Future<void> loginRequest(String email, String pw) async {
 Future<void> postpwfindemailcheck() async {
   ConnectivityResult result = await initConnectivity();
   LogInController logInController = Get.put(LogInController());
-  ModalController _modalController = Get.put(ModalController());
   PwChangeController pwChangeController = Get.find();
   if (result == ConnectivityResult.none) {
-    _modalController.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
-    ModalController.to
-        .showCustomDialog('입력하신 이메일로 들어가서 링크를 클릭해 본인 인증을 해주세요', 1400);
+    showCustomDialog('입력하신 이메일로 들어가서 링크를 클릭해 본인 인증을 해주세요', 1400);
     pwChangeController.pwcertification(Emailcertification.waiting);
     Uri uri = Uri.parse('$serverUri/user_api/password');
 
@@ -107,11 +104,11 @@ Future<void> postpwfindemailcheck() async {
         // _modalController.showCustomDialog('입력하신 이메일로 새로운 비밀번호를 알려드렸어요', 1400);
       } else if (response.statusCode == 401) {
         pwChangeController.pwcertification(Emailcertification.fail);
-        _modalController.showCustomDialog('아직 가입 되지 않은 이메일입니다', 1400);
+        showCustomDialog('아직 가입 되지 않은 이메일입니다', 1400);
         print('에러1');
       } else {
         pwChangeController.pwcertification(Emailcertification.fail);
-        _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }
     } on SocketException {
@@ -125,12 +122,11 @@ Future<void> postpwfindemailcheck() async {
 
 Future<void> putpwfindchange() async {
   ConnectivityResult result = await initConnectivity();
-  ModalController _modalController = Get.put(ModalController());
   PwChangeController pwChangeController = Get.find();
   LogInController logInController = Get.find();
 
   if (result == ConnectivityResult.none) {
-    _modalController.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     Uri uri = Uri.parse('$serverUri/user_api/password?type=find');
 
@@ -149,12 +145,12 @@ Future<void> putpwfindchange() async {
       print("비밀번호 찾기 : ${response.statusCode}");
       if (response.statusCode == 200) {
         getbacks(2);
-        _modalController.showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
+        showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
       } else if (response.statusCode == 401) {
-        _modalController.showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
+        showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
         print('에러1');
       } else {
-        _modalController.showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
         print('에러');
       }
     } on SocketException {

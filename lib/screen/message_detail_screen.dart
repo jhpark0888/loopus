@@ -33,7 +33,7 @@ class MessageDetailScreen extends StatelessWidget {
     if (controller.isSendButtonon.value) {
       if (controller.user!.value.banned != BanState.normal) {
         controller.messagefocus.unfocus();
-        ModalController.to.showCustomDialog("해당 유저에게 메세지를 보낼 수 없습니다", 1000);
+        showCustomDialog("해당 유저에게 메세지를 보낼 수 없습니다", 1000);
       } else {
         controller.messagefocus.unfocus();
         controller.messagetextController.clear();

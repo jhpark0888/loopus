@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -12,16 +14,18 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
 import 'package:loopus/screen/posting_add_images_screen.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
-import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/widget/careertile_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
-import 'package:loopus/widget/project_widget.dart';
+import 'package:loopus/widget/custom_footer.dart';
+import 'package:loopus/widget/custom_header.dart';
+import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -93,82 +97,61 @@ class MyProfileScreen extends StatelessWidget {
                             ? false
                             : true,
                     enablePullUp: !profileController.profileenablepullup.value,
-                    header: ClassicHeader(
-                      spacing: 0.0,
-                      height: 60,
-                      completeDuration: Duration(milliseconds: 600),
-                      textStyle: TextStyle(color: mainblack),
-                      refreshingText: '',
-                      releaseText: "",
-                      completeText: "",
-                      idleText: "",
-                      refreshingIcon: Column(
-                        children: [
-                          Image.asset(
-                            'assets/icons/loading.gif',
-                            scale: 6,
-                          ),
-                        ],
-                      ),
-                      releaseIcon: Column(
-                        children: [
-                          Image.asset(
-                            'assets/icons/loading.gif',
-                            scale: 6,
-                          ),
-                        ],
-                      ),
-                      completeIcon: Column(
-                        children: [
-                          const Icon(
-                            Icons.check_rounded,
-                            color: mainblue,
-                          ),
-                        ],
-                      ),
-                      idleIcon: Column(
-                        children: [
-                          Image.asset(
-                            'assets/icons/loading.png',
-                            scale: 12,
-                          ),
-                        ],
-                      ),
-                    ),
-                    footer: ClassicFooter(
-                      completeDuration: Duration.zero,
-                      loadingText: "",
-                      canLoadingText: "",
-                      idleText: "",
-                      idleIcon: Container(),
-                      noMoreIcon: Container(
-                        child: Text('as'),
-                      ),
-                      loadingIcon: Image.asset(
-                        'assets/icons/loading.gif',
-                        scale: 6,
-                      ),
-                      canLoadingIcon: Image.asset(
-                        'assets/icons/loading.gif',
-                        scale: 6,
-                      ),
-                    ),
+                    header: const MyCustomHeader(),
+                    footer: const MyCustomFooter(),
                     onRefresh: profileController.onRefresh,
                     child: SingleChildScrollView(
                         child: Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0,
+                            horizontal: 24.0,
                           ),
                           child: Column(
                             children: [
-                              Stack(
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Obx(
-                                    () => GestureDetector(
-                                      onTap: () => ModalController.to
-                                          .showModalIOS(context,
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Obx(
+                                        () => Text(
+                                          profileController
+                                              .myUserInfo.value.loopcount
+                                              .toString(),
+                                          style: kSubTitle2Style.copyWith(
+                                              color: _hoverController
+                                                      .isHover.value
+                                                  ? mainblack.withOpacity(0.6)
+                                                  : mainblack),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      Obx(
+                                        () => Text(
+                                          '팔로워',
+                                          style: kBody1Style.copyWith(
+                                              color: _hoverController
+                                                      .isHover.value
+                                                  ? mainblack.withOpacity(0.6)
+                                                  : mainblack),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Stack(
+                                    children: [
+                                      Obx(
+                                        () => GestureDetector(
+                                          onTap: () => showModalIOS(context,
                                               func1: changeProfileImage,
                                               func2: changeDefaultImage,
                                               value1: '라이브러리에서 선택',
@@ -176,61 +159,62 @@ class MyProfileScreen extends StatelessWidget {
                                               isValue1Red: false,
                                               isValue2Red: false,
                                               isOne: false),
-                                      child: ClipOval(
-                                          child: (profileController
-                                                      .myprofilescreenstate
-                                                      .value !=
-                                                  ScreenState.loading)
-                                              ? (profileController.myUserInfo
-                                                          .value.profileImage !=
-                                                      null)
-                                                  ? CachedNetworkImage(
-                                                      height: 92,
-                                                      width: 92,
-                                                      imageUrl:
-                                                          profileController
+                                          child: ClipOval(
+                                              child: (profileController
+                                                          .myprofilescreenstate
+                                                          .value !=
+                                                      ScreenState.loading)
+                                                  ? (profileController
                                                               .myUserInfo
                                                               .value
-                                                              .profileImage!
-                                                              .replaceAll(
-                                                                  'https',
-                                                                  'http'),
-                                                      placeholder:
-                                                          (context, url) =>
+                                                              .profileImage !=
+                                                          null)
+                                                      ? CachedNetworkImage(
+                                                          height: 92,
+                                                          width: 92,
+                                                          imageUrl:
+                                                              profileController
+                                                                  .myUserInfo
+                                                                  .value
+                                                                  .profileImage!
+                                                                  .replaceAll(
+                                                                      'https',
+                                                                      'http'),
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  CircleAvatar(
+                                                            backgroundColor:
+                                                                const Color(
+                                                                    0xffe7e7e7),
+                                                            child: Container(),
+                                                          ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
                                                               CircleAvatar(
-                                                        backgroundColor:
-                                                            const Color(
-                                                                0xffe7e7e7),
-                                                        child: Container(),
-                                                      ),
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          CircleAvatar(
-                                                        backgroundColor:
-                                                            const Color(
-                                                                0xffe7e7e7),
-                                                        child: Container(),
-                                                      ),
-                                                      fit: BoxFit.cover,
-                                                    )
+                                                            backgroundColor:
+                                                                const Color(
+                                                                    0xffe7e7e7),
+                                                            child: Container(),
+                                                          ),
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Image.asset(
+                                                          "assets/illustrations/default_profile.png",
+                                                          height: 92,
+                                                          width: 92,
+                                                        )
                                                   : Image.asset(
                                                       "assets/illustrations/default_profile.png",
                                                       height: 92,
                                                       width: 92,
-                                                    )
-                                              : Image.asset(
-                                                  "assets/illustrations/default_profile.png",
-                                                  height: 92,
-                                                  width: 92,
-                                                )),
-                                    ),
-                                  ),
-                                  Positioned.fill(
-                                    child: Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: GestureDetector(
-                                        onTap: () => ModalController.to
-                                            .showModalIOS(context,
+                                                    )),
+                                        ),
+                                      ),
+                                      Positioned.fill(
+                                        child: Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: GestureDetector(
+                                            onTap: () => showModalIOS(context,
                                                 func1: changeProfileImage,
                                                 func2: changeDefaultImage,
                                                 value1: '라이브러리에서 선택',
@@ -238,18 +222,56 @@ class MyProfileScreen extends StatelessWidget {
                                                 isValue1Red: false,
                                                 isValue2Red: false,
                                                 isOne: false),
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: mainWhite),
-                                          child: SvgPicture.asset(
-                                            "assets/icons/Image.svg",
-                                            width: 24,
-                                            height: 24,
+                                            child: Container(
+                                              decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: mainWhite),
+                                              child: SvgPicture.asset(
+                                                "assets/icons/Image.svg",
+                                                width: 24,
+                                                height: 24,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Obx(
+                                        () => Text(
+                                          profileController
+                                              .myUserInfo.value.loopcount
+                                              .toString(),
+                                          style: kSubTitle2Style.copyWith(
+                                              color: _hoverController
+                                                      .isHover.value
+                                                  ? mainblack.withOpacity(0.6)
+                                                  : mainblack),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      Obx(
+                                        () => Text(
+                                          '팔로잉',
+                                          style: kBody1Style.copyWith(
+                                              color: _hoverController
+                                                      .isHover.value
+                                                  ? mainblack.withOpacity(0.6)
+                                                  : mainblack),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -274,31 +296,43 @@ class MyProfileScreen extends StatelessWidget {
                               const SizedBox(
                                 height: 12,
                               ),
-                              Obx(
-                                () => Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: profileController
-                                        .myUserInfo.value.profileTag
-                                        .map((tag) => Row(children: [
-                                              Tagwidget(
-                                                tag: tag,
-                                                fontSize: 14,
-                                              ),
-                                              profileController.myUserInfo.value
-                                                          .profileTag
-                                                          .indexOf(tag) !=
-                                                      profileController
-                                                              .myUserInfo
-                                                              .value
-                                                              .profileTag
-                                                              .length -
-                                                          1
-                                                  ? const SizedBox(
-                                                      width: 8,
-                                                    )
-                                                  : Container()
-                                            ]))
-                                        .toList()),
+                              Row(
+                                children: [
+                                  const Text(
+                                    '상위 태그',
+                                    style: kBody2Style,
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Obx(
+                                    () => Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: profileController
+                                            .myUserInfo.value.profileTag
+                                            .map((tag) => Row(children: [
+                                                  Tagwidget(
+                                                    tag: tag,
+                                                    fontSize: 14,
+                                                  ),
+                                                  profileController.myUserInfo
+                                                              .value.profileTag
+                                                              .indexOf(tag) !=
+                                                          profileController
+                                                                  .myUserInfo
+                                                                  .value
+                                                                  .profileTag
+                                                                  .length -
+                                                              1
+                                                      ? const SizedBox(
+                                                          width: 8,
+                                                        )
+                                                      : Container()
+                                                ]))
+                                            .toList()),
+                                  ),
+                                ],
                               ),
                               const SizedBox(
                                 height: 16,
@@ -330,426 +364,407 @@ class MyProfileScreen extends StatelessWidget {
                                         title: '관심 태그 변경하기',
                                         buttonTag: '관심 태그 변경하기'),
                                   ),
-                                  // Expanded(
-                                  //   child: GestureDetector(
-                                  //     // onTapDown: (details) =>
-                                  //     //     _hoverController.isHover(true),
-                                  //     // onTapCancel: () =>
-                                  //     //     _hoverController.isHover(false),
-                                  //     // onTapUp: (details) =>
-                                  //     //     _hoverController.isHover(false),
-                                  //     onTap: () {
-                                  //       tagController.selectedtaglist.clear();
-                                  //       tagController.tagsearch.text = "";
-                                  //       for (var tag in profileController
-                                  //           .myUserInfo.value.profileTag) {
-                                  //         tagController.selectedtaglist
-                                  //             .add(SelectedTagWidget(
-                                  //           id: tag.tagId,
-                                  //           text: tag.tag,
-                                  //           selecttagtype:
-                                  //               SelectTagtype.interesting,
-                                  //           tagtype: Tagtype.profile,
-                                  //         ));
-                                  //       }
-                                  //       Get.to(() => ProfileTagChangeScreen());
-                                  //     },
-                                  //     child: Container(
-                                  //       decoration: BoxDecoration(
-                                  //         color: mainlightgrey,
-                                  //         borderRadius:
-                                  //             BorderRadius.circular(4),
-                                  //       ),
-                                  //       child: Padding(
-                                  //         padding: EdgeInsets.symmetric(
-                                  //             vertical: 8.0),
-                                  //         child: Center(
-                                  //           child: Text(
-                                  //             '관심 태그 변경하기',
-                                  //             style: kButtonStyle,
-                                  //           ),
-                                  //         ),
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // const SizedBox(
-                                  //   width: 8,
-                                  // ),
-                                  // Expanded(
-                                  //   child: GestureDetector(
-                                  //     onTap: () {
-                                  //       KakaoShareManager()
-                                  //           .isKakaotalkInstalled()
-                                  //           .then((installed) {
-                                  //         if (installed) {
-                                  //           KakaoShareManager().shareMyCode();
-                                  //         } else {
-                                  //           // show alert
-                                  //         }
-                                  //       });
-                                  //     },
-                                  //     child: Container(
-                                  //       decoration: BoxDecoration(
-                                  //         color: mainblue,
-                                  //         borderRadius:
-                                  //             BorderRadius.circular(4),
-                                  //       ),
-                                  //       child: Padding(
-                                  //         padding: const EdgeInsets.symmetric(
-                                  //           vertical: 8.0,
-                                  //         ),
-                                  //         child: Center(
-                                  //             child: Text('내 프로필 공유하기',
-                                  //                 style: kButtonStyle.copyWith(
-                                  //                     color: mainWhite))),
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // )
                                 ],
                               ),
                               const SizedBox(
                                 height: 16,
                               ),
+                              const Divider(
+                                thickness: 1,
+                                color: cardGray,
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Row(
+                                children: [
+                                  const Text('스카우터 컨택', style: k18Semibold),
+                                  const SizedBox(width: 7),
+                                  SvgPicture.asset(
+                                    'assets/icons/Question.svg',
+                                    width: 20,
+                                    height: 20,
+                                    color: mainblack.withOpacity(0.6),
+                                  ),
+                                  const Spacer(),
+                                  InkWell(
+                                      onTap: () {
+                                        AppController.to.changePageIndex(3);
+                                      },
+                                      child: Text(
+                                        '전체 보기(000개)',
+                                        style: kBody1Style.copyWith(
+                                            color: mainblue),
+                                      ))
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height: 60,
+                                child: ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: mainblack.withOpacity(0.1),
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        height: 60,
+                                        width: 60,
+                                        child: Image.network(
+                                          'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+                                          height: 60,
+                                          width: 60,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: mainblack.withOpacity(0.1),
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        height: 60,
+                                        width: 60,
+                                        child: Image.network(
+                                          'https://images.samsung.com/kdp/aboutsamsung/brand_identity/logo/360_197_1.png?\$FB_TYPE_B_PNG\$',
+                                          height: 60,
+                                          width: 60,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: mainblack.withOpacity(0.1),
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        height: 60,
+                                        width: 60,
+                                        child: Image.network(
+                                          'https://w7.pngwing.com/pngs/240/71/png-transparent-hyundai-motor-company-car-logo-berkeley-payments-hyundai-blue-cdr-text.png',
+                                          height: 60,
+                                          width: 60,
+                                        ),
+                                      ),
+                                    ]),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  const Divider(thickness: 1, color: cardGray),
+                                  const SizedBox(height: 24),
+                                  // Row(
+                                  //   mainAxisAlignment: MainAxisAlignment.start,
+                                  //   children: [
+                                  //     const Text('커리어 분석', style: k18Semibold),
+                                  //     const SizedBox(width: 7),
+                                  //     SvgPicture.asset(
+                                  //       'assets/icons/Question.svg',
+                                  //       width: 20,
+                                  //       height: 20,
+                                  //       color: mainblack.withOpacity(0.6),
+                                  //     )
+                                  //   ],
+                                  // ),
+                                  // Column(
+                                  //     children:
+                                  //         profileController.careerAnalysis),
+                                  // const SizedBox(height: 24),
+                                  // const Divider(thickness: 1, color: cardGray),
+                                  // const SizedBox(height: 24),
+                                  Row(
+                                    children: [
+                                      const Text('커리어', style: k18Semibold),
+                                      const SizedBox(width: 7),
+                                      SvgPicture.asset(
+                                        'assets/icons/Question.svg',
+                                        width: 20,
+                                        height: 20,
+                                        color: mainblack.withOpacity(0.6),
+                                      ),
+                                      const Spacer(),
+                                      InkWell(
+                                        onTap: () {
+                                          Get.to(ProjectAddTitleScreen(
+                                              screenType: Screentype.add));
+                                        },
+                                        child: Text(
+                                          '추가하기',
+                                          style: k15normal.copyWith(
+                                              color: mainblue),
+                                        ),
+                                        splashColor: kSplashColor,
+                                      ),
+                                    ],
+                                  ),
+                                  Obx(
+                                    () => Column(
+                                        children: profileController
+                                            .myProjectList
+                                            .map((career) {
+                                      int index = profileController
+                                          .myProjectList
+                                          .indexWhere((element) =>
+                                              element.id == career.id);
+                                      return CareerTile(
+                                          index: index,
+                                          title: career.careerName.obs,
+                                          time: career.startDate!);
+                                    }).toList()),
+                                  ),
+                                  const SizedBox(height: 24),
+                                  const Divider(thickness: 1, color: cardGray),
+                                  const SizedBox(height: 24),
+                                  Row(
+                                    children: [
+                                      const Text('포스트', style: k18Semibold),
+                                      const Spacer(),
+                                      InkWell(
+                                          onTap: () {
+                                            Get.to(() => PostingAddImagesScreen(
+                                                  project_id: profileController
+                                                      .myProjectList[
+                                                          profileController
+                                                              .careerCurrentPage
+                                                              .toInt()]
+                                                      .id,
+                                                  route: PostaddRoute.project,
+                                                ));
+                                          },
+                                          child: Text(
+                                            '전체 보기(000개)',
+                                            style: kBody1Style.copyWith(
+                                                color: mainblue),
+                                          ))
+                                    ],
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),
-                        Container(
-                          height: 8,
-                          color: const Color(0xffF2F3F5),
+                        const SizedBox(
+                          height: 14,
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 12.0,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        '포스팅',
-                                        style: kBody1Style,
-                                      ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Obx(
-                                        () => Text(
-                                          profileController
-                                              .myUserInfo.value.totalposting
-                                              .toString(),
-                                          style: kSubTitle2Style,
-                                        ),
-                                      )
-                                    ],
+                        AspectRatio(
+                          aspectRatio: 1.3,
+                          child: PieChart(
+                            PieChartData(
+                                pieTouchData: PieTouchData(touchCallback:
+                                    (FlTouchEvent event, pieTouchResponse) {
+                                  // if (!event.isInterestedForInteractions ||
+                                  //     pieTouchResponse == null ||
+                                  //     pieTouchResponse.touchedSection ==
+                                  //         null) {
+                                  //   selectedIndex.value = -1;
+                                  //   return;
+                                  // }
+                                  // selectedIndex.value = pieTouchResponse
+                                  //     .touchedSection!.touchedSectionIndex;
+                                }),
+                                borderData: FlBorderData(
+                                  show: false,
+                                ),
+                                sectionsSpace: 0,
+                                centerSpaceRadius: 60,
+                                sections: profileController.showingSections()),
+                            swapAnimationDuration: Duration(milliseconds: 300),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          height: 25,
+                          child: PageView.builder(
+                            controller: profileController.careertitleController,
+                            scrollDirection: Axis.horizontal,
+                            onPageChanged: (index) {
+                              if (index.toDouble() !=
+                                  profileController.careerCurrentPage.value) {
+                                profileController.careerCurrentPage.value =
+                                    index.toDouble();
+                                profileController.careerPageController
+                                    .animateToPage(index,
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.ease);
+                              }
+                            },
+                            itemBuilder: (context, index) {
+                              var _scale = profileController
+                                          .careerCurrentPage.value
+                                          .toInt() ==
+                                      index
+                                  ? 1.0
+                                  : 0.8;
+                              var _color = profileController
+                                          .careerCurrentPage.value
+                                          .toInt() ==
+                                      index
+                                  ? mainblack
+                                  : mainblack.withOpacity(0.2);
+                              return TweenAnimationBuilder(
+                                duration: const Duration(milliseconds: 350),
+                                tween: Tween(begin: _scale, end: _scale),
+                                curve: Curves.ease,
+                                child: Center(
+                                  child: Text(
+                                    profileController
+                                        .myProjectList[index].careerName,
+                                    style: k18Semibold.copyWith(color: _color),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                behavior: HitTestBehavior.translucent,
-                                onTapDown: (details) =>
-                                    _hoverController.isHover(true),
-                                onTapCancel: () =>
-                                    _hoverController.isHover(false),
-                                onTapUp: (details) =>
-                                    _hoverController.isHover(false),
-                                onTap: () {
-                                  profileController.isLoopPeopleLoading(true);
-                                  Get.to(() => LoopPeopleScreen(
-                                        userid: profileController
-                                            .myUserInfo.value.userid,
-                                        loopcount: profileController
-                                            .myUserInfo.value.loopcount.value,
-                                      ));
+                                builder: (context, double value, child) {
+                                  return Transform.scale(
+                                    scale: value,
+                                    child: child,
+                                  );
                                 },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 12.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
+                              );
+                            },
+                            itemCount: profileController.myProjectList.length,
+                          ),
+                        ),
+                        profileController.myProjectList.isEmpty
+                            ? Container()
+                            : ExpandablePageView.builder(
+                                onPageChanged: (index) {
+                                  if (index.toDouble() !=
+                                      profileController
+                                          .careerCurrentPage.value) {
+                                    profileController.careerCurrentPage.value =
+                                        index.toDouble();
+                                    profileController.careertitleController
+                                        .animateToPage(index,
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            curve: Curves.ease);
+                                  }
+                                },
+                                controller:
+                                    profileController.careerPageController,
+                                itemBuilder: (context, index) {
+                                  return Column(
                                     children: [
-                                      Obx(
-                                        () => Text(
-                                          '팔로워',
-                                          style: kBody1Style.copyWith(
-                                              color: _hoverController
-                                                      .isHover.value
-                                                  ? mainblack.withOpacity(0.6)
-                                                  : mainblack),
-                                          textAlign: TextAlign.center,
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 24),
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          '함께한 친구',
+                                          style: k15normal.copyWith(
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 8,
                                       ),
-                                      Obx(
-                                        () => Text(
-                                          profileController
-                                              .myUserInfo.value.loopcount
-                                              .toString(),
-                                          style: kSubTitle2Style.copyWith(
-                                              color: _hoverController
-                                                      .isHover.value
-                                                  ? mainblack.withOpacity(0.6)
-                                                  : mainblack),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          height: 1,
-                          color: Color(0xfff2f3f5),
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                16,
-                                20,
-                                16,
-                                16,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text('활동', style: kSubTitle2Style),
-                                  if (profileController
-                                      .myProjectList.value.isNotEmpty)
-                                    GestureDetector(
-                                      behavior: HitTestBehavior.translucent,
-                                      onTap: () {
-                                        Get.to(
-                                          () => ProjectAddTitleScreen(
-                                            screenType: Screentype.add,
-                                          ),
-                                        );
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 4),
-                                        child: Text(
-                                          '추가하기',
-                                          style: kSubTitle2Style.copyWith(
-                                              color: mainblue),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                            Obx(
-                              () => Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                  child: (profileController
-                                              .myprofilescreenstate.value ==
-                                          ScreenState.loading)
-                                      ? Column(
-                                          children: [
-                                            Image.asset(
-                                              'assets/icons/loading.gif',
-                                              scale: 6,
-                                            ),
-                                            const Text(
-                                              '활동 받아오는 중...',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: mainblue),
-                                            ),
-                                            CustomExpandedButton(
-                                              onTap: () {
-                                                // Get.to(
-                                                //   () =>
-                                                //       ProjectAddTitleScreen(
-                                                //     screenType:
-                                                //         Screentype.add,
-                                                //   ),
-                                                // );
-                                                Get.to(
-                                                  () => PostingAddImagesScreen(
-                                                    project_id: 1,
-                                                    route: PostaddRoute.project,
+                                      // profileController
+                                      //             .myProjectList[profileController.careerCurrentPage.to]
+                                      SizedBox(
+                                        height: 90,
+                                        child: ListView.separated(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 24),
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              Project project =
+                                                  profileController
+                                                      .myProjectList[index];
+                                              return Column(
+                                                children: [
+                                                  ClipOval(
+                                                    child: Image.network(
+                                                      project.members[index]
+                                                              .profileImage ??
+                                                          '',
+                                                      width: 50,
+                                                      height: 50,
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   ),
-                                                );
-                                              },
-                                              isBlue: true,
-                                              title: '첫번째 활동 추가하기',
-                                              buttonTag: '첫번째 활동 추가하기',
-                                              isBig: false,
-                                            )
-                                          ],
-                                        )
-                                      : profileController
-                                                  .myprofilescreenstate.value ==
-                                              ScreenState.disconnect
-                                          ? Container()
-                                          : profileController
-                                                      .myprofilescreenstate
-                                                      .value ==
-                                                  ScreenState.error
-                                              ? Container()
-                                              : Obx(
-                                                  () => profileController
-                                                          .myProjectList
-                                                          .value
-                                                          .isNotEmpty
-                                                      ? Column(
-                                                          children: profileController
-                                                              .myProjectList
-                                                              .map((project) =>
-                                                                  ProjectWidget(
-                                                                      project:
-                                                                          project
-                                                                              .obs,
-                                                                      type: ProjectWidgetType
-                                                                          .profile))
-                                                              .toList(),
-                                                        )
-                                                      : Column(
-                                                          children: [
-                                                            Text(
-                                                              '첫번째 활동을 기록해보세요',
-                                                              style:
-                                                                  kSubTitle1Style,
-                                                            ),
-                                                            SizedBox(
-                                                              height: 4,
-                                                            ),
-                                                            Text(
-                                                              '수업, 과제, 스터디 등 학교 생활과 관련있는\n다양한 경험을 남겨보세요',
-                                                              style: kBody1Style
-                                                                  .copyWith(
-                                                                color: mainblack
-                                                                    .withOpacity(
-                                                                        0.6),
-                                                              ),
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                            ),
-                                                            SizedBox(
-                                                              height: 12,
-                                                            ),
-                                                            CustomExpandedButton(
-                                                              onTap: () {
-                                                                // Get.to(
-                                                                //   () =>
-                                                                //       ProjectAddTitleScreen(
-                                                                //     screenType:
-                                                                //         Screentype.add,
-                                                                //   ),
-                                                                // );
-                                                                Get.to(
-                                                                  () =>
-                                                                      PostingAddImagesScreen(
-                                                                    project_id:
-                                                                        1,
-                                                                    route: PostaddRoute
-                                                                        .project,
-                                                                  ),
-                                                                );
-                                                              },
-                                                              isBlue: true,
-                                                              title:
-                                                                  '첫번째 활동 추가하기',
-                                                              buttonTag:
-                                                                  '첫번째 활동 추가하기',
-                                                              isBig: false,
-                                                            )
-                                                          ],
-                                                        ),
-                                                )),
-                            ),
-                            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Divider(thickness: 1, color: cardGray),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text('커리어 분석', style: k18Semibold),
-                    const SizedBox(width: 7),
-                    SvgPicture.asset(
-                      'assets/icons/Question.svg',
-                      width: 20,
-                      height: 20,
-                      color: mainblack.withOpacity(0.6),
-                    )
-                  ],
-                ),
-                Column(children: profileController.careerAnalysis),
-                const SizedBox(height: 24),
-                const Divider(thickness: 1, color: cardGray),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    const Text('커리어', style: k18Semibold),
-                    const SizedBox(width: 7),
-                    SvgPicture.asset(
-                      'assets/icons/Question.svg',
-                      width: 20,
-                      height: 20,
-                      color: mainblack.withOpacity(0.6),
-                    ),
-                    const Spacer(),
-                    IconButton(
-                        onPressed: () {
-                          profileController.isDelete(false);
-                          profileController.isUpdate(false);
-                          showDialogs(
-                              title: '추가하기',
-                              controller: profileController.careerAddController,
-                              leftFunction: () {
-                                Get.back();
-                              },
-                              rightFunction: () {
-                                ProfileController.to.careerwidget.add(
-                                    CareerTile(
-                                        title: ProfileController
-                                            .to.careerAddController.text.obs,
-                                        time: DateTime.now()));
-
-                                profileController.careerAddController.clear();
-                                Get.back();
-                              });
-                        },
-                        icon: const Text('추가')),
-                    IconButton(
-                        onPressed: () {
-                          profileController.isUpdate(true);
-                          profileController.isDelete(false);
-                        },
-                        icon: const Text('수정')),
-                    IconButton(
-                        onPressed: () {
-                          profileController.isDelete(true);
-                          profileController.isUpdate(false);
-                        },
-                        icon: const Text('삭제'))
-                  ],
-                ),
-                Column(children: profileController.careerwidget.toList()),
-                const SizedBox(height: 24),
-                const Divider(thickness: 1, color: cardGray),
-              ],
-            )
-                          ],
-                        ),
+                                                  const SizedBox(
+                                                    height: 6,
+                                                  ),
+                                                  Text(
+                                                    project.members[index]
+                                                        .realName,
+                                                    style: k15normal.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  )
+                                                ],
+                                              );
+                                            },
+                                            separatorBuilder: (context, index) {
+                                              return const SizedBox(
+                                                width: 8,
+                                              );
+                                            },
+                                            itemCount: profileController
+                                                .myProjectList[profileController
+                                                    .careerCurrentPage.value
+                                                    .toInt()]
+                                                .members
+                                                .length),
+                                      ),
+                                      Obx(
+                                        () => profileController
+                                                .careerLoading.value
+                                            ? LoadingWidget()
+                                            : profileController
+                                                    .myProjectList[index]
+                                                    .posts
+                                                    .isNotEmpty
+                                                ? Column(
+                                                    children: profileController
+                                                        .myProjectList[index]
+                                                        .posts
+                                                        .map((post) => post
+                                                                .images
+                                                                .isNotEmpty
+                                                            ? Image.network(
+                                                                post.images[0])
+                                                            : Container(
+                                                                child: Text(post
+                                                                    .content),
+                                                              ))
+                                                        .toList(),
+                                                  )
+                                                : Container(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 20),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      '아직 포스팅이 없어요',
+                                                      style:
+                                                          kBody1Style.copyWith(
+                                                              color: mainblack
+                                                                  .withOpacity(
+                                                                      0.6)),
+                                                    ),
+                                                  ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                                itemCount:
+                                    profileController.myProjectList.length,
+                              )
                       ],
                     )),
                   ),

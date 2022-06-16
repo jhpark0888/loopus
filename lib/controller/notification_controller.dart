@@ -19,7 +19,7 @@ import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/project_screen.dart';
-import 'package:loopus/screen/question_detail_screen.dart';
+import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/widget/message_widget.dart';
@@ -29,23 +29,25 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  if (message.data["type"] == 'logout') {
-    Get.put(ModalController()).showoneButtonDialog(
-      title: '로그인 감지',
-      content: '다른 기기에서 해당 계정으로 로그인 하여 로그아웃합니다',
-      oneFunction: () {
-        AppController.to.currentIndex.value = 0;
-        FlutterSecureStorage().delete(key: "token");
-        FlutterSecureStorage().delete(key: "id");
-        Get.delete<AppController>();
-        Get.delete<HomeController>();
-        Get.delete<SearchController>();
-        Get.delete<ProfileController>();
-        Get.offAll(() => StartScreen());
-      },
-      oneText: '확인',
-    );
-  }
+  await const FlutterSecureStorage().write(key: "login detect", value: 'true');
+  // if (message.data["type"] == 'logout') {
+  //   showoneButtonDialog(
+  //     title: '로그인 감지',
+  //     content: '다른 기기에서 해당 계정으로 로그인 하여 로그아웃합니다',
+  //     oneFunction: () {
+  //       AppController.to.currentIndex.value = 0;
+  //       FlutterSecureStorage().delete(key: "token");
+  //       FlutterSecureStorage().delete(key: "id");
+
+  //       Get.delete<AppController>();
+  //       Get.delete<HomeController>();
+  //       Get.delete<SearchController>();
+  //       Get.delete<ProfileController>();
+  //       Get.offAll(() => StartScreen());
+  //     },
+  //     oneText: '확인',
+  //   );
+  // }
 }
 
 class NotificationController extends GetxController {
@@ -162,20 +164,21 @@ class NotificationController extends GetxController {
             MessageController.to.chattingroomlist.insert(0, messageroomwidget);
           } else {
             ProfileController.to.isnewmessage(true);
-            ModalController.to.showCustomSnackbar(
+            showCustomSnackbar(
               event.notification!.title,
               event.notification!.body,
             );
           }
         }
       } else if (event.data["type"] == "logout") {
-        ModalController.to.showoneButtonDialog(
+        showoneButtonDialog(
           title: '로그인 감지',
           content: '다른 기기에서 해당 계정으로 로그인 하여 로그아웃합니다',
           oneFunction: () {
             AppController.to.currentIndex.value = 0;
             FlutterSecureStorage().delete(key: "token");
             FlutterSecureStorage().delete(key: "id");
+            FlutterSecureStorage().delete(key: "login detect");
             Get.delete<AppController>();
             Get.delete<HomeController>();
             Get.delete<SearchController>();
@@ -187,7 +190,7 @@ class NotificationController extends GetxController {
       } else {
         ProfileController.to.isnewalarm(true);
 
-        ModalController.to.showCustomSnackbar(
+        showCustomSnackbar(
           event.notification!.title,
           event.notification!.body,
         );

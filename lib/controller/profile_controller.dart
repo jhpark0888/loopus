@@ -1,13 +1,17 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/career_model.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/careertile_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -19,12 +23,11 @@ class ProfileController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static ProfileController get to => Get.find();
 
-  List<String> dropdownQanda = ["답변한 질문", "내가 한 질문"];
-  var selectqanda = 0.obs;
   RxBool profileenablepullup = true.obs;
-  ScrollController userscrollController = ScrollController();
-  ScrollController projectscrollController = ScrollController();
-  ScrollController questionscrollController = ScrollController();
+
+  final careertitleController = PageController(viewportFraction: 0.4);
+  final careerPageController = PageController();
+  RxDouble careerCurrentPage = 0.0.obs;
 
   RefreshController profilerefreshController =
       RefreshController(initialRefresh: false);
@@ -40,7 +43,10 @@ class ProfileController extends GetxController
     profilerefreshController.loadComplete();
   }
 
+  RxBool careerLoading = false.obs;
+
   RxList<Project> myProjectList = <Project>[].obs;
+  List<int> careerPagenums = <int>[];
 
   Rx<File> profileimage = File('').obs;
   Rx<User> myUserInfo = User.defaultuser().obs;
@@ -52,9 +58,7 @@ class ProfileController extends GetxController
   RxBool isnewalarm = false.obs;
   RxBool isnewmessage = false.obs;
 
-  // RxBool isProfileLoading = true.obs;
   RxBool isLoopPeopleLoading = true.obs;
-  // RxBool isNetworkConnect = false.obs;
   Rx<ScreenState> myprofilescreenstate = ScreenState.loading.obs;
 
   // ---
@@ -63,11 +67,9 @@ class ProfileController extends GetxController
   late RxList<CareerTile> careerwidget;
   TextEditingController careerAddController = TextEditingController();
   TextEditingController careerUpdateController = TextEditingController();
-  final RxBool isDelete = false.obs;
-  final RxBool isUpdate = false.obs;
   // --
 
-  void loadmyProfile() async {
+  Future loadmyProfile() async {
     // isProfileLoading.value = true;
     myprofilescreenstate(ScreenState.loading);
     String? userId = await const FlutterSecureStorage().read(key: "id");
@@ -75,44 +77,68 @@ class ProfileController extends GetxController
     ConnectivityResult result = await initConnectivity();
     if (result == ConnectivityResult.none) {
       myprofilescreenstate(ScreenState.disconnect);
-      ModalController.to.showdisconnectdialog();
+      showdisconnectdialog();
     } else {
        await getProfile(userId, 1);
       await getProjectlist(userId, 1);
+      if(myProjectList.isNotEmpty) {
+        await getCareerPosting(
+              myProjectList[careerCurrentPage.value.toInt()].id, 0)
+          .then((value) {
+        if (value.isError == false) {
+          List<Post> postlist = value.data;
+          myProjectList[careerCurrentPage.value.toInt()].posts(postlist);
+          myprofilescreenstate(ScreenState.success);
+        } else {
+          errorSituation(value);
+          myprofilescreenstate(ScreenState.error);
+        }
+      });
+      }
+      
     }
     // isProfileLoading.value = false;
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     profileTabController = TabController(length: 2, vsync: this);
-    loadmyProfile();
 
+    await loadmyProfile();
 
     //-----
     careerAnalysis = [
       careerAnalysisWidget('IT', 14, 2, 12, 12),
       careerAnalysisWidget('인공지능', 14, 2, 14, -12),
       careerAnalysisWidget('디자인', 14, 2, 30, 12),
-      careerAnalysisWidget('산업경영공학', 14, 2, 30, 0)
     ].obs;
-    career = [
-      CareerModel(title: '3학년 인공지능 스터디 기록', time: DateTime.parse('2021-08-11')),
-      CareerModel(title: '루프어스 프로젝트', time: DateTime.parse('2021-10-11')),
-      CareerModel(title: '4학년 데이터 분석 졸업작품', time: DateTime.parse('2021-12-11')),
-      CareerModel(title: '교내 홈페이지 제작', time: DateTime.parse('2022-02-11')),
-    ].obs;
-    // await Future.delayed(const Duration(seconds: 1));
-    careerwidget = career
-        .map((element) =>
-            CareerTile(title: element.title.obs, time: element.time))
-        .toList()
-        .obs;
-    //-----
+
+    ever(
+      careerCurrentPage,
+      (_) async {
+        Project project = myProjectList[careerCurrentPage.toInt()];
+        if (project.posts.isEmpty) {
+          careerLoading(true);
+          await getCareerPosting(project.id, 0).then((value) {
+            if (value.isError == false) {
+              List<Post> postlist = value.data;
+              project.posts(postlist);
+              // myprofilescreenstate(ScreenState.success);
+            } else {
+              errorSituation(value);
+              // myprofilescreenstate(ScreenState.error);
+            }
+            careerLoading(false);
+          });
+        }
+      },
+      // time: const Duration(milliseconds: 300),
+    );
+
     super.onInit();
   }
 
-   Widget careerAnalysisWidget(String title, int countrywide,
+  Widget careerAnalysisWidget(String title, int countrywide,
       int countryVariance, int campus, int campusVariance) {
     return Column(
       children: [
@@ -136,6 +162,7 @@ class ProfileController extends GetxController
       ],
     );
   }
+
   Widget rate(int variance) {
     return Row(children: [
       const SizedBox(width: 32),
@@ -156,5 +183,25 @@ class ProfileController extends GetxController
     } else {
       return SvgPicture.asset('assets/icons/down_arrow.svg');
     }
+  }
+
+  List<PieChartSectionData> showingSections() {
+    return myProjectList.map((career) {
+      int index =
+          myProjectList.indexWhere((element) => element.id == career.id);
+      final isSelected = index == careerCurrentPage.value;
+      final fontSize = isSelected ? 15.0 : 10.0;
+      final radius = isSelected ? 40.0 : 25.0;
+      return PieChartSectionData(
+        color: colorgroup[index],
+        value: career.postRatio,
+        title: '${career.postRatio}',
+        radius: radius,
+        titleStyle: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xffffffff)),
+      );
+    }).toList();
   }
 }
