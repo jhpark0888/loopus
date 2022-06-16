@@ -77,7 +77,7 @@ class ProfileController extends GetxController
       myprofilescreenstate(ScreenState.disconnect);
       ModalController.to.showdisconnectdialog();
     } else {
-      await getProfile(userId, 1);
+       await getProfile(userId, 1);
       await getProjectlist(userId, 1);
     }
     // isProfileLoading.value = false;

@@ -1,0 +1,325 @@
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
+import 'package:loopus/controller/upload_controller.dart';
+
+import 'package:photo_manager/photo_manager.dart';
+
+class UploadScreen extends StatelessWidget {
+  UploadScreen({Key? key}) : super(key: key);
+  UploadController controller = Get.put(UploadController());
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(44),
+        child: AppBar(
+          leading: SvgPicture.asset('assets/icons/Arrow_left.svg'),
+          title: Obx(
+            () => controller.isImage.value ? Container() : Text(
+              '이미지 첨부',
+              style: kHeaderH1Style,
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 12.5, 12.5, 0),
+              child: Text(
+                '확인',
+                style: kHeaderH1Style,
+              ),
+            )
+          ],
+          elevation: 0,
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+            child: Column(children: [
+          GestureDetector(
+            onTap: () {},
+            child: Obx(
+              () => Container(
+                  width: Get.width,
+                  height: Get.width,
+                  decoration: const BoxDecoration(color: mainWhite),
+                  child: controller.isSelect.value
+                      ? _photoWidget(controller.selectedImage!, 500,
+                          builder: (data) {
+                          return Image.memory(data, fit: BoxFit.cover);
+                        })
+                      : Center(
+                          child: Text(
+                          '이미지를 선택해주세요 \n 최대 10장까지 가능해요',
+                          style: kSubTitle3Style.copyWith(height: 1.5),
+                        ))),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 20.0, right: 20, top: 10, bottom: 10),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    print('눌림');
+                    showModalBottomSheet(
+                      barrierColor: Colors.transparent,
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(16),
+                                topRight: Radius.circular(16))),
+                        builder: (_) => Container(
+                              height: Get.height -
+                                  MediaQuery.of(context).padding.top - 44,
+                              color: Colors.white,
+                              child: SingleChildScrollView(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: List.generate(
+                                        controller.albums.length,
+                                        (index) => Container(
+                                            height: 110,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                print(index);
+                                                controller.imageList.value =
+                                                    controller
+                                                        .titleImageList1[index];
+                                                controller.headerTitle.value =
+                                                    controller
+                                                        .albums[index].name;
+                                                Get.back();
+                                              },
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        height: 100,
+                                                        width: 100,
+                                                        child: _photoWidget(
+                                                            controller
+                                                                .titleImageList1[
+                                                                    index][0]
+                                                                .obs,
+                                                            500,
+                                                            builder: (data) {
+                                                          return Image.memory(
+                                                              data,
+                                                              fit:
+                                                                  BoxFit.cover);
+                                                        }),
+                                                      ),
+                                                      const SizedBox(width: 15),
+                                                      Text(
+                                                        controller
+                                                            .albums[index].name,
+                                                        style: k16semiBold,
+                                                      ),
+                                                      const Spacer(),
+                                                      Text(
+                                                        '${controller.albums[index].assetCount.toString()}개',
+                                                        style: kSubTitle3Style,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 10)
+                                                ],
+                                              ),
+                                            ))),
+                                  ),
+                                ),
+                              ),
+                            ));
+                  },
+                  child: Row(
+                    children: [
+                      Obx(
+                        () => Text(
+                          controller.headerTitle.value,
+                          style: k18Semibold,
+                        ),
+                      ),
+                      Icon(Icons.arrow_drop_down)
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Obx(() => GridView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  mainAxisSpacing: 1,
+                  crossAxisSpacing: 1,
+                  childAspectRatio: 1),
+              itemCount: controller.imageList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Obx(() => _photoWidget(
+                        controller.imageList[index].obs, 200, builder: (data) {
+                      return Obx(
+                        (() => GestureDetector(
+                              onTap: () {
+                                controller.selectedImage!.value =
+                                    controller.imageList[index];
+                                controller.selectedImage!.refresh();
+                                controller.isSelect.value = true;
+                              },
+                              child: Opacity(
+                                  opacity: controller.imageList[index] ==
+                                          controller.selectedImage!.value
+                                      ? 0.3
+                                      : 1,
+                                  child: Image.memory(data, fit: BoxFit.cover)),
+                            )),
+                      );
+                    }));
+              })),
+          // _imageSelectLis1t()
+        ])),
+      ),
+    );
+  }
+
+  Widget _imagePreview() {
+    return Container(
+        width: Get.width,
+        height: Get.width,
+        decoration: BoxDecoration(color: maingrey),
+        child: controller.selectedImage == null
+            ? Container()
+            : _photoWidget(controller.selectedImage!, 500, builder: (data) {
+                return Image.memory(data, fit: BoxFit.cover);
+              }));
+  }
+
+  Widget _header() {
+    return Padding(
+      padding:
+          const EdgeInsets.only(left: 20.0, right: 20, top: 10, bottom: 10),
+      child: Row(
+        children: [
+          Row(
+            children: [
+              Text(
+                controller.headerTitle.value,
+                style: k18Semibold,
+              ),
+              Icon(Icons.arrow_drop_down)
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _imageSelectList() {
+    return GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            mainAxisSpacing: 1,
+            crossAxisSpacing: 1,
+            childAspectRatio: 1),
+        itemCount: controller.imageList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Obx(() => _photoWidget(controller.imageList[index].obs, 200,
+                  builder: (data) {
+                return GestureDetector(
+                  onTap: () {
+                    controller.selectedImage = controller.imageList[index].obs;
+                  },
+                  child: Opacity(
+                      opacity: controller.imageList[index] ==
+                              controller.selectedImage!.value
+                          ? 0.3
+                          : 1,
+                      child: Image.memory(data, fit: BoxFit.cover)),
+                );
+              }));
+        });
+  }
+
+  Widget _photoWidget(Rx<AssetEntity> asset, int size,
+      {required Widget Function(Uint8List) builder}) {
+    return FutureBuilder(
+        future: asset.value.thumbnailDataWithSize(ThumbnailSize(size, size)),
+        builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
+          if (snapshot.hasData) {
+            return builder(snapshot.data!);
+          } else {
+            return Container();
+          }
+        });
+  }
+
+  void modalsheet(context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+        builder: (_) => Container(
+              color: Colors.white,
+              child: Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: List.generate(
+                        controller.albums.length,
+                        (index) => Container(
+                            height: 50,
+                            child: Text(controller.albums[index].name))),
+                  ),
+                ),
+              ),
+            ));
+  }
+  // Widget _imageSelectLis1t() {
+  //   return GridView.builder(
+  //         physics: NeverScrollableScrollPhysics(),
+  //         shrinkWrap: true,
+  //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //             crossAxisCount: 4,
+  //             mainAxisSpacing: 1,
+  //             crossAxisSpacing: 1,
+  //             childAspectRatio: 1),
+  //         itemCount: controller.imageList1.length,
+  //         itemBuilder: (BuildContext context, int index) {
+  //           return Obx(() => controller.isLoad.value == false
+  //               ? const SizedBox.shrink()
+  //               : GestureDetector(
+  //                   onTap: () {
+  //                     controller.selectedImage1!.value =
+  //                         controller.imageList1[index];
+  //                         print(controller.selectedImage1!.value);
+  //                         print(controller.imageList1[index] ==
+  //                               controller.selectedImage1!.value);
+  //                               controller.selectedImage1!.refresh();
+  //                   },
+  //                   child: Opacity(
+  //                       opacity: controller.imageList1[index] ==
+  //                               controller.selectedImage1!.value
+  //                           ? 0.3
+  //                           : 1,
+  //                       child: Image.file(controller.imageList1[index],
+  //                           fit: BoxFit.cover)),
+  //                 ));
+  //         });
+
+  // }
+}

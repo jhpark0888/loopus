@@ -25,7 +25,7 @@ class Post {
   String content;
   List<String> images;
   // List<Scrap> scraps 입력값 10개까지
-  // List<Comment> comments 댓글
+  // List<Comment> comments;  //댓글
   List<Tag> tags;
   DateTime date;
   Project? project;

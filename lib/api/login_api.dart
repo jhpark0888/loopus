@@ -39,6 +39,7 @@ Future<void> loginRequest(String email, String pw) async {
     };
 
     try {
+      print('$serverUri/user_api/login');
       http.Response response = await http.post(
         uri,
         headers: <String, String>{
