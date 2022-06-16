@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 
@@ -12,7 +11,6 @@ class PersonTileWidget extends StatelessWidget {
     required this.user,
   });
 
-  final ProfileController profileController = Get.put(ProfileController());
   final User user;
   late final HoverController _hoverController =
       Get.put(HoverController(), tag: user.userid.toString());

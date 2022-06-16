@@ -269,7 +269,7 @@
 //       types.insert(index, selectedType.value);
 //     } else {
 //       TextEditingController linkcontroller = TextEditingController();
-//       ModalController.to.showTextFieldDialog(
+//       .showTextFieldDialog(
 //           isWithdrawal: false,
 //           title: '링크를 입력해주세요',
 //           hintText: 'https//',

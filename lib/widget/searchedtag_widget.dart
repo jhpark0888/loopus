@@ -216,7 +216,7 @@ class SearchTagWidget extends StatelessWidget {
         // gettagsearch(tagtype!);
       }
     } else {
-      ModalController.to.showCustomDialog('최대 3개까지 선택할 수 있어요', 1000);
+      showCustomDialog('최대 3개까지 선택할 수 있어요', 1000);
     }
   }
 }

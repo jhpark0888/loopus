@@ -105,8 +105,8 @@ class QuestionAnswerWidget extends StatelessWidget {
 
   void showModal(BuildContext context) {
     if (answer.isuser == 1) {
-      ModalController.to.showModalIOS(context, func1: () {
-        ModalController.to.showButtonDialog(
+      showModalIOS(context, func1: () {
+        showButtonDialog(
             leftText: '취소',
             rightText: '삭제',
             title: '정말 답변을 삭제하시겠어요?',
@@ -123,8 +123,8 @@ class QuestionAnswerWidget extends StatelessWidget {
           isValue2Red: true,
           isOne: true);
     } else {
-      ModalController.to.showModalIOS(context, func1: () {
-        ModalController.to.showButtonDialog(
+      showModalIOS(context, func1: () {
+        showButtonDialog(
             leftText: '취소',
             rightText: '신고',
             title: '정말 이 답변을 신고하시겠어요?',

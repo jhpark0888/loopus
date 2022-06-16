@@ -61,7 +61,6 @@ class OtherProfileScreen extends StatelessWidget {
 
   final ImageController imageController = Get.put(ImageController());
   final HoverController _hoverController = Get.put(HoverController());
-  final ModalController modalController = Get.put(ModalController());
 
   int userid;
   int isuser;
@@ -103,10 +102,10 @@ class OtherProfileScreen extends StatelessWidget {
                 )
               : IconButton(
                   onPressed: () {
-                    modalController.showModalIOS(
+                    showModalIOS(
                       context,
                       func1: () {
-                        modalController.showButtonDialog(
+                        showButtonDialog(
                             leftText: '취소',
                             rightText: '신고',
                             title: '<${realname}> 유저를 신고하시겠어요?',
@@ -117,7 +116,7 @@ class OtherProfileScreen extends StatelessWidget {
                             });
                       },
                       func2: () {
-                        modalController.showButtonDialog(
+                        showButtonDialog(
                             leftText: '취소',
                             rightText: '차단',
                             title: '<${realname}> 유저를 차단하시겠어요?',
@@ -259,17 +258,14 @@ class OtherProfileScreen extends StatelessWidget {
                                             onTap: controller.otherUser.value
                                                         .isuser ==
                                                     1
-                                                ? () => ModalController.to
-                                                    .showModalIOS(context,
-                                                        func1:
-                                                            changeProfileImage,
-                                                        func2:
-                                                            changeDefaultImage,
-                                                        value1: '라이브러리에서 선택',
-                                                        value2: '기본 이미지로 변경',
-                                                        isValue1Red: false,
-                                                        isValue2Red: false,
-                                                        isOne: false)
+                                                ? () => showModalIOS(context,
+                                                    func1: changeProfileImage,
+                                                    func2: changeDefaultImage,
+                                                    value1: '라이브러리에서 선택',
+                                                    value2: '기본 이미지로 변경',
+                                                    isValue1Red: false,
+                                                    isValue2Red: false,
+                                                    isOne: false)
                                                 : () {},
                                             child: ClipOval(
                                                 child: (controller
@@ -307,17 +303,15 @@ class OtherProfileScreen extends StatelessWidget {
                                           child: Align(
                                             alignment: Alignment.bottomRight,
                                             child: GestureDetector(
-                                                onTap: () => ModalController.to
-                                                    .showModalIOS(context,
-                                                        func1:
-                                                            changeProfileImage,
-                                                        func2:
-                                                            changeDefaultImage,
-                                                        value1: '라이브러리에서 선택',
-                                                        value2: '기본 이미지로 변경',
-                                                        isValue1Red: false,
-                                                        isValue2Red: false,
-                                                        isOne: false),
+                                                onTap: () => showModalIOS(
+                                                    context,
+                                                    func1: changeProfileImage,
+                                                    func2: changeDefaultImage,
+                                                    value1: '라이브러리에서 선택',
+                                                    value2: '기본 이미지로 변경',
+                                                    isValue1Red: false,
+                                                    isValue2Red: false,
+                                                    isOne: false),
                                                 child: controller.otherUser
                                                             .value.isuser ==
                                                         1

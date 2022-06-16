@@ -25,7 +25,7 @@ Future<void> getNotificationlist(String type, int lastindex) async {
       controller.notificationscreenstate(ScreenState.disconnect);
     }
 
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 

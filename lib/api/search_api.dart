@@ -26,7 +26,7 @@ import '../controller/error_controller.dart';
 Future<void> tagsearch() async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token;
     await FlutterSecureStorage().read(key: 'token').then((value) {
@@ -100,7 +100,7 @@ Future<void> search(
       Get.find<TagDetailController>(tag: searchtext)
           .tagquestionscreenstate(ScreenState.disconnect);
     }
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     SearchController searchController = Get.find();
     String? token;

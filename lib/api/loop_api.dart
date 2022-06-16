@@ -26,7 +26,7 @@ Future<void> getfollowlist(int userid, followlist followtype) async {
     } else {
       controller.followingscreenstate(ScreenState.disconnect);
     }
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
@@ -77,7 +77,7 @@ Future<void> getprojectfollowlist(int userid, followlist followtype) async {
   ProjectAddController controller = Get.find();
   if (result == ConnectivityResult.none) {
     controller.looppersonscreenstate(ScreenState.disconnect);
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 

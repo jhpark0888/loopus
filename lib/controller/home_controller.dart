@@ -1,11 +1,13 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/api/question_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
@@ -13,6 +15,7 @@ import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -64,14 +67,33 @@ class HomeController extends GetxController
   // int pageNumber = 1;
 
   @override
-  void onInit() {
+  void onInit() async {
     // hometabcontroller = TabController(length: 3, vsync: this);
 
-    getpopulartag();
-    onPostingRefresh();
+    // getpopulartag();
+    // onPostingRefresh();
     // onQuestionRefresh();
     // onLoopRefresh();
-    logindetect();
+    // logindetect();
+    String? islogindetect =
+        await FlutterSecureStorage().read(key: 'login detect');
+    if (islogindetect == 'true') {
+      showoneButtonDialog(
+        title: '로그인 감지',
+        content: '다른 기기에서 해당 계정으로 로그인 하여 로그아웃합니다',
+        oneFunction: () {
+          AppController.to.currentIndex.value = 0;
+          FlutterSecureStorage().delete(key: "token");
+          FlutterSecureStorage().delete(key: "id");
+          FlutterSecureStorage().delete(key: "login detect");
+          Get.delete<AppController>();
+          Get.delete<HomeController>();
+          Get.delete<SearchController>();
+          Get.offAll(() => StartScreen());
+        },
+        oneText: '확인',
+      );
+    }
     super.onInit();
   }
 
@@ -129,7 +151,7 @@ class HomeController extends GetxController
   // Future<void> questionLoadItem() async {
   //   ConnectivityResult result = await initConnectivity();
   //   if (result == ConnectivityResult.none) {
-  //     ModalController.to.showdisconnectdialog();
+  //     .showdisconnectdialog();
   //   } else {
   //     HTTPResponse httpresult;
   //     if (selectgroup.value == "모든 질문") {
@@ -164,7 +186,7 @@ class HomeController extends GetxController
     HTTPResponse httpresult;
     ConnectivityResult result = await initConnectivity();
     if (result == ConnectivityResult.none) {
-      ModalController.to.showdisconnectdialog();
+      showdisconnectdialog();
     } else {
       if (isRecommandFull.value == false) {
         httpresult = await recommandpost(recommandpagenum);
@@ -222,7 +244,7 @@ class HomeController extends GetxController
   // Future<void> looploadItem() async {
   //   ConnectivityResult result = await initConnectivity();
   //   if (result == ConnectivityResult.none) {
-  //     ModalController.to.showdisconnectdialog();
+  //     .showdisconnectdialog();
   //   } else {
   //     HTTPResponse httpresult = await looppost(
   //         loopResult.value.postingitems.isEmpty
@@ -284,7 +306,7 @@ class HomeController extends GetxController
     }
 
     await bookmarkpost(postid);
-    ModalController.to.showCustomDialog('북마크 탭에 저장했어요', 1000);
+    showCustomDialog('북마크 탭에 저장했어요', 1000);
   }
 
   void tapunBookmark(int postid) async {
@@ -323,7 +345,7 @@ class HomeController extends GetxController
     }
 
     await bookmarkpost(postid);
-    ModalController.to.showCustomDialog("북마크 탭에서 삭제했어요.", 1000);
+    showCustomDialog("북마크 탭에서 삭제했어요.", 1000);
   }
 
   void tapLike(int postid, int likecount) {

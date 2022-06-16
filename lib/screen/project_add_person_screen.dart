@@ -1,14 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/ga_controller.dart';
+import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
-import 'package:loopus/screen/project_add_thumbnail_screen.dart';
+import 'package:loopus/model/project_model.dart';
+import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
@@ -36,17 +42,46 @@ class ProjectAddPersonScreen extends StatelessWidget {
           screenType == Screentype.add
               ? TextButton(
                   onPressed: () async {
-                    Get.to(() => ProjectAddThumbnailScreen(
-                          screenType: Screentype.add,
-                        ));
+                    Get.to(() => LoadingScreen(), opaque: false);
+                    await addproject().then((value) async {
+                      Get.back();
+                      final LocalDataController _localDataController =
+                          Get.put(LocalDataController());
+                      final GAController _gaController =
+                          Get.put(GAController());
+                      if (value.isError == false) {
+                        await _gaController.logProjectCreated(true);
+
+                        Project project = Project.fromJson(value.data);
+                        project.is_user = 1;
+
+                        ProfileController.to.myProjectList.insert(0, project);
+
+                        SchedulerBinding.instance!.addPostFrameCallback((_) {
+                          showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
+                        });
+
+                        if (_localDataController.isAddFirstProject == true) {
+                          final InAppReview inAppReview = InAppReview.instance;
+
+                          if (await inAppReview.isAvailable()) {
+                            inAppReview.requestReview();
+                          }
+                        }
+                        _localDataController.firstProjectAdd();
+                      } else {
+                        await _gaController.logProjectCreated(false);
+                      }
+                    });
                   },
                   child: Obx(
                     () => Padding(
                       padding: const EdgeInsets.only(right: 4),
                       child: Text(
-                        projectaddcontroller.selectedpersontaglist.isEmpty
-                            ? '건너뛰기'
-                            : '다음',
+                        // projectaddcontroller.selectedpersontaglist.isEmpty
+                        //     ? '건너뛰기'
+                        //     :
+                        '만들기',
                         style: kSubTitle2Style.copyWith(
                           color: mainblue,
                         ),
@@ -118,7 +153,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: '활동을 ',
+                            text: '커리어를 ',
                             style: kSubTitle1Style,
                           ),
                           TextSpan(

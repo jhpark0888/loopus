@@ -27,7 +27,7 @@ class WithdrawalScreen extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   TextEditingController pwcontroller = TextEditingController();
-                  ModalController.to.showTextFieldDialog(
+                  showTextFieldDialog(
                       isWithdrawal: true,
                       title: "현재 비밀번호를 입력해주세요",
                       hintText: "8자리 이상",

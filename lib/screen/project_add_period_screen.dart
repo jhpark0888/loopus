@@ -10,7 +10,6 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/screen/project_add_person_screen.dart';
-import 'package:loopus/screen/project_add_tag_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
 class ProjectAddPeriodScreen extends StatelessWidget {
@@ -21,7 +20,6 @@ class ProjectAddPeriodScreen extends StatelessWidget {
   }) : super(key: key);
 
   final ProjectAddController projectaddcontroller = Get.find();
-  final ModalController _modalController = Get.put(ModalController());
   final Screentype screenType;
   int? projectid;
 
@@ -96,7 +94,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                         ),
                 )
         ],
-        title: '활동 기간',
+        title: '커리어 기간',
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(
@@ -130,7 +128,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                   height: 12,
                 ),
                 Text(
-                  '아직 종료되지 않은 활동이어도 괜찮아요',
+                  '아직 종료되지 않은 커리어여도 괜찮아요',
                   style: kBody2Style,
                 ),
                 SizedBox(
@@ -148,8 +146,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        _modalController.showDatePicker(
-                            context, SelectDateType.start);
+                        showCustomDatePicker(context, SelectDateType.start);
                       },
                       child: Obx(
                         () => Text(
@@ -183,7 +180,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                         onPressed:
                             (projectaddcontroller.isEndedProject.value == true)
                                 ? () {
-                                    _modalController.showDatePicker(
+                                    showCustomDatePicker(
                                         context, SelectDateType.end);
                                   }
                                 : () {},

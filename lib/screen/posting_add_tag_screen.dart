@@ -41,7 +41,7 @@ class PostingAddTagScreen extends StatelessWidget {
                     //     projectId,
                     //   ).then((value) => null);
                     // } else {
-                    //   ModalController.to
+                    //
                     //       .showCustomDialog('3개의 태그를 선택해주세요', 1000);
                     // }
                   },

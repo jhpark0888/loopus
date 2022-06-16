@@ -46,7 +46,7 @@ class BookmarkController extends GetxController {
   Future<void> bookmarkLoadItem() async {
     ConnectivityResult result = await initConnectivity();
     if (result == ConnectivityResult.none) {
-      ModalController.to.showdisconnectdialog();
+      showdisconnectdialog();
     } else {
       HTTPResponse httpresult = await bookmarklist(pageNumber);
       HTTPResponse nexthttpresult = await bookmarklist(pageNumber + 1);

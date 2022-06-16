@@ -24,10 +24,9 @@ import '../constant.dart';
 void emailRequest() async {
   ConnectivityResult result = await initConnectivity();
   SignupController signupController = Get.put(SignupController());
-  ModalController modalController = Get.put(ModalController());
   if (result == ConnectivityResult.none) {
     signupController.signupcertification(Emailcertification.fail);
-    modalController.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     Uri uri = Uri.parse('$serverUri/user_api/check_email');
 
@@ -61,10 +60,10 @@ void emailRequest() async {
         // Get.back();
         signupController.timer!.cancel();
         signupController.signupcertification(Emailcertification.fail);
-        modalController.showCustomDialog("이미 가입된 회원입니다", 1000);
+        showCustomDialog("이미 가입된 회원입니다", 1000);
       } else {
         signupController.signupcertification(Emailcertification.fail);
-        ModalController.to.showCustomDialog("인증에 실패하였습니다", 1000);
+        showCustomDialog("인증에 실패하였습니다", 1000);
         signupController.timer!.cancel();
       }
     } on SocketException {
@@ -79,13 +78,12 @@ void emailRequest() async {
 Future<void> signupRequest() async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    Get.put(ModalController()).showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     final SignupController signupController = Get.find();
     final TagController tagController =
         Get.find(tag: Tagtype.profile.toString());
     final GAController _gaController = Get.put(GAController());
-    final ModalController _modalController = Get.put(ModalController());
 
     Uri uri = Uri.parse('$serverUri/user_api/signup');
     const FlutterSecureStorage storage = FlutterSecureStorage();
@@ -125,7 +123,7 @@ Future<void> signupRequest() async {
         // Get.offAll(() => App());
 
         SchedulerBinding.instance!.addPostFrameCallback((_) {
-          _modalController.showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
+          showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
         });
 
         await _gaController.logScreenView('signup_6');
@@ -147,7 +145,7 @@ Future getdeptlist() async {
   final SignupController signupController = Get.find();
   if (result == ConnectivityResult.none) {
     signupController.deptscreenstate(ScreenState.disconnect);
-    Get.put(ModalController()).showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     final GAController _gaController = Get.put(GAController());

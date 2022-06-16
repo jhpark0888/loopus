@@ -38,9 +38,17 @@ class Post {
   factory Post.fromJson(Map<String, dynamic> json) => Post(
         id: json["id"],
         userid: json["user_id"],
-        content: json["title"],
-        images: [],
-        tags: [],
+        content: json["contents"],
+        images: json["contents_image"] != null
+            ? List<Map<String, dynamic>>.from(json["contents_image"])
+                .map((map) => map['image'].toString())
+                .toList()
+            : [],
+        tags: json['post_tag'] != null
+            ? List<Map<String, dynamic>>.from(json['post_tag'])
+                .map((tag) => Tag.fromJson(tag))
+                .toList()
+            : [],
         date: DateTime.parse(json["date"]),
         project:
             json["project"] != null ? Project.fromJson(json["project"]) : null,

@@ -5,7 +5,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
-import 'package:loopus/screen/project_add_intro_screen.dart';
+import 'package:loopus/trash_bin/project_add_intro_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
@@ -98,7 +98,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                             ),
                           ))
           ],
-          title: '활동명',
+          title: '커리어명',
         ),
         body: Form(
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -117,7 +117,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: '활동명',
+                        text: '커리어명',
                         style: kSubTitle1Style.copyWith(
                           color: mainblue,
                         ),
@@ -133,7 +133,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                   height: 12,
                 ),
                 const Text(
-                  '어떤 활동인지 잘 드러나는 이름을 입력해주세요',
+                  '어떤 커리어인지 잘 드러나는 이름을 입력해주세요',
                   style: kBody2Style,
                 ),
                 const SizedBox(

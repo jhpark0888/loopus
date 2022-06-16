@@ -28,8 +28,6 @@ class ProjectScreen extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  ModalController modalController = Get.put(ModalController());
-
   late ProjectDetailController controller =
       Get.put(ProjectDetailController(projectid), tag: projectid.toString());
 
@@ -212,10 +210,10 @@ class ProjectScreen extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   controller.project.value.is_user == 1
-                      ? modalController.showModalIOS(
+                      ? showModalIOS(
                           context,
                           func1: () {
-                            modalController.showButtonDialog(
+                            showButtonDialog(
                                 leftText: '취소',
                                 rightText: '삭제',
                                 title:
@@ -240,10 +238,10 @@ class ProjectScreen extends StatelessWidget {
                           isValue2Red: false,
                           isOne: true,
                         )
-                      : modalController.showModalIOS(
+                      : showModalIOS(
                           context,
                           func1: () {
-                            modalController.showButtonDialog(
+                            showButtonDialog(
                                 leftText: '취소',
                                 rightText: '신고',
                                 title:

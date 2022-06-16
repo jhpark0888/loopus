@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -11,7 +12,6 @@ import 'package:loopus/screen/login_screen.dart';
 
 class StartScreen extends StatelessWidget {
   final PageController pageController = PageController(viewportFraction: 1);
-  final ModalController _modalController = Get.put(ModalController());
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class StartScreen extends StatelessWidget {
               ),
               CustomExpandedButton(
                 buttonTag: '시작하기',
-                onTap: () => ModalController.to.showContentModal(context),
+                onTap: () => showContentModal(context),
                 isBlue: true,
                 isBig: true,
                 title: '시작하기',
@@ -52,9 +52,14 @@ class StartScreen extends StatelessWidget {
               ),
               CustomExpandedButton(
                 buttonTag: '이미 계정이 있어요',
-                onTap: () => Get.to(
-                  () => LogInScreen(),
-                ),
+                onTap: () async {
+                  String? login =
+                      await FlutterSecureStorage().read(key: 'login detect');
+                  print(login);
+                  Get.to(
+                    () => LogInScreen(),
+                  );
+                },
                 isBlue: false,
                 isBig: true,
                 title: '이미 계정이 있어요',

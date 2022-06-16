@@ -33,7 +33,7 @@ import '../controller/modal_controller.dart';
 Future<HTTPResponse> addposting(int projectId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     final PostingAddController postingAddController = Get.find();
@@ -88,7 +88,7 @@ Future<HTTPResponse> addposting(int projectId) async {
         //       isuser: 1,
         //     ),
         //   );
-        //   ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
+        //   .showCustomDialog('포스팅을 업로드했어요', 1000);
         // } else {
         //   String responsebody = await response.stream.bytesToString();
         //   Map<String, dynamic> responsemap = json.decode(responsebody);
@@ -100,7 +100,7 @@ Future<HTTPResponse> addposting(int projectId) async {
         //   HomeController.to.recommandpostingResult.value.postingitems
         //       .insert(0, post);
         //   getbacks(5);
-        //   ModalController.to.showCustomDialog('포스팅을 업로드했어요', 1000);
+        //   .showCustomDialog('포스팅을 업로드했어요', 1000);
         // }
         return HTTPResponse.success('success');
       } else if (response.statusCode == 400) {
@@ -138,7 +138,7 @@ Future<HTTPResponse> getposting(int postingid) async {
 
   if (result == ConnectivityResult.none) {
     controller.postscreenstate(ScreenState.disconnect);
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
@@ -170,7 +170,7 @@ Future<HTTPResponse> getposting(int postingid) async {
             Post.fromJson(responseBody['posting_info']));
       } else if (response.statusCode == 404) {
         Get.back();
-        ModalController.to.showCustomDialog('이미 삭제된 포스팅입니다', 1400);
+        showCustomDialog('이미 삭제된 포스팅입니다', 1400);
         return HTTPResponse.apiError('이미 삭제된 포스팅입니다', response.statusCode);
       } else {
         controller.postscreenstate(ScreenState.error);
@@ -200,7 +200,7 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
       Get.find<PostingDetailController>(tag: postid.toString());
 
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     final PostingAddController postingAddController = Get.find();
 
@@ -323,7 +323,7 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
           }
         }
         Get.back();
-        ModalController.to.showCustomDialog('변경이 완료되었어요', 1000);
+        showCustomDialog('변경이 완료되었어요', 1000);
         // String responsebody = await response.stream.bytesToString();
         // print(responsebody);
         // var responsemap = json.decode(responsebody);
@@ -345,7 +345,7 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
 Future<void> deleteposting(int postid, int projectid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
@@ -572,7 +572,7 @@ Future<void> getlikepeoele(int postid) async {
   LikePeopleController controller = Get.find(tag: postid.toString());
   if (result == ConnectivityResult.none) {
     controller.likepeoplescreenstate(ScreenState.disconnect);
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
@@ -609,7 +609,7 @@ Future<void> getlikepeoele(int postid) async {
 Future postingreport(int postingId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token;
     await const FlutterSecureStorage().read(key: 'token').then((value) {
@@ -631,7 +631,7 @@ Future postingreport(int postingId) async {
       print('포스팅 신고 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         getbacks(2);
-        ModalController.to.showCustomDialog("신고가 접수되었습니다", 1000);
+        showCustomDialog("신고가 접수되었습니다", 1000);
         return;
       } else {
         return Future.error(response.statusCode);

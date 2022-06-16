@@ -13,7 +13,6 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
-import 'package:loopus/screen/posting_modify_screen.dart';
 import 'package:loopus/screen/project_screen.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
@@ -40,7 +39,6 @@ class PostingScreen extends StatelessWidget {
       LikeController(isliked: isLiked, id: postid, lastisliked: isLiked.value),
       tag: postid.toString());
 
-  final ModalController modalController = Get.put(ModalController());
   final ScrollController _controller = ScrollController();
   // final TransitionAnimationController _transitionAnimationController =
   // Get.put(TransitionAnimationController());
@@ -177,10 +175,10 @@ class PostingScreen extends StatelessWidget {
                     IconButton(
                       onPressed: isuser == 1
                           ? () {
-                              modalController.showModalIOS(
+                              showModalIOS(
                                 context,
                                 func1: () {
-                                  modalController.showButtonDialog(
+                                  showButtonDialog(
                                       leftText: '취소',
                                       rightText: '삭제',
                                       title:
@@ -208,10 +206,10 @@ class PostingScreen extends StatelessWidget {
                               );
                             }
                           : () {
-                              modalController.showModalIOS(
+                              showModalIOS(
                                 context,
                                 func1: () {
-                                  modalController.showButtonDialog(
+                                  showButtonDialog(
                                       leftText: '취소',
                                       rightText: '신고',
                                       title:

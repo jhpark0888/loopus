@@ -19,7 +19,6 @@
 //     required this.realname,
 //     Key? key,
 //   }) : super(key: key);
-//   ModalController modalController = Get.put(ModalController());
 //   // final _formKey = GlobalKey<FormState>();
 
 //   late QuestionDetailController questionController = Get.put(

@@ -128,16 +128,6 @@ class PwFindScreen extends StatelessWidget {
                 ),
               ),
             ),
-            if (_loginController.isLogin.value == true)
-              Container(
-                height: Get.height,
-                width: Get.width,
-                color: mainblack.withOpacity(0.3),
-                child: Image.asset(
-                  'assets/icons/loading.gif',
-                  scale: 6,
-                ),
-              ),
           ],
         ));
   }

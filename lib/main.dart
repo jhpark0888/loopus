@@ -46,11 +46,11 @@ void main() async {
   await GetStorage.init();
 
   // KakaoContext.clientId = '3e0e4823d8dd690cfb48b8bcd5ad7e6c';
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-    print('error catch');
-    // if (kReleaseMode) exit(1);
-  };
+  // FlutterError.onError = (FlutterErrorDetails details) {
+  //   FlutterError.presentError(details);
+  //   print('error catch');
+  //   // if (kReleaseMode) exit(1);
+  // };
   runApp(
     // DevicePreview(
     // enabled: !kReleaseMode,

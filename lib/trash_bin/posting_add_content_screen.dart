@@ -46,7 +46,7 @@
 //                                   project_id: project_id,
 //                                 ));
 //                           } else {
-//                             ModalController.to
+//                             
 //                                 .showCustomDialog('내용을 입력해주세요', 1000);
 //                           }
 //                           // postingAddController.editorController
@@ -82,7 +82,7 @@
 //                                       controller.isPostUpdateLoading(false);
 //                                     });
 //                                   } else {
-//                                     ModalController.to
+//                                     
 //                                         .showCustomDialog('내용을 입력해주세요', 1000);
 //                                   }
 //                                   // postingAddController.editorController

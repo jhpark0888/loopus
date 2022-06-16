@@ -46,7 +46,7 @@ class OtherProfileController extends GetxController
     ConnectivityResult result = await initConnectivity();
     if (result == ConnectivityResult.none) {
       otherprofilescreenstate(ScreenState.disconnect);
-      ModalController.to.showdisconnectdialog();
+      showdisconnectdialog();
     } else {
       await getProfile(userid, 0);
       await getProjectlist(userid, 0);

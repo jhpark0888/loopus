@@ -15,7 +15,6 @@ import '../controller/modal_controller.dart';
 
 class SearchFocusScreen extends StatelessWidget {
   final SearchController _searchController = Get.find();
-  final ModalController _modalController = Get.put(ModalController());
   final HomeController homeController = Get.find();
 
   @override

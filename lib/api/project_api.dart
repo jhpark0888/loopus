@@ -20,22 +20,19 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/project_screen.dart';
 
 import '../constant.dart';
 
-Future addproject() async {
+Future<HTTPResponse> addproject() async {
   ConnectivityResult result = await initConnectivity();
   final ProjectAddController projectAddController = Get.find();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
-    final LocalDataController _localDataController =
-        Get.put(LocalDataController());
-    TagController tagController = Get.find(tag: Tagtype.Posting.toString());
-    final GAController _gaController = Get.put(GAController());
-
     String? token = await const FlutterSecureStorage().read(key: "token");
     Uri uri = Uri.parse('$serverUri/project_api/project');
     try {
@@ -48,16 +45,8 @@ Future addproject() async {
 
       request.headers.addAll(headers);
 
-      if (projectAddController.projectthumbnail.value!.path != '') {
-        var multipartFile = await http.MultipartFile.fromPath(
-            'thumbnail', projectAddController.projectthumbnail.value!.path);
-        request.files.add(multipartFile);
-      }
-
       request.fields['project_name'] =
           projectAddController.projectnamecontroller.text;
-      request.fields['introduction'] =
-          projectAddController.introcontroller.text;
       request.fields['start_date'] = DateFormat('yyyy-MM-dd').format(
           DateTime.parse(projectAddController.selectedStartDateTime.value));
       request.fields['end_date'] = (projectAddController.isEndedProject.value ==
@@ -69,52 +58,25 @@ Future addproject() async {
           .selectedpersontaglist
           .map((person) => person.id)
           .toList());
-      request.fields['tag'] = json.encode(
-          tagController.selectedtaglist.map((tag) => tag.text).toList());
 
       http.StreamedResponse response = await request.send();
 
       print("활동 생성: ${response.statusCode}");
       if (response.statusCode == 201) {
-        //!GA
-        await _gaController.logProjectCreated(true);
-        getbacks(6);
-
         String responsebody = await response.stream.bytesToString();
         Map<String, dynamic> responsemap = json.decode(responsebody);
-        Project project = Project.fromJson(responsemap);
-        project.is_user = 1;
 
-        // Get.put(ProjectDetailController(project.id),
-        //     tag: project.id.toString());
-
-        Get.to(() => ProjectScreen(
-              projectid: project.id,
-              isuser: 1,
-            ));
-
-        ProfileController.to.myProjectList.insert(0, project);
-
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
-          ModalController.to.showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
-        });
-
-        if (_localDataController.isAddFirstProject == true) {
-          final InAppReview inAppReview = InAppReview.instance;
-
-          if (await inAppReview.isAvailable()) {
-            inAppReview.requestReview();
-          }
-        }
-        _localDataController.firstProjectAdd();
+        return HTTPResponse.success(responsemap);
       } else {
         //!GA
-        await _gaController.logProjectCreated(false);
+        return HTTPResponse.apiError('fail', response.statusCode);
       }
     } on SocketException {
       ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
+      return HTTPResponse.unexpectedError(e);
       // ErrorController.to.isServerClosed(true);
     }
   }
@@ -126,7 +88,7 @@ Future<Project?> getproject(int projectId) async {
       Get.find<ProjectDetailController>(tag: projectId.toString());
   if (result == ConnectivityResult.none) {
     controller.projectscreenstate(ScreenState.disconnect);
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
@@ -145,7 +107,7 @@ Future<Project?> getproject(int projectId) async {
         return project;
       } else if (response.statusCode == 404) {
         Get.back();
-        ModalController.to.showCustomDialog('이미 삭제된 활동입니다', 1400);
+        showCustomDialog('이미 삭제된 활동입니다', 1400);
         return Future.error(response.statusCode);
       } else {
         controller.projectscreenstate(ScreenState.error);
@@ -161,21 +123,14 @@ Future<Project?> getproject(int projectId) async {
   }
 }
 
-enum ProjectUpdateType {
-  project_name,
-  date,
-  tag,
-  introduction,
-  thumbnail,
-  looper
-}
+enum ProjectUpdateType { project_name, date, looper }
 
 Future updateproject(int projectId, ProjectUpdateType updateType) async {
   ConnectivityResult result = await initConnectivity();
   ProjectDetailController controller =
       Get.find<ProjectDetailController>(tag: projectId.toString());
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     ProjectAddController projectAddController = Get.find();
     TagController tagController = Get.find(tag: Tagtype.Posting.toString());
@@ -196,9 +151,6 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
       if (updateType == ProjectUpdateType.project_name) {
         request.fields['project_name'] =
             projectAddController.projectnamecontroller.text;
-      } else if (updateType == ProjectUpdateType.introduction) {
-        request.fields['introduction'] =
-            projectAddController.introcontroller.text;
       } else if (updateType == ProjectUpdateType.date) {
         request.fields['start_date'] = DateFormat('yyyy-MM-dd').format(
             DateTime.parse(projectAddController.selectedStartDateTime.value));
@@ -206,22 +158,11 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
             ? DateFormat('yyyy-MM-dd').format(
                 DateTime.parse(projectAddController.selectedEndDateTime.value))
             : '';
-      } else if (updateType == ProjectUpdateType.tag) {
-        request.fields['tag'] = json.encode(
-            tagController.selectedtaglist.map((tag) => tag.text).toList());
       } else if (updateType == ProjectUpdateType.looper) {
         request.fields['looper'] = json.encode(projectAddController
             .selectedpersontaglist
             .map((person) => person.id)
             .toList());
-      } else if (updateType == ProjectUpdateType.thumbnail) {
-        if (projectAddController.projectthumbnail.value!.path != '') {
-          var multipartFile = await http.MultipartFile.fromPath(
-              'thumbnail', projectAddController.projectthumbnail.value!.path);
-          request.files.add(multipartFile);
-        } else {
-          request.fields['thumbnail'] = 'image';
-        }
       }
 
       http.StreamedResponse response = await request.send();
@@ -238,7 +179,7 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
         }
 
         Get.back();
-        ModalController.to.showCustomDialog('변경이 완료되었어요', 1000);
+        showCustomDialog('변경이 완료되었어요', 1000);
         // String responsebody = await response.stream.bytesToString();
         // print(responsebody);
         // var responsemap = json.decode(responsebody);
@@ -260,7 +201,7 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
 Future<void> deleteproject(int projectId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    ModalController.to.showdisconnectdialog();
+    showdisconnectdialog();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     String? userid = await const FlutterSecureStorage().read(key: "id");
