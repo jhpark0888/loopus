@@ -8,7 +8,7 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
-import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
@@ -84,7 +84,7 @@ class NotificationWidget extends StatelessWidget {
                                 fontWeight: FontWeight.w400),
                           ),
                           TextSpan(
-                            text: DurationCaculator().messagedurationCaculate(
+                            text: messagedurationCaculate(
                                 startDate: notification.date,
                                 endDate: DateTime.now()),
                             style: kSubTitle1Style.copyWith(
@@ -172,7 +172,7 @@ class NotificationWidget extends StatelessWidget {
                                 fontWeight: FontWeight.w400),
                           ),
                           TextSpan(
-                              text: DurationCaculator().messagedurationCaculate(
+                              text: messagedurationCaculate(
                                   startDate: notification.date,
                                   endDate: DateTime.now()),
                               style: kSubTitle3Style.copyWith(
@@ -225,21 +225,16 @@ class NotificationWidget extends StatelessWidget {
 
   void clicknotice() {
     if (notification.type == NotificationType.tag) {
-      Get.to(() => ProjectScreen(projectid: notification.targetId, isuser: 0));
+      // Get.to(() => ProjectScreen(projectid: notification.targetId, isuser: 0));
     } else if (notification.type == NotificationType.like) {
-      Get.to(() => PostingScreen(
-          userid: ProfileController.to.myUserInfo.value.userid,
-          isuser: 1,
-          postid: notification.targetId,
-          title: notification.content!,
-          realName: ProfileController.to.myUserInfo.value.realName,
-          department: ProfileController.to.myUserInfo.value.department,
-          postDate: DateTime.now(),
-          profileImage: ProfileController.to.myUserInfo.value.profileImage,
-          thumbNail: null,
-          likecount: 0.obs,
-          isLiked: 0.obs,
-          isMarked: 0.obs));
+      Get.to(
+          () => PostingScreen(
+                post: null,
+                postid: notification.targetId,
+                likecount: 0.obs,
+                isLiked: 0.obs,
+              ),
+          opaque: false);
     }
   }
 }

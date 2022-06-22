@@ -63,10 +63,10 @@ class CustomTextField extends StatelessWidget {
           borderSide: BorderSide(color: mainblack, width: 1.2),
         ),
         errorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: mainpink, width: 1.2),
+          borderSide: BorderSide(color: rankred, width: 1.2),
         ),
         focusedErrorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: mainpink, width: 1.2),
+          borderSide: BorderSide(color: rankred, width: 1.2),
         ),
       ),
       validator: validator,

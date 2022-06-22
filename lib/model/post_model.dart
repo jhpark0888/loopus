@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:loopus/model/comment_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -11,9 +12,11 @@ class Post {
       required this.userid,
       required this.content,
       required this.images,
+      required this.scraps,
       required this.tags,
       required this.date,
       required this.project,
+      required this.comments,
       required this.likeCount,
       required this.isLiked,
       required this.isMarked,
@@ -24,8 +27,8 @@ class Post {
   int userid;
   String content;
   List<String> images;
-  // List<Scrap> scraps 입력값 10개까지
-  // List<Comment> comments;  //댓글
+  List<String> scraps; //입력값 10개까지
+  RxList<Comment> comments; //댓글
   List<Tag> tags;
   DateTime date;
   Project? project;
@@ -44,12 +47,19 @@ class Post {
                 .map((map) => map['image'].toString())
                 .toList()
             : [],
+        scraps: json["scraps"] ?? [],
         tags: json['post_tag'] != null
             ? List<Map<String, dynamic>>.from(json['post_tag'])
                 .map((tag) => Tag.fromJson(tag))
                 .toList()
             : [],
         date: DateTime.parse(json["date"]),
+        comments: json["comments"].runtimeType != List
+            ? <Comment>[Comment.fromJson(json["comments"])].obs
+            : List<Map<String, dynamic>>.from(json["comments"])
+                .map((comment) => Comment.fromJson(comment))
+                .toList()
+                .obs,
         project:
             json["project"] != null ? Project.fromJson(json["project"]) : null,
         likeCount: RxInt(json["like_count"]),

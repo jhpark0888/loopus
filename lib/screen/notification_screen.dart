@@ -210,7 +210,7 @@ class NotificationScreen extends StatelessWidget {
                                                 })
                                               : Dismissible(
                                                   background: Container(
-                                                    color: mainpink,
+                                                    color: rankred,
                                                     child: Row(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
@@ -388,7 +388,7 @@ class NotificationScreen extends StatelessWidget {
                                                   })
                                                 : Dismissible(
                                                     background: Container(
-                                                      color: mainpink,
+                                                      color: rankred,
                                                       child: Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment

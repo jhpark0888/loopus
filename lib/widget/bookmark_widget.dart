@@ -25,8 +25,11 @@ class BookmarkWidget extends StatelessWidget {
   BookmarkController bookmarkController = Get.put(BookmarkController());
   late final LikeController likeController = Get.put(
       LikeController(
-          isliked: item.isLiked, id: item.id, lastisliked: item.isLiked.value),
-      tag: item.id.toString());
+          isliked: item.isLiked,
+          id: item.id,
+          lastisliked: item.isLiked.value,
+          liketype: Liketype.post),
+      tag: 'posting${item.id}');
 
   HomeController homeController = Get.find();
 
@@ -223,19 +226,12 @@ class BookmarkWidget extends StatelessWidget {
 
   void tapPosting() {
     Get.to(
-      () => PostingScreen(
-          userid: item.userid,
-          isuser: item.isuser,
-          postid: item.id,
-          title: item.content,
-          realName: item.user.realName,
-          department: item.user.department,
-          postDate: item.date,
-          profileImage: item.user.profileImage,
-          thumbNail: item.images[0],
-          likecount: item.likeCount,
-          isLiked: item.isLiked,
-          isMarked: item.isMarked),
-    );
+        () => PostingScreen(
+              post: item,
+              postid: item.id,
+              likecount: item.likeCount,
+              isLiked: item.isLiked,
+            ),
+        opaque: false);
   }
 }

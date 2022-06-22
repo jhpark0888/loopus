@@ -8,7 +8,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
-import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/trash_bin/project_screen.dart';
 
 import '../controller/hover_controller.dart';
 import '../utils/duration_calculate.dart';
@@ -85,7 +85,7 @@ class SearchTagProjectWidget extends StatelessWidget {
                         child: Text(
                           (project.endDate == null)
                               ? '진행중'
-                              : DurationCaculator().durationCaculate(
+                              : durationCaculate(
                                   startDate: project.startDate!,
                                   endDate: project.endDate!,
                                 ),
@@ -178,11 +178,11 @@ class SearchTagProjectWidget extends StatelessWidget {
   }
 
   void tapProject() {
-    Get.to(
-      () => ProjectScreen(
-        projectid: project.id,
-        isuser: project.is_user,
-      ),
-    );
+    // Get.to(
+    //   () => ProjectScreen(
+    //     projectid: project.id,
+    //     isuser: project.is_user,
+    //   ),
+    // );
   }
 }

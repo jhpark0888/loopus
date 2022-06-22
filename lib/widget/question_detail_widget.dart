@@ -75,7 +75,7 @@ class QuestionDetailWidget extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    DurationCaculator().messagedurationCaculate(
+                    messagedurationCaculate(
                         startDate: question.date!, endDate: DateTime.now()),
                     style:
                         kBody2Style.copyWith(color: mainblack.withOpacity(0.6)),

@@ -12,7 +12,7 @@ class LoadingScreen extends StatelessWidget {
       height: Get.height,
       width: Get.width,
       color: mainblack.withOpacity(0.3),
-      child: LoadingWidget(),
+      child: const LoadingWidget(),
     );
   }
 }

@@ -111,7 +111,7 @@ class PostingAddNameScreen1 extends StatelessWidget {
                   Obx(() => tagController.selectedtaglist.isEmpty
                       ? Text('입력시 기업이 컨택할 가능성이 높아져요',
                           style: kSubTitle3Style.copyWith(
-                              color: maingrey.withOpacity(0.5)))
+                              color: maingray.withOpacity(0.5)))
                       : Container(
                           width: Get.width,
                           child: Wrap(

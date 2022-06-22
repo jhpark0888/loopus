@@ -52,7 +52,7 @@ class _AlertScreenState extends State<AlertScreen> {
                 if (Platform.isAndroid)
                   Switch(
                       activeColor: mainblue,
-                      inactiveTrackColor: maingrey,
+                      inactiveTrackColor: maingray,
                       value: _localDataController.isUserAgreeProNoti,
                       onChanged: (bool val) {
                         setState(() {

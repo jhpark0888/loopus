@@ -18,7 +18,7 @@ import 'package:loopus/model/message_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
-import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
@@ -81,7 +81,7 @@ class NotificationController extends GetxController {
     } else if (message.data["type"] == "like") {
       Get.to(() => NotificationScreen());
     } else if (message.data["type"] == "tag") {
-      Get.to(() => ProjectScreen(projectid: id, isuser: 0));
+      // Get.to(() => ProjectScreen(projectid: id, isuser: 0));
     } else if (message.data["type"] == "follow") {
       Get.to(() => OtherProfileScreen(
           userid: id, isuser: 0, realname: message.data["real_name"]));

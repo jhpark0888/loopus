@@ -29,18 +29,12 @@ class SearchPostingWidget extends StatelessWidget {
       onTap: () {
         Get.to(
             () => PostingScreen(
-                userid: post.userid,
-                isuser: post.isuser,
-                postid: post.id,
-                title: post.content,
-                realName: post.user.realName,
-                department: post.user.department,
-                postDate: post.date,
-                profileImage: post.user.profileImage,
-                thumbNail: post.images[0],
-                likecount: post.likeCount,
-                isLiked: post.isLiked,
-                isMarked: post.isMarked),
+                  post: null,
+                  postid: post.id,
+                  likecount: post.likeCount,
+                  isLiked: post.isLiked,
+                ),
+            opaque: false,
             preventDuplicates: false);
       },
       child: Obx(

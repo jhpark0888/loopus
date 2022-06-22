@@ -108,7 +108,7 @@ class SearchTagWidget extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                                color: maingrey.withOpacity(0.5), width: 0.3)),
+                                color: maingray.withOpacity(0.5), width: 0.3)),
                         padding: const EdgeInsets.fromLTRB(14, 5, 14, 5),
                         child: Text(tag, style: k15normal),
                       ),

@@ -44,7 +44,7 @@ class SelectedTagWidget extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(14, 7, 14, 7),
         decoration: BoxDecoration(
           color: mainWhite,
-          borderRadius: BorderRadius.circular(16),border: Border.all(width: 0.5,color: maingrey.withOpacity(0.5))
+          borderRadius: BorderRadius.circular(16),border: Border.all(width: 0.5,color: maingray.withOpacity(0.5))
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

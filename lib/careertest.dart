@@ -279,7 +279,7 @@ class CareerTile extends StatelessWidget {
                 const Spacer(),
                 Text(
                   '${time.year}.${time.month.toString().padLeft(2, '0')}',
-                  style: k15normal.copyWith(color: maingrey.withOpacity(0.5)),
+                  style: k15normal.copyWith(color: maingray.withOpacity(0.5)),
                 )
               ],
             ),
@@ -293,7 +293,7 @@ class CareerTile extends StatelessWidget {
 const mainblack = Color(0xFF263238);
 const mainred = Color(0xFFF70D4D);
 const cardGray = Color(0xFFF5F5F5);
-const maingrey = Color(0xFF5A5A5A);
+const maingray = Color(0xFF5A5A5A);
 const mainblue = Color(0xFF2199FC);
 const k18Semibold = TextStyle(
   fontSize: 18,

@@ -25,64 +25,51 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: 52,
+        // toolbarHeight: 50,
         centerTitle: false,
         titleSpacing: 0,
         elevation: 0,
         backgroundColor: mainWhite,
-        leading: Text(''),
-        leadingWidth: 16,
-        actions: const [
-          SizedBox(
-            width: 16,
-          ),
-        ],
         title: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           width: MediaQuery.of(context).size.width,
           height: 36,
           child: TextField(
               autocorrect: false,
               readOnly: true,
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SearchFocusScreen()));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => SearchFocusScreen()));
+                _searchController.isFocused(true);
               },
               focusNode: _searchController.focusNode,
-              style: TextStyle(color: mainblack, fontSize: 14),
-              cursorColor: mainblue,
+              style: k16Normal,
+              cursorColor: mainblack,
               cursorWidth: 1.2,
               cursorRadius: Radius.circular(5.0),
               autofocus: false,
-              // focusNode: searchController.detailsearchFocusnode,
-              textAlign: TextAlign.start,
-              // selectionHeightStyle: BoxHeightStyle.tight,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: mainlightgrey,
+                fillColor: cardGray,
                 enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(8)),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(8)),
-                // focusColor: Colors.black,
-                // border: OutlineInputBorder(borderSide: BorderSide.none),
-                contentPadding: EdgeInsets.only(right: 16),
+                contentPadding: const EdgeInsets.only(right: 24),
                 isDense: true,
-                hintText: "어떤 정보를 찾으시나요?",
-                hintStyle: TextStyle(
-                  fontSize: 14,
-                  color: mainblack.withOpacity(0.6),
-                ),
+                hintText: "무엇을 찾으시나요?",
+                hintStyle: k16Normal.copyWith(color: maingray),
                 prefixIcon: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
+                  padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
                   child: SvgPicture.asset(
                     "assets/icons/Search_Inactive.svg",
-                    width: 16,
-                    height: 16,
-                    color: mainblack.withOpacity(0.6),
+                    width: 20,
+                    height: 20,
+                    color: maingray,
                   ),
                 ),
               )),
@@ -145,16 +132,6 @@ class SearchScreen extends StatelessWidget {
                                                             width: 16,
                                                           )
                                                         : Container(),
-                                                    HomeTagWidget(
-                                                      onTap: () {
-                                                        Get.to(() =>
-                                                            TagDetailScreen(
-                                                              tag: tag,
-                                                            ));
-                                                      },
-                                                      tagTitle: tag.tag,
-                                                      tagCount: tag.count,
-                                                    ),
                                                     (homeController
                                                                 .populartaglist
                                                                 .indexOf(tag) !=

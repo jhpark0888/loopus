@@ -321,7 +321,7 @@ class UploadScreen extends StatelessWidget {
     return Container(
         width: Get.width,
         height: Get.width,
-        decoration: BoxDecoration(color: maingrey),
+        decoration: BoxDecoration(color: maingray),
         child: controller.selectedImages == null
             ? Container()
             : _photoWidget(controller.selectedImages!.first, 500,500,

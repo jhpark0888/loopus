@@ -662,9 +662,7 @@ class OtherProfileScreen extends StatelessWidget {
                                                                 .value
                                                                 .isNotEmpty)
                                                             ? Column(
-                                                                children: controller
-                                                                    .otherProjectList
-                                                                    .value,
+                                                                children: [],
                                                               )
                                                             : controller
                                                                         .otherUser

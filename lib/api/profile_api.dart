@@ -85,14 +85,11 @@ Future<void> getProjectlist(var userId, int isuser) async {
 
     if (isuser == 1) {
       ProfileController.to.myProjectList(projectlist);
+      ProfileController.to.careerPagenums =
+          List.generate(projectlist.length, (index) => 1);
     } else {
       Get.find<OtherProfileController>(tag: userId.toString())
-          .otherProjectList(projectlist
-              .map((project) => ProjectWidget(
-                    project: project.obs,
-                    type: ProjectWidgetType.profile,
-                  ))
-              .toList());
+          .otherProjectList(projectlist);
       // Get.find<OtherProfileController>(tag: userId.toString())
       //     .otherprofilescreenstate(ScreenState.success);
     }
@@ -122,28 +119,29 @@ Future<HTTPResponse> getCareerPosting(int careerId, int page) async {
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    try {
-      http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"});
+    // try {
+    http.Response response =
+        await http.get(uri, headers: {"Authorization": "Token $token"});
 
-      print("커리어 안 포스팅 리스트 get: ${response.statusCode}");
-      if (response.statusCode == 200) {
-        List responseBody = json.decode(utf8.decode(response.bodyBytes));
+    print("커리어 안 포스팅 리스트 get: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      List responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-        List<Post> postlist =
-            responseBody.map((post) => Post.fromJson(post)).toList();
-        return HTTPResponse.success(postlist);
-      } else {
-        return HTTPResponse.apiError('', response.statusCode);
-      }
-    } on SocketException {
-      ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.unexpectedError(e);
+      List<Post> postlist = responseBody.map((post) {
+        return Post.fromJson(post);
+      }).toList();
+      return HTTPResponse.success(postlist);
+    } else {
+      return HTTPResponse.apiError('', response.statusCode);
     }
+    // } on SocketException {
+    //   ErrorController.to.isServerClosed(true);
+    //   return HTTPResponse.serverError();
+    // } catch (e) {
+    //   print(e);
+    //   // ErrorController.to.isServerClosed(true);
+    //   return HTTPResponse.unexpectedError(e);
+    // }
   }
 }
 

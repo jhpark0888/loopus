@@ -239,7 +239,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     true)
                   Text(
                     '시작한 날짜는 종료한 날짜보다 클 수 없어요',
-                    style: kButtonStyle.copyWith(color: mainpink),
+                    style: kButtonStyle.copyWith(color: rankred),
                   ),
               ],
             ),

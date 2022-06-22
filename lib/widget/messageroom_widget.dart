@@ -101,7 +101,7 @@ class MessageRoomWidget extends StatelessWidget {
                       Obx(
                         () => Text(
                           '${messageRoom.value.user.realName}' +
-                              ' · ${DurationCaculator().messagedurationCaculate(startDate: messageRoom.value.message.value.date, endDate: DateTime.now())}',
+                              ' · ${messagedurationCaculate(startDate: messageRoom.value.message.value.date, endDate: DateTime.now())}',
                           style: messageRoom.value.notread.value == 0
                               ? kSubTitle3Style.copyWith(
                                   color: _hoverController.isHover.value

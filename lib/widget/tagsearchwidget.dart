@@ -35,7 +35,7 @@ class TagSearchWidget extends StatelessWidget {
                   '(${tagController.selectedtaglist.length} / 3)',
                   style: kSubTitle2Style.copyWith(
                       color: tagController.selectedtaglist.length < 3
-                          ? mainpink
+                          ? rankred
                           : mainblack),
                 ),
               ),
@@ -80,7 +80,7 @@ class TagSearchWidget extends StatelessWidget {
             // selectionHeightStyle: BoxHeightStyle.tight,
             decoration: InputDecoration(
               filled: true,
-              fillColor: mainlightgrey,
+              fillColor: lightcardgray,
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(8)),
