@@ -10,6 +10,9 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines;
   final String? counterText;
   final int? maxLength;
+  final void Function()? ontap;
+  final bool? autofocus;
+  final TextInputAction? textInputAction;
 
   CustomTextField({
     required this.textController,
@@ -19,17 +22,22 @@ class CustomTextField extends StatelessWidget {
     required this.maxLines,
     required this.counterText,
     required this.maxLength,
+    this.autofocus,
+    this.ontap,
+    this.textInputAction
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textInputAction: textInputAction,
       maxLength: maxLength,
+      onTap: ontap,
       obscureText: obscureText,
       autocorrect: false,
       minLines: 1,
       maxLines: maxLines,
-      autofocus: true,
+      autofocus: autofocus ?? true,
       style: kSubTitle3Style.copyWith(height: 1.5),
       cursorColor: mainblue,
       cursorWidth: 1.2,

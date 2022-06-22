@@ -19,7 +19,9 @@ class TagController extends GetxController {
   Tagtype tagtype;
   final maxExtent = Get.height * 0.25;
   RxDouble currentExtent = 0.0.obs;
-
+  RxDouble textfieldOffset = 0.0.obs;
+  RxDouble offsetDy = 0.0.obs;
+  RxBool keyController = false.obs;
   // _onSearchChanged() {
   //   if (_debounce.isActive) _debounce.cancel();
   //   _debounce = Timer(const Duration(milliseconds: 300), () {
@@ -33,6 +35,7 @@ class TagController extends GetxController {
 
     debounce(_searchword, (_) {
       gettagsearch(tagtype);
+      print(_searchword);
     }, time: Duration(milliseconds: 300));
 
     tagsearch.addListener(() {
@@ -52,4 +55,7 @@ class TagController extends GetxController {
   RxList<SearchTagWidget> searchtaglist = <SearchTagWidget>[].obs;
   RxList<SearchTagWidget> searchpagetag = <SearchTagWidget>[].obs;
   RxList<SelectedTagWidget> selectedpersontaglist = <SelectedTagWidget>[].obs;
+
+
+
 }

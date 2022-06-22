@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/screen/post_add_test.dart';
 import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
 
@@ -51,7 +52,8 @@ class CompanyScreen extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           CareerRankWidget(isUniversity: true,),
-          IconButton(onPressed: (){Get.to(()=> UploadScreen());}, icon: Text('바로가기'))
+          IconButton(onPressed: (){Get.to(()=> UploadScreen());}, icon: Text('바로가기')),
+          IconButton(onPressed: (){Get.to(()=> PostingAddNameScreen1(project_id : 6, route: PostaddRoute.bottom,));}, icon: Text('포스트 작성 가기'))
         ],)
         // body: Column(
         //   mainAxisSize: MainAxisSize.max,

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/tag_model.dart';
@@ -40,70 +41,86 @@ class SearchTagWidget extends StatelessWidget {
                 onTapCancel: () => _hoverController.isHover(false),
                 onTapUp: (details) => _hoverController.isHover(false),
                 onTap: _selectTag,
+                // child: Padding(
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 24,
+                //     vertical: 12,
+                //   ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
-                  ),
+                  padding: const EdgeInsets.only(bottom: 14),
                   child: Row(
                     children: [
-                      Obx(
-                        () => SvgPicture.asset(
-                          'assets/icons/Tag.svg',
-                          width: 24,
-                          height: 24,
-                          color: _hoverController.isHover.value
-                              ? mainblack.withOpacity(0.6)
-                              : mainblack,
-                        ),
+                      // // Obx(
+                      // //   () => SvgPicture.asset(
+                      // //     'assets/icons/Tag.svg',
+                      // //     width: 24,
+                      // //     height: 24,
+                      // //     color: _hoverController.isHover.value
+                      // //         ? mainblack.withOpacity(0.6)
+                      // //         : mainblack,
+                      // //   ),
+                      // // ),
+                      // const SizedBox(
+                      //   width: 20,
+                      // ),
+                      // Expanded(
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: [
+                      //       Obx(
+                      //         () => Text(
+                      //           tag,
+                      //           style: kButtonStyle.copyWith(
+                      //             color: _hoverController.isHover.value
+                      //                 ? mainblack.withOpacity(0.6)
+                      //                 : mainblack,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       SizedBox(
+                      //         height: 4,
+                      //       ),
+                      //       (count != null)
+                      //           ? Obx(
+                      //               () => Text(
+                      //                 '관심도 ${numberFormat.format(count)}',
+                      //                 style: kBody1Style.copyWith(
+                      //                   color: _hoverController.isHover.value
+                      //                       ? mainblack.withOpacity(0.6)
+                      //                       : mainblack,
+                      //                 ),
+                      //               ),
+                      //             )
+                      //           : Obx(
+                      //               () => Text(
+                      //                 '관심도 0',
+                      //                 style: kBody1Style.copyWith(
+                      //                   color: _hoverController.isHover.value
+                      //                       ? mainblack.withOpacity(0.6)
+                      //                       : mainblack,
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //   ],
+                      // ),
+                      // ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                                color: maingrey.withOpacity(0.5), width: 0.3)),
+                        padding: const EdgeInsets.fromLTRB(14, 5, 14, 5),
+                        child: Text(tag, style: k15normal),
                       ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Obx(
-                              () => Text(
-                                tag,
-                                style: kButtonStyle.copyWith(
-                                  color: _hoverController.isHover.value
-                                      ? mainblack.withOpacity(0.6)
-                                      : mainblack,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 4,
-                            ),
-                            (count != null)
-                                ? Obx(
-                                    () => Text(
-                                      '관심도 ${numberFormat.format(count)}',
-                                      style: kBody1Style.copyWith(
-                                        color: _hoverController.isHover.value
-                                            ? mainblack.withOpacity(0.6)
-                                            : mainblack,
-                                      ),
-                                    ),
-                                  )
-                                : Obx(
-                                    () => Text(
-                                      '관심도 0',
-                                      style: kBody1Style.copyWith(
-                                        color: _hoverController.isHover.value
-                                            ? mainblack.withOpacity(0.6)
-                                            : mainblack,
-                                      ),
-                                    ),
-                                  ),
-                          ],
-                        ),
-                      ),
+                      const Spacer(),
+                      (count != null)
+                          ? Text('${numberFormat.format(count)}회',
+                              style: k15normal)
+                          : const Text('0 회', style: k15normal),
                     ],
                   ),
                 ),
+                // ),
               )
             : GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -192,7 +209,7 @@ class SearchTagWidget extends StatelessWidget {
 
   void _selectTag() async {
     TagController controller = Get.find<TagController>(tag: tagtype.toString());
-    if (controller.selectedtaglist.length < 3) {
+    // if (controller.selectedtaglist.length < 3) {
       if (id == 0) {
         // SearchTag? searchTag = await postmaketag(tagtype!);
         SearchTag searchTag = SearchTag(
@@ -215,8 +232,9 @@ class SearchTagWidget extends StatelessWidget {
         controller.searchtaglist.removeWhere((element) => element.id == id);
         // gettagsearch(tagtype!);
       }
-    } else {
-      showCustomDialog('최대 3개까지 선택할 수 있어요', 1000);
-    }
+    // }
+    //  else {
+    //   showCustomDialog('최대 3개까지 선택할 수 있어요', 1000);
+    // }
   }
 }

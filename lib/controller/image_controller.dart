@@ -51,10 +51,10 @@ class ImageController extends GetxController {
 
   Future<File?> profilecropImage(pickimage) async {
     File? croppedFile = await _imageCropper.cropImage(
-        maxWidth: 1920,
-        maxHeight: 1080,
+        maxWidth: Get.width.toInt(),
+        maxHeight: Get.width.toInt(),
         compressQuality: 50,
-        cropStyle: CropStyle.circle,
+        cropStyle: CropStyle.rectangle,
         sourcePath: pickimage.path,
         aspectRatioPresets: [
           CropAspectRatioPreset.original,
@@ -63,8 +63,9 @@ class ImageController extends GetxController {
             toolbarTitle: 'Cropper',
             toolbarColor: mainblue,
             toolbarWidgetColor: mainWhite,
+            hideBottomControls: true,
             initAspectRatio: CropAspectRatioPreset.square,
-            lockAspectRatio: true),
+            lockAspectRatio: false),
         iosUiSettings: const IOSUiSettings(
           aspectRatioPickerButtonHidden: true,
           minimumAspectRatio: 1 / 1,

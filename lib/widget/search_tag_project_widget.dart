@@ -52,7 +52,7 @@ class SearchTagProjectWidget extends StatelessWidget {
               children: [
                 Text(
                   project.careerName,
-                  style: kHeaderH1Style.copyWith(fontSize: 18),
+                  style: kNavigationTitle.copyWith(fontSize: 18),
                 ),
                 const SizedBox(
                   height: 20,

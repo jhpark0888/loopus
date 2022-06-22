@@ -66,7 +66,7 @@ class MyProfileScreen extends StatelessWidget {
                   centerTitle: false,
                   title: const Text(
                     '프로필',
-                    style: kHeaderH1Style,
+                    style: kNavigationTitle,
                   ),
                   actions: [
                     IconButton(

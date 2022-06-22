@@ -365,7 +365,7 @@ class _CustomSpace extends StatelessWidget {
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: kHeaderH1Style,
+          style: kNavigationTitle,
         ));
   }
 

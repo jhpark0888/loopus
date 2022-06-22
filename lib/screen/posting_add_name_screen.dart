@@ -95,7 +95,7 @@ class PostingAddNameScreen extends StatelessWidget {
                           ),
                   ),
           ],
-          title: '포스팅 내용',
+          title: '포스트 작성',
         ),
         body: Padding(
           padding: const EdgeInsets.fromLTRB(

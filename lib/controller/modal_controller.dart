@@ -731,7 +731,7 @@ void showCustomBottomSheet() {
             children: [
               Text(
                 '작성 및 추가',
-                style: kHeaderH1Style,
+                style: kNavigationTitle,
               ),
               IconButton(
                 onPressed: () => Get.back(),

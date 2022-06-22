@@ -7,12 +7,15 @@ class UploadController extends GetxController {
   var albums = <AssetPathEntity>[].obs;
   RxString headerTitle = ''.obs;
   RxList<AssetEntity> imageList = <AssetEntity>[].obs;
-  // RxList<File> imageList1 = <File>[].obs;
+  RxList<AssetEntity>? selectedImages;
   Rx<AssetEntity>? selectedImage;
-  // Rx<File>? selectedImage1;
+  Rx<File>? croppedImage;
   RxBool isLoad = false.obs;
   RxBool isSelect = false.obs;
   RxBool isImage = false.obs;
+  RxBool isCropped = false.obs;
+  RxDouble? croppedHeight;
+  RxDouble? croppedWidth;
   RxList<List<AssetEntity>> titleImageList1 = <List<AssetEntity>>[].obs;
   RxList<File> titleImageList = <File>[].obs;
   @override
@@ -27,11 +30,11 @@ class UploadController extends GetxController {
   }
 
   Future<void> _pagingPhotos() async {
-    print(albums.value);
     var photos = await albums.first.getAssetListPaged(page: 0, size: 30);
 
     imageList.addAll(photos);
  
+    selectedImages = [imageList.first].obs;
     selectedImage = imageList.first.obs;
   }
   Future<void> getPhotos()async {
@@ -57,7 +60,7 @@ class UploadController extends GetxController {
           getPhotos();
       _loadData();
     } else {
-      // message 권한 요청
+
     }
   }
 }

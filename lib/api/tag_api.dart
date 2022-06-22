@@ -70,19 +70,19 @@ void gettagsearch(Tagtype tagtype) async {
               tagtype: tagtype,
             );
           }).toList());
-          if (tagsearchword != '' &&
-              tagController.selectedtaglist
-                  .where((tag) => tag.text == tagsearchword)
-                  .isEmpty) {
-            tagController.searchtaglist.insert(
-                0,
-                SearchTagWidget(
-                  id: 0,
-                  tag: "처음으로 '${tagsearchword}' 태그 사용하기",
-                  isSearch: 0,
-                  tagtype: tagtype,
-                ));
-          }
+          // if (tagsearchword != '' &&
+          //     tagController.selectedtaglist
+          //         .where((tag) => tag.text == tagsearchword)
+          //         .isEmpty) {
+          //   tagController.searchtaglist.insert(
+          //       0,
+          //       SearchTagWidget(
+          //         id: 0,
+          //         tag: "처음으로 '${tagsearchword}' 태그 사용하기",
+          //         isSearch: 0,
+          //         tagtype: tagtype,
+          //       ));
+          // }
 
           tagController.selectedtaglist.forEach((selectedtag) {
             tagController.searchtaglist
