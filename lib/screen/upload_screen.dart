@@ -20,10 +20,12 @@ class UploadScreen extends StatelessWidget {
         child: AppBar(
           leading: SvgPicture.asset('assets/icons/Arrow_left.svg'),
           title: Obx(
-            () => controller.isImage.value ? Container() : Text(
-              '이미지 첨부',
-              style: kHeaderH1Style,
-            ),
+            () => controller.isImage.value
+                ? Container()
+                : Text(
+                    '이미지 첨부',
+                    style: kHeaderH1Style,
+                  ),
           ),
           actions: [
             Padding(
@@ -68,7 +70,7 @@ class UploadScreen extends StatelessWidget {
                   onTap: () {
                     print('눌림');
                     showModalBottomSheet(
-                      barrierColor: Colors.transparent,
+                        barrierColor: Colors.transparent,
                         context: context,
                         isScrollControlled: true,
                         shape: const RoundedRectangleBorder(
@@ -77,7 +79,8 @@ class UploadScreen extends StatelessWidget {
                                 topRight: Radius.circular(16))),
                         builder: (_) => Container(
                               height: Get.height -
-                                  MediaQuery.of(context).padding.top - 44,
+                                  MediaQuery.of(context).padding.top -
+                                  44,
                               color: Colors.white,
                               child: SingleChildScrollView(
                                 child: Padding(
@@ -197,7 +200,7 @@ class UploadScreen extends StatelessWidget {
     return Container(
         width: Get.width,
         height: Get.width,
-        decoration: BoxDecoration(color: maingrey),
+        decoration: BoxDecoration(color: maingray),
         child: controller.selectedImage == null
             ? Container()
             : _photoWidget(controller.selectedImage!, 500, builder: (data) {

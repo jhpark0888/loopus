@@ -25,17 +25,19 @@ import 'package:loopus/widget/careertile_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_footer.dart';
 import 'package:loopus/widget/custom_header.dart';
+import 'package:loopus/widget/divide_widget.dart';
+import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
+import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
+import 'package:loopus/widget/user_image_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MyProfileScreen extends StatelessWidget {
   MyProfileScreen({Key? key}) : super(key: key);
   final ProfileController profileController = Get.put(ProfileController());
   final ImageController imageController = Get.put(ImageController());
-  final ScrollController _projectScrollController = ScrollController();
-  final ScrollController _questionScrollController = ScrollController();
   final HoverController _hoverController = Get.put(HoverController());
   TagController tagController = Get.put(TagController(tagtype: Tagtype.profile),
       tag: Tagtype.profile.toString());
@@ -66,7 +68,7 @@ class MyProfileScreen extends StatelessWidget {
                   centerTitle: false,
                   title: const Text(
                     '프로필',
-                    style: kHeaderH1Style,
+                    style: k26Semibold,
                   ),
                   actions: [
                     IconButton(
@@ -90,457 +92,274 @@ class MyProfileScreen extends StatelessWidget {
                 ),
                 body: Obx(
                   () => SmartRefresher(
+                    physics: const BouncingScrollPhysics(),
                     controller: profileController.profilerefreshController,
                     enablePullDown:
                         (profileController.myprofilescreenstate.value ==
                                 ScreenState.loading)
                             ? false
                             : true,
-                    enablePullUp: !profileController.profileenablepullup.value,
+                    enablePullUp: profileController.profileenablepullup.value,
                     header: const MyCustomHeader(),
                     footer: const MyCustomFooter(),
                     onRefresh: profileController.onRefresh,
+                    onLoading: profileController.onLoading,
                     child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
                         child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0,
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24.0,
+                              ),
+                              child: Column(
                                 children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Obx(
-                                        () => Text(
-                                          profileController
-                                              .myUserInfo.value.loopcount
-                                              .toString(),
-                                          style: kSubTitle2Style.copyWith(
-                                              color: _hoverController
-                                                      .isHover.value
-                                                  ? mainblack.withOpacity(0.6)
-                                                  : mainblack),
-                                          textAlign: TextAlign.center,
-                                        ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Obx(
+                                            () => Text(
+                                              profileController
+                                                  .myUserInfo.value.loopcount
+                                                  .toString(),
+                                              style: k18Semibold.copyWith(
+                                                  color: _hoverController
+                                                          .isHover.value
+                                                      ? mainblack
+                                                          .withOpacity(0.6)
+                                                      : mainblack),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 7,
+                                          ),
+                                          Text(
+                                            '팔로워',
+                                            style: k15Semibold.copyWith(
+                                                color: maingray),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
                                       ),
                                       const SizedBox(
-                                        height: 8,
+                                        width: 24,
                                       ),
-                                      Obx(
-                                        () => Text(
-                                          '팔로워',
-                                          style: kBody1Style.copyWith(
-                                              color: _hoverController
-                                                      .isHover.value
-                                                  ? mainblack.withOpacity(0.6)
-                                                  : mainblack),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Stack(
-                                    children: [
-                                      Obx(
-                                        () => GestureDetector(
-                                          onTap: () => showModalIOS(context,
-                                              func1: changeProfileImage,
-                                              func2: changeDefaultImage,
-                                              value1: '라이브러리에서 선택',
-                                              value2: '기본 이미지로 변경',
-                                              isValue1Red: false,
-                                              isValue2Red: false,
-                                              isOne: false),
-                                          child: ClipOval(
-                                              child: (profileController
-                                                          .myprofilescreenstate
-                                                          .value !=
-                                                      ScreenState.loading)
-                                                  ? (profileController
-                                                              .myUserInfo
-                                                              .value
-                                                              .profileImage !=
-                                                          null)
-                                                      ? CachedNetworkImage(
-                                                          height: 92,
-                                                          width: 92,
-                                                          imageUrl:
-                                                              profileController
-                                                                  .myUserInfo
-                                                                  .value
-                                                                  .profileImage!
-                                                                  .replaceAll(
-                                                                      'https',
-                                                                      'http'),
-                                                          placeholder:
-                                                              (context, url) =>
-                                                                  CircleAvatar(
-                                                            backgroundColor:
-                                                                const Color(
-                                                                    0xffe7e7e7),
-                                                            child: Container(),
-                                                          ),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              CircleAvatar(
-                                                            backgroundColor:
-                                                                const Color(
-                                                                    0xffe7e7e7),
-                                                            child: Container(),
-                                                          ),
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      : Image.asset(
-                                                          "assets/illustrations/default_profile.png",
-                                                          height: 92,
-                                                          width: 92,
-                                                        )
-                                                  : Image.asset(
-                                                      "assets/illustrations/default_profile.png",
-                                                      height: 92,
-                                                      width: 92,
-                                                    )),
-                                        ),
-                                      ),
-                                      Positioned.fill(
-                                        child: Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: GestureDetector(
-                                            onTap: () => showModalIOS(context,
-                                                func1: changeProfileImage,
-                                                func2: changeDefaultImage,
-                                                value1: '라이브러리에서 선택',
-                                                value2: '기본 이미지로 변경',
-                                                isValue1Red: false,
-                                                isValue2Red: false,
-                                                isOne: false),
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: mainWhite),
-                                              child: SvgPicture.asset(
-                                                "assets/icons/Image.svg",
-                                                width: 24,
-                                                height: 24,
+                                      Stack(
+                                        children: [
+                                          Obx(
+                                            () => GestureDetector(
+                                                onTap: () => showModalIOS(
+                                                    context,
+                                                    func1: changeProfileImage,
+                                                    func2: changeDefaultImage,
+                                                    value1: '라이브러리에서 선택',
+                                                    value2: '기본 이미지로 변경',
+                                                    isValue1Red: false,
+                                                    isValue2Red: false,
+                                                    isOne: false),
+                                                child: UserImageWidget(
+                                                  imageUrl: profileController
+                                                          .myUserInfo
+                                                          .value
+                                                          .profileImage ??
+                                                      '',
+                                                  width: 90,
+                                                  height: 90,
+                                                )),
+                                          ),
+                                          Positioned.fill(
+                                            child: Align(
+                                              alignment: Alignment.bottomRight,
+                                              child: GestureDetector(
+                                                onTap: () => showModalIOS(
+                                                    context,
+                                                    func1: changeProfileImage,
+                                                    func2: changeDefaultImage,
+                                                    value1: '라이브러리에서 선택',
+                                                    value2: '기본 이미지로 변경',
+                                                    isValue1Red: false,
+                                                    isValue2Red: false,
+                                                    isOne: false),
+                                                child: Container(
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          color: mainWhite),
+                                                  child: SvgPicture.asset(
+                                                    "assets/icons/Image.svg",
+                                                    width: 24,
+                                                    height: 24,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Obx(
-                                        () => Text(
-                                          profileController
-                                              .myUserInfo.value.loopcount
-                                              .toString(),
-                                          style: kSubTitle2Style.copyWith(
-                                              color: _hoverController
-                                                      .isHover.value
-                                                  ? mainblack.withOpacity(0.6)
-                                                  : mainblack),
-                                          textAlign: TextAlign.center,
-                                        ),
+                                        ],
                                       ),
                                       const SizedBox(
-                                        height: 8,
+                                        width: 24,
                                       ),
-                                      Obx(
-                                        () => Text(
-                                          '팔로잉',
-                                          style: kBody1Style.copyWith(
-                                              color: _hoverController
-                                                      .isHover.value
-                                                  ? mainblack.withOpacity(0.6)
-                                                  : mainblack),
-                                          textAlign: TextAlign.center,
-                                        ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Obx(
+                                            () => Text(
+                                              profileController
+                                                  .myUserInfo.value.loopcount
+                                                  .toString(),
+                                              style: k18Semibold.copyWith(
+                                                  color: _hoverController
+                                                          .isHover.value
+                                                      ? mainblack
+                                                          .withOpacity(0.6)
+                                                      : mainblack),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 7,
+                                          ),
+                                          Text(
+                                            '팔로잉',
+                                            style: k15Semibold.copyWith(
+                                                color: maingray),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Obx(
-                                () => Text(
-                                  profileController.myUserInfo.value.realName,
-                                  style: kSubTitle2Style,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 4,
-                              ),
-                              Obx(
-                                () => Text(
-                                  profileController.myUserInfo.value.department,
-                                  style: kBody1Style,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Row(
-                                children: [
-                                  const Text(
-                                    '상위 태그',
-                                    style: kBody2Style,
-                                  ),
                                   const SizedBox(
-                                    width: 8,
+                                    height: 14,
                                   ),
                                   Obx(
-                                    () => Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: profileController
-                                            .myUserInfo.value.profileTag
-                                            .map((tag) => Row(children: [
-                                                  Tagwidget(
-                                                    tag: tag,
-                                                    fontSize: 14,
-                                                  ),
-                                                  profileController.myUserInfo
-                                                              .value.profileTag
-                                                              .indexOf(tag) !=
-                                                          profileController
+                                    () => Text(
+                                      profileController
+                                          .myUserInfo.value.realName,
+                                      style: k18Semibold,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 14,
+                                  ),
+                                  Obx(
+                                    () => Text(
+                                      profileController
+                                          .myUserInfo.value.department,
+                                      style: k15Semibold,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 14,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '상위 태그',
+                                        style:
+                                            k15Normal.copyWith(color: maingray),
+                                      ),
+                                      const SizedBox(
+                                        width: 7,
+                                      ),
+                                      Obx(
+                                        () => Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: profileController
+                                                .myUserInfo.value.profileTag
+                                                .map((tag) => Row(children: [
+                                                      Tagwidget(
+                                                        tag: tag,
+                                                        fontSize: 14,
+                                                      ),
+                                                      profileController
                                                                   .myUserInfo
                                                                   .value
                                                                   .profileTag
-                                                                  .length -
-                                                              1
-                                                      ? const SizedBox(
-                                                          width: 8,
-                                                        )
-                                                      : Container()
-                                                ]))
-                                            .toList()),
+                                                                  .indexOf(
+                                                                      tag) !=
+                                                              profileController
+                                                                      .myUserInfo
+                                                                      .value
+                                                                      .profileTag
+                                                                      .length -
+                                                                  1
+                                                          ? const SizedBox(
+                                                              width: 8,
+                                                            )
+                                                          : Container()
+                                                    ]))
+                                                .toList()),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: CustomExpandedButton(
-                                        onTap: () {
-                                          tagController.selectedtaglist.clear();
-                                          tagController.tagsearch.text = "";
-                                          for (var tag in profileController
-                                              .myUserInfo.value.profileTag) {
-                                            tagController.selectedtaglist
-                                                .add(SelectedTagWidget(
-                                              id: tag.tagId,
-                                              text: tag.tag,
-                                              selecttagtype:
-                                                  SelectTagtype.interesting,
-                                              tagtype: Tagtype.profile,
-                                            ));
-                                          }
-                                          Get.to(
-                                              () => ProfileTagChangeScreen());
-                                        },
-                                        isBlue: false,
-                                        isBig: false,
-                                        title: '관심 태그 변경하기',
-                                        buttonTag: '관심 태그 변경하기'),
+                                  const SizedBox(
+                                    height: 16,
                                   ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              const Divider(
-                                thickness: 1,
-                                color: cardGray,
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Row(
-                                children: [
-                                  const Text('스카우터 컨택', style: k18Semibold),
-                                  const SizedBox(width: 7),
-                                  SvgPicture.asset(
-                                    'assets/icons/Question.svg',
-                                    width: 20,
-                                    height: 20,
-                                    color: mainblack.withOpacity(0.6),
-                                  ),
-                                  const Spacer(),
-                                  InkWell(
-                                      onTap: () {
-                                        AppController.to.changePageIndex(3);
-                                      },
-                                      child: Text(
-                                        '전체 보기(000개)',
-                                        style: kBody1Style.copyWith(
-                                            color: mainblue),
-                                      ))
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              SizedBox(
-                                height: 60,
-                                child: ListView(
-                                    scrollDirection: Axis.horizontal,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: mainblack.withOpacity(0.1),
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        height: 60,
-                                        width: 60,
-                                        child: Image.network(
-                                          'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
-                                          height: 60,
-                                          width: 60,
-                                        ),
+                                      Expanded(
+                                        child: CustomExpandedButton(
+                                            onTap: () {
+                                              tagController.selectedtaglist
+                                                  .clear();
+                                              tagController.tagsearch.text = "";
+                                              for (var tag in profileController
+                                                  .myUserInfo
+                                                  .value
+                                                  .profileTag) {
+                                                tagController.selectedtaglist
+                                                    .add(SelectedTagWidget(
+                                                  id: tag.tagId,
+                                                  text: tag.tag,
+                                                  selecttagtype:
+                                                      SelectTagtype.interesting,
+                                                  tagtype: Tagtype.profile,
+                                                ));
+                                              }
+                                              Get.to(() =>
+                                                  ProfileTagChangeScreen());
+                                            },
+                                            isBlue: false,
+                                            isBig: false,
+                                            title: '관심 태그 변경하기',
+                                            buttonTag: '관심 태그 변경하기'),
                                       ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: mainblack.withOpacity(0.1),
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        height: 60,
-                                        width: 60,
-                                        child: Image.network(
-                                          'https://images.samsung.com/kdp/aboutsamsung/brand_identity/logo/360_197_1.png?\$FB_TYPE_B_PNG\$',
-                                          height: 60,
-                                          width: 60,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: mainblack.withOpacity(0.1),
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        height: 60,
-                                        width: 60,
-                                        child: Image.network(
-                                          'https://w7.pngwing.com/pngs/240/71/png-transparent-hyundai-motor-company-car-logo-berkeley-payments-hyundai-blue-cdr-text.png',
-                                          height: 60,
-                                          width: 60,
-                                        ),
-                                      ),
-                                    ]),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  const Divider(thickness: 1, color: cardGray),
-                                  const SizedBox(height: 24),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.start,
-                                  //   children: [
-                                  //     const Text('커리어 분석', style: k18Semibold),
-                                  //     const SizedBox(width: 7),
-                                  //     SvgPicture.asset(
-                                  //       'assets/icons/Question.svg',
-                                  //       width: 20,
-                                  //       height: 20,
-                                  //       color: mainblack.withOpacity(0.6),
-                                  //     )
-                                  //   ],
-                                  // ),
-                                  // Column(
-                                  //     children:
-                                  //         profileController.careerAnalysis),
-                                  // const SizedBox(height: 24),
-                                  // const Divider(thickness: 1, color: cardGray),
-                                  // const SizedBox(height: 24),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 24,
+                                  ),
+                                  const Divider(
+                                    thickness: 1,
+                                    color: cardGray,
+                                  ),
+                                  const SizedBox(
+                                    height: 24,
+                                  ),
                                   Row(
                                     children: [
-                                      const Text('커리어', style: k18Semibold),
+                                      const Text('스카우터 컨택', style: k18Semibold),
                                       const SizedBox(width: 7),
                                       SvgPicture.asset(
                                         'assets/icons/Question.svg',
-                                        width: 20,
-                                        height: 20,
+                                        width: 15,
+                                        height: 15,
                                         color: mainblack.withOpacity(0.6),
                                       ),
                                       const Spacer(),
                                       InkWell(
-                                        onTap: () {
-                                          Get.to(ProjectAddTitleScreen(
-                                              screenType: Screentype.add));
-                                        },
-                                        child: Text(
-                                          '추가하기',
-                                          style: k15normal.copyWith(
-                                              color: mainblue),
-                                        ),
-                                        splashColor: kSplashColor,
-                                      ),
-                                    ],
-                                  ),
-                                  Obx(
-                                    () => Column(
-                                        children: profileController
-                                            .myProjectList
-                                            .map((career) {
-                                      int index = profileController
-                                          .myProjectList
-                                          .indexWhere((element) =>
-                                              element.id == career.id);
-                                      return CareerTile(
-                                          index: index,
-                                          title: career.careerName.obs,
-                                          time: career.startDate!);
-                                    }).toList()),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  const Divider(thickness: 1, color: cardGray),
-                                  const SizedBox(height: 24),
-                                  Row(
-                                    children: [
-                                      const Text('포스트', style: k18Semibold),
-                                      const Spacer(),
-                                      InkWell(
                                           onTap: () {
-                                            Get.to(() => PostingAddImagesScreen(
-                                                  project_id: profileController
-                                                      .myProjectList[
-                                                          profileController
-                                                              .careerCurrentPage
-                                                              .toInt()]
-                                                      .id,
-                                                  route: PostaddRoute.project,
-                                                ));
+                                            AppController.to.changePageIndex(3);
                                           },
                                           child: Text(
                                             '전체 보기(000개)',
@@ -549,224 +368,466 @@ class MyProfileScreen extends StatelessWidget {
                                           ))
                                     ],
                                   ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 14,
-                        ),
-                        AspectRatio(
-                          aspectRatio: 1.3,
-                          child: PieChart(
-                            PieChartData(
-                                pieTouchData: PieTouchData(touchCallback:
-                                    (FlTouchEvent event, pieTouchResponse) {
-                                  // if (!event.isInterestedForInteractions ||
-                                  //     pieTouchResponse == null ||
-                                  //     pieTouchResponse.touchedSection ==
-                                  //         null) {
-                                  //   selectedIndex.value = -1;
-                                  //   return;
-                                  // }
-                                  // selectedIndex.value = pieTouchResponse
-                                  //     .touchedSection!.touchedSectionIndex;
-                                }),
-                                borderData: FlBorderData(
-                                  show: false,
-                                ),
-                                sectionsSpace: 0,
-                                centerSpaceRadius: 60,
-                                sections: profileController.showingSections()),
-                            swapAnimationDuration: Duration(milliseconds: 300),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          height: 25,
-                          child: PageView.builder(
-                            controller: profileController.careertitleController,
-                            scrollDirection: Axis.horizontal,
-                            onPageChanged: (index) {
-                              if (index.toDouble() !=
-                                  profileController.careerCurrentPage.value) {
-                                profileController.careerCurrentPage.value =
-                                    index.toDouble();
-                                profileController.careerPageController
-                                    .animateToPage(index,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.ease);
-                              }
-                            },
-                            itemBuilder: (context, index) {
-                              var _scale = profileController
-                                          .careerCurrentPage.value
-                                          .toInt() ==
-                                      index
-                                  ? 1.0
-                                  : 0.8;
-                              var _color = profileController
-                                          .careerCurrentPage.value
-                                          .toInt() ==
-                                      index
-                                  ? mainblack
-                                  : mainblack.withOpacity(0.2);
-                              return TweenAnimationBuilder(
-                                duration: const Duration(milliseconds: 350),
-                                tween: Tween(begin: _scale, end: _scale),
-                                curve: Curves.ease,
-                                child: Center(
-                                  child: Text(
-                                    profileController
-                                        .myProjectList[index].careerName,
-                                    style: k18Semibold.copyWith(color: _color),
+                                  const SizedBox(
+                                    height: 8,
                                   ),
-                                ),
-                                builder: (context, double value, child) {
-                                  return Transform.scale(
-                                    scale: value,
-                                    child: child,
-                                  );
-                                },
-                              );
-                            },
-                            itemCount: profileController.myProjectList.length,
-                          ),
-                        ),
-                        profileController.myProjectList.isEmpty
-                            ? Container()
-                            : ExpandablePageView.builder(
-                                onPageChanged: (index) {
-                                  if (index.toDouble() !=
-                                      profileController
-                                          .careerCurrentPage.value) {
-                                    profileController.careerCurrentPage.value =
-                                        index.toDouble();
-                                    profileController.careertitleController
-                                        .animateToPage(index,
-                                            duration: const Duration(
-                                                milliseconds: 300),
-                                            curve: Curves.ease);
-                                  }
-                                },
-                                controller:
-                                    profileController.careerPageController,
-                                itemBuilder: (context, index) {
-                                  return Column(
+                                  SizedBox(
+                                    height: 60,
+                                    child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: mainblack
+                                                      .withOpacity(0.1),
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
+                                            height: 60,
+                                            width: 60,
+                                            child: Image.network(
+                                              'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+                                              height: 60,
+                                              width: 60,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: mainblack
+                                                      .withOpacity(0.1),
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
+                                            height: 60,
+                                            width: 60,
+                                            child: Image.network(
+                                              'https://images.samsung.com/kdp/aboutsamsung/brand_identity/logo/360_197_1.png?\$FB_TYPE_B_PNG\$',
+                                              height: 60,
+                                              width: 60,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: mainblack
+                                                      .withOpacity(0.1),
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
+                                            height: 60,
+                                            width: 60,
+                                            child: Image.network(
+                                              'https://w7.pngwing.com/pngs/240/71/png-transparent-hyundai-motor-company-car-logo-berkeley-payments-hyundai-blue-cdr-text.png',
+                                              height: 60,
+                                              width: 60,
+                                            ),
+                                          ),
+                                        ]),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
                                     children: [
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 24),
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          '함께한 친구',
-                                          style: k15normal.copyWith(
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      // profileController
-                                      //             .myProjectList[profileController.careerCurrentPage.to]
-                                      SizedBox(
-                                        height: 90,
-                                        child: ListView.separated(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 24),
-                                            scrollDirection: Axis.horizontal,
-                                            itemBuilder: (context, index) {
-                                              Project project =
-                                                  profileController
-                                                      .myProjectList[index];
-                                              return Column(
-                                                children: [
-                                                  ClipOval(
-                                                    child: Image.network(
-                                                      project.members[index]
-                                                              .profileImage ??
-                                                          '',
-                                                      width: 50,
-                                                      height: 50,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 6,
-                                                  ),
-                                                  Text(
-                                                    project.members[index]
-                                                        .realName,
-                                                    style: k15normal.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  )
-                                                ],
-                                              );
+                                      const Divider(
+                                          thickness: 1, color: cardGray),
+                                      const SizedBox(height: 24),
+                                      // Row(
+                                      //   mainAxisAlignment: MainAxisAlignment.start,
+                                      //   children: [
+                                      //     const Text('커리어 분석', style: k18Semibold),
+                                      //     const SizedBox(width: 7),
+                                      //     SvgPicture.asset(
+                                      //       'assets/icons/Question.svg',
+                                      //       width: 20,
+                                      //       height: 20,
+                                      //       color: mainblack.withOpacity(0.6),
+                                      //     )
+                                      //   ],
+                                      // ),
+                                      // Column(
+                                      //     children:
+                                      //         profileController.careerAnalysis),
+                                      // const SizedBox(height: 24),
+                                      // const Divider(thickness: 1, color: cardGray),
+                                      // const SizedBox(height: 24),
+                                      Row(
+                                        children: [
+                                          const Text('커리어', style: k18Semibold),
+                                          const SizedBox(width: 7),
+                                          SvgPicture.asset(
+                                            'assets/icons/Question.svg',
+                                            width: 20,
+                                            height: 20,
+                                            color: mainblack.withOpacity(0.6),
+                                          ),
+                                          const Spacer(),
+                                          InkWell(
+                                            onTap: () {
+                                              Get.to(ProjectAddTitleScreen(
+                                                  screenType: Screentype.add));
                                             },
-                                            separatorBuilder: (context, index) {
-                                              return const SizedBox(
-                                                width: 8,
+                                            child: Text(
+                                              '추가하기',
+                                              style: k15normal.copyWith(
+                                                  color: mainblue),
+                                            ),
+                                            splashColor: kSplashColor,
+                                          ),
+                                        ],
+                                      ),
+                                      Obx(
+                                        () => Column(
+                                            children: profileController
+                                                .myProjectList
+                                                .map((career) {
+                                          int index = profileController
+                                              .myProjectList
+                                              .indexWhere((element) =>
+                                                  element.id == career.id);
+                                          return CareerTile(
+                                              index: index,
+                                              title: career.careerName.obs,
+                                              time: career.startDate!);
+                                        }).toList()),
+                                      ),
+                                      const SizedBox(height: 24),
+                                      const Divider(
+                                          thickness: 1, color: cardGray),
+                                      const SizedBox(height: 24),
+                                      Row(
+                                        children: [
+                                          const Text('포스트', style: k18Semibold),
+                                          const Spacer(),
+                                          InkWell(
+                                              onTap: () {
+                                                Get.to(() =>
+                                                    PostingAddImagesScreen(
+                                                      project_id: profileController
+                                                          .myProjectList[
+                                                              profileController
+                                                                  .careerCurrentPage
+                                                                  .toInt()]
+                                                          .id,
+                                                      route:
+                                                          PostaddRoute.project,
+                                                    ));
+                                              },
+                                              child: Text(
+                                                '전체 보기(${profileController.myUserInfo.value.totalposting}개)',
+                                                style: k15Normal.copyWith(
+                                                    color: mainblue),
+                                              ))
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            profileController.myProjectList.isEmpty
+                                ? EmptyContentWidget(text: '아직 커리어가 없어요')
+                                : Column(
+                                    children: [
+                                      Stack(
+                                        alignment: AlignmentDirectional.center,
+                                        children: [
+                                          AspectRatio(
+                                            aspectRatio: 1.3,
+                                            child: PieChart(
+                                              PieChartData(
+                                                  pieTouchData: PieTouchData(
+                                                      touchCallback:
+                                                          (FlTouchEvent event,
+                                                              pieTouchResponse) {
+                                                    // if (!event.isInterestedForInteractions ||
+                                                    //     pieTouchResponse == null ||
+                                                    //     pieTouchResponse.touchedSection ==
+                                                    //         null) {
+                                                    //   selectedIndex.value = -1;
+                                                    //   return;
+                                                    // }
+                                                    // selectedIndex.value = pieTouchResponse
+                                                    //     .touchedSection!.touchedSectionIndex;
+                                                  }),
+                                                  borderData: FlBorderData(
+                                                    show: false,
+                                                  ),
+                                                  sectionsSpace: 0,
+                                                  centerSpaceRadius: 80,
+                                                  sections: profileController
+                                                      .showingSections()),
+                                              swapAnimationDuration:
+                                                  Duration(milliseconds: 300),
+                                            ),
+                                          ),
+                                          RichText(
+                                            textAlign: TextAlign.center,
+                                            text: TextSpan(children: [
+                                              TextSpan(
+                                                text: 'IT',
+                                                style: k15Normal.copyWith(
+                                                    color: mainblue),
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    '분야\n${profileController.myUserInfo.value.totalposting}개의 포스트\n전체 커리어 중 ${(profileController.myProjectList[profileController.careerCurrentPage.toInt()].postRatio! * 100).toInt()}%',
+                                                style: k15Normal,
+                                              ),
+                                            ]),
+                                          )
+                                        ],
+                                      ),
+                                      Obx(
+                                        () => Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 24),
+                                          height: 25,
+                                          child: PageView.builder(
+                                            controller: profileController
+                                                .careertitleController,
+                                            scrollDirection: Axis.horizontal,
+                                            onPageChanged: (index) {
+                                              if (index.toDouble() !=
+                                                  profileController
+                                                      .careerCurrentPage
+                                                      .value) {
+                                                profileController
+                                                    .careerCurrentPage
+                                                    .value = index.toDouble();
+                                                profileController
+                                                    .careerPageController
+                                                    .animateToPage(index,
+                                                        duration:
+                                                            const Duration(
+                                                                milliseconds:
+                                                                    300),
+                                                        curve: Curves.ease);
+                                              }
+                                            },
+                                            itemBuilder: (context, index) {
+                                              var _scale = profileController
+                                                          .careerCurrentPage
+                                                          .value
+                                                          .toInt() ==
+                                                      index
+                                                  ? 1.0
+                                                  : 0.8;
+                                              var _color = profileController
+                                                          .careerCurrentPage
+                                                          .value
+                                                          .toInt() ==
+                                                      index
+                                                  ? mainblack
+                                                  : mainblack.withOpacity(0.2);
+                                              return TweenAnimationBuilder(
+                                                duration: const Duration(
+                                                    milliseconds: 350),
+                                                tween: Tween(
+                                                    begin: _scale, end: _scale),
+                                                curve: Curves.ease,
+                                                child: Center(
+                                                  child: Text(
+                                                    profileController
+                                                        .myProjectList[index]
+                                                        .careerName,
+                                                    style: k18Semibold.copyWith(
+                                                        color: _color),
+                                                  ),
+                                                ),
+                                                builder: (context, double value,
+                                                    child) {
+                                                  return Transform.scale(
+                                                    scale: value,
+                                                    child: child,
+                                                  );
+                                                },
                                               );
                                             },
                                             itemCount: profileController
-                                                .myProjectList[profileController
-                                                    .careerCurrentPage.value
-                                                    .toInt()]
-                                                .members
-                                                .length),
+                                                .myProjectList.length,
+                                          ),
+                                        ),
                                       ),
+                                      // profileController.myProjectList.isEmpty
+                                      //     ? Container(
+                                      //         padding: const EdgeInsets.only(bottom: 20),
+                                      //         alignment: Alignment.center,
+                                      //         child: Text(
+                                      //           '아직 커리어가 없어요',
+                                      //           style: kBody1Style.copyWith(
+                                      //               color: mainblack.withOpacity(0.6)),
+                                      //         ),
+                                      //       )
+                                      //     :
                                       Obx(
-                                        () => profileController
-                                                .careerLoading.value
-                                            ? LoadingWidget()
-                                            : profileController
-                                                    .myProjectList[index]
-                                                    .posts
-                                                    .isNotEmpty
-                                                ? Column(
-                                                    children: profileController
-                                                        .myProjectList[index]
-                                                        .posts
-                                                        .map((post) => post
-                                                                .images
-                                                                .isNotEmpty
-                                                            ? Image.network(
-                                                                post.images[0])
-                                                            : Container(
-                                                                child: Text(post
-                                                                    .content),
-                                                              ))
-                                                        .toList(),
-                                                  )
-                                                : Container(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 20),
-                                                    alignment: Alignment.center,
-                                                    child: Text(
-                                                      '아직 포스팅이 없어요',
-                                                      style:
-                                                          kBody1Style.copyWith(
-                                                              color: mainblack
-                                                                  .withOpacity(
-                                                                      0.6)),
-                                                    ),
+                                        () => ExpandablePageView.builder(
+                                          onPageChanged: (index) {
+                                            if (index.toDouble() !=
+                                                profileController
+                                                    .careerCurrentPage.value) {
+                                              profileController
+                                                  .careerCurrentPage
+                                                  .value = index.toDouble();
+                                              profileController
+                                                  .careertitleController
+                                                  .animateToPage(index,
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.ease);
+                                            }
+                                          },
+                                          controller: profileController
+                                              .careerPageController,
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 24),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    '함께한 친구',
+                                                    style: k15normal.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w500),
                                                   ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 8,
+                                                ),
+                                                // profileController
+                                                //             .myProjectList[profileController.careerCurrentPage.to]
+                                                SizedBox(
+                                                  height: 90,
+                                                  child: profileController
+                                                          .myProjectList[index]
+                                                          .members
+                                                          .isEmpty
+                                                      ? EmptyContentWidget(
+                                                          text:
+                                                              '혼자서 진행한 커리어입니다')
+                                                      : ListView.separated(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      24),
+                                                          scrollDirection: Axis
+                                                              .horizontal,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            Project project =
+                                                                profileController
+                                                                        .myProjectList[
+                                                                    index];
+                                                            return Column(
+                                                              children: [
+                                                                ClipOval(
+                                                                  child: Image
+                                                                      .network(
+                                                                    project.members[index]
+                                                                            .profileImage ??
+                                                                        '',
+                                                                    width: 50,
+                                                                    height: 50,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 6,
+                                                                ),
+                                                                Text(
+                                                                  project
+                                                                      .members[
+                                                                          index]
+                                                                      .realName,
+                                                                  style: k15normal.copyWith(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400),
+                                                                )
+                                                              ],
+                                                            );
+                                                          },
+                                                          separatorBuilder:
+                                                              (context, index) {
+                                                            return const SizedBox(
+                                                              width: 8,
+                                                            );
+                                                          },
+                                                          itemCount: profileController
+                                                              .myProjectList[
+                                                                  profileController
+                                                                      .careerCurrentPage
+                                                                      .value
+                                                                      .toInt()]
+                                                              .members
+                                                              .length),
+                                                ),
+                                                Obx(
+                                                  () => profileController
+                                                          .careerLoading.value
+                                                      ? const LoadingWidget()
+                                                      : profileController
+                                                              .myProjectList[
+                                                                  index]
+                                                              .posts
+                                                              .isNotEmpty
+                                                          ? ListView.separated(
+                                                              primary: false,
+                                                              shrinkWrap: true,
+                                                              itemBuilder:
+                                                                  (context,
+                                                                      postindex) {
+                                                                return PostingWidget(
+                                                                  item: profileController
+                                                                      .myProjectList[
+                                                                          index]
+                                                                      .posts[postindex],
+                                                                  view:
+                                                                      'profile',
+                                                                );
+                                                              },
+                                                              separatorBuilder:
+                                                                  (context,
+                                                                          postindex) =>
+                                                                      const DivideWidget(),
+                                                              itemCount:
+                                                                  profileController
+                                                                      .myProjectList[
+                                                                          index]
+                                                                      .posts
+                                                                      .length,
+                                                            )
+                                                          : EmptyContentWidget(
+                                                              text:
+                                                                  '아직 포스팅이 없어요'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                          itemCount: profileController
+                                              .myProjectList.length,
+                                        ),
                                       ),
                                     ],
-                                  );
-                                },
-                                itemCount:
-                                    profileController.myProjectList.length,
-                              )
-                      ],
-                    )),
+                                  )
+                          ],
+                        )),
                   ),
                 ),
               ),

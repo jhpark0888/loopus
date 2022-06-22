@@ -124,7 +124,7 @@ class SearchFocusScreen extends StatelessWidget {
                 // selectionHeightStyle: BoxHeightStyle.tight,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: mainlightgrey,
+                  fillColor: lightcardgray,
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(8)),

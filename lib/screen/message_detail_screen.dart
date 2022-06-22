@@ -155,7 +155,7 @@ class MessageDetailScreen extends StatelessWidget {
             fontSize: 14,
             color: mainblack.withOpacity(0.38),
           ),
-          fillColor: mainlightgrey,
+          fillColor: lightcardgray,
           filled: true,
         ),
       ),

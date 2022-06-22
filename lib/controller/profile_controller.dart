@@ -25,7 +25,9 @@ class ProfileController extends GetxController
 
   RxBool profileenablepullup = true.obs;
 
-  final careertitleController = PageController(viewportFraction: 0.4);
+  final careertitleController = PageController(
+    viewportFraction: 0.4,
+  );
   final careerPageController = PageController();
   RxDouble careerCurrentPage = 0.0.obs;
 
@@ -33,13 +35,17 @@ class ProfileController extends GetxController
       RefreshController(initialRefresh: false);
 
   void onRefresh() async {
+    careerCurrentPage(0.0);
     profileenablepullup.value = true;
     loadmyProfile();
     profilerefreshController.refreshCompleted();
   }
 
   void onLoading() async {
-    await Future.delayed(Duration(milliseconds: 10));
+    // await Future.delayed(Duration(seconds: 2));
+    if (myProjectList.isNotEmpty) {
+      getProfilePost();
+    }
     profilerefreshController.loadComplete();
   }
 
@@ -53,8 +59,6 @@ class ProfileController extends GetxController
 
   RxList<User> mylooplist = <User>[].obs;
 
-  late TabController profileTabController;
-
   RxBool isnewalarm = false.obs;
   RxBool isnewmessage = false.obs;
 
@@ -65,8 +69,6 @@ class ProfileController extends GetxController
   late RxList<Widget> careerAnalysis;
   late RxList<CareerModel> career;
   late RxList<CareerTile> careerwidget;
-  TextEditingController careerAddController = TextEditingController();
-  TextEditingController careerUpdateController = TextEditingController();
   // --
 
   Future loadmyProfile() async {
@@ -79,31 +81,49 @@ class ProfileController extends GetxController
       myprofilescreenstate(ScreenState.disconnect);
       showdisconnectdialog();
     } else {
-       await getProfile(userId, 1);
+      await getProfile(userId, 1);
       await getProjectlist(userId, 1);
-      if(myProjectList.isNotEmpty) {
-        await getCareerPosting(
-              myProjectList[careerCurrentPage.value.toInt()].id, 0)
-          .then((value) {
-        if (value.isError == false) {
-          List<Post> postlist = value.data;
-          myProjectList[careerCurrentPage.value.toInt()].posts(postlist);
-          myprofilescreenstate(ScreenState.success);
-        } else {
-          errorSituation(value);
-          myprofilescreenstate(ScreenState.error);
-        }
-      });
+      if (myProjectList.isNotEmpty) {
+        getProfilePost();
       }
-      
     }
     // isProfileLoading.value = false;
   }
 
+  void getProfilePost() async {
+    // print('현재 페이지 ${careerCurrentPage.value}');
+    await getCareerPosting(myProjectList[careerCurrentPage.value.toInt()].id,
+            careerPagenums[careerCurrentPage.value.toInt()])
+        .then((value) {
+      if (value.isError == false) {
+        List<Post> postlist = value.data;
+
+        if (postlist.isNotEmpty) {
+          if (myProjectList[careerCurrentPage.value.toInt()]
+              .posts
+              .where((post) => post.id == postlist.last.id)
+              .isEmpty) {
+            myProjectList[careerCurrentPage.value.toInt()]
+                .posts
+                .addAll(postlist);
+            careerPagenums[careerCurrentPage.value.toInt()] += 1;
+          } else {
+            profileenablepullup(false);
+          }
+        } else {
+          profileenablepullup(false);
+        }
+
+        myprofilescreenstate(ScreenState.success);
+      } else {
+        errorSituation(value);
+        myprofilescreenstate(ScreenState.error);
+      }
+    });
+  }
+
   @override
   void onInit() async {
-    profileTabController = TabController(length: 2, vsync: this);
-
     await loadmyProfile();
 
     //-----
@@ -117,19 +137,11 @@ class ProfileController extends GetxController
       careerCurrentPage,
       (_) async {
         Project project = myProjectList[careerCurrentPage.toInt()];
+        profileenablepullup(true);
         if (project.posts.isEmpty) {
           careerLoading(true);
-          await getCareerPosting(project.id, 0).then((value) {
-            if (value.isError == false) {
-              List<Post> postlist = value.data;
-              project.posts(postlist);
-              // myprofilescreenstate(ScreenState.success);
-            } else {
-              errorSituation(value);
-              // myprofilescreenstate(ScreenState.error);
-            }
-            careerLoading(false);
-          });
+          getProfilePost();
+          careerLoading(false);
         }
       },
       // time: const Duration(milliseconds: 300),
@@ -171,7 +183,7 @@ class ProfileController extends GetxController
       if (variance != 0)
         Text('${variance.abs()}%',
             style:
-                k9normal.copyWith(color: variance >= 1 ? mainred : mainblue)),
+                k9normal.copyWith(color: variance >= 1 ? rankred : mainblue)),
     ]);
   }
 
@@ -195,7 +207,7 @@ class ProfileController extends GetxController
       return PieChartSectionData(
         color: colorgroup[index],
         value: career.postRatio,
-        title: '${career.postRatio}',
+        title: '',
         radius: radius,
         titleStyle: TextStyle(
             fontSize: fontSize,

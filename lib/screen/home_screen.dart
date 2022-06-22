@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/widget/custom_footer.dart';
+import 'package:loopus/widget/custom_header.dart';
+import 'package:loopus/widget/news_widget.dart';
+import 'package:loopus/widget/scrap_widget.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
-import 'package:underline_indicator/underline_indicator.dart';
-
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:loopus/constant.dart';
-
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
-
-import 'package:loopus/screen/home_posting_screen.dart';
 import 'package:loopus/screen/message_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
 
@@ -24,117 +25,163 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: GestureDetector(
-          onTap: () => CustomScrollController.to.scrollToTop(),
-          child: Image.asset(
-            'assets/illustrations/Home_Logo.png',
-            width: 54,
-            height: 30,
-          ),
-        ),
-        actions: [
-          // IconButton(
-          //   onPressed: () => Get.to(() => SearchScreen()),
-          //   icon: SvgPicture.asset(
-          //     "assets/icons/Search.svg",
-          //     width: 28,
-          //     height: 28,
-          //   ),
-          // ),
-          Stack(
-            children: [
-              IconButton(
-                onPressed: () {
-                  ProfileController.to.isnewalarm(false);
-
-                  Get.to(() => NotificationScreen());
-                },
-                icon: SvgPicture.asset(
-                  "assets/icons/Bell_Inactive.svg",
-                  width: 28,
-                ),
-              ),
-              Positioned(
-                right: 14,
-                top: 12,
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Obx(() => ProfileController.to.isnewalarm.value == true
-                      ? Container(
-                          height: 8,
-                          width: 8,
-                          decoration: BoxDecoration(
-                              color: mainpink, shape: BoxShape.circle),
-                        )
-                      : Container()),
-                ),
-              ),
-            ],
-          ),
-          Stack(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Get.to(() => MessageScreen());
-                },
-                icon: SvgPicture.asset(
-                  "assets/icons/Chat.svg",
-                  width: 28,
-                  height: 28,
-                ),
-              ),
-              Positioned(
-                right: 12,
-                top: 12,
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child:
-                      Obx(() => ProfileController.to.isnewmessage.value == true
-                          ? Container(
-                              height: 8,
-                              width: 8,
-                              decoration: BoxDecoration(
-                                  color: mainpink, shape: BoxShape.circle),
-                            )
-                          : Container()),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            width: 5,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: UserImageWidget(
-              imageUrl:
-                  ProfileController.to.myUserInfo.value.profileImage ?? '',
-              width: 35,
-              height: 35,
+        appBar: AppBar(
+          toolbarHeight: 44,
+          elevation: 0,
+          title: GestureDetector(
+            onTap: () => CustomScrollController.to.scrollToTop(),
+            child: Image.asset(
+              'assets/illustrations/Home_Logo.png',
+              width: 72,
+              height: 40,
             ),
           ),
-          const SizedBox(
-            width: 15,
+          actions: [
+            // IconButton(
+            //   onPressed: () => Get.to(() => SearchScreen()),
+            //   icon: SvgPicture.asset(
+            //     "assets/icons/Search.svg",
+            //     width: 28,
+            //     height: 28,
+            //   ),
+            // ),
+            Center(
+              child: Stack(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      ProfileController.to.isnewalarm(false);
+
+                      Get.to(() => NotificationScreen());
+                    },
+                    icon: SvgPicture.asset(
+                      "assets/icons/Bell_Inactive.svg",
+                      width: 28,
+                    ),
+                  ),
+                  Positioned(
+                    right: 14,
+                    top: 12,
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Obx(
+                          () => ProfileController.to.isnewalarm.value == true
+                              ? Container(
+                                  height: 8,
+                                  width: 8,
+                                  decoration: BoxDecoration(
+                                      color: rankred, shape: BoxShape.circle),
+                                )
+                              : Container()),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Center(
+              child: Stack(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Get.to(() => MessageScreen());
+                    },
+                    icon: SvgPicture.asset(
+                      "assets/icons/Chat.svg",
+                      width: 28,
+                      height: 28,
+                    ),
+                  ),
+                  Positioned(
+                    right: 12,
+                    top: 12,
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Obx(
+                          () => ProfileController.to.isnewmessage.value == true
+                              ? Container(
+                                  height: 8,
+                                  width: 8,
+                                  decoration: BoxDecoration(
+                                      color: rankred, shape: BoxShape.circle),
+                                )
+                              : Container()),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: UserImageWidget(
+                  imageUrl:
+                      ProfileController.to.myUserInfo.value.profileImage ?? '',
+                  width: 36,
+                  height: 36,
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+          ],
+        ),
+        body: SmartRefresher(
+          physics: const BouncingScrollPhysics(),
+          controller: _homeController.postingRefreshController,
+          enablePullDown:
+              (_homeController.isPostingLoading.value == true) ? false : true,
+          enablePullUp: (_homeController.isPostingLoading.value == true)
+              ? false
+              : _homeController.enablePostingPullup.value,
+          header: const MyCustomHeader(),
+          footer: const MyCustomFooter(),
+          onRefresh: _homeController.onPostingRefresh,
+          onLoading: _homeController.onPostingLoading,
+          child: ScrollNoneffectWidget(
+            child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 24,
+                          ),
+                          Text(
+                            '\'커리어이름\'\n커리어엔 최근 어떤 일이 있었나요?',
+                            style: k16Normal.copyWith(height: 1.5),
+                          ),
+                          const SizedBox(
+                            height: 14,
+                          ),
+                          Text(
+                            '포스트를 바로 작성해 보세요',
+                            style: k16Normal.copyWith(color: maingray),
+                          ),
+                          const SizedBox(
+                            height: 7,
+                          ),
+                          Divider(thickness: 1, color: maingray),
+                        ],
+                      ),
+                    ),
+                    ScrapWidget(
+                      url: 'http://www.segye.com/newsView/20220617510520',
+                      widgetType: 'add',
+                    ),
+                    NewsWidget(
+                        url: 'http://www.segye.com/newsView/20220617510520'),
+                  ],
+                )),
           ),
-        ],
-      ),
-      body: NestedScrollView(
-        controller: CustomScrollController.to.customScrollController.value,
-        headerSliverBuilder: (context, value) {
-          return [
-            //홈 검색 탭
-            // homeSearchBar(_searchController),
-            //활동중인 공식계정
-            // activatedOfficialAccount(_modalController),
-            //탭 바
-            // sliverTabBar(context, _homeController),
-          ];
-        },
-        body: HomePostingScreen(),
-      ),
-    );
+        ));
   }
 
   Widget homeSearchBar(SearchController _searchController) {
@@ -161,7 +208,7 @@ class HomeScreen extends StatelessWidget {
                   vertical: 10,
                 ),
                 decoration: BoxDecoration(
-                  color: mainlightgrey,
+                  color: lightcardgray,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(

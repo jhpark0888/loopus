@@ -22,7 +22,7 @@ import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/project_model.dart';
-import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/trash_bin/project_screen.dart';
 
 import '../constant.dart';
 
@@ -219,7 +219,7 @@ Future<void> deleteproject(int projectId) async {
         try {
           Get.find<OtherProfileController>(tag: userid)
               .otherProjectList
-              .removeWhere((project) => project.project.value.id == projectId);
+              .removeWhere((project) => project.id == projectId);
         } catch (e) {
           print("활동 삭제 : $e");
         }

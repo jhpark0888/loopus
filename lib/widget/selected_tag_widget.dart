@@ -28,7 +28,7 @@ class SelectedTagWidget extends StatelessWidget {
       margin: const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.fromLTRB(14, 4, 4, 4),
       decoration: BoxDecoration(
-        color: mainlightgrey,
+        color: lightcardgray,
         borderRadius: BorderRadius.circular(40),
       ),
       child: Row(

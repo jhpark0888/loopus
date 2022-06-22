@@ -47,9 +47,9 @@ dependencies:
   connectivity_plus: ^2.2.1
   card_swiper: ^2.0.3
   photo_manager: ^2.1.2
-  
   fl_chart: ^0.51.0
   expandable_page_view: ^1.0.13
+  link_preview_generator: ^1.2.0
 
 dev_dependencies:
   flutter_test:

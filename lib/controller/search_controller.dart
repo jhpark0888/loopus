@@ -36,7 +36,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   int tagpagenumber = 1;
   int pagenumber = 1;
 
-  // RxBool isFocused = false.obs;
+  RxBool isFocused = false.obs;
   RxInt tabpage = 0.obs;
   late TabController tabController;
 

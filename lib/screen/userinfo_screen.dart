@@ -103,7 +103,7 @@ class UserInfoScreen extends StatelessWidget {
                   },
                   title: Text(
                     '회원탈퇴',
-                    style: kSubTitle2Style.copyWith(color: mainpink),
+                    style: kSubTitle2Style.copyWith(color: rankred),
                   ),
                 )
               ],

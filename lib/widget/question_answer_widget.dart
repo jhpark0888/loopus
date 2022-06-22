@@ -65,7 +65,7 @@ class QuestionAnswerWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      " · ${DurationCaculator().messagedurationCaculate(startDate: answer.date, endDate: DateTime.now())}",
+                      " · ${messagedurationCaculate(startDate: answer.date, endDate: DateTime.now())}",
                       style: kBody2Style.copyWith(
                           color: mainblack.withOpacity(0.6)),
                     ),

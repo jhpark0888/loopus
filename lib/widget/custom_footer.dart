@@ -7,7 +7,9 @@ class MyCustomFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClassicFooter(
-      completeDuration: Duration.zero,
+      spacing: 0.0,
+      completeDuration: const Duration(milliseconds: 200),
+      loadStyle: LoadStyle.ShowWhenLoading,
       loadingText: "",
       canLoadingText: "",
       idleText: "",

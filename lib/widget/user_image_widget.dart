@@ -12,20 +12,25 @@ class UserImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipOval(
-      child: CachedNetworkImage(
-        imageUrl: imageUrl == ''
-            ? 'https://cdn.pixabay.com/photo/2021/12/04/04/44/woman-6844349__340.jpg'
-            : imageUrl,
-        height: height ?? 50,
-        width: width ?? 50,
-        fit: BoxFit.cover,
-        placeholder: (context, string) {
-          return Image.asset(
-            'assets/icons/loading.gif',
-            scale: 6,
-          );
-        },
-      ),
+      child: imageUrl == ''
+          ? Image.asset(
+              "assets/illustrations/default_profile.png",
+              height: height ?? 50,
+              width: width ?? 50,
+              fit: BoxFit.cover,
+            )
+          : CachedNetworkImage(
+              imageUrl: imageUrl,
+              height: height ?? 50,
+              width: width ?? 50,
+              fit: BoxFit.cover,
+              placeholder: (context, string) {
+                return Image.asset(
+                  'assets/icons/loading.gif',
+                  scale: 6,
+                );
+              },
+            ),
     );
   }
 }

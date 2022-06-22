@@ -8,7 +8,7 @@ import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
-import 'package:loopus/screen/project_screen.dart';
+import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:intl/intl.dart';
 
 enum ProjectWidgetType { profile, addposting }
@@ -38,10 +38,10 @@ class ProjectWidget extends StatelessWidget {
         onTapUp: (details) => _hoverController.isNonHoverState(),
         onTap: () async {
           if (type == ProjectWidgetType.profile) {
-            Get.to(() => ProjectScreen(
-                  projectid: project.value.id,
-                  isuser: project.value.is_user,
-                ));
+            // Get.to(() => ProjectScreen(
+            //       projectid: project.value.id,
+            //       isuser: project.value.is_user,
+            //     ));
           } else {
             Get.to(() => PostingAddNameScreen(
                   project_id: project.value.id,
@@ -138,8 +138,7 @@ class ProjectWidget extends StatelessWidget {
                                         () => Text(
                                           (project.value.endDate == null)
                                               ? '진행중'
-                                              : DurationCaculator()
-                                                  .durationCaculate(
+                                              : durationCaculate(
                                                   startDate:
                                                       project.value.startDate!,
                                                   endDate:

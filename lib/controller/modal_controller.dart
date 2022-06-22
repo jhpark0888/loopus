@@ -420,7 +420,7 @@ void showModalIOS(
           child: Text(
             value1,
             style: kButtonStyle.copyWith(
-              color: isValue1Red ? mainpink : mainblack,
+              color: isValue1Red ? rankred : mainblack,
             ),
           ),
           onPressed: func1,
@@ -430,7 +430,7 @@ void showModalIOS(
               child: Text(
                 value2,
                 style: kButtonStyle.copyWith(
-                  color: isValue2Red ? mainpink : mainblack,
+                  color: isValue2Red ? rankred : mainblack,
                 ),
               ),
               onPressed: func2)
@@ -475,7 +475,7 @@ void showButtonDialog({
                     child: Text(
                       leftText,
                       style: kButtonStyle.copyWith(
-                        color: mainpink,
+                        color: rankred,
                       ),
                     ),
                   ),
@@ -572,7 +572,7 @@ void showoneButtonDialog({
                       child: Text(
                         oneText,
                         style: kButtonStyle.copyWith(
-                          color: mainpink,
+                          color: rankred,
                         ),
                       ),
                     ),
@@ -667,7 +667,7 @@ void showTextFieldDialog({
                     child: Text(
                       isWithdrawal ? '탈퇴' : '확인',
                       style: kButtonStyle.copyWith(
-                        color: isWithdrawal ? mainpink : mainblue,
+                        color: isWithdrawal ? rankred : mainblue,
                       ),
                     ),
                   ),
@@ -757,7 +757,7 @@ void showCustomBottomSheet() {
                     width: 24,
                   ),
                   decoration: BoxDecoration(
-                    color: mainlightgrey,
+                    color: lightcardgray,
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
@@ -792,7 +792,7 @@ void showCustomBottomSheet() {
                     fit: BoxFit.cover,
                   ),
                   decoration: BoxDecoration(
-                    color: mainlightgrey,
+                    color: lightcardgray,
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),

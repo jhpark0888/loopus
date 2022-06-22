@@ -53,7 +53,7 @@ class MessageWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12.0, 18.0, 8.0, 0.0),
                   child: Text(
-                    "${DurationCaculator().messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
+                    "${messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
                     style: kCaptionStyle.copyWith(
                       color: mainblack.withOpacity(0.6),
                     ),
@@ -151,7 +151,7 @@ class MessageWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 18.0, 12.0, 0.0),
                   child: Text(
-                    "${DurationCaculator().messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
+                    "${messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
                     style: kCaptionStyle.copyWith(
                         color: mainblack.withOpacity(0.6)),
                   ),

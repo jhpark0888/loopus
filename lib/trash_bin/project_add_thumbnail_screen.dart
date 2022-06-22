@@ -271,8 +271,7 @@
 //                                                               .value ==
 //                                                           false)
 //                                                       ? '진행중'
-//                                                       : DurationCaculator()
-//                                                           .durationCaculate(
+//                                                       : durationCaculate(
 //                                                           startDate: DateTime.parse(
 //                                                               projectAddController
 //                                                                   .selectedStartDateTime
