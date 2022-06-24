@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/controller/upload_controller.dart';
-import 'package:loopus/screen/test_screen.dart';
 
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_view/photo_view.dart';
@@ -275,19 +274,14 @@ class UploadScreen extends StatelessWidget {
                       Obx(
                         () => Text(
                           controller.headerTitle.value,
-                          style: k18Semibold,
+                          style: kmainbold,
                         ),
                       ),
                       Icon(Icons.arrow_drop_down)
                     ],
                   ),
                 ),
-                TextButton(
-                    onPressed: () {
-                      Get.to(() =>
-                          TestScreen(file1: controller.croppedImage!.value));
-                    },
-                    child: Text('크롭'))
+                // 
               ],
             ),
           ),
@@ -428,7 +422,7 @@ class UploadScreen extends StatelessWidget {
             children: [
               Text(
                 controller.headerTitle.value,
-                style: k18Semibold,
+                style: kmainbold,
               ),
               Icon(Icons.arrow_drop_down)
             ],

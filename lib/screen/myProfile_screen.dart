@@ -73,7 +73,7 @@ class MyProfileScreen extends StatelessWidget {
                   actions: [
                     IconButton(
                         onPressed: () {
-                          Get.to(() => BookmarkScreen());
+                          // Get.to(() => BookmarkScreen());
                         },
                         icon: SvgPicture.asset(
                           'assets/icons/Mark_Default.svg',
@@ -126,7 +126,7 @@ class MyProfileScreen extends StatelessWidget {
                                               profileController
                                                   .myUserInfo.value.loopcount
                                                   .toString(),
-                                              style: k18Semibold.copyWith(
+                                              style: kmainbold.copyWith(
                                                   color: _hoverController
                                                           .isHover.value
                                                       ? mainblack
@@ -140,8 +140,8 @@ class MyProfileScreen extends StatelessWidget {
                                           ),
                                           Text(
                                             '팔로워',
-                                            style: k15Semibold.copyWith(
-                                                color: maingray),
+                                            style:
+                                                kmain.copyWith(color: maingray),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -214,7 +214,7 @@ class MyProfileScreen extends StatelessWidget {
                                               profileController
                                                   .myUserInfo.value.loopcount
                                                   .toString(),
-                                              style: k18Semibold.copyWith(
+                                              style: kmainbold.copyWith(
                                                   color: _hoverController
                                                           .isHover.value
                                                       ? mainblack
@@ -228,8 +228,8 @@ class MyProfileScreen extends StatelessWidget {
                                           ),
                                           Text(
                                             '팔로잉',
-                                            style: k15Semibold.copyWith(
-                                                color: maingray),
+                                            style:
+                                                kmain.copyWith(color: maingray),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -243,7 +243,7 @@ class MyProfileScreen extends StatelessWidget {
                                     () => Text(
                                       profileController
                                           .myUserInfo.value.realName,
-                                      style: k18Semibold,
+                                      style: kmainbold,
                                     ),
                                   ),
                                   const SizedBox(
@@ -253,7 +253,7 @@ class MyProfileScreen extends StatelessWidget {
                                     () => Text(
                                       profileController
                                           .myUserInfo.value.department,
-                                      style: k15Semibold,
+                                      style: kmainbold,
                                     ),
                                   ),
                                   const SizedBox(
@@ -263,8 +263,7 @@ class MyProfileScreen extends StatelessWidget {
                                     children: [
                                       Text(
                                         '상위 태그',
-                                        style:
-                                            k15Normal.copyWith(color: maingray),
+                                        style: kmain.copyWith(color: maingray),
                                       ),
                                       const SizedBox(
                                         width: 7,
@@ -348,7 +347,8 @@ class MyProfileScreen extends StatelessWidget {
                                   ),
                                   Row(
                                     children: [
-                                      const Text('스카우터 컨택', style: k18Semibold),
+                                      const Text('스카우터 컨택',
+                                          style: kNavigationTitle),
                                       const SizedBox(width: 7),
                                       SvgPicture.asset(
                                         'assets/icons/Question.svg',
@@ -460,7 +460,8 @@ class MyProfileScreen extends StatelessWidget {
                                       // const SizedBox(height: 24),
                                       Row(
                                         children: [
-                                          const Text('커리어', style: k18Semibold),
+                                          const Text('커리어',
+                                              style: kNavigationTitle),
                                           const SizedBox(width: 7),
                                           SvgPicture.asset(
                                             'assets/icons/Question.svg',
@@ -504,7 +505,8 @@ class MyProfileScreen extends StatelessWidget {
                                       const SizedBox(height: 24),
                                       Row(
                                         children: [
-                                          const Text('포스트', style: k18Semibold),
+                                          const Text('포스트',
+                                              style: kNavigationTitle),
                                           const Spacer(),
                                           InkWell(
                                               onTap: () {
@@ -522,7 +524,7 @@ class MyProfileScreen extends StatelessWidget {
                                               },
                                               child: Text(
                                                 '전체 보기(${profileController.myUserInfo.value.totalposting}개)',
-                                                style: k15Normal.copyWith(
+                                                style: kmain.copyWith(
                                                     color: mainblue),
                                               ))
                                         ],
@@ -573,13 +575,13 @@ class MyProfileScreen extends StatelessWidget {
                                             text: TextSpan(children: [
                                               TextSpan(
                                                 text: 'IT',
-                                                style: k15Normal.copyWith(
+                                                style: kmain.copyWith(
                                                     color: mainblue),
                                               ),
                                               TextSpan(
                                                 text:
                                                     '분야\n${profileController.myUserInfo.value.totalposting}개의 포스트\n전체 커리어 중 ${(profileController.myProjectList[profileController.careerCurrentPage.toInt()].postRatio! * 100).toInt()}%',
-                                                style: k15Normal,
+                                                style: kmain,
                                               ),
                                             ]),
                                           )
@@ -638,8 +640,9 @@ class MyProfileScreen extends StatelessWidget {
                                                     profileController
                                                         .myProjectList[index]
                                                         .careerName,
-                                                    style: k18Semibold.copyWith(
-                                                        color: _color),
+                                                    style: kNavigationTitle
+                                                        .copyWith(
+                                                            color: _color),
                                                   ),
                                                 ),
                                                 builder: (context, double value,

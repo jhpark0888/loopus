@@ -319,13 +319,16 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
+import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/overflow_text_widget.dart';
@@ -345,21 +348,29 @@ class PostingWidget extends StatelessWidget {
   String? view;
   PostingWidget({required this.item, Key? key, this.view}) : super(key: key);
 
-  late final LikeController likeController = Get.put(
-      LikeController(
-          isliked: item.isLiked,
-          id: item.id,
-          lastisliked: item.isLiked.value,
-          liketype: Liketype.post),
-      tag: 'post${item.id}');
-  late final HoverController _hoverController =
-      Get.put(HoverController(), tag: 'posting${item.id}');
+  // late final LikeController likeController = Get.put(
+  //     LikeController(
+  //         isLiked: item.isLiked,
+  //         id: item.id,
+  //         lastisliked: item.isLiked.value,
+  //         liketype: Liketype.post),
+  //     tag: 'post${item.id}');
+  // late final HoverController _hoverController =
+  //     Get.put(HoverController(), tag: 'posting${item.id}');
+
+  final Debouncer _debouncer = Debouncer(
+    milliseconds: 500,
+  );
+
+  late int lastIsLiked;
+  int num = 0;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => tapPosting(context),
-      splashColor: view != 'detail' ? kSplashColor : null,
+      onTap: () => tapPosting(),
+      // behavior: HitTestBehavior.translucent,
+      splashColor: kSplashColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -469,34 +480,13 @@ class PostingWidget extends StatelessWidget {
                           const SizedBox(
                             width: 15,
                           ),
-                          // GestureDetector(
-                          //   behavior: HitTestBehavior.translucent,
-                          //   onTap: () {
-                          //     // Get.to(() => LikePeopleScreen(
-                          //     //       postid: item.id,
-                          //     //     ));
-                          //   },
-                          //   child:
-                          //    Padding(
-                          //     padding: const EdgeInsets.symmetric(
-                          //       vertical: 4,
-                          //     ),
-                          //     child: Text(
-                          //       item.likeCount.value != 0
-                          //           ? "${item.likeCount.value}     \u200B"
-                          //           : ' \u200B',
-                          //       style: kButtonStyle,
-                          //     ),
+                          // Obx(
+                          //   () => SizedBox(
+                          //     width: item.likeCount.value != 0 ? 0 : 8,
                           //   ),
                           // ),
-                          Obx(
-                            () => SizedBox(
-                              width: item.likeCount.value != 0 ? 0 : 8,
-                            ),
-                          ),
                           SvgPicture.asset("assets/icons/Comment.svg"),
                           const Spacer(),
-
                           InkWell(
                             onTap: tapBookmark,
                             child: (item.isMarked.value == 0)
@@ -524,29 +514,34 @@ class PostingWidget extends StatelessWidget {
                           },
                           child: Obx(
                             () => Text(
-                              '좋아요 ${item.likeCount}개',
+                              '좋아요 ${item.likeCount.value}개',
                               style: kSubTitle3Style,
                             ),
                           )),
                       const Spacer(),
                       Text(calculateDate(item.date), style: kSubTitle3Style),
                     ]),
-                    const SizedBox(height: 13),
-                    if (view != 'detail' && item.comments.isNotEmpty)
-                      Obx(
-                        () => Row(
-                          children: [
-                            Text(
-                              item.comments.first.user.realName,
-                              style: k16semiBold,
+                    const SizedBox(height: 14),
+                    if (item.comments.isNotEmpty)
+                      Column(
+                        children: [
+                          Obx(
+                            () => Row(
+                              children: [
+                                Text(
+                                  item.comments.first.user.realName,
+                                  style: k16semiBold,
+                                ),
+                                const SizedBox(width: 7),
+                                Text(
+                                  item.comments.first.content,
+                                  style: k16Normal,
+                                )
+                              ],
                             ),
-                            const SizedBox(width: 7),
-                            Text(
-                              item.comments.first.content,
-                              style: k16Normal,
-                            )
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 14),
+                        ],
                       ),
                   ],
                 ),
@@ -559,39 +554,15 @@ class PostingWidget extends StatelessWidget {
     );
   }
 
-  // Widget postingTag() {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.start,
-  //     children: item.project!.projectTag
-  //         .map((tag) => Row(children: [
-  //               Tagwidget(
-  //                 tag: tag,
-  //                 fontSize: 12,
-  //               ),
-  //               item.project!.projectTag.indexOf(tag) !=
-  //                       item.project!.projectTag.length - 1
-  //                   ? const SizedBox(
-  //                       width: 4,
-  //                     )
-  //                   : Container()
-  //             ]))
-  //         .toList(),
-  //   );
-  // }
-
-  void tapPosting(context) {
-    if (view != 'detail') {
-      Get.to(
-          () => PostingScreen(
-                post: item,
-                postid: item.id,
-                likecount: item.likeCount,
-                isLiked: item.isLiked,
-              ),
-          opaque: false);
-    } else {
-      FocusScope.of(context).unfocus();
-    }
+  void tapPosting() {
+    Get.to(
+        () => PostingScreen(
+              post: item,
+              postid: item.id,
+              // likecount: item.likeCount,
+              // isLiked: item.isLiked,
+            ),
+        opaque: false);
   }
 
   void tapProjectname() {
@@ -610,17 +581,31 @@ class PostingWidget extends StatelessWidget {
   }
 
   void tapLike() {
+    if (num == 0) {
+      lastIsLiked = item.isLiked.value;
+    }
     if (item.isLiked.value == 0) {
-      likeController.isliked(1);
-      // item.isLiked(1);
+      item.isLiked(1);
+      // likepost(item.id, 'post');
+      // likeController.isLiked(1);
       item.likeCount += 1;
       // homeController.tapLike(item.id, item.likeCount.value);
     } else {
-      likeController.isliked(0);
-      // item.isLiked(0);
+      item.isLiked(0);
+      // likepost(item.id, 'post');
+      // likeController.isLiked(0);
       item.likeCount -= 1;
       // homeController.tapunLike(item.id, item.likeCount.value);
     }
+    num += 1;
+
+    _debouncer.run(() {
+      if (lastIsLiked != item.isLiked.value) {
+        likepost(item.id, 'post');
+        lastIsLiked = item.isLiked.value;
+        num = 0;
+      }
+    });
   }
 
   void tapProfile() {
@@ -630,23 +615,4 @@ class PostingWidget extends StatelessWidget {
     //       realname: item.user.realName,
     //     ));
   }
-
-  // Widget overflowText(String text) {
-  //   int maxLength = 50;
-  //   if (text.length < maxLength) {
-  //     return Text(text);
-  //   } else {
-  //     return RichText(
-  //         text: TextSpan(children: [
-  //       TextSpan(
-  //           text: text.substring(0, 49),
-  //           style: kSubTitle3Style.copyWith(height: 1.5)),
-  //       TextSpan(
-  //           text: '... 더보기',
-  //           style:
-  //               kSubTitle3Style.copyWith(height: 1.5, color: Color(0xFF5A5A5A)))
-  //     ]));
-  //   }
-  // }
-
 }

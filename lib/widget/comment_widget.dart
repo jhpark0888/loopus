@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/comment_model.dart';
+import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/reply_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
@@ -22,13 +24,20 @@ class CommentWidget extends StatelessWidget {
   late final PostingDetailController postController =
       Get.find(tag: postid.toString());
 
-  late final LikeController likeController = Get.put(
-      LikeController(
-          isliked: comment.isLiked,
-          id: comment.id,
-          lastisliked: comment.isLiked.value,
-          liketype: Liketype.comment),
-      tag: 'comment${comment.id}');
+  // late final LikeController likeController = Get.put(
+  //     LikeController(
+  //         isLiked: comment.isLiked,
+  //         id: comment.id,
+  //         lastisliked: comment.isLiked.value,
+  //         liketype: Liketype.comment),
+  //     tag: 'comment${comment.id}');
+
+  final Debouncer _debouncer = Debouncer(
+    milliseconds: 500,
+  );
+
+  late int lastIsLiked;
+  int num = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -157,12 +166,24 @@ class CommentWidget extends StatelessWidget {
   }
 
   void tapLike() {
+    if (num == 0) {
+      lastIsLiked = comment.isLiked.value;
+    }
     if (comment.isLiked.value == 0) {
-      likeController.isliked(1);
+      comment.isLiked(1);
       comment.likecount += 1;
     } else {
-      likeController.isliked(0);
+      comment.isLiked(0);
       comment.likecount -= 1;
     }
+    num += 1;
+
+    _debouncer.run(() {
+      if (lastIsLiked != comment.isLiked.value) {
+        likepost(comment.id, 'comment');
+        lastIsLiked = comment.isLiked.value;
+        num = 0;
+      }
+    });
   }
 }

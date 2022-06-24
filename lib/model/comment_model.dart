@@ -30,8 +30,9 @@ class Comment implements PostComment {
         date: json["date"] != null
             ? DateTime.parse(json["date"])
             : DateTime.now(),
-        likecount: json['likecount'] ?? 0.obs,
-        isLiked: json['isliked'] ?? 0.obs,
+        likecount:
+            json['like_count'] != null ? RxInt(json["like_count"]) : RxInt(0),
+        isLiked: json["is_liked"] != null ? RxInt(json["is_liked"]) : RxInt(0),
         replyList: json['cocomments'] != null
             ? List.from(json['cocomments'])
                 .map((reply) => Reply.fromJson(reply, json['id'] ?? 0))
@@ -47,6 +48,7 @@ class Reply implements PostComment {
     required this.commentId,
     required this.content,
     required this.user,
+    required this.taggedUser,
     required this.date,
     required this.likecount,
     required this.isLiked,
@@ -56,6 +58,7 @@ class Reply implements PostComment {
   int commentId;
   String content;
   User user;
+  User taggedUser;
   DateTime date;
   RxInt likecount;
   RxInt isLiked;
@@ -65,10 +68,12 @@ class Reply implements PostComment {
         commentId: commentId,
         content: json['content'] ?? '',
         user: User.fromJson(json["profile"]),
+        taggedUser: User.fromJson(json["tagged_user"]),
         date: json["date"] != null
             ? DateTime.parse(json["date"])
             : DateTime.now(),
-        likecount: json['likecount'] != null ? RxInt(json['likecount']) : 0.obs,
-        isLiked: json['isliked'] != null ? RxInt(json['likecount']) : 0.obs,
+        likecount:
+            json['like_count'] != null ? RxInt(json['like_count']) : 0.obs,
+        isLiked: json["is_liked"] != null ? RxInt(json["is_liked"]) : RxInt(0),
       );
 }

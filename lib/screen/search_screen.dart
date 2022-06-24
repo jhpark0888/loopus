@@ -9,6 +9,8 @@ import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/screen/home_posting_screen.dart';
 import 'package:loopus/screen/search_focus_screen.dart';
 import 'package:loopus/screen/tag_detail_screen.dart';
+import 'package:loopus/widget/divide_widget.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_student_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
@@ -25,7 +27,7 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        // toolbarHeight: 50,
+        toolbarHeight: 60,
         centerTitle: false,
         titleSpacing: 0,
         elevation: 0,
@@ -36,7 +38,8 @@ class SearchScreen extends StatelessWidget {
           height: 36,
           child: TextField(
               autocorrect: false,
-              readOnly: true,
+              readOnly:
+                  _searchController.isFocused.value == false ? true : false,
               onTap: () {
                 // Navigator.push(
                 //     context,
@@ -77,77 +80,52 @@ class SearchScreen extends StatelessWidget {
       ),
       body: GestureDetector(
           onTap: () => _searchController.focusNode.unfocus(),
-          child: AnimatedOpacity(
-            opacity: 1.0,
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
+          child: ScrollNoneffectWidget(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: 16,
-                      left: 16,
-                      top: 24,
-                      bottom: 16,
+                  const SizedBox(height: 12),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20,
                     ),
                     child: Text(
-                      "인기 태그",
-                      style: kSubTitle2Style,
+                      "이 계정을 추천해요",
+                      style: kmainbold,
                     ),
                   ),
-                  Obx(
-                    () => homeController.populartagstate.value ==
-                            ScreenState.loading
-                        ? Image.asset(
-                            'assets/icons/loading.gif',
-                            scale: 6,
-                          )
-                        : homeController.populartagstate.value ==
-                                ScreenState.disconnect
-                            ? DisconnectReloadWidget(reload: () {
-                                getpopulartag();
-                              })
-                            : homeController.populartagstate.value ==
-                                    ScreenState.error
-                                ? ErrorReloadWidget(reload: () {
-                                    getpopulartag();
-                                  })
-                                : Container(
-                                    height: 88,
-                                    child: ListView(
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      children: homeController.populartaglist
-                                          .map((tag) => Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    (homeController
-                                                                .populartaglist
-                                                                .indexOf(tag) ==
-                                                            0)
-                                                        ? const SizedBox(
-                                                            width: 16,
-                                                          )
-                                                        : Container(),
-                                                    (homeController
-                                                                .populartaglist
-                                                                .indexOf(tag) !=
-                                                            homeController
-                                                                .populartaglist
-                                                                .length)
-                                                        ? const SizedBox(
-                                                            width: 16,
-                                                          )
-                                                        : Container()
-                                                  ]))
-                                          .toList(),
-                                    ),
-                                  ),
-                  )
-
+                  const SizedBox(
+                    height: 14,
+                  ),
+                  SizedBox(
+                    height: 105,
+                    child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemBuilder: (context, index) {
+                          return Container();
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            width: 14,
+                          );
+                        },
+                        itemCount: _searchController.recommandUsers.length),
+                  ),
+                  const DivideWidget(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: Text(
+                      "지금 인기있는 포스트를 만나보세요",
+                      style: kmainbold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 14,
+                  ),
                   // weekendStudent(_modalController),
                 ],
               ),
