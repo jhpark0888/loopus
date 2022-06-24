@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_crop/image_crop.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/tag_controller.dart';
 
 class KeyController extends GetxController {
   GlobalKey viewKey = GlobalKey();
-  KeyController({required this.tag, required this.isTextField});
-  Tagtype tag;
+  GlobalKey linkKey = GlobalKey();
+  KeyController({this.tag, required this.isTextField});
+  Tagtype? tag;
   RxBool isTextField;
 
   // static KeyController get to => Get.put(KeyController());
@@ -51,4 +53,6 @@ class KeyController extends GetxController {
       
     }
   }
+
+  
 }

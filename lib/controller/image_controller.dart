@@ -53,7 +53,7 @@ class ImageController extends GetxController {
     File? croppedFile = await _imageCropper.cropImage(
         maxWidth: Get.width.toInt(),
         maxHeight: Get.width.toInt(),
-        compressQuality: 50,
+        compressQuality: 90,
         cropStyle: CropStyle.rectangle,
         sourcePath: pickimage.path,
         aspectRatioPresets: [
@@ -64,13 +64,14 @@ class ImageController extends GetxController {
             toolbarColor: mainblue,
             toolbarWidgetColor: mainWhite,
             hideBottomControls: true,
-            initAspectRatio: CropAspectRatioPreset.square,
+            initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
         iosUiSettings: const IOSUiSettings(
           aspectRatioPickerButtonHidden: true,
           minimumAspectRatio: 1 / 1,
         ));
     if (croppedFile != null) {
+      print(croppedFile);
       return croppedFile;
     } else {
       isProfileImagePickerLoading.value = false;
@@ -81,7 +82,7 @@ class ImageController extends GetxController {
     File? croppedFile = await _imageCropper.cropImage(
         maxWidth: 1920,
         maxHeight: 1080,
-        compressQuality: 50,
+        compressQuality: 90,
         // compressQuality: 90,
         aspectRatio: CropAspectRatio(ratioX: 2, ratioY: 1),
         sourcePath: pickimage.path,

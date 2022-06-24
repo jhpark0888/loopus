@@ -14,7 +14,6 @@ class ProjectAddController extends GetxController {
   static ProjectAddController get to => Get.find();
 
   final TextEditingController projectnamecontroller = TextEditingController();
-
   RxList<SelectedTagWidget> selectedpersontaglist = <SelectedTagWidget>[].obs;
 
   RxBool ontitlebutton = false.obs;

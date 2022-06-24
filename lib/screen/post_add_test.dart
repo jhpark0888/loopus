@@ -12,6 +12,7 @@ import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/layout_builder.dart';
+import 'package:loopus/screen/posting_add_link_screen.dart';
 import 'package:loopus/screen/posting_add_tag_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -43,6 +44,7 @@ class PostingAddNameScreen1 extends StatelessWidget {
         appBar: AppBarWidget(
           bottomBorder: false,
           title: '포스트 작성',
+          leading: GestureDetector(onTap: (){Get.back();},child: SvgPicture.asset('assets/icons/Back_icon.svg')),
         ),
         body: Obx(
           () => SingleChildScrollView(
@@ -70,8 +72,8 @@ class PostingAddNameScreen1 extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      addButton(title: '이미지', titleEng: 'image'),
-                      addButton(title: '링크', titleEng: 'link')
+                      addButton(title: '이미지', titleEng: 'image', ontap: (){Get.to(() => UploadScreen());}),
+                      addButton(title: '링크', titleEng: 'link', ontap: (){Get.to(() => PostingAddLinkScreen());})
                     ],
                   ),
                   SizedBox(height: 24),
@@ -168,9 +170,9 @@ class PostingAddNameScreen1 extends StatelessWidget {
     );
   }
 
-  Widget addButton({required String title, required String titleEng}) {
+  Widget addButton({required String title, required String titleEng, required Function()? ontap}) {
     return GestureDetector(
-      onTap: (){Get.to(()=> UploadScreen());},
+      onTap: ontap,
       child: Container(
         padding: EdgeInsets.fromLTRB(18.25, 14.5, 18.25, 14.5),
         decoration: BoxDecoration(

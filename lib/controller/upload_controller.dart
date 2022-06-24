@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -14,10 +15,12 @@ class UploadController extends GetxController {
   RxBool isSelect = false.obs;
   RxBool isImage = false.obs;
   RxBool isCropped = false.obs;
-  RxDouble? croppedHeight;
-  RxDouble? croppedWidth;
+  RxDouble croppedHeight = 500.0.obs;
+  RxDouble croppedWidth = 500.0.obs;
+  Rx<Size> selectedImageSize = Size(Get.width, Get.height).obs;
   RxList<List<AssetEntity>> titleImageList1 = <List<AssetEntity>>[].obs;
   RxList<File> titleImageList = <File>[].obs;
+  TransformationController transformationController = TransformationController();
   @override
   void onInit() {
     _loadPhotos();

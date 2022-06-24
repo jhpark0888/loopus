@@ -4,16 +4,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/widget/loading_widget.dart';
 
 class ScrapWidget extends StatefulWidget {
-  ScrapWidget({Key? key, required this.url, required this.widgetType})
+  ScrapWidget({Key? key, required this.url,required this.length, required this.widgetType})
       : super(key: key);
   WebInfo? info;
   String url;
+  int length;
   // add, post
   String widgetType;
-
   @override
   State<ScrapWidget> createState() => _ScrapWidgetState();
 }
@@ -121,10 +122,11 @@ class _ScrapWidgetState extends State<ScrapWidget> {
                         top: 15,
                         right: 15,
                         child: GestureDetector(
-                            onTap: () {},
+                            onTap: (){
+                              Get.find<PostingAddController>().scrapList.removeWhere((element) => element.key == widget.key);
+                            },
                             child: SvgPicture.asset(
-                              'assets/icons/Close.svg',
-                              color: mainblack,
+                              'assets/icons/link_delete_button.svg',
                             ))),
                 ],
               );

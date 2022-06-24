@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final String? counterText;
   final int? maxLength;
   final void Function()? ontap;
+  final void Function(String)? onfieldSubmitted;
   final bool? autofocus;
   final TextInputAction? textInputAction;
 
@@ -24,7 +25,8 @@ class CustomTextField extends StatelessWidget {
     required this.maxLength,
     this.autofocus,
     this.ontap,
-    this.textInputAction
+    this.textInputAction,
+    this.onfieldSubmitted
   });
 
   @override
@@ -43,6 +45,7 @@ class CustomTextField extends StatelessWidget {
       cursorWidth: 1.2,
       cursorRadius: const Radius.circular(2),
       controller: textController,
+      onFieldSubmitted: onfieldSubmitted,
       decoration: InputDecoration(
         counterText: counterText,
         contentPadding: const EdgeInsets.only(bottom: 12),

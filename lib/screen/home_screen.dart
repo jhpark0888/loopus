@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/screen/post_add_test.dart';
 import 'package:loopus/widget/custom_footer.dart';
 import 'package:loopus/widget/custom_header.dart';
 import 'package:loopus/widget/news_widget.dart';
@@ -161,9 +162,12 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(
                             height: 14,
                           ),
-                          Text(
-                            '포스트를 바로 작성해 보세요',
-                            style: k16Normal.copyWith(color: maingray),
+                          GestureDetector(
+                            onTap: (){Get.to(()=> PostingAddNameScreen1(route: PostaddRoute.bottom,project_id: 0));},
+                            child: Text(
+                              '포스트를 바로 작성해 보세요',
+                              style: k16Normal.copyWith(color: maingray),
+                            ),
                           ),
                           const SizedBox(
                             height: 7,
@@ -172,10 +176,10 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    ScrapWidget(
-                      url: 'http://www.segye.com/newsView/20220617510520',
-                      widgetType: 'add',
-                    ),
+                    // ScrapWidget(
+                    //   url: 'http://www.segye.com/newsView/20220617510520',
+                    //   widgetType: 'add',
+                    // ),
                     NewsWidget(
                         url: 'http://www.segye.com/newsView/20220617510520'),
                   ],
