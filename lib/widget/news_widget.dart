@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/screen/webview_screen.dart';
 import 'package:loopus/widget/loading_widget.dart';
 
 class NewsWidget extends StatefulWidget {
@@ -18,7 +22,8 @@ class NewsWidget extends StatefulWidget {
   State<NewsWidget> createState() => _NewsWidgetState();
 }
 
-class _NewsWidgetState extends State<NewsWidget> {
+class _NewsWidgetState extends State<NewsWidget>
+    with AutomaticKeepAliveClientMixin<NewsWidget> {
   /// Description of the page.
   late String description;
 
@@ -49,6 +54,10 @@ class _NewsWidgetState extends State<NewsWidget> {
     super.initState();
   }
 
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
   Future geturlinfo() async {
     final WebInfo info = await LinkPreview.scrapeFromURL(widget.url);
     description = info.description;
@@ -61,7 +70,6 @@ class _NewsWidgetState extends State<NewsWidget> {
     if (mounted) {
       setState(() {
         loading = false;
-        print(loading);
       });
     }
   }
@@ -69,34 +77,100 @@ class _NewsWidgetState extends State<NewsWidget> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const LoadingWidget();
+      return const SizedBox(width: 252, child: LoadingWidget());
     } else {
-      return SizedBox(
-        width: 252,
-        child: Column(
-          children: [
-            image != ''
-                ? CachedNetworkImage(
-                    imageUrl: image,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  )
-                : Container(
-                    height: 150,
-                    color: cardGray,
-                  ),
-            const SizedBox(
-              height: 14,
+      if (type != LinkPreviewType.error) {
+        return InkWell(
+          onTap: () {
+            Get.to(() => WebViewScreen(url: widget.url));
+          },
+          splashColor: kSplashColor,
+          child: SizedBox(
+            width: 252,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                image != ''
+                    ? CachedNetworkImage(
+                        imageUrl: image,
+                        height: 150,
+                        width: 252,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(
+                        height: 150,
+                        width: 252,
+                        color: cardGray,
+                      ),
+                const SizedBox(
+                  height: 14,
+                ),
+                Text(
+                  title,
+                  style: k16Normal.copyWith(height: 1.5),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
-            Text(
-              title,
-              style: k16Normal.copyWith(height: 1.5),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      );
+          ),
+        );
+      } else {
+        return SizedBox(
+          width: 252,
+          child: Center(
+              child: Text(
+            '존재하지 않는 URL입니다',
+            style: k16Normal.copyWith(height: 1.5),
+          )),
+        );
+      }
     }
+  }
+}
+
+class NewsListWidget extends StatelessWidget {
+  NewsListWidget({Key? key, required this.newslist}) : super(key: key);
+
+  RxList<String> newslist;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              '이건 꼭 봐야해! 관심 분야 최근 이슈',
+              style: kmainbold,
+            ),
+          ),
+          const SizedBox(
+            height: 14,
+          ),
+          Obx(
+            () => SizedBox(
+              height: 220,
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return NewsWidget(url: newslist[index]);
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(
+                    width: 14,
+                  );
+                },
+                itemCount: newslist.length,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

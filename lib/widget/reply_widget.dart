@@ -1,10 +1,13 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/comment_model.dart';
+import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
@@ -21,13 +24,20 @@ class ReplyWidget extends StatelessWidget {
   late final PostingDetailController postController =
       Get.find(tag: postid.toString());
 
-  late final LikeController likeController = Get.put(
-      LikeController(
-          isliked: reply.isLiked,
-          id: reply.id,
-          lastisliked: reply.isLiked.value,
-          liketype: Liketype.reply),
-      tag: 'reply${reply.id}');
+  // late final LikeController likeController = Get.put(
+  //     LikeController(
+  //         isLiked: reply.isLiked,
+  //         id: reply.id,
+  //         lastisliked: reply.isLiked.value,
+  //         liketype: Liketype.reply),
+  //     tag: 'reply${reply.id}');
+
+  final Debouncer _debouncer = Debouncer(
+    milliseconds: 500,
+  );
+
+  late int lastIsLiked;
+  int num = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +62,7 @@ class ReplyWidget extends StatelessWidget {
                   children: [
                     Text(
                       reply.user.realName,
-                      style: k16semiBold,
+                      style: kmainbold,
                     ),
                     const Spacer(),
                     Text(
@@ -64,13 +74,26 @@ class ReplyWidget extends StatelessWidget {
                 const SizedBox(
                   height: 7,
                 ),
-                Text(
-                  reply.content,
-                  style: k16semiBold.copyWith(
-                    height: 1.5,
-                    fontWeight: FontWeight.w400,
+                RichText(
+                    text: TextSpan(children: [
+                  TextSpan(
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        print('dddd');
+                      },
+                    text: reply.taggedUser.realName,
+                    style: kmainbold.copyWith(
+                      height: 1.5,
+                    ),
                   ),
-                ),
+                  TextSpan(
+                    text: reply.content,
+                    style: kmainbold.copyWith(
+                      height: 1.5,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  )
+                ])),
                 const SizedBox(
                   height: 7,
                 ),
@@ -129,12 +152,25 @@ class ReplyWidget extends StatelessWidget {
   }
 
   void tapLike() {
+    if (num == 0) {
+      lastIsLiked = reply.isLiked.value;
+    }
     if (reply.isLiked.value == 0) {
-      likeController.isliked(1);
+      reply.isLiked(1);
       reply.likecount += 1;
     } else {
-      likeController.isliked(0);
+      reply.isLiked(0);
       reply.likecount -= 1;
     }
+
+    num += 1;
+
+    _debouncer.run(() {
+      if (lastIsLiked != reply.isLiked.value) {
+        likepost(reply.id, 'cocomment');
+        lastIsLiked = reply.isLiked.value;
+        num = 0;
+      }
+    });
   }
 }

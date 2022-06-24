@@ -62,13 +62,46 @@ class Post {
                 .obs,
         project:
             json["project"] != null ? Project.fromJson(json["project"]) : null,
-        likeCount: RxInt(json["like_count"]),
+        likeCount:
+            json["like_count"] != null ? RxInt(json["like_count"]) : RxInt(0),
         isLiked: json["is_liked"] != null ? RxInt(json["is_liked"]) : RxInt(0),
         isMarked:
             json["is_marked"] != null ? RxInt(json["is_marked"]) : RxInt(0),
         isuser: json["is_user"] ?? 0,
         user: User.fromJson(json["profile"]),
       );
+
+  void postDeepCopy(Map<String, dynamic> json) {
+    id = json["id"];
+    userid = json["user_id"];
+    content = json["contents"];
+    images = json["contents_image"] != null
+        ? List<Map<String, dynamic>>.from(json["contents_image"])
+            .map((map) => map['image'].toString())
+            .toList()
+        : [];
+    scraps = json["scraps"] ?? [];
+    tags = json['post_tag'] != null
+        ? List<Map<String, dynamic>>.from(json['post_tag'])
+            .map((tag) => Tag.fromJson(tag))
+            .toList()
+        : [];
+    date = DateTime.parse(json["date"]);
+    comments = json["comments"].runtimeType != List
+        ? <Comment>[Comment.fromJson(json["comments"])].obs
+        : List<Map<String, dynamic>>.from(json["comments"])
+            .map((comment) => Comment.fromJson(comment))
+            .toList()
+            .obs;
+    project =
+        json["project"] != null ? Project.fromJson(json["project"]) : null;
+    // likeCount =
+    //     json["like_count"] != null ? RxInt(json["like_count"]) : RxInt(0);
+    // isLiked = json["is_liked"] != null ? RxInt(json["is_liked"]) : RxInt(0);
+    // isMarked = json["is_marked"] != null ? RxInt(json["is_marked"]) : RxInt(0);
+    isuser = json["is_user"] ?? 0;
+    user = User.fromJson(json["profile"]);
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -93,42 +126,37 @@ String contentsummary(List<Map<String, dynamic>> json) {
   return summary;
 }
 
-// String type = "T";
-// SmartTextType smartTextType =
-//     SmartTextType.values.firstWhere((e) => e.name == type);
-// print(smartTextType.name);
+// class PostContent {
+//   PostContent({
+//     required this.type,
+//     required this.content,
+//     this.url,
+//   });
 
-class PostContent {
-  PostContent({
-    required this.type,
-    required this.content,
-    this.url,
-  });
+//   SmartTextType type;
+//   String content;
+//   String? url;
 
-  SmartTextType type;
-  String content;
-  String? url;
+//   factory PostContent.fromJson(Map<String, dynamic> json) => PostContent(
+//         type: SmartTextType.values.firstWhere((e) => e.name == json["type"]),
+//         content: json["content"],
+//         url: json["url"] ?? null,
+//       );
 
-  factory PostContent.fromJson(Map<String, dynamic> json) => PostContent(
-        type: SmartTextType.values.firstWhere((e) => e.name == json["type"]),
-        content: json["content"],
-        url: json["url"] ?? null,
-      );
+//   Map<String, dynamic> toJson() => {
+//         "type": type,
+//         "content": content,
+//         "url": url ?? null,
+//       };
+// }
 
-  Map<String, dynamic> toJson() => {
-        "type": type,
-        "content": content,
-        "url": url ?? null,
-      };
-}
+// class PostingModel {
+//   RxList<Post> postingitems;
+//   PostingModel({required this.postingitems});
 
-class PostingModel {
-  RxList<Post> postingitems;
-  PostingModel({required this.postingitems});
-
-  factory PostingModel.fromJson(List<dynamic> json) {
-    RxList<Post>? items = <Post>[].obs;
-    items.value = json.map((e) => Post.fromJson(e)).toList();
-    return PostingModel(postingitems: items);
-  }
-}
+//   factory PostingModel.fromJson(List<dynamic> json) {
+//     RxList<Post>? items = <Post>[].obs;
+//     items.value = json.map((e) => Post.fromJson(e)).toList();
+//     return PostingModel(postingitems: items);
+//   }
+// }

@@ -31,8 +31,8 @@ class SearchPostingWidget extends StatelessWidget {
             () => PostingScreen(
                   post: null,
                   postid: post.id,
-                  likecount: post.likeCount,
-                  isLiked: post.isLiked,
+                  // likecount: post.likeCount,
+                  // isLiked: post.isLiked,
                 ),
             opaque: false,
             preventDuplicates: false);

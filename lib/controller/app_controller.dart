@@ -39,7 +39,9 @@ class AppController extends GetxService {
       }
 
       if (currentIndex.value == 0) {
-        CustomScrollController.to.scrollToTop();
+        _homeController.scrollController.animateTo(0,
+            duration: const Duration(milliseconds: 500), curve: Curves.linear);
+        // CustomScrollController.to.scrollToTop();
         // if (CustomScrollController.to.customScrollController.value.offset ==
         //     0.0) {
         //   HomeController.to.hometabcontroller.animateTo(

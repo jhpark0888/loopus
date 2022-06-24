@@ -35,9 +35,7 @@ class UploadScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 12.5, 12.5, 0),
               child: GestureDetector(
-                onTap: (){
-                  
-                },
+                onTap: () {},
                 child: Text(
                   '확인',
                   style: kNavigationTitle,
@@ -77,7 +75,8 @@ class UploadScreen extends StatelessWidget {
                                     fit: BoxFit.cover,
                                     width: controller.croppedWidth?.value,
                                     height: controller.croppedHeight?.value))
-                            : _photoWidget(controller.selectedImage!.value, 500,500,
+                            : _photoWidget(
+                                controller.selectedImage!.value, 500, 500,
                                 builder: (data) {
                                 return Image.memory(data,
                                     fit: BoxFit.cover,
@@ -167,7 +166,8 @@ class UploadScreen extends StatelessWidget {
                                                             controller
                                                                     .titleImageList1[
                                                                 index][0],
-                                                            500,500,
+                                                            500,
+                                                            500,
                                                             builder: (data) {
                                                           return Image.memory(
                                                               data,
@@ -202,7 +202,7 @@ class UploadScreen extends StatelessWidget {
                       Obx(
                         () => Text(
                           controller.headerTitle.value,
-                          style: k18Semibold,
+                          style: kmainbold,
                         ),
                       ),
                       Icon(Icons.arrow_drop_down)
@@ -225,7 +225,7 @@ class UploadScreen extends StatelessWidget {
                 return Obx(() => Container(
                       height: Get.width / 4,
                       width: Get.width / 4,
-                      child: _photoWidget(controller.imageList[index], 200,200,
+                      child: _photoWidget(controller.imageList[index], 200, 200,
                           builder: (data) {
                         return Obx(
                           (() => GestureDetector(
@@ -324,7 +324,7 @@ class UploadScreen extends StatelessWidget {
         decoration: BoxDecoration(color: maingray),
         child: controller.selectedImages == null
             ? Container()
-            : _photoWidget(controller.selectedImages!.first, 500,500,
+            : _photoWidget(controller.selectedImages!.first, 500, 500,
                 builder: (data) {
                 return Image.memory(data, fit: BoxFit.cover);
               }));
@@ -340,7 +340,7 @@ class UploadScreen extends StatelessWidget {
             children: [
               Text(
                 controller.headerTitle.value,
-                style: k18Semibold,
+                style: kmainbold,
               ),
               Icon(Icons.arrow_drop_down)
             ],
@@ -381,7 +381,7 @@ class UploadScreen extends StatelessWidget {
   Widget _photoWidget(AssetEntity asset, int height, int width,
       {required Widget Function(Uint8List) builder}) {
     return FutureBuilder(
-        future: asset.thumbnailDataWithSize(ThumbnailSize(width,height)),
+        future: asset.thumbnailDataWithSize(ThumbnailSize(width, height)),
         builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
           if (snapshot.hasData) {
             return builder(snapshot.data!);

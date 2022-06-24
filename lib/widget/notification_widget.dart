@@ -231,8 +231,8 @@ class NotificationWidget extends StatelessWidget {
           () => PostingScreen(
                 post: null,
                 postid: notification.targetId,
-                likecount: 0.obs,
-                isLiked: 0.obs,
+                // likecount: 0.obs,
+                // isLiked: 0.obs,
               ),
           opaque: false);
     }

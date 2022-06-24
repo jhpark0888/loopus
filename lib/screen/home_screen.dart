@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/model/post_model.dart';
 import 'package:loopus/widget/custom_footer.dart';
 import 'package:loopus/widget/custom_header.dart';
+import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/news_widget.dart';
+import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/scrap_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
@@ -29,7 +32,11 @@ class HomeScreen extends StatelessWidget {
           toolbarHeight: 44,
           elevation: 0,
           title: GestureDetector(
-            onTap: () => CustomScrollController.to.scrollToTop(),
+            onTap: () {
+              _homeController.scrollController.animateTo(0,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.linear);
+            },
             child: Image.asset(
               'assets/illustrations/Home_Logo.png',
               width: 72,
@@ -50,9 +57,10 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      ProfileController.to.isnewalarm(false);
+                      // ProfileController.to.isnewalarm(false);
 
-                      Get.to(() => NotificationScreen());
+                      // Get.to(() => NotificationScreen());
+                      print(_homeController.contents);
                     },
                     icon: SvgPicture.asset(
                       "assets/icons/Bell_Inactive.svg",
@@ -69,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                               ? Container(
                                   height: 8,
                                   width: 8,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       color: rankred, shape: BoxShape.circle),
                                 )
                               : Container()),
@@ -101,7 +109,7 @@ class HomeScreen extends StatelessWidget {
                               ? Container(
                                   height: 8,
                                   width: 8,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       color: rankred, shape: BoxShape.circle),
                                 )
                               : Container()),
@@ -129,57 +137,80 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: SmartRefresher(
-          physics: const BouncingScrollPhysics(),
-          controller: _homeController.postingRefreshController,
-          enablePullDown:
-              (_homeController.isPostingLoading.value == true) ? false : true,
-          enablePullUp: (_homeController.isPostingLoading.value == true)
-              ? false
-              : _homeController.enablePostingPullup.value,
-          header: const MyCustomHeader(),
-          footer: const MyCustomFooter(),
-          onRefresh: _homeController.onPostingRefresh,
-          onLoading: _homeController.onPostingLoading,
-          child: ScrollNoneffectWidget(
-            child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 24,
-                          ),
-                          Text(
-                            '\'커리어이름\'\n커리어엔 최근 어떤 일이 있었나요?',
-                            style: k16Normal.copyWith(height: 1.5),
-                          ),
-                          const SizedBox(
-                            height: 14,
-                          ),
-                          Text(
-                            '포스트를 바로 작성해 보세요',
-                            style: k16Normal.copyWith(color: maingray),
-                          ),
-                          const SizedBox(
-                            height: 7,
-                          ),
-                          Divider(thickness: 1, color: maingray),
-                        ],
+        body: Obx(
+          () => SmartRefresher(
+            physics: const BouncingScrollPhysics(),
+            scrollController: _homeController.scrollController,
+            controller: _homeController.postingRefreshController,
+            enablePullDown:
+                (_homeController.isPostingLoading.value == true) ? false : true,
+            enablePullUp: (_homeController.isPostingLoading.value == true)
+                ? false
+                : _homeController.enablePostingPullup.value,
+            header: const MyCustomHeader(),
+            footer: const MyCustomFooter(),
+            onRefresh: _homeController.onPostingRefresh,
+            onLoading: _homeController.onPostingLoading,
+            child: ScrollNoneffectWidget(
+              child: SingleChildScrollView(
+                  primary: false,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 24,
+                            ),
+                            Text(
+                              '\'커리어이름\'\n커리어엔 최근 어떤 일이 있었나요?',
+                              style: k16Normal.copyWith(height: 1.5),
+                            ),
+                            const SizedBox(
+                              height: 14,
+                            ),
+                            Text(
+                              '포스트를 바로 작성해 보세요',
+                              style: k16Normal.copyWith(color: maingray),
+                            ),
+                            const SizedBox(
+                              height: 7,
+                            ),
+                            Divider(thickness: 1, color: maingray),
+                          ],
+                        ),
                       ),
-                    ),
-                    ScrapWidget(
-                      url: 'http://www.segye.com/newsView/20220617510520',
-                      widgetType: 'add',
-                    ),
-                    NewsWidget(
-                        url: 'http://www.segye.com/newsView/20220617510520'),
-                  ],
-                )),
+                      Obx(
+                        () => ListView.separated(
+                          primary: false,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            if (_homeController.contents[index] is Post) {
+                              return PostingWidget(
+                                  item: _homeController.contents[index]);
+                            } else if (_homeController.contents[index]
+                                is List<String>) {
+                              return NewsListWidget(
+                                  newslist: _homeController.contents[index]);
+                            } else {
+                              return const Text(
+                                '에러',
+                                style: kmainbold,
+                              );
+                            }
+                          },
+                          separatorBuilder: (context, index) {
+                            return const DivideWidget();
+                          },
+                          itemCount: _homeController.contents.length,
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
           ),
         ));
   }

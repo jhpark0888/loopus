@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/api/search_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/search_posting_widget.dart';
 import 'package:loopus/widget/search_profile_widget.dart';
 import 'package:loopus/widget/search_question_widget.dart';
@@ -13,10 +14,10 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   TextEditingController searchtextcontroller = TextEditingController();
   RxString _searchword = "".obs;
 
+  RxList<User> recommandUsers = <User>[].obs;
+
   RxList<SearchPostingWidget> searchpostinglist = <SearchPostingWidget>[].obs;
   RxList<SearchProfileWidget> searchprofilelist = <SearchProfileWidget>[].obs;
-  // RxList<SearchQuestionWidget> searchquestionlist =
-  //     <SearchQuestionWidget>[].obs;
   RxList<SearchTagWidget> searchtaglist = <SearchTagWidget>[].obs;
 
   RxBool isnosearchpost = false.obs;
@@ -92,9 +93,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
           String searchword =
               searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ");
           isSearchLoading(true);
-          // print(searchpostinglist);
-          // print(searchprofilelist);
-          // print(searchquestionlist);
+
           if (tabController.index == 0 && searchword != presearchwordpost) {
             search(SearchType.post, searchtextcontroller.text, postpagenumber);
           } else if (tabController.index == 1 &&
@@ -112,31 +111,10 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
           isSearchLoading(false);
         }
       }
-      // if (tabController.index == 3) {
-      //   istag.value = true;
-      // } else {
-      //   istag.value = false;
-      // }
     });
 
     super.onInit();
   }
-
-  // void focusChange() {
-  //   isFocused.value = false;
-  // }
-
-  // void _focusListen() {
-  //   focusNode.addListener(() {
-  //     if (focusNode.hasFocus) {
-  //       isFocused.value = true;
-  //       // isnosearchpost(false);
-  //       // isnosearchprofile(false);
-  //       // isnosearchquestion(false);
-  //       // isnosearchtag(false);
-  //     }
-  //   });
-  // }
 
   void clearSearchedList() {
     searchpostinglist.clear();

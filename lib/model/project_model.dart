@@ -49,7 +49,7 @@ class Project {
           ? List<User>.from(
               json["looper"].map((x) => User.fromJson(x["profile"])))
           : [],
-      postRatio: double.parse(json['ratio'].toString()),
+      postRatio: json['ratio'],
       post_count: json["count"] != null
           ? RxInt(json["count"]["post_count"])
           : json["post"] != null

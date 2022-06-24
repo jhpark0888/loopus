@@ -1,3 +1,4 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -10,12 +11,17 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/comment_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/utils/debouncer.dart';
+import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/comment_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/reply_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
+import 'package:loopus/widget/tag_widget.dart';
+import 'package:loopus/widget/user_image_widget.dart';
 
 // class PostingScreen extends StatelessWidget {
 //   PostingScreen({
@@ -581,36 +587,32 @@ class PostingScreen extends StatelessWidget {
     Key? key,
     this.post,
     required this.postid,
-    required this.likecount,
-    required this.isLiked,
   }) : super(key: key);
   late PostingDetailController controller = Get.put(
       PostingDetailController(
           postid: postid, post: post != null ? post.obs : null.obs),
       tag: postid.toString());
-  late final LikeController likeController = Get.put(
-      LikeController(
-          isliked: isLiked,
-          id: postid,
-          lastisliked: isLiked.value,
-          liketype: Liketype.post),
-      tag: 'post$postid');
-
-  final ScrollController _controller = ScrollController();
-  // final TransitionAnimationController _transitionAnimationController =
-  // Get.put(TransitionAnimationController());
+  // late final LikeController likeController = Get.put(
+  //     LikeController(
+  //         isLiked: isLiked,
+  //         id: postid,
+  //         lastisliked: isLiked.value,
+  //         liketype: Liketype.post),
+  //     tag: 'post$postid');
 
   Post? post;
   int postid;
-  RxInt likecount;
-  RxInt isLiked;
+
+  final Debouncer _debouncer = Debouncer(
+    milliseconds: 500,
+  );
 
   void _commentSubmitted(String text) async {
     if (text.trim() == "") {
       showCustomDialog('내용을 입력해주세요', 1400);
     } else {
       if (controller.selectedCommentId.value == 0) {
-        commentPost(postid, 'post', controller.commentController.text)
+        commentPost(postid, 'post', controller.commentController.text, null)
             .then((value) {
           if (value.isError == false) {
             controller.commentController.clear();
@@ -622,8 +624,11 @@ class PostingScreen extends StatelessWidget {
           }
         });
       } else {
-        commentPost(controller.selectedCommentId.value, 'comment',
-                controller.commentController.text)
+        commentPost(
+                controller.selectedCommentId.value,
+                'comment',
+                controller.commentController.text,
+                controller.tagUser.value.userid)
             .then((value) {
           if (value.isError == false) {
             Reply reply =
@@ -782,10 +787,215 @@ class PostingScreen extends StatelessWidget {
                         child: SingleChildScrollView(
                           child: Obx(
                             () => Column(children: [
-                              PostingWidget(
-                                item: controller.post.value!,
-                                view: 'detail',
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Column(children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 14, 20, 0),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              UserImageWidget(
+                                                imageUrl: controller.post.value!
+                                                        .user.profileImage ??
+                                                    '',
+                                                width: 35,
+                                                height: 35,
+                                              ),
+                                              const SizedBox(
+                                                width: 14,
+                                              ),
+                                              Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                        controller.post.value!
+                                                            .user.realName,
+                                                        style: k16semiBold),
+                                                    Text(
+                                                        controller.post.value!
+                                                            .user.department,
+                                                        style: kSubTitle3Style)
+                                                  ])
+                                            ],
+                                          ),
+                                          const SizedBox(height: 14),
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: GestureDetector(
+                                              onTap: tapProjectname,
+                                              child: Text(
+                                                controller.post.value!.project!
+                                                    .careerName,
+                                                style: k16semiBold.copyWith(
+                                                    color: maingray),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 14),
+                                        ],
+                                      ),
+                                    ),
+                                  ]),
+                                  if (controller.post.value!.images.isNotEmpty)
+                                    SizedBox(
+                                        width: Get.width,
+                                        height: 300,
+                                        child: Swiper(
+                                          outer: true,
+                                          itemCount: controller
+                                              .post.value!.images.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Image.network(
+                                                controller
+                                                    .post.value!.images[index],
+                                                fit: BoxFit.fill);
+                                          },
+                                          pagination: SwiperPagination(
+                                              margin: const EdgeInsets.all(14),
+                                              alignment: Alignment.bottomCenter,
+                                              builder:
+                                                  DotSwiperPaginationBuilder(
+                                                      color: const Color(
+                                                              0xFF5A5A5A)
+                                                          .withOpacity(0.5),
+                                                      activeColor: mainblue,
+                                                      size: 7,
+                                                      activeSize: 7)),
+                                        )),
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 20,
+                                          right: 20,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(controller.post.value!.content,
+                                                style: kSubTitle3Style.copyWith(
+                                                    height: 1.5)),
+                                            const SizedBox(
+                                              height: 14,
+                                            ),
+                                            Row(
+                                                children: controller
+                                                    .post.value!.tags
+                                                    .map((tag) => Row(
+                                                            children: [
+                                                              Tagwidget(
+                                                                  tag: tag,
+                                                                  fontSize: 16),
+                                                              const SizedBox(
+                                                                  width: 7)
+                                                            ]))
+                                                    .toList()),
+                                            const SizedBox(height: 14),
+                                            Obx(
+                                              () => Row(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: tapLike,
+                                                    child: controller
+                                                                .post
+                                                                .value!
+                                                                .isLiked
+                                                                .value ==
+                                                            0
+                                                        ? SvgPicture.asset(
+                                                            "assets/icons/Favorite_Inactive.svg")
+                                                        : SvgPicture.asset(
+                                                            "assets/icons/Favorite_Active.svg"),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 15,
+                                                  ),
+                                                  // Obx(
+                                                  //   () => SizedBox(
+                                                  //     width: controller
+                                                  //                 .post
+                                                  //                 .value!
+                                                  //                 .likeCount
+                                                  //                 .value !=
+                                                  //             0
+                                                  //         ? 0
+                                                  //         : 8,
+                                                  //   ),
+                                                  // ),
+                                                  SvgPicture.asset(
+                                                      "assets/icons/Comment.svg"),
+                                                  const Spacer(),
+                                                  InkWell(
+                                                    onTap: tapBookmark,
+                                                    child: (controller
+                                                                .post
+                                                                .value!
+                                                                .isMarked
+                                                                .value ==
+                                                            0)
+                                                        ? SvgPicture.asset(
+                                                            "assets/icons/Mark_Default.svg",
+                                                            color: mainblack,
+                                                          )
+                                                        : SvgPicture.asset(
+                                                            "assets/icons/Mark_Saved.svg"),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            // postingTag(),
+                                            const SizedBox(
+                                              height: 13,
+                                            ),
+                                            Row(children: [
+                                              GestureDetector(
+                                                  behavior: HitTestBehavior
+                                                      .translucent,
+                                                  onTap: () {
+                                                    Get.to(
+                                                        () => LikePeopleScreen(
+                                                              postid: controller
+                                                                  .post
+                                                                  .value!
+                                                                  .id,
+                                                            ));
+                                                  },
+                                                  child: Obx(
+                                                    () => Text(
+                                                      '좋아요 ${controller.post.value!.likeCount}개',
+                                                      style: kSubTitle3Style,
+                                                    ),
+                                                  )),
+                                              const Spacer(),
+                                              Text(
+                                                  calculateDate(controller
+                                                      .post.value!.date),
+                                                  style: kSubTitle3Style),
+                                            ]),
+                                            const SizedBox(height: 13),
+                                          ],
+                                        ),
+                                      ),
+                                      // if (view != 'detail') const DivideWidget()
+                                    ],
+                                  ),
+                                ],
                               ),
+                              // PostingWidget(
+                              //   controller.post.value!: controller.post.value!,
+                              //   view: 'detail',
+                              // ),
                               Obx(
                                 () => ListView.separated(
                                   primary: false,
@@ -827,5 +1037,49 @@ class PostingScreen extends StatelessWidget {
               ? LoadingScreen()
               : Container(),
     );
+  }
+
+  void tapProjectname() {
+    // Get.to(() => ProjectScreen(
+    //       projectid: item.project!.id,
+    //       isuser: item.isuser,
+    //     ));
+  }
+
+  void tapBookmark() {
+    // if (item.isMarked.value == 0) {
+    //   homeController.tapBookmark(item.id);
+    // } else {
+    //   homeController.tapunBookmark(item.id);
+    // }
+  }
+
+  void tapLike() {
+    if (controller.post.value!.isLiked.value == 0) {
+      controller.post.value!.isLiked(1);
+      // likepost(controller.post.value!.id, 'post');
+      controller.post.value!.likeCount += 1;
+      // homeController.tapLike(item.id, item.likeCount.value);
+    } else {
+      controller.post.value!.isLiked(0);
+      // likepost(controller.post.value!.id, 'post');
+      controller.post.value!.likeCount -= 1;
+      // homeController.tapunLike(item.id, item.likeCount.value);
+    }
+
+    _debouncer.run(() {
+      if (controller.lastIsLiked != controller.post.value!.isLiked.value) {
+        likepost(controller.post.value!.id, 'post');
+        controller.lastIsLiked = controller.post.value!.isLiked.value;
+      }
+    });
+  }
+
+  void tapProfile() {
+    // Get.to(() => OtherProfileScreen(
+    //       userid: item.userid,
+    //       isuser: item.isuser,
+    //       realname: item.user.realName,
+    //     ));
   }
 }

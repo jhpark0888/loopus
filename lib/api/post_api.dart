@@ -357,10 +357,10 @@ Future<void> deleteposting(int postid, int projectid) async {
           //     .removeWhere((post) => post.item.value.id == postid);
         }
 
-        HomeController.to.recommandpostingResult.value.postingitems
-            .removeWhere((post) => post.id == postid);
-        HomeController.to.latestpostingResult.value.postingitems
-            .removeWhere((post) => post.id == postid);
+        // HomeController.to.recommandpostingResult.value.postingitems
+        //     .removeWhere((post) => post.id == postid);
+        // HomeController.to.latestpostingResult.value.postingitems
+        //     .removeWhere((post) => post.id == postid);
       } else {
         return Future.error(response.statusCode);
       }
@@ -373,79 +373,82 @@ Future<void> deleteposting(int postid, int projectid) async {
   }
 }
 
-Future<HTTPResponse> latestpost(int lastindex) async {
-  String? token;
-  // print('메인페이지 번호 : $pageNumber');
-  await const FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
+Future<HTTPResponse> mainload(int lastindex) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token;
+    // print('메인페이지 번호 : $pageNumber');
+    await const FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
 
-  final latestloadUri =
-      Uri.parse("$serverUri/post_api/main_load?last=$lastindex");
+    final mainloadUri =
+        Uri.parse("$serverUri/post_api/main_load?last=$lastindex");
 
-  try {
-    final response = await http
-        .get(latestloadUri, headers: {"Authorization": "Token $token"});
-    var responseBody = utf8.decode(response.bodyBytes);
-    List<dynamic> list = jsonDecode(responseBody);
+    try {
+      final response = await http
+          .get(mainloadUri, headers: {"Authorization": "Token $token"});
 
-    if (kDebugMode) {
-      print('posting list : $list');
+      if (response.statusCode == 200) {
+        // Future.error(response.statusCode);
+        var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+        // print(responseBody);
+        return HTTPResponse.success(responseBody);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+      // ErrorController.to.isServerClosed(true);
     }
-    if (response.statusCode != 200) {
-      // Future.error(response.statusCode);
-      return HTTPResponse.apiError('', response.statusCode);
-    } else {
-      return HTTPResponse.success(PostingModel.fromJson(list));
-    }
-  } on SocketException {
-    ErrorController.to.isServerClosed(true);
-    return HTTPResponse.serverError();
-  } catch (e) {
-    print(e);
-    return HTTPResponse.unexpectedError(e);
-    // ErrorController.to.isServerClosed(true);
   }
 }
 
-Future<HTTPResponse> recommandpost(int pagenum) async {
-  String? token;
-  // print('메인페이지 번호 : $pageNumber');
-  await const FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
+// Future<HTTPResponse> recommandpost(int pagenum) async {
+//   String? token;
+//   // print('메인페이지 번호 : $pageNumber');
+//   await const FlutterSecureStorage().read(key: 'token').then((value) {
+//     token = value;
+//   });
 
-  final recommandloadUri =
-      Uri.parse("$serverUri/post_api/recommend_load?page=$pagenum");
+//   final recommandloadUri =
+//       Uri.parse("$serverUri/post_api/recommend_load?page=$pagenum");
 
-  try {
-    final response = await http
-        .get(recommandloadUri, headers: {"Authorization": "Token $token"});
+//   try {
+//     final response = await http
+//         .get(recommandloadUri, headers: {"Authorization": "Token $token"});
 
-    // if (kDebugMode) {
-    //   print('posting list : $list');
-    // }
-    print("추천 포스팅 리스트 :${response.statusCode}");
-    if (response.statusCode != 200) {
-      // Future.error(response.statusCode);
-      return HTTPResponse.apiError('', response.statusCode);
-    } else {
-      var responseBody = utf8.decode(response.bodyBytes);
-      List<dynamic> list = jsonDecode(responseBody);
-      HomeController.to.recommandpagenum += 1;
-      return HTTPResponse.success(PostingModel.fromJson(list));
-    }
-  } on SocketException {
-    print("서버에러 발생");
+//     // if (kDebugMode) {
+//     //   print('posting list : $list');
+//     // }
+//     print("추천 포스팅 리스트 :${response.statusCode}");
+//     if (response.statusCode != 200) {
+//       // Future.error(response.statusCode);
+//       return HTTPResponse.apiError('', response.statusCode);
+//     } else {
+//       var responseBody = utf8.decode(response.bodyBytes);
+//       List<dynamic> list = jsonDecode(responseBody);
+//       HomeController.to.recommandpagenum += 1;
+//       return HTTPResponse.success(PostingModel.fromJson(list));
+//     }
+//   } on SocketException {
+//     print("서버에러 발생");
 
-    ErrorController.to.isServerClosed(true);
-    return HTTPResponse.serverError();
-  } catch (e) {
-    print(e);
-    return HTTPResponse.unexpectedError(e);
-    // ErrorController.to.isServerClosed(true);
-  }
-}
+//     ErrorController.to.isServerClosed(true);
+//     return HTTPResponse.serverError();
+//   } catch (e) {
+//     print(e);
+//     return HTTPResponse.unexpectedError(e);
+//     // ErrorController.to.isServerClosed(true);
+//   }
+// }
 
 Future<HTTPResponse> bookmarklist(int pageNumber) async {
   // print('북마크페이지 번호 : $pageNumber');
@@ -466,7 +469,7 @@ Future<HTTPResponse> bookmarklist(int pageNumber) async {
     if (response.statusCode != 200) {
       return HTTPResponse.apiError('', response.statusCode);
     } else {
-      return HTTPResponse.success(PostingModel.fromJson(list));
+      return HTTPResponse.success([]);
     }
   } on SocketException {
     ErrorController.to.isServerClosed(true);
@@ -478,24 +481,52 @@ Future<HTTPResponse> bookmarklist(int pageNumber) async {
   }
 }
 
-Future<dynamic> bookmarkpost(int postingId) async {
-  String? token;
-  await const FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
+// Future<dynamic> bookmarkpost(int postingId) async {
+//   String? token;
+//   await const FlutterSecureStorage().read(key: 'token').then((value) {
+//     token = value;
+//   });
 
-  final bookmarkUri = Uri.parse("$serverUri/post_api/bookmark/$postingId");
-  try {
-    final response = await http
-        .post(bookmarkUri, headers: {"Authorization": "Token $token"});
+//   final bookmarkUri = Uri.parse("$serverUri/post_api/bookmark/$postingId");
+//   try {
+//     final response = await http
+//         .post(bookmarkUri, headers: {"Authorization": "Token $token"});
 
-    var responseBody = utf8.decode(response.bodyBytes);
-    String result = jsonDecode(responseBody);
-  } on SocketException {
-    ErrorController.to.isServerClosed(true);
-  } catch (e) {
-    print(e);
-    // ErrorController.to.isServerClosed(true);
+//     var responseBody = utf8.decode(response.bodyBytes);
+//     String result = jsonDecode(responseBody);
+//   } on SocketException {
+//     ErrorController.to.isServerClosed(true);
+//   } catch (e) {
+//     print(e);
+//     // ErrorController.to.isServerClosed(true);
+//   }
+// }
+
+Future<HTTPResponse> bookmarkpost(int id) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    String? token;
+    await const FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
+
+    final bookmarkUri = Uri.parse("$serverUri/post_api/bookmark/$id");
+    try {
+      final response = await http
+          .post(bookmarkUri, headers: {"Authorization": "Token $token"});
+      print('좋아요 : ${response.statusCode}');
+      var responseBody = utf8.decode(response.bodyBytes);
+      String result = jsonDecode(responseBody);
+      return HTTPResponse.success('');
+    } on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
   }
 }
 
@@ -510,7 +541,7 @@ Future<HTTPResponse> likepost(int id, String type) async {
     });
 
     if (type == 'reply') {
-      type = 'cocoment';
+      type = 'cocomment';
     }
 
     final likeUri = Uri.parse("$serverUri/post_api/like?id=$id&type=$type");
@@ -571,22 +602,13 @@ Future<void> getlikepeoele(int postid) async {
 }
 
 //type : post, comment
-Future<HTTPResponse> commentPost(int id, String type, String text) async {
+Future<HTTPResponse> commentPost(
+    int id, String type, String text, int? tagUserId) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
 
   final CommentUri = Uri.parse("$serverUri/post_api/comment?id=$id&type=$type");
 
-  final content = {"content": text.trim()};
-
-// {profile: {
-//   user_id: 15,
-//   real_name: 박지환,
-//   profile_image: null,
-//   department: 산업경영공학과},
-//   id: 8,
-//   content: 안녕하세요,
-//   cocomment_count: 0,
-//   date: 2022-06-21T15:11:22.844750}
+  final content = {"content": text.trim(), "tagged_user": tagUserId};
 
   try {
     final response = await http.post(

@@ -5,12 +5,12 @@ enum Liketype { post, comment, reply }
 
 class LikeController extends GetxController {
   LikeController(
-      {required this.isliked,
+      {required this.isLiked,
       required this.id,
       required this.lastisliked,
       required this.liketype});
   static LikeController get to => Get.find();
-  RxInt isliked;
+  RxInt isLiked;
   int lastisliked;
   int id;
   Liketype liketype;
@@ -18,12 +18,12 @@ class LikeController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
-    debounce(isliked, (like) {
-      if (isliked != lastisliked.obs) {
+    debounce(isLiked, (like) {
+      if (isLiked != lastisliked.obs) {
         print("좋아요");
-        lastisliked = isliked.value;
+        lastisliked = isLiked.value;
 
-        likepost(id, liketype.name);
+        // likepost(id, liketype.name);
       } else {
         print("아무일도 안 일어남");
       }

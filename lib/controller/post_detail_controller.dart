@@ -54,12 +54,19 @@ class PostingDetailController extends GetxController {
           user: User.defaultuser())
       .obs;
 
+  late int lastIsLiked;
+
   @override
   void onInit() async {
     await getposting(postid).then((value) async {
       if (value.isError == false) {
-        Post temppost = Post.fromJson(value.data);
-        post(temppost);
+        // Post temppost = Post.fromJson(value.data);
+        // print('변화 전 : ${post.hashCode}');
+        // print('새로운 포스트 : ${temppost.hashCode}');
+        // post.value = Post.fromJson(value.data);
+        post.value!.postDeepCopy(value.data);
+        // print('변화 후 : ${post.hashCode}');
+        lastIsLiked = post.value!.isLiked.value;
         commentToList();
         postscreenstate(ScreenState.success);
       } else {}
