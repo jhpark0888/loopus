@@ -12,6 +12,7 @@ import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/layout_builder.dart';
 import 'package:loopus/screen/posting_add_link_screen.dart';
 import 'package:loopus/screen/posting_add_tag_screen.dart';
@@ -20,6 +21,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 import 'package:loopus/widget/no_ul_textfield_widget.dart';
+import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/swiper_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
@@ -33,7 +35,7 @@ class PostingAddNameScreen1 extends StatelessWidget {
       Get.put(PostingAddController(route: route));
   TagController tagController = Get.put(TagController(tagtype: Tagtype.Posting),
       tag: Tagtype.Posting.toString());
-      KeyController keyController = Get.put(KeyController(isTextField: false.obs));
+  KeyController keyController = Get.put(KeyController(isTextField: false.obs));
   int project_id;
   int? postid;
   PostaddRoute route;
@@ -59,10 +61,9 @@ class PostingAddNameScreen1 extends StatelessWidget {
             controller: postingAddController.scrollController,
             child: Padding(
               padding: EdgeInsets.only(
-                bottom:
-                // postingAddController.isTagClick.value ? 0 : 34,
-                34
-              ),
+                  bottom:
+                      // postingAddController.isTagClick.value ? 0 : 34,
+                      34),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -77,37 +78,55 @@ class PostingAddNameScreen1 extends StatelessWidget {
                   ),
                   postingAddController.isAddLink.value == false
                       ? postingAddController.isAddImage.value == true
-                          ? postingAddController.images.length == 1 ?
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Container(
-                                height: Get.width,
-                                child: Image.file(
-                                            postingAddController.images.first,
-                                            fit: BoxFit.fill),
-                              ),
-                              // const SizedBox(height: 14),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
-                                child: GestureDetector(onTap: (){
-                                    Get.to(()=> UploadScreen());
-                                  },child: Text('사진 수정하기',style: k16Normal.copyWith(color: mainblue), textAlign: ui.TextAlign.right)),
-                              )
-                            ],
-                          ) :
-                          Stack(
-                            children: [SwiperWidget(
-                                item: postingAddController.images,
-                                height: Get.width,
-                                itembuilder: (context, index) {
-                                  return Image.file(
-                                      postingAddController.images[index],
-                                      fit: BoxFit.fill);
-                                }), Positioned(child: GestureDetector(onTap: (){
-                                  Get.to(()=> UploadScreen(), duration: const Duration(milliseconds: 300), curve: Curves.ease);
-                                },child: Text('사진 수정하기',style: k16Normal.copyWith(color: mainblue))), right: 20, bottom: 10)]
-                          )
+                          ? postingAddController.images.length == 1
+                              ? Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Container(
+                                      height: Get.width,
+                                      child: Image.file(
+                                          postingAddController.images.first,
+                                          fit: BoxFit.fill),
+                                    ),
+                                    // const SizedBox(height: 14),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 14, 20, 14),
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            Get.to(() => UploadScreen());
+                                          },
+                                          child: Text('사진 수정하기',
+                                              style: k16Normal.copyWith(
+                                                  color: mainblue),
+                                              textAlign: ui.TextAlign.right)),
+                                    )
+                                  ],
+                                )
+                              : Stack(children: [
+                                  SwiperWidget(
+                                      item: postingAddController.images,
+                                      height: Get.width,
+                                      itembuilder: (context, index) {
+                                        return Image.file(
+                                            postingAddController.images[index],
+                                            fit: BoxFit.fill);
+                                      }),
+                                  Positioned(
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            Get.to(() => UploadScreen(),
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                                curve: Curves.ease);
+                                          },
+                                          child: Text('사진 수정하기',
+                                              style: k16Normal.copyWith(
+                                                  color: mainblue))),
+                                      right: 20,
+                                      bottom: 10)
+                                ])
                           : Column(children: [
                               SizedBox(height: 23),
                               Row(
@@ -142,99 +161,147 @@ class PostingAddNameScreen1 extends StatelessWidget {
                               ),
                             )
                           : postingAddController.scrapList.first,
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch,children:[
-                  Divider(thickness: 0.5),
-                  LayoutBuilder(builder: (context, constraints) {
-                    return NoUlTextField(
-                      controller: postingAddController.textcontroller,
-                      obscureText: false,
-                      onChanged: (string) {
-                        TextSpan span = TextSpan(
-                              text: postingAddController.textcontroller.text,
-                              style: kSubTitle3Style);
-                        TextPainter tp = TextPainter(
-                              text: span, textDirection: ui.TextDirection.ltr);
-                        tp.layout(maxWidth: Get.width - 40);
-                        int numLines = tp.computeLineMetrics().length;
-                        postingAddController.lines.value = numLines;
-                        if (postingAddController.lines.value == 7) {
-                            postingAddController.keyControllerAtive.value = true;
-                        }
-                      },
-                      hintText: '내용을 입력해주세요',
-                    );
-                  }),
-                  // Obx(() => Divider(
-                  //     key: Get.put(
-                  //               KeyController(
-                  //                   tag: Tagtype.Posting, isTextField: true.obs),
-                  //               tag: postingAddController.keyControllerAtive.value
-                  //                   .toString())
-                  //           .viewKey,
-                  //     thickness: 0.5)),
-                  Divider(key: keyController.viewKey,thickness: 0.5),
-                  SizedBox(height: 14),
-                  Text('태그', style: kSubTitle3Style),
-                  SizedBox(height: 14),
-                  Obx(() => tagController.selectedtaglist.isEmpty
-                      ? Text('입력시 기업이 컨택할 가능성이 높아져요',
-                            style: kSubTitle3Style.copyWith(
-                                color: maingray.withOpacity(0.5)))
-                      : Container(
-                            width: Get.width,
-                            child: Wrap(
-                                spacing: 7,
-                                runSpacing: 7,
-                                direction: Axis.horizontal,
-                                children: tagController.selectedtaglist))),
-                  SizedBox(height: 28),
-                  CustomTextField(
-                    textController: tagController.tagsearch,
-                    autofocus: false,
-                    hintText: '태그를 입력해주세요',
-                    validator: (_) {},
-                    obscureText: false,
-                    maxLines: 2,
-                    counterText: '',
-                    maxLength: null,
-                    textInputAction: TextInputAction.done,
-                    ontap: () async {
-                      // await Future.delayed(Duration(milliseconds: 300));
-                      // postingAddController.scrollController.animateTo(
-                      //       postingAddController.lines.value < 7
-                      //           ? tagController.offsetDy.value  - 80
-                      //           : tagController.offsetDy.value +
-                      //               ((postingAddController.lines.value - 7) *
-                      //                   tagController.textfieldOffset.value) -
-                      //               80,
-                      //       duration: const Duration(milliseconds: 300),
-                      //       curve: Curves.easeOut);
-                      await Future.delayed(Duration(milliseconds: 300));
-                      Scrollable.ensureVisible(keyController.viewKey.currentContext!,curve: Curves.easeOut, duration: const Duration(milliseconds: 300));
-                      postingAddController.isTagClick(true);
-                      // }
-                      // );
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Obx(() => SizedBox(
-                      // height: postingAddController.isTagClick.value
-                      //       ? postingAddController.lines.value < 7
-                      //           ? tagController.offsetDy.value + 80
-                      //           : tagController.offsetDy.value +
-                      //               ((postingAddController.lines.value - 7) *
-                      //                   tagController.textfieldOffset.value) +
-                      //               100
-                      //       : 0,
-                      child: Column(children: tagController.searchtaglist))),
-                  const SizedBox(height: 100),
-                  uploadButton()
-                            ]),
-                          )
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Divider(thickness: 0.5),
+                          LayoutBuilder(builder: (context, constraints) {
+                            return NoUlTextField(
+                              controller: postingAddController.textcontroller,
+                              obscureText: false,
+                              onChanged: (string) {
+                                TextSpan span = TextSpan(
+                                    text: postingAddController
+                                        .textcontroller.text,
+                                    style: kSubTitle3Style);
+                                TextPainter tp = TextPainter(
+                                    text: span,
+                                    textDirection: ui.TextDirection.ltr);
+                                tp.layout(maxWidth: Get.width - 40);
+                                int numLines = tp.computeLineMetrics().length;
+                                postingAddController.lines.value = numLines;
+                                if (postingAddController.lines.value == 7) {
+                                  postingAddController
+                                      .keyControllerAtive.value = true;
+                                }
+                              },
+                              hintText: '내용을 입력해주세요',
+                            );
+                          }),
+                          // Obx(() => Divider(
+                          //     key: Get.put(
+                          //               KeyController(
+                          //                   tag: Tagtype.Posting, isTextField: true.obs),
+                          //               tag: postingAddController.keyControllerAtive.value
+                          //                   .toString())
+                          //           .viewKey,
+                          //     thickness: 0.5)),
+                          Divider(key: keyController.viewKey, thickness: 0.5),
+                          SizedBox(height: 14),
+                          Text('태그', style: kSubTitle3Style),
+                          SizedBox(height: 14),
+                          Obx(() => tagController.selectedtaglist.isEmpty
+                              ? Text('입력시 기업이 컨택할 가능성이 높아져요',
+                                  style: kSubTitle3Style.copyWith(
+                                      color: maingray.withOpacity(0.5)))
+                              : Container(
+                                  width: Get.width,
+                                  child: Wrap(
+                                      spacing: 7,
+                                      runSpacing: 7,
+                                      direction: Axis.horizontal,
+                                      children:
+                                          tagController.selectedtaglist))),
+                          SizedBox(height: 28),
+                          CustomTextField(
+                            textController: tagController.tagsearch,
+                            autofocus: false,
+                            hintText: '태그를 입력해주세요',
+                            validator: (_) {},
+                            obscureText: false,
+                            maxLines: 2,
+                            counterText: '',
+                            maxLength: null,
+                            textInputAction: TextInputAction.done,
+                            ontap: () async {
+                              // await Future.delayed(Duration(milliseconds: 300));
+                              // postingAddController.scrollController.animateTo(
+                              //       postingAddController.lines.value < 7
+                              //           ? tagController.offsetDy.value  - 80
+                              //           : tagController.offsetDy.value +
+                              //               ((postingAddController.lines.value - 7) *
+                              //                   tagController.textfieldOffset.value) -
+                              //               80,
+                              //       duration: const Duration(milliseconds: 300),
+                              //       curve: Curves.easeOut);
+                              await Future.delayed(Duration(milliseconds: 300));
+                              Scrollable.ensureVisible(
+                                  keyController.viewKey.currentContext!,
+                                  curve: Curves.easeOut,
+                                  duration: const Duration(milliseconds: 300));
+                              postingAddController.isTagClick(true);
+                              // }
+                              // );
+                            },
+                            onfieldSubmitted: (string) {
+                              TagController controller =
+                                  Get.find<TagController>(
+                                      tag: Tagtype.Posting.toString());
+                              print(controller.searchtaglist
+                                  .where((element) => element.tag == string));
+                              // if (controller.selectedtaglist.length < 3) {
+                              if (controller.searchtaglist
+                                  .where((element) => element.tag == string)
+                                  .isNotEmpty) {
+                                controller.selectedtaglist.add(
+                                    SelectedTagWidget(
+                                        id: controller.searchtaglist
+                                  .where((element) => element.tag == string).first.id,
+                                        text: string,
+                                        selecttagtype:
+                                            SelectTagtype.interesting,
+                                        tagtype: Tagtype.Posting));
+                                controller.tagsearch.clear();
+                                controller.searchtaglist
+                                    .removeWhere((element) => element.id == controller.searchtaglist
+                                  .where((element) => element.tag == string).first.id);
+                              }else{
+                                controller.selectedtaglist.add(
+                                    SelectedTagWidget(
+                                        id: 0,
+                                        text: string,
+                                        selecttagtype:
+                                            SelectTagtype.interesting,
+                                        tagtype: Tagtype.Posting));
+                                controller.tagsearch.clear();
+                              }
+
+                              // }
+                              //  else {
+                              //   showCustomDialog('최대 3개까지 선택할 수 있어요', 1000);
+                              // }
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Obx(() => SizedBox(
+                              // height: postingAddController.isTagClick.value
+                              //       ? postingAddController.lines.value < 7
+                              //           ? tagController.offsetDy.value + 80
+                              //           : tagController.offsetDy.value +
+                              //               ((postingAddController.lines.value - 7) *
+                              //                   tagController.textfieldOffset.value) +
+                              //               100
+                              //       : 0,
+                              child: Column(
+                                  children: tagController.searchtaglist))),
+                          const SizedBox(height: 100),
+                          uploadButton()
+                        ]),
+                  )
                 ],
               ),
             ),
@@ -268,15 +335,21 @@ class PostingAddNameScreen1 extends StatelessWidget {
     );
   }
 
-  Widget uploadButton(){
+  Widget uploadButton() {
     return GestureDetector(
-      onTap: ()async{
+      onTap: () async {
         await addposting(project_id);
       },
       child: Container(
         padding: const EdgeInsets.fromLTRB(146.5, 13, 146.5, 13),
-        decoration: BoxDecoration(color: maingray.withOpacity(0.5), borderRadius: BorderRadius.circular(8)),
-        child: Text('업로드', textAlign: ui.TextAlign.center,style: k16Normal.copyWith(color: mainWhite),),
+        decoration: BoxDecoration(
+            color: maingray.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(8)),
+        child: Text(
+          '업로드',
+          textAlign: ui.TextAlign.center,
+          style: k16Normal.copyWith(color: mainWhite),
+        ),
       ),
     );
   }

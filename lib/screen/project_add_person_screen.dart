@@ -74,8 +74,10 @@ class ProjectAddPersonScreen extends StatelessWidget {
                       }
                     });
                   },
-                  child: Obx(
-                    () => Padding(
+                  child:
+                  //  Obx(
+                  //   () => 
+                    Padding(
                       padding: const EdgeInsets.only(right: 4),
                       child: Text(
                         // projectaddcontroller.selectedpersontaglist.isEmpty
@@ -88,8 +90,8 @@ class ProjectAddPersonScreen extends StatelessWidget {
                         textAlign: TextAlign.end,
                       ),
                     ),
-                  ),
-                )
+                  )
+                // )
               : Obx(
                   () => Get.find<ProjectDetailController>(
                               tag: projectid.toString())

@@ -29,11 +29,12 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
         actions: [
           GestureDetector(
               onTap: () {
-                postingAddController.isAddLink(true);
-                Get.back();
-                for(var i in postingAddController.scrapList){
-                  print(i.url);
+                if(postingAddController.scrapList != []){
+                postingAddController.isAddLink(true);}
+                else{
+                  postingAddController.isAddLink(false);
                 }
+                Get.back();
               },
               child: Padding(
                 padding: const EdgeInsets.only(top: 12, right: 17.5),

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/post_add_test.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
@@ -56,142 +57,52 @@ class ProjectWidget extends StatelessWidget {
             duration: Duration(milliseconds: 100),
             curve: kAnimationCurve,
             child: Container(
-              decoration: kCardStyle,
+              color: mainWhite,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // type == ProjectWidgetType.profile
-                  //     ? ClipRRect(
-                  //         borderRadius: BorderRadius.only(
-                  //           topLeft: Radius.circular(8),
-                  //           topRight: Radius.circular(8),
-                  //         ),
-                  //         child: AspectRatio(
-                  //           aspectRatio: 2 / 1,
-                  //           child: Obx(
-                  //             () => Container(
-                  //               decoration: BoxDecoration(
-                  //                 image: DecorationImage(
-                  //                   image: project.value.thumbnail != null
-                  //                       ? NetworkImage(
-                  //                           project.value.thumbnail!,
-                  //                         ) as ImageProvider
-                  //                       : AssetImage(
-                  //                           "assets/illustrations/default_image.png",
-                  //                         ),
-                  //                   fit: BoxFit.cover,
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       )
-                  //     : Container(),
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
+                  Obx(
+                    () => Row(
+                      children: [
+                        Text(
+                          project.value.careerName,
+                          style: kmainbold,
+                        ),
+                        Spacer(),
+                        Obx(
+                          () => Text(
+                            '${DateFormat("yyyy.MM").format(project.value.startDate!)}',
+                            style: kSubTitle3Style,
+                          ),
+                          //  ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''
+                          // }
+                        ),
+                      ],
                     ),
-                    child: Container(
-                      color: mainWhite,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12.0,
-                        horizontal: 16.0,
+                  ),
+                  SizedBox(
+                    height: 14,
+                  ),
+                  Row(
+                    children: [
+                      Text('포스트',
+                          style: kSubTitle3Style.copyWith(
+                              color: maingray.withOpacity(0.5))),
+                      SizedBox(
+                        width: 4,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Obx(
-                            () => Text(
-                              project.value.careerName,
-                              style: kHeaderH2Style.copyWith(fontSize: 18),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          Row(
-                            children: [
-                              Obx(
-                                () => Text(
-                                  '${DateFormat("yy.MM.dd").format(project.value.startDate!)} ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''}',
-                                  style: kSubTitle2Style,
-                                ),
-                              ),
-                              Obx(
-                                () => SizedBox(
-                                  width:
-                                      (project.value.endDate == null) ? 4 : 8,
-                                ),
-                              ),
-                              Obx(() => Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4),
-                                      color: (project.value.endDate == null)
-                                          ? Color(0xffefefef)
-                                          : Color(0xff888B8C),
-                                    ),
-                                    child: Center(
-                                      child: Obx(
-                                        () => Text(
-                                          (project.value.endDate == null)
-                                              ? '진행중'
-                                              : durationCaculate(
-                                                  startDate:
-                                                      project.value.startDate!,
-                                                  endDate:
-                                                      project.value.endDate!,
-                                                ),
-                                          style: kBody2Style.copyWith(
-                                              fontWeight:
-                                                  (project.value.endDate ==
-                                                          null)
-                                                      ? FontWeight.w400
-                                                      : FontWeight.w500,
-                                              color: (project.value.endDate ==
-                                                      null)
-                                                  ? mainblack.withOpacity(0.6)
-                                                  : mainWhite),
-                                        ),
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    '포스팅',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Obx(
-                                    () => Text(
-                                      '${project.value.post_count!.value}',
-                                      style: kButtonStyle,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )
-                        ],
+                      Obx(
+                        () => Text(
+                          '${project.value.post_count!.value}개',
+                          style: kSubTitle3Style,
+                        ),
                       ),
-                    ),
-                  )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 14,
+                  ),
+                  careerAnalysisWidget('디자인', 21, 2, 23, 1)
                 ],
               ),
             ),
@@ -199,5 +110,48 @@ class ProjectWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget careerAnalysisWidget(String title, int countrywide,
+      int countryVariance, int campus, int campusVariance) {
+    return Row(
+      children: [
+        RichText(
+            text: TextSpan(children: [
+          TextSpan(
+              text: title, style: kSubTitle3Style.copyWith(color: mainblue)),
+          const TextSpan(text: '분야', style: kSubTitle3Style)
+        ])),
+        Spacer(),
+        const SizedBox(width: 37),
+        Text('전국 $countrywide%', style: kSubTitle3Style),
+        rate(countryVariance),
+        const SizedBox(width: 11),
+        Text('교내 $campus%', style: kSubTitle3Style),
+        rate(campusVariance)
+      ],
+    );
+  }
+
+  Widget rate(int variance) {
+    return Row(children: [
+      const SizedBox(width: 4),
+      arrowDirection(variance),
+      const SizedBox(width: 4),
+      if (variance != 0)
+        Text('${variance.abs()}%', style: kcaption
+            // .copyWith(color: variance >= 1 ? rankred : mainblue)
+            ),
+    ]);
+  }
+
+  Widget arrowDirection(int variance) {
+    if (variance == 0) {
+      return const SizedBox.shrink();
+    } else if (variance >= 1) {
+      return SvgPicture.asset('assets/icons/upper_arrow.svg');
+    } else {
+      return SvgPicture.asset('assets/icons/down_arrow.svg');
+    }
   }
 }

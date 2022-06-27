@@ -41,8 +41,17 @@ class UploadScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(0, 12.5, 12.5, 0),
               child: GestureDetector(
                 onTap: () async{Get.back();
+                if(controller.isSelect.value == true){
+                  if(controller.images != []){
                 controller.images.value = (await assetToFile(controller.selectedImages!));
-                PostingAddController.to.isAddImage(true);
+                controller.isAddImage(true);}else{
+                  controller.isAddImage(false);
+                }
+                }else{
+                  controller.isAddImage(false);
+                }
+                print(controller.isAddImage.value);
+                print(controller.isSelect.value);
                 },
                 child: Text(
                   '확인',
@@ -297,6 +306,7 @@ class UploadScreen extends StatelessWidget {
                                       controller.selectedImage ??=
                                           controller.imageList[index].obs;
                                     }
+                                    controller.isSelect.value = true;
                                   } else {
                                     if (controller.selectedImage!.value ==
                                         controller.imageList[index]) {

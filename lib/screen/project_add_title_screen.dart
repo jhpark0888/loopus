@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:in_app_review/in_app_review.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/ga_controller.dart';
+import 'package:loopus/controller/local_data_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/project_model.dart';
+import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/trash_bin/project_add_intro_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -38,11 +47,47 @@ class ProjectAddTitleScreen extends StatelessWidget {
             screenType == Screentype.add
                 ? TextButton(
                     onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        Get.to(() => ProjectAddPeriodScreen(
-                              screenType: Screentype.add,
-                            ));
-                      }
+                      // if (_formKey.currentState!.validate()) {
+                      //   Get.to(() => ProjectAddPeriodScreen(
+                      //         screenType: Screentype.add,
+                      //       ));
+                      // }
+                      projectaddcontroller.selectedStartDateTime.value =
+                          DateTime.parse(DateTime.now().toString()).toString();
+                      projectaddcontroller.isEndedProject(false);
+                      Get.to(() => LoadingScreen(), opaque: false);
+
+                      await addproject().then((value) async {
+                        Get.back();
+                        final LocalDataController _localDataController =
+                            Get.put(LocalDataController());
+                        final GAController _gaController =
+                            Get.put(GAController());
+                        if (value.isError == false) {
+                          await _gaController.logProjectCreated(true);
+
+                          Project project = Project.fromJson(value.data);
+                          project.is_user = 1;
+
+                          ProfileController.to.myProjectList.insert(0, project);
+
+                          SchedulerBinding.instance!.addPostFrameCallback((_) {
+                            showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
+                          });
+
+                          if (_localDataController.isAddFirstProject == true) {
+                            final InAppReview inAppReview =
+                                InAppReview.instance;
+
+                            if (await inAppReview.isAvailable()) {
+                              inAppReview.requestReview();
+                            }
+                          }
+                          _localDataController.firstProjectAdd();
+                        } else {
+                          await _gaController.logProjectCreated(false);
+                        }
+                      });
                     },
                     child: Obx(
                       () => Text(
