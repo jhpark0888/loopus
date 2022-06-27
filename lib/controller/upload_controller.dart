@@ -66,4 +66,5 @@ class UploadController extends GetxController {
 
     }
   }
+  
 }

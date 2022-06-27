@@ -334,6 +334,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/widget/swiper_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
 import 'package:loopus/controller/home_controller.dart';
@@ -416,24 +417,12 @@ class PostingWidget extends StatelessWidget {
               ),
           ]),
           if (item.images.isNotEmpty)
-            SizedBox(
-                width: Get.width,
+            SwiperWidget(
+                item: item.images,
                 height: 300,
-                child: Swiper(
-                  outer: true,
-                  itemCount: item.images.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.network(item.images[index], fit: BoxFit.fill);
-                  },
-                  pagination: SwiperPagination(
-                      margin: EdgeInsets.all(14),
-                      alignment: Alignment.bottomCenter,
-                      builder: DotSwiperPaginationBuilder(
-                          color: Color(0xFF5A5A5A).withOpacity(0.5),
-                          activeColor: mainblue,
-                          size: 7,
-                          activeSize: 7)),
-                )),
+                itembuilder: (BuildContext context, int index) {
+                  return Image.network(item.images[index], fit: BoxFit.fill);
+                }),
           Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,

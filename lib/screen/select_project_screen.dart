@@ -17,20 +17,20 @@ class SelectProjectScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: '포스팅 작성하기',
+        title: '커리어 선택',
         bottomBorder: false,
       ),
       body: SingleChildScrollView(
         child: Obx(
           () => Padding(
-            padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (controller.selectprojectlist.value.isNotEmpty)
                   Text(
-                    '어떤 활동에 대한 포스팅인가요?',
-                    style: kSubTitle2Style,
+                    '포스트를 추가할 커리어를 선택해주세요',
+                    style: kSubTitle3Style.copyWith(color: maingray.withOpacity(0.5)),
                     textAlign: TextAlign.center,
                   ),
                 if (controller.selectprojectlist.value.isNotEmpty)

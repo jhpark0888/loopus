@@ -51,6 +51,16 @@ class _ScrapWidgetState extends State<ScrapWidget> {
   }
 
   Future geturlinfo() async {
+    // final String finalUrl;
+    // if(widget.url.contains('https')){
+    //   finalUrl = widget.url;
+    // }else if(widget.url.contains('http')){
+    //   finalUrl = widget.url.replaceAll('http', 'https');
+    // }
+    // else{
+    //   finalUrl = 'https://' + widget.url;
+    // }
+
     final WebInfo info = await LinkPreview.scrapeFromURL(widget.url);
     description = info.description;
     domain = info.domain;
@@ -123,7 +133,10 @@ class _ScrapWidgetState extends State<ScrapWidget> {
                         right: 15,
                         child: GestureDetector(
                             onTap: (){
-                              Get.find<PostingAddController>().scrapList.removeWhere((element) => element.key == widget.key);
+                              Get.find<PostingAddController>().scrapList.removeWhere((element) => element.url == widget.url);
+                              if(Get.find<PostingAddController>().scrapList.isEmpty){
+                                Get.find<PostingAddController>().isAddLink(false);
+                              }
                             },
                             child: SvgPicture.asset(
                               'assets/icons/link_delete_button.svg',

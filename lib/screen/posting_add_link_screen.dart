@@ -9,10 +9,17 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 import 'package:loopus/widget/scrap_widget.dart';
 
-class PostingAddLinkScreen extends StatelessWidget {
+class PostingAddLinkScreen extends StatefulWidget {
   PostingAddLinkScreen({Key? key}) : super(key: key);
+
+  @override
+  State<PostingAddLinkScreen> createState() => _PostingAddLinkScreenState();
+}
+
+class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
   PostingAddController postingAddController =
       Get.put(PostingAddController(route: PostaddRoute.bottom));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +28,13 @@ class PostingAddLinkScreen extends StatelessWidget {
         bottomBorder: false,
         actions: [
           GestureDetector(
-              onTap: () {Get.back();},
+              onTap: () {
+                postingAddController.isAddLink(true);
+                Get.back();
+                for(var i in postingAddController.scrapList){
+                  print(i.url);
+                }
+              },
               child: Padding(
                 padding: const EdgeInsets.only(top: 12, right: 17.5),
                 child: Text('확인',
@@ -56,31 +69,27 @@ class PostingAddLinkScreen extends StatelessWidget {
                 counterText: '',
                 maxLength: null,
                 onfieldSubmitted: (string) {
-                  // if (string.contains('www.')) {
-                  if (string.contains('http://') ||
-                      string.contains('https://')) {
+                  print(postingAddController.linkcontroller.text);
+                  print(string);
+                  if (postingAddController.scrapList
+                      .where((scrapwidget) =>
+                          scrapwidget.url ==
+                          changeUrl(string))
+                      .isEmpty) {
                     postingAddController.scrapList.add(ScrapWidget(
-                        key: Get.put(
-                            KeyController(isTextField: false.obs).linkKey,
-                            tag: postingAddController.scrapList.length
-                                .toString()),
-                        url: string,
-                        widgetType: 'add',
-                         length: postingAddController.scrapList.length,
-                         ));
+                      // key: Get.put(
+                      //     KeyController(isTextField: false.obs).linkKey,
+                      //     tag:
+                      //         postingAddController.scrapList.length.toString()),
+                      url: changeUrl(string),
+                      widgetType: 'add',
+                      length: postingAddController.scrapList.length,
+                    ));
+
+                    postingAddController.linkcontroller.clear();
                   } else {
-                    postingAddController.scrapList.add(ScrapWidget(
-                        key: Get.put(
-                            KeyController(isTextField: false.obs).linkKey,
-                            tag: postingAddController.scrapList.length
-                                .toString()),
-                        url: 'https://' + string,
-                        widgetType: 'add', length: postingAddController.scrapList.length,));
+                    showCustomDialog('중복된 주소는 하나만 게시됩니다.', 1000);
                   }
-                  postingAddController.linkcontroller.clear();
-                  // } else {
-                  //   showCustomDialog('주소를 확인해주세요', 1000);
-                  // }
 
                   print(postingAddController.scrapList);
                 }),
@@ -96,5 +105,15 @@ class PostingAddLinkScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String changeUrl(String url){
+    if(url.contains('https')){
+      return url;
+    }else if(url.contains('http')){
+      return url.replaceAll('http', 'https');
+    }else{
+      return 'https://' + url;
+    }
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
+import 'package:loopus/screen/post_add_test.dart';
 import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
@@ -43,7 +44,7 @@ class ProjectWidget extends StatelessWidget {
             //       isuser: project.value.is_user,
             //     ));
           } else {
-            Get.to(() => PostingAddNameScreen(
+            Get.to(() => PostingAddNameScreen1(
                   project_id: project.value.id,
                   route: PostaddRoute.bottom,
                 ));

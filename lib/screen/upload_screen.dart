@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/image_controller.dart';
+import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/upload_controller.dart';
 
 import 'package:photo_manager/photo_manager.dart';
@@ -13,7 +15,8 @@ import 'package:photo_view/photo_view.dart';
 class UploadScreen extends StatelessWidget {
   UploadScreen({Key? key}) : super(key: key);
 
-  UploadController controller = Get.put(UploadController());
+  // UploadController controller = Get.put(UploadController());
+  PostingAddController controller = Get.find();
   ImageController imageController = Get.put(ImageController());
   @override
   Widget build(BuildContext context) {
@@ -24,8 +27,6 @@ class UploadScreen extends StatelessWidget {
           leading: GestureDetector(
               onTap: () {
                 Get.back();
-                print(Get.width);
-                print(Get.height);
               },
               child: SvgPicture.asset('assets/icons/Back_icon.svg',)),
           title: Obx(
@@ -39,7 +40,10 @@ class UploadScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 12.5, 12.5, 0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () async{Get.back();
+                controller.images.value = (await assetToFile(controller.selectedImages!));
+                PostingAddController.to.isAddImage(true);
+                },
                 child: Text(
                   '확인',
                   style: kNavigationTitle,
@@ -56,7 +60,6 @@ class UploadScreen extends StatelessWidget {
           Obx(
             () => GestureDetector(
               onTap: () {
-                print(controller.selectedImage);
               },
               child: Stack(children: [
                 Container(
@@ -71,9 +74,6 @@ class UploadScreen extends StatelessWidget {
                                   var a = await decodeImageFromList(controller
                                       .croppedImage!.value
                                       .readAsBytesSync());
-                                  print(a.height);
-                                  print(a.width);
-                                  print(controller.croppedHeight);
                                 },
                                 child: InteractiveViewer(
                                   child: Image.file(
@@ -93,55 +93,19 @@ class UploadScreen extends StatelessWidget {
                                               Get.width
                                           ? Get.width
                                           : controller.croppedHeight.value,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          print(controller.croppedHeight);
-                                          print(controller.croppedWidth);
-                                          print(controller
-                                              .selectedImageSize.value.height
-                                              .toInt());
-                                        },
-                                        child: 
-                                        // InteractiveViewer(
-                                        //   transformationController: controller
-                                        //       .transformationController,
-                                        //   onInteractionStart: (a) {
-                                        //     print('$a입니다.');
-                                        //     controller.transformationController
-                                        //         .toScene(Offset(
-                                        //             controller.croppedWidth
-                                        //                 .toDouble(),
-                                        //             controller.croppedHeight
-                                        //                 .toDouble()));
-                                        //   },
-                                        //   onInteractionUpdate: (a) {
-                                        //     print('$a입니다.');
-                                        //   },
-                                          // child: _photoWidget(
-                                          //     controller.selectedImage!.value,
-                                          //     1280,
-                                          //     720, builder: (data) {
-                                          //   return Image.memory(
-                                          //     data,
-                                          //     fit: BoxFit.fitWidth,
-                                          //     // scale: 0.003,
-                                          //   );
-                                          // }),
-                                        // ),
-                                         _photoWidget(
-                                              controller.selectedImage!.value,
-                                              500,
-                                              500, builder: (data) {
-                                            return PhotoView.customChild(
-                                              tightMode: false,
-                                              child: Image.memory(
-                                                data,
-                                                fit: BoxFit.fitWidth,
-                                                // scale: 0.003,
-                                              )
-                                            );
-                                          }),
-                                      ),
+                                      child: _photoWidget(
+                                           controller.selectedImage!.value,
+                                           500,
+                                           500, builder: (data) {
+                                         return PhotoView.customChild(
+                                           tightMode: false,
+                                           child: Image.memory(
+                                             data,
+                                             fit: BoxFit.fitWidth,
+                                             // scale: 0.003,
+                                           )
+                                         );
+                                       }),
                                     ),
                                   ),
                                 ],
@@ -157,7 +121,6 @@ class UploadScreen extends StatelessWidget {
                           onTap: () async {
                             var path2 = await controller.selectedImage!.value
                                 .loadFile();
-                            print(path2);
                             await imageController
                                 .profilecropImage(path2)
                                 .then((value) {
@@ -466,7 +429,6 @@ class UploadScreen extends StatelessWidget {
         future: asset.thumbnailDataWithSize(ThumbnailSize(width, height)),
         builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
           if (snapshot.hasData) {
-            print(height);
             return builder(snapshot.data!);
           } else {
             return Container();
@@ -530,4 +492,12 @@ class UploadScreen extends StatelessWidget {
   //         });
 
   // }
+  Future<List<File>> assetToFile(List<AssetEntity> assetEntity)async{
+    List<File> images = <File>[];
+    for(AssetEntity assetentity in assetEntity){
+      File? image = await assetentity.file;
+      images.add(image!);
+    }
+    return images;
+  }
 }
