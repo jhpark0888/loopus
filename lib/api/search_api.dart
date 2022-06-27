@@ -9,6 +9,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/tag_detail_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
@@ -52,7 +53,8 @@ Future<void> tagsearch() async {
       print("태그 검색: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        searchController.presearchwordtag = searchword;
+        searchController.preWordList[searchController.tabController.index] =
+            searchword;
         var responsebody = json.decode(utf8.decode(response.bodyBytes));
         List responselist = responsebody["results"];
         List<SearchTag> tagmaplist =
@@ -62,18 +64,18 @@ Future<void> tagsearch() async {
         searchController.searchtaglist.clear();
 
         if (tagmaplist.isEmpty) {
-          searchController.isnosearchtag(true);
+          // searchController.isnosearchtag(true);
         } else {
-          searchController.searchtaglist(tagmaplist.map((element) {
-            return SearchTagWidget(
-              id: element.id,
-              tag: element.tag,
-              count: element.count,
-              isSearch: 1,
-            );
-          }).toList());
+          // searchController.searchtaglist(tagmaplist.map((element) {
+          //   return SearchTagWidget(
+          //     id: element.id,
+          //     tag: element.tag,
+          //     count: element.count,
+          //     isSearch: 1,
+          //   );
+          // }).toList());
 
-          searchController.isnosearchtag(false);
+          // searchController.isnosearchtag(false);
         }
       } else if (response.statusCode == 401) {
         return Future.error(response.statusCode);
@@ -89,169 +91,42 @@ Future<void> tagsearch() async {
   }
 }
 
-Future<void> search(
+Future<HTTPResponse> search(
     SearchType searchType, String searchtext, int pagenumber) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    if (searchType == SearchType.tag_project) {
-      Get.find<TagDetailController>(tag: searchtext)
-          .tagprojectscreenstate(ScreenState.disconnect);
-    } else if (searchType == SearchType.tag_question) {
-      Get.find<TagDetailController>(tag: searchtext)
-          .tagquestionscreenstate(ScreenState.disconnect);
-    }
     showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     SearchController searchController = Get.find();
-    String? token;
-    await FlutterSecureStorage().read(key: 'token').then((value) {
-      token = value;
-    });
+    String? token = await FlutterSecureStorage().read(key: 'token');
     // 수정
 
     String searchword = searchtext.trim().replaceAll(RegExp("\\s+"), " ");
     print("검색어: $searchword");
 
     final url = Uri.parse(
-        "http://3.35.253.151:8000/search_api/search/${searchType.name}?query=${searchword}&page=${pagenumber}");
+        "$serverUri/search_api/search/${searchType.name}?query=$searchword&page=$pagenumber");
 
     try {
       final response =
           await http.get(url, headers: {"Authorization": "Token $token"});
-      var statusCode = response.statusCode;
-      var responseHeaders = response.headers;
-      var responseBody = utf8.decode(response.bodyBytes);
-      print("검색 : $statusCode");
+
+      print("검색 : ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        List searchlist = jsonDecode(responseBody);
-        print("pagenumber$pagenumber");
-        print(searchlist);
-        if (pagenumber >= 2) {
-          print(searchlist);
-          // print(searchController.searchquestionlist.value);
-          print(searchController.searchprofilelist.value);
-          if (searchType == SearchType.post && searchlist.isNotEmpty) {
-            if (searchlist[0]["id"] ==
-                searchController.searchpostinglist.value[0].post.id) {
-              return;
-            }
-          }
-          if (searchType == SearchType.profile && searchlist.isNotEmpty) {
-            if (searchlist[0]["user"] ==
-                searchController.searchprofilelist.value[0].user.userid) {
-              return;
-            }
-          }
-          if (searchType == SearchType.question && searchlist.isNotEmpty) {
-            // if (searchlist[0]["id"] ==
-            //     searchController.searchquestionlist.value[0].item.id) {
-            //   return;
-            // }
-          }
-        }
-
-        if (searchlist.isEmpty) {
-          if (searchType == SearchType.post) {
-            searchController.presearchwordpost = searchword;
-
-            searchController.isnosearchpost(true);
-            searchController.searchpostinglist.clear();
-          } else if (searchType == SearchType.profile) {
-            searchController.presearchwordprofile = searchword;
-
-            searchController.isnosearchprofile(true);
-            searchController.searchprofilelist.clear();
-          } else if (searchType == SearchType.question) {
-            searchController.presearchwordquestion = searchword;
-
-            searchController.isnosearchquestion(true);
-            // searchController.searchquestionlist.clear();
-          } else if (searchType == SearchType.tag_project) {
-            Get.find<TagDetailController>(tag: searchtext)
-                .tagprojectscreenstate(ScreenState.success);
-            return;
-          } else if (searchType == SearchType.tag_question) {
-            Get.find<TagDetailController>(tag: searchtext)
-                .tagquestionscreenstate(ScreenState.success);
-            return;
-          }
-        } else {
-          // if (tab_index == 0) {
-          //   SearchController.to.pagenumber1 += 1;
-          // } else if (tab_index == 1) {
-          //   SearchController.to.pagenumber2 += 1;
-          // } else if (tab_index == 2) {
-          //   SearchController.to.pagenumber3 += 1;
-          // }
-
-          if (searchType == SearchType.post) {
-            searchController.presearchwordpost = searchword;
-            searchController.searchpostinglist(searchlist
-                .map((json) => Post.fromJson(json))
-                .toList()
-                .map((post) => SearchPostingWidget(post: post))
-                .toList());
-            searchController.isnosearchpost(false);
-          } else if (searchType == SearchType.profile) {
-            searchController.presearchwordprofile = searchword;
-            searchController.searchprofilelist(searchlist
-                .map((json) => User.fromJson(json))
-                .toList()
-                .map((user) => SearchProfileWidget(
-                      user: user,
-                    ))
-                .toList());
-            searchController.isnosearchprofile(false);
-          } else if (searchType == SearchType.question) {
-            searchController.presearchwordquestion = searchword;
-            // searchController.searchquestionlist(searchlist
-            //     .map((json) => QuestionItem.fromJson(json))
-            //     .toList()
-            //     .map((question) => SearchQuestionWidget(
-            //           item: question,
-            //         ))
-            //     .toList());
-            searchController.isnosearchquestion(false);
-          } else if (searchType == SearchType.tag_project) {
-            Get.find<TagDetailController>(tag: searchtext)
-                .searchtagprojectlist(searchlist
-                    .map((json) => Project.fromJson(json))
-                    .toList()
-                    .map((project) => SearchTagProjectWidget(
-                          project: project,
-                        ))
-                    .toList());
-            Get.find<TagDetailController>(tag: searchtext)
-                .tagprojectscreenstate(ScreenState.success);
-          } else if (searchType == SearchType.tag_question) {
-            // Get.find<TagDetailController>(tag: searchtext)
-            //     .searchtagquestionlist(searchlist
-            //         .map((json) => QuestionItem.fromJson(json))
-            //         .toList()
-            //         .map((question) => QuestionWidget(
-            //               item: question,
-            //             ))
-            //         .toList());
-            Get.find<TagDetailController>(tag: searchtext)
-                .tagquestionscreenstate(ScreenState.success);
-          }
-        }
+        List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+        print(responseBody);
+        return HTTPResponse.success(responseBody);
       } else {
-        if (searchType == SearchType.tag_project) {
-          Get.find<TagDetailController>(tag: searchtext)
-              .tagprojectscreenstate(ScreenState.error);
-        } else if (searchType == SearchType.tag_question) {
-          Get.find<TagDetailController>(tag: searchtext)
-              .tagquestionscreenstate(ScreenState.error);
-        }
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError('', response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }

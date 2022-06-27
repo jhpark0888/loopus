@@ -26,8 +26,8 @@ class AppController extends GetxService {
   final HomeController _homeController = Get.put(HomeController());
   RxBool ismyprofile = false.obs;
   RxInt currentIndex = 0.obs;
-  GlobalKey<NavigatorState> searcnPageNaviationKey =
-      GlobalKey<NavigatorState>();
+  // GlobalKey<NavigatorState> searcnPageNaviationKey =
+  //     GlobalKey<NavigatorState>();
 
   Future<void> changePageIndex(int index) async {
     if (index == 0) {

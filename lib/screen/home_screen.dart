@@ -190,7 +190,9 @@ class HomeScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             if (_homeController.contents[index] is Post) {
                               return PostingWidget(
-                                  item: _homeController.contents[index]);
+                                item: _homeController.contents[index],
+                                type: PostingWidgetType.normal,
+                              );
                             } else if (_homeController.contents[index]
                                 is List<String>) {
                               return NewsListWidget(
@@ -203,7 +205,7 @@ class HomeScreen extends StatelessWidget {
                             }
                           },
                           separatorBuilder: (context, index) {
-                            return const DivideWidget();
+                            return DivideWidget();
                           },
                           itemCount: _homeController.contents.length,
                         ),
@@ -219,10 +221,10 @@ class HomeScreen extends StatelessWidget {
     return SliverToBoxAdapter(
       child: InkWell(
         onTap: () {
-          _searchController.clearSearchedList();
+          // _searchController.clearSearchedList();
           Get.toNamed('/search');
-          print('search posting list : ${_searchController.searchpostinglist}');
-          print('search profile list : ${_searchController.searchprofilelist}');
+          print('search posting list : ${_searchController.searchPostList}');
+          print('search profile list : ${_searchController.searchUserList}');
 
           // print(
           //     'search question list : ${_searchController.searchquestionlist}');

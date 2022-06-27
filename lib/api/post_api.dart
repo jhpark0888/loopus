@@ -61,8 +61,11 @@ Future<HTTPResponse> addposting(int projectId) async {
     }
 
     request.fields['contents'] = postingAddController.textcontroller.text;
-    request.fields['tag'] = json
-        .encode(tagController.selectedtaglist.map((tag) => tag.text).toList());
+    for (int i = 0; i < tagController.selectedtaglist.length; i++) {
+      var multipartFile = http.MultipartFile.fromString(
+          'tag', tagController.selectedtaglist[i].text);
+      request.files.add(multipartFile);
+    }
 
     try {
       http.StreamedResponse response = await request.send();

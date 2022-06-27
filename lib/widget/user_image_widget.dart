@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:loopus/constant.dart';
 
 class UserImageWidget extends StatelessWidget {
   UserImageWidget({Key? key, required this.imageUrl, this.width, this.height})
@@ -25,9 +26,10 @@ class UserImageWidget extends StatelessWidget {
               width: width ?? 50,
               fit: BoxFit.cover,
               placeholder: (context, string) {
-                return Image.asset(
-                  'assets/icons/loading.gif',
-                  scale: 6,
+                return Container(
+                  height: height ?? 50,
+                  width: width ?? 50,
+                  color: dividegray,
                 );
               },
             ),

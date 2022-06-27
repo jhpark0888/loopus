@@ -19,13 +19,14 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
       HomeScreen(),
-      Navigator(
-          key: controller.searcnPageNaviationKey,
-          onGenerateRoute: (routeSettings) {
-            return MaterialPageRoute(
-              builder: (context) => SearchScreen(),
-            );
-          }),
+      SearchScreen(),
+      // Navigator(
+      //     key: controller.searcnPageNaviationKey,
+      //     onGenerateRoute: (routeSettings) {
+      //       return MaterialPageRoute(
+      //         builder: (context) => SearchScreen(),
+      //       );
+      //     }),
       Container(
         color: mainblack.withOpacity(0.25),
       ),
@@ -35,30 +36,28 @@ class App extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        if (controller.currentIndex.value == 1) {
-          var value = await AppController
-              .to.searcnPageNaviationKey.currentState!
-              .maybePop();
-          print(value);
-          if (value) {
-            AppController.to.searcnPageNaviationKey.currentState!.pop();
-            SearchController.to.clearSearchedList();
-            SearchController.to.isnosearchpost(false);
-            SearchController.to.isnosearchprofile(false);
-            SearchController.to.isnosearchquestion(false);
-            SearchController.to.isnosearchtag(false);
-            SearchController.to.searchtextcontroller.clear();
-            SearchController.to.postpagenumber = 1;
-            SearchController.to.profilepagenumber = 1;
-            SearchController.to.questionpagenumber = 1;
-            SearchController.to.tagpagenumber = 1;
-            SearchController.to.pagenumber = 1;
-          }
+        // if (controller.currentIndex.value == 1) {
+        // var value = await AppController
+        //     .to.searcnPageNaviationKey.currentState!
+        //     .maybePop();
+        // print(value);
+        // if (value) {
+        //   AppController.to.searcnPageNaviationKey.currentState!.pop();
+        //   SearchController.to.clearSearchedList();
+        //   SearchController.to.isnosearchpost(false);
+        //   SearchController.to.isnosearchprofile(false);
+        //   SearchController.to.isnosearchquestion(false);
+        //   SearchController.to.isnosearchtag(false);
+        //   SearchController.to.searchtextcontroller.clear();
+        //   for (int pagenum in SearchController.to.pagenumList) {
+        //     pagenum += 1;
+        //   }
+        // }
 
-          return !value;
-        } else {
-          return true;
-        }
+        // return !value;
+        // } else {
+        return true;
+        // }
       },
       child: Scaffold(
         extendBody: false,
