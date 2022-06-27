@@ -801,14 +801,14 @@ class MyProfileScreen extends StatelessWidget {
                                                                       .myProjectList[
                                                                           index]
                                                                       .posts[postindex],
-                                                                  view:
-                                                                      'profile',
+                                                                  type: PostingWidgetType
+                                                                      .profile,
                                                                 );
                                                               },
                                                               separatorBuilder:
                                                                   (context,
                                                                           postindex) =>
-                                                                      const DivideWidget(),
+                                                                      DivideWidget(),
                                                               itemCount:
                                                                   profileController
                                                                       .myProjectList[

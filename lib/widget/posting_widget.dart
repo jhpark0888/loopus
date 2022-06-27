@@ -343,11 +343,14 @@ import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
+enum PostingWidgetType { normal, search, profile }
+
 class PostingWidget extends StatelessWidget {
   // final int index;
   Post item;
-  String? view;
-  PostingWidget({required this.item, Key? key, this.view}) : super(key: key);
+  PostingWidgetType type;
+  PostingWidget({required this.item, Key? key, required this.type})
+      : super(key: key);
 
   // late final LikeController likeController = Get.put(
   //     LikeController(
@@ -376,7 +379,7 @@ class PostingWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            if (view != 'profile')
+            if (type != PostingWidgetType.profile)
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
                 child: Column(
@@ -417,12 +420,24 @@ class PostingWidget extends StatelessWidget {
               ),
           ]),
           if (item.images.isNotEmpty)
-            SwiperWidget(
-                item: item.images,
-                height: 300,
-                itembuilder: (BuildContext context, int index) {
-                  return Image.network(item.images[index], fit: BoxFit.fill);
-                }),
+            SizedBox(
+                width: Get.width,
+                height: Get.width,
+                child: Swiper(
+                  outer: true,
+                  itemCount: item.images.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Image.network(item.images[index], fit: BoxFit.fill);
+                  },
+                  pagination: SwiperPagination(
+                      margin: EdgeInsets.all(14),
+                      alignment: Alignment.bottomCenter,
+                      builder: DotSwiperPaginationBuilder(
+                          color: Color(0xFF5A5A5A).withOpacity(0.5),
+                          activeColor: mainblue,
+                          size: 7,
+                          activeSize: 7)),
+                )),
           Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -455,81 +470,87 @@ class PostingWidget extends StatelessWidget {
                                 ]))
                             .toList()),
                     const SizedBox(height: 14),
-                    Obx(
-                      () => Row(
-                        children: [
-                          InkWell(
-                            onTap: tapLike,
-                            child: item.isLiked.value == 0
-                                ? SvgPicture.asset(
-                                    "assets/icons/Favorite_Inactive.svg")
-                                : SvgPicture.asset(
-                                    "assets/icons/Favorite_Active.svg"),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          // Obx(
-                          //   () => SizedBox(
-                          //     width: item.likeCount.value != 0 ? 0 : 8,
-                          //   ),
-                          // ),
-                          SvgPicture.asset("assets/icons/Comment.svg"),
-                          const Spacer(),
-                          InkWell(
-                            onTap: tapBookmark,
-                            child: (item.isMarked.value == 0)
-                                ? SvgPicture.asset(
-                                    "assets/icons/Mark_Default.svg",
-                                    color: mainblack,
-                                  )
-                                : SvgPicture.asset(
-                                    "assets/icons/Mark_Saved.svg"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // postingTag(),
-                    const SizedBox(
-                      height: 13,
-                    ),
-                    Row(children: [
-                      GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onTap: () {
-                            Get.to(() => LikePeopleScreen(
-                                  postid: item.id,
-                                ));
-                          },
-                          child: Obx(
-                            () => Text(
-                              '좋아요 ${item.likeCount.value}개',
-                              style: kSubTitle3Style,
-                            ),
-                          )),
-                      const Spacer(),
-                      Text(calculateDate(item.date), style: kSubTitle3Style),
-                    ]),
-                    const SizedBox(height: 14),
-                    if (item.comments.isNotEmpty)
+                    if (type != PostingWidgetType.search)
                       Column(
                         children: [
                           Obx(
                             () => Row(
                               children: [
-                                Text(
-                                  item.comments.first.user.realName,
-                                  style: k16semiBold,
+                                InkWell(
+                                  onTap: tapLike,
+                                  child: item.isLiked.value == 0
+                                      ? SvgPicture.asset(
+                                          "assets/icons/Favorite_Inactive.svg")
+                                      : SvgPicture.asset(
+                                          "assets/icons/Favorite_Active.svg"),
                                 ),
-                                const SizedBox(width: 7),
-                                Text(
-                                  item.comments.first.content,
-                                  style: k16Normal,
-                                )
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                                // Obx(
+                                //   () => SizedBox(
+                                //     width: item.likeCount.value != 0 ? 0 : 8,
+                                //   ),
+                                // ),
+                                SvgPicture.asset("assets/icons/Comment.svg"),
+                                const Spacer(),
+                                InkWell(
+                                  onTap: tapBookmark,
+                                  child: (item.isMarked.value == 0)
+                                      ? SvgPicture.asset(
+                                          "assets/icons/Mark_Default.svg",
+                                          color: mainblack,
+                                        )
+                                      : SvgPicture.asset(
+                                          "assets/icons/Mark_Saved.svg"),
+                                ),
                               ],
                             ),
                           ),
+                          // postingTag(),
+                          const SizedBox(
+                            height: 13,
+                          ),
+                          Row(children: [
+                            GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  Get.to(() => LikePeopleScreen(
+                                        postid: item.id,
+                                      ));
+                                },
+                                child: Obx(
+                                  () => Text(
+                                    '좋아요 ${item.likeCount.value}개',
+                                    style: kSubTitle3Style,
+                                  ),
+                                )),
+                            const Spacer(),
+                            Text(calculateDate(item.date),
+                                style: kSubTitle3Style),
+                          ]),
                           const SizedBox(height: 14),
+                          if (item.comments.isNotEmpty)
+                            Column(
+                              children: [
+                                Obx(
+                                  () => Row(
+                                    children: [
+                                      Text(
+                                        item.comments.first.user.realName,
+                                        style: k16semiBold,
+                                      ),
+                                      const SizedBox(width: 7),
+                                      Text(
+                                        item.comments.first.content,
+                                        style: k16Normal,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 14),
+                              ],
+                            ),
                         ],
                       ),
                   ],
@@ -575,16 +596,18 @@ class PostingWidget extends StatelessWidget {
     }
     if (item.isLiked.value == 0) {
       item.isLiked(1);
-      // likepost(item.id, 'post');
-      // likeController.isLiked(1);
       item.likeCount += 1;
-      // homeController.tapLike(item.id, item.likeCount.value);
+
+      HomeController.to.tapLike(item.id, item.likeCount.value);
+      ProfileController.to
+          .tapLike(item.project!.id, item.id, item.likeCount.value);
     } else {
       item.isLiked(0);
-      // likepost(item.id, 'post');
-      // likeController.isLiked(0);
       item.likeCount -= 1;
-      // homeController.tapunLike(item.id, item.likeCount.value);
+
+      HomeController.to.tapunLike(item.id, item.likeCount.value);
+      ProfileController.to
+          .tapunLike(item.project!.id, item.id, item.likeCount.value);
     }
     num += 1;
 

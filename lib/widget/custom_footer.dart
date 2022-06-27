@@ -12,11 +12,10 @@ class MyCustomFooter extends StatelessWidget {
       loadStyle: LoadStyle.ShowWhenLoading,
       loadingText: "",
       canLoadingText: "",
+      noDataText: "",
       idleText: "",
       idleIcon: Container(),
-      noMoreIcon: Container(
-        child: Text('as'),
-      ),
+      noMoreIcon: Container(),
       loadingIcon: Image.asset(
         'assets/icons/loading.gif',
         scale: 6,

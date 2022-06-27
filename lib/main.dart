@@ -19,6 +19,7 @@ import 'package:loopus/screen/posting_add_images_screen.dart';
 
 import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -846,7 +846,7 @@ class PostingScreen extends StatelessWidget {
                                   if (controller.post.value!.images.isNotEmpty)
                                     SizedBox(
                                         width: Get.width,
-                                        height: 300,
+                                        height: Get.width,
                                         child: Swiper(
                                           outer: true,
                                           itemCount: controller

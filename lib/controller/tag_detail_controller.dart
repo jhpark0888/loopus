@@ -41,11 +41,11 @@ class TagDetailController extends GetxController
 
   void loadproject() {
     tagprojectscreenstate(ScreenState.loading);
-    search(SearchType.tag_project, tagid.toString(), 1);
+    // search(SearchType.tag_project, tagid.toString(), 1);
   }
 
   void loadquestion() {
     tagquestionscreenstate(ScreenState.loading);
-    search(SearchType.tag_question, tagid.toString(), 1);
+    // search(SearchType.tag_question, tagid.toString(), 1);
   }
 }

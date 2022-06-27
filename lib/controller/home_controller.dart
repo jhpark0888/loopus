@@ -458,7 +458,19 @@ class HomeController extends GetxController
 
   void tapunBookmark(int postid) async {}
 
-  void tapLike(int postid, int likecount) {}
+  void tapLike(int postid, int likecount) {
+    if (contents.where((post) => (post as Post).id == postid).isNotEmpty) {
+      Post post = posts.where((post) => post.id == postid).first;
+      post.isLiked(1);
+      post.likeCount(likecount);
+    }
+  }
 
-  void tapunLike(int postid, int likecount) {}
+  void tapunLike(int postid, int likecount) {
+    if (posts.where((post) => post.id == postid).isNotEmpty) {
+      Post post = posts.where((post) => post.id == postid).first;
+      post.isLiked(0);
+      post.likeCount(likecount);
+    }
+  }
 }

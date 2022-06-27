@@ -65,7 +65,7 @@ Future<HTTPResponse> addposting(int projectId) async {
       request.files.add(multipartFile);
     }
     for(var link in postingAddController.scrapList){
-      var multipartFile = await http.MultipartFile.fromString('tag', link.url);
+      var multipartFile = await http.MultipartFile.fromString('link', link.url);
       request.files.add(multipartFile);
     }
 

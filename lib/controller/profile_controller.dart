@@ -216,4 +216,32 @@ class ProfileController extends GetxController
       );
     }).toList();
   }
+
+  void tapLike(int careerId, int postId, int likeCount) {
+    if (myProjectList.where((career) => career.id == careerId).isNotEmpty) {
+      Project? career =
+          myProjectList.where((career) => career.id == careerId).first;
+
+      if (career.posts.where((post) => post.id == postId).isNotEmpty) {
+        Post post = career.posts.where((post) => post.id == postId).first;
+
+        post.isLiked(1);
+        post.likeCount(likeCount);
+      }
+    }
+  }
+
+  void tapunLike(int careerId, int postId, int likeCount) {
+    if (myProjectList.where((career) => career.id == careerId).isNotEmpty) {
+      Project? career =
+          myProjectList.where((career) => career.id == careerId).first;
+
+      if (career.posts.where((post) => post.id == postId).isNotEmpty) {
+        Post post = career.posts.where((post) => post.id == postId).first;
+
+        post.isLiked(0);
+        post.likeCount(likeCount);
+      }
+    }
+  }
 }
