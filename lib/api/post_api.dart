@@ -79,34 +79,12 @@ Future<HTTPResponse> addposting(int projectId) async {
         if (kDebugMode) {
           print("status code : ${response.statusCode} 포스팅 업로드 완료");
         }
-        // String responsebody = await response.stream.bytesToString();
-        // String responsemap = json.decode(responsebody);
-        // print(responsemap);
-        // if (route == PostaddRoute.project) {
-        //   getbacks(3);
-        //   Get.find<ProjectDetailController>(tag: projectId.toString())
-        //       .loadProject();
-        //   Get.to(
-        //     () => ProjectScreen(
-        //       projectid: projectId,
-        //       isuser: 1,
-        //     ),
-        //   );
-        //   .showCustomDialog('포스팅을 업로드했어요', 1000);
-        // } else {
-        //   String responsebody = await response.stream.bytesToString();
-        //   Map<String, dynamic> responsemap = json.decode(responsebody);
-        //   Post post = Post.fromJson(responsemap);
-        //   post.isuser = 1;
-        //   post.isLiked = 0.obs;
-        //   post.isMarked = 0.obs;
-        //   AppController.to.changePageIndex(0);
-        //   HomeController.to.recommandpostingResult.value.postingitems
-        //       .insert(0, post);
-        //   getbacks(5);
-        //   .showCustomDialog('포스팅을 업로드했어요', 1000);
-        // }
-        return HTTPResponse.success('success');
+
+        String responsebody = await response.stream.bytesToString();
+        var responseResult = json.decode(responsebody);
+        print(responseResult);
+
+        return HTTPResponse.success(responseResult);
       } else if (response.statusCode == 400) {
         //!GA
         await _gaController.logPostingCreated(false);

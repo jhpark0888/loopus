@@ -548,8 +548,8 @@ class OtherProfileScreen extends StatelessWidget {
                                         const Spacer(),
                                         InkWell(
                                             onTap: () {
-                                              AppController.to
-                                                  .changePageIndex(3);
+                                              // AppController.to
+                                              //     .changePageIndex(3);
                                             },
                                             child: Text(
                                               '전체 보기(000개)',
@@ -660,19 +660,20 @@ class OtherProfileScreen extends StatelessWidget {
                                               color: mainblack.withOpacity(0.6),
                                             ),
                                             const Spacer(),
-                                            InkWell(
-                                              onTap: () {
-                                                Get.to(ProjectAddTitleScreen(
-                                                    screenType:
-                                                        Screentype.add));
-                                              },
-                                              child: Text(
-                                                '추가하기',
-                                                style: k15normal.copyWith(
-                                                    color: mainblue),
+                                            if (isuser == 1)
+                                              InkWell(
+                                                onTap: () {
+                                                  Get.to(ProjectAddTitleScreen(
+                                                      screenType:
+                                                          Screentype.add));
+                                                },
+                                                child: Text(
+                                                  '추가하기',
+                                                  style: k15normal.copyWith(
+                                                      color: mainblue),
+                                                ),
+                                                splashColor: kSplashColor,
                                               ),
-                                              splashColor: kSplashColor,
-                                            ),
                                           ],
                                         ),
                                         Obx(

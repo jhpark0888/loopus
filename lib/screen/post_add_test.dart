@@ -11,12 +11,17 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/layout_builder.dart';
+import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/posting_add_link_screen.dart';
 import 'package:loopus/screen/posting_add_tag_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_textfield.dart';
@@ -354,7 +359,30 @@ class PostingAddNameScreen1 extends StatelessWidget {
   Widget uploadButton() {
     return GestureDetector(
       onTap: () async {
-        await addposting(project_id);
+        loading();
+        await addposting(project_id).then((value) {
+          Get.back();
+          if (value.isError == false) {
+            Post post = Post.fromJson(value.data);
+
+            if (Get.isRegistered<ProfileController>()) {
+              Project? career =
+                  ProfileController.to.myProjectList.firstWhereOrNull(
+                (career) => career.id == project_id,
+              );
+
+              if (career != null) {
+                career.posts.insert(0, post);
+              }
+
+              getbacks(2);
+              dialogBack();
+              showCustomDialog('포스팅을 업로드했어요', 1000);
+            } else {
+              errorSituation(value);
+            }
+          }
+        });
       },
       child: Container(
         padding: const EdgeInsets.fromLTRB(146.5, 13, 146.5, 13),
