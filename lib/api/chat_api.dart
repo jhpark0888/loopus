@@ -55,7 +55,7 @@ Future<void> getmessageroomlist() async {
     } on SocketException {
       print("서버에러 발생");
 
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -85,7 +85,7 @@ Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
         return HTTPResponse.apiError('', response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
       print(e);
@@ -133,7 +133,7 @@ Future<HTTPResponse> getmessagelist(int userid, int lastindex) async {
       return HTTPResponse.apiError('', response.statusCode);
     }
   } on SocketException {
-    ErrorController.to.isServerClosed(true);
+    // ErrorController.to.isServerClosed(true);
     return HTTPResponse.serverError();
   } catch (e) {
     print(e);

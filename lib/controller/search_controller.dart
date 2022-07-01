@@ -33,22 +33,21 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     // User.defaultuser(department: "안전공학과", realName: "박어스"),
   ].obs;
   RxList<Post> searchPostList = <Post>[].obs;
-  RxList<Tag> searchtaglist = <Tag>[
-    Tag(tagId: 1, tag: '인공지능', count: 23),
-    Tag(tagId: 1, tag: '인공지능 스터디', count: 23),
-    Tag(tagId: 1, tag: '물류시스템 스터디', count: 23),
-    Tag(tagId: 1, tag: '산업디자인', count: 23)
+  RxList<Tag> searchTagList = <Tag>[
+    // Tag(tagId: 1, tag: '인공지능', count: 23),
+    // Tag(tagId: 1, tag: '인공지능 스터디', count: 23),
+    // Tag(tagId: 1, tag: '물류시스템 스터디', count: 23),
+    // Tag(tagId: 1, tag: '산업디자인', count: 23)
   ].obs;
 
   List<int> pagenumList = List.generate(4, (index) => 1);
   List<RefreshController> refreshControllerList =
-      List.generate(4, (index) => RefreshController());
+      List.generate(4, (index) => RefreshController()..loadNoData());
   List<String> preWordList = List.generate(4, (index) => "");
   List<RxBool> isSearchEmptyList = List.generate(4, (index) => false.obs);
   List<RxBool> isSearchLoadingList = List.generate(4, (index) => false.obs);
 
   RxBool isFocused = false.obs;
-  RxInt tabpage = 0.obs;
   late TabController tabController;
 
   final FocusNode focusNode = FocusNode();
@@ -67,9 +66,9 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
       vsync: this,
     );
 
-    for (var i in refreshControllerList) {
-      i.loadNoData();
-    }
+    // for (var i in refreshControllerList) {
+    //   i.loadNoData();
+    // }
 
     debounce(_searchword, (_) async {
       searchInit();
@@ -89,20 +88,17 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     tabController.addListener(() {
       if (searchtextcontroller.text.isEmpty == false) {
         if (tabController.indexIsChanging == true) {
-          String searchword =
-              searchtextcontroller.text.trim().replaceAll(RegExp("\\s+"), " ");
-
           if (tabController.index == 0 &&
-              searchword != preWordList[tabController.index]) {
+              _searchword.value != preWordList[tabController.index]) {
             searchFunction();
           } else if (tabController.index == 1 &&
-              searchword != preWordList[tabController.index]) {
+              _searchword.value != preWordList[tabController.index]) {
             searchFunction();
           } else if (tabController.index == 2 &&
-              searchword != preWordList[tabController.index]) {
-            tagsearch();
+              _searchword.value != preWordList[tabController.index]) {
+            searchFunction();
           } else if (tabController.index == 3 &&
-              searchword != preWordList[tabController.index]) {}
+              _searchword.value != preWordList[tabController.index]) {}
         }
       }
     });
@@ -151,7 +147,23 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
           }
         });
       } else {
-        // await tagsearch();
+        await tagsearch(_searchword.value).then((value) {
+          if (value.isError == false) {
+            List<Tag> tagList = List.from(value.data['results'])
+                .map((tag) => Tag.fromJson(tag))
+                .toList();
+
+            if (tagList.isEmpty) {
+              isSearchEmptyList[tabController.index](true);
+            }
+
+            searchTagList.addAll(tagList);
+
+            pagenumList[tabController.index] += 1;
+            preWordList[tabController.index] = _searchword.value;
+          } else {}
+          refreshControllerList[tabController.index].loadNoData();
+        });
       }
       isSearchLoadingList[tabController.index](false);
     }
@@ -166,6 +178,6 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     }
     searchPostList.clear();
     searchUserList.clear();
-    searchtaglist.clear();
+    searchTagList.clear();
   }
 }

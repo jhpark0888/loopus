@@ -86,7 +86,7 @@ Future<HTTPResponse> getquestionlist(int lastindex, String type) async {
       return HTTPResponse.apiError('', response.statusCode);
     }
   } on SocketException {
-    ErrorController.to.isServerClosed(true);
+    // ErrorController.to.isServerClosed(true);
     return HTTPResponse.serverError();
   } catch (e) {
     print(e);
@@ -219,7 +219,7 @@ Future<void> answermake(String content, int questionid) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -258,7 +258,7 @@ Future<dynamic> deleteanswer(int questionid, int answerid) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -297,7 +297,7 @@ Future questionreport(int questionid) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -336,7 +336,7 @@ Future answerreport(int answerid) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);

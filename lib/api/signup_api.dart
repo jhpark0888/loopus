@@ -67,7 +67,7 @@ void emailRequest() async {
         signupController.timer!.cancel();
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -132,7 +132,7 @@ Future<void> signupRequest() async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -172,7 +172,7 @@ Future getdeptlist() async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,11 +11,14 @@ import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/comment_model.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
+import 'package:loopus/utils/error_control.dart';
+import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/comment_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
@@ -763,7 +767,87 @@ class PostingScreen extends StatelessWidget {
                 title: '게시물',
                 actions: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: controller.post.value!.isuser == 1
+                        ? () {
+                            showModalIOS(
+                              context,
+                              func1: () {
+                                showButtonDialog(
+                                    leftText: '취소',
+                                    rightText: '삭제',
+                                    title: '포스팅을 삭제하시겠어요?',
+                                    content: '삭제한 포스팅은 복구할 수 없어요',
+                                    leftFunction: () => Get.back(),
+                                    rightFunction: () async {
+                                      dialogBack();
+                                      loading();
+                                      // await Future.delayed(
+                                      //         Duration(milliseconds: 1000))
+                                      //     .then((value) {
+                                      //   getbacks(2);
+                                      //   showCustomDialog("포스팅이 삭제되었습니다", 1400);
+                                      // });
+                                      deleteposting(
+                                              controller.post.value!.id,
+                                              controller
+                                                  .post.value!.project!.id)
+                                          .then((value) {
+                                        Get.back();
+                                        if (value.isError == false) {
+                                          Get.back();
+                                          Project project = ProfileController
+                                              .to.myProjectList
+                                              .where((career) =>
+                                                  career.id ==
+                                                  controller
+                                                      .post.value!.project!.id)
+                                              .first;
+                                          project.posts.removeWhere((post) =>
+                                              post.id ==
+                                              controller.post.value!.id);
+                                          showCustomDialog(
+                                              "포스팅이 삭제되었습니다", 1400);
+                                        } else {
+                                          errorSituation(value);
+                                        }
+
+                                        // HomeController.to.recommandpostingResult.value.postingitems
+                                        //     .removeWhere((post) => post.id == postid);
+                                        // HomeController.to.latestpostingResult.value.postingitems
+                                        //     .removeWhere((post) => post.id == postid);
+                                      });
+                                    });
+                              },
+                              func2: () {},
+                              value1: '이 포스팅 삭제하기',
+                              value2: '',
+                              isValue1Red: true,
+                              isValue2Red: false,
+                              isOne: true,
+                            );
+                          }
+                        : () {
+                            showModalIOS(
+                              context,
+                              func1: () {
+                                showButtonDialog(
+                                    leftText: '취소',
+                                    rightText: '신고',
+                                    title: '정말 포스팅을 신고하시겠어요?',
+                                    content: '관리자가 검토 절차를 거칩니다',
+                                    leftFunction: () => Get.back(),
+                                    rightFunction: () {
+                                      postingreport(controller.post.value!.id);
+                                    });
+                              },
+                              func2: () {},
+                              value1: '이 포스팅 신고하기',
+                              value2: '',
+                              isValue1Red: true,
+                              isValue2Red: false,
+                              isOne: true,
+                            );
+                          },
                     icon: SvgPicture.asset('assets/icons/More.svg'),
                   ),
                 ],
@@ -843,28 +927,41 @@ class PostingScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ]),
-                                  if (controller.post.value!.images.isNotEmpty)
+                                  if (controller
+                                          .post.value!.images.isNotEmpty ||
+                                      controller.post.value!.links.isNotEmpty)
                                     SizedBox(
-                                        width: Get.width,
                                         height: Get.width,
                                         child: Swiper(
+                                          loop: false,
                                           outer: true,
                                           itemCount: controller
-                                              .post.value!.images.length,
+                                                  .post.value!.images.isNotEmpty
+                                              ? controller
+                                                  .post.value!.images.length
+                                              : controller
+                                                  .post.value!.links.length,
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            return Image.network(
-                                                controller
-                                                    .post.value!.images[index],
-                                                fit: BoxFit.fill);
+                                            if (controller.post.value!.images
+                                                .isNotEmpty) {
+                                              return CachedNetworkImage(
+                                                  imageUrl: controller.post
+                                                      .value!.images[index],
+                                                  fit: BoxFit.fill);
+                                            } else {
+                                              return LinkWidget(
+                                                  url: controller
+                                                      .post.value!.links[index],
+                                                  widgetType: 'post');
+                                            }
                                           },
                                           pagination: SwiperPagination(
-                                              margin: const EdgeInsets.all(14),
+                                              margin: EdgeInsets.all(14),
                                               alignment: Alignment.bottomCenter,
                                               builder:
                                                   DotSwiperPaginationBuilder(
-                                                      color: const Color(
-                                                              0xFF5A5A5A)
+                                                      color: Color(0xFF5A5A5A)
                                                           .withOpacity(0.5),
                                                       activeColor: mainblue,
                                                       size: 7,
@@ -889,18 +986,15 @@ class PostingScreen extends StatelessWidget {
                                             const SizedBox(
                                               height: 14,
                                             ),
-                                            Row(
-                                                children: controller
-                                                    .post.value!.tags
-                                                    .map((tag) => Row(
-                                                            children: [
-                                                              Tagwidget(
-                                                                  tag: tag,
-                                                                  fontSize: 16),
-                                                              const SizedBox(
-                                                                  width: 7)
-                                                            ]))
-                                                    .toList()),
+                                            Wrap(
+                                                spacing: 7,
+                                                runSpacing: 7,
+                                                children:
+                                                    controller.post.value!.tags
+                                                        .map((tag) => Tagwidget(
+                                                              tag: tag,
+                                                            ))
+                                                        .toList()),
                                             const SizedBox(height: 14),
                                             Obx(
                                               () => Row(

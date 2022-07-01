@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
-import 'package:loopus/widget/scrap_widget.dart';
+import 'package:loopus/widget/Link_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class PostingAddController extends GetxController {
@@ -18,7 +18,7 @@ class PostingAddController extends GetxController {
   RxBool isAddLink = false.obs;
   RxBool isAddImage = false.obs;
   RxList<File> images = <File>[].obs;
-  RxList<ScrapWidget> scrapList = <ScrapWidget>[].obs;
+  RxList<LinkWidget> scrapList = <LinkWidget>[].obs;
   RxInt lines = 0.obs;
   RxBool isPostingTitleEmpty = false.obs;
   RxBool isPostingContentEmpty = true.obs;
@@ -38,12 +38,6 @@ class PostingAddController extends GetxController {
     super.onInit();
   }
 
-
-
-
-
-
-
   var albums = <AssetPathEntity>[].obs;
   RxString headerTitle = ''.obs;
   RxList<AssetEntity> imageList = <AssetEntity>[].obs;
@@ -59,7 +53,8 @@ class PostingAddController extends GetxController {
   Rx<Size> selectedImageSize = Size(Get.width, Get.height).obs;
   RxList<List<AssetEntity>> titleImageList1 = <List<AssetEntity>>[].obs;
   RxList<File> titleImageList = <File>[].obs;
-  TransformationController transformationController = TransformationController();
+  TransformationController transformationController =
+      TransformationController();
   // @override
   // void onInit() {
   //   _loadPhotos();
@@ -75,17 +70,19 @@ class PostingAddController extends GetxController {
     var photos = await albums.first.getAssetListPaged(page: 0, size: 30);
 
     imageList.addAll(photos);
- 
+
     selectedImages = [imageList.first].obs;
     selectedImage = imageList.first.obs;
   }
-  Future<void> getPhotos()async {
+
+  Future<void> getPhotos() async {
     print(albums);
-    for(int i = 0; i < albums.length; i ++){
-     var photos = await albums.first.getAssetListPaged(page: i, size: 30);
-     titleImageList1.add(photos);
+    for (int i = 0; i < albums.length; i++) {
+      var photos = await albums.first.getAssetListPaged(page: i, size: 30);
+      titleImageList1.add(photos);
     }
   }
+
   void _loadPhotos() async {
     var result = await PhotoManager.requestPermissionExtend();
     if (result.isAuth) {
@@ -99,10 +96,8 @@ class PostingAddController extends GetxController {
               const OrderOption(type: OrderOptionType.createDate, asc: false),
             ],
           ));
-          getPhotos();
+      getPhotos();
       _loadData();
-    } else {
-
-    }
+    } else {}
   }
 }

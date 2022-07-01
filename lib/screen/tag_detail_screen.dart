@@ -6,48 +6,145 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/tag_detail_controller.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/widget/custom_footer.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
+import 'package:loopus/widget/loading_widget.dart';
+import 'package:loopus/widget/posting_widget.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
+import 'package:loopus/widget/tag_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 import 'dart:math' as math;
 
 class TagDetailScreen extends StatelessWidget {
   // final SearchController searchController = Get.find();
-  late TagDetailController controller =
+  TagDetailScreen({required this.tag});
+
+  late final TagDetailController _controller =
       Get.put(TagDetailController(tag.tagId), tag: tag.tagId.toString());
   Tag tag;
 
-  TagDetailScreen({required this.tag});
+  Widget emptyTagWidget() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Text(
+        '"${tag.tag}"에 대한 결과가 없습니다',
+        style: kmain,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        body: NestedScrollView(
-          physics: const BouncingScrollPhysics(),
+    return Scaffold(
+      body: ScrollNoneffectWidget(
+        child: NestedScrollView(
+          // physics: const BouncingScrollPhysics(),
           headerSliverBuilder: (context, value) {
             return [
               SliverAppBar(
-                bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(0),
-                  child: Container(),
+                title: Tagwidget(
+                  tag: tag,
+                  isonTap: false,
                 ),
+                centerTitle: true,
+                // bottom: PreferredSize(
+                //   preferredSize: Size.fromHeight(0),
+                //   child: Container(),
+                // ),
                 pinned: true,
-                stretch: true,
+                toolbarHeight: 44,
                 elevation: 0,
-                leading: IconButton(
-                  onPressed: () => Get.back(),
-                  icon: SvgPicture.asset(
-                    'assets/icons/Arrow.svg',
-                    width: 28,
-                    height: 28,
+                leading: GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: SvgPicture.asset(
+                    'assets/icons/Back_icon.svg',
                   ),
                 ),
                 automaticallyImplyLeading: false,
-                centerTitle: true,
-                flexibleSpace: _CustomSpace(tag.tag, tag.count.toString()),
-                expandedHeight: Get.height * 0.15,
+
+                // flexibleSpace: _CustomSpace(tag.tag, tag.count.toString()),
+                // expandedHeight: Get.height * 0.15,
+              ),
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    Text(
+                      "최근 태그 사용 동향",
+                      style: kmain.copyWith(color: maingray),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 130,
+                            child: Obx(
+                              () => Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: _controller.tagUsageTrendNum.entries
+                                    .map((entry) => Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              _controller.teptNumMap[entry.key]
+                                                  .toString(),
+                                              style: kmain.copyWith(
+                                                  color: mainblue),
+                                            ),
+                                            const SizedBox(
+                                              height: 7,
+                                            ),
+                                            AnimatedSize(
+                                              duration: const Duration(
+                                                  milliseconds: 200),
+                                              child: Container(
+                                                height: entry.value.toDouble(),
+                                                width: 14,
+                                                decoration: BoxDecoration(
+                                                    color: mainblue,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                              ),
+                                            ),
+                                          ],
+                                        ))
+                                    .toList(),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 24,
+                          ),
+                          Obx(
+                            () => Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: _controller.tagUsageTrendNum.keys
+                                  .map((month) => Text(
+                                        '$month월',
+                                        style: kmain,
+                                      ))
+                                  .toList(),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
               SliverOverlapAbsorber(
                 handle:
@@ -65,35 +162,37 @@ class TagDetailScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         TabBar(
-                          controller: controller.tagtabController,
-                          labelStyle: kButtonStyle,
+                          controller: _controller.tabController,
+                          labelStyle: kmainbold,
                           labelColor: mainblack,
-                          unselectedLabelStyle: kBody2Style,
-                          unselectedLabelColor: mainblack.withOpacity(0.6),
+                          unselectedLabelStyle:
+                              kmainbold.copyWith(color: dividegray),
+                          unselectedLabelColor: dividegray,
+                          automaticIndicatorColorAdjustment: false,
                           indicator: const UnderlineIndicator(
                             strokeCap: StrokeCap.round,
-                            borderSide: BorderSide(width: 1.2),
+                            borderSide: BorderSide(width: 2, color: mainblack),
                           ),
-                          indicatorColor: mainblack,
                           tabs: const [
                             Tab(
                               height: 40,
                               child: Text(
-                                "관련 활동",
+                                "인기",
                               ),
                             ),
                             Tab(
                               height: 40,
                               child: Text(
-                                "관련 질문",
+                                "최신",
                               ),
                             )
                           ],
                         ),
-                        Container(
+                        Divider(
                           height: 1,
-                          color: Color(0xffe7e7e7),
-                        ),
+                          thickness: 2,
+                          color: dividegray,
+                        )
                       ],
                     ),
                   ),
@@ -101,153 +200,78 @@ class TagDetailScreen extends StatelessWidget {
               ),
             ];
           },
-          body: Obx(
-            () => TabBarView(
-              controller: controller.tagtabController,
-              children: [
-                controller.tagprojectscreenstate.value == ScreenState.loading
-                    ? Column(
-                        children: [
-                          SizedBox(
-                            height: 24,
+          body: TabBarView(
+            controller: _controller.tabController,
+            children: [
+              Obx(
+                () => _controller.isTagLoadingList[0].value
+                    ? const LoadingWidget()
+                    : _controller.isTagEmptyList[0].value == true
+                        ? emptyTagWidget()
+                        : Obx(
+                            () => SmartRefresher(
+                              physics: const BouncingScrollPhysics(),
+                              primary: true,
+                              enablePullDown: false,
+                              enablePullUp: true,
+                              controller: _controller.refreshControllerList[0],
+                              footer: const MyCustomFooter(),
+                              onLoading: _controller.onLoading,
+                              child: ListView.separated(
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 14),
+                                  itemBuilder: (context, index) {
+                                    return PostingWidget(
+                                      item: _controller.tagPopPostList[index],
+                                      type: PostingWidgetType.search,
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return DivideWidget(
+                                      height: 10,
+                                    );
+                                  },
+                                  itemCount: _controller.tagPopPostList.length),
+                            ),
                           ),
-                          Image.asset(
-                            'assets/icons/loading.gif',
-                            scale: 6,
+              ),
+              Obx(
+                () => _controller.isTagLoadingList[1].value
+                    ? const LoadingWidget()
+                    : _controller.isTagEmptyList[1].value == true
+                        ? emptyTagWidget()
+                        : Obx(
+                            () => SmartRefresher(
+                              physics: const BouncingScrollPhysics(),
+                              primary: true,
+                              enablePullDown: false,
+                              enablePullUp: true,
+                              controller: _controller.refreshControllerList[1],
+                              footer: const MyCustomFooter(),
+                              onLoading: _controller.onLoading,
+                              child: ListView.separated(
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 14),
+                                  itemBuilder: (context, index) {
+                                    return PostingWidget(
+                                      item: _controller.tagNewPostList[index],
+                                      type: PostingWidgetType.search,
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return DivideWidget(
+                                      height: 10,
+                                    );
+                                  },
+                                  itemCount: _controller.tagNewPostList.length),
+                            ),
                           ),
-                        ],
-                      )
-                    : controller.tagprojectscreenstate.value ==
-                            ScreenState.disconnect
-                        ? DisconnectReloadWidget(reload: () {
-                            controller.loadproject();
-                          })
-                        : controller.tagprojectscreenstate.value ==
-                                ScreenState.error
-                            ? ErrorReloadWidget(reload: () {
-                                controller.loadproject();
-                              })
-                            : SingleChildScrollView(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 16,
-                                    bottom: 40,
-                                  ),
-                                  child: Obx(
-                                    () => Column(
-                                      children: controller
-                                              .searchtagprojectlist.isNotEmpty
-                                          ? controller
-                                              .searchtagprojectlist.value
-                                          : [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 8),
-                                                child: Center(
-                                                  child: RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        const TextSpan(
-                                                          text: '아직 ',
-                                                        ),
-                                                        TextSpan(
-                                                          text: tag.tag,
-                                                          style: kSubTitle1Style
-                                                              .copyWith(
-                                                                  color:
-                                                                      mainblue),
-                                                        ),
-                                                        const TextSpan(
-                                                          text:
-                                                              '와(과) 관련된 활동이 없어요',
-                                                        ),
-                                                      ],
-                                                      style: kSubTitle1Style
-                                                          .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                // controller.tagquestionscreenstate.value == ScreenState.loading
-                //     ? Column(
-                //         children: [
-                //           SizedBox(
-                //             height: 24,
-                //           ),
-                //           Image.asset(
-                //             'assets/icons/loading.gif',
-                //             scale: 6,
-                //           ),
-                //         ],
-                //       )
-                //     : controller.tagquestionscreenstate.value ==
-                //             ScreenState.disconnect
-                //         ? DisconnectReloadWidget(reload: () {
-                //             controller.loadquestion();
-                //           })
-                //         : controller.tagquestionscreenstate.value ==
-                //                 ScreenState.error
-                //             ? ErrorReloadWidget(reload: () {
-                //                 controller.loadquestion();
-                //               })
-                //             : SingleChildScrollView(
-                //                 child: Container(
-                //                   margin: const EdgeInsets.symmetric(
-                //                     vertical: 8,
-                //                     horizontal: 16,
-                //                   ),
-                //                   padding: const EdgeInsets.only(
-                //                       top: 16, bottom: 32),
-                //                   child: Obx(
-                //                     () => Column(
-                //                       children: controller
-                //                               .searchtagquestionlist.isNotEmpty
-                //                           ? controller
-                //                               .searchtagquestionlist.value
-                //                           : [
-                //                               Center(
-                //                                 child: RichText(
-                //                                   text: TextSpan(
-                //                                     children: [
-                //                                       const TextSpan(
-                //                                         text: '아직 ',
-                //                                       ),
-                //                                       TextSpan(
-                //                                         text: tag.tag,
-                //                                         style: kSubTitle1Style
-                //                                             .copyWith(
-                //                                                 color:
-                //                                                     mainblue),
-                //                                       ),
-                //                                       const TextSpan(
-                //                                         text:
-                //                                             '와(과) 관련된 질문이 없어요',
-                //                                       ),
-                //                                     ],
-                //                                     style: kSubTitle1Style
-                //                                         .copyWith(
-                //                                       fontWeight:
-                //                                           FontWeight.w400,
-                //                                     ),
-                //                                   ),
-                //                                 ),
-                //                               ),
-                //                             ],
-                //                     ),
-                //                   ),
-                //                 ),
-                //               ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -255,128 +279,128 @@ class TagDetailScreen extends StatelessWidget {
   }
 }
 
-class _CustomSpace extends StatelessWidget {
-  _CustomSpace(this.tagTitle, this.tagCount);
-  String tagTitle;
-  var tagCount;
+// class _CustomSpace extends StatelessWidget {
+//   _CustomSpace(this.tagTitle, this.tagCount);
+//   String tagTitle;
+//   var tagCount;
 
-  @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
-    var numberFormat = NumberFormat('###,###,###,###');
+//   @override
+//   Widget build(
+//     BuildContext context,
+//   ) {
+//     final double statusBarHeight = MediaQuery.of(context).padding.top;
+//     var numberFormat = NumberFormat('###,###,###,###');
 
-    return LayoutBuilder(
-      builder: (context, c) {
-        var top = c.biggest.height;
+//     return LayoutBuilder(
+//       builder: (context, c) {
+//         var top = c.biggest.height;
 
-        final settings = context
-            .dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
-        final deltaExtent = settings!.maxExtent - settings.minExtent;
-        final t =
-            (1.0 - (settings.currentExtent - settings.minExtent) / deltaExtent)
-                .clamp(0.0, 1.0);
-        final fadeStart = math.max(0.0, 1.0 - kToolbarHeight / deltaExtent);
-        const fadeEnd = 1.0;
-        final opacity1 = 1.0 - Interval(0.0, 0.4).transform(t);
-        final opacity2 = 1.0 - Interval(fadeStart, fadeEnd).transform(t);
+//         final settings = context
+//             .dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
+//         final deltaExtent = settings!.maxExtent - settings.minExtent;
+//         final t =
+//             (1.0 - (settings.currentExtent - settings.minExtent) / deltaExtent)
+//                 .clamp(0.0, 1.0);
+//         final fadeStart = math.max(0.0, 1.0 - kToolbarHeight / deltaExtent);
+//         const fadeEnd = 1.0;
+//         final opacity1 = 1.0 - Interval(0.0, 0.4).transform(t);
+//         final opacity2 = 1.0 - Interval(fadeStart, fadeEnd).transform(t);
 
-        return Stack(
-          children: [
-            SafeArea(
-              child: Center(
-                child: Opacity(
-                  opacity: 1 - opacity2,
-                  child: getCollapseTitle(
-                    tagTitle,
-                  ),
-                ),
-              ),
-            ),
-            Opacity(
-              opacity: opacity1,
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  backgroundSpace(),
-                  SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        getExpendTitle(
-                          tagTitle,
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '관심도 ${numberFormat.format(int.parse(tagCount))}',
-                              style: kSubTitle4Style.copyWith(
-                                fontSize: 16,
-                                color: mainblack.withOpacity(0.6),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                showCustomDialog(
-                                    '얼마나 많은 학생들이 관심을 가지고 있는지 알 수 있어요', 1400);
-                              },
-                              child: SvgPicture.asset(
-                                'assets/icons/Question.svg',
-                                width: 20,
-                                height: 20,
-                                color: mainblack.withOpacity(0.6),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+//         return Stack(
+//           children: [
+//             SafeArea(
+//               child: Center(
+//                 child: Opacity(
+//                   opacity: 1 - opacity2,
+//                   child: getCollapseTitle(
+//                     tagTitle,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             Opacity(
+//               opacity: opacity1,
+//               child: Stack(
+//                 alignment: Alignment.bottomCenter,
+//                 children: [
+//                   backgroundSpace(),
+//                   SingleChildScrollView(
+//                     child: Column(
+//                       mainAxisAlignment: MainAxisAlignment.end,
+//                       crossAxisAlignment: CrossAxisAlignment.stretch,
+//                       children: [
+//                         getExpendTitle(
+//                           tagTitle,
+//                         ),
+//                         SizedBox(
+//                           height: 8,
+//                         ),
+//                         Row(
+//                           crossAxisAlignment: CrossAxisAlignment.center,
+//                           mainAxisAlignment: MainAxisAlignment.center,
+//                           children: [
+//                             Text(
+//                               '관심도 ${numberFormat.format(int.parse(tagCount))}',
+//                               style: kSubTitle4Style.copyWith(
+//                                 fontSize: 16,
+//                                 color: mainblack.withOpacity(0.6),
+//                               ),
+//                             ),
+//                             SizedBox(
+//                               width: 4,
+//                             ),
+//                             GestureDetector(
+//                               onTap: () {
+//                                 showCustomDialog(
+//                                     '얼마나 많은 학생들이 관심을 가지고 있는지 알 수 있어요', 1400);
+//                               },
+//                               child: SvgPicture.asset(
+//                                 'assets/icons/Question.svg',
+//                                 width: 20,
+//                                 height: 20,
+//                                 color: mainblack.withOpacity(0.6),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ],
+//                     ),
+//                   )
+//                 ],
+//               ),
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
 
-  Widget backgroundSpace() {
-    return Container(
-      width: Get.width,
-      height: Get.height,
-      color: mainWhite,
-    );
-  }
+//   Widget backgroundSpace() {
+//     return Container(
+//       width: Get.width,
+//       height: Get.height,
+//       color: mainWhite,
+//     );
+//   }
 
-  Widget getExpendTitle(String text) {
-    return Padding(
-        padding: const EdgeInsets.only(right: 16, left: 16),
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: kNavigationTitle,
-        ));
-  }
+//   Widget getExpendTitle(String text) {
+//     return Padding(
+//         padding: const EdgeInsets.only(right: 16, left: 16),
+//         child: Text(
+//           text,
+//           textAlign: TextAlign.center,
+//           style: kNavigationTitle,
+//         ));
+//   }
 
-  Widget getCollapseTitle(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 60),
-      child: Text(text,
-          textAlign: TextAlign.center,
-          softWrap: false,
-          overflow: TextOverflow.ellipsis,
-          style: kSubTitle3Style),
-    );
-  }
-}
+//   Widget getCollapseTitle(String text) {
+//     return Container(
+//       padding: const EdgeInsets.symmetric(horizontal: 60),
+//       child: Text(text,
+//           textAlign: TextAlign.center,
+//           softWrap: false,
+//           overflow: TextOverflow.ellipsis,
+//           style: kSubTitle3Style),
+//     );
+//   }
+// }

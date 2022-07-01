@@ -127,7 +127,7 @@ class LogInScreen extends StatelessWidget {
   void login(context) async {
     if (_formKey.currentState!.validate()) {
       FocusScope.of(context).unfocus();
-      Get.to(() => LoadingScreen(), opaque: false);
+      loading();
       // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
       await loginRequest(
         _loginController.idcontroller.text,

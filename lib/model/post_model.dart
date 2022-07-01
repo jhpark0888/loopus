@@ -12,7 +12,7 @@ class Post {
       required this.userid,
       required this.content,
       required this.images,
-      required this.scraps,
+      required this.links,
       required this.tags,
       required this.date,
       required this.project,
@@ -27,7 +27,7 @@ class Post {
   int userid;
   String content;
   List<String> images;
-  List<String> scraps; //입력값 10개까지
+  List<String> links; //입력값 10개까지
   RxList<Comment> comments; //댓글
   List<Tag> tags;
   DateTime date;
@@ -47,7 +47,11 @@ class Post {
                 .map((map) => map['image'].toString())
                 .toList()
             : [],
-        scraps: json["scraps"] ?? [],
+        links: json["contents_link"] != null
+            ? List<Map<String, dynamic>>.from(json["contents_link"])
+                .map((map) => map['link'].toString())
+                .toList()
+            : [],
         tags: json['post_tag'] != null
             ? List<Map<String, dynamic>>.from(json['post_tag'])
                 .map((tag) => Tag.fromJson(tag))
@@ -80,7 +84,11 @@ class Post {
             .map((map) => map['image'].toString())
             .toList()
         : [];
-    scraps = json["scraps"] ?? [];
+    links = json["contents_link"] != null
+        ? List<Map<String, dynamic>>.from(json["contents_link"])
+            .map((map) => map['link'].toString())
+            .toList()
+        : [];
     tags = json['post_tag'] != null
         ? List<Map<String, dynamic>>.from(json['post_tag'])
             .map((tag) => Tag.fromJson(tag))

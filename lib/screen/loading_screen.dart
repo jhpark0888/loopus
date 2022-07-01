@@ -16,3 +16,7 @@ class LoadingScreen extends StatelessWidget {
     );
   }
 }
+
+void loading() {
+  Get.to(() => const LoadingScreen(), opaque: false);
+}

@@ -16,8 +16,6 @@ class PostingDetailController extends GetxController {
     required this.postid,
     required this.post,
   });
-  // RxBool isPostingContentLoading = true.obs;
-  RxBool isPostDeleteLoading = false.obs;
   RxBool isPostUpdateLoading = false.obs;
   // RxBool isNetworkConnect = false.obs;
   Rx<ScreenState> postscreenstate = ScreenState.loading.obs;
@@ -42,7 +40,7 @@ class PostingDetailController extends GetxController {
           userid: 0,
           content: '',
           images: [],
-          scraps: [],
+          links: [],
           comments: <Comment>[].obs,
           tags: [],
           date: DateTime.now(),

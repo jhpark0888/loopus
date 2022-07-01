@@ -32,28 +32,28 @@ class OtherProfileController extends GetxController
   final careerPageController = PageController();
   RxDouble careerCurrentPage = 0.0.obs;
 
-  RefreshController profilerefreshController =
-      RefreshController(initialRefresh: false);
+  // RefreshController profilerefreshController =
+  //     RefreshController(initialRefresh: false);
 
-  void onRefresh() async {
-    careerCurrentPage(0.0);
-    profileenablepullup.value = true;
-    // loadmyProfile();
-    profilerefreshController.refreshCompleted();
-  }
+  // void onRefresh() async {
+  //   careerCurrentPage(0.0);
+  //   profileenablepullup.value = true;
+  //   // loadmyProfile();
+  //   profilerefreshController.refreshCompleted();
+  // }
 
-  void onLoading() async {
-    // await Future.delayed(Duration(seconds: 2));
-    if (otherProjectList.isNotEmpty) {
-      // getposting();
-    }
-    profilerefreshController.loadComplete();
-  }
+  // void onLoading() async {
+  //   // await Future.delayed(Duration(seconds: 2));
+  //   if (otherProjectList.isNotEmpty) {
+  //     // getposting();
+  //   }
+  //   profilerefreshController.loadComplete();
+  // }
 
   RxBool careerLoading = false.obs;
 
   RxList<Project> otherProjectList = <Project>[].obs;
-  List<int> careerPagenums = <int>[];
+  List<int> _careerPagenums = <int>[];
 
   Rx<File> profileimage = File('').obs;
 
@@ -61,12 +61,10 @@ class OtherProfileController extends GetxController
 
   RxList<User> otherlooplist = <User>[].obs;
 
-  // RxBool isProfileLoading = true.obs;
   // RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
 
   Future loadotherProfile(int userid) async {
-    otherprofilescreenstate(ScreenState.loading);
     // isProfileLoading.value = true;
 
     ConnectivityResult result = await initConnectivity();
@@ -74,8 +72,27 @@ class OtherProfileController extends GetxController
       otherprofilescreenstate(ScreenState.disconnect);
       showdisconnectdialog();
     } else {
-      await getProfile(userid, 0);
-      await getProjectlist(userid, 0);
+      await getProfile(userid).then((value) {
+        if (value.isError == false) {
+          User user = User.fromJson(value.data);
+
+          otherUser(user);
+        } else {
+          errorSituation(value, screenState: otherprofilescreenstate.value);
+        }
+      });
+      await getProjectlist(userid).then((value) {
+        if (value.isError == false) {
+          List<Project> projectlist = List.from(value.data)
+              .map((project) => Project.fromJson(project))
+              .toList();
+          _careerPagenums = List.generate(projectlist.length, (index) => 1);
+
+          otherProjectList(projectlist);
+        } else {
+          errorSituation(value, screenState: otherprofilescreenstate.value);
+        }
+      });
       if (otherProjectList.isNotEmpty) {
         getProfilePost();
       }
@@ -85,7 +102,7 @@ class OtherProfileController extends GetxController
   void getProfilePost() async {
     // print('현재 페이지 ${careerCurrentPage.value}');
     await getCareerPosting(otherProjectList[careerCurrentPage.value.toInt()].id,
-            careerPagenums[careerCurrentPage.value.toInt()])
+            _careerPagenums[careerCurrentPage.value.toInt()])
         .then((value) {
       if (value.isError == false) {
         List<Post> postlist = value.data;
@@ -98,7 +115,7 @@ class OtherProfileController extends GetxController
             otherProjectList[careerCurrentPage.value.toInt()]
                 .posts
                 .addAll(postlist);
-            careerPagenums[careerCurrentPage.value.toInt()] += 1;
+            _careerPagenums[careerCurrentPage.value.toInt()] += 1;
           } else {
             profileenablepullup(false);
           }
@@ -108,8 +125,7 @@ class OtherProfileController extends GetxController
 
         otherprofilescreenstate(ScreenState.success);
       } else {
-        errorSituation(value);
-        otherprofilescreenstate(ScreenState.error);
+        errorSituation(value, screenState: otherprofilescreenstate.value);
       }
     });
   }

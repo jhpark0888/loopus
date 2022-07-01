@@ -327,6 +327,7 @@ import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
@@ -334,6 +335,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/swiper_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 
@@ -384,24 +386,35 @@ class PostingWidget extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        UserImageWidget(
-                          imageUrl: item.user.profileImage ?? '',
-                          width: 35,
-                          height: 35,
-                        ),
-                        const SizedBox(
-                          width: 14,
-                        ),
-                        Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(item.user.realName, style: k16semiBold),
-                              Text(item.user.department, style: kSubTitle3Style)
-                            ])
-                      ],
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(
+                            () => OtherProfileScreen(
+                                userid: item.user.userid,
+                                isuser: item.user.isuser ?? 0,
+                                realname: item.user.realName),
+                            preventDuplicates: false);
+                      },
+                      child: Row(
+                        children: [
+                          UserImageWidget(
+                            imageUrl: item.user.profileImage ?? '',
+                            width: 35,
+                            height: 35,
+                          ),
+                          const SizedBox(
+                            width: 14,
+                          ),
+                          Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(item.user.realName, style: k16semiBold),
+                                Text(item.user.department,
+                                    style: kSubTitle3Style)
+                              ])
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 14),
                     Container(
@@ -419,18 +432,29 @@ class PostingWidget extends StatelessWidget {
                 ),
               ),
           ]),
-          if (item.images.isNotEmpty)
+          if (item.images.isNotEmpty || item.links.isNotEmpty)
             SizedBox(
                 width: Get.width,
                 height: Get.width,
                 child: Swiper(
                   outer: true,
-                  itemCount: item.images.length,
+                  loop: false,
+                  itemCount: item.images.isNotEmpty
+                      ? item.images.length
+                      : item.links.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Image.network(item.images[index], fit: BoxFit.fill);
+                    if (item.images.isNotEmpty) {
+                      return CachedNetworkImage(
+                          imageUrl: item.images[index], fit: BoxFit.fill);
+                      // Image.network(item.images[index],
+                      //     fit: BoxFit.fill);
+                    } else {
+                      return LinkWidget(
+                          url: item.links[index], widgetType: 'post');
+                    }
                   },
                   pagination: SwiperPagination(
-                      margin: EdgeInsets.all(14),
+                      margin: const EdgeInsets.all(14),
                       alignment: Alignment.bottomCenter,
                       builder: DotSwiperPaginationBuilder(
                           color: Color(0xFF5A5A5A).withOpacity(0.5),
@@ -441,6 +465,7 @@ class PostingWidget extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
                 padding: const EdgeInsets.only(
@@ -462,12 +487,13 @@ class PostingWidget extends StatelessWidget {
                     const SizedBox(
                       height: 14,
                     ),
-                    Row(
+                    Wrap(
+                        spacing: 7,
+                        runSpacing: 7,
                         children: item.tags
-                            .map((tag) => Row(children: [
-                                  Tagwidget(tag: tag, fontSize: 16),
-                                  const SizedBox(width: 7)
-                                ]))
+                            .map((tag) => Tagwidget(
+                                  tag: tag,
+                                ))
                             .toList()),
                     const SizedBox(height: 14),
                     if (type != PostingWidgetType.search)

@@ -41,7 +41,7 @@ Future<HTTPResponse> getbanlist() async {
         return HTTPResponse.apiError('', response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
       print(e);
@@ -51,15 +51,12 @@ Future<HTTPResponse> getbanlist() async {
   }
 }
 
-Future userban(int userid) async {
+Future<HTTPResponse> userban(int userid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
-    String? token;
-    await const FlutterSecureStorage().read(key: 'token').then((value) {
-      token = value;
-    });
+    String? token = await const FlutterSecureStorage().read(key: 'token');
 
     final Uri uri = Uri.parse("$serverUri/user_api/ban?id=$userid");
 
@@ -74,23 +71,15 @@ Future userban(int userid) async {
 
       print('유저 차단 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
-        getbacks(2);
-        if (Get.isRegistered<OtherProfileController>(tag: userid.toString())) {
-          Get.find<OtherProfileController>(tag: userid.toString())
-              .otherUser
-              .value
-              .banned(BanState.ban);
-        }
-        showCustomDialog("해당 유저가 차단 되었습니다", 1000);
-        return;
+        return HTTPResponse.success("success");
       } else {
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }
@@ -136,7 +125,7 @@ Future userbancancel(int userid) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);

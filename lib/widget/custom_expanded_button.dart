@@ -18,8 +18,7 @@ class CustomExpandedButton extends StatelessWidget {
   bool? isBig;
   String? title;
   String? buttonTag;
-  late final HoverController _hoverController =
-      Get.put(HoverController(), tag: buttonTag);
+  final HoverController _hoverController = HoverController();
 
   @override
   Widget build(BuildContext context) {

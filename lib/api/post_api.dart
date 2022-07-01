@@ -60,11 +60,11 @@ Future<HTTPResponse> addposting(int projectId) async {
       print(request.files);
     }
     request.fields['contents'] = postingAddController.textcontroller.text;
-    for(var tag in tagController.selectedtaglist){
+    for (var tag in tagController.selectedtaglist) {
       var multipartFile = await http.MultipartFile.fromString('tag', tag.text);
       request.files.add(multipartFile);
     }
-    for(var link in postingAddController.scrapList){
+    for (var link in postingAddController.scrapList) {
       var multipartFile = await http.MultipartFile.fromString('link', link.url);
       request.files.add(multipartFile);
     }
@@ -125,7 +125,7 @@ Future<HTTPResponse> addposting(int projectId) async {
         return HTTPResponse.apiError('False', response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
       print(e);
@@ -169,7 +169,7 @@ Future<HTTPResponse> getposting(int postingid) async {
         return HTTPResponse.apiError('', response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
       print(e);
@@ -326,7 +326,7 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -334,10 +334,11 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
   }
 }
 
-Future<void> deleteposting(int postid, int projectid) async {
+Future<HTTPResponse> deleteposting(int postid, int projectid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
@@ -347,33 +348,19 @@ Future<void> deleteposting(int postid, int projectid) async {
       http.Response response =
           await http.delete(uri, headers: {"Authorization": "Token $token"});
 
-      print(response.statusCode);
+      print('포스팅 삭제: ${response.statusCode}');
       if (response.statusCode == 200) {
-        Get.back();
-        if (Get.isRegistered<ProjectDetailController>(
-            tag: projectid.toString())) {
-          Get.find<ProjectDetailController>(tag: projectid.toString())
-              .project
-              .value
-              .posts
-              .removeWhere((post) => post.id == postid);
-          // Get.find<ProjectDetailController>(tag: projectid.toString())
-          //     .postinglist
-          //     .removeWhere((post) => post.item.value.id == postid);
-        }
-
-        // HomeController.to.recommandpostingResult.value.postingitems
-        //     .removeWhere((post) => post.id == postid);
-        // HomeController.to.latestpostingResult.value.postingitems
-        //     .removeWhere((post) => post.id == postid);
+        return HTTPResponse.success("success");
       } else {
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }
@@ -406,7 +393,7 @@ Future<HTTPResponse> mainload(int lastindex) async {
         return HTTPResponse.apiError('', response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
       print(e);
@@ -477,7 +464,7 @@ Future<HTTPResponse> bookmarklist(int pageNumber) async {
       return HTTPResponse.success([]);
     }
   } on SocketException {
-    ErrorController.to.isServerClosed(true);
+    // ErrorController.to.isServerClosed(true);
     return HTTPResponse.serverError();
   } catch (e) {
     print(e);
@@ -598,7 +585,7 @@ Future<void> getlikepeoele(int postid) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -634,7 +621,7 @@ Future<HTTPResponse> commentPost(
       return HTTPResponse.apiError('', response.statusCode);
     }
   } on SocketException {
-    ErrorController.to.isServerClosed(true);
+    // ErrorController.to.isServerClosed(true);
     return HTTPResponse.serverError();
   } catch (e) {
     print(e);
@@ -674,7 +661,7 @@ Future postingreport(int postingId) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);

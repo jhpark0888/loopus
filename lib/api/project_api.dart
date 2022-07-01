@@ -72,7 +72,7 @@ Future<HTTPResponse> addproject() async {
         return HTTPResponse.apiError('fail', response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
       print(e);
@@ -115,7 +115,7 @@ Future<Project?> getproject(int projectId) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -190,7 +190,7 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -229,7 +229,7 @@ Future<void> deleteproject(int projectId) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);

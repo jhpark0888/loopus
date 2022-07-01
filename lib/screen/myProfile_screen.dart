@@ -29,6 +29,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
@@ -277,7 +278,6 @@ class MyProfileScreen extends StatelessWidget {
                                                 .map((tag) => Row(children: [
                                                       Tagwidget(
                                                         tag: tag,
-                                                        fontSize: 14,
                                                       ),
                                                       profileController
                                                                   .myUserInfo
@@ -311,7 +311,8 @@ class MyProfileScreen extends StatelessWidget {
                                             onTap: () {
                                               tagController.selectedtaglist
                                                   .clear();
-                                              tagController.tagsearch.text = "";
+                                              tagController
+                                                  .tagsearchContoller.text = "";
                                               for (var tag in profileController
                                                   .myUserInfo
                                                   .value
@@ -352,8 +353,8 @@ class MyProfileScreen extends StatelessWidget {
                                       const SizedBox(width: 7),
                                       SvgPicture.asset(
                                         'assets/icons/Question.svg',
-                                        width: 15,
-                                        height: 15,
+                                        width: 20,
+                                        height: 20,
                                         color: mainblack.withOpacity(0.6),
                                       ),
                                       const Spacer(),
@@ -488,15 +489,35 @@ class MyProfileScreen extends StatelessWidget {
                                         () => Column(
                                             children: profileController
                                                 .myProjectList
-                                                .map((career) {
-                                          int index = profileController
-                                              .myProjectList
-                                              .indexWhere((element) =>
-                                                  element.id == career.id);
-                                          return CareerTile(
-                                              index: index,
-                                              title: career.careerName.obs,
-                                              time: career.startDate!);
+                                                .asMap()
+                                                .entries
+                                                .map((entry) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              profileController
+                                                  .careerCurrentPage
+                                                  .value = entry.key.toDouble();
+                                              profileController
+                                                  .careertitleController
+                                                  .jumpToPage(
+                                                entry.key,
+                                                // duration: const Duration(milliseconds: 300), curve: Curves.ease
+                                              );
+                                              profileController
+                                                  .careerPageController
+                                                  .jumpToPage(
+                                                entry.key,
+                                                // duration: const Duration(milliseconds: 300), curve: Curves.ease
+                                              );
+                                            },
+                                            child: CareerTile(
+                                                index: entry.key,
+                                                currentPage: profileController
+                                                    .careerCurrentPage,
+                                                title:
+                                                    entry.value.careerName.obs,
+                                                time: entry.value.startDate!),
+                                          );
                                         }).toList()),
                                       ),
                                       const SizedBox(height: 24),
@@ -510,17 +531,17 @@ class MyProfileScreen extends StatelessWidget {
                                           const Spacer(),
                                           InkWell(
                                               onTap: () {
-                                                Get.to(() =>
-                                                    PostingAddImagesScreen(
-                                                      project_id: profileController
-                                                          .myProjectList[
-                                                              profileController
-                                                                  .careerCurrentPage
-                                                                  .toInt()]
-                                                          .id,
-                                                      route:
-                                                          PostaddRoute.project,
-                                                    ));
+                                                // Get.to(() =>
+                                                //     PostingAddImagesScreen(
+                                                //       project_id: profileController
+                                                //           .myProjectList[
+                                                //               profileController
+                                                //                   .careerCurrentPage
+                                                //                   .toInt()]
+                                                //           .id,
+                                                //       route:
+                                                //           PostaddRoute.project,
+                                                //     ));
                                               },
                                               child: Text(
                                                 '전체 보기(${profileController.myUserInfo.value.totalposting}개)',
@@ -671,160 +692,170 @@ class MyProfileScreen extends StatelessWidget {
                                       //       )
                                       //     :
                                       Obx(
-                                        () => ExpandablePageView.builder(
-                                          onPageChanged: (index) {
-                                            if (index.toDouble() !=
+                                        () => ScrollNoneffectWidget(
+                                          child: ExpandablePageView.builder(
+                                            onPageChanged: (index) {
+                                              if (index.toDouble() !=
+                                                  profileController
+                                                      .careerCurrentPage
+                                                      .value) {
                                                 profileController
-                                                    .careerCurrentPage.value) {
-                                              profileController
-                                                  .careerCurrentPage
-                                                  .value = index.toDouble();
-                                              profileController
-                                                  .careertitleController
-                                                  .animateToPage(index,
-                                                      duration: const Duration(
-                                                          milliseconds: 300),
-                                                      curve: Curves.ease);
-                                            }
-                                          },
-                                          controller: profileController
-                                              .careerPageController,
-                                          itemBuilder: (context, index) {
-                                            return Column(
-                                              children: [
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Container(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 24),
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    '함께한 친구',
-                                                    style: k15normal.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.w500),
+                                                    .careerCurrentPage
+                                                    .value = index.toDouble();
+                                                profileController
+                                                    .careertitleController
+                                                    .animateToPage(index,
+                                                        duration:
+                                                            const Duration(
+                                                                milliseconds:
+                                                                    300),
+                                                        curve: Curves.ease);
+                                              }
+                                            },
+                                            controller: profileController
+                                                .careerPageController,
+                                            itemBuilder: (context, index) {
+                                              return Column(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 10,
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 8,
-                                                ),
-                                                // profileController
-                                                //             .myProjectList[profileController.careerCurrentPage.to]
-                                                SizedBox(
-                                                  height: 90,
-                                                  child: profileController
-                                                          .myProjectList[index]
-                                                          .members
-                                                          .isEmpty
-                                                      ? EmptyContentWidget(
-                                                          text:
-                                                              '혼자서 진행한 커리어입니다')
-                                                      : ListView.separated(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      24),
-                                                          scrollDirection: Axis
-                                                              .horizontal,
-                                                          itemBuilder:
-                                                              (context, index) {
-                                                            Project project =
-                                                                profileController
-                                                                        .myProjectList[
-                                                                    index];
-                                                            return Column(
-                                                              children: [
-                                                                ClipOval(
-                                                                  child: Image
-                                                                      .network(
-                                                                    project.members[index]
-                                                                            .profileImage ??
-                                                                        '',
-                                                                    width: 50,
-                                                                    height: 50,
-                                                                    fit: BoxFit
-                                                                        .cover,
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 24),
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(
+                                                      '함께한 친구',
+                                                      style: k15normal.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  // profileController
+                                                  //             .myProjectList[profileController.careerCurrentPage.to]
+                                                  SizedBox(
+                                                    height: 90,
+                                                    child: profileController
+                                                            .myProjectList[
+                                                                index]
+                                                            .members
+                                                            .isEmpty
+                                                        ? EmptyContentWidget(
+                                                            text:
+                                                                '혼자서 진행한 커리어입니다')
+                                                        : ListView.separated(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        24),
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              Project project =
+                                                                  profileController
+                                                                          .myProjectList[
+                                                                      index];
+                                                              return Column(
+                                                                children: [
+                                                                  ClipOval(
+                                                                    child: Image
+                                                                        .network(
+                                                                      project.members[index]
+                                                                              .profileImage ??
+                                                                          '',
+                                                                      width: 50,
+                                                                      height:
+                                                                          50,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 6,
-                                                                ),
-                                                                Text(
-                                                                  project
-                                                                      .members[
-                                                                          index]
-                                                                      .realName,
-                                                                  style: k15normal.copyWith(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                )
-                                                              ],
-                                                            );
-                                                          },
-                                                          separatorBuilder:
-                                                              (context, index) {
-                                                            return const SizedBox(
-                                                              width: 8,
-                                                            );
-                                                          },
-                                                          itemCount: profileController
-                                                              .myProjectList[
-                                                                  profileController
-                                                                      .careerCurrentPage
-                                                                      .value
-                                                                      .toInt()]
-                                                              .members
-                                                              .length),
-                                                ),
-                                                Obx(
-                                                  () => profileController
-                                                          .careerLoading.value
-                                                      ? const LoadingWidget()
-                                                      : profileController
-                                                              .myProjectList[
-                                                                  index]
-                                                              .posts
-                                                              .isNotEmpty
-                                                          ? ListView.separated(
-                                                              primary: false,
-                                                              shrinkWrap: true,
-                                                              itemBuilder:
-                                                                  (context,
-                                                                      postindex) {
-                                                                return PostingWidget(
-                                                                  item: profileController
-                                                                      .myProjectList[
-                                                                          index]
-                                                                      .posts[postindex],
-                                                                  type: PostingWidgetType
-                                                                      .profile,
-                                                                );
-                                                              },
-                                                              separatorBuilder:
-                                                                  (context,
-                                                                          postindex) =>
-                                                                      DivideWidget(),
-                                                              itemCount:
-                                                                  profileController
-                                                                      .myProjectList[
-                                                                          index]
-                                                                      .posts
-                                                                      .length,
-                                                            )
-                                                          : EmptyContentWidget(
-                                                              text:
-                                                                  '아직 포스팅이 없어요'),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                          itemCount: profileController
-                                              .myProjectList.length,
+                                                                  const SizedBox(
+                                                                    height: 6,
+                                                                  ),
+                                                                  Text(
+                                                                    project
+                                                                        .members[
+                                                                            index]
+                                                                        .realName,
+                                                                    style: k15normal.copyWith(
+                                                                        fontWeight:
+                                                                            FontWeight.w400),
+                                                                  )
+                                                                ],
+                                                              );
+                                                            },
+                                                            separatorBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              return const SizedBox(
+                                                                width: 8,
+                                                              );
+                                                            },
+                                                            itemCount: profileController
+                                                                .myProjectList[
+                                                                    profileController
+                                                                        .careerCurrentPage
+                                                                        .value
+                                                                        .toInt()]
+                                                                .members
+                                                                .length),
+                                                  ),
+                                                  Obx(
+                                                    () => profileController
+                                                            .careerLoading.value
+                                                        ? const LoadingWidget()
+                                                        : profileController
+                                                                .myProjectList[
+                                                                    index]
+                                                                .posts
+                                                                .isNotEmpty
+                                                            ? ListView
+                                                                .separated(
+                                                                primary: false,
+                                                                shrinkWrap:
+                                                                    true,
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        postindex) {
+                                                                  return PostingWidget(
+                                                                    item: profileController
+                                                                        .myProjectList[
+                                                                            index]
+                                                                        .posts[postindex],
+                                                                    type: PostingWidgetType
+                                                                        .profile,
+                                                                  );
+                                                                },
+                                                                separatorBuilder:
+                                                                    (context,
+                                                                            postindex) =>
+                                                                        DivideWidget(),
+                                                                itemCount:
+                                                                    profileController
+                                                                        .myProjectList[
+                                                                            index]
+                                                                        .posts
+                                                                        .length,
+                                                              )
+                                                            : EmptyContentWidget(
+                                                                text:
+                                                                    '아직 포스팅이 없어요'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                            itemCount: profileController
+                                                .myProjectList.length,
+                                          ),
                                         ),
                                       ),
                                     ],

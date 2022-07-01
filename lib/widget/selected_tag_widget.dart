@@ -26,26 +26,26 @@ class SelectedTagWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-         if (selecttagtype == SelectTagtype.interesting) {
-                tagController.selectedtaglist
-                    .removeWhere((element) => element.text == text);
-                gettagsearch(tagtype);
-              } else {
-                ProjectAddController.to.selectedpersontaglist
-                    .removeWhere((element) => element.id == id);
-                ProjectAddController.to.looppersonlist
-                    .where((element) => element.user.userid == id)
-                    .first
-                    .isselected(false);
-              }
+      onTap: () {
+        if (selecttagtype == SelectTagtype.interesting) {
+          tagController.selectedtaglist
+              .removeWhere((element) => element.text == text);
+          tagController.tagSearchFunction();
+        } else {
+          ProjectAddController.to.selectedpersontaglist
+              .removeWhere((element) => element.id == id);
+          ProjectAddController.to.looppersonlist
+              .where((element) => element.user.userid == id)
+              .first
+              .isselected(false);
+        }
       },
       child: Container(
         padding: const EdgeInsets.fromLTRB(14, 7, 14, 7),
         decoration: BoxDecoration(
-          color: mainWhite,
-          borderRadius: BorderRadius.circular(16),border: Border.all(width: 0.5,color: maingray.withOpacity(0.5))
-        ),
+            color: mainWhite,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(width: 0.5, color: maingray.withOpacity(0.5))),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

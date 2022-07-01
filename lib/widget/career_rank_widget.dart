@@ -38,6 +38,7 @@ class CareerRankWidget extends StatelessWidget {
                 loopcount: 0.obs,
                 totalposting: 1,
                 isuser: 0,
+                field: "노멀",
                 profileImage:
                     'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202203/23/d58e7390-afda-42cd-9374-ca327df1cad8.jpg',
                 profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],

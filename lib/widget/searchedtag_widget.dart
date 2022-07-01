@@ -210,28 +210,30 @@ class SearchTagWidget extends StatelessWidget {
   void _selectTag() async {
     TagController controller = Get.find<TagController>(tag: tagtype.toString());
     // if (controller.selectedtaglist.length < 3) {
-      if (id == 0) {
-        // SearchTag? searchTag = await postmaketag(tagtype!);
-        SearchTag searchTag = SearchTag(
-            id: id, tag: controller.tagsearch.text.replaceAll(" ", ""));
-        controller.selectedtaglist.add(SelectedTagWidget(
-          id: searchTag.id,
-          text: searchTag.tag,
+    if (id == 0) {
+      // SearchTag? searchTag = await postmaketag(tagtype!);
+      Tag searchTag = Tag(
+          tagId: id,
+          tag: controller.tagsearchContoller.text.replaceAll(" ", ""),
+          count: 0);
+      controller.selectedtaglist.add(SelectedTagWidget(
+        id: searchTag.tagId,
+        text: searchTag.tag,
+        selecttagtype: SelectTagtype.interesting,
+        tagtype: tagtype!,
+      ));
+      controller.tagsearchContoller.clear();
+      // gettagsearch(tagtype!);
+    } else {
+      controller.selectedtaglist.add(SelectedTagWidget(
+          id: id,
+          text: tag,
           selecttagtype: SelectTagtype.interesting,
-          tagtype: tagtype!,
-        ));
-        controller.tagsearch.clear();
-        // gettagsearch(tagtype!);
-      } else {
-        controller.selectedtaglist.add(SelectedTagWidget(
-            id: id,
-            text: tag,
-            selecttagtype: SelectTagtype.interesting,
-            tagtype: tagtype!));
-        controller.tagsearch.clear();
-        controller.searchtaglist.removeWhere((element) => element.id == id);
-        // gettagsearch(tagtype!);
-      }
+          tagtype: tagtype!));
+      controller.tagsearchContoller.clear();
+      controller.searchtaglist.removeWhere((element) => element.id == id);
+      // gettagsearch(tagtype!);
+    }
     // }
     //  else {
     //   showCustomDialog('최대 3개까지 선택할 수 있어요', 1000);

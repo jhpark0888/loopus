@@ -52,7 +52,7 @@ class ProfileController extends GetxController
   RxBool careerLoading = false.obs;
 
   RxList<Project> myProjectList = <Project>[].obs;
-  List<int> careerPagenums = <int>[];
+  List<int> _careerPagenums = <int>[];
 
   Rx<File> profileimage = File('').obs;
   Rx<User> myUserInfo = User.defaultuser().obs;
@@ -81,8 +81,28 @@ class ProfileController extends GetxController
       myprofilescreenstate(ScreenState.disconnect);
       showdisconnectdialog();
     } else {
-      await getProfile(userId, 1);
-      await getProjectlist(userId, 1);
+      await getProfile(int.parse(userId!)).then((value) {
+        if (value.isError == false) {
+          User user = User.fromJson(value.data);
+          myUserInfo(user);
+          isnewalarm(value.data["new_alarm"]);
+          isnewmessage(value.data["new_message"]);
+        } else {
+          errorSituation(value, screenState: myprofilescreenstate.value);
+        }
+      });
+      await getProjectlist(int.parse(userId)).then((value) {
+        if (value.isError == false) {
+          List<Project> projectlist = List.from(value.data)
+              .map((project) => Project.fromJson(project))
+              .toList();
+
+          myProjectList(projectlist);
+          _careerPagenums = List.generate(projectlist.length, (index) => 1);
+        } else {
+          errorSituation(value, screenState: myprofilescreenstate.value);
+        }
+      });
       if (myProjectList.isNotEmpty) {
         getProfilePost();
       }
@@ -93,7 +113,7 @@ class ProfileController extends GetxController
   void getProfilePost() async {
     // print('현재 페이지 ${careerCurrentPage.value}');
     await getCareerPosting(myProjectList[careerCurrentPage.value.toInt()].id,
-            careerPagenums[careerCurrentPage.value.toInt()])
+            _careerPagenums[careerCurrentPage.value.toInt()])
         .then((value) {
       if (value.isError == false) {
         List<Post> postlist = value.data;
@@ -106,7 +126,7 @@ class ProfileController extends GetxController
             myProjectList[careerCurrentPage.value.toInt()]
                 .posts
                 .addAll(postlist);
-            careerPagenums[careerCurrentPage.value.toInt()] += 1;
+            _careerPagenums[careerCurrentPage.value.toInt()] += 1;
           } else {
             profileenablepullup(false);
           }
@@ -116,8 +136,7 @@ class ProfileController extends GetxController
 
         myprofilescreenstate(ScreenState.success);
       } else {
-        errorSituation(value);
-        myprofilescreenstate(ScreenState.error);
+        errorSituation(value, screenState: myprofilescreenstate.value);
       }
     });
   }

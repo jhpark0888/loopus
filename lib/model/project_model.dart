@@ -50,11 +50,8 @@ class Project {
               json["looper"].map((x) => User.fromJson(x["profile"])))
           : [],
       postRatio: json['ratio'] ?? 0.0,
-      post_count: json["count"] != null
-          ? RxInt(json["count"]["post_count"])
-          : json["post"] != null
-              ? RxInt(List.from(json["post"]).length)
-              : RxInt(0),
+      post_count:
+          json["post_count"] != null ? RxInt(json["post_count"]) : RxInt(0),
       is_user: json['is_user'] ?? 0,
       user: json["profile"] != null ? User.fromJson(json["profile"]) : null);
 
