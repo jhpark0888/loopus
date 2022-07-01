@@ -62,7 +62,7 @@ Future<HTTPResponse> loginRequest(String email, String pw) async {
         return HTTPResponse.apiError('fail', response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
       print(e);
@@ -112,7 +112,7 @@ Future<void> postpwfindemailcheck() async {
         print('에러');
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -154,7 +154,7 @@ Future<void> putpwfindchange() async {
         print('에러');
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/tag_detail_screen.dart';
+import 'package:loopus/widget/tag_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class SearchUserWidget extends StatelessWidget {
@@ -49,23 +52,17 @@ class SearchTagWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        print('dddd');
+        Get.to(() => TagDetailScreen(
+              tag: tag,
+            ));
       },
       splashColor: kSplashColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: maingray, width: 0.3)),
-              child: Center(
-                  child: Text(
-                tag.tag,
-                style: kmain,
-              )),
+            Tagwidget(
+              tag: tag,
             ),
             const Spacer(),
             Text(

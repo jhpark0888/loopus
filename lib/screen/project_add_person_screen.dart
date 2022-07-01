@@ -42,7 +42,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
           screenType == Screentype.add
               ? TextButton(
                   onPressed: () async {
-                    Get.to(() => LoadingScreen(), opaque: false);
+                    loading();
                     await addproject().then((value) async {
                       Get.back();
                       final LocalDataController _localDataController =
@@ -75,23 +75,23 @@ class ProjectAddPersonScreen extends StatelessWidget {
                     });
                   },
                   child:
-                  //  Obx(
-                  //   () => 
-                    Padding(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Text(
-                        // projectaddcontroller.selectedpersontaglist.isEmpty
-                        //     ? '건너뛰기'
-                        //     :
-                        '만들기',
-                        style: kSubTitle2Style.copyWith(
-                          color: mainblue,
-                        ),
-                        textAlign: TextAlign.end,
+                      //  Obx(
+                      //   () =>
+                      Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: Text(
+                      // projectaddcontroller.selectedpersontaglist.isEmpty
+                      //     ? '건너뛰기'
+                      //     :
+                      '만들기',
+                      style: kSubTitle2Style.copyWith(
+                        color: mainblue,
                       ),
+                      textAlign: TextAlign.end,
                     ),
-                  )
-                // )
+                  ),
+                )
+              // )
               : Obx(
                   () => Get.find<ProjectDetailController>(
                               tag: projectid.toString())

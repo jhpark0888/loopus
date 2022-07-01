@@ -9,12 +9,14 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/post_add_test.dart';
 import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
 import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
+import 'package:loopus/widget/tag_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 import '../constant.dart';
@@ -58,7 +60,10 @@ class CompanyScreen extends StatelessWidget {
           children: [
             Obx(
               () => Column(children: [
-                Text(controller.currentFieldText.value),
+                Text(
+                  controller.currentFieldText.value,
+                  style: k13midum.copyWith(color: mainWhite),
+                ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   height: 30,
@@ -72,7 +77,7 @@ class CompanyScreen extends StatelessWidget {
                             curve: Curves.ease);
                       }
                       controller.currentFieldText.value =
-                          controller.fieldList[controller.currentField.toInt()];
+                          controller.fieldlist[controller.currentField.toInt()];
                     },
                     itemBuilder: (context, page) {
                       var _scale =
@@ -94,12 +99,12 @@ class CompanyScreen extends StatelessWidget {
                           },
                           child: Center(
                             child: Text(
-                              controller.fieldList[page],
+                              controller.fieldlist[page],
                               style: ktitle.copyWith(color: _color),
                             ),
                           ));
                     },
-                    itemCount: controller.fieldList.length,
+                    itemCount: controller.fieldlist.length,
                     controller: controller.fieldController,
                   ),
                 ),
@@ -115,7 +120,7 @@ class CompanyScreen extends StatelessWidget {
                             curve: Curves.ease);
                       }
                       controller.currentFieldText.value =
-                          controller.fieldList[controller.currentField.toInt()];
+                          controller.fieldlist[controller.currentField.toInt()];
                     },
                     itemBuilder: (context, index) {
                       return Column(
@@ -197,25 +202,22 @@ class CompanyScreen extends StatelessWidget {
                                 padding: EdgeInsets.only(left: 24.0, right: 24),
                                 child: Text('해시태그 분석', style: k18semiBold)),
                             Padding(
-                              padding: const EdgeInsets.only(left: 24.0, right: 24, top: 6),
-                              child : Obx(
-                                ()=> Column(
-                                    children: HomeController.to.topTagList
-                                        .map((element) => Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  const SizedBox(height: 14),
-                                                  Row(
-                                                    children: [
-                                                      Text(element.tagId.toString(),style: k16semiBold,),
-                                                      const SizedBox(width: 14),
-                                                      SelectedTagWidget(text: element.tag, selecttagtype: SelectTagtype.interesting, tagtype: Tagtype.Posting),
-                                                      const Spacer(),
-                                                      Text('${element.count.toString()}회', style: k15normal,)
-                                                    ],
-                                                  )
-                                                ]))
-                                        .toList()),
+                              padding: const EdgeInsets.only(
+                                  left: 24.0, right: 24, top: 6),
+                              child: Obx(
+                                () => ListView.separated(
+                                  padding: const EdgeInsets.only(top: 20),
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      HomeController.to.topTagList.length,
+                                  itemBuilder: (context, index) {
+                                    return tagAnalize(HomeController.to.topTagList[index]);
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox(height: 14);
+                                  },
+                                ),
                               ),
                             ),
                             const SizedBox(height: 24),
@@ -234,14 +236,21 @@ class CompanyScreen extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Container(width: 20, height: 1, decoration: BoxDecoration(color: myPostColor)),
+                                  Container(
+                                      width: 20,
+                                      height: 1,
+                                      decoration:
+                                          BoxDecoration(color: myPostColor)),
                                   const SizedBox(width: 4),
-                                  Text('내 포스트 수', style: k13midum.copyWith(color: myPostColor)),
+                                  Text('내 포스트 수',
+                                      style: k13midum.copyWith(
+                                          color: myPostColor)),
                                 ],
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 40,right: 40, bottom: 34),
+                              padding: const EdgeInsets.only(
+                                  left: 40, right: 40, bottom: 34),
                               child: Container(
                                 height: 172,
                                 width: 295,
@@ -250,7 +259,7 @@ class CompanyScreen extends StatelessWidget {
                             )
                           ]);
                     },
-                    itemCount: controller.fieldList.length,
+                    itemCount: controller.fieldlist.length,
                   ),
                 ),
               ]),
@@ -271,7 +280,10 @@ class CompanyScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: dividegray, width: 0.5), color: dividegray),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: dividegray, width: 0.5),
+                  color: dividegray),
               height: 60,
               width: 60,
               child: Image.network(company.companyImage, fit: BoxFit.fill)),
@@ -369,4 +381,37 @@ class CompanyScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget tagAnalize(Tag tag) {
+    return Row(children: [
+      Text(
+        tag.tagId.toString(),
+        style: k16semiBold,
+      ),
+      const SizedBox(width: 14),
+      Tagwidget(tag: tag),
+      const Spacer(),
+      Text(
+        '${tag.count.toString()}회',
+        style: k15normal,
+      )
+    ]);
+  }
 }
+
+     //HomeController.to.populartaglist
+                                        // .map((element) => Column(
+                                        //         mainAxisSize: MainAxisSize.min,
+                                        //         children: [
+                                        //           const SizedBox(height: 14),
+                                        //           Row(
+                                        //             children: [
+                                        //               Text(element.tagId.toString(),style: k16semiBold,),
+                                        //               const SizedBox(width: 14),
+                                        //               Tagwidget(tag: element),
+                                        //               const Spacer(),
+                                        //               Text('${element.count.toString()}회', style: k15normal,)
+                                        //             ],
+                                        //           )
+                                        //         ]))
+                                        // .toList()

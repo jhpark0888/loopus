@@ -30,8 +30,8 @@ class App extends StatelessWidget {
       Container(
         color: mainblack.withOpacity(0.25),
       ),
+      Container(),
       CompanyScreen(),
-      MyProfileScreen(),
     ];
 
     return WillPopScope(
@@ -117,22 +117,31 @@ class App extends StatelessWidget {
                       label: "검색"),
                   BottomNavigationBarItem(
                       tooltip: '',
-                      icon: SvgPicture.asset("assets/icons/Plus_inactive.svg"),
-                      activeIcon:
-                          SvgPicture.asset("assets/icons/Plus_active.svg"),
-                      label: "기업"),
+                      icon: SvgPicture.asset(
+                        "assets/icons/Plus_inactive.svg",
+                        width: 35,
+                        height: 35,
+                      ),
+                      activeIcon: SvgPicture.asset(
+                        "assets/icons/Plus_inactive.svg",
+                        width: 35,
+                        height: 35,
+                      ),
+                      label: "추가"),
                   BottomNavigationBarItem(
                       tooltip: '',
-                      icon: SvgPicture.asset("assets/icons/Paper_Inactive.svg"),
+                      icon: SvgPicture.asset(
+                        "assets/icons/Scout_Inactive.svg",
+                      ),
                       activeIcon:
-                          SvgPicture.asset("assets/icons/Paper_Active.svg"),
-                      label: "공고"),
+                          SvgPicture.asset("assets/icons/Scout_Active.svg"),
+                      label: "스카우트 리포트"),
                   BottomNavigationBarItem(
                     tooltip: '',
-                    icon: SvgPicture.asset("assets/icons/Profile_Inactive.svg"),
+                    icon: SvgPicture.asset("assets/icons/Career_Inactive.svg"),
                     activeIcon:
-                        SvgPicture.asset("assets/icons/Profile_Active.svg"),
-                    label: "프로필",
+                        SvgPicture.asset("assets/icons/Career_Active.svg"),
+                    label: "커리어 보드",
                   ),
                 ],
               ),

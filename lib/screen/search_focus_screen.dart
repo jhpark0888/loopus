@@ -439,45 +439,55 @@ class SearchFocusScreen extends StatelessWidget {
                     pinned: true,
                     elevation: 0,
                     automaticallyImplyLeading: false,
-                    flexibleSpace: TabBar(
-                        controller: _searchController.tabController,
-                        labelStyle: kmainbold,
-                        labelColor: mainblack,
-                        unselectedLabelStyle:
-                            kmainbold.copyWith(color: dividegray),
-                        unselectedLabelColor: dividegray,
-                        automaticIndicatorColorAdjustment: false,
-                        indicator: const UnderlineIndicator(
-                          strokeCap: StrokeCap.round,
-                          borderSide: BorderSide(width: 2, color: mainblack),
-                        ),
-                        isScrollable: false,
-                        tabs: const [
-                          Tab(
-                            height: 40,
-                            child: Text(
-                              "계정",
+                    flexibleSpace: Column(
+                      children: [
+                        TabBar(
+                            controller: _searchController.tabController,
+                            labelStyle: kmainbold,
+                            labelColor: mainblack,
+                            unselectedLabelStyle:
+                                kmainbold.copyWith(color: dividegray),
+                            unselectedLabelColor: dividegray,
+                            automaticIndicatorColorAdjustment: false,
+                            indicator: const UnderlineIndicator(
+                              strokeCap: StrokeCap.round,
+                              borderSide:
+                                  BorderSide(width: 2, color: mainblack),
                             ),
-                          ),
-                          Tab(
-                            height: 40,
-                            child: Text(
-                              "포스트",
-                            ),
-                          ),
-                          Tab(
-                            height: 40,
-                            child: Text(
-                              "태그",
-                            ),
-                          ),
-                          Tab(
-                            height: 40,
-                            child: Text(
-                              "기업",
-                            ),
-                          ),
-                        ]),
+                            isScrollable: false,
+                            tabs: const [
+                              Tab(
+                                height: 40,
+                                child: Text(
+                                  "계정",
+                                ),
+                              ),
+                              Tab(
+                                height: 40,
+                                child: Text(
+                                  "포스트",
+                                ),
+                              ),
+                              Tab(
+                                height: 40,
+                                child: Text(
+                                  "태그",
+                                ),
+                              ),
+                              Tab(
+                                height: 40,
+                                child: Text(
+                                  "기업",
+                                ),
+                              ),
+                            ]),
+                        Divider(
+                          height: 1,
+                          thickness: 2,
+                          color: dividegray,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -579,7 +589,7 @@ class SearchFocusScreen extends StatelessWidget {
                                     itemBuilder: (context, index) {
                                       return SearchTagWidget(
                                           tag: _searchController
-                                              .searchtaglist[index]);
+                                              .searchTagList[index]);
                                     },
                                     separatorBuilder: (context, index) {
                                       return const SizedBox(
@@ -587,11 +597,30 @@ class SearchFocusScreen extends StatelessWidget {
                                       );
                                     },
                                     itemCount:
-                                        _searchController.searchtaglist.length),
+                                        _searchController.searchTagList.length),
                               ),
                             ),
                 ),
-                Container(),
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        "assets/icons/Enterprise_Ready.svg",
+                        width: 60,
+                        height: 60,
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      const Text(
+                        "기업 정보를 수집중이에요\n빠른 시일 내 기업 정보를 제공해 드릴게요",
+                        style: kmainheight,
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                ),
               ]),
         ),
       ),

@@ -80,7 +80,7 @@ Future<void> getNotificationlist(String type, int lastindex) async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -104,7 +104,7 @@ Future deleteNotification(int noticeid) async {
       return Future.error(response.statusCode);
     }
   } on SocketException {
-    ErrorController.to.isServerClosed(true);
+    // ErrorController.to.isServerClosed(true);
   } catch (e) {
     print(e);
     // ErrorController.to.isServerClosed(true);

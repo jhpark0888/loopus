@@ -30,85 +30,76 @@ import '../controller/error_controller.dart';
 import '../controller/home_controller.dart';
 import '../controller/search_controller.dart';
 
-Future<void> getProfile(var userId, int isuser) async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-  print('user token: $token');
+Future<HTTPResponse> getProfile(int userId) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    print('user token: $token');
 
-  var uri = Uri.parse("$serverUri/user_api/profile?id=$userId");
-  try {
-    http.Response response =
-        await http.get(uri, headers: {"Authorization": "Token $token"});
+    var uri = Uri.parse("$serverUri/user_api/profile?id=$userId");
+    try {
+      http.Response response =
+          await http.get(uri, headers: {"Authorization": "Token $token"});
 
-    print("프로필 로드: ${response.statusCode}");
-    if (response.statusCode == 200) {
-      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print("프로필 로드: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-      User user = User.fromJson(responseBody);
-      if (isuser == 1) {
-        ProfileController.to.myUserInfo(user);
-        ProfileController.to.isnewalarm(responseBody["new_alarm"]);
-        ProfileController.to.isnewmessage(responseBody["new_message"]);
+        return HTTPResponse.success(responseBody);
       } else {
-        Get.find<OtherProfileController>(tag: userId.toString())
-            .otherUser(user);
+        // Get.back();
+        // showCustomDialog('이미 삭제된 유저입니다', 1400);
+        return HTTPResponse.apiError("", response.statusCode);
       }
-      return;
-    } else if (response.statusCode == 404) {
-      Get.back();
-      showCustomDialog('이미 삭제된 유저입니다', 1400);
-      return Future.error(response.statusCode);
-    } else {
-      return Future.error(response.statusCode);
+    } on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
     }
-  } on SocketException {
-    ErrorController.to.isServerClosed(true);
-  } catch (e) {
-    print(e);
-    // ErrorController.to.isServerClosed(true);
   }
 }
 
-Future<void> getProjectlist(var userId, int isuser) async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-
-  var uri = Uri.parse("$serverUri/user_api/project?id=$userId");
-
-  // try {
-  http.Response response =
-      await http.get(uri, headers: {"Authorization": "Token $token"});
-
-  print("프로젝트 리스트 get: ${response.statusCode}");
-  if (response.statusCode == 200) {
-    List responseBody = json.decode(utf8.decode(response.bodyBytes));
-    List<Project> projectlist =
-        responseBody.map((project) => Project.fromJson(project)).toList();
-
-    if (isuser == 1) {
-      ProfileController.to.myProjectList(projectlist);
-      ProfileController.to.careerPagenums =
-          List.generate(projectlist.length, (index) => 1);
-    } else {
-      Get.find<OtherProfileController>(tag: userId.toString())
-          .otherProjectList(projectlist);
-      // Get.find<OtherProfileController>(tag: userId.toString())
-      //     .otherprofilescreenstate(ScreenState.success);
-    }
-    return;
+Future<HTTPResponse> getProjectlist(int userId) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
-    // if (isuser == 1) {
-    //   ProfileController.to.myprofilescreenstate(ScreenState.error);
-    // } else {
-    //   Get.find<OtherProfileController>(tag: userId.toString())
-    //       .otherprofilescreenstate(ScreenState.error);
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+    var uri = Uri.parse("$serverUri/user_api/project?id=$userId");
+
+    // try {
+    http.Response response =
+        await http.get(uri, headers: {"Authorization": "Token $token"});
+
+    print("프로젝트 리스트 get: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      List responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+      return HTTPResponse.success(responseBody);
+    } else {
+      // if (isuser == 1) {
+      //   ProfileController.to.myprofilescreenstate(ScreenState.error);
+      // } else {
+      //   Get.find<OtherProfileController>(tag: userId.toString())
+      //       .otherprofilescreenstate(ScreenState.error);
+      // }
+      return HTTPResponse.apiError("", response.statusCode);
+    }
+    // } on SocketException {
+    //   // ErrorController.to.isServerClosed(true);
+    //   return HTTPResponse.serverError();
+    // } catch (e) {
+    //   print(e);
+    //   return HTTPResponse.unexpectedError(e);
     // }
-    // return Future.error(response.statusCode);
   }
-  // } on SocketException {
-  //   ErrorController.to.isServerClosed(true);
-  // } catch (e) {
-  //   print(e);
-  //   // ErrorController.to.isServerClosed(true);
-  // }
 }
 
 Future<HTTPResponse> getCareerPosting(int careerId, int page) async {
@@ -217,7 +208,7 @@ Future<User?> updateProfile(
         }
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -261,7 +252,7 @@ Future<void> putpwchange() async {
         print('에러');
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -297,7 +288,7 @@ Future postlogout() async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
@@ -359,7 +350,7 @@ Future<HTTPResponse> deleteuser(String pw) async {
         ;
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
       print(e);
@@ -369,15 +360,12 @@ Future<HTTPResponse> deleteuser(String pw) async {
   }
 }
 
-Future userreport(int userid) async {
+Future<HTTPResponse> userreport(int userid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
-    String? token;
-    await const FlutterSecureStorage().read(key: 'token').then((value) {
-      token = value;
-    });
+    String? token = await const FlutterSecureStorage().read(key: 'token');
 
     final Uri uri = Uri.parse("$serverUri/user_api/report");
 
@@ -393,17 +381,15 @@ Future userreport(int userid) async {
 
       print('유저 신고 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
-        getbacks(2);
-        showCustomDialog("신고가 접수되었습니다", 1000);
-        return;
+        return HTTPResponse.success("success");
       } else {
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }
@@ -456,7 +442,7 @@ Future inquiry() async {
         return Future.error(response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);

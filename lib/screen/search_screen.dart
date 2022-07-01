@@ -52,6 +52,7 @@ class SearchScreen extends StatelessWidget {
         },
         child: Obx(
           () => Scaffold(
+              resizeToAvoidBottomInset: true,
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 toolbarHeight: 60,
@@ -72,11 +73,10 @@ class SearchScreen extends StatelessWidget {
                                 ? true
                                 : false,
                             onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => SearchFocusScreen()));
-                              _searchController.isFocused(true);
+                              if (_searchController.isFocused.value == false) {
+                                _searchController.isFocused(true);
+                                _searchController.tabController.index = 0;
+                              }
                             },
                             controller: _searchController.searchtextcontroller,
                             focusNode: _searchController.focusNode,

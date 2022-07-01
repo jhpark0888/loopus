@@ -55,7 +55,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                       projectaddcontroller.selectedStartDateTime.value =
                           DateTime.parse(DateTime.now().toString()).toString();
                       projectaddcontroller.isEndedProject(false);
-                      Get.to(() => LoadingScreen(), opaque: false);
+                      loading();
 
                       await addproject().then((value) async {
                         Get.back();

@@ -23,8 +23,7 @@ class ProjectWidget extends StatelessWidget {
   // late ProjectDetailController controller = Get.put(
   //     ProjectDetailController(project.value.id),
   //     tag: project.value.id.toString());
-  late final HoverController _hoverController =
-      Get.put(HoverController(), tag: 'project${project.value.id}');
+  final HoverController _hoverController = HoverController();
   Rx<Project> project;
 
   @override

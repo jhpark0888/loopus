@@ -20,5 +20,5 @@ class HTTPResponse {
       isError: true, errorData: {"message": '서버 오류입니다', "statusCode": 500});
 
   factory HTTPResponse.unexpectedError(e) =>
-      HTTPResponse(isError: true, errorData: {"message": e, "statusCode": 500});
+      HTTPResponse(isError: true, errorData: {"message": e, "statusCode": 600});
 }

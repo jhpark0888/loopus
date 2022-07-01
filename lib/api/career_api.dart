@@ -43,7 +43,7 @@ Future<HTTPResponse> getTopPost(int id) async {
         return HTTPResponse.apiError('', response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
       print(e);

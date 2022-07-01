@@ -1,109 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/career_board_controller.dart';
 import 'package:loopus/controller/error_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
 
 import '../constant.dart';
-
-void gettagsearch(Tagtype tagtype) async {
-  ConnectivityResult result = await initConnectivity();
-  TagController tagController = Get.find(tag: tagtype.toString());
-  tagController.tagsearchstate(ScreenState.loading);
-  if (result == ConnectivityResult.none) {
-    tagController.tagsearchstate(ScreenState.disconnect);
-    showdisconnectdialog();
-  } else {
-    String tagsearchword = tagController.tagsearch.text.replaceAll(" ", "");
-
-    Uri uri = Uri.parse('$serverUri/tag_api/tag?query=${tagsearchword}');
-    print(uri);
-    try {
-      http.Response response = await http.get(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-      );
-
-      var responsebody = json.decode(utf8.decode(response.bodyBytes));
-
-      if (response.statusCode == 200) {
-        List responselist = responsebody["results"];
-        List<SearchTag> tagmaplist =
-            responselist.map((map) => SearchTag.fromJson(map)).toList();
-
-        if (tagmaplist
-            .where((element) => element.tag == tagsearchword)
-            .isNotEmpty) {
-          tagController.searchtaglist.clear();
-
-          tagController.searchtaglist(tagmaplist.map((element) {
-            return SearchTagWidget(
-              id: element.id,
-              tag: element.tag,
-              count: element.count,
-              isSearch: 0,
-              tagtype: tagtype,
-            );
-          }).toList());
-
-          for (var selectedtag in tagController.selectedtaglist) {
-            tagController.searchtaglist
-                .removeWhere((element) => element.tag == selectedtag.text);
-          }
-        } else {
-          tagController.searchtaglist.clear();
-
-          tagController.searchtaglist(tagmaplist.map((element) {
-            return SearchTagWidget(
-              id: element.id,
-              tag: element.tag,
-              count: element.count,
-              isSearch: 0,
-              tagtype: tagtype,
-            );
-          }).toList());
-          // if (tagsearchword != '' &&
-          //     tagController.selectedtaglist
-          //         .where((tag) => tag.text == tagsearchword)
-          //         .isEmpty) {
-          //   tagController.searchtaglist.insert(
-          //       0,
-          //       SearchTagWidget(
-          //         id: 0,
-          //         tag: "처음으로 '${tagsearchword}' 태그 사용하기",
-          //         isSearch: 0,
-          //         tagtype: tagtype,
-          //       ));
-          // }
-
-          tagController.selectedtaglist.forEach((selectedtag) {
-            tagController.searchtaglist
-                .removeWhere((element) => element.tag == selectedtag.text);
-          });
-        }
-        tagController.tagsearchstate(ScreenState.success);
-      } else if (response.statusCode == 401) {
-        tagController.tagsearchstate(ScreenState.error);
-      } else {
-        tagController.tagsearchstate(ScreenState.error);
-        print('tag status code :${response.statusCode}');
-      }
-    } on SocketException {
-      ErrorController.to.isServerClosed(true);
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-    }
-  }
-}
 
 void getpopulartag() async {
   ConnectivityResult result = await initConnectivity();
@@ -128,13 +38,13 @@ void getpopulartag() async {
       print("인기 태그 리스트: ${response.statusCode}");
       if (response.statusCode == 200) {
         List responselist = responsebody["results"];
-        List<SearchTag> tagmaplist =
-            responselist.map((map) => SearchTag.fromJson(map)).toList();
+        List<Tag> tagmaplist =
+            responselist.map((map) => Tag.fromJson(map)).toList();
 
         controller.populartaglist(tagmaplist
-            .map((tag) => Tag(tagId: tag.id, tag: tag.tag, count: tag.count!))
+            .map((tag) => Tag(tagId: tag.tagId, tag: tag.tag, count: tag.count))
             .toList());
-        controller.topTagList(controller.populartaglist.sublist(0,5));
+        controller.topTagList.value = controller.populartaglist.sublist(0,5);
         controller.populartagstate(ScreenState.success);
       } else if (response.statusCode == 401) {
         controller.populartagstate(ScreenState.error);
@@ -143,9 +53,49 @@ void getpopulartag() async {
         print('tag status code :${response.statusCode}');
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
     } catch (e) {
       print(e);
+      // ErrorController.to.isServerClosed(true);
+    }
+  }
+}
+
+Future<HTTPResponse> getTagPosting(int tagId, int page, String type) async {
+  ConnectivityResult result = await initConnectivity();
+
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+    // print(userid);
+    //type: new, pop
+    final specificPostingLoadUri = Uri.parse(
+        "$serverUri/tag_api/tagged_post?id=$tagId&page=$page&type=$type");
+
+    try {
+      http.Response response = await http.get(specificPostingLoadUri,
+          headers: {"Authorization": "Token $token"});
+
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+        return HTTPResponse.success(responseBody);
+      } else if (response.statusCode == 404) {
+        Get.back();
+        showCustomDialog('이미 삭제된 포스팅입니다', 1400);
+        return HTTPResponse.apiError('이미 삭제된 포스팅입니다', response.statusCode);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
       // ErrorController.to.isServerClosed(true);
     }
   }

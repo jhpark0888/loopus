@@ -10,7 +10,7 @@ class PersonImageWidget extends StatelessWidget {
   User user;
   double? width;
   late final HoverController _hoverController =
-      Get.put(HoverController(), tag: user.userid.toString());
+      HoverController();
   @override
   Widget build(BuildContext context) {
     return  ClipOval(
@@ -19,8 +19,8 @@ class PersonImageWidget extends StatelessWidget {
                         opacity: _hoverController.isHover.value ? 0.6 : 1,
                         child: Image.asset(
                           "assets/illustrations/default_profile.png",
-                          width: 50,
-                          height: 50,
+                          width: width ?? 50,
+                          height: width ?? 50,
                         ),
                       ))
                   : Obx(

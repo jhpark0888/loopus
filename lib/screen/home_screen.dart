@@ -4,12 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/widget/custom_footer.dart';
 import 'package:loopus/widget/custom_header.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/news_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
-import 'package:loopus/widget/scrap_widget.dart';
+import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -24,6 +25,7 @@ import 'package:loopus/screen/notification_screen.dart';
 class HomeScreen extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
   final SearchController _searchController = Get.put(SearchController());
+  final ProfileController _profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,6 @@ class HomeScreen extends StatelessWidget {
                       // ProfileController.to.isnewalarm(false);
 
                       // Get.to(() => NotificationScreen());
-                      print(_homeController.contents);
                     },
                     icon: SvgPicture.asset(
                       "assets/icons/Bell_Inactive.svg",
@@ -122,13 +123,17 @@ class HomeScreen extends StatelessWidget {
               width: 5,
             ),
             Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: UserImageWidget(
-                  imageUrl:
-                      ProfileController.to.myUserInfo.value.profileImage ?? '',
-                  width: 36,
-                  height: 36,
+              child: GestureDetector(
+                onTap: () => Get.to(() => MyProfileScreen()),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: UserImageWidget(
+                    imageUrl:
+                        ProfileController.to.myUserInfo.value.profileImage ??
+                            '',
+                    width: 36,
+                    height: 36,
+                  ),
                 ),
               ),
             ),
@@ -229,7 +234,7 @@ class HomeScreen extends StatelessWidget {
           // print(
           //     'search question list : ${_searchController.searchquestionlist}');
 
-          print('search tag list : ${_searchController.searchtaglist}');
+          print('search tag list : ${_searchController.searchTagList}');
         },
         child: Column(
           children: [

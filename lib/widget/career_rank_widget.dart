@@ -47,7 +47,8 @@ class CareerRankWidget extends StatelessWidget {
                   'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202203/23/d58e7390-afda-42cd-9374-ca327df1cad8.jpg',
               profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
               looped: FollowState.follower.obs,
-              banned: BanState.normal.obs)),
+              banned: BanState.normal.obs,
+              field: '노멀')),
               const SizedBox(height: 20),
           personRankWidget(User(
               userid: 3,
@@ -61,7 +62,8 @@ class CareerRankWidget extends StatelessWidget {
                   'http://www.footballist.co.kr/news/photo/201405/9983_15159_0541.jpg',
               profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
               looped: FollowState.follower.obs,
-              banned: BanState.normal.obs)),
+              banned: BanState.normal.obs,
+              field: '노멀')),
               const SizedBox(height: 20),
           personRankWidget(User(
               userid: 3,
@@ -75,7 +77,8 @@ class CareerRankWidget extends StatelessWidget {
                   'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202110/04/b9651a63-1ba7-4ee3-bbe8-3c83fbc1f71f.jpg',
               profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
               looped: FollowState.follower.obs,
-              banned: BanState.normal.obs))
+              banned: BanState.normal.obs,
+              field: '노멀'))
         ],
       ),
     );

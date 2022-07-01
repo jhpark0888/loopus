@@ -24,23 +24,16 @@ import 'package:loopus/widget/searchedtag_widget.dart';
 
 import '../controller/error_controller.dart';
 
-Future<void> tagsearch() async {
+Future<HTTPResponse> tagsearch(String searchWord) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
-    String? token;
-    await FlutterSecureStorage().read(key: 'token').then((value) {
-      token = value;
-    });
-
-    SearchController searchController = Get.find();
-    String searchword = searchController.searchtextcontroller.text
-        .trim()
-        .replaceAll(RegExp("\\s+"), " ");
+    String? token = await FlutterSecureStorage().read(key: 'token');
 
     Uri uri = Uri.parse(
-        'http://3.35.253.151:8000/tag_api/search_tag?query=${searchword}');
+        'http://3.35.253.151:8000/tag_api/search_tag?query=${searchWord}');
     try {
       http.Response response = await http.get(
         uri,
@@ -53,40 +46,26 @@ Future<void> tagsearch() async {
       print("태그 검색: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        searchController.preWordList[searchController.tabController.index] =
-            searchword;
         var responsebody = json.decode(utf8.decode(response.bodyBytes));
-        List responselist = responsebody["results"];
-        List<SearchTag> tagmaplist =
-            responselist.map((map) => SearchTag.fromJson(map)).toList();
+        // List responselist = responsebody["results"];
+        // List<SearchTag> tagmaplist =
+        //     responselist.map((map) => SearchTag.fromJson(map)).toList();
 
-        print(responselist);
-        searchController.searchtaglist.clear();
+        // print(responselist);
+        // searchController.searchtaglist.clear();
 
-        if (tagmaplist.isEmpty) {
-          // searchController.isnosearchtag(true);
-        } else {
-          // searchController.searchtaglist(tagmaplist.map((element) {
-          //   return SearchTagWidget(
-          //     id: element.id,
-          //     tag: element.tag,
-          //     count: element.count,
-          //     isSearch: 1,
-          //   );
-          // }).toList());
-
-          // searchController.isnosearchtag(false);
-        }
+        return HTTPResponse.success(responsebody);
       } else if (response.statusCode == 401) {
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError('', response.statusCode);
       } else {
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError('', response.statusCode);
       }
     } on SocketException {
-      ErrorController.to.isServerClosed(true);
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }

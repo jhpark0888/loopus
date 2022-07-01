@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/screen/webview_screen.dart';
+import 'package:loopus/utils/custom_linkpreview.dart';
 import 'package:loopus/widget/loading_widget.dart';
 
 class NewsWidget extends StatefulWidget {
@@ -59,7 +59,7 @@ class _NewsWidgetState extends State<NewsWidget>
   bool get wantKeepAlive => true;
 
   Future geturlinfo() async {
-    final WebInfo info = await LinkPreview.scrapeFromURL(widget.url);
+    final WebInfo info = await CustomLinkPreview.scrapeFromURL(widget.url);
     description = info.description;
     domain = info.domain;
     icon = info.icon;

@@ -69,7 +69,7 @@ class TagSearchWidget extends StatelessWidget {
           child: TextField(
             autofocus: true,
             focusNode: tagController.tagsearchfocusNode,
-            controller: tagController.tagsearch,
+            controller: tagController.tagsearchContoller,
             style: kBody2Style,
             cursorColor: Colors.grey,
             cursorWidth: 1.2,
@@ -135,11 +135,11 @@ class TagSearchWidget extends StatelessWidget {
                 )
               : tagController.tagsearchstate.value == ScreenState.disconnect
                   ? DisconnectReloadWidget(reload: () {
-                      gettagsearch(tagtype);
+                      tagController.tagSearchFunction();
                     })
                   : tagController.tagsearchstate.value == ScreenState.error
                       ? ErrorReloadWidget(reload: () {
-                          gettagsearch(tagtype);
+                          tagController.tagSearchFunction();
                         })
                       : Obx(
                           () => Expanded(
