@@ -16,6 +16,7 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/trash_bin/project_add_intro_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
@@ -69,7 +70,9 @@ class ProjectAddTitleScreen extends StatelessWidget {
                           Project project = Project.fromJson(value.data);
                           project.is_user = 1;
 
-                          ProfileController.to.myProjectList.insert(0, project);
+                          ProfileController.to.myProjectList.add(project);
+                          ProfileController.to.careerPagenums.add(1);
+                          Get.back();
 
                           SchedulerBinding.instance!.addPostFrameCallback((_) {
                             showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
@@ -86,6 +89,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                           _localDataController.firstProjectAdd();
                         } else {
                           await _gaController.logProjectCreated(false);
+                          errorSituation(value);
                         }
                       });
                     },

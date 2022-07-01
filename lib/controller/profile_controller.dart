@@ -36,6 +36,8 @@ class ProfileController extends GetxController
 
   void onRefresh() async {
     careerCurrentPage(0.0);
+    careertitleController.jumpTo(0);
+    careerPageController.jumpTo(0);
     profileenablepullup.value = true;
     loadmyProfile();
     profilerefreshController.refreshCompleted();
@@ -52,7 +54,7 @@ class ProfileController extends GetxController
   RxBool careerLoading = false.obs;
 
   RxList<Project> myProjectList = <Project>[].obs;
-  List<int> _careerPagenums = <int>[];
+  List<int> careerPagenums = <int>[];
 
   Rx<File> profileimage = File('').obs;
   Rx<User> myUserInfo = User.defaultuser().obs;
@@ -98,7 +100,7 @@ class ProfileController extends GetxController
               .toList();
 
           myProjectList(projectlist);
-          _careerPagenums = List.generate(projectlist.length, (index) => 1);
+          careerPagenums = List.generate(projectlist.length, (index) => 1);
         } else {
           errorSituation(value, screenState: myprofilescreenstate.value);
         }
@@ -113,7 +115,7 @@ class ProfileController extends GetxController
   void getProfilePost() async {
     // print('현재 페이지 ${careerCurrentPage.value}');
     await getCareerPosting(myProjectList[careerCurrentPage.value.toInt()].id,
-            _careerPagenums[careerCurrentPage.value.toInt()])
+            careerPagenums[careerCurrentPage.value.toInt()])
         .then((value) {
       if (value.isError == false) {
         List<Post> postlist = value.data;
@@ -126,7 +128,7 @@ class ProfileController extends GetxController
             myProjectList[careerCurrentPage.value.toInt()]
                 .posts
                 .addAll(postlist);
-            _careerPagenums[careerCurrentPage.value.toInt()] += 1;
+            careerPagenums[careerCurrentPage.value.toInt()] += 1;
           } else {
             profileenablepullup(false);
           }

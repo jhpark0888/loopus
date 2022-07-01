@@ -64,7 +64,7 @@ Future<HTTPResponse> addproject() async {
       print("활동 생성: ${response.statusCode}");
       if (response.statusCode == 201) {
         String responsebody = await response.stream.bytesToString();
-        Map<String, dynamic> responsemap = json.decode(responsebody);
+        var responsemap = json.decode(responsebody);
 
         return HTTPResponse.success(responsemap);
       } else {
