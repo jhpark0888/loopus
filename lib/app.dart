@@ -118,12 +118,12 @@ class App extends StatelessWidget {
                   BottomNavigationBarItem(
                       tooltip: '',
                       icon: SvgPicture.asset(
-                        "assets/icons/Plus_inactive.svg",
+                        "assets/icons/Plus_Inactive.svg",
                         width: 35,
                         height: 35,
                       ),
                       activeIcon: SvgPicture.asset(
-                        "assets/icons/Plus_inactive.svg",
+                        "assets/icons/Plus_Inactive.svg",
                         width: 35,
                         height: 35,
                       ),

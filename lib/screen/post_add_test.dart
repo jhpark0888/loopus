@@ -119,7 +119,7 @@ class PostingAddNameScreen1 extends StatelessWidget {
                                           return Image.file(
                                               postingAddController
                                                   .images[index],
-                                              fit: BoxFit.fill);
+                                              fit: BoxFit.cover);
                                         }),
                                     Positioned(
                                         child: GestureDetector(
@@ -387,14 +387,23 @@ class PostingAddNameScreen1 extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(146.5, 13, 146.5, 13),
         decoration: BoxDecoration(
-            color: maingray.withOpacity(0.5),
+            color: checkContent() ? mainblue: maingray.withOpacity(0.5),
             borderRadius: BorderRadius.circular(8)),
         child: Text(
           '업로드',
           textAlign: ui.TextAlign.center,
-          style: k16Normal.copyWith(color: mainWhite),
+          style: k16Normal.copyWith(color:mainWhite),
         ),
       ),
     );
   }
+
+  bool checkContent(){
+    if(postingAddController.isAddImage.value || postingAddController.isAddLink.value || !postingAddController.isPostingTitleEmpty.value){
+      return true;
+    }else {
+      return false;
+    }
+  }
+
 }

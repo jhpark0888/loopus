@@ -20,7 +20,7 @@ class PostingAddController extends GetxController {
   RxList<File> images = <File>[].obs;
   RxList<LinkWidget> scrapList = <LinkWidget>[].obs;
   RxInt lines = 0.obs;
-  RxBool isPostingTitleEmpty = false.obs;
+  RxBool isPostingTitleEmpty = true.obs;
   RxBool isPostingContentEmpty = true.obs;
   RxBool isTagClick = false.obs;
   RxBool keyControllerAtive = false.obs;
