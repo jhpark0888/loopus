@@ -11,6 +11,7 @@ import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/post_add_test.dart';
+import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
@@ -138,19 +139,32 @@ class CompanyScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 14),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                  children: controller.careerRank
-                                      .map((element) => Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                const SizedBox(width: 14),
-                                                element
-                                              ]))
-                                      .toList()),
+                            // SingleChildScrollView(
+                            //   scrollDirection: Axis.horizontal,
+                            //   child: Row(
+                            //       children: controller.careerRank
+                            //           .map((element) => Row(
+                            //                   mainAxisSize: MainAxisSize.min,
+                            //                   children: [
+                            //                     const SizedBox(width: 14),
+                            //                     element
+                            //                   ]))
+                            //           .toList()),
+                            // ),
+                            SizedBox(
+                              height: 360,
+                              child: ListView.separated(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24),
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return controller.careerRank[index];
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox(width: 14);
+                                  },
+                                  itemCount: controller.careerRank.length),
                             ),
-                            // controller.careerRank.first,
                             const SizedBox(height: 24),
                             Padding(
                               padding: const EdgeInsets.only(left: 24),
@@ -160,17 +174,20 @@ class CompanyScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 14),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                  children: controller.companyList
-                                      .map((element) => Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                const SizedBox(width: 14),
-                                                companyWidget(element)
-                                              ]))
-                                      .toList()),
+                            SizedBox(
+                              height: 100,
+                              child: ListView.separated(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24),
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return companyWidget(
+                                        controller.companyList[index]);
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox(width: 14);
+                                  },
+                                  itemCount: controller.companyList.length),
                             ),
                             const SizedBox(height: 24),
                             const Padding(
@@ -212,7 +229,8 @@ class CompanyScreen extends StatelessWidget {
                                   itemCount:
                                       HomeController.to.topTagList.length,
                                   itemBuilder: (context, index) {
-                                    return tagAnalize(HomeController.to.topTagList[index]);
+                                    return tagAnalize(
+                                        HomeController.to.topTagList[index]);
                                   },
                                   separatorBuilder: (context, index) {
                                     return const SizedBox(height: 14);
@@ -281,9 +299,9 @@ class CompanyScreen extends StatelessWidget {
         children: [
           Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: dividegray, width: 0.5),
-                  color: dividegray),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: dividegray, width: 0.5),
+              ),
               height: 60,
               width: 60,
               child: Image.network(company.companyImage, fit: BoxFit.fill)),
@@ -307,77 +325,80 @@ class CompanyScreen extends StatelessWidget {
   }
 
   Widget topPost(Post post) {
-    return Container(
-      width: 280,
-      decoration: BoxDecoration(
-          color: lightcardgray, borderRadius: BorderRadius.circular(16)),
-      padding: const EdgeInsets.only(top: 20, bottom: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 14, right: 14),
-            child: Row(
-              children: [
-                UserImageWidget(
-                  imageUrl: post.user.profileImage ?? '',
-                  width: 32,
-                  height: 32,
-                ),
-                const SizedBox(width: 8),
-                RichText(
-                    text: TextSpan(children: [
-                  TextSpan(
-                      text: '${post.user.realName} · ', style: k15semiBold),
-                  TextSpan(text: post.user.department, style: k15normal)
-                ])),
-                const Spacer(),
-                SvgPicture.asset('assets/icons/Bookmark_Inactive.svg')
-              ],
+    return GestureDetector(
+      onTap: (){Get.to(() => PostingScreen(post: post,postid: post.id),opaque: false);},
+      child: Container(
+        width: 280,
+        decoration: BoxDecoration(
+            color: lightcardgray, borderRadius: BorderRadius.circular(16)),
+        padding: const EdgeInsets.only(top: 20, bottom: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 14, right: 14),
+              child: Row(
+                children: [
+                  UserImageWidget(
+                    imageUrl: post.user.profileImage ?? '',
+                    width: 32,
+                    height: 32,
+                  ),
+                  const SizedBox(width: 8),
+                  RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: '${post.user.realName} · ', style: k15semiBold),
+                    TextSpan(text: post.user.department, style: k15normal)
+                  ])),
+                  const Spacer(),
+                  SvgPicture.asset('assets/icons/Bookmark_Inactive.svg')
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 14),
-          Padding(
-            padding: const EdgeInsets.only(left: 14, right: 14),
-            child: Text(post.project!.careerName,
-                style: k15normal.copyWith(color: maingray)),
-          ),
-          const SizedBox(height: 14),
-          if (post.images.isNotEmpty)
-            SizedBox(
-                width: 280,
-                height: 195,
-                child: CachedNetworkImage(
-                    imageUrl: post.images.first, fit: BoxFit.fill)),
-          const SizedBox(height: 14),
-          Padding(
-            padding: const EdgeInsets.only(left: 14, right: 14),
-            child: ExpandableText(
-                textSpan: TextSpan(
-                    text: post.content, style: k15normal.copyWith(height: 1.5)),
-                maxLines: 3,
-                moreSpan: TextSpan(
-                    text: ' ...', style: k15normal.copyWith(height: 1.5))),
-          ),
-          const SizedBox(height: 14),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text('좋아요 ', style: k15normal.copyWith(color: maingray)),
-                Text('${post.likeCount}개', style: k15normal),
-                const SizedBox(width: 7),
-                Text('댓글 ', style: k15normal.copyWith(color: maingray)),
-                Text(
-                  '${(post.comments.length + 1).toString()}개',
-                  style: k15normal,
-                ),
-                const Spacer(),
-                Text('교내추천', style: k15normal.copyWith(color: maingray))
-              ],
+            const SizedBox(height: 14),
+            Padding(
+              padding: const EdgeInsets.only(left: 14, right: 14),
+              child: Text(post.project!.careerName,
+                  style: k15normal.copyWith(color: maingray)),
             ),
-          )
-        ],
+            const SizedBox(height: 14),
+            if (post.images.isNotEmpty)
+              SizedBox(
+                  width: 280,
+                  height: 195,
+                  child: CachedNetworkImage(
+                      imageUrl: post.images.first, fit: BoxFit.fill)),
+            const SizedBox(height: 14),
+            Padding(
+              padding: const EdgeInsets.only(left: 14, right: 14),
+              child: ExpandableText(
+                  textSpan: TextSpan(
+                      text: post.content, style: k15normal.copyWith(height: 1.5)),
+                  maxLines: 3,
+                  moreSpan: TextSpan(
+                      text: '...', style: k15normal.copyWith(height: 1.5))),
+            ),
+            const SizedBox(height: 14),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Row(
+                children: [
+                  Text('좋아요 ', style: k15normal.copyWith(color: maingray)),
+                  Text('${post.likeCount}개', style: k15normal),
+                  const SizedBox(width: 7),
+                  Text('댓글 ', style: k15normal.copyWith(color: maingray)),
+                  Text(
+                    '${(post.comments.length + 1).toString()}개',
+                    style: k15normal,
+                  ),
+                  const Spacer(),
+                  Text('교내추천', style: k15normal.copyWith(color: maingray))
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -398,20 +419,3 @@ class CompanyScreen extends StatelessWidget {
     ]);
   }
 }
-
-     //HomeController.to.populartaglist
-                                        // .map((element) => Column(
-                                        //         mainAxisSize: MainAxisSize.min,
-                                        //         children: [
-                                        //           const SizedBox(height: 14),
-                                        //           Row(
-                                        //             children: [
-                                        //               Text(element.tagId.toString(),style: k16semiBold,),
-                                        //               const SizedBox(width: 14),
-                                        //               Tagwidget(tag: element),
-                                        //               const Spacer(),
-                                        //               Text('${element.count.toString()}회', style: k15normal,)
-                                        //             ],
-                                        //           )
-                                        //         ]))
-                                        // .toList()

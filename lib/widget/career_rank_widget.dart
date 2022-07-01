@@ -31,7 +31,7 @@ class CareerRankWidget extends StatelessWidget {
                   style: k15normal.copyWith(fontWeight: FontWeight.w600)),
                 // Flexible(child: const Spacer()),  
                 // const Spacer(),
-              Text('전체보기', style: k15normal.copyWith(color: mainblue))
+              // Text('전체보기', style: k15normal.copyWith(color: mainblue))
             ],
           ),
           const SizedBox(height: 20),

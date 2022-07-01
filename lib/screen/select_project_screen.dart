@@ -44,8 +44,10 @@ class SelectProjectScreen extends StatelessWidget {
                   Column(
                     children: [
                       Column(
-                        children: controller.selectprojectlist.value.isNotEmpty
-                            ? controller.selectprojectlist
+                        children: 
+                        controller.selectprojectlist.value.isNotEmpty
+                            ? 
+                            controller.selectprojectlist
                                 .map((project) => Column(children: [
                                       const SizedBox(height: 14),
                                       ProjectWidget(
@@ -72,24 +74,24 @@ class SelectProjectScreen extends StatelessWidget {
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                                SizedBox(
-                                  height: 12,
-                                ),
-                                CustomExpandedButton(
-                                  onTap: () {
-                                    Get.to(
-                                      () => ProjectAddTitleScreen(
-                                        screenType: Screentype.add,
-                                      ),
-                                    );
-                                  },
-                                  isBlue: true,
-                                  title: '첫번째 활동 추가하기',
-                                  buttonTag: '첫번째 활동 추가하기',
-                                  isBig: false,
-                                )
+                                // SizedBox(
+                                //   height: 12,
+                                // ),
+                                // CustomExpandedButton(
+                                //   onTap: () {
+                                //     Get.to(
+                                //       () => ProjectAddTitleScreen(
+                                //         screenType: Screentype.add,
+                                //       ),
+                                //     );
+                                //   },
+                                //   isBlue: true,
+                                //   title: '첫번째 활동 추가하기',
+                                //   buttonTag: '첫번째 활동 추가하기',
+                                //   isBig: false,
+                                // )
                               ],
-                      ),
+                       ),
                       const SizedBox(height: 24),
                       GestureDetector(
                         onTap: () {

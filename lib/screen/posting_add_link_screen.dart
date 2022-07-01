@@ -33,21 +33,6 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
           bottomBorder: false,
           actions: [
             GestureDetector(
-                onTap: () {
-                  if (postingAddController.scrapList != []) {
-                    postingAddController.isAddLink(true);
-                  } else {
-                    postingAddController.isAddLink(false);
-                  }
-                  Get.back();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 12, right: 17.5),
-                  child: Text('확인',
-                      style: kNavigationTitle.copyWith(color: mainblue)),
-                ))
-          ],
-          leading: GestureDetector(
               onTap: () {
                 if (postingAddController.scrapList.isNotEmpty) {
                   postingAddController.isAddLink(true);
@@ -63,6 +48,8 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
                       style: kNavigationTitle.copyWith(color: postingAddController.scrapList.value.isNotEmpty ? mainblue : mainblack.withOpacity(0.5))),
                 ),
               ))
+          ],
+          leading: GestureDetector(onTap: (){Get.back();},child: SvgPicture.asset('assets/icons/Back_icon.svg'))
         // ],
         // leading: GestureDetector(
         //     onTap: () {

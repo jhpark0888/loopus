@@ -43,7 +43,7 @@ class _ExpandableTextState extends State<ExpandableText> {
     ..onTap = () {
       print(_isExpanded);
       setState(() {
-        _isExpanded = !_isExpanded;
+        // _isExpanded = !_isExpanded;
       });
     };
 
