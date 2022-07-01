@@ -29,17 +29,19 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
         actions: [
           GestureDetector(
               onTap: () {
-                if(postingAddController.scrapList != []){
-                postingAddController.isAddLink(true);}
-                else{
+                if (postingAddController.scrapList.isNotEmpty) {
+                  postingAddController.isAddLink(true);
+                  Get.back();
+                } else {
                   postingAddController.isAddLink(false);
                 }
-                Get.back();
               },
               child: Padding(
                 padding: const EdgeInsets.only(top: 12, right: 17.5),
-                child: Text('확인',
-                    style: kNavigationTitle.copyWith(color: mainblue)),
+                child:  Obx(
+                  () => Text('확인',
+                      style: kNavigationTitle.copyWith(color: postingAddController.scrapList.value.isNotEmpty ? mainblue : mainblack.withOpacity(0.5))),
+                ),
               ))
         ],
         leading: GestureDetector(
@@ -73,9 +75,8 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
                   print(postingAddController.linkcontroller.text);
                   print(string);
                   if (postingAddController.scrapList
-                      .where((scrapwidget) =>
-                          scrapwidget.url ==
-                          changeUrl(string))
+                      .where(
+                          (scrapwidget) => scrapwidget.url == changeUrl(string))
                       .isEmpty) {
                     postingAddController.scrapList.add(ScrapWidget(
                       // key: Get.put(
@@ -108,12 +109,12 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
     );
   }
 
-  String changeUrl(String url){
-    if(url.contains('https')){
+  String changeUrl(String url) {
+    if (url.contains('https')) {
       return url;
-    }else if(url.contains('http')){
+    } else if (url.contains('http')) {
       return url.replaceAll('http', 'https');
-    }else{
+    } else {
       return 'https://' + url;
     }
   }

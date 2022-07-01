@@ -615,6 +615,8 @@ class MyProfileScreen extends StatelessWidget {
                                               }
                                             },
                                             itemBuilder: (context, index) {
+                                              print(index);
+                                              print(profileController.careerCurrentPage.value.toInt() == index);
                                               var _scale = profileController
                                                           .careerCurrentPage
                                                           .value

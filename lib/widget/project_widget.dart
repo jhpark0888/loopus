@@ -45,6 +45,7 @@ class ProjectWidget extends StatelessWidget {
             //       isuser: project.value.is_user,
             //     ));
           } else {
+                  print(project.value.post_count);
             Get.to(() => PostingAddNameScreen1(
                   project_id: project.value.id,
                   route: PostaddRoute.bottom,

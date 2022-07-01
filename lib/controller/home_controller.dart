@@ -366,7 +366,7 @@ class HomeController extends GetxController
 
   Rx<ScreenState> populartagstate = ScreenState.loading.obs;
   RxList<Tag> populartaglist = <Tag>[].obs;
-
+  RxList<Tag> topTagList = <Tag>[].obs;
   @override
   void onInit() async {
     // hometabcontroller = TabController(length: 3, vsync: this);
