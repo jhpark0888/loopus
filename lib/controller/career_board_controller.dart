@@ -24,7 +24,6 @@ class CareerBoardController extends GetxController {
   RxList<MapEntry<String, String>> careerFieldList =
       <MapEntry<String, String>>[].obs;
   RxList<CareerRankWidget> careerRank = <CareerRankWidget>[].obs;
-  RxList<String> fieldlist = ['IT', '디자인', '경영', '제조', '건설', '예체능', '공무원'].obs;
   RxList<User> ranker = <User>[
     User(
         userid: 3,
@@ -39,7 +38,7 @@ class CareerBoardController extends GetxController {
         profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
         looped: FollowState.follower.obs,
         banned: BanState.normal.obs,
-        field: "노멀"),
+        fieldId: 10),
     User(
         userid: 3,
         realName: '한근형',
@@ -53,7 +52,7 @@ class CareerBoardController extends GetxController {
         profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
         looped: FollowState.follower.obs,
         banned: BanState.normal.obs,
-        field: "노멀"),
+        fieldId: 10),
     User(
         userid: 3,
         realName: '박지성',
@@ -67,7 +66,7 @@ class CareerBoardController extends GetxController {
         profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
         looped: FollowState.follower.obs,
         banned: BanState.normal.obs,
-        field: "노멀")
+        fieldId: 10)
   ].obs;
   RxList<Company> companyList = <Company>[].obs;
   RxList<Post> topPostList = <Post>[].obs;
@@ -101,7 +100,7 @@ class CareerBoardController extends GetxController {
             'https://blog.kakaocdn.net/dn/Sq4OD/btqzlkr13eD/dYwFnscXEA6YIOHckdPDDk/img.jpg',
         companyName: '카카오톡',
         contactField: 'IT, 디자인'));
-    currentFieldText.value = fieldlist.first;
+  
     careerFieldList.value = careerField.entries.toList();
     currentFieldMap({careerField.keys.first: careerField.values.first});
     await getPostingGraph();
@@ -120,7 +119,6 @@ class CareerBoardController extends GetxController {
     await getTopPost(id).then((value) {
       if (value.isError == false) {
         topPostList.value = value.data;
-        print(value.data);
       }
     });
   }

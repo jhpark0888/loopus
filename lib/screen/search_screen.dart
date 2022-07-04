@@ -13,6 +13,7 @@ import 'package:loopus/screen/home_posting_screen.dart';
 import 'package:loopus/screen/search_focus_screen.dart';
 import 'package:loopus/screen/tag_detail_screen.dart';
 import 'package:loopus/widget/divide_widget.dart';
+import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_student_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
@@ -179,6 +180,20 @@ class SearchScreen extends StatelessWidget {
                             const SizedBox(
                               height: 14,
                             ),
+                            ListView.separated(
+                                primary: false,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return PostingWidget(
+                                      item:
+                                          _searchController.popPostList[index],
+                                      type: PostingWidgetType.search);
+                                },
+                                separatorBuilder: (context, index) =>
+                                    DivideWidget(
+                                      height: 10,
+                                    ),
+                                itemCount: _searchController.popPostList.length)
                             // weekendStudent(_modalController),
                           ],
                         ),

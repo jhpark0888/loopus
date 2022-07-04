@@ -68,15 +68,13 @@ Future<HTTPResponse> getPostingTrend(String id) async {
     final topPostUrl =
         Uri.parse("$serverUri/rank/posting_trends?id=$id");
 
-    // try {
+    try {
       http.Response response = await http.get(topPostUrl,
           headers: {"Authorization": "Token $token"});
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseBody = json.decode(utf8.decode(response.bodyBytes));
         Map<String, dynamic> tempt = responseBody['monthly_count'];
-        print(tempt);
-        // print(responseBody['monthly_count'].runtimeType);
         return  HTTPResponse.success(tempt);
       } else if (response.statusCode == 404) {
         return HTTPResponse.apiError('이미 삭제된 포스팅입니다', response.statusCode);
@@ -84,13 +82,13 @@ Future<HTTPResponse> getPostingTrend(String id) async {
         return HTTPResponse.apiError('', response.statusCode);
       }
     } 
-    // on SocketException {
-    //   // ErrorController.to.isServerClosed(true);
-    //   return HTTPResponse.serverError();
-    // } catch (e) {
-    //   print(e);
-    //   return HTTPResponse.unexpectedError(e);
-    //   // ErrorController.to.isServerClosed(true);
-    // }
-  // }
+    on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+      // ErrorController.to.isServerClosed(true);
+    }
+  }
 }

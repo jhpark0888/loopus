@@ -363,6 +363,7 @@ class PostingWidget extends StatelessWidget {
   //     tag: 'post${item.id}');
   // late final HoverController _hoverController =
   //     Get.put(HoverController(), tag: 'posting${item.id}');
+  PageController pageController = PageController();
 
   final Debouncer _debouncer = Debouncer(
     milliseconds: 500,
@@ -433,35 +434,110 @@ class PostingWidget extends StatelessWidget {
               ),
           ]),
           if (item.images.isNotEmpty || item.links.isNotEmpty)
-            SizedBox(
-                width: Get.width,
-                height: Get.width,
-                child: Swiper(
-                  outer: true,
-                  loop: false,
-                  itemCount: item.images.isNotEmpty
+            Column(
+              children: [
+                // Swiper(
+                //   outer: true,
+                //   loop: false,
+                //   itemCount: item.images.isNotEmpty
+                //       ? item.images.length
+                //       : item.links.length,
+                //   itemBuilder: (BuildContext context, int index) {
+                //     if (item.images.isNotEmpty) {
+                //       return CachedNetworkImage(
+                //           imageUrl: item.images[index], fit: BoxFit.fill);
+                //       // Image.network(item.images[index],
+                //       //     fit: BoxFit.fill);
+                //     } else {
+                //       return KeepAlivePage(
+                //         child: LinkWidget(
+                //             url: item.links[index], widgetType: 'post'),
+                //       );
+                //     }
+                //   },
+                //   pagination: SwiperPagination(
+                //       margin: const EdgeInsets.all(14),
+                //       alignment: Alignment.bottomCenter,
+                //       builder: DotSwiperPaginationBuilder(
+                //           color: Color(0xFF5A5A5A).withOpacity(0.5),
+                //           activeColor: mainblue,
+                //           size: 7,
+                //           activeSize: 7)),
+                // ),
+                // ),
+                Container(
+                    constraints: BoxConstraints(
+                        maxWidth: 600,
+                        maxHeight: item.images.isNotEmpty ? Get.width : 300),
+                    child: PageView.builder(
+                      controller: pageController,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (item.images.isNotEmpty) {
+                          return CachedNetworkImage(
+                              imageUrl: item.images[index], fit: BoxFit.fill);
+                          // Image.network(item.images[index],
+                          //     fit: BoxFit.fill);
+                        } else {
+                          return KeepAlivePage(
+                            child: LinkWidget(
+                                url: item.links[index], widgetType: 'post'),
+                          );
+                        }
+                      },
+                      itemCount: item.images.isNotEmpty
+                          ? item.images.length
+                          : item.links.length,
+                    )
+                    // )
+                    // Swiper(
+                    //   outer: true,
+                    //   loop: false,
+                    //   itemCount: item.images.isNotEmpty
+                    //       ? item.images.length
+                    //       : item.links.length,
+                    //   itemBuilder: (BuildContext context, int index) {
+                    //     if (item.images.isNotEmpty) {
+                    //       return CachedNetworkImage(
+                    //           imageUrl: item.images[index], fit: BoxFit.fill);
+                    //       // Image.network(item.images[index],
+                    //       //     fit: BoxFit.fill);
+                    //     } else {
+                    //       return KeepAlivePage(
+                    //         child: LinkWidget(
+                    //             url: item.links[index], widgetType: 'post'),
+                    //       );
+                    //     }
+                    //   },
+                    //   pagination: SwiperPagination(
+                    //       margin: const EdgeInsets.all(14),
+                    //       alignment: Alignment.bottomCenter,
+                    //       builder: DotSwiperPaginationBuilder(
+                    //           color: Color(0xFF5A5A5A).withOpacity(0.5),
+                    //           activeColor: mainblue,
+                    //           size: 7,
+                    //           activeSize: 7)),
+                    // ),
+                    ),
+                const SizedBox(
+                  height: 14,
+                ),
+                PageIndicator(
+                  size: 7,
+                  activeSize: 7,
+                  space: 7,
+                  color: maingray,
+                  activeColor: mainblue,
+                  count: item.images.isNotEmpty
                       ? item.images.length
                       : item.links.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (item.images.isNotEmpty) {
-                      return CachedNetworkImage(
-                          imageUrl: item.images[index], fit: BoxFit.fill);
-                      // Image.network(item.images[index],
-                      //     fit: BoxFit.fill);
-                    } else {
-                      return LinkWidget(
-                          url: item.links[index], widgetType: 'post');
-                    }
-                  },
-                  pagination: SwiperPagination(
-                      margin: const EdgeInsets.all(14),
-                      alignment: Alignment.bottomCenter,
-                      builder: DotSwiperPaginationBuilder(
-                          color: Color(0xFF5A5A5A).withOpacity(0.5),
-                          activeColor: mainblue,
-                          size: 7,
-                          activeSize: 7)),
-                )),
+                  controller: pageController,
+                  layout: PageIndicatorLayout.SLIDE,
+                ),
+                const SizedBox(
+                  height: 14,
+                ),
+              ],
+            ),
           Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,

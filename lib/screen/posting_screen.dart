@@ -606,6 +606,7 @@ class PostingScreen extends StatelessWidget {
 
   Post? post;
   int postid;
+  PageController pageController = PageController();
 
   final Debouncer _debouncer = Debouncer(
     milliseconds: 500,
@@ -930,43 +931,112 @@ class PostingScreen extends StatelessWidget {
                                   if (controller
                                           .post.value!.images.isNotEmpty ||
                                       controller.post.value!.links.isNotEmpty)
-                                    SizedBox(
-                                        height: Get.width,
-                                        child: Swiper(
-                                          loop: false,
-                                          outer: true,
-                                          itemCount: controller
+                                    Column(
+                                      children: [
+                                        Container(
+                                            constraints: BoxConstraints(
+                                                maxWidth: 600,
+                                                maxHeight: controller
+                                                        .post
+                                                        .value!
+                                                        .images
+                                                        .isNotEmpty
+                                                    ? Get.width
+                                                    : 300),
+                                            child: PageView.builder(
+                                              controller: pageController,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                if (controller.post.value!
+                                                    .images.isNotEmpty) {
+                                                  return CachedNetworkImage(
+                                                      imageUrl: controller.post
+                                                          .value!.images[index],
+                                                      fit: BoxFit.fill);
+                                                  // Image.network(item.images[index],
+                                                  //     fit: BoxFit.fill);
+                                                } else {
+                                                  return KeepAlivePage(
+                                                    child: LinkWidget(
+                                                        url: controller
+                                                            .post
+                                                            .value!
+                                                            .links[index],
+                                                        widgetType: 'post'),
+                                                  );
+                                                }
+                                              },
+                                              itemCount: controller.post.value!
+                                                      .images.isNotEmpty
+                                                  ? controller
+                                                      .post.value!.images.length
+                                                  : controller
+                                                      .post.value!.links.length,
+                                            )),
+                                        const SizedBox(
+                                          height: 14,
+                                        ),
+                                        PageIndicator(
+                                          size: 7,
+                                          activeSize: 7,
+                                          space: 7,
+                                          color: maingray,
+                                          activeColor: mainblue,
+                                          count: controller
                                                   .post.value!.images.isNotEmpty
                                               ? controller
                                                   .post.value!.images.length
                                               : controller
                                                   .post.value!.links.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            if (controller.post.value!.images
-                                                .isNotEmpty) {
-                                              return CachedNetworkImage(
-                                                  imageUrl: controller.post
-                                                      .value!.images[index],
-                                                  fit: BoxFit.fill);
-                                            } else {
-                                              return LinkWidget(
-                                                  url: controller
-                                                      .post.value!.links[index],
-                                                  widgetType: 'post');
-                                            }
-                                          },
-                                          pagination: SwiperPagination(
-                                              margin: EdgeInsets.all(14),
-                                              alignment: Alignment.bottomCenter,
-                                              builder:
-                                                  DotSwiperPaginationBuilder(
-                                                      color: Color(0xFF5A5A5A)
-                                                          .withOpacity(0.5),
-                                                      activeColor: mainblue,
-                                                      size: 7,
-                                                      activeSize: 7)),
-                                        )),
+                                          controller: pageController,
+                                          layout: PageIndicatorLayout.SLIDE,
+                                        ),
+                                        const SizedBox(
+                                          height: 14,
+                                        ),
+                                      ],
+                                    ),
+                                  // if (controller
+                                  //         .post.value!.images.isNotEmpty ||
+                                  //     controller.post.value!.links.isNotEmpty)
+                                  //   SizedBox(
+                                  //       height: Get.width,
+                                  //       child: Swiper(
+                                  //         loop: false,
+                                  //         outer: true,
+                                  //         itemCount: controller
+                                  //                 .post.value!.images.isNotEmpty
+                                  //             ? controller
+                                  //                 .post.value!.images.length
+                                  //             : controller
+                                  //                 .post.value!.links.length,
+                                  //         itemBuilder: (BuildContext context,
+                                  //             int index) {
+                                  //           if (controller.post.value!.images
+                                  //               .isNotEmpty) {
+                                  //             return CachedNetworkImage(
+                                  //                 imageUrl: controller.post
+                                  //                     .value!.images[index],
+                                  //                 fit: BoxFit.fill);
+                                  //           } else {
+                                  //             return LinkWidget(
+                                  //                 url: controller
+                                  //                     .post.value!.links[index],
+                                  //                 widgetType: 'post');
+                                  //           }
+                                  //         },
+                                  //         pagination: SwiperPagination(
+                                  //             margin: EdgeInsets.all(14),
+                                  //             alignment: Alignment.bottomCenter,
+                                  //             builder:
+                                  //                 DotSwiperPaginationBuilder(
+                                  //                     color: Color(0xFF5A5A5A)
+                                  //                         .withOpacity(0.5),
+                                  //                     activeColor: mainblue,
+                                  //                     size: 7,
+                                  //                     activeSize: 7)),
+                                  //       )),
                                   Column(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.start,

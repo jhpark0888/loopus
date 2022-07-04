@@ -17,8 +17,7 @@ class CareerRankWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: lightcardgray),
+          borderRadius: BorderRadius.circular(16), color: lightcardgray),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -29,56 +28,62 @@ class CareerRankWidget extends StatelessWidget {
             children: [
               Text(isUniversity ? '교내' : '전국',
                   style: k15normal.copyWith(fontWeight: FontWeight.w600)),
-                // Flexible(child: const Spacer()),  
-                // const Spacer(),
+              // Flexible(child: const Spacer()),
+              // const Spacer(),
               // Text('전체보기', style: k15normal.copyWith(color: mainblue))
             ],
           ),
           const SizedBox(height: 20),
-          personRankWidget(User(
-              userid: 3,
-              realName: '김원우',
-              type: 1,
-              department: '산업경영공',
-              loopcount: 0.obs,
-              totalposting: 1,
-              isuser: 0,
-              profileImage:
-                  'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202203/23/d58e7390-afda-42cd-9374-ca327df1cad8.jpg',
-              profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
-              looped: FollowState.follower.obs,
-              banned: BanState.normal.obs,
-              field: '노멀'), 1),
-              const SizedBox(height: 20),
-          personRankWidget(User(
-              userid: 3,
-              realName: '한근형',
-              type: 1,
-              department: '융합특성화자유전공학부',
-              loopcount: 0.obs,
-              totalposting: 1,
-              isuser: 0,
-              profileImage:
-                  'http://www.footballist.co.kr/news/photo/201405/9983_15159_0541.jpg',
-              profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
-              looped: FollowState.follower.obs,
-              banned: BanState.normal.obs,
-              field: '노멀'),2 ),
-              const SizedBox(height: 20),
-          personRankWidget(User(
-              userid: 3,
-              realName: '박지성',
-              type: 1,
-              department: '산업경영공',
-              loopcount: 0.obs,
-              totalposting: 1,
-              isuser: 0,
-              profileImage:
-                  'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202110/04/b9651a63-1ba7-4ee3-bbe8-3c83fbc1f71f.jpg',
-              profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
-              looped: FollowState.follower.obs,
-              banned: BanState.normal.obs,
-              field: '노멀'),3 )
+          personRankWidget(
+              User(
+                  userid: 3,
+                  realName: '김원우',
+                  type: 1,
+                  department: '산업경영공',
+                  loopcount: 0.obs,
+                  totalposting: 1,
+                  isuser: 0,
+                  profileImage:
+                      'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202203/23/d58e7390-afda-42cd-9374-ca327df1cad8.jpg',
+                  profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
+                  looped: FollowState.follower.obs,
+                  banned: BanState.normal.obs,
+                  fieldId: 10),
+              1),
+          const SizedBox(height: 20),
+          personRankWidget(
+              User(
+                  userid: 3,
+                  realName: '한근형',
+                  type: 1,
+                  department: '융합특성화자유전공학부',
+                  loopcount: 0.obs,
+                  totalposting: 1,
+                  isuser: 0,
+                  profileImage:
+                      'http://www.footballist.co.kr/news/photo/201405/9983_15159_0541.jpg',
+                  profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
+                  looped: FollowState.follower.obs,
+                  banned: BanState.normal.obs,
+                  fieldId: 10),
+              2),
+          const SizedBox(height: 20),
+          personRankWidget(
+              User(
+                  userid: 3,
+                  realName: '박지성',
+                  type: 1,
+                  department: '산업경영공',
+                  loopcount: 0.obs,
+                  totalposting: 1,
+                  isuser: 0,
+                  profileImage:
+                      'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202110/04/b9651a63-1ba7-4ee3-bbe8-3c83fbc1f71f.jpg',
+                  profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
+                  looped: FollowState.follower.obs,
+                  banned: BanState.normal.obs,
+                  fieldId: 10),
+              3)
         ],
       ),
     );
