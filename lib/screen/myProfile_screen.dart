@@ -595,7 +595,8 @@ class MyProfileScreen extends StatelessWidget {
                                             textAlign: TextAlign.center,
                                             text: TextSpan(children: [
                                               TextSpan(
-                                                text: 'IT',
+                                                text:
+                                                    '${fieldList[int.parse(profileController.myProjectList[profileController.careerCurrentPage.toInt()].fieldIds.first)]}',
                                                 style: kmain.copyWith(
                                                     color: mainblue),
                                               ),

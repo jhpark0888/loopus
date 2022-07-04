@@ -29,95 +29,101 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
       },
       child: Scaffold(
         appBar: AppBarWidget(
-          title: '링크 첨부',
-          bottomBorder: false,
-          actions: [
-            GestureDetector(
-              onTap: () {
-                if (postingAddController.scrapList.isNotEmpty) {
-                  postingAddController.isAddLink(true);
+            title: '링크 첨부',
+            bottomBorder: false,
+            actions: [
+              GestureDetector(
+                  onTap: () {
+                    if (postingAddController.scrapList.isNotEmpty) {
+                      postingAddController.isAddLink(true);
+                      Get.back();
+                    } else {
+                      postingAddController.isAddLink(false);
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12, right: 17.5),
+                    child: Obx(
+                      () => Text('확인',
+                          style: kNavigationTitle.copyWith(
+                              color: postingAddController
+                                      .scrapList.value.isNotEmpty
+                                  ? mainblue
+                                  : mainblack.withOpacity(0.5))),
+                    ),
+                  ))
+            ],
+            leading: GestureDetector(
+                onTap: () {
                   Get.back();
-                } else {
-                  postingAddController.isAddLink(false);
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 12, right: 17.5),
-                child:  Obx(
-                  () => Text('확인',
-                      style: kNavigationTitle.copyWith(color: postingAddController.scrapList.value.isNotEmpty ? mainblue : mainblack.withOpacity(0.5))),
-                ),
-              ))
-          ],
-          leading: GestureDetector(onTap: (){Get.back();},child: SvgPicture.asset('assets/icons/Back_icon.svg'))
-        // ],
-        // leading: GestureDetector(
-        //     onTap: () {
-        //       postingAddController.scrapList.clear();
-        //       Get.back();
-        //     },
-        //     child: Container(
-        //         width: 10,
-        //         height: 16,
-        //         child: SvgPicture.asset(
-        //           'assets/icons/Back_icon.svg',
-        //         ))),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            const Text('링크', style: k16Normal),
-            const SizedBox(height: 14),
-            CustomTextField(
-                textController: postingAddController.linkcontroller,
-                hintText: '링크 주소를 입력해주세요. 최대 10개까지 가능해요',
-                validator: null,
-                obscureText: false,
-                maxLines: 1,
-                counterText: '',
-                maxLength: null,
-                onfieldSubmitted: (string) {
-                  print(postingAddController.linkcontroller.text);
-                  print(string);
-                  if (postingAddController.scrapList
-                      .where(
-                          (scrapwidget) => scrapwidget.url == changeUrl(string))
-                      .isEmpty) {
-                    postingAddController.scrapList.add(LinkWidget(
-                      // key: Get.put(
-                      //     KeyController(isTextField: false.obs).linkKey,
-                      //     tag:
-                      //         postingAddController.scrapList.length.toString()),
-                      url: changeUrl(string),
-                      widgetType: 'add',
-                      // length: postingAddController.scrapList.length,
-                    ));
-
-                            postingAddController.linkcontroller.clear();
-                          } else {
-                            showCustomDialog('중복된 주소는 하나만 게시됩니다.', 1000);
-                          }
-
-                          print(postingAddController.scrapList);
-                        }),
-                    const SizedBox(height: 24),
-                    Obx(() => Column(
-                        children: postingAddController.scrapList
-                            .map((element) => Column(children: [
-                                  element,
-                                  const SizedBox(height: 14)
-                                ]))
-                            .toList()
-                            .reversed
-                            .toList()))
-                  ]),
+                },
+                child: SvgPicture.asset('assets/icons/Back_icon.svg'))
+            // ],
+            // leading: GestureDetector(
+            //     onTap: () {
+            //       postingAddController.scrapList.clear();
+            //       Get.back();
+            //     },
+            //     child: Container(
+            //         width: 10,
+            //         height: 16,
+            //         child: SvgPicture.asset(
+            //           'assets/icons/Back_icon.svg',
+            //         ))),
             ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text('링크', style: k16Normal),
+                  const SizedBox(height: 14),
+                  CustomTextField(
+                      textController: postingAddController.linkcontroller,
+                      hintText: '링크 주소를 입력해주세요. 최대 10개까지 가능해요',
+                      validator: null,
+                      obscureText: false,
+                      maxLines: 1,
+                      counterText: '',
+                      maxLength: null,
+                      onfieldSubmitted: (string) {
+                        print(postingAddController.linkcontroller.text);
+                        print(string);
+                        if (postingAddController.scrapList
+                            .where((scrapwidget) =>
+                                scrapwidget.url == changeUrl(string))
+                            .isEmpty) {
+                          postingAddController.scrapList.add(LinkWidget(
+                            // key: Get.put(
+                            //     KeyController(isTextField: false.obs).linkKey,
+                            //     tag:
+                            //         postingAddController.scrapList.length.toString()),
+                            url: changeUrl(string),
+                            widgetType: 'add',
+                            // length: postingAddController.scrapList.length,
+                          ));
+
+                          postingAddController.linkcontroller.clear();
+                        } else {
+                          showCustomDialog('중복된 주소는 하나만 게시됩니다.', 1000);
+                        }
+
+                        print(postingAddController.scrapList);
+                      }),
+                  const SizedBox(height: 24),
+                  Obx(() => Column(
+                      children: postingAddController.scrapList
+                          .map((element) => Column(
+                              children: [element, const SizedBox(height: 14)]))
+                          .toList()
+                          .reversed
+                          .toList()))
+                ]),
           ),
         ),
-      )
-    ;
+      ),
+    );
   }
 
   String changeUrl(String url) {

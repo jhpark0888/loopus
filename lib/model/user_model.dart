@@ -11,7 +11,7 @@ class User {
     required this.loopcount,
     required this.totalposting,
     required this.isuser,
-    required this.field,
+    required this.fieldId,
     this.profileImage,
     required this.profileTag,
     required this.looped,
@@ -25,26 +25,11 @@ class User {
   int? isuser;
   RxInt loopcount;
   int totalposting;
-  String field;
+  int fieldId;
   String? profileImage;
   List<Tag> profileTag;
   Rx<FollowState> looped;
   Rx<BanState> banned;
-
-  static List<String> fieldList = [
-    "노멀",
-    "IT",
-    "디자인",
-    "경영",
-    "제조",
-    "기계",
-    "전기",
-    "교육",
-    "화학",
-    "체육",
-    "미술",
-    "음악"
-  ];
 
   factory User.defaultuser({
     int? userid,
@@ -53,7 +38,7 @@ class User {
     String? department,
     int? isuser,
     RxInt? loopcount,
-    String? field,
+    int? field,
     int? totalposting,
     String? profileImage,
     List<Tag>? profileTag,
@@ -67,7 +52,7 @@ class User {
           department: department ?? "",
           loopcount: loopcount ?? 0.obs,
           totalposting: totalposting ?? 0,
-          field: field ?? "",
+          fieldId: field ?? 10,
           isuser: isuser ?? 0,
           profileTag: profileTag ?? [],
           looped: looped ?? FollowState.normal.obs,
@@ -84,9 +69,8 @@ class User {
         profileTag: json["profile_tag"] != null
             ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
             : [],
-        field: json["group"] != null
-            ? fieldList[int.parse(json["group"].toString())]
-            : fieldList[0],
+        fieldId:
+            json["group"] != null ? int.parse(json["group"].toString()) : 10,
         department: json["department"] ?? '',
         isuser: json["is_user"] ?? 0,
         looped: json["looped"] != null

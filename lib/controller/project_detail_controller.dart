@@ -20,6 +20,7 @@ class ProjectDetailController extends GetxController {
           userid: 0,
           careerName: '',
           posts: <Post>[].obs,
+          fieldIds: [],
           members: [],
           is_user: 0,
           user: User.defaultuser())

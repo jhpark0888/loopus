@@ -20,7 +20,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   RxString _searchword = "".obs;
 
   RxList<User> recommandUsers = <User>[].obs;
-  RxList<Post> recommandPosts = <Post>[].obs;
+  RxList<Post> popPostList = <Post>[].obs;
 
   RxList<User> searchUserList = <User>[
     // User.defaultuser(department: "산업경영공학과", realName: "홍길동"),
@@ -69,6 +69,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     // for (var i in refreshControllerList) {
     //   i.loadNoData();
     // }
+    popPostLoad();
 
     debounce(_searchword, (_) async {
       searchInit();
@@ -104,6 +105,17 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     });
 
     super.onInit();
+  }
+
+  void popPostLoad() async {
+    await searchPopPost(1).then((value) {
+      if (value.isError == false) {
+        List<Post> postList =
+            List.from(value.data).map((post) => Post.fromJson(post)).toList();
+
+        popPostList(postList);
+      }
+    });
   }
 
   void searchFunction() async {

@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:get/get.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
@@ -7,7 +9,7 @@ class Project {
   Project(
       {required this.id,
       required this.userid,
-      this.field,
+      required this.fieldIds,
       this.postRatio,
       required this.careerName,
       this.startDate,
@@ -23,7 +25,7 @@ class Project {
   int? userid;
   double? postRatio;
   String careerName;
-  String? field;
+  List<String> fieldIds;
   DateTime? startDate;
   DateTime? endDate;
   RxList<Post> posts;
@@ -45,6 +47,19 @@ class Project {
       posts: json["post"] != null
           ? RxList<Post>.from(json["post"].map((x) => Post.fromJson(x)))
           : <Post>[].obs,
+      fieldIds: json["group"] != null
+          ? [json["group"].toString()]
+          // SplayTreeMap<String, int>.from(
+          //             (json["group"] as Map<String, dynamic>),
+          //             (keys1, keys2) => keys1.compareTo(keys2))
+          //         .keys
+          //         .toList()
+          //         .isNotEmpty
+          //     ? SplayTreeMap<String, int>.from(
+          //         (json["group"] as Map<String, dynamic>),
+          //         (keys1, keys2) => keys1.compareTo(keys2)).keys.toList()
+          //     : ["10"]
+          : ["10"],
       members: json["looper"] != null
           ? List<User>.from(
               json["looper"].map((x) => User.fromJson(x["profile"])))
