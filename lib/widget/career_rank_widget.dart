@@ -48,7 +48,7 @@ class CareerRankWidget extends StatelessWidget {
               profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
               looped: FollowState.follower.obs,
               banned: BanState.normal.obs,
-              field: '노멀')),
+              field: '노멀'), 1),
               const SizedBox(height: 20),
           personRankWidget(User(
               userid: 3,
@@ -63,7 +63,7 @@ class CareerRankWidget extends StatelessWidget {
               profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
               looped: FollowState.follower.obs,
               banned: BanState.normal.obs,
-              field: '노멀')),
+              field: '노멀'),2 ),
               const SizedBox(height: 20),
           personRankWidget(User(
               userid: 3,
@@ -78,13 +78,13 @@ class CareerRankWidget extends StatelessWidget {
               profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
               looped: FollowState.follower.obs,
               banned: BanState.normal.obs,
-              field: '노멀'))
+              field: '노멀'),3 )
         ],
       ),
     );
   }
 
-  Widget personRankWidget(User user) {
+  Widget personRankWidget(User user, int rank) {
     return Row(children: [
       Column(
         children: [
@@ -99,7 +99,7 @@ class CareerRankWidget extends StatelessWidget {
       const SizedBox(width: 14),
       Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         Text(
-          '1',
+          rank.toString(),
           style: k15normal.copyWith(fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 3),

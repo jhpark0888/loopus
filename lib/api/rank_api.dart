@@ -24,7 +24,7 @@ Future<HTTPResponse> getTopPost(int id) async {
 
     // print(userid);
     final topPostUrl =
-        Uri.parse("$serverUri/rank/ranking?id=10");
+        Uri.parse("$serverUri/rank/ranking?id=$id");
 
     try {
       http.Response response = await http.get(topPostUrl,
@@ -51,4 +51,46 @@ Future<HTTPResponse> getTopPost(int id) async {
       // ErrorController.to.isServerClosed(true);
     }
   }
+}
+
+Future<HTTPResponse> getPostingTrend(String id) async {
+  ConnectivityResult result = await initConnectivity();
+
+
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    String? userid = await FlutterSecureStorage().read(key: "id");
+
+    // print(userid);
+    final topPostUrl =
+        Uri.parse("$serverUri/rank/posting_trends?id=$id");
+
+    // try {
+      http.Response response = await http.get(topPostUrl,
+          headers: {"Authorization": "Token $token"});
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseBody = json.decode(utf8.decode(response.bodyBytes));
+        Map<String, dynamic> tempt = responseBody['monthly_count'];
+        print(tempt);
+        // print(responseBody['monthly_count'].runtimeType);
+        return  HTTPResponse.success(tempt);
+      } else if (response.statusCode == 404) {
+        return HTTPResponse.apiError('이미 삭제된 포스팅입니다', response.statusCode);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } 
+    // on SocketException {
+    //   // ErrorController.to.isServerClosed(true);
+    //   return HTTPResponse.serverError();
+    // } catch (e) {
+    //   print(e);
+    //   return HTTPResponse.unexpectedError(e);
+    //   // ErrorController.to.isServerClosed(true);
+    // }
+  // }
 }

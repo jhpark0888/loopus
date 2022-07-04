@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:loopus/api/career_api.dart';
+import 'package:loopus/api/rank_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/company_model.dart';
@@ -10,8 +13,17 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
 
 class CareerBoardController extends GetxController {
-  RxList<CareerRankWidget> careerRank = <CareerRankWidget>[
-  ].obs;
+  Map<String, String> careerField = {
+    '1': 'IT',
+    '2': '디자인',
+    '3': '제조',
+    '4': '경영',
+    '9': '기타',
+    '10': '미정'
+  };
+  RxList<MapEntry<String, String>> careerFieldList =
+      <MapEntry<String, String>>[].obs;
+  RxList<CareerRankWidget> careerRank = <CareerRankWidget>[].obs;
   RxList<String> fieldlist = ['IT', '디자인', '경영', '제조', '건설', '예체능', '공무원'].obs;
   RxList<User> ranker = <User>[
     User(
@@ -60,25 +72,84 @@ class CareerBoardController extends GetxController {
   RxList<Company> companyList = <Company>[].obs;
   RxList<Post> topPostList = <Post>[].obs;
   RxList<Post> topTagtList = <Post>[].obs;
-  PageController fieldController = PageController(viewportFraction:0.2,initialPage: 0);
+  RxMap<String, double> postUsageTrendNum = <String, double>{}.obs;
+  RxMap<String, int> teptNumMap = <String, int>{}.obs;
+  RxMap<String, int> myteptNumMap =
+      {'1': 1, '2': 0, '3': 2, '4': 1, '5': 2, '6': 2}.obs;
+  PageController fieldController =
+      PageController(viewportFraction: 0.2, initialPage: 0);
   PageController pageFieldController = PageController();
   RxDouble currentField = 0.0.obs;
   RxString currentFieldText = ''.obs;
+  RxMap<String, String> currentFieldMap = <String, String>{}.obs;
   @override
-  void onInit() {
+  void onInit() async {
     careerRank.add(CareerRankWidget(isUniversity: true, ranker: ranker));
     careerRank.add(CareerRankWidget(isUniversity: false, ranker: ranker));
-    companyList.add(Company(companyImage: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/DaangnMarket_logo.png/220px-DaangnMarket_logo.png', companyName: '당근마켓', contactField: 'IT, 디자인'));
-    companyList.add(Company(companyImage: 'http://image.kmib.co.kr/online_image/2021/1217/2021121717103643262_1639728637_0016582097.jpg', companyName: '우아한 형제들', contactField: 'IT, 디자인'));
-    companyList.add(Company(companyImage: 'https://blog.kakaocdn.net/dn/Sq4OD/btqzlkr13eD/dYwFnscXEA6YIOHckdPDDk/img.jpg', companyName: '카카오톡', contactField: 'IT, 디자인'));
+    companyList.add(Company(
+        companyImage:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/DaangnMarket_logo.png/220px-DaangnMarket_logo.png',
+        companyName: '당근마켓',
+        contactField: 'IT, 디자인'));
+    companyList.add(Company(
+        companyImage:
+            'http://image.kmib.co.kr/online_image/2021/1217/2021121717103643262_1639728637_0016582097.jpg',
+        companyName: '우아한 형제들',
+        contactField: 'IT, 디자인'));
+    companyList.add(Company(
+        companyImage:
+            'https://blog.kakaocdn.net/dn/Sq4OD/btqzlkr13eD/dYwFnscXEA6YIOHckdPDDk/img.jpg',
+        companyName: '카카오톡',
+        contactField: 'IT, 디자인'));
     currentFieldText.value = fieldlist.first;
-    getTopPost(10).then((value){if(value.isError == false){
-      print(value.data);
-      topPostList.value = value.data;
-      print(topPostList);
-    }});
+    careerFieldList.value = careerField.entries.toList();
+    currentFieldMap({careerField.keys.first: careerField.values.first});
+    await getPostingGraph();
+    await getTopPosts(int.parse(currentFieldMap.keys.first));
     getpopulartag();
-    print(topPostList);
+
+    currentFieldMap.listen((data) async {
+      await getPostingGraph();
+      await getTopPosts(int.parse(currentFieldMap.keys.first));
+    });
+
     super.onInit();
+  }
+
+  Future<void> getTopPosts(int id) async {
+    await getTopPost(id).then((value) {
+      if (value.isError == false) {
+        topPostList.value = value.data;
+        print(value.data);
+      }
+    });
+  }
+
+  Future<void> getPostingGraph() async {
+    await getPostingTrend(currentFieldMap.keys.first).then((value) {
+      if (value.isError == false) {
+        Map<String, int> data = Map.from(value.data);
+        teptNumMap(reverseMap(data));
+        numberNormalization();
+      }
+    });
+  }
+
+  Map<String, int> reverseMap(Map<String, int> data) {
+    Map<String, int> reverse = {};
+    for (var _key in data.keys.toList().reversed) {
+      reverse[_key] = data[_key]!;
+    }
+    return reverse;
+  }
+
+  void numberNormalization() {
+    int maxNum = teptNumMap.values.toList().reduce(max);
+
+    for (var i in teptNumMap.entries) {
+      postUsageTrendNum[i.key] = i.value == 0
+          ? 1
+          : double.parse(((i.value / maxNum) * 100).toString());
+    }
   }
 }

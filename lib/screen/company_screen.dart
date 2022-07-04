@@ -36,7 +36,7 @@ class CompanyScreen extends StatelessWidget {
           elevation: 0,
           centerTitle: false,
           title: Padding(
-            padding: const EdgeInsets.fromLTRB(5, 30, 24, 20),
+            padding: const EdgeInsets.fromLTRB(5, 40, 24, 20),
             child: Text(
               '커리어 보드',
               style: ktitle,
@@ -44,7 +44,7 @@ class CompanyScreen extends StatelessWidget {
           ),
           actions: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 24, 0),
+              padding: const EdgeInsets.fromLTRB(0, 20, 24, 0),
               child: IconButton(
                 onPressed: () {},
                 icon: SvgPicture.asset(
@@ -78,7 +78,7 @@ class CompanyScreen extends StatelessWidget {
                             curve: Curves.ease);
                       }
                       controller.currentFieldText.value =
-                          controller.fieldlist[controller.currentField.toInt()];
+                          controller.careerFieldList[controller.currentField.toInt()].value;
                     },
                     itemBuilder: (context, page) {
                       var _scale =
@@ -89,28 +89,36 @@ class CompanyScreen extends StatelessWidget {
                           controller.currentField.value == page.toDouble()
                               ? mainblack
                               : mainblack.withOpacity(0.2);
-                      return TweenAnimationBuilder(
-                          duration: const Duration(milliseconds: 350),
-                          tween: Tween(begin: _scale, end: _scale),
-                          builder: (context, double value, child) {
-                            return Transform.scale(
-                              scale: value,
-                              child: child,
-                            );
-                          },
-                          child: Center(
-                            child: Text(
-                              controller.fieldlist[page],
-                              style: ktitle.copyWith(color: _color),
-                            ),
-                          ));
+                      return GestureDetector(
+                        onTap: () {
+                          controller.pageFieldController.animateToPage(page,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.ease);
+                          // controller.fieldController.animateToPage(page, duration: const Duration(milliseconds: 300),
+                          //   curve: Curves.ease);
+                        },
+                        child: TweenAnimationBuilder(
+                            duration: const Duration(milliseconds: 350),
+                            tween: Tween(begin: _scale, end: _scale),
+                            builder: (context, double value, child) {
+                              return Transform.scale(
+                                scale: value,
+                                child: child,
+                              );
+                            },
+                            child: Center(
+                              child: Text(
+                                controller.careerFieldList[page].value,
+                                style: ktitle.copyWith(color: _color),
+                              ),
+                            )),
+                      );
                     },
-                    itemCount: controller.fieldlist.length,
+                    itemCount: controller.careerField.length,
                     controller: controller.fieldController,
                   ),
                 ),
-                Obx(
-                  () => ExpandablePageView.builder(
+                ExpandablePageView.builder(
                     controller: controller.pageFieldController,
                     onPageChanged: (index) {
                       if (controller.currentField.value != index.toDouble()) {
@@ -121,7 +129,9 @@ class CompanyScreen extends StatelessWidget {
                             curve: Curves.ease);
                       }
                       controller.currentFieldText.value =
-                          controller.fieldlist[controller.currentField.toInt()];
+                          controller.careerFieldList[controller.currentField.toInt()].value;
+                          controller.currentFieldMap({controller.careerFieldList[controller.currentField.toInt()].key : controller.careerFieldList[controller.currentField.toInt()].value});
+                          print(controller.currentFieldMap.value);
                     },
                     itemBuilder: (context, index) {
                       return Column(
@@ -132,7 +142,7 @@ class CompanyScreen extends StatelessWidget {
                                   const EdgeInsets.only(left: 24.0, top: 24),
                               child: Obx(
                                 () => Text(
-                                  '${controller.currentFieldText.value} 분야 실시간 순위',
+                                  '${controller.currentFieldMap.values.first} 분야 실시간 순위',
                                   style: k18semiBold,
                                   textAlign: TextAlign.start,
                                 ),
@@ -169,7 +179,7 @@ class CompanyScreen extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 24),
                               child: Text(
-                                '${controller.currentFieldText.value} 분야 최근 인기 기업',
+                                '${controller.currentFieldMap.values.first} 분야 최근 인기 기업',
                                 style: k18semiBold,
                               ),
                             ),
@@ -272,14 +282,53 @@ class CompanyScreen extends StatelessWidget {
                               child: Container(
                                 height: 172,
                                 width: 295,
-                                decoration: BoxDecoration(color: maingray),
+                                // decoration: BoxDecoration(color: maingray),
+                                child: Obx(
+                                  ()=> Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children:
+                                          controller.postUsageTrendNum.entries
+                                              .map((e) => Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      Text(controller
+                                                          .teptNumMap[e.key]
+                                                          .toString()),
+                                                      const SizedBox(height: 3),
+                                                      AnimatedSize(
+                                                          duration: const Duration(
+                                                              milliseconds: 300),
+                                                          child: Container(
+                                                            height: e.value
+                                                                .toDouble(),
+                                                            width: 20,
+                                                            decoration: const BoxDecoration(
+                                                                color: mainblue,
+                                                                borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            16),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            16))),
+                                                          )),
+                                                      const SizedBox(height: 12),
+                                                      Text(
+                                                        '${e.key}월',
+                                                        style: kButtonStyle,
+                                                      )
+                                                    ],
+                                                  ))
+                                              .toList()),
+                                ),
                               ),
                             )
                           ]);
                     },
-                    itemCount: controller.fieldlist.length,
+                    itemCount: controller.careerField.length,
                   ),
-                ),
               ]),
             ),
           ],
@@ -326,7 +375,9 @@ class CompanyScreen extends StatelessWidget {
 
   Widget topPost(Post post) {
     return GestureDetector(
-      onTap: (){Get.to(() => PostingScreen(post: post,postid: post.id),opaque: false);},
+      onTap: () {
+        Get.to(() => PostingScreen(post: post, postid: post.id), opaque: false);
+      },
       child: Container(
         width: 280,
         decoration: BoxDecoration(
@@ -374,7 +425,8 @@ class CompanyScreen extends StatelessWidget {
               padding: const EdgeInsets.only(left: 14, right: 14),
               child: ExpandableText(
                   textSpan: TextSpan(
-                      text: post.content, style: k15normal.copyWith(height: 1.5)),
+                      text: post.content,
+                      style: k15normal.copyWith(height: 1.5)),
                   maxLines: 3,
                   moreSpan: TextSpan(
                       text: '...', style: k15normal.copyWith(height: 1.5))),
