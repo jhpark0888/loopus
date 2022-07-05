@@ -1,27 +1,27 @@
-import 'package:loopus/model/enterprise_model.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/user_model.dart';
 
 class Contact {
   Contact(
       {required this.id,
       required this.user,
-      required this.enterprise,
+      required this.company,
       required this.date});
 
   int id;
   User user;
-  Enterprise enterprise;
+  Company company;
   DateTime date;
 
   factory Contact.fromJson(Map<String, dynamic> json) => Contact(
         id: json['id'],
         user: json["user_id"],
-        enterprise: json["real_name"],
+        company: json["real_name"],
         date: json["date"],
       );
 
   Map<String, dynamic> toJson() => {
         "user": user,
-        "enterprise": enterprise,
+        "enterprise": company,
       };
 }

@@ -423,205 +423,285 @@ class SearchFocusScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshConfiguration(
-      child: ScrollNoneffectWidget(
-        child: NestedScrollView(
-          headerSliverBuilder: (context, value) {
-            return [
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverSafeArea(
-                  top: false,
-                  sliver: SliverAppBar(
-                    backgroundColor: mainWhite,
-                    toolbarHeight: 44,
-                    pinned: true,
-                    elevation: 0,
-                    automaticallyImplyLeading: false,
-                    flexibleSpace: Column(
-                      children: [
-                        TabBar(
-                            controller: _searchController.tabController,
-                            labelStyle: kmainbold,
-                            labelColor: mainblack,
-                            unselectedLabelStyle:
-                                kmainbold.copyWith(color: dividegray),
-                            unselectedLabelColor: dividegray,
-                            automaticIndicatorColorAdjustment: false,
-                            indicator: const UnderlineIndicator(
-                              strokeCap: StrokeCap.round,
-                              borderSide:
-                                  BorderSide(width: 2, color: mainblack),
-                            ),
-                            isScrollable: false,
-                            tabs: const [
-                              Tab(
-                                height: 40,
-                                child: Text(
-                                  "계정",
-                                ),
-                              ),
-                              Tab(
-                                height: 40,
-                                child: Text(
-                                  "포스트",
-                                ),
-                              ),
-                              Tab(
-                                height: 40,
-                                child: Text(
-                                  "태그",
-                                ),
-                              ),
-                              Tab(
-                                height: 40,
-                                child: Text(
-                                  "기업",
-                                ),
-                              ),
-                            ]),
-                        Divider(
-                          height: 1,
-                          thickness: 2,
-                          color: dividegray,
-                        )
-                      ],
+    return GestureDetector(
+      onTap: () {
+        _searchController.focusNode.unfocus();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          toolbarHeight: 60,
+          centerTitle: false,
+          titleSpacing: 0,
+          elevation: 0,
+          backgroundColor: mainWhite,
+          title: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            width: MediaQuery.of(context).size.width,
+            height: 36,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                      autocorrect: false,
+                      readOnly: false,
+                      // _searchController.isFocused.value == false
+                      //     ? true
+                      //     : false,
+                      onTap: () {
+                        // AppController.to.willPopAction;
+                        // if (_searchController.isFocused.value == false) {
+                        //   _searchController.isFocused(true);
+                        //   _searchController.tabController.index = 0;
+                        // }
+                      },
+                      controller: _searchController.searchtextcontroller,
+                      focusNode: _searchController.focusNode,
+                      style: k16Normal,
+                      cursorColor: mainblack,
+                      cursorWidth: 1.2,
+                      cursorRadius: Radius.circular(5.0),
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: cardGray,
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(8)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(8)),
+                        contentPadding: const EdgeInsets.only(right: 24),
+                        isDense: true,
+                        hintText: "무엇을 찾으시나요?",
+                        hintStyle: k16Normal.copyWith(color: maingray),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
+                          child: SvgPicture.asset(
+                            "assets/icons/Search_Inactive.svg",
+                            width: 20,
+                            height: 20,
+                            color: maingray,
+                          ),
+                        ),
+                      )),
+                ),
+                GestureDetector(
+                  onTap: AppController.to.willPopAction,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 14),
+                    child: Text(
+                      '취소',
+                      style: kmain.copyWith(color: mainblue),
                     ),
                   ),
-                ),
-              ),
-            ];
-          },
-          body: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: _searchController.tabController,
-              children: [
-                Obx(
-                  () => _searchController.isSearchLoadingList[0].value
-                      ? const LoadingWidget()
-                      : _searchController.isSearchEmptyList[0].value == true
-                          ? const SearchEmptyWidget()
-                          : Obx(
-                              () => SmartRefresher(
-                                physics: const BouncingScrollPhysics(),
-                                enablePullDown: false,
-                                enablePullUp: true,
-                                controller:
-                                    _searchController.refreshControllerList[0],
-                                footer: const MyCustomFooter(),
-                                onLoading: _searchController.onLoading,
-                                child: ListView.separated(
-                                    primary: false,
-                                    shrinkWrap: true,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 14),
-                                    itemBuilder: (context, index) {
-                                      return SearchUserWidget(
-                                          user: _searchController
-                                              .searchUserList[index]);
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return const SizedBox(
-                                        height: 4,
-                                      );
-                                    },
-                                    itemCount: _searchController
-                                        .searchUserList.length),
-                              ),
-                            ),
-                ),
-                Obx(
-                  () => _searchController.isSearchLoadingList[0].value
-                      ? const LoadingWidget()
-                      : _searchController.isSearchEmptyList[1].value == true
-                          ? const SearchEmptyWidget()
-                          : Obx(
-                              () => SmartRefresher(
-                                physics: const BouncingScrollPhysics(),
-                                enablePullDown: false,
-                                enablePullUp: true,
-                                controller:
-                                    _searchController.refreshControllerList[1],
-                                footer: const MyCustomFooter(),
-                                onLoading: _searchController.onLoading,
-                                child: ListView.separated(
-                                    primary: false,
-                                    shrinkWrap: true,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 14),
-                                    itemBuilder: (context, index) {
-                                      return PostingWidget(
-                                        item: _searchController
-                                            .searchPostList[index],
-                                        type: PostingWidgetType.search,
-                                      );
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return DivideWidget(
-                                        height: 10,
-                                      );
-                                    },
-                                    itemCount: _searchController
-                                        .searchPostList.length),
-                              ),
-                            ),
-                ),
-                Obx(
-                  () => _searchController.isSearchLoadingList[0].value
-                      ? const LoadingWidget()
-                      : _searchController.isSearchEmptyList[2].value == true
-                          ? const SearchEmptyWidget()
-                          : Obx(
-                              () => SmartRefresher(
-                                physics: const BouncingScrollPhysics(),
-                                enablePullDown: false,
-                                enablePullUp: true,
-                                controller:
-                                    _searchController.refreshControllerList[2],
-                                footer: const MyCustomFooter(),
-                                onLoading: _searchController.onLoading,
-                                child: ListView.separated(
-                                    primary: false,
-                                    shrinkWrap: true,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 14),
-                                    itemBuilder: (context, index) {
-                                      return SearchTagWidget(
-                                          tag: _searchController
-                                              .searchTagList[index]);
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return const SizedBox(
-                                        height: 4,
-                                      );
-                                    },
-                                    itemCount:
-                                        _searchController.searchTagList.length),
-                              ),
-                            ),
-                ),
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        "assets/icons/Enterprise_Ready.svg",
-                        width: 60,
-                        height: 60,
+                )
+              ],
+            ),
+          ),
+        ),
+        body: RefreshConfiguration(
+          child: ScrollNoneffectWidget(
+            child: NestedScrollView(
+              headerSliverBuilder: (context, value) {
+                return [
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                    sliver: SliverSafeArea(
+                      top: false,
+                      sliver: SliverAppBar(
+                        backgroundColor: mainWhite,
+                        toolbarHeight: 44,
+                        pinned: true,
+                        elevation: 0,
+                        automaticallyImplyLeading: false,
+                        flexibleSpace: Column(
+                          children: [
+                            TabBar(
+                                controller: _searchController.tabController,
+                                labelStyle: kmainbold,
+                                labelColor: mainblack,
+                                unselectedLabelStyle:
+                                    kmainbold.copyWith(color: dividegray),
+                                unselectedLabelColor: dividegray,
+                                automaticIndicatorColorAdjustment: false,
+                                indicator: const UnderlineIndicator(
+                                  strokeCap: StrokeCap.round,
+                                  borderSide:
+                                      BorderSide(width: 2, color: mainblack),
+                                ),
+                                isScrollable: false,
+                                tabs: const [
+                                  Tab(
+                                    height: 40,
+                                    child: Text(
+                                      "계정",
+                                    ),
+                                  ),
+                                  Tab(
+                                    height: 40,
+                                    child: Text(
+                                      "포스트",
+                                    ),
+                                  ),
+                                  Tab(
+                                    height: 40,
+                                    child: Text(
+                                      "태그",
+                                    ),
+                                  ),
+                                  Tab(
+                                    height: 40,
+                                    child: Text(
+                                      "기업",
+                                    ),
+                                  ),
+                                ]),
+                            Divider(
+                              height: 1,
+                              thickness: 2,
+                              color: dividegray,
+                            )
+                          ],
+                        ),
                       ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      const Text(
-                        "기업 정보를 수집중이에요\n빠른 시일 내 기업 정보를 제공해 드릴게요",
-                        style: kmainheight,
-                        textAlign: TextAlign.center,
-                      )
-                    ],
+                    ),
                   ),
-                ),
-              ]),
+                ];
+              },
+              body: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _searchController.tabController,
+                  children: [
+                    Obx(
+                      () => _searchController.isSearchLoadingList[0].value
+                          ? const LoadingWidget()
+                          : _searchController.isSearchEmptyList[0].value == true
+                              ? const SearchEmptyWidget()
+                              : Obx(
+                                  () => SmartRefresher(
+                                    physics: const BouncingScrollPhysics(),
+                                    enablePullDown: false,
+                                    enablePullUp: true,
+                                    controller: _searchController
+                                        .refreshControllerList[0],
+                                    footer: const MyCustomFooter(),
+                                    onLoading: _searchController.onLoading,
+                                    child: ListView.separated(
+                                        primary: false,
+                                        shrinkWrap: true,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 14),
+                                        itemBuilder: (context, index) {
+                                          return SearchUserWidget(
+                                              user: _searchController
+                                                  .searchUserList[index]);
+                                        },
+                                        separatorBuilder: (context, index) {
+                                          return const SizedBox(
+                                            height: 4,
+                                          );
+                                        },
+                                        itemCount: _searchController
+                                            .searchUserList.length),
+                                  ),
+                                ),
+                    ),
+                    Obx(
+                      () => _searchController.isSearchLoadingList[0].value
+                          ? const LoadingWidget()
+                          : _searchController.isSearchEmptyList[1].value == true
+                              ? const SearchEmptyWidget()
+                              : Obx(
+                                  () => SmartRefresher(
+                                    physics: const BouncingScrollPhysics(),
+                                    enablePullDown: false,
+                                    enablePullUp: true,
+                                    controller: _searchController
+                                        .refreshControllerList[1],
+                                    footer: const MyCustomFooter(),
+                                    onLoading: _searchController.onLoading,
+                                    child: ListView.separated(
+                                        primary: false,
+                                        shrinkWrap: true,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 14),
+                                        itemBuilder: (context, index) {
+                                          return PostingWidget(
+                                            item: _searchController
+                                                .searchPostList[index],
+                                            type: PostingWidgetType.search,
+                                          );
+                                        },
+                                        separatorBuilder: (context, index) {
+                                          return DivideWidget(
+                                            height: 10,
+                                          );
+                                        },
+                                        itemCount: _searchController
+                                            .searchPostList.length),
+                                  ),
+                                ),
+                    ),
+                    Obx(
+                      () => _searchController.isSearchLoadingList[0].value
+                          ? const LoadingWidget()
+                          : _searchController.isSearchEmptyList[2].value == true
+                              ? const SearchEmptyWidget()
+                              : Obx(
+                                  () => SmartRefresher(
+                                    physics: const BouncingScrollPhysics(),
+                                    enablePullDown: false,
+                                    enablePullUp: true,
+                                    controller: _searchController
+                                        .refreshControllerList[2],
+                                    footer: const MyCustomFooter(),
+                                    onLoading: _searchController.onLoading,
+                                    child: ListView.separated(
+                                        primary: false,
+                                        shrinkWrap: true,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 14),
+                                        itemBuilder: (context, index) {
+                                          return SearchTagWidget(
+                                              tag: _searchController
+                                                  .searchTagList[index]);
+                                        },
+                                        separatorBuilder: (context, index) {
+                                          return const SizedBox(
+                                            height: 4,
+                                          );
+                                        },
+                                        itemCount: _searchController
+                                            .searchTagList.length),
+                                  ),
+                                ),
+                    ),
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            "assets/icons/Company_Ready.svg",
+                            width: 60,
+                            height: 60,
+                          ),
+                          const SizedBox(
+                            height: 24,
+                          ),
+                          const Text(
+                            "기업 정보를 수집중이에요\n빠른 시일 내 기업 정보를 제공해 드릴게요",
+                            style: kmainheight,
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ),
+                    ),
+                  ]),
+            ),
+          ),
         ),
       ),
     );

@@ -25,7 +25,7 @@ class User {
   int? isuser;
   RxInt loopcount;
   int totalposting;
-  int fieldId;
+  String fieldId;
   String? profileImage;
   List<Tag> profileTag;
   Rx<FollowState> looped;
@@ -38,7 +38,7 @@ class User {
     String? department,
     int? isuser,
     RxInt? loopcount,
-    int? fieldId,
+    String? fieldId,
     int? totalposting,
     String? profileImage,
     List<Tag>? profileTag,
@@ -52,7 +52,7 @@ class User {
           department: department ?? "",
           loopcount: loopcount ?? 0.obs,
           totalposting: totalposting ?? 0,
-          fieldId: fieldId ?? 10,
+          fieldId: fieldId ?? "10",
           isuser: isuser ?? 0,
           profileTag: profileTag ?? [],
           looped: looped ?? FollowState.normal.obs,
@@ -69,8 +69,7 @@ class User {
         profileTag: json["profile_tag"] != null
             ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
             : [],
-        fieldId:
-            json["group"] != null ? int.parse(json["group"].toString()) : 10,
+        fieldId: json["group"] != null ? json["group"].toString() : "10",
         department: json["department"] ?? '',
         isuser: json["is_user"] ?? 0,
         looped: json["looped"] != null

@@ -786,7 +786,7 @@ class OtherProfileScreen extends StatelessWidget {
                                               text: TextSpan(children: [
                                                 TextSpan(
                                                   text:
-                                                      '${fieldList[int.parse(_controller.otherProjectList[_controller.careerCurrentPage.toInt()].fieldIds.first)]}',
+                                                      '${fieldList[_controller.otherProjectList[_controller.careerCurrentPage.toInt()].fieldIds.first]}',
                                                   style: kmain.copyWith(
                                                       color: mainblue),
                                                 ),

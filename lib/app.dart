@@ -10,6 +10,7 @@ import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/screen/company_screen.dart';
 import 'package:loopus/screen/home_screen.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
+import 'package:loopus/screen/scout_screen.dart';
 import 'package:loopus/screen/search_screen.dart';
 
 // ignore: use_key_in_widget_constructors
@@ -19,46 +20,23 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
       HomeScreen(),
-      SearchScreen(),
-      // Navigator(
-      //     key: controller.searcnPageNaviationKey,
-      //     onGenerateRoute: (routeSettings) {
-      //       return MaterialPageRoute(
-      //         builder: (context) => SearchScreen(),
-      //       );
-      //     }),
+      // SearchScreen(),
+      Navigator(
+          key: controller.searcnPageNaviationKey,
+          onGenerateRoute: (routeSettings) {
+            return MaterialPageRoute(
+              builder: (context) => SearchScreen(),
+            );
+          }),
       Container(
         color: mainblack.withOpacity(0.25),
       ),
-      Container(),
+      ScoutScreen(),
       CompanyScreen(),
     ];
 
     return WillPopScope(
-      onWillPop: () async {
-        // if (controller.currentIndex.value == 1) {
-        // var value = await AppController
-        //     .to.searcnPageNaviationKey.currentState!
-        //     .maybePop();
-        // print(value);
-        // if (value) {
-        //   AppController.to.searcnPageNaviationKey.currentState!.pop();
-        //   SearchController.to.clearSearchedList();
-        //   SearchController.to.isnosearchpost(false);
-        //   SearchController.to.isnosearchprofile(false);
-        //   SearchController.to.isnosearchquestion(false);
-        //   SearchController.to.isnosearchtag(false);
-        //   SearchController.to.searchtextcontroller.clear();
-        //   for (int pagenum in SearchController.to.pagenumList) {
-        //     pagenum += 1;
-        //   }
-        // }
-
-        // return !value;
-        // } else {
-        return true;
-        // }
-      },
+      onWillPop: controller.willPopAction,
       child: Scaffold(
         extendBody: false,
         body: Obx(
@@ -70,10 +48,10 @@ class App extends StatelessWidget {
         bottomNavigationBar: Obx(
           () => Container(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(20),
-                topLeft: Radius.circular(20),
-              ),
+              // borderRadius: const BorderRadius.only(
+              //   topRight: Radius.circular(20),
+              //   topLeft: Radius.circular(20),
+              // ),
               boxShadow: [
                 BoxShadow(
                   color: mainblack.withOpacity(0.1),
@@ -87,12 +65,12 @@ class App extends StatelessWidget {
             ),
             child: ClipRRect(
               clipBehavior: Clip.hardEdge,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-                bottomLeft: Radius.circular(0),
-                bottomRight: Radius.circular(0),
-              ),
+              // borderRadius: const BorderRadius.only(
+              //   topLeft: Radius.circular(20),
+              //   topRight: Radius.circular(20),
+              //   bottomLeft: Radius.circular(0),
+              //   bottomRight: Radius.circular(0),
+              // ),
               child: BottomNavigationBar(
                 backgroundColor: mainWhite,
                 type: BottomNavigationBarType.fixed,
@@ -100,7 +78,7 @@ class App extends StatelessWidget {
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
                 enableFeedback: false,
-                onTap: controller.changePageIndex,
+                onTap: controller.changeBottomNav,
                 items: [
                   BottomNavigationBarItem(
                       tooltip: '',

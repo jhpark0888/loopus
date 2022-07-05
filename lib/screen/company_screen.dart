@@ -15,6 +15,8 @@ import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
+import 'package:loopus/widget/company_image_widget.dart';
+import 'package:loopus/widget/company_widget.dart';
 import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
@@ -36,8 +38,8 @@ class CompanyScreen extends StatelessWidget {
         child: AppBar(
           elevation: 0,
           centerTitle: false,
-          title: Padding(
-            padding: const EdgeInsets.fromLTRB(5, 40, 24, 20),
+          title: const Padding(
+            padding: EdgeInsets.fromLTRB(5, 40, 24, 20),
             child: Text(
               '커리어 보드',
               style: ktitle,
@@ -79,8 +81,9 @@ class CompanyScreen extends StatelessWidget {
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.ease);
                         }
-                        controller.currentFieldText.value =
-                            controller.careerFieldList[controller.currentField.toInt()].value;
+                        controller.currentFieldText.value = controller
+                            .careerFieldList[controller.currentField.toInt()]
+                            .value;
                       },
                       itemBuilder: (context, page) {
                         var _scale =
@@ -116,227 +119,239 @@ class CompanyScreen extends StatelessWidget {
                               )),
                         );
                       },
-                      itemCount: controller.careerField.length,
+                      itemCount: fieldList.length,
                       controller: controller.fieldController,
                     ),
                   ),
                   ExpandablePageView.builder(
-                      controller: controller.pageFieldController,
-                      onPageChanged: (index) {
-                        if (controller.currentField.value != index.toDouble()) {
-                          controller.currentField(index.toDouble());
-                          controller.currentField.refresh();
-                          controller.fieldController.animateToPage(index,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease);
-                        }
-                        controller.currentFieldText.value =
-                            controller.careerFieldList[controller.currentField.toInt()].value;
-                            controller.currentFieldMap({controller.careerFieldList[controller.currentField.toInt()].key : controller.careerFieldList[controller.currentField.toInt()].value});
-                            print(controller.currentFieldMap.value);
-                      },
-                      itemBuilder: (context, index) {
-                        return Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 24.0, top: 24),
-                                child: Obx(
-                                  () => Text(
-                                    '${controller.currentFieldMap.values.first} 분야 실시간 순위',
-                                    style: k18semiBold,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 14),
-                              // SingleChildScrollView(
-                              //   scrollDirection: Axis.horizontal,
-                              //   child: Row(
-                              //       children: controller.careerRank
-                              //           .map((element) => Row(
-                              //                   mainAxisSize: MainAxisSize.min,
-                              //                   children: [
-                              //                     const SizedBox(width: 14),
-                              //                     element
-                              //                   ]))
-                              //           .toList()),
-                              // ),
-                              SizedBox(
-                                height: 360,
-                                child: ScrollNoneffectWidget(
-                                  child: ListView.separated(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 24),
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) {
-                                        return controller.careerRank[index];
-                                      },
-                                      separatorBuilder: (context, index) {
-                                        return const SizedBox(width: 14);
-                                      },
-                                      itemCount: controller.careerRank.length),
-                                ),
-                              ),
-                              const SizedBox(height: 24),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 24),
-                                child: Text(
-                                  '${controller.currentFieldMap.values.first} 분야 최근 인기 기업',
+                    controller: controller.pageFieldController,
+                    onPageChanged: (index) {
+                      if (controller.currentField.value != index.toDouble()) {
+                        controller.currentField(index.toDouble());
+                        controller.currentField.refresh();
+                        controller.fieldController.animateToPage(index,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.ease);
+                      }
+                      controller.currentFieldText.value = controller
+                          .careerFieldList[controller.currentField.toInt()]
+                          .value;
+                      controller.currentFieldMap({
+                        controller
+                                .careerFieldList[controller.currentField.toInt()]
+                                .key:
+                            controller
+                                .careerFieldList[
+                                    controller.currentField.toInt()]
+                                .value
+                      });
+                      print(controller.currentFieldMap.value);
+                    },
+                    itemBuilder: (context, index) {
+                      return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 24.0, top: 24),
+                              child: Obx(
+                                () => Text(
+                                  '${controller.currentFieldMap.values.first} 분야 실시간 순위',
                                   style: k18semiBold,
+                                  textAlign: TextAlign.start,
                                 ),
                               ),
-                              const SizedBox(height: 14),
-                              ScrollNoneffectWidget(
-                                child: SizedBox(
-                                  height: 100,
-                                  child: ListView.separated(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 24),
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) {
-                                        return companyWidget(
-                                            controller.companyList[index]);
-                                      },
-                                      separatorBuilder: (context, index) {
-                                        return const SizedBox(width: 14);
-                                      },
-                                      itemCount: controller.companyList.length),
-                                ),
-                              ),
-                              const SizedBox(height: 24),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 24),
-                                child: Text('실시간 인기 포스트', style: k18semiBold),
-                              ),
-                              const SizedBox(height: 14),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Obx(
-                                  () => ScrollNoneffectWidget(
-                                    child: Row(
-                                        children: controller.topPostList
-                                            .map((element) => Row(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: [
-                                                      const SizedBox(width: 14),
-                                                      topPost(element)
-                                                    ]))
-                                            .toList()),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 24),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 24.0, right: 24),
-                                child: Divider(thickness: 1, color: cardGray),
-                              ),
-                              const SizedBox(height: 24),
-                              const Padding(
-                                  padding: EdgeInsets.only(left: 24.0, right: 24),
-                                  child: Text('해시태그 분석', style: k18semiBold)),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 24.0, right: 24, top: 6),
-                                child: Obx(
-                                  () => ListView.separated(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    primary: false,
-                                    shrinkWrap: true,
-                                    itemCount:
-                                        HomeController.to.topTagList.length,
+                            ),
+                            const SizedBox(height: 14),
+                            // SingleChildScrollView(
+                            //   scrollDirection: Axis.horizontal,
+                            //   child: Row(
+                            //       children: controller.careerRank
+                            //           .map((element) => Row(
+                            //                   mainAxisSize: MainAxisSize.min,
+                            //                   children: [
+                            //                     const SizedBox(width: 14),
+                            //                     element
+                            //                   ]))
+                            //           .toList()),
+                            // ),
+                            SizedBox(
+                              height: 360,
+                              child: ScrollNoneffectWidget(
+                                child: ListView.separated(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24),
+                                    scrollDirection: Axis.horizontal,
                                     itemBuilder: (context, index) {
-                                      return tagAnalize(
-                                          HomeController.to.topTagList[index]);
+                                      return controller.careerRank[index];
                                     },
                                     separatorBuilder: (context, index) {
-                                      return const SizedBox(height: 14);
+                                      return const SizedBox(width: 14);
                                     },
-                                  ),
+                                    itemCount: controller.careerRank.length),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 24),
+                              child: Text(
+                                '${controller.currentFieldMap.values.first} 분야 최근 인기 기업',
+                                style: k18semiBold,
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            ScrollNoneffectWidget(
+                              child: SizedBox(
+                                height: 100,
+                                child: ListView.separated(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24),
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      return CompanyWidget(
+                                          company:
+                                              controller.companyList[index]);
+                                    },
+                                    separatorBuilder: (context, index) {
+                                      return const SizedBox(width: 14);
+                                    },
+                                    itemCount: controller.companyList.length),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 24),
+                              child: Text('실시간 인기 포스트', style: k18semiBold),
+                            ),
+                            const SizedBox(height: 14),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Obx(
+                                () => ScrollNoneffectWidget(
+                                  child: Row(
+                                      children: controller.topPostList
+                                          .map((element) =>
+                                              Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    const SizedBox(width: 14),
+                                                    topPost(element)
+                                                  ]))
+                                          .toList()),
                                 ),
                               ),
-                              const SizedBox(height: 24),
-                              const Padding(
+                            ),
+                            const SizedBox(height: 24),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 24.0, right: 24),
+                              child: Divider(thickness: 1, color: cardGray),
+                            ),
+                            const SizedBox(height: 24),
+                            const Padding(
                                 padding: EdgeInsets.only(left: 24.0, right: 24),
-                                child: Divider(thickness: 1, color: cardGray),
-                              ),
-                              const SizedBox(height: 24),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 24.0, right: 24),
-                                child: Text('포스트 분석', style: k18semiBold),
-                              ),
-                              const SizedBox(height: 12),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 46),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                        width: 20,
-                                        height: 1,
-                                        decoration:
-                                            BoxDecoration(color: myPostColor)),
-                                    const SizedBox(width: 4),
-                                    Text('내 포스트 수',
-                                        style: k13midum.copyWith(
-                                            color: myPostColor)),
-                                  ],
+                                child: Text('해시태그 분석', style: k18semiBold)),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 24.0, right: 24, top: 6),
+                              child: Obx(
+                                () => ListView.separated(
+                                  padding: const EdgeInsets.only(top: 20),
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      HomeController.to.topTagList.length,
+                                  itemBuilder: (context, index) {
+                                    return tagAnalize(
+                                        HomeController.to.topTagList[index]);
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox(height: 14);
+                                  },
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 40, right: 40, bottom: 34),
-                                child: Container(
-                                  height: 172,
-                                  width: 295,
-                                  // decoration: BoxDecoration(color: maingray),
-                                  child: Obx(
-                                    ()=> Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children:
-                                            controller.postUsageTrendNum.entries
-                                                .map((e) => Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        Text(controller
-                                                            .teptNumMap[e.key]
-                                                            .toString()),
-                                                        const SizedBox(height: 3),
-                                                        AnimatedSize(
-                                                            duration: const Duration(
-                                                                milliseconds: 300),
-                                                            child: Container(
-                                                              height: e.value
-                                                                  .toDouble(),
-                                                              width: 20,
-                                                              decoration: const BoxDecoration(
-                                                                  color: mainblue,
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              16),
-                                                                      topRight: Radius
-                                                                          .circular(
-                                                                              16))),
-                                                            )),
-                                                        const SizedBox(height: 12),
-                                                        Text(
-                                                          '${e.key}월',
-                                                          style: kButtonStyle,
-                                                        )
-                                                      ],
-                                                    ))
-                                                .toList()),
-                                  ),
+                            ),
+                            const SizedBox(height: 24),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 24.0, right: 24),
+                              child: Divider(thickness: 1, color: cardGray),
+                            ),
+                            const SizedBox(height: 24),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 24.0, right: 24),
+                              child: Text('포스트 분석', style: k18semiBold),
+                            ),
+                            const SizedBox(height: 12),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 46),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                      width: 20,
+                                      height: 1,
+                                      decoration:
+                                          BoxDecoration(color: myPostColor)),
+                                  const SizedBox(width: 4),
+                                  Text('내 포스트 수',
+                                      style: k13midum.copyWith(
+                                          color: myPostColor)),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 40, right: 40, bottom: 34),
+                              child: Container(
+                                height: 172,
+                                width: 295,
+                                // decoration: BoxDecoration(color: maingray),
+                                child: Obx(
+                                  () => Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: controller
+                                          .postUsageTrendNum.entries
+                                          .map((e) => Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Text(controller
+                                                      .teptNumMap[e.key]
+                                                      .toString()),
+                                                  const SizedBox(height: 3),
+                                                  AnimatedSize(
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      child: Container(
+                                                        height:
+                                                            e.value.toDouble(),
+                                                        width: 20,
+                                                        decoration: const BoxDecoration(
+                                                            color: mainblue,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        16),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        16))),
+                                                      )),
+                                                  const SizedBox(height: 12),
+                                                  Text(
+                                                    '${e.key}월',
+                                                    style: kButtonStyle,
+                                                  )
+                                                ],
+                                              ))
+                                          .toList()),
                                 ),
-                              )
-                            ]);
-                      },
-                      itemCount: controller.careerField.length,
-                    ),
+                              ),
+                            )
+                          ]);
+                    },
+                    itemCount: fieldList.length,
+                  ),
                 ]),
               ),
             ],
@@ -344,42 +359,6 @@ class CompanyScreen extends StatelessWidget {
         ),
       ),
     ));
-  }
-
-  Widget companyWidget(Company company) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-          color: lightcardgray, borderRadius: BorderRadius.circular(16)),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: dividegray, width: 0.5),
-              ),
-              height: 60,
-              width: 60,
-              child: Image.network(company.companyImage, fit: BoxFit.fill)),
-          const SizedBox(width: 24),
-          Column(
-            children: [
-              Text(company.companyName),
-              const SizedBox(height: 7),
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: company.contactField,
-                    style: k15normal.copyWith(color: mainblue)),
-                const TextSpan(text: '분야 컨택 중', style: k15normal)
-              ]))
-            ],
-          )
-        ],
-      ),
-    );
   }
 
   Widget topPost(Post post) {

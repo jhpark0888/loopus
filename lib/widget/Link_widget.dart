@@ -201,12 +201,20 @@ class LinkWidget extends StatelessWidget {
                               height: 200,
                               width: Get.width,
                               fit: BoxFit.cover,
+                              errorWidget: (context, string, widget) {
+                                return const Center(
+                                  child: Text(
+                                    "이미지 없음",
+                                    style: kNavigationTitle,
+                                  ),
+                                );
+                              },
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 22, horizontal: 20),
+                                  vertical: 20, horizontal: 20),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   Text(
                                     linkController.info.value.domain,
@@ -218,7 +226,7 @@ class LinkWidget extends StatelessWidget {
                                     height: 14,
                                   ),
                                   Text(
-                                    linkController.info.value.description,
+                                    linkController.info.value.title,
                                     style: k16Normal,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,

@@ -51,15 +51,15 @@ class MyProfileScreen extends StatelessWidget {
           children: [
             WillPopScope(
               onWillPop: () async {
-                try {
-                  if (Platform.isAndroid &&
-                      (AppController.to.currentIndex.value == 4)) {
-                    AppController.to.currentIndex(0);
-                    return false;
-                  }
-                } catch (e) {
-                  print(e);
-                }
+                // try {
+                //   if (Platform.isAndroid &&
+                //       (AppController.to.currentIndex.value == 4)) {
+                //     AppController.to.currentIndex(0);
+                //     return false;
+                //   }
+                // } catch (e) {
+                //   print(e);
+                // }
 
                 return true;
               },
@@ -360,7 +360,7 @@ class MyProfileScreen extends StatelessWidget {
                                       const Spacer(),
                                       InkWell(
                                           onTap: () {
-                                            AppController.to.changePageIndex(3);
+                                            AppController.to.changeBottomNav(3);
                                           },
                                           child: Text(
                                             '전체 보기(000개)',
@@ -596,7 +596,7 @@ class MyProfileScreen extends StatelessWidget {
                                             text: TextSpan(children: [
                                               TextSpan(
                                                 text:
-                                                    '${fieldList[int.parse(profileController.myProjectList[profileController.careerCurrentPage.toInt()].fieldIds.first)]}',
+                                                    '${fieldList[profileController.myProjectList[profileController.careerCurrentPage.toInt()].fieldIds.first]}',
                                                 style: kmain.copyWith(
                                                     color: mainblue),
                                               ),
