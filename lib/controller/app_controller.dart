@@ -14,9 +14,9 @@ import 'package:loopus/controller/scroll_controller.dart';
 enum RouteName {
   home,
   search,
-  paper,
-  bookmark,
-  profile,
+  upload,
+  scout,
+  careerboard,
 }
 
 class AppController extends GetxService {
@@ -26,53 +26,96 @@ class AppController extends GetxService {
   final HomeController _homeController = Get.put(HomeController());
   RxBool ismyprofile = false.obs;
   RxInt currentIndex = 0.obs;
-  // GlobalKey<NavigatorState> searcnPageNaviationKey =
-  //     GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> searcnPageNaviationKey =
+      GlobalKey<NavigatorState>();
+  List<int> bottomHistory = [0];
 
-  Future<void> changePageIndex(int index) async {
-    if (index == 0) {
-      if (_localDataController.isTagChanged == true) {
-        _homeController.onPostingRefresh();
-        // _homeController.onQuestionRefresh();
-        _localDataController.tagChange(false);
-        // .showCustomDialog('관심 태그 변경한 뒤 홈 새로고침했다는 뜻', 1000);
-      }
-
-      if (currentIndex.value == 0) {
-        _homeController.scrollController.animateTo(0,
-            duration: const Duration(milliseconds: 500), curve: Curves.linear);
-        // CustomScrollController.to.scrollToTop();
-        // if (CustomScrollController.to.customScrollController.value.offset ==
-        //     0.0) {
-        //   HomeController.to.hometabcontroller.animateTo(
-        //     0,
-        //     curve: Curves.easeInOut,
-        //     duration: Duration(milliseconds: 300),
-        //   );
-        // }
-      }
-      currentIndex(index);
-    }
-    if (index == 1) {
-      currentIndex(index);
-    }
-    if (index == 2) {
-      if (currentIndex.value != 2) {
+  void changeBottomNav(int value, {bool hasGesture = true}) {
+    var page = RouteName.values[value];
+    switch (page) {
+      case RouteName.upload:
         showCustomBottomSheet();
-      }
-    }
-    if (index == 3) {
-      currentIndex(index);
-    }
-    if (index == 4) {
-      ismyprofile.value = true;
-
-      // if (currentIndex.value != 4) {
-      //   //TODO: 임시
-      //   ProfileController.to.isProfileLoading.value = true;
-      //   ProfileController.to.loadmyProfile();
-      // }
-      currentIndex(index);
+        break;
+      case RouteName.home:
+      case RouteName.search:
+      case RouteName.scout:
+      case RouteName.careerboard:
+        _changePage(value, hasGesture: hasGesture);
+        break;
     }
   }
+
+  void _changePage(int value, {bool hasGesture = true}) {
+    currentIndex(value);
+    if (!hasGesture) return;
+    if (bottomHistory.last != value) {
+      bottomHistory.add(value);
+    }
+  }
+
+  Future<bool> willPopAction() async {
+    if (bottomHistory.length == 1) {
+      // showDialog(
+      //   context: Get.context!,
+      //   builder: (context) => MessagePopup(
+      //     message: '종료하시겠습니까?',
+      //     okCallback: () {
+      //       exit(0);
+      //     },
+      //     cancelCallback: Get.back,
+      //     title: '시스템',
+      //   ),
+      // );
+      return true;
+    } else {
+      var page = RouteName.values[bottomHistory.last];
+      if (page == RouteName.search) {
+        var value = await searcnPageNaviationKey.currentState!.maybePop();
+        if (value) return false;
+      }
+
+      bottomHistory.removeLast();
+      var index = bottomHistory.last;
+      changeBottomNav(index, hasGesture: false);
+      return false;
+    }
+  }
+
+  // Future<void> changePageIndex(int index) async {
+  //   if (index == 0) {
+  //     if (_localDataController.isTagChanged == true) {
+  //       _homeController.onPostingRefresh();
+  //       // _homeController.onQuestionRefresh();
+  //       _localDataController.tagChange(false);
+  //       // .showCustomDialog('관심 태그 변경한 뒤 홈 새로고침했다는 뜻', 1000);
+  //     }
+
+  //     if (currentIndex.value == 0) {
+  //       _homeController.scrollController.animateTo(0,
+  //           duration: const Duration(milliseconds: 500), curve: Curves.linear);
+  //     }
+  //     currentIndex(index);
+  //   }
+  //   if (index == 1) {
+  //     currentIndex(index);
+  //   }
+  //   if (index == 2) {
+  //     if (currentIndex.value != 2) {
+  //       showCustomBottomSheet();
+  //     }
+  //   }
+  //   if (index == 3) {
+  //     currentIndex(index);
+  //   }
+  //   if (index == 4) {
+  //     ismyprofile.value = true;
+
+  //     // if (currentIndex.value != 4) {
+  //     //   //TODO: 임시
+  //     //   ProfileController.to.isProfileLoading.value = true;
+  //     //   ProfileController.to.loadmyProfile();
+  //     // }
+  //     currentIndex(index);
+  //   }
+  // }
 }

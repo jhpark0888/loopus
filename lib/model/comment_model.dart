@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:loopus/model/enterprise_model.dart';
 import 'package:loopus/model/user_model.dart';
 
 abstract class PostComment {}

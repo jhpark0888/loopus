@@ -38,7 +38,7 @@ class CareerBoardController extends GetxController {
         profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
         looped: FollowState.follower.obs,
         banned: BanState.normal.obs,
-        fieldId: 10),
+        fieldId: "10"),
     User(
         userid: 3,
         realName: '한근형',
@@ -52,7 +52,7 @@ class CareerBoardController extends GetxController {
         profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
         looped: FollowState.follower.obs,
         banned: BanState.normal.obs,
-        fieldId: 10),
+        fieldId: "10"),
     User(
         userid: 3,
         realName: '박지성',
@@ -66,7 +66,7 @@ class CareerBoardController extends GetxController {
         profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
         looped: FollowState.follower.obs,
         banned: BanState.normal.obs,
-        fieldId: 10)
+        fieldId: "10")
   ].obs;
   RxList<Company> companyList = <Company>[].obs;
   RxList<Post> topPostList = <Post>[].obs;
@@ -85,20 +85,25 @@ class CareerBoardController extends GetxController {
     careerRank.add(CareerRankWidget(isUniversity: true, ranker: ranker));
     careerRank.add(CareerRankWidget(isUniversity: false, ranker: ranker));
     companyList.add(Company(
+        id: 1,
         companyImage:
             'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/DaangnMarket_logo.png/220px-DaangnMarket_logo.png',
         companyName: '당근마켓',
-        contactField: 'IT, 디자인'));
+        contactField: 'IT, 디자인',
+        contactcount: 0.obs));
     companyList.add(Company(
+        id: 2,
         companyImage:
             'http://image.kmib.co.kr/online_image/2021/1217/2021121717103643262_1639728637_0016582097.jpg',
         companyName: '우아한 형제들',
-        contactField: 'IT, 디자인'));
+        contactField: 'IT, 디자인',
+        contactcount: 0.obs));
     companyList.add(Company(
+        id: 3,
         companyImage:
             'https://blog.kakaocdn.net/dn/Sq4OD/btqzlkr13eD/dYwFnscXEA6YIOHckdPDDk/img.jpg',
         companyName: '카카오톡',
-        contactField: 'IT, 디자인'));
+        contactField: 'IT, 디자인', contactcount: 0.obs));
     createMap();
     careerFieldList.value = careerField.entries.toList();
     currentFieldMap({careerField.keys.first: careerField.values.first});

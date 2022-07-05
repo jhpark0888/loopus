@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/api/search_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/model/enterprise_model.dart';
+
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';

@@ -15,6 +15,8 @@ import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
+import 'package:loopus/widget/company_image_widget.dart';
+import 'package:loopus/widget/company_widget.dart';
 import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
@@ -140,7 +142,7 @@ class CompanyScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return companyWidget(controller.companyList[index]);
+                  return CompanyWidget(company: controller.companyList[index]);
                 },
                 separatorBuilder: (context, index) {
                   return const SizedBox(width: 14);
@@ -280,42 +282,6 @@ class CompanyScreen extends StatelessWidget {
           ),
         )
       ]),
-    );
-  }
-
-  Widget companyWidget(Company company) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-          color: lightcardgray, borderRadius: BorderRadius.circular(16)),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: dividegray, width: 0.5),
-              ),
-              height: 60,
-              width: 60,
-              child: Image.network(company.companyImage, fit: BoxFit.fill)),
-          const SizedBox(width: 24),
-          Column(
-            children: [
-              Text(company.companyName),
-              const SizedBox(height: 7),
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: company.contactField,
-                    style: k15normal.copyWith(color: mainblue)),
-                const TextSpan(text: '분야 컨택 중', style: k15normal)
-              ]))
-            ],
-          )
-        ],
-      ),
     );
   }
 

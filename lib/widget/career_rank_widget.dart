@@ -48,7 +48,7 @@ class CareerRankWidget extends StatelessWidget {
                   profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
                   looped: FollowState.follower.obs,
                   banned: BanState.normal.obs,
-                  fieldId: 10),
+                  fieldId: "10"),
               1),
           const SizedBox(height: 20),
           personRankWidget(
@@ -65,7 +65,7 @@ class CareerRankWidget extends StatelessWidget {
                   profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
                   looped: FollowState.follower.obs,
                   banned: BanState.normal.obs,
-                  fieldId: 10),
+                  fieldId: "10"),
               2),
           const SizedBox(height: 20),
           personRankWidget(
@@ -82,7 +82,7 @@ class CareerRankWidget extends StatelessWidget {
                   profileTag: [Tag(tagId: 1, tag: '태그', count: 1)],
                   looped: FollowState.follower.obs,
                   banned: BanState.normal.obs,
-                  fieldId: 10),
+                  fieldId: "10"),
               3)
         ],
       ),

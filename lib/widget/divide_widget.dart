@@ -13,7 +13,7 @@ class DivideWidget extends StatelessWidget {
       thickness: 1,
       indent: 20,
       endIndent: 20,
-      color: cardGray,
+      color: dividegray,
     );
   }
 }

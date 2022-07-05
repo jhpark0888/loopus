@@ -30,20 +30,20 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        try {
-          if (Platform.isAndroid && AppController.to.currentIndex.value == 1) {
-            if (_searchController.isFocused.value) {
-              _searchController.focusNode.unfocus();
-              _searchController.isFocused(false);
-            } else {
-              AppController.to.currentIndex(0);
-            }
+        // try {
+        //   if (Platform.isAndroid && AppController.to.currentIndex.value == 1) {
+        //     if (_searchController.isFocused.value) {
+        //       _searchController.focusNode.unfocus();
+        //       _searchController.isFocused(false);
+        //     } else {
+        //       AppController.to.currentIndex(0);
+        //     }
 
-            return false;
-          }
-        } catch (e) {
-          print(e);
-        }
+        //     return false;
+        //   }
+        // } catch (e) {
+        //   print(e);
+        // }
 
         return true;
       },
@@ -70,17 +70,23 @@ class SearchScreen extends StatelessWidget {
                       Expanded(
                         child: TextField(
                             autocorrect: false,
-                            readOnly: _searchController.isFocused.value == false
-                                ? true
-                                : false,
+                            readOnly: true,
+                            // _searchController.isFocused.value == false
+                            //     ? true
+                            //     : false,
                             onTap: () {
-                              if (_searchController.isFocused.value == false) {
-                                _searchController.isFocused(true);
-                                _searchController.tabController.index = 0;
-                              }
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SearchFocusScreen()));
+                              // if (_searchController.isFocused.value == false) {
+                              //   _searchController.isFocused(true);
+                              //   _searchController.tabController.index = 0;
+                              // }
                             },
-                            controller: _searchController.searchtextcontroller,
-                            focusNode: _searchController.focusNode,
+                            // controller: _searchController.searchtextcontroller,
+                            // focusNode: _searchController.focusNode,
                             style: k16Normal,
                             cursorColor: mainblack,
                             cursorWidth: 1.2,
@@ -111,94 +117,92 @@ class SearchScreen extends StatelessWidget {
                               ),
                             )),
                       ),
-                      if (_searchController.isFocused.value)
-                        GestureDetector(
-                          onTap: () {
-                            _searchController.focusNode.unfocus();
-                            _searchController.searchtextcontroller.clear();
-                            _searchController.isFocused(false);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 14),
-                            child: Text(
-                              '취소',
-                              style: kmain.copyWith(color: mainblue),
-                            ),
-                          ),
-                        )
+                      // if (_searchController.isFocused.value)
+                      //   GestureDetector(
+                      //     onTap: () {
+                      //       _searchController.focusNode.unfocus();
+                      //       _searchController.searchtextcontroller.clear();
+                      //       _searchController.isFocused(false);
+                      //     },
+                      //     child: Padding(
+                      //       padding: const EdgeInsets.only(left: 14),
+                      //       child: Text(
+                      //         '취소',
+                      //         style: kmain.copyWith(color: mainblue),
+                      //       ),
+                      //     ),
+                      //   )
                     ],
                   ),
                 ),
               ),
-              body: _searchController.isFocused.value
-                  ? SearchFocusScreen()
-                  : ScrollNoneffectWidget(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            const SizedBox(height: 12),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ),
-                              child: Text(
-                                "이 계정을 추천해요",
-                                style: kmainbold,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 14,
-                            ),
-                            SizedBox(
-                              height: 105,
-                              child: ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  itemBuilder: (context, index) {
-                                    return Container();
-                                  },
-                                  separatorBuilder: (context, index) {
-                                    return const SizedBox(
-                                      width: 14,
-                                    );
-                                  },
-                                  itemCount:
-                                      _searchController.recommandUsers.length),
-                            ),
-                            DivideWidget(),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ),
-                              child: Text(
-                                "지금 인기있는 포스트를 만나보세요",
-                                style: kmainbold,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 14,
-                            ),
-                            ListView.separated(
-                                primary: false,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return PostingWidget(
-                                      item:
-                                          _searchController.popPostList[index],
-                                      type: PostingWidgetType.search);
-                                },
-                                separatorBuilder: (context, index) =>
-                                    DivideWidget(
-                                      height: 10,
-                                    ),
-                                itemCount: _searchController.popPostList.length)
-                            // weekendStudent(_modalController),
-                          ],
+              body:
+                  // _searchController.isFocused.value
+                  //     ? SearchFocusScreen()
+                  //     :
+                  ScrollNoneffectWidget(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 12),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                        ),
+                        child: Text(
+                          "이 계정을 추천해요",
+                          style: kmainbold,
                         ),
                       ),
-                    )),
+                      const SizedBox(
+                        height: 14,
+                      ),
+                      SizedBox(
+                        height: 105,
+                        child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            itemBuilder: (context, index) {
+                              return Container();
+                            },
+                            separatorBuilder: (context, index) {
+                              return const SizedBox(
+                                width: 14,
+                              );
+                            },
+                            itemCount: _searchController.recommandUsers.length),
+                      ),
+                      DivideWidget(),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                        ),
+                        child: Text(
+                          "지금 인기있는 포스트를 만나보세요",
+                          style: kmainbold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 14,
+                      ),
+                      ListView.separated(
+                          primary: false,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return PostingWidget(
+                                item: _searchController.popPostList[index],
+                                type: PostingWidgetType.search);
+                          },
+                          separatorBuilder: (context, index) => DivideWidget(
+                                height: 10,
+                              ),
+                          itemCount: _searchController.popPostList.length)
+                      // weekendStudent(_modalController),
+                    ],
+                  ),
+                ),
+              )),
         ),
       ),
     );
