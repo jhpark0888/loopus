@@ -521,21 +521,26 @@ class PostingWidget extends StatelessWidget {
                 const SizedBox(
                   height: 14,
                 ),
-                PageIndicator(
-                  size: 7,
-                  activeSize: 7,
-                  space: 7,
-                  color: maingray,
-                  activeColor: mainblue,
-                  count: item.images.isNotEmpty
-                      ? item.images.length
-                      : item.links.length,
-                  controller: pageController,
-                  layout: PageIndicatorLayout.SLIDE,
-                ),
-                const SizedBox(
-                  height: 14,
-                ),
+                if (item.images.length > 1 || item.links.length > 1)
+                  Column(
+                    children: [
+                      PageIndicator(
+                        size: 7,
+                        activeSize: 7,
+                        space: 7,
+                        color: maingray,
+                        activeColor: mainblue,
+                        count: item.images.isNotEmpty
+                            ? item.images.length
+                            : item.links.length,
+                        controller: pageController,
+                        layout: PageIndicatorLayout.SLIDE,
+                      ),
+                      const SizedBox(
+                        height: 14,
+                      ),
+                    ],
+                  ),
               ],
             ),
           Column(

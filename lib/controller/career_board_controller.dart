@@ -72,15 +72,14 @@ class CareerBoardController extends GetxController {
   RxList<Post> topPostList = <Post>[].obs;
   RxList<Post> topTagtList = <Post>[].obs;
   RxMap<String, double> postUsageTrendNum = <String, double>{}.obs;
-  RxMap<String, int> teptNumMap = <String, int>{}.obs;
-  RxMap<String, int> myteptNumMap =
-      {'1': 1, '2': 0, '3': 2, '4': 1, '5': 2, '6': 2}.obs;
-  PageController fieldController =
-      PageController(viewportFraction: 0.2, initialPage: 0);
-  PageController pageFieldController = PageController();
-  RxDouble currentField = 0.0.obs;
-  RxString currentFieldText = ''.obs;
+  RxMap<String, double> teptNumMap = <String, double>{}.obs;
   RxMap<String, String> currentFieldMap = <String, String>{}.obs;
+  RxMap<String, List<Post>?> activeFieldsPost = <String, List<Post>?>{}.obs;
+  RxMap<String, Map<String, Map<String, double>?>> activeFieldsGraph =
+      <String, Map<String, Map<String, double>?>>{}.obs;
+  PageController pageFieldController = PageController();
+  RxInt currentField = 1.obs;
+
   @override
   void onInit() async {
     careerRank.add(CareerRankWidget(isUniversity: true, ranker: ranker));
@@ -100,7 +99,7 @@ class CareerBoardController extends GetxController {
             'https://blog.kakaocdn.net/dn/Sq4OD/btqzlkr13eD/dYwFnscXEA6YIOHckdPDDk/img.jpg',
         companyName: '카카오톡',
         contactField: 'IT, 디자인'));
-  
+    createMap();
     careerFieldList.value = careerField.entries.toList();
     currentFieldMap({careerField.keys.first: careerField.values.first});
     await getPostingGraph();
@@ -108,18 +107,34 @@ class CareerBoardController extends GetxController {
     getpopulartag();
 
     currentFieldMap.listen((data) async {
-      await getPostingGraph();
-      await getTopPosts(int.parse(currentFieldMap.keys.first));
+      if (activeFieldsPost[data.keys.first.toString()] == null) {
+        await getPostingGraph();
+        await getTopPosts(int.parse(data.keys.first));
+      }
     });
 
     super.onInit();
+  }
+
+  void createMap() {
+    for (var key in careerField.keys) {
+      activeFieldsGraph[key] = {'postUsageTrendNum': null, 'teptNumMap': null};
+      activeFieldsPost[key] = null;
+    }
+    Future.delayed(Duration(milliseconds: 300));
   }
 
   Future<void> getTopPosts(int id) async {
     await getTopPost(id).then((value) {
       if (value.isError == false) {
         topPostList.value = value.data;
+        print(topPostList);
+        print(id);
+        if (activeFieldsPost[id.toString()] == null) {
+          activeFieldsPost[id.toString()] = topPostList.toList();
+        }
       }
+      print(activeFieldsPost.value);
     });
   }
 
@@ -129,20 +144,26 @@ class CareerBoardController extends GetxController {
         Map<String, int> data = Map.from(value.data);
         teptNumMap(reverseMap(data));
         numberNormalization();
+        activeFieldsGraph[currentFieldMap.keys.first]!['teptNumMap'] =
+            Map.from(reverseMap(data));
+        activeFieldsGraph[currentFieldMap.keys.first]!['postUsageTrendNum'] =
+            Map.from(postUsageTrendNum);
+        // activeFieldsGraph[currentFieldMap.keys.first] = postUsageTrendNum.value
       }
+      print(activeFieldsGraph.value);
     });
   }
 
-  Map<String, int> reverseMap(Map<String, int> data) {
-    Map<String, int> reverse = {};
+  Map<String, double> reverseMap(Map<String, int> data) {
+    Map<String, double> reverse = {};
     for (var _key in data.keys.toList().reversed) {
-      reverse[_key] = data[_key]!;
+      reverse[_key] = double.parse(data[_key]!.toString());
     }
     return reverse;
   }
 
   void numberNormalization() {
-    int maxNum = teptNumMap.values.toList().reduce(max);
+    double maxNum = teptNumMap.values.toList().reduce(max);
 
     for (var i in teptNumMap.entries) {
       postUsageTrendNum[i.key] = i.value == 0
