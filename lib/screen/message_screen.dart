@@ -20,6 +20,7 @@ class MessageScreen extends StatelessWidget {
         appBar: AppBarWidget(
           leading: IconButton(
             onPressed: () {
+              Get.back();
               // if (messageController.chattingroomlist
               //     .where((messageroomwidget) =>
               //         messageroomwidget.messageRoom.value.notread.value != 0)
@@ -81,11 +82,10 @@ class MessageScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
                 child: Column(
                   children: [
-                    // Container(
-                    //   height: 36,
-                    //   decoration: const BoxDecoration(color: cardGray,),
-                    // ),
-                    NoUlTextField(controller: messageController.searchName,obscureText: false,),
+                    Container(
+                      height: 36,
+                      decoration: const BoxDecoration(color: cardGray,),
+                    ),
                     Expanded(
                       child: ListView.separated(
                         padding: EdgeInsets.only(top: 24),
