@@ -7,6 +7,7 @@ class User {
     required this.userid,
     required this.realName,
     required this.type,
+    required this.univ,
     required this.department,
     required this.loopcount,
     required this.totalposting,
@@ -25,6 +26,7 @@ class User {
   int userid;
   String realName;
   int type;
+  String univ;
   String department;
   int? isuser;
   RxInt loopcount;
@@ -44,6 +46,7 @@ class User {
     int? userid,
     String? realName,
     int? type,
+    String? univ,
     String? department,
     int? isuser,
     RxInt? loopcount,
@@ -62,6 +65,7 @@ class User {
           userid: userid ?? 0,
           realName: realName ?? "",
           type: type ?? 0,
+          univ: univ ?? "",
           department: department ?? "",
           loopcount: loopcount ?? 0.obs,
           totalposting: totalposting ?? 0,
@@ -91,6 +95,7 @@ class User {
             : [],
         fieldId: json["group"] != null ? json["group"].toString() : "10",
         fieldRank: json["group_rank"] ?? 0.0,
+        univ: json["univ"] ?? '',
         department: json["department"] ?? '',
         isuser: json["is_user"] ?? 0,
         looped: json["looped"] != null
@@ -117,6 +122,7 @@ class User {
         : profileTag;
     fieldId = json["group"] != null ? json["group"].toString() : fieldId;
     fieldRank = json["group_rank"] ?? fieldRank;
+    univ = json["univ"] ?? univ;
     department = json["department"] ?? department;
     isuser = json["is_user"] ?? isuser;
     looped = json["looped"] != null

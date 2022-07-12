@@ -79,7 +79,8 @@ class Post {
   void copywith(Map<String, dynamic> json) {
     id = json["id"] ?? id;
     userid = json["user_id"] ?? userid;
-    content = json["contents"] != null ? RxString(json["contents"]) : content;
+    content.value = json["contents"] ?? content.value;
+
     images = json["contents_image"] != null
         ? List<Map<String, dynamic>>.from(json["contents_image"])
             .map((map) => map['image'].toString())
@@ -90,19 +91,18 @@ class Post {
             .map((map) => map['link'].toString())
             .toList()
         : links;
-    tags = json['post_tag'] != null
+    tags.assignAll(json['post_tag'] != null
         ? List<Map<String, dynamic>>.from(json['post_tag'])
             .map((tag) => Tag.fromJson(tag))
             .toList()
-            .obs
-        : tags;
+        : tags);
     date = json["date"] != null ? DateTime.parse(json["date"]) : date;
-    comments = json["comments"].runtimeType != List
-        ? <Comment>[Comment.fromJson(json["comments"])].obs
+    comments.assignAll(json["comments"].runtimeType != List
+        ? <Comment>[Comment.fromJson(json["comments"])]
         : List<Map<String, dynamic>>.from(json["comments"])
             .map((comment) => Comment.fromJson(comment))
-            .toList()
-            .obs;
+            .toList());
+
     project =
         json["project"] != null ? Project.fromJson(json["project"]) : project;
     // likeCount =
@@ -125,16 +125,16 @@ class Post {
       };
 }
 
-String contentsummary(List<Map<String, dynamic>> json) {
-  String summary = '';
-  for (var map in json) {
-    if (["T", "H1", "H2", "QUOTE", "BULLET", "LINK"].contains(map['type'])) {
-      summary = summary + map['content'];
-    }
-  }
-  // summary.replaceAll('\n', '');
-  return summary;
-}
+// String contentsummary(List<Map<String, dynamic>> json) {
+//   String summary = '';
+//   for (var map in json) {
+//     if (["T", "H1", "H2", "QUOTE", "BULLET", "LINK"].contains(map['type'])) {
+//       summary = summary + map['content'];
+//     }
+//   }
+//   // summary.replaceAll('\n', '');
+//   return summary;
+// }
 
 // class PostContent {
 //   PostContent({

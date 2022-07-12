@@ -21,55 +21,57 @@ class UploadScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(44),
-        child: AppBar(
-          leading: GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: SvgPicture.asset('assets/icons/Back_icon.svg',)),
-          title: Obx(
-            () => Text(
-              controller.isImage.value ? '사진첩 선택' : '이미지 첨부',
-              style: kNavigationTitle,
-            ),
+      appBar: AppBar(
+        toolbarHeight: 44,
+        leading: GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: SvgPicture.asset(
+              'assets/icons/Back_icon.svg',
+            )),
+        title: Obx(
+          () => Text(
+            controller.isImage.value ? '사진첩 선택' : '이미지 첨부',
+            style: kNavigationTitle,
           ),
-          centerTitle: true,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 12.5, 12.5, 0),
-              child: GestureDetector(
-                onTap: () async{Get.back();
-                if(controller.isSelect.value == true){
-                  if(controller.images != []){
-                controller.images.value = (await assetToFile(controller.selectedImages!));
-                controller.isAddImage(true);}else{
-                  controller.isAddImage(false);
-                }
-                }else{
+        ),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 12.5, 12.5, 0),
+            child: GestureDetector(
+              onTap: () async {
+                Get.back();
+                if (controller.isSelect.value == true) {
+                  if (controller.images != []) {
+                    controller.images.value =
+                        (await assetToFile(controller.selectedImages!));
+                    controller.isAddImage(true);
+                  } else {
+                    controller.isAddImage(false);
+                  }
+                } else {
                   controller.isAddImage(false);
                 }
                 print(controller.isAddImage.value);
                 print(controller.isSelect.value);
-                },
-                child: Text(
-                  '확인',
-                  style: kNavigationTitle,
-                ),
+              },
+              child: const Text(
+                '확인',
+                style: kNavigationTitle,
               ),
-            )
-          ],
-          elevation: 0,
-        ),
+            ),
+          )
+        ],
+        elevation: 0,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
             child: Column(children: [
           Obx(
             () => GestureDetector(
-              onTap: () {
-              },
+              onTap: () {},
               child: Stack(children: [
                 Container(
                     width: Get.width,
@@ -103,18 +105,17 @@ class UploadScreen extends StatelessWidget {
                                           ? Get.width
                                           : controller.croppedHeight.value,
                                       child: _photoWidget(
-                                           controller.selectedImage!.value,
-                                           500,
-                                           500, builder: (data) {
-                                         return PhotoView.customChild(
-                                           tightMode: false,
-                                           child: Image.memory(
-                                             data,
-                                             fit: BoxFit.fitWidth,
-                                             // scale: 0.003,
-                                           )
-                                         );
-                                       }),
+                                          controller.selectedImage!.value,
+                                          500,
+                                          500, builder: (data) {
+                                        return PhotoView.customChild(
+                                            tightMode: false,
+                                            child: Image.memory(
+                                              data,
+                                              fit: BoxFit.fitWidth,
+                                              // scale: 0.003,
+                                            ));
+                                      }),
                                     ),
                                   ),
                                 ],
@@ -253,7 +254,7 @@ class UploadScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                // 
+                //
               ],
             ),
           ),
@@ -502,9 +503,9 @@ class UploadScreen extends StatelessWidget {
   //         });
 
   // }
-  Future<List<File>> assetToFile(List<AssetEntity> assetEntity)async{
+  Future<List<File>> assetToFile(List<AssetEntity> assetEntity) async {
     List<File> images = <File>[];
-    for(AssetEntity assetentity in assetEntity){
+    for (AssetEntity assetentity in assetEntity) {
       File? image = await assetentity.file;
       images.add(image!);
     }

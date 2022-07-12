@@ -26,7 +26,6 @@ class PostingUpdateController extends GetxController {
 
   @override
   void onInit() {
-    print(post.hashCode);
     textcontroller.addListener(() {
       if (textcontroller.text.trim().isEmpty) {
         isPostingTitleEmpty.value = true;

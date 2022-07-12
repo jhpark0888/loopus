@@ -21,7 +21,7 @@ class CareerBoardPostWidget extends StatelessWidget {
         Get.to(() => PostingScreen(post: post, postid: post.id), opaque: false);
       },
       child: Container(
-        height: 422,
+        height: 430,
         width: 280,
         decoration: BoxDecoration(
             color: lightcardgray, borderRadius: BorderRadius.circular(16)),

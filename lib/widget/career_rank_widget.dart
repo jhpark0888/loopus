@@ -16,7 +16,7 @@ class CareerRankWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 310,
+      width: 300,
       height: 340,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -31,8 +31,6 @@ class CareerRankWidget extends StatelessWidget {
             children: [
               Text(isUniversity ? '교내' : '전국',
                   style: k15normal.copyWith(fontWeight: FontWeight.w600)),
-              // Flexible(child: const Spacer()),
-              // const Spacer(),
               GestureDetector(
                   onTap: () {},
                   child:
@@ -102,7 +100,9 @@ class CareerRankWidget extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('인천대 ${user.department}', style: k15normal),
+            Text(user.univ != "" ? user.univ : '땡땡대', style: k15normal),
+            const SizedBox(height: 7),
+            Text(user.department, style: k15normal),
             const SizedBox(height: 7),
             RichText(
               text: TextSpan(children: [
