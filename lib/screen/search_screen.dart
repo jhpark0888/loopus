@@ -56,7 +56,7 @@ class SearchScreen extends StatelessWidget {
                       SearchTextFieldWidget(hinttext: '무엇을 찾으시나요?', ontap: () { Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SearchFocusScreen()));}, readonly: true,),
+                                    builder: (context) => SearchFocusScreen()));}, readonly: true, controller: null,),
                       // TextField(
                       //     autocorrect: false,
                       //     readOnly: true,

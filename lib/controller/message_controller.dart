@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/api/chat_api.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
 
@@ -24,7 +26,13 @@ class MessageController extends GetxController {
         chattingroomlist.value = temp
             .map((messageRoom) => MessageRoomWidget(chatRoom: messageRoom.obs))
             .toList();
+        // for (var element in temp) {
+        //   SQLController.to.insertmessageRoom(element);
+        // }
       }
+    // getProfile(143).then((value) {if(value.isError == false){
+    //   print(value.data);
+    // }});
     });
     super.onInit();
   }

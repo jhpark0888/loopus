@@ -74,12 +74,12 @@ Future<HTTPResponse> getChatroomlist() async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
-    final url = Uri.parse("http://192.168.35.18:8000/chat/chat_list?id=1");
+    final url = Uri.parse("http://192.168.35.22:8000/chat/chat_list?id=1");
     try {
       http.Response response = await http.get(
         url,
         headers: {
-          'id': '1',
+          // 'id': '1',
           'Content-Type': 'application/json'
         },
       );

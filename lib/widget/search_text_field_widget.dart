@@ -3,13 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loopus/constant.dart';
 
 class SearchTextFieldWidget extends StatelessWidget {
-  SearchTextFieldWidget({ Key? key, required this.ontap, required this.hinttext, required this.readonly }) : super(key: key);
+  SearchTextFieldWidget({ Key? key, required this.ontap, required this.hinttext, required this.readonly, required this.controller}) : super(key: key);
   void Function()? ontap;
   String hinttext;
   bool readonly;
+  TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
                           autocorrect: false,
                           readOnly: readonly,
                           onTap: ontap,

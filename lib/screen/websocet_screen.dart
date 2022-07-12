@@ -14,14 +14,34 @@ import 'package:sqlite_viewer/sqlite_viewer.dart';
 import 'package:web_socket_channel/io.dart';
 
 class WebsoketScreen extends StatelessWidget {
-  WebsoketScreen({Key? key}) : super(key: key);
-  WebsoketController controller = Get.put(WebsoketController());
+  WebsoketScreen({Key? key, required this.roomid, required this.userid})
+      : super(key: key);
+  int roomid;
+  int userid;
+
+  late WebsoketController controller =
+      Get.put(WebsoketController(userid: userid, roomid: roomid));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(title: '한근형', bottomBorder: false,leading: Center(child: SvgPicture.asset('assets/icons/Arrow_left.svg')), actions: [SizedBox(height: 44,width: 44,child: Center(child: SvgPicture.asset('assets/icons/More.svg')))],),
+      appBar: AppBarWidget(
+        title: '한근형',
+        bottomBorder: false,
+        leading: GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child:
+                Center(child: SvgPicture.asset('assets/icons/Arrow_left.svg'))),
+        actions: [
+          SizedBox(
+              height: 44,
+              width: 44,
+              child: Center(child: SvgPicture.asset('assets/icons/More.svg')))
+        ],
+      ),
       body: SingleChildScrollView(
-         dragStartBehavior : DragStartBehavior.down,
+        dragStartBehavior: DragStartBehavior.down,
         child: Column(
           children: [
             SizedBox(height: 10),
@@ -70,14 +90,16 @@ class WebsoketScreen extends StatelessWidget {
                 icon: Text('sssssss')),
             IconButton(
                 onPressed: () {
-                  print(SQLController.to.getDBMessage());
+                  print(SQLController.to.getDBMessage(2));
                 },
                 icon: Text('저장 메세지 리스트 불러오기')),
             Obx(
               () => Column(
                 children: controller.messageList
                     .map((element) => MessageWidget(message: element))
-                    .toList().reversed.toList(),
+                    .toList()
+                    .reversed
+                    .toList(),
               ),
             )
             // StreamBuilder(
@@ -99,18 +121,22 @@ class WebsoketScreen extends StatelessWidget {
 }
 
 class WebsoketController extends GetxController {
-  var channel = IOWebSocketChannel.connect(
-      Uri.parse('ws://192.168.35.18:8000/ws/chat/2/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'id': '1'
-      });
+  WebsoketController({required this.roomid, required this.userid});
+  int roomid;
+  int userid;
+  late var channel;
   RxList<Chat> messageList = <Chat>[].obs;
   TextEditingController sendText = TextEditingController();
   @override
   void onInit() async {
     // channel.stream;
-    messageList.addAll(await SQLController.to.getDBMessage());
+    channel = IOWebSocketChannel.connect(
+        Uri.parse('ws://192.168.35.22:8000/ws/chat/${userid.toString()}/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'id': '1'
+        });
+    messageList.addAll(await SQLController.to.getDBMessage(roomid));
     channel.stream.listen((event) {
       print(event);
       messageTypeCheck(jsonDecode(event));
@@ -135,6 +161,8 @@ class WebsoketController extends GetxController {
           checkRoomId(json['room_id']).then((value) {
             if (value.isNotEmpty) {
               sendLastView(messageList.last.messageId!);
+            } else {
+              sendLastView(0);
             }
           });
         } else {
@@ -150,10 +178,15 @@ class WebsoketController extends GetxController {
         break;
       case 'chat_log':
         json['chat_log'].forEach((element) {
-            SQLController.to.insertmessage(Chat.fromJson(element));
-            messageList.add(Chat.fromJson(element));
-            });
+          SQLController.to.insertmessage(Chat.fromJson(element));
+          messageList.add(Chat.fromJson(element));
+        });
         print('저장완료');
+        break;
+      case 'other_view':
+        if (json['msg_id'] != null) {
+          changeReadMessage(roomid, json['msg_id']);
+        }
         break;
     }
   }
@@ -168,6 +201,13 @@ class WebsoketController extends GetxController {
     list = (await SQLController.to.database!
         .rawQuery('SELECT * FROM chatting WHERE room_id = $id'));
     return list;
+  }
+
+  Future<void> changeReadMessage(int roomid, int msgid) async {
+     SQLController.to.database!.rawUpdate(
+        'UPDATE chatting SET is_read = ? WHERE is_read = ? and room_id = ? and msg_id <= ?',
+        ['true', 'false', roomid, msgid]);
+    print('업데이트 성공!');
   }
 }
 

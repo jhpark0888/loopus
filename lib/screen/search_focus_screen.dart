@@ -14,6 +14,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
+import 'package:loopus/widget/search_text_field_widget.dart';
 import 'package:loopus/widget/search_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:underline_indicator/underline_indicator.dart';
@@ -443,50 +444,52 @@ class SearchFocusScreen extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: TextField(
-                      autocorrect: false,
-                      readOnly: false,
-                      // _searchController.isFocused.value == false
-                      //     ? true
-                      //     : false,
-                      onTap: () {
-                        // AppController.to.willPopAction;
-                        // if (_searchController.isFocused.value == false) {
-                        //   _searchController.isFocused(true);
-                        //   _searchController.tabController.index = 0;
-                        // }
-                      },
-                      controller: _searchController.searchtextcontroller,
-                      focusNode: _searchController.focusNode,
-                      style: k16Normal,
-                      cursorColor: mainblack,
-                      cursorWidth: 1.2,
-                      cursorRadius: Radius.circular(5.0),
-                      autofocus: false,
-                      textInputAction: TextInputAction.none,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: cardGray,
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(8)),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(8)),
-                        contentPadding: const EdgeInsets.only(right: 24),
-                        isDense: true,
-                        hintText: "무엇을 찾으시나요?",
-                        hintStyle: k16Normal.copyWith(color: maingray),
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
-                          child: SvgPicture.asset(
-                            "assets/icons/Search_Inactive.svg",
-                            width: 20,
-                            height: 20,
-                            color: maingray,
-                          ),
-                        ),
-                      )),
+                  child: 
+                  // TextField(
+                  //     autocorrect: false,
+                  //     readOnly: false,
+                  //     // _searchController.isFocused.value == false
+                  //     //     ? true
+                  //     //     : false,
+                  //     onTap: () {
+                  //       // AppController.to.willPopAction;
+                  //       // if (_searchController.isFocused.value == false) {
+                  //       //   _searchController.isFocused(true);
+                  //       //   _searchController.tabController.index = 0;
+                  //       // }
+                  //     },
+                  //     controller: _searchController.searchtextcontroller,
+                  //     focusNode: _searchController.focusNode,
+                  //     style: k16Normal,
+                  //     cursorColor: mainblack,
+                  //     cursorWidth: 1.2,
+                  //     cursorRadius: Radius.circular(5.0),
+                  //     autofocus: false,
+                  //     textInputAction: TextInputAction.none,
+                  //     decoration: InputDecoration(
+                  //       filled: true,
+                  //       fillColor: cardGray,
+                  //       enabledBorder: OutlineInputBorder(
+                  //           borderSide: BorderSide.none,
+                  //           borderRadius: BorderRadius.circular(8)),
+                  //       focusedBorder: OutlineInputBorder(
+                  //           borderSide: BorderSide.none,
+                  //           borderRadius: BorderRadius.circular(8)),
+                  //       contentPadding: const EdgeInsets.only(right: 24),
+                  //       isDense: true,
+                  //       hintText: "무엇을 찾으시나요?",
+                  //       hintStyle: k16Normal.copyWith(color: maingray),
+                  //       prefixIcon: Padding(
+                  //         padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
+                  //         child: SvgPicture.asset(
+                  //           "assets/icons/Search_Inactive.svg",
+                  //           width: 20,
+                  //           height: 20,
+                  //           color: maingray,
+                  //         ),
+                  //       ),
+                  //     )),
+                      SearchTextFieldWidget(hinttext: '무엇을 찾으시나요?', ontap: () {  }, readonly:false, controller: _searchController.searchtextcontroller,)
                 ),
                 GestureDetector(
                   onTap: AppController.to.willPopAction,

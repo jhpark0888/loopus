@@ -10,6 +10,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/no_ul_textfield_widget.dart';
+import 'package:loopus/widget/search_text_field_widget.dart';
 
 class MessageScreen extends StatelessWidget {
   MessageController messageController = Get.put(MessageController());
@@ -82,10 +83,7 @@ class MessageScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
                 child: Column(
                   children: [
-                    Container(
-                      height: 36,
-                      decoration: const BoxDecoration(color: cardGray,),
-                    ),
+                    SizedBox(height: 36,child: SearchTextFieldWidget(ontap: (){}, hinttext: '검색', readonly: false, controller: messageController.searchName)),
                     Expanded(
                       child: ListView.separated(
                         padding: EdgeInsets.only(top: 24),
@@ -107,7 +105,7 @@ class MessageScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => WebsoketScreen());
+                          Get.to(() => WebsoketScreen(userid: 2,roomid: 27,));
                         },
                         child: Text(
                           '메시지 목록이 비어있어요',

@@ -104,12 +104,27 @@ class SQLController extends GetxController {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
-
-  Future<List<Chat>> getDBMessage() async {
+  Future<void> insertmessageRoom(ChatRoom chatRoom) async {
+    // 데이터베이스 reference를 얻습니다.
     final Database db = await database!;
 
-    final List<Map<String, dynamic>> maps = await db.query('chatting');
+    // Dog를 올바른 테이블에 추가합니다. 동일한 dog가 두번 추가되는 경우를 처리하기 위해
+    // `conflictAlgorithm`을 명시할 수 있습니다.
+    //
+    // 본 예제에서는, 이전 데이터를 갱신하도록 하겠습니다.
 
+    await db.insert(
+      'chatroom',
+      chatRoom.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    print('추가되었습니다/');
+  }
+  Future<List<Chat>> getDBMessage(int id) async {
+    final Database db = await database!;
+
+    final List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM chatting WHERE room_id = $id');
+    print(maps);
     if (maps.isEmpty) {
       return [];
     } else {
@@ -123,6 +138,7 @@ class SQLController extends GetxController {
             type: maps[index]['type'],
             roomId: maps[index]['room_id']);
       });
+      print(messageList);
       return messageList;
     }
   }

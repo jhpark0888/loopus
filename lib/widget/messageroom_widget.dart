@@ -5,6 +5,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
@@ -176,31 +177,37 @@ class MessageRoomWidget extends StatelessWidget {
         //     ),
         //   ),
         // );
-        Row(
-      children: [
-        UserImageWidget(
-            imageUrl:
-                'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202203/23/d58e7390-afda-42cd-9374-ca327df1cad8.jpg',
-            width: 36,
-            height: 36),
-        const SizedBox(width: 14),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('한근형', style: k16semiBold),
-            const SizedBox(height: 7),
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(
-                  text: chatRoom.value.message.value.content, style: k16Normal),
-              TextSpan(
-                  text:
-                      '· ${messagedurationCaculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
-                  style: k16Normal.copyWith(color: maingray))
-            ]))
-          ],
-        ),
-      ],
-    );
+        GestureDetector(
+          onTap: (){
+            print(chatRoom.value.roomId);
+            Get.to(() => WebsoketScreen(roomid: chatRoom.value.roomId, userid: chatRoom.value.user,));
+            },
+          child: Row(
+              children: [
+          UserImageWidget(
+              imageUrl:
+                  'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202203/23/d58e7390-afda-42cd-9374-ca327df1cad8.jpg',
+              width: 36,
+              height: 36),
+          const SizedBox(width: 14),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('한근형', style: k16semiBold),
+              const SizedBox(height: 7),
+              RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: chatRoom.value.message.value.content, style: k16Normal),
+                TextSpan(
+                    text:
+                        '· ${messagedurationCaculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
+                    style: k16Normal.copyWith(color: maingray))
+              ]))
+            ],
+          ),
+              ],
+            ),
+        );
   }
 }

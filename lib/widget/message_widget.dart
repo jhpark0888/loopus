@@ -15,7 +15,7 @@ class MessageWidget extends StatelessWidget {
   //     Get.find(tag: user.userid.toString());
 
   Chat message;
-  
+
   // var image;
   // String content;
   // int isSender;
@@ -61,18 +61,19 @@ class MessageWidget extends StatelessWidget {
                   ),
                 ),
                 hasTextOverflow(message.content, kBody2Style)
-                    ? Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: mainblue,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                message.content,
-                                style: kSubTitle3Style.copyWith(height: 1.5,color: mainblack),
-                              )),
-                        ),
+                    ? Container(
+                        constraints:
+                            BoxConstraints(maxWidth: Get.width * (2 / 3)),
+                        decoration: BoxDecoration(
+                            color: mainblue,
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              message.content,
+                              style: kSubTitle3Style.copyWith(
+                                  height: 1.5, color: mainblack),
+                            )),
                       )
                     : Container(
                         decoration: BoxDecoration(
@@ -82,7 +83,8 @@ class MessageWidget extends StatelessWidget {
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
                               message.content,
-                              style: kSubTitle3Style.copyWith(height: 1.5,color: mainWhite),
+                              style: kSubTitle3Style.copyWith(
+                                  height: 1.5, color: mainWhite),
                             )),
                       ),
               ],
@@ -98,72 +100,95 @@ class MessageWidget extends StatelessWidget {
                     //       realname: user.realName,
                     //     ));
                   },
-                  child: ClipOval(
-                      child: 
-                      // user.profileImage == null
-                      //     ? 
-                          Image.asset(
-                              "assets/illustrations/default_profile.png",
-                              height: 32,
-                              width: 32,
-                            )
-                          // : CachedNetworkImage(
-                          //     height: 32,
-                          //     width: 32,
-                          //     imageUrl: user.profileImage!,
-                          //     placeholder: (context, url) => CircleAvatar(
-                          //       backgroundColor: Color(0xffe7e7e7),
-                          //       child: Container(),
-                          //     ),
-                          //     fit: BoxFit.cover,
-                          )
-                            ,
+                  child: SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: ClipOval(
+                        child:
+                            // user.profileImage == null
+                            //     ?
+                            Image.asset(
+                      "assets/illustrations/default_profile.png",
+                    )
+                        // : CachedNetworkImage(
+                        //     height: 32,
+                        //     width: 32,
+                        //     imageUrl: user.profileImage!,
+                        //     placeholder: (context, url) => CircleAvatar(
+                        //       backgroundColor: Color(0xffe7e7e7),
+                        //       child: Container(),
+                        //     ),
+                        //     fit: BoxFit.cover,
+                        ),
+                  ),
                 ),
                 SizedBox(
                   width: 10,
                 ),
-               hasTextOverflow(message.content, kBody2Style, maxWidth: Get.width * (2/3))
-                    ? Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Color(0xffe7e7e7),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      '한근형',
+                      style: k16semiBold,
+                    ),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                    Row(
+                      children: [
+                        hasTextOverflow(message.content, kBody2Style,
+                                maxWidth: Get.width * (2 / 3))
+                            ? Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Color(0xffe7e7e7),
+                                      ),
+                                      borderRadius: BorderRadius.circular(8)),
+                                  child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        message.content,
+                                        style: kBody2Style,
+                                      )),
+                                ),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Color(0xffe7e7e7),
+                                    ),
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      message.content,
+                                      style: kBody2Style,
+                                    )),
                               ),
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                message.content,
-                                style: kBody2Style,
-                              )),
-                        ),
-                      )
-                    : Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Color(0xffe7e7e7),
-                            ),
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              message.content,
-                              style: kBody2Style,
-                            )),
-                      ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 18.0, 12.0, 0.0),
-                  child: Text(
-                    messagedurationCaculate(startDate: message.date, endDate: DateTime.now()),
-                    style: kCaptionStyle.copyWith(
-                        color: mainblack.withOpacity(0.6)),
-                  ),
-                )
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(8.0, 18.0, 12.0, 0.0),
+                          child: Text(
+                            messagedurationCaculate(
+                                startDate: message.date,
+                                endDate: DateTime.now()),
+                            style: kCaptionStyle.copyWith(
+                                color: mainblack.withOpacity(0.6)),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
     );
   }
-   bool hasTextOverflow(String text, TextStyle style,
+
+  bool hasTextOverflow(String text, TextStyle style,
       {double minWidth = 0, double maxWidth = 10, int maxLines = 1}) {
     final TextPainter textPainter = TextPainter(
       text: TextSpan(text: text, style: style),
