@@ -216,10 +216,10 @@ Future<User?> updateProfile(
   }
 }
 
-Future<void> putpwchange() async {
+Future<HTTPResponse> putpwchange() async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     PwChangeController pwChangeController = Get.find();
@@ -242,20 +242,15 @@ Future<void> putpwchange() async {
 
       print("비밀번호 변경 : ${response.statusCode}");
       if (response.statusCode == 200) {
-        Get.back();
-        showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
-      } else if (response.statusCode == 401) {
-        showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
-        print('에러1');
+        return HTTPResponse.success("success");
       } else {
-        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-        print('에러');
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }

@@ -6,7 +6,7 @@ class Debouncer {
   VoidCallback? action;
   Timer? _timer;
 
-  Debouncer({required this.milliseconds, this.action});
+  Debouncer({this.milliseconds = 500, this.action});
 
   run(VoidCallback action) {
     if (_timer != null) {

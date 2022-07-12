@@ -9,7 +9,9 @@ import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/comment_model.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/utils/error_control.dart';
 
 class PostingDetailController extends GetxController {
   PostingDetailController({
@@ -38,11 +40,11 @@ class PostingDetailController extends GetxController {
   Rx<Post?> post = Post(
           id: 0,
           userid: 0,
-          content: '',
+          content: ''.obs,
           images: [],
           links: [],
           comments: <Comment>[].obs,
-          tags: [],
+          tags: <Tag>[].obs,
           date: DateTime.now(),
           project: null,
           likeCount: 0.obs,
@@ -62,12 +64,14 @@ class PostingDetailController extends GetxController {
         // print('변화 전 : ${post.hashCode}');
         // print('새로운 포스트 : ${temppost.hashCode}');
         // post.value = Post.fromJson(value.data);
-        post.value!.postDeepCopy(value.data);
+        post.value!.copywith(value.data);
         // print('변화 후 : ${post.hashCode}');
         lastIsLiked = post.value!.isLiked.value;
         commentToList();
         postscreenstate(ScreenState.success);
-      } else {}
+      } else {
+        errorSituation(value, screenState: postscreenstate);
+      }
     });
 
     // keyboardController.onChange.listen((isVisible) {

@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 import 'package:loopus/api/login_api.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/utils/check_form_validate.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
@@ -110,8 +112,30 @@ class PwChangeScreen extends StatelessWidget {
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
                       pwType == PwType.pwchange
-                          ? putpwchange()
-                          : putpwfindchange();
+                          ? putpwchange().then((value) {
+                              if (value.isError == false) {
+                                Get.back();
+                                showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
+                              } else {
+                                if (value.errorData!["statusCode"] == 401) {
+                                  showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
+                                } else {
+                                  errorSituation(value);
+                                }
+                              }
+                            })
+                          : putpwfindchange().then((value) {
+                              if (value.isError == false) {
+                                getbacks(2);
+                                showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
+                              } else {
+                                if (value.errorData!["statusCode"] == 401) {
+                                  showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+                                } else {
+                                  errorSituation(value);
+                                }
+                              }
+                            });
                     }
                   },
                   child: Container(

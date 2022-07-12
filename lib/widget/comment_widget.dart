@@ -32,9 +32,7 @@ class CommentWidget extends StatelessWidget {
   //         liketype: Liketype.comment),
   //     tag: 'comment${comment.id}');
 
-  final Debouncer _debouncer = Debouncer(
-    milliseconds: 500,
-  );
+  final Debouncer _debouncer = Debouncer();
 
   late int lastIsLiked;
   int num = 0;

@@ -83,8 +83,8 @@ class NotificationController extends GetxController {
     } else if (message.data["type"] == "tag") {
       // Get.to(() => ProjectScreen(projectid: id, isuser: 0));
     } else if (message.data["type"] == "follow") {
-      Get.to(() => OtherProfileScreen(
-          userid: id, isuser: 0, realname: message.data["real_name"]));
+      Get.to(() =>
+          OtherProfileScreen(userid: id, realname: message.data["real_name"]));
     } else if (message.data["type"] == "answer") {
       // Get.to(() => QuestionDetailScreen(
       //     questionid: id, isuser: 1, realname: message.data["real_name"]));
@@ -176,9 +176,9 @@ class NotificationController extends GetxController {
           content: '다른 기기에서 해당 계정으로 로그인 하여 로그아웃합니다',
           oneFunction: () {
             AppController.to.currentIndex.value = 0;
-            FlutterSecureStorage().delete(key: "token");
-            FlutterSecureStorage().delete(key: "id");
-            FlutterSecureStorage().delete(key: "login detect");
+            const FlutterSecureStorage().delete(key: "token");
+            const FlutterSecureStorage().delete(key: "id");
+            const FlutterSecureStorage().delete(key: "login detect");
             Get.delete<AppController>();
             Get.delete<HomeController>();
             Get.delete<SearchController>();

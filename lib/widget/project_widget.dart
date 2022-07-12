@@ -7,7 +7,6 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/post_add_test.dart';
-import 'package:loopus/screen/posting_add_name_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/trash_bin/project_screen.dart';
@@ -44,7 +43,7 @@ class ProjectWidget extends StatelessWidget {
             //       isuser: project.value.is_user,
             //     ));
           } else {
-                  print(project.value.post_count);
+            print(project.value.post_count);
             Get.to(() => PostingAddNameScreen1(
                   project_id: project.value.id,
                   route: PostaddRoute.bottom,
@@ -102,7 +101,8 @@ class ProjectWidget extends StatelessWidget {
                   SizedBox(
                     height: 14,
                   ),
-                  careerAnalysisWidget('디자인', 21, 2, 23, 1)
+                  careerAnalysisWidget(
+                      fieldList[project.value.fieldIds.first]!, 21, 2, 23, 1)
                 ],
               ),
             ),

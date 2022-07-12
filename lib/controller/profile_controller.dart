@@ -90,7 +90,7 @@ class ProfileController extends GetxController
           isnewalarm(value.data["new_alarm"]);
           isnewmessage(value.data["new_message"]);
         } else {
-          errorSituation(value, screenState: myprofilescreenstate.value);
+          errorSituation(value, screenState: myprofilescreenstate);
         }
       });
       await getProjectlist(int.parse(userId)).then((value) {
@@ -102,7 +102,7 @@ class ProfileController extends GetxController
           myProjectList(projectlist);
           careerPagenums = List.generate(projectlist.length, (index) => 1);
         } else {
-          errorSituation(value, screenState: myprofilescreenstate.value);
+          errorSituation(value, screenState: myprofilescreenstate);
         }
       });
       if (myProjectList.isNotEmpty) {
@@ -138,7 +138,7 @@ class ProfileController extends GetxController
 
         myprofilescreenstate(ScreenState.success);
       } else {
-        errorSituation(value, screenState: myprofilescreenstate.value);
+        errorSituation(value, screenState: myprofilescreenstate);
       }
     });
   }

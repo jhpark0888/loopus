@@ -71,55 +71,59 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
             //           'assets/icons/Back_icon.svg',
             //         ))),
             ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text('링크', style: k16Normal),
-                  const SizedBox(height: 14),
-                  CustomTextField(
-                      textController: postingAddController.linkcontroller,
-                      hintText: '링크 주소를 입력해주세요. 최대 10개까지 가능해요',
-                      validator: null,
-                      obscureText: false,
-                      maxLines: 1,
-                      counterText: '',
-                      maxLength: null,
-                      onfieldSubmitted: (string) {
-                        print(postingAddController.linkcontroller.text);
-                        print(string);
-                        if (postingAddController.scrapList
-                            .where((scrapwidget) =>
-                                scrapwidget.url == changeUrl(string))
-                            .isEmpty) {
-                          postingAddController.scrapList.add(LinkWidget(
-                            // key: Get.put(
-                            //     KeyController(isTextField: false.obs).linkKey,
-                            //     tag:
-                            //         postingAddController.scrapList.length.toString()),
-                            url: changeUrl(string),
-                            widgetType: 'add',
-                            // length: postingAddController.scrapList.length,
-                          ));
+        body: ScrollNoneffectWidget(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text('링크', style: k16Normal),
+                    const SizedBox(height: 14),
+                    CustomTextField(
+                        textController: postingAddController.linkcontroller,
+                        hintText: '링크 주소를 입력해주세요. 최대 10개까지 가능해요',
+                        validator: null,
+                        obscureText: false,
+                        maxLines: 1,
+                        counterText: '',
+                        maxLength: null,
+                        onfieldSubmitted: (string) {
+                          print(postingAddController.linkcontroller.text);
+                          print(string);
+                          if (postingAddController.scrapList
+                              .where((scrapwidget) =>
+                                  scrapwidget.url == changeUrl(string))
+                              .isEmpty) {
+                            postingAddController.scrapList.add(LinkWidget(
+                              // key: Get.put(
+                              //     KeyController(isTextField: false.obs).linkKey,
+                              //     tag:
+                              //         postingAddController.scrapList.length.toString()),
+                              url: changeUrl(string),
+                              widgetType: 'add',
+                              // length: postingAddController.scrapList.length,
+                            ));
 
-                          postingAddController.linkcontroller.clear();
-                        } else {
-                          showCustomDialog('중복된 주소는 하나만 게시됩니다.', 1000);
-                        }
+                            postingAddController.linkcontroller.clear();
+                          } else {
+                            showCustomDialog('중복된 주소는 하나만 게시됩니다.', 1000);
+                          }
 
-                        print(postingAddController.scrapList);
-                      }),
-                  const SizedBox(height: 24),
-                  Obx(() => Column(
-                      children: postingAddController.scrapList
-                          .map((element) => Column(
-                              children: [element, const SizedBox(height: 14)]))
-                          .toList()
-                          .reversed
-                          .toList()))
-                ]),
+                          print(postingAddController.scrapList);
+                        }),
+                    const SizedBox(height: 24),
+                    Obx(() => Column(
+                        children: postingAddController.scrapList
+                            .map((element) => Column(children: [
+                                  element,
+                                  const SizedBox(height: 14)
+                                ]))
+                            .toList()
+                            .reversed
+                            .toList()))
+                  ]),
+            ),
           ),
         ),
       ),

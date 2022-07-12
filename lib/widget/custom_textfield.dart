@@ -15,19 +15,18 @@ class CustomTextField extends StatelessWidget {
   final bool? autofocus;
   final TextInputAction? textInputAction;
 
-  CustomTextField({
-    required this.textController,
-    required this.hintText,
-    required this.validator,
-    required this.obscureText,
-    required this.maxLines,
-    required this.counterText,
-    required this.maxLength,
-    this.autofocus,
-    this.ontap,
-    this.textInputAction,
-    this.onfieldSubmitted
-  });
+  CustomTextField(
+      {required this.textController,
+      required this.hintText,
+      required this.validator,
+      required this.obscureText,
+      required this.maxLines,
+      required this.counterText,
+      required this.maxLength,
+      this.autofocus,
+      this.ontap,
+      this.textInputAction,
+      this.onfieldSubmitted});
 
   @override
   Widget build(BuildContext context) {
@@ -51,25 +50,25 @@ class CustomTextField extends StatelessWidget {
         contentPadding: const EdgeInsets.only(bottom: 12),
         isDense: true,
         hintText: hintText,
-        hintStyle: kSubTitle3Style.copyWith(
-          color: mainblack.withOpacity(0.38),
+        hintStyle: kmain.copyWith(
+          color: maingray,
         ),
         enabledBorder: UnderlineInputBorder(
           borderRadius: BorderRadius.circular(2),
-          borderSide: const BorderSide(color: mainblack, width: 1.2),
+          borderSide: BorderSide(color: maingray, width: 1),
         ),
         disabledBorder: UnderlineInputBorder(
           borderRadius: BorderRadius.circular(2),
-          borderSide: const BorderSide(color: mainblack, width: 1.2),
+          borderSide: BorderSide(color: maingray, width: 1),
         ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: mainblack, width: 1.2),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: maingray, width: 1),
         ),
         errorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: rankred, width: 1.2),
+          borderSide: BorderSide(color: rankred, width: 1),
         ),
         focusedErrorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: rankred, width: 1.2),
+          borderSide: BorderSide(color: rankred, width: 1),
         ),
       ),
       validator: validator,

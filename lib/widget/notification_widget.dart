@@ -20,24 +20,24 @@ class NotificationWidget extends StatelessWidget {
   }) : super(key: key);
 
   NotificationModel notification;
-  late final FollowController followController = Get.put(
-      FollowController(
-          islooped: notification.looped!.value == FollowState.normal
-              ? 0.obs
-              : notification.looped!.value == FollowState.follower
-                  ? 0.obs
-                  : notification.looped!.value == FollowState.following
-                      ? 1.obs
-                      : 1.obs,
-          id: notification.targetId,
-          lastislooped: notification.looped!.value == FollowState.normal
-              ? 0
-              : notification.looped!.value == FollowState.follower
-                  ? 0
-                  : notification.looped!.value == FollowState.following
-                      ? 1
-                      : 1),
-      tag: notification.targetId.toString());
+  // late final FollowController followController = Get.put(
+  //     FollowController(
+  //         islooped: notification.looped!.value == FollowState.normal
+  //             ? 0.obs
+  //             : notification.looped!.value == FollowState.follower
+  //                 ? 0.obs
+  //                 : notification.looped!.value == FollowState.following
+  //                     ? 1.obs
+  //                     : 1.obs,
+  //         id: notification.targetId,
+  //         lastislooped: notification.looped!.value == FollowState.normal
+  //             ? 0
+  //             : notification.looped!.value == FollowState.follower
+  //                 ? 0
+  //                 : notification.looped!.value == FollowState.following
+  //                     ? 1
+  //                     : 1),
+  //     tag: notification.targetId.toString());
 
   @override
   Widget build(BuildContext context) {
@@ -97,16 +97,16 @@ class NotificationWidget extends StatelessWidget {
                   const SizedBox(
                     width: 12,
                   ),
-                  Obx(() => CustomExpandedButton(
-                        onTap: followMotion,
-                        title: followController.islooped.value == 0
-                            ? "팔로우하기"
-                            : "팔로잉 중",
-                        isBlue:
-                            followController.islooped.value == 0 ? true : false,
-                        isBig: false,
-                        buttonTag: notification.targetId.toString(),
-                      ))
+                  // Obx(() => CustomExpandedButton(
+                  //       onTap: followMotion,
+                  //       title: followController.islooped.value == 0
+                  //           ? "팔로우하기"
+                  //           : "팔로잉 중",
+                  //       isBlue:
+                  //           followController.islooped.value == 0 ? true : false,
+                  //       isBig: false,
+                  //       buttonTag: notification.targetId.toString(),
+                  //     ))
                 ],
               ),
             ),
@@ -186,39 +186,36 @@ class NotificationWidget extends StatelessWidget {
   }
 
   void followMotion() {
-    if (notification.looped!.value == FollowState.normal) {
-      followController.islooped(1);
-      notification.looped!(FollowState.following);
-    } else if (notification.looped!.value == FollowState.follower) {
-      followController.islooped(1);
+    // if (notification.looped!.value == FollowState.normal) {
+    //   followController.islooped(1);
+    //   notification.looped!(FollowState.following);
+    // } else if (notification.looped!.value == FollowState.follower) {
+    //   followController.islooped(1);
 
-      notification.looped!(FollowState.wefollow);
+    //   notification.looped!(FollowState.wefollow);
 
-      // ProfileController.to.myUserInfo
-      //         .value.loopcount -
-      //     1;
+    //   // ProfileController.to.myUserInfo
+    //   //         .value.loopcount -
+    //   //     1;
 
-    } else if (notification.looped!.value == FollowState.following) {
-      followController.islooped(0);
+    // } else if (notification.looped!.value == FollowState.following) {
+    //   followController.islooped(0);
 
-      notification.looped!(FollowState.normal);
-    } else if (notification.looped!.value == FollowState.wefollow) {
-      followController.islooped(0);
+    //   notification.looped!(FollowState.normal);
+    // } else if (notification.looped!.value == FollowState.wefollow) {
+    //   followController.islooped(0);
 
-      notification.looped!(FollowState.follower);
-    }
+    //   notification.looped!(FollowState.follower);
+    // }
   }
 
   void clickprofile(NotificationType type) async {
     if (type == NotificationType.follow) {
       Get.to(() => OtherProfileScreen(
-          userid: notification.targetId,
-          isuser: 0,
-          realname: notification.user.realName));
+          userid: notification.targetId, realname: notification.user.realName));
     } else {
       Get.to(() => OtherProfileScreen(
           userid: notification.user.userid,
-          isuser: 0,
           realname: notification.user.realName));
     }
   }

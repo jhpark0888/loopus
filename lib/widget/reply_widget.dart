@@ -32,9 +32,7 @@ class ReplyWidget extends StatelessWidget {
   //         liketype: Liketype.reply),
   //     tag: 'reply${reply.id}');
 
-  final Debouncer _debouncer = Debouncer(
-    milliseconds: 500,
-  );
+  final Debouncer _debouncer = Debouncer();
 
   late int lastIsLiked;
   int num = 0;

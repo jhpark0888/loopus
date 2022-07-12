@@ -19,7 +19,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class OtherProfileController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  OtherProfileController(this.userid);
+  OtherProfileController({required this.userid, required this.otherUser});
   static OtherProfileController get to => Get.find();
 
   int userid;
@@ -64,6 +64,8 @@ class OtherProfileController extends GetxController
   // RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
 
+  late int lastisFollowed;
+
   Future loadotherProfile(int userid) async {
     // isProfileLoading.value = true;
 
@@ -74,11 +76,11 @@ class OtherProfileController extends GetxController
     } else {
       await getProfile(userid).then((value) {
         if (value.isError == false) {
-          User user = User.fromJson(value.data);
+          otherUser.value.copywith(value.data);
 
-          otherUser(user);
+          lastisFollowed = otherUser.value.looped.value.index;
         } else {
-          errorSituation(value, screenState: otherprofilescreenstate.value);
+          errorSituation(value, screenState: otherprofilescreenstate);
         }
       });
       await getProjectlist(userid).then((value) {
@@ -89,8 +91,9 @@ class OtherProfileController extends GetxController
           _careerPagenums = List.generate(projectlist.length, (index) => 1);
 
           otherProjectList(projectlist);
+          otherprofilescreenstate(ScreenState.success);
         } else {
-          errorSituation(value, screenState: otherprofilescreenstate.value);
+          errorSituation(value, screenState: otherprofilescreenstate);
         }
       });
       if (otherProjectList.isNotEmpty) {
@@ -125,7 +128,7 @@ class OtherProfileController extends GetxController
 
         otherprofilescreenstate(ScreenState.success);
       } else {
-        errorSituation(value, screenState: otherprofilescreenstate.value);
+        errorSituation(value, screenState: otherprofilescreenstate);
       }
     });
   }
@@ -137,12 +140,14 @@ class OtherProfileController extends GetxController
     ever(
       careerCurrentPage,
       (_) async {
-        Project project = otherProjectList[careerCurrentPage.toInt()];
-        profileenablepullup(true);
-        if (project.posts.isEmpty) {
-          careerLoading(true);
-          getProfilePost();
-          careerLoading(false);
+        if (otherProjectList.isNotEmpty) {
+          Project project = otherProjectList[careerCurrentPage.toInt()];
+          profileenablepullup(true);
+          if (project.posts.isEmpty) {
+            careerLoading(true);
+            getProfilePost();
+            careerLoading(false);
+          }
         }
       },
       // time: const Duration(milliseconds: 300),

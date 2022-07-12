@@ -8,15 +8,21 @@ class LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: Get.height,
-      width: Get.width,
-      color: mainblack.withOpacity(0.3),
-      child: const LoadingWidget(),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Container(
+        height: Get.height,
+        width: Get.width,
+        color: mainblack.withOpacity(0.3),
+        child: const LoadingWidget(),
+      ),
     );
   }
 }
 
 void loading() {
-  Get.to(() => const LoadingScreen(), opaque: false);
+  Get.to(() => const LoadingScreen(),
+      opaque: false, transition: Transition.noTransition);
 }

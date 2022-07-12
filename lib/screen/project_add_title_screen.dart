@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
@@ -95,8 +96,8 @@ class ProjectAddTitleScreen extends StatelessWidget {
                     },
                     child: Obx(
                       () => Text(
-                        '다음',
-                        style: kSubTitle2Style.copyWith(
+                        '확인',
+                        style: kNavigationTitle.copyWith(
                           color: projectaddcontroller.ontitlebutton.value
                               ? mainblue
                               : mainblack.withOpacity(0.38),
@@ -137,7 +138,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                             child: Obx(
                               () => Text(
                                 '저장',
-                                style: kSubTitle2Style.copyWith(
+                                style: kNavigationTitle.copyWith(
                                   color:
                                       projectaddcontroller.ontitlebutton.value
                                           ? mainblue
@@ -147,52 +148,46 @@ class ProjectAddTitleScreen extends StatelessWidget {
                             ),
                           ))
           ],
-          title: '커리어명',
+          leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: SvgPicture.asset('assets/icons/Close.svg'),
+          ),
+          title: '커리어 추가',
         ),
         body: Form(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              32,
-              24,
-              32,
-              40,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '커리어명',
-                        style: kSubTitle1Style.copyWith(
-                          color: mainblue,
-                        ),
-                      ),
-                      TextSpan(
-                        text: '이 무엇인가요?',
-                        style: kSubTitle1Style,
-                      ),
-                    ],
+                const SizedBox(
+                  height: 14,
+                ),
+                Text(
+                  "본인의 새로운 경험을 추가해보세요",
+                  style: kmain.copyWith(color: maingray),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "커리어 이름",
+                    style: kmain,
                   ),
                 ),
                 const SizedBox(
-                  height: 12,
-                ),
-                const Text(
-                  '어떤 커리어인지 잘 드러나는 이름을 입력해주세요',
-                  style: kBody2Style,
-                ),
-                const SizedBox(
-                  height: 32,
+                  height: 14,
                 ),
                 CustomTextField(
                     counterText: null,
                     maxLength: 32,
                     textController: projectaddcontroller.projectnamecontroller,
-                    hintText: 'OO 스터디, OO 공모전, OO 프로젝트 등',
+                    hintText: '커리어 이름을 입력하세요',
                     validator: (value) => CheckValidate().validateName(value!),
                     obscureText: false,
                     maxLines: 2),

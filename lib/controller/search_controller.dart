@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/api/rank_api.dart';
 import 'package:loopus/api/search_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -8,6 +9,7 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/search_posting_widget.dart';
 import 'package:loopus/widget/search_profile_widget.dart';
 import 'package:loopus/widget/search_question_widget.dart';
@@ -19,26 +21,15 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   TextEditingController searchtextcontroller = TextEditingController();
   RxString _searchword = "".obs;
 
+  RefreshController refreshController = RefreshController();
+  int popPagenum = 1;
+
   RxList<User> recommandUsers = <User>[].obs;
   RxList<Post> popPostList = <Post>[].obs;
 
-  RxList<User> searchUserList = <User>[
-    // User.defaultuser(department: "산업경영공학과", realName: "홍길동"),
-    // User.defaultuser(department: "전자공학과", realName: "아무개"),
-    // User.defaultuser(department: "컴퓨터공학과", realName: "김루프"),
-    // User.defaultuser(department: "안전공학과", realName: "박어스"),
-    // User.defaultuser(department: "산업경영공학과", realName: "홍길동"),
-    // User.defaultuser(department: "전자공학과", realName: "아무개"),
-    // User.defaultuser(department: "컴퓨터공학과", realName: "김루프"),
-    // User.defaultuser(department: "안전공학과", realName: "박어스"),
-  ].obs;
+  RxList<User> searchUserList = <User>[].obs;
   RxList<Post> searchPostList = <Post>[].obs;
-  RxList<Tag> searchTagList = <Tag>[
-    // Tag(tagId: 1, tag: '인공지능', count: 23),
-    // Tag(tagId: 1, tag: '인공지능 스터디', count: 23),
-    // Tag(tagId: 1, tag: '물류시스템 스터디', count: 23),
-    // Tag(tagId: 1, tag: '산업디자인', count: 23)
-  ].obs;
+  RxList<Tag> searchTagList = <Tag>[].obs;
 
   List<int> pagenumList = List.generate(4, (index) => 1);
   List<RefreshController> refreshControllerList =
@@ -52,7 +43,18 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
 
   final FocusNode focusNode = FocusNode();
 
-  void onLoading() async {
+  void onRefresh() {
+    popPagenum = 1;
+    popPostList.clear();
+    popPostLoad();
+    refreshController.refreshCompleted();
+  }
+
+  void onLoading() {
+    popPostLoad();
+  }
+
+  void onSearchLoading() async {
     // await Future.delayed(Duration(seconds: 2));
     searchFunction();
   }
@@ -108,12 +110,21 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   }
 
   void popPostLoad() async {
-    await searchPopPost(1).then((value) {
+    await getTopPost("10", "", page: popPagenum).then((value) {
       if (value.isError == false) {
         List<Post> postList =
             List.from(value.data).map((post) => Post.fromJson(post)).toList();
 
-        popPostList(postList);
+        popPostList.addAll(postList);
+
+        popPagenum += 1;
+        refreshController.loadComplete();
+      } else {
+        if (value.errorData!['statusCode'] == 204) {
+          refreshController.loadNoData();
+        } else {
+          refreshController.loadComplete();
+        }
       }
     });
   }

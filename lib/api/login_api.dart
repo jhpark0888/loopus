@@ -53,12 +53,8 @@ Future<HTTPResponse> loginRequest(String email, String pw) async {
       if (response.statusCode == 202) {
         return HTTPResponse.success(response);
       } else if (response.statusCode == 401) {
-        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-        print('에러1');
         return HTTPResponse.apiError('fail', response.statusCode);
       } else {
-        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-        print('에러');
         return HTTPResponse.apiError('fail', response.statusCode);
       }
     } on SocketException {
@@ -66,26 +62,29 @@ Future<HTTPResponse> loginRequest(String email, String pw) async {
       return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      return HTTPResponse.success('success');
+      return HTTPResponse.unexpectedError(e);
       // ErrorController.to.isServerClosed(true);
     }
   }
 }
 
-Future<void> postpwfindemailcheck() async {
+Future<HTTPResponse> postpwfindemailcheck(String inputEmail) async {
   ConnectivityResult result = await initConnectivity();
-  LogInController logInController = Get.put(LogInController());
   PwChangeController pwChangeController = Get.find();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
-    showCustomDialog('입력하신 이메일로 들어가서 링크를 클릭해 본인 인증을 해주세요', 1400);
+    showCustomDialog(
+      '입력하신 이메일로 들어가서 링크를 클릭해 본인 인증을 해주세요',
+      1400,
+    );
     pwChangeController.pwcertification(Emailcertification.waiting);
     Uri uri = Uri.parse('$serverUri/user_api/password');
 
     //이메일 줘야 됨
     final email = {
-      'email': logInController.idcontroller.text.trim(),
+      'email': inputEmail.trim(),
     };
 
     try {
@@ -97,36 +96,26 @@ Future<void> postpwfindemailcheck() async {
 
       print("비밀번호 찾기 이메일 체크 : ${response.statusCode}");
       if (response.statusCode == 200) {
-        pwChangeController.pwcertification(Emailcertification.success);
-        Get.to(() => PwChangeScreen(
-              pwType: PwType.pwfind,
-            ));
-        // _modalController.showCustomDialog('입력하신 이메일로 새로운 비밀번호를 알려드렸어요', 1400);
-      } else if (response.statusCode == 401) {
-        pwChangeController.pwcertification(Emailcertification.fail);
-        showCustomDialog('아직 가입 되지 않은 이메일입니다', 1400);
-        print('에러1');
+        return HTTPResponse.success("success");
       } else {
-        pwChangeController.pwcertification(Emailcertification.fail);
-        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-        print('에러');
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }
 
-Future<void> putpwfindchange() async {
+Future<HTTPResponse> putpwfindchange() async {
   ConnectivityResult result = await initConnectivity();
   PwChangeController pwChangeController = Get.find();
   LogInController logInController = Get.find();
 
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     Uri uri = Uri.parse('$serverUri/user_api/password?type=find');
 
@@ -144,20 +133,15 @@ Future<void> putpwfindchange() async {
 
       print("비밀번호 찾기 : ${response.statusCode}");
       if (response.statusCode == 200) {
-        getbacks(2);
-        showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
-      } else if (response.statusCode == 401) {
-        showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
-        print('에러1');
+        return HTTPResponse.success("success");
       } else {
-        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-        print('에러');
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }

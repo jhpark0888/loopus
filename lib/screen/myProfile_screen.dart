@@ -17,14 +17,12 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
-import 'package:loopus/screen/posting_add_images_screen.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/widget/careertile_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
-import 'package:loopus/widget/custom_footer.dart';
-import 'package:loopus/widget/custom_header.dart';
+import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
@@ -308,31 +306,29 @@ class MyProfileScreen extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: CustomExpandedButton(
-                                            onTap: () {
+                                          onTap: () {
+                                            tagController.selectedtaglist
+                                                .clear();
+                                            tagController
+                                                .tagsearchContoller.text = "";
+                                            for (var tag in profileController
+                                                .myUserInfo.value.profileTag) {
                                               tagController.selectedtaglist
-                                                  .clear();
-                                              tagController
-                                                  .tagsearchContoller.text = "";
-                                              for (var tag in profileController
-                                                  .myUserInfo
-                                                  .value
-                                                  .profileTag) {
-                                                tagController.selectedtaglist
-                                                    .add(SelectedTagWidget(
-                                                  id: tag.tagId,
-                                                  text: tag.tag,
-                                                  selecttagtype:
-                                                      SelectTagtype.interesting,
-                                                  tagtype: Tagtype.profile,
-                                                ));
-                                              }
-                                              Get.to(() =>
-                                                  ProfileTagChangeScreen());
-                                            },
-                                            isBlue: false,
-                                            isBig: false,
-                                            title: '관심 태그 변경하기',
-                                            buttonTag: '관심 태그 변경하기'),
+                                                  .add(SelectedTagWidget(
+                                                id: tag.tagId,
+                                                text: tag.tag,
+                                                selecttagtype:
+                                                    SelectTagtype.interesting,
+                                                tagtype: Tagtype.profile,
+                                              ));
+                                            }
+                                            Get.to(
+                                                () => ProfileTagChangeScreen());
+                                          },
+                                          isBlue: false,
+                                          isBig: false,
+                                          title: '관심 태그 변경하기',
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -486,39 +482,46 @@ class MyProfileScreen extends StatelessWidget {
                                         ],
                                       ),
                                       Obx(
-                                        () => Column(
-                                            children: profileController
-                                                .myProjectList
-                                                .asMap()
-                                                .entries
-                                                .map((entry) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              profileController
-                                                  .careerCurrentPage
-                                                  .value = entry.key.toDouble();
-                                              profileController
-                                                  .careertitleController
-                                                  .jumpToPage(
-                                                entry.key,
-                                                // duration: const Duration(milliseconds: 300), curve: Curves.ease
-                                              );
-                                              profileController
-                                                  .careerPageController
-                                                  .jumpToPage(
-                                                entry.key,
-                                                // duration: const Duration(milliseconds: 300), curve: Curves.ease
-                                              );
-                                            },
-                                            child: CareerTile(
-                                                index: entry.key,
-                                                currentPage: profileController
-                                                    .careerCurrentPage,
-                                                title:
-                                                    entry.value.careerName.obs,
-                                                time: entry.value.startDate!),
-                                          );
-                                        }).toList()),
+                                        () => profileController
+                                                .myProjectList.isEmpty
+                                            ? EmptyContentWidget(
+                                                text: '아직 커리어가 없어요')
+                                            : Column(
+                                                children: profileController
+                                                    .myProjectList
+                                                    .asMap()
+                                                    .entries
+                                                    .map((entry) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    profileController
+                                                            .careerCurrentPage
+                                                            .value =
+                                                        entry.key.toDouble();
+                                                    profileController
+                                                        .careertitleController
+                                                        .jumpToPage(
+                                                      entry.key,
+                                                      // duration: const Duration(milliseconds: 300), curve: Curves.ease
+                                                    );
+                                                    profileController
+                                                        .careerPageController
+                                                        .jumpToPage(
+                                                      entry.key,
+                                                      // duration: const Duration(milliseconds: 300), curve: Curves.ease
+                                                    );
+                                                  },
+                                                  child: CareerTile(
+                                                      index: entry.key,
+                                                      currentPage:
+                                                          profileController
+                                                              .careerCurrentPage,
+                                                      title: entry
+                                                          .value.careerName.obs,
+                                                      time: entry
+                                                          .value.startDate!),
+                                                );
+                                              }).toList()),
                                       ),
                                       const SizedBox(height: 24),
                                       const Divider(

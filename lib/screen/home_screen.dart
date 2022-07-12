@@ -5,8 +5,7 @@ import 'package:get/get.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
-import 'package:loopus/widget/custom_footer.dart';
-import 'package:loopus/widget/custom_header.dart';
+import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/news_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
@@ -31,18 +30,19 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 44,
+          toolbarHeight: 58,
           elevation: 0,
+          titleSpacing: 20,
           title: GestureDetector(
             onTap: () {
               _homeController.scrollController.animateTo(0,
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.linear);
             },
-            child: Image.asset(
-              'assets/illustrations/Home_Logo.png',
-              width: 72,
-              height: 40,
+            child: SvgPicture.asset(
+              'assets/icons/Home_Logo.svg',
+              width: 64.8,
+              height: 36,
             ),
           ),
           actions: [
@@ -57,15 +57,16 @@ class HomeScreen extends StatelessWidget {
             Center(
               child: Stack(
                 children: [
-                  IconButton(
-                    onPressed: () {
+                  GestureDetector(
+                    onTap: () {
                       // ProfileController.to.isnewalarm(false);
 
                       // Get.to(() => NotificationScreen());
                     },
-                    icon: SvgPicture.asset(
+                    child: SvgPicture.asset(
                       "assets/icons/Bell_Inactive.svg",
-                      width: 28,
+                      width: 24,
+                      height: 24,
                     ),
                   ),
                   Positioned(
@@ -87,17 +88,20 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(
+              width: 24,
+            ),
             Center(
               child: Stack(
                 children: [
-                  IconButton(
-                    onPressed: () {
+                  GestureDetector(
+                    onTap: () {
                       Get.to(() => MessageScreen());
                     },
-                    icon: SvgPicture.asset(
+                    child: SvgPicture.asset(
                       "assets/icons/Chat.svg",
-                      width: 28,
-                      height: 28,
+                      width: 24,
+                      height: 24,
                     ),
                   ),
                   Positioned(
@@ -120,7 +124,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              width: 5,
+              width: 24,
             ),
             Center(
               child: GestureDetector(
@@ -131,32 +135,33 @@ class HomeScreen extends StatelessWidget {
                     imageUrl:
                         ProfileController.to.myUserInfo.value.profileImage ??
                             '',
-                    width: 36,
-                    height: 36,
+                    width: 32,
+                    height: 32,
                   ),
                 ),
               ),
             ),
             const SizedBox(
-              width: 15,
+              width: 20,
             ),
           ],
         ),
         body: Obx(
-          () => SmartRefresher(
-            physics: const BouncingScrollPhysics(),
-            scrollController: _homeController.scrollController,
-            controller: _homeController.postingRefreshController,
-            enablePullDown:
-                (_homeController.isPostingLoading.value == true) ? false : true,
-            enablePullUp: (_homeController.isPostingLoading.value == true)
-                ? false
-                : _homeController.enablePostingPullup.value,
-            header: const MyCustomHeader(),
-            footer: const MyCustomFooter(),
-            onRefresh: _homeController.onPostingRefresh,
-            onLoading: _homeController.onPostingLoading,
-            child: ScrollNoneffectWidget(
+          () => ScrollNoneffectWidget(
+            child: SmartRefresher(
+              physics: const BouncingScrollPhysics(),
+              scrollController: _homeController.scrollController,
+              controller: _homeController.postingRefreshController,
+              enablePullDown: (_homeController.isPostingLoading.value == true)
+                  ? false
+                  : true,
+              enablePullUp: (_homeController.isPostingLoading.value == true)
+                  ? false
+                  : _homeController.enablePostingPullup.value,
+              header: const MyCustomHeader(),
+              footer: const MyCustomFooter(),
+              onRefresh: _homeController.onPostingRefresh,
+              onLoading: _homeController.onPostingLoading,
               child: SingleChildScrollView(
                   primary: false,
                   child: Column(
@@ -167,7 +172,7 @@ class HomeScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(
-                              height: 24,
+                              height: 14,
                             ),
                             Text(
                               '\'커리어이름\'\n커리어엔 최근 어떤 일이 있었나요?',

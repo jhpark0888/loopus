@@ -10,8 +10,8 @@ class MyCustomHeader extends StatelessWidget {
     return ClassicHeader(
       spacing: 0.0,
       height: 60,
-      completeDuration: Duration(milliseconds: 600),
-      textStyle: TextStyle(color: mainblack),
+      completeDuration: const Duration(milliseconds: 600),
+      textStyle: const TextStyle(color: mainblack),
       refreshingText: '',
       releaseText: "",
       completeText: "",
@@ -47,6 +47,33 @@ class MyCustomHeader extends StatelessWidget {
             scale: 12,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class MyCustomFooter extends StatelessWidget {
+  const MyCustomFooter({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClassicFooter(
+      spacing: 0.0,
+      completeDuration: const Duration(milliseconds: 200),
+      loadStyle: LoadStyle.ShowWhenLoading,
+      loadingText: "",
+      canLoadingText: "",
+      noDataText: "",
+      idleText: "",
+      idleIcon: Container(),
+      noMoreIcon: Container(),
+      loadingIcon: Image.asset(
+        'assets/icons/loading.gif',
+        scale: 6,
+      ),
+      canLoadingIcon: Image.asset(
+        'assets/icons/loading.gif',
+        scale: 6,
       ),
     );
   }

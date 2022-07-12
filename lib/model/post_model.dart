@@ -25,11 +25,11 @@ class Post {
 
   int id;
   int userid;
-  String content;
+  RxString content;
   List<String> images;
   List<String> links; //입력값 10개까지
   RxList<Comment> comments; //댓글
-  List<Tag> tags;
+  RxList<Tag> tags;
   DateTime date;
   Project? project;
   RxInt likeCount;
@@ -41,7 +41,7 @@ class Post {
   factory Post.fromJson(Map<String, dynamic> json) => Post(
         id: json["id"],
         userid: json["user_id"],
-        content: json["contents"],
+        content: RxString(json["contents"]),
         images: json["contents_image"] != null
             ? List<Map<String, dynamic>>.from(json["contents_image"])
                 .map((map) => map['image'].toString())
@@ -56,7 +56,8 @@ class Post {
             ? List<Map<String, dynamic>>.from(json['post_tag'])
                 .map((tag) => Tag.fromJson(tag))
                 .toList()
-            : [],
+                .obs
+            : <Tag>[].obs,
         date: DateTime.parse(json["date"]),
         comments: json["comments"].runtimeType != List
             ? <Comment>[Comment.fromJson(json["comments"])].obs
@@ -75,26 +76,27 @@ class Post {
         user: User.fromJson(json["profile"]),
       );
 
-  void postDeepCopy(Map<String, dynamic> json) {
-    id = json["id"];
-    userid = json["user_id"];
-    content = json["contents"];
+  void copywith(Map<String, dynamic> json) {
+    id = json["id"] ?? id;
+    userid = json["user_id"] ?? userid;
+    content = json["contents"] != null ? RxString(json["contents"]) : content;
     images = json["contents_image"] != null
         ? List<Map<String, dynamic>>.from(json["contents_image"])
             .map((map) => map['image'].toString())
             .toList()
-        : [];
+        : images;
     links = json["contents_link"] != null
         ? List<Map<String, dynamic>>.from(json["contents_link"])
             .map((map) => map['link'].toString())
             .toList()
-        : [];
+        : links;
     tags = json['post_tag'] != null
         ? List<Map<String, dynamic>>.from(json['post_tag'])
             .map((tag) => Tag.fromJson(tag))
             .toList()
-        : [];
-    date = DateTime.parse(json["date"]);
+            .obs
+        : tags;
+    date = json["date"] != null ? DateTime.parse(json["date"]) : date;
     comments = json["comments"].runtimeType != List
         ? <Comment>[Comment.fromJson(json["comments"])].obs
         : List<Map<String, dynamic>>.from(json["comments"])
@@ -102,13 +104,13 @@ class Post {
             .toList()
             .obs;
     project =
-        json["project"] != null ? Project.fromJson(json["project"]) : null;
+        json["project"] != null ? Project.fromJson(json["project"]) : project;
     // likeCount =
     //     json["like_count"] != null ? RxInt(json["like_count"]) : RxInt(0);
     // isLiked = json["is_liked"] != null ? RxInt(json["is_liked"]) : RxInt(0);
     // isMarked = json["is_marked"] != null ? RxInt(json["is_marked"]) : RxInt(0);
-    isuser = json["is_user"] ?? 0;
-    user = User.fromJson(json["profile"]);
+    isuser = json["is_user"] ?? isuser;
+    user = json["profile"] != null ? User.fromJson(json["profile"]) : user;
   }
 
   Map<String, dynamic> toJson() => {

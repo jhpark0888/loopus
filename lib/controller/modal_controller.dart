@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -922,6 +924,9 @@ void showErrorDialog({
 }
 
 void showCustomDialog(String title, int duration) {
+  Timer _timer = Timer(Duration(milliseconds: duration), () {
+    Get.back();
+  });
   Get.dialog(
     AlertDialog(
       elevation: 0,
@@ -947,9 +952,10 @@ void showCustomDialog(String title, int duration) {
     barrierColor: mainblack.withOpacity(0.3),
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
-  );
-  Future.delayed(Duration(milliseconds: duration), () {
-    Get.back();
+  ).then((value) {
+    if (_timer.isActive) {
+      _timer.cancel();
+    }
   });
 }
 

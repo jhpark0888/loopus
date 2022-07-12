@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:ui' as ui;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -11,6 +12,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
+import 'package:loopus/controller/posting_update_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/post_model.dart';
@@ -21,6 +23,7 @@ import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/posting_add_link_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/utils/error_control.dart';
+import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_textfield.dart';
@@ -32,29 +35,28 @@ import 'package:loopus/widget/tag_widget.dart';
 
 import '../controller/modal_controller.dart';
 
-class PostingAddNameScreen1 extends StatelessWidget {
-  PostingAddNameScreen1(
-      {Key? key, this.postid, required this.project_id, required this.route})
-      : super(key: key);
-  late PostingAddController postingAddController =
-      Get.put(PostingAddController(route: route));
+class PostUpdateScreen extends StatelessWidget {
+  PostUpdateScreen({Key? key, required this.post}) : super(key: key);
+  late PostingUpdateController postingUpdateController =
+      Get.put(PostingUpdateController(post: post));
   TagController tagController = Get.put(TagController(tagtype: Tagtype.Posting),
       tag: Tagtype.Posting.toString());
   KeyController keyController = Get.put(KeyController(isTextField: false.obs));
-  int project_id;
-  int? postid;
-  PostaddRoute route;
+
+  PageController pageController = PageController();
+
+  Post post;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
-        postingAddController.isTagClick.value = false;
+        postingUpdateController.isTagClick.value = false;
       },
       child: Scaffold(
         appBar: AppBarWidget(
           bottomBorder: false,
-          title: '포스트 작성',
+          title: '포스트 수정',
           leading: GestureDetector(
               onTap: () {
                 Get.back();
@@ -64,7 +66,7 @@ class PostingAddNameScreen1 extends StatelessWidget {
         body: Obx(
           () => ScrollNoneffectWidget(
             child: SingleChildScrollView(
-              controller: postingAddController.scrollController,
+              controller: postingUpdateController.scrollController,
               child: Padding(
                 padding: EdgeInsets.only(
                     bottom:
@@ -73,103 +75,72 @@ class PostingAddNameScreen1 extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Divider(
-                      key: Get.put(
-                              KeyController(
-                                  tag: Tagtype.Posting, isTextField: false.obs),
-                              tag: 'second')
-                          .viewKey,
-                      thickness: 0,
-                      color: mainWhite,
-                    ),
-                    postingAddController.isAddLink.value == false
-                        ? postingAddController.isAddImage.value == true
-                            ? postingAddController.images.length == 1
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Container(
-                                        color: mainblack,
-                                        height: Get.width,
-                                        child: Image.file(
-                                            postingAddController.images.first,
-                                            fit: BoxFit.contain),
-                                      ),
-                                      // const SizedBox(height: 14),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            20, 14, 20, 14),
-                                        child: GestureDetector(
-                                            onTap: () {
-                                              Get.to(() => UploadScreen());
-                                            },
-                                            child: Text('사진 수정하기',
-                                                style: k16Normal.copyWith(
-                                                    color: mainblue),
-                                                textAlign: ui.TextAlign.right)),
-                                      )
-                                    ],
-                                  )
-                                : Stack(children: [
-                                    SwiperWidget(
-                                        item: postingAddController.images,
-                                        height: Get.width,
-                                        itembuilder: (context, index) {
-                                          return Image.file(
-                                              postingAddController
-                                                  .images[index],
-                                              fit: BoxFit.cover);
-                                        }),
-                                    Positioned(
-                                        child: GestureDetector(
-                                            onTap: () {
-                                              Get.to(() => UploadScreen(),
-                                                  duration: const Duration(
-                                                      milliseconds: 300),
-                                                  curve: Curves.ease);
-                                            },
-                                            child: Text('사진 수정하기',
-                                                style: k16Normal.copyWith(
-                                                    color: mainblue))),
-                                        right: 20,
-                                        bottom: 10)
-                                  ])
-                            : Column(children: [
-                                SizedBox(height: 23),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    addButton(
-                                        title: '이미지',
-                                        titleEng: 'image',
-                                        ontap: () {
-                                          Get.to(() => UploadScreen());
-                                        }),
-                                    addButton(
-                                        title: '링크',
-                                        titleEng: 'link',
-                                        ontap: () {
-                                          Get.to(() => PostingAddLinkScreen());
-                                        })
-                                  ],
+                    if (postingUpdateController.post.images.isNotEmpty ||
+                        postingUpdateController.post.links.isNotEmpty)
+                      Column(
+                        children: [
+                          Container(
+                              color: mainblack,
+                              constraints: BoxConstraints(
+                                  maxWidth: 600,
+                                  maxHeight: postingUpdateController
+                                          .post.images.isNotEmpty
+                                      ? Get.width
+                                      : 300),
+                              child: PageView.builder(
+                                controller: pageController,
+                                itemBuilder: (BuildContext context, int index) {
+                                  if (postingUpdateController
+                                      .post.images.isNotEmpty) {
+                                    return CachedNetworkImage(
+                                        imageUrl: postingUpdateController
+                                            .post.images[index],
+                                        fit: BoxFit.contain);
+                                    // Image.network(item.images[index],
+                                    //     fit: BoxFit.fill);
+                                  } else {
+                                    return KeepAlivePage(
+                                      child: LinkWidget(
+                                          url: postingUpdateController
+                                              .post.links[index],
+                                          widgetType: 'post'),
+                                    );
+                                  }
+                                },
+                                itemCount: postingUpdateController
+                                        .post.images.isNotEmpty
+                                    ? postingUpdateController.post.images.length
+                                    : postingUpdateController.post.links.length,
+                              )),
+                          const SizedBox(
+                            height: 14,
+                          ),
+                          if (postingUpdateController.post.images.length > 1 ||
+                              postingUpdateController.post.links.length > 1)
+                            Column(
+                              children: [
+                                PageIndicator(
+                                  size: 7,
+                                  activeSize: 7,
+                                  space: 7,
+                                  color: maingray,
+                                  activeColor: mainblue,
+                                  count: postingUpdateController
+                                          .post.images.isNotEmpty
+                                      ? postingUpdateController
+                                          .post.images.length
+                                      : postingUpdateController
+                                          .post.links.length,
+                                  controller: pageController,
+                                  layout: PageIndicatorLayout.SLIDE,
                                 ),
-                                SizedBox(height: 24),
-                              ])
-                        : postingAddController.scrapList.length >= 2
-                            ? SizedBox(
-                                height: 350,
-                                child: SwiperWidget(
-                                  item: postingAddController.scrapList,
-                                  height: 300,
-                                  itembuilder: (context, index) {
-                                    return postingAddController
-                                        .scrapList[index];
-                                  },
-                                ),
-                              )
-                            : postingAddController.scrapList.first,
+                              ],
+                            ),
+                          const SizedBox(
+                            height: 14,
+                          ),
+                        ],
+                      ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Column(
@@ -178,11 +149,12 @@ class PostingAddNameScreen1 extends StatelessWidget {
                             Divider(thickness: 0.5),
                             LayoutBuilder(builder: (context, constraints) {
                               return NoUlTextField(
-                                controller: postingAddController.textcontroller,
+                                controller:
+                                    postingUpdateController.textcontroller,
                                 obscureText: false,
                                 onChanged: (string) {
                                   TextSpan span = TextSpan(
-                                      text: postingAddController
+                                      text: postingUpdateController
                                           .textcontroller.text,
                                       style: kSubTitle3Style);
                                   TextPainter tp = TextPainter(
@@ -190,9 +162,11 @@ class PostingAddNameScreen1 extends StatelessWidget {
                                       textDirection: ui.TextDirection.ltr);
                                   tp.layout(maxWidth: Get.width - 40);
                                   int numLines = tp.computeLineMetrics().length;
-                                  postingAddController.lines.value = numLines;
-                                  if (postingAddController.lines.value == 7) {
-                                    postingAddController
+                                  postingUpdateController.lines.value =
+                                      numLines;
+                                  if (postingUpdateController.lines.value ==
+                                      7) {
+                                    postingUpdateController
                                         .keyControllerAtive.value = true;
                                   }
                                 },
@@ -252,7 +226,7 @@ class PostingAddNameScreen1 extends StatelessWidget {
                                     curve: Curves.easeOut,
                                     duration:
                                         const Duration(milliseconds: 300));
-                                postingAddController.isTagClick(true);
+                                postingUpdateController.isTagClick(true);
                                 // }
                                 // );
                               },
@@ -317,10 +291,9 @@ class PostingAddNameScreen1 extends StatelessWidget {
                                 //               100
                                 //       : 0,
                                 child: Column(
-                                    children:
-                                        tagController.searchtaglist.value))),
+                                    children: tagController.searchtaglist))),
                             const SizedBox(height: 100),
-                            uploadButton()
+                            updateButton()
                           ]),
                     )
                   ],
@@ -333,55 +306,26 @@ class PostingAddNameScreen1 extends StatelessWidget {
     );
   }
 
-  Widget addButton(
-      {required String title,
-      required String titleEng,
-      required Function()? ontap}) {
-    return GestureDetector(
-      onTap: ontap,
-      child: Container(
-        padding: EdgeInsets.fromLTRB(18.25, 14.5, 18.25, 14.5),
-        decoration: BoxDecoration(
-            color: mainblue, borderRadius: BorderRadius.circular(8)),
-        child: Row(
-          children: [
-            SvgPicture.asset('assets/icons/Add_$titleEng.svg'),
-            SizedBox(width: 7),
-            Text(
-              '$title 첨부하기',
-              style: kSubTitle3Style.copyWith(color: mainWhite),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget uploadButton() {
+  Widget updateButton() {
     return GestureDetector(
       onTap: () async {
         loading();
-        await addposting(project_id).then((value) {
+        await updateposting(post.id, PostingUpdateType.contents).then((value) {
           Get.back();
           if (value.isError == false) {
-            Post post = Post.fromJson(value.data);
+            postingUpdateController.post.content.value =
+                postingUpdateController.textcontroller.text;
+            postingUpdateController.post.tags = tagController.selectedtaglist
+                .map((tagwidget) =>
+                    Tag(tagId: tagwidget.id!, tag: tagwidget.text, count: 0))
+                .toList()
+                .obs;
 
-            if (Get.isRegistered<ProfileController>()) {
-              Project? career =
-                  ProfileController.to.myProjectList.firstWhereOrNull(
-                (career) => career.id == project_id,
-              );
-
-              if (career != null) {
-                career.posts.insert(0, post);
-              }
-
-              getbacks(2);
-              dialogBack();
-              showCustomDialog('포스팅을 업로드했어요', 1000);
-            } else {
-              errorSituation(value);
-            }
+            Get.back();
+            dialogBack(modalIOS: true);
+            showCustomDialog('포스팅 수정이 완료됐어요', 1000);
+          } else {
+            errorSituation(value);
           }
         });
       },
@@ -391,7 +335,7 @@ class PostingAddNameScreen1 extends StatelessWidget {
             color: checkContent() ? mainblue : maingray.withOpacity(0.5),
             borderRadius: BorderRadius.circular(8)),
         child: Text(
-          '업로드',
+          '적용하기',
           textAlign: ui.TextAlign.center,
           style: k16Normal.copyWith(color: mainWhite),
         ),
@@ -400,9 +344,7 @@ class PostingAddNameScreen1 extends StatelessWidget {
   }
 
   bool checkContent() {
-    if (postingAddController.isAddImage.value ||
-        postingAddController.isAddLink.value ||
-        !postingAddController.isPostingTitleEmpty.value) {
+    if (!postingUpdateController.isPostingTitleEmpty.value) {
       return true;
     } else {
       return false;
