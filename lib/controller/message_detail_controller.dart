@@ -52,52 +52,52 @@ class MessageDetailController extends GetxController {
 
   void messageLoading() async {
     //페이지 처리
-    await loadmessage(false);
+    // await loadmessage(false);
     messageRefreshController.loadComplete();
   }
 
-  Future<void> loadmessage(bool first) async {
-    ConnectivityResult result = await initConnectivity();
-    if (result == ConnectivityResult.none) {
-      if (first) {
-        messagescreenstate(ScreenState.disconnect);
-      }
-      showdisconnectdialog();
-    } else {
-      HTTPResponse httpresult = await getmessagelist(
-          userid,
-          first
-              ? 0
-              : messagelist.isNotEmpty
-                  ? messagelist.first.message.id
-                  : 0);
+  // Future<void> loadmessage(bool first) async {
+  //   ConnectivityResult result = await initConnectivity();
+  //   if (result == ConnectivityResult.none) {
+  //     if (first) {
+  //       messagescreenstate(ScreenState.disconnect);
+  //     }
+  //     showdisconnectdialog();
+  //   } else {
+  //     HTTPResponse httpresult = await getmessagelist(
+  //         userid,
+  //         first
+  //             ? 0
+  //             : messagelist.isNotEmpty
+  //                 ? messagelist.first.message.id
+  //                 : 0);
 
-      if (httpresult.isError == false) {
-        List<MessageWidget> messagewidgetlist = httpresult.data;
-        if (messagewidgetlist.isEmpty &&
-            messagelist.isEmpty &&
-            first == false) {
-          enablemessagePullup.value = false;
-          // isalarmEmpty.value = true;
-        } else if (messagewidgetlist.isEmpty && messagelist.isNotEmpty) {
-          enablemessagePullup.value = false;
-        }
+  //     if (httpresult.isError == false) {
+  //       List<MessageWidget> messagewidgetlist = httpresult.data;
+  //       if (messagewidgetlist.isEmpty &&
+  //           messagelist.isEmpty &&
+  //           first == false) {
+  //         enablemessagePullup.value = false;
+  //         // isalarmEmpty.value = true;
+  //       } else if (messagewidgetlist.isEmpty && messagelist.isNotEmpty) {
+  //         enablemessagePullup.value = false;
+  //       }
 
-        if (first) {
-          messagelist(messagewidgetlist);
-          messagescreenstate(ScreenState.success);
-        } else {
-          for (var message in messagewidgetlist.reversed) {
-            messagelist.insert(0, message);
-          }
-        }
-      }
-    }
-  }
+  //       if (first) {
+  //         messagelist(messagewidgetlist);
+  //         messagescreenstate(ScreenState.success);
+  //       } else {
+  //         for (var message in messagewidgetlist.reversed) {
+  //           messagelist.insert(0, message);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   void firstmessagesload() {
     messagescreenstate(ScreenState.loading);
-    loadmessage(true);
+    // loadmessage(true);
   }
 
   void bottomtoscroll() {

@@ -439,19 +439,22 @@ class OtherProfileScreen extends StatelessWidget {
                                                     //             .toString());
                                                     // messagecontroller
                                                     //     .firstmessagesload();
-                                                    Get.to(() =>
-                                                        MessageDetailScreen(
-                                                          realname: _controller
-                                                              .otherUser
-                                                              .value
-                                                              .realName,
-                                                          userid: _controller
-                                                              .otherUser
-                                                              .value
-                                                              .userid,
-                                                          user: _controller
-                                                              .otherUser.value,
-                                                        ));
+
+                                                    //----------------
+                                                    // Get.to(() =>
+                                                    //     MessageDetailScreen(
+                                                    //       realname: _controller
+                                                    //           .otherUser
+                                                    //           .value
+                                                    //           .realName,
+                                                    //       userid: _controller
+                                                    //           .otherUser
+                                                    //           .value
+                                                    //           .userid,
+                                                    //       user: _controller
+                                                    //           .otherUser.value,
+                                                    //     ));
+                                                    //----------------
                                                   },
                                             isBlue: false,
                                             isBig: false,

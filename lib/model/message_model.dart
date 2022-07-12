@@ -15,6 +15,9 @@ class Message {
     required this.isRead,
     required this.issender,
     required this.issending,
+    // ---------------------------
+    // ----------------------------
+
   });
 
   int id;
@@ -25,6 +28,15 @@ class Message {
   bool isRead;
   int issender;
   RxBool issending;
+  //---------------------
+  //---------------------
+  // int id;
+  // int userid;
+  // int roomid;
+  // String content;
+  // bool isread;
+  // DateTime date;
+
 
   factory Message.fromJson(Map<String, dynamic> json, String? myid) => Message(
         id: json["id"],
@@ -35,9 +47,11 @@ class Message {
         isRead: json["is_read"],
         issender: json["receiver_id"].toString() != myid ? 1 : 0,
         issending: false.obs,
+        
       );
 
   Map<String, dynamic> toJson() => {
+        'id' : id,
         "room_id": roomId,
         "receiver_id": receiverId,
         "message": message,
@@ -51,11 +65,15 @@ class MessageRoom {
     required this.message,
     required this.user,
     required this.notread,
+    required this.roomId,
+    required this.delId
   });
 
   Rx<Message> message;
   User user;
   RxInt notread;
+  int roomId;
+  int delId;
 
   factory MessageRoom.fromJson(Map<String, dynamic> json, String? myid) =>
       MessageRoom(
@@ -66,11 +84,15 @@ class MessageRoom {
                 realName: "알 수 없음",
               ),
         notread: RxInt(json["not_read"]),
+        roomId: json['room_id'],
+        delId: json['del_id']
       );
 
   Map<String, dynamic> toJson() => {
         "message": message,
         "profile": user,
         "not_read": notread,
+        'room_ id': roomId,
+        'del_id' : delId
       };
 }

@@ -37,19 +37,19 @@ class MessageDetailScreen extends StatelessWidget {
       } else {
         controller.messagefocus.unfocus();
         controller.messagetextController.clear();
-        Message message = Message(
-            id: 0,
-            roomId: controller.messagelist.isEmpty
-                ? 0
-                : controller.messagelist.first.message.roomId,
-            receiverId: userid,
-            message: text,
-            date: DateTime.now(),
-            isRead: true,
-            issender: 1,
-            issending: true.obs);
-        controller.messagelist.insert(controller.messagelist.length,
-            MessageWidget(message: message, user: controller.user!.value));
+        // Message message = Message(
+        //     id: 0,
+        //     roomId: controller.messagelist.isEmpty
+        //         ? 0
+        //         : controller.messagelist.first.message.roomId,
+        //     receiverId: userid,
+        //     message: text,
+        //     date: DateTime.now(),
+        //     isRead: true,
+        //     issender: 1,
+        //     issending: true.obs);
+        // controller.messagelist.insert(controller.messagelist.length,
+        //     MessageWidget(message: message, user: controller.user!.value));
         if (controller.scrollController.hasClients) {
           if (controller.scrollController.offset != 0) {
             controller.scrollController.jumpTo(
@@ -58,29 +58,29 @@ class MessageDetailScreen extends StatelessWidget {
           }
         }
         await postmessage(text, controller.userid).then((value) {
-          message.issending(false);
+          // message.issending(false);
 
           if (Get.isRegistered<MessageController>()) {
-            MessageController messageController = Get.find<MessageController>();
-            MessageRoomWidget messageroomwidget = messageController
-                .chattingroomlist
-                .where((messageroom) =>
-                    messageroom.messageRoom.value.user.userid ==
-                    controller.userid)
-                .first;
-            messageroomwidget.messageRoom.value.message.value = Message(
-                id: 0,
-                roomId: controller.messagelist.isEmpty
-                    ? 0
-                    : controller.messagelist.first.message.roomId,
-                receiverId: userid,
-                message: text,
-                date: DateTime.now(),
-                isRead: true,
-                issender: 1,
-                issending: true.obs);
-            messageController.chattingroomlist.remove(messageroomwidget);
-            messageController.chattingroomlist.insert(0, messageroomwidget);
+            // MessageController messageController = Get.find<MessageController>();
+            // MessageRoomWidget messageroomwidget = messageController
+            //     .chattingroomlist
+            //     .where((messageroom) =>
+            //         messageroom.messageRoom.value.user.userid ==
+            //         controller.userid)
+            //     .first;
+            // messageroomwidget.messageRoom.value.message.value = Message(
+            //     id: 0,
+            //     roomId: controller.messagelist.isEmpty
+            //         ? 0
+            //         : controller.messagelist.first.message.roomId,
+            //     receiverId: userid,
+            //     message: text,
+            //     date: DateTime.now(),
+            //     isRead: true,
+            //     issender: 1,
+            //     issending: true.obs);
+            // messageController.chattingroomlist.remove(messageroomwidget);
+            // messageController.chattingroomlist.insert(0, messageroomwidget);
           }
         });
       }

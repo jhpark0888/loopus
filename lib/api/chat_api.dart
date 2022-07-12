@@ -9,6 +9,7 @@ import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/message_model.dart';
+import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/message_widget.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
@@ -41,7 +42,7 @@ Future<void> getmessageroomlist() async {
         List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
         MessageController.to.chattingroomlist(responseBody
             .map((messageroom) => MessageRoomWidget(
-                messageRoom: MessageRoom.fromJson(messageroom, myid).obs))
+                chatRoom: ChatRoom.fromJson(messageroom).obs))
             .toList());
         MessageController.to.chatroomscreenstate(ScreenState.success);
         print("---------------------------");
@@ -59,6 +60,52 @@ Future<void> getmessageroomlist() async {
     } catch (e) {
       print(e);
       // ErrorController.to.isServerClosed(true);
+    }
+  }
+}
+
+Future<HTTPResponse> getChatroomlist() async {
+  ConnectivityResult result = await initConnectivity();
+  MessageController.to.chatroomscreenstate(ScreenState.loading);
+  if (result == ConnectivityResult.none) {
+    MessageController.to.chatroomscreenstate(ScreenState.disconnect);
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: 'token');
+    String? myid = await const FlutterSecureStorage().read(key: 'id');
+    final url = Uri.parse("http://192.168.35.18:8000/chat/chat_list?id=1");
+    try {
+      http.Response response = await http.get(
+        url,
+        headers: {
+          'id': '1',
+          'Content-Type': 'application/json'
+        },
+      );
+
+      print('채팅방 리스트 statuscode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+
+        List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+        List<ChatRoom> chatroom = responseBody.map((e) => ChatRoom.fromJson(e)).toList();
+        MessageController.to.chatroomscreenstate(ScreenState.success);
+        print("---------------------------");
+        print(responseBody);
+        print(response.statusCode);
+        return HTTPResponse.success(chatroom);
+      } else {
+        MessageController.to.chatroomscreenstate(ScreenState.error);
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      print("서버에러 발생");
+      return HTTPResponse.serverError();
+      // ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }
@@ -95,51 +142,51 @@ Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
   }
 }
 
-Future<HTTPResponse> getmessagelist(int userid, int lastindex) async {
-  String? token = await const FlutterSecureStorage().read(key: 'token');
-  String? myid = await const FlutterSecureStorage().read(key: 'id');
-  MessageDetailController messageDetailController =
-      Get.find<MessageDetailController>(tag: userid.toString());
+// Future<HTTPResponse> getmessagelist(int userid, int lastindex) async {
+//   String? token = await const FlutterSecureStorage().read(key: 'token');
+//   String? myid = await const FlutterSecureStorage().read(key: 'id');
+//   MessageDetailController messageDetailController =
+//       Get.find<MessageDetailController>(tag: userid.toString());
 
-  final url = Uri.parse("$serverUri/chat/chatting?id=$userid&last=$lastindex");
+//   final url = Uri.parse("$serverUri/chat/chatting?id=$userid&last=$lastindex");
 
-  try {
-    final response =
-        await http.get(url, headers: {"Authorization": "Token $token"});
+//   try {
+//     final response =
+//         await http.get(url, headers: {"Authorization": "Token $token"});
 
-    print('채팅 리스트 statuscode: ${response.statusCode}');
-    if (response.statusCode == 200) {
-      Map responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-      if (lastindex == 0) {
-        messageDetailController.user =
-            User.fromJson(responseBody["profile"]).obs;
-      }
-      List<MessageWidget> modelmessagelist = List.from(responseBody["message"])
-          .map((message) => Message.fromJson(message, myid))
-          .toList()
-          .map((message) => MessageWidget(
-              message: message, user: messageDetailController.user!.value))
-          .toList();
-      // print(responseBody);
+//     print('채팅 리스트 statuscode: ${response.statusCode}');
+//     if (response.statusCode == 200) {
+//       Map responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+//       if (lastindex == 0) {
+//         messageDetailController.user =
+//             User.fromJson(responseBody["profile"]).obs;
+//       }
+//       List<MessageWidget> modelmessagelist = List.from(responseBody["message"])
+//           .map((message) => Message.fromJson(message, myid))
+//           .toList()
+//           .map((message) => MessageWidget(
+//               message: message, user: messageDetailController.user!.value))
+//           .toList();
+//       // print(responseBody);
 
-      // MessageController.to.chattingroomlist(responseBody
-      //     .map((messageroom) => MessageRoom.fromJson(messageroom))
-      //     .toList());
-      return HTTPResponse.success(modelmessagelist);
-    } else if (response.statusCode == 404) {
-      messageDetailController.messagelist([]);
-      return HTTPResponse.success(<MessageWidget>[]);
-    } else {
-      return HTTPResponse.apiError('', response.statusCode);
-    }
-  } on SocketException {
-    // ErrorController.to.isServerClosed(true);
-    return HTTPResponse.serverError();
-  } catch (e) {
-    print(e);
-    return HTTPResponse.unexpectedError(e);
-    // ErrorController.to.isServerClosed(true);
-  }
+//       // MessageController.to.chattingroomlist(responseBody
+//       //     .map((messageroom) => MessageRoom.fromJson(messageroom))
+//       //     .toList());
+//       return HTTPResponse.success(modelmessagelist);
+//     } else if (response.statusCode == 404) {
+//       messageDetailController.messagelist([]);
+//       return HTTPResponse.success(<MessageWidget>[]);
+//     } else {
+//       return HTTPResponse.apiError('', response.statusCode);
+//     }
+//   } on SocketException {
+//     // ErrorController.to.isServerClosed(true);
+//     return HTTPResponse.serverError();
+//   } catch (e) {
+//     print(e);
+//     return HTTPResponse.unexpectedError(e);
+//     // ErrorController.to.isServerClosed(true);
+//   }
 
   // print(map);
   // String username = map["real_name"];
@@ -163,7 +210,7 @@ Future<HTTPResponse> getmessagelist(int userid, int lastindex) async {
   // } else {
   //   return;
   // }
-}
+// }
 
 Future<void> postmessage(String content, int userid) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');

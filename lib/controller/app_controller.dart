@@ -10,6 +10,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
+import 'package:loopus/controller/sql_controller.dart';
 
 enum RouteName {
   home,
@@ -29,7 +30,7 @@ class AppController extends GetxService {
   GlobalKey<NavigatorState> searcnPageNaviationKey =
       GlobalKey<NavigatorState>();
   List<int> bottomHistory = [0];
-
+  SQLController sqlcontroller = Get.put(SQLController());
   void changeBottomNav(int value, {bool hasGesture = true}) {
     var page = RouteName.values[value];
     switch (page) {

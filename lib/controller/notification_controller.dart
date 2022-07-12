@@ -104,71 +104,73 @@ class NotificationController extends GetxController {
         if (Get.isRegistered<MessageDetailController>(
             tag: event.data["id"].toString())) {
           String? myid = await const FlutterSecureStorage().read(key: 'id');
-          Get.find<MessageDetailController>(tag: event.data["id"].toString())
-              .messagelist
-              .add(MessageWidget(
-                  message: Message(
-                      id: 0,
-                      roomId: 0,
-                      receiverId: int.parse(myid!),
-                      date: DateTime.now(),
-                      message: event.notification!.body!,
-                      isRead: true,
-                      issender: 0,
-                      issending: true.obs),
-                  user: Get.find<MessageDetailController>(
-                          tag: event.data["id"].toString())
-                      .user!
-                      .value));
+          // Get.find<MessageDetailController>(tag: event.data["id"].toString())
+          //     .messagelist
+          //     .add(
+          //       MessageWidget(
+          //         message: Message(
+          //             id: 0,
+          //             roomId: 0,
+          //             receiverId: int.parse(myid!),
+          //             date: DateTime.now(),
+          //             message: event.notification!.body!,
+          //             isRead: true,
+          //             issender: 0,
+          //             issending: true.obs),
+          //         user: Get.find<MessageDetailController>(
+          //                 tag: event.data["id"].toString())
+          //             .user!
+          //             .value)
+          //             );
           // 새로 추가
           putonmessagescreen(event.data["id"].toString());
           if (Get.isRegistered<MessageController>()) {
-            MessageRoomWidget messageroomwidget = MessageController
-                .to.chattingroomlist
-                .where((messageroomwidget) =>
-                    messageroomwidget.messageRoom.value.user.userid ==
-                    int.parse(event.data["id"]))
-                .first;
-            messageroomwidget.messageRoom.value.message.value = Message(
-                id: 0,
-                roomId: 0,
-                receiverId: int.parse(myid),
-                date: DateTime.now(),
-                message: event.notification!.body!,
-                isRead: false,
-                issender: 0,
-                issending: true.obs);
-            MessageController.to.chattingroomlist.remove(messageroomwidget);
-            MessageController.to.chattingroomlist.insert(0, messageroomwidget);
+            // MessageRoomWidget messageroomwidget = MessageController
+            //     .to.chattingroomlist
+            //     .where((messageroomwidget) =>
+            //         messageroomwidget.messageRoom.value.user.userid ==
+            //         int.parse(event.data["id"]))
+            //     .first;
+            // messageroomwidget.messageRoom.value.message.value = Message(
+            //     id: 0,
+            //     roomId: 0,
+            //     receiverId: int.parse(myid),
+            //     date: DateTime.now(),
+            //     message: event.notification!.body!,
+            //     isRead: false,
+            //     issender: 0,
+            //     issending: true.obs);
+            // MessageController.to.chattingroomlist.remove(messageroomwidget);
+            // MessageController.to.chattingroomlist.insert(0, messageroomwidget);
           }
-        } else {
-          if (Get.isRegistered<MessageController>()) {
-            String? myid = await const FlutterSecureStorage().read(key: 'id');
-            MessageRoomWidget messageroomwidget = MessageController
-                .to.chattingroomlist
-                .where((messageroomwidget) =>
-                    messageroomwidget.messageRoom.value.user.userid ==
-                    int.parse(event.data["id"]))
-                .first;
-            messageroomwidget.messageRoom.value.notread.value += 1;
-            messageroomwidget.messageRoom.value.message.value = Message(
-                id: 0,
-                roomId: 0,
-                receiverId: int.parse(myid!),
-                date: DateTime.now(),
-                message: event.notification!.body!,
-                isRead: false,
-                issender: 0,
-                issending: true.obs);
-            MessageController.to.chattingroomlist.remove(messageroomwidget);
-            MessageController.to.chattingroomlist.insert(0, messageroomwidget);
-          } else {
-            ProfileController.to.isnewmessage(true);
-            showCustomSnackbar(
-              event.notification!.title,
-              event.notification!.body,
-            );
-          }
+        // } else {
+        //   if (Get.isRegistered<MessageController>()) {
+        //     String? myid = await const FlutterSecureStorage().read(key: 'id');
+        //     MessageRoomWidget messageroomwidget = MessageController
+        //         .to.chattingroomlist
+        //         .where((messageroomwidget) =>
+        //             messageroomwidget.messageRoom.value.user.userid ==
+        //             int.parse(event.data["id"]))
+        //         .first;
+        //     messageroomwidget.messageRoom.value.notread.value += 1;
+        //     messageroomwidget.messageRoom.value.message.value = Message(
+        //         id: 0,
+        //         roomId: 0,
+        //         receiverId: int.parse(myid!),
+        //         date: DateTime.now(),
+        //         message: event.notification!.body!,
+        //         isRead: false,
+        //         issender: 0,
+        //         issending: true.obs);
+        //     MessageController.to.chattingroomlist.remove(messageroomwidget);
+        //     MessageController.to.chattingroomlist.insert(0, messageroomwidget);
+        //   } else {
+        //     ProfileController.to.isnewmessage(true);
+        //     showCustomSnackbar(
+        //       event.notification!.title,
+        //       event.notification!.body,
+        //     );
+        //   }
         }
       } else if (event.data["type"] == "logout") {
         showoneButtonDialog(
