@@ -265,6 +265,79 @@ class LinkWidget extends StatelessWidget {
   }
 }
 
+class LinkSmallWidget extends StatelessWidget {
+  LinkSmallWidget({
+    Key? key,
+    required this.url,
+  }) : super(key: key);
+
+  String url;
+  late final LinkController linkController = LinkController(url: url)
+    ..infoLoad();
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => linkController.loading.value
+          ? ScrapCard(
+              child: const LoadingWidget(),
+              isimgae: false,
+              width: 280,
+              height: 195,
+            )
+          : linkController.info.value.domain.endsWith('jpg') ||
+                  linkController.info.value.domain.endsWith('png')
+              ? ScrapCard(
+                  isimgae: true,
+                  domain: linkController.info.value.domain,
+                  width: 280,
+                  height: 195,
+                )
+              : GestureDetector(
+                  onTap: () {
+                    Get.to(() => WebViewScreen(url: url));
+                  },
+                  child: ScrapCard(
+                    width: 280,
+                    height: 195,
+                    child: Column(
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: linkController.info.value.image != ''
+                              ? linkController.info.value.image
+                              : 'https://cdn.pixabay.com/photo/2022/04/22/14/14/leaves-7149850__340.jpg',
+                          height: 150,
+                          fit: BoxFit.cover,
+                          errorWidget: (context, string, widget) {
+                            return const Center(
+                              child: Text(
+                                "이미지 없음",
+                                style: kNavigationTitle,
+                              ),
+                            );
+                          },
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: Center(
+                            child: Text(
+                              linkController.info.value.title,
+                              style: kmain,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    isimgae: false,
+                  ),
+                ),
+    );
+  }
+}
+
 class LinkController {
   LinkController({required this.url});
   Rx<WebInfo> info = WebInfo(
@@ -288,18 +361,26 @@ class LinkController {
 }
 
 class ScrapCard extends StatelessWidget {
-  ScrapCard({Key? key, this.child, required this.isimgae, this.domain})
+  ScrapCard(
+      {Key? key,
+      this.child,
+      required this.isimgae,
+      this.domain,
+      this.width,
+      this.height})
       : super(key: key);
 
   Widget? child;
   bool isimgae;
   String? domain;
+  double? width;
+  double? height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 300,
-        width: Get.width,
+        height: height ?? 300,
+        width: width ?? Get.width,
         decoration: BoxDecoration(
           color: cardGray,
           image: isimgae

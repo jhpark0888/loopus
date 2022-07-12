@@ -57,7 +57,7 @@ class SearchPostingWidget extends StatelessWidget {
               children: [
                 Container(
                   child: Text(
-                    post.content,
+                    post.content.value,
                     style: kSubTitle4Style,
                   ),
                 ),
@@ -187,7 +187,6 @@ class SearchPostingWidget extends StatelessWidget {
   void tapProfile() {
     Get.to(() => OtherProfileScreen(
           userid: post.userid,
-          isuser: post.isuser,
           realname: post.user.realName,
         ));
   }

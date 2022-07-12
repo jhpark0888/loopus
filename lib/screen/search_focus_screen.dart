@@ -9,7 +9,7 @@ import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/home_screen.dart';
 import 'package:loopus/screen/search_screen.dart';
-import 'package:loopus/widget/custom_footer.dart';
+import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
@@ -431,7 +431,7 @@ class SearchFocusScreen extends StatelessWidget {
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          toolbarHeight: 60,
+          toolbarHeight: 50,
           centerTitle: false,
           titleSpacing: 0,
           elevation: 0,
@@ -463,6 +463,7 @@ class SearchFocusScreen extends StatelessWidget {
                       cursorWidth: 1.2,
                       cursorRadius: Radius.circular(5.0),
                       autofocus: false,
+                      textInputAction: TextInputAction.none,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: cardGray,
@@ -571,135 +572,143 @@ class SearchFocusScreen extends StatelessWidget {
                   ),
                 ];
               },
-              body: TabBarView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: _searchController.tabController,
-                  children: [
-                    Obx(
-                      () => _searchController.isSearchLoadingList[0].value
-                          ? const LoadingWidget()
-                          : _searchController.isSearchEmptyList[0].value == true
-                              ? const SearchEmptyWidget()
-                              : Obx(
-                                  () => SmartRefresher(
-                                    physics: const BouncingScrollPhysics(),
-                                    enablePullDown: false,
-                                    enablePullUp: true,
-                                    controller: _searchController
-                                        .refreshControllerList[0],
-                                    footer: const MyCustomFooter(),
-                                    onLoading: _searchController.onLoading,
-                                    child: ListView.separated(
-                                        primary: false,
-                                        shrinkWrap: true,
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 14),
-                                        itemBuilder: (context, index) {
-                                          return SearchUserWidget(
-                                              user: _searchController
-                                                  .searchUserList[index]);
-                                        },
-                                        separatorBuilder: (context, index) {
-                                          return const SizedBox(
-                                            height: 4,
-                                          );
-                                        },
-                                        itemCount: _searchController
-                                            .searchUserList.length),
+              body: ScrollNoneffectWidget(
+                child: TabBarView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: _searchController.tabController,
+                    children: [
+                      Obx(
+                        () => _searchController.isSearchLoadingList[0].value
+                            ? const LoadingWidget()
+                            : _searchController.isSearchEmptyList[0].value ==
+                                    true
+                                ? const SearchEmptyWidget()
+                                : Obx(
+                                    () => SmartRefresher(
+                                      physics: const BouncingScrollPhysics(),
+                                      enablePullDown: false,
+                                      enablePullUp: true,
+                                      controller: _searchController
+                                          .refreshControllerList[0],
+                                      footer: const MyCustomFooter(),
+                                      onLoading:
+                                          _searchController.onSearchLoading,
+                                      child: ListView.separated(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 14),
+                                          itemBuilder: (context, index) {
+                                            return SearchUserWidget(
+                                                user: _searchController
+                                                    .searchUserList[index]);
+                                          },
+                                          separatorBuilder: (context, index) {
+                                            return const SizedBox(
+                                              height: 4,
+                                            );
+                                          },
+                                          itemCount: _searchController
+                                              .searchUserList.length),
+                                    ),
                                   ),
-                                ),
-                    ),
-                    Obx(
-                      () => _searchController.isSearchLoadingList[0].value
-                          ? const LoadingWidget()
-                          : _searchController.isSearchEmptyList[1].value == true
-                              ? const SearchEmptyWidget()
-                              : Obx(
-                                  () => SmartRefresher(
-                                    physics: const BouncingScrollPhysics(),
-                                    enablePullDown: false,
-                                    enablePullUp: true,
-                                    controller: _searchController
-                                        .refreshControllerList[1],
-                                    footer: const MyCustomFooter(),
-                                    onLoading: _searchController.onLoading,
-                                    child: ListView.separated(
-                                        primary: false,
-                                        shrinkWrap: true,
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 14),
-                                        itemBuilder: (context, index) {
-                                          return PostingWidget(
-                                            item: _searchController
-                                                .searchPostList[index],
-                                            type: PostingWidgetType.search,
-                                          );
-                                        },
-                                        separatorBuilder: (context, index) {
-                                          return DivideWidget(
-                                            height: 10,
-                                          );
-                                        },
-                                        itemCount: _searchController
-                                            .searchPostList.length),
-                                  ),
-                                ),
-                    ),
-                    Obx(
-                      () => _searchController.isSearchLoadingList[0].value
-                          ? const LoadingWidget()
-                          : _searchController.isSearchEmptyList[2].value == true
-                              ? const SearchEmptyWidget()
-                              : Obx(
-                                  () => SmartRefresher(
-                                    physics: const BouncingScrollPhysics(),
-                                    enablePullDown: false,
-                                    enablePullUp: true,
-                                    controller: _searchController
-                                        .refreshControllerList[2],
-                                    footer: const MyCustomFooter(),
-                                    onLoading: _searchController.onLoading,
-                                    child: ListView.separated(
-                                        primary: false,
-                                        shrinkWrap: true,
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 14),
-                                        itemBuilder: (context, index) {
-                                          return SearchTagWidget(
-                                              tag: _searchController
-                                                  .searchTagList[index]);
-                                        },
-                                        separatorBuilder: (context, index) {
-                                          return const SizedBox(
-                                            height: 4,
-                                          );
-                                        },
-                                        itemCount: _searchController
-                                            .searchTagList.length),
-                                  ),
-                                ),
-                    ),
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            "assets/icons/Company_Ready.svg",
-                            width: 60,
-                            height: 60,
-                          ),
-                          const SizedBox(
-                            height: 24,
-                          ),
-                          const Text(
-                            "기업 정보를 수집중이에요\n빠른 시일 내 기업 정보를 제공해 드릴게요",
-                            style: kmainheight,
-                            textAlign: TextAlign.center,
-                          )
-                        ],
                       ),
-                    ),
-                  ]),
+                      Obx(
+                        () => _searchController.isSearchLoadingList[1].value
+                            ? const LoadingWidget()
+                            : _searchController.isSearchEmptyList[1].value ==
+                                    true
+                                ? const SearchEmptyWidget()
+                                : Obx(
+                                    () => SmartRefresher(
+                                      physics: const BouncingScrollPhysics(),
+                                      enablePullDown: false,
+                                      enablePullUp: true,
+                                      controller: _searchController
+                                          .refreshControllerList[1],
+                                      footer: const MyCustomFooter(),
+                                      onLoading:
+                                          _searchController.onSearchLoading,
+                                      child: ListView.separated(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 14),
+                                          itemBuilder: (context, index) {
+                                            return PostingWidget(
+                                              item: _searchController
+                                                  .searchPostList[index],
+                                              type: PostingWidgetType.search,
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) {
+                                            return DivideWidget(
+                                              height: 10,
+                                            );
+                                          },
+                                          itemCount: _searchController
+                                              .searchPostList.length),
+                                    ),
+                                  ),
+                      ),
+                      Obx(
+                        () => _searchController.isSearchLoadingList[2].value
+                            ? const LoadingWidget()
+                            : _searchController.isSearchEmptyList[2].value ==
+                                    true
+                                ? const SearchEmptyWidget()
+                                : Obx(
+                                    () => SmartRefresher(
+                                      physics: const BouncingScrollPhysics(),
+                                      enablePullDown: false,
+                                      enablePullUp: true,
+                                      controller: _searchController
+                                          .refreshControllerList[2],
+                                      footer: const MyCustomFooter(),
+                                      onLoading:
+                                          _searchController.onSearchLoading,
+                                      child: ListView.separated(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 14),
+                                          itemBuilder: (context, index) {
+                                            return SearchTagWidget(
+                                                tag: _searchController
+                                                    .searchTagList[index]);
+                                          },
+                                          separatorBuilder: (context, index) {
+                                            return const SizedBox(
+                                              height: 4,
+                                            );
+                                          },
+                                          itemCount: _searchController
+                                              .searchTagList.length),
+                                    ),
+                                  ),
+                      ),
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              "assets/icons/Company_Ready.svg",
+                              width: 60,
+                              height: 60,
+                            ),
+                            const SizedBox(
+                              height: 24,
+                            ),
+                            const Text(
+                              "기업 정보를 수집중이에요\n빠른 시일 내 기업 정보를 제공해 드릴게요",
+                              style: kmainheight,
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      ),
+                    ]),
+              ),
             ),
           ),
         ),

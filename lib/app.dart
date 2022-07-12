@@ -7,7 +7,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 
-import 'package:loopus/screen/company_screen.dart';
+import 'package:loopus/screen/careerboard_screen.dart';
 import 'package:loopus/screen/home_screen.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/scout_screen.dart';
@@ -32,7 +32,7 @@ class App extends StatelessWidget {
         color: mainblack.withOpacity(0.25),
       ),
       ScoutScreen(),
-      CompanyScreen(),
+      CareerBoardScreen(),
     ];
 
     return WillPopScope(

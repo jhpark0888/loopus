@@ -79,52 +79,52 @@ class _NewsWidgetState extends State<NewsWidget>
     if (loading) {
       return const SizedBox(width: 252, child: LoadingWidget());
     } else {
-      if (type != LinkPreviewType.error) {
-        return InkWell(
-          onTap: () {
-            Get.to(() => WebViewScreen(url: widget.url));
-          },
-          splashColor: kSplashColor,
-          child: SizedBox(
-            width: 252,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                image != ''
-                    ? CachedNetworkImage(
-                        imageUrl: image,
-                        height: 150,
-                        width: 252,
-                        fit: BoxFit.cover,
-                      )
-                    : Container(
-                        height: 150,
-                        width: 252,
-                        color: cardGray,
-                      ),
-                const SizedBox(
-                  height: 14,
-                ),
-                Text(
-                  title,
-                  style: k16Normal.copyWith(height: 1.5),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        );
-      } else {
-        return SizedBox(
+      // if (type != LinkPreviewType.error) {
+      return InkWell(
+        onTap: () {
+          Get.to(() => WebViewScreen(url: widget.url));
+        },
+        splashColor: kSplashColor,
+        child: SizedBox(
           width: 252,
-          child: Center(
-              child: Text(
-            '존재하지 않는 URL입니다',
-            style: k16Normal.copyWith(height: 1.5),
-          )),
-        );
-      }
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              image != ''
+                  ? CachedNetworkImage(
+                      imageUrl: image,
+                      height: 150,
+                      width: 252,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      height: 150,
+                      width: 252,
+                      color: cardGray,
+                    ),
+              const SizedBox(
+                height: 14,
+              ),
+              Text(
+                title,
+                style: k16Normal.copyWith(height: 1.5),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      );
+      // } else {
+      //   return SizedBox(
+      //     width: 252,
+      //     child: Center(
+      //         child: Text(
+      //       '존재하지 않는 URL입니다',
+      //       style: k16Normal.copyWith(height: 1.5),
+      //     )),
+      //   );
+      // }
     }
   }
 }

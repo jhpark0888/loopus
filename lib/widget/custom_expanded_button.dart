@@ -9,7 +9,6 @@ class CustomExpandedButton extends StatelessWidget {
     required this.onTap,
     required this.isBlue,
     required this.title,
-    required this.buttonTag,
     required this.isBig,
   });
 
@@ -17,7 +16,6 @@ class CustomExpandedButton extends StatelessWidget {
   bool? isBlue;
   bool? isBig;
   String? title;
-  String? buttonTag;
   final HoverController _hoverController = HoverController();
 
   @override

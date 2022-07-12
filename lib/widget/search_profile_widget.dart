@@ -27,7 +27,6 @@ class SearchProfileWidget extends StatelessWidget {
 
           Get.to(() => OtherProfileScreen(
                 userid: user.userid,
-                isuser: user.isuser!,
                 realname: user.realName,
               ));
         },

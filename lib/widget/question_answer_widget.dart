@@ -149,7 +149,6 @@ class QuestionAnswerWidget extends StatelessWidget {
 
     Get.to(() => OtherProfileScreen(
           userid: answer.userid,
-          isuser: answer.isuser,
           realname: answer.user.realName,
         ));
   }

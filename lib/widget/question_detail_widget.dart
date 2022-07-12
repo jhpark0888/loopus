@@ -40,7 +40,6 @@ class QuestionDetailWidget extends StatelessWidget {
                         onTap: () {
                           Get.to(() => OtherProfileScreen(
                                 userid: question.userid,
-                                isuser: question.isuser,
                                 realname: question.user.realName,
                               ));
                         },

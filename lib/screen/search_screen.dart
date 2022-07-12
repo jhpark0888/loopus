@@ -12,10 +12,12 @@ import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/screen/home_posting_screen.dart';
 import 'package:loopus/screen/search_focus_screen.dart';
 import 'package:loopus/screen/tag_detail_screen.dart';
+import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_student_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 import '../api/tag_api.dart';
@@ -28,119 +30,78 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        // try {
-        //   if (Platform.isAndroid && AppController.to.currentIndex.value == 1) {
-        //     if (_searchController.isFocused.value) {
-        //       _searchController.focusNode.unfocus();
-        //       _searchController.isFocused(false);
-        //     } else {
-        //       AppController.to.currentIndex(0);
-        //     }
-
-        //     return false;
-        //   }
-        // } catch (e) {
-        //   print(e);
-        // }
-
-        return true;
+    return GestureDetector(
+      onTap: () {
+        _searchController.focusNode.unfocus();
       },
-      child: GestureDetector(
-        onTap: () {
-          _searchController.focusNode.unfocus();
-        },
-        child: Obx(
-          () => Scaffold(
-              resizeToAvoidBottomInset: true,
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                toolbarHeight: 60,
-                centerTitle: false,
-                titleSpacing: 0,
-                elevation: 0,
-                backgroundColor: mainWhite,
-                title: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: MediaQuery.of(context).size.width,
-                  height: 36,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                            autocorrect: false,
-                            readOnly: true,
-                            // _searchController.isFocused.value == false
-                            //     ? true
-                            //     : false,
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          SearchFocusScreen()));
-                              // if (_searchController.isFocused.value == false) {
-                              //   _searchController.isFocused(true);
-                              //   _searchController.tabController.index = 0;
-                              // }
-                            },
-                            // controller: _searchController.searchtextcontroller,
-                            // focusNode: _searchController.focusNode,
-                            style: k16Normal,
-                            cursorColor: mainblack,
-                            cursorWidth: 1.2,
-                            cursorRadius: Radius.circular(5.0),
-                            autofocus: false,
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: cardGray,
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(8)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(8)),
-                              contentPadding: const EdgeInsets.only(right: 24),
-                              isDense: true,
-                              hintText: "무엇을 찾으시나요?",
-                              hintStyle: k16Normal.copyWith(color: maingray),
-                              prefixIcon: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(24, 8, 14, 8),
-                                child: SvgPicture.asset(
-                                  "assets/icons/Search_Inactive.svg",
-                                  width: 20,
-                                  height: 20,
-                                  color: maingray,
-                                ),
+      child: Obx(
+        () => Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              toolbarHeight: 50,
+              centerTitle: false,
+              titleSpacing: 0,
+              elevation: 0,
+              backgroundColor: mainWhite,
+              title: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                width: MediaQuery.of(context).size.width,
+                height: 36,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                          autocorrect: false,
+                          readOnly: true,
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchFocusScreen()));
+                          },
+                          style: k16Normal,
+                          cursorColor: mainblack,
+                          cursorWidth: 1.2,
+                          cursorRadius: Radius.circular(5.0),
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: cardGray,
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(8)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(8)),
+                            contentPadding: const EdgeInsets.only(right: 24),
+                            isDense: true,
+                            hintText: "무엇을 찾으시나요?",
+                            hintStyle: k16Normal.copyWith(color: maingray),
+                            prefixIcon: Padding(
+                              padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
+                              child: SvgPicture.asset(
+                                "assets/icons/Search_Inactive.svg",
+                                width: 20,
+                                height: 20,
+                                color: maingray,
                               ),
-                            )),
-                      ),
-                      // if (_searchController.isFocused.value)
-                      //   GestureDetector(
-                      //     onTap: () {
-                      //       _searchController.focusNode.unfocus();
-                      //       _searchController.searchtextcontroller.clear();
-                      //       _searchController.isFocused(false);
-                      //     },
-                      //     child: Padding(
-                      //       padding: const EdgeInsets.only(left: 14),
-                      //       child: Text(
-                      //         '취소',
-                      //         style: kmain.copyWith(color: mainblue),
-                      //       ),
-                      //     ),
-                      //   )
-                    ],
-                  ),
+                            ),
+                          )),
+                    ),
+                  ],
                 ),
               ),
-              body:
-                  // _searchController.isFocused.value
-                  //     ? SearchFocusScreen()
-                  //     :
-                  ScrollNoneffectWidget(
+            ),
+            body: ScrollNoneffectWidget(
+              child: SmartRefresher(
+                physics: const BouncingScrollPhysics(),
+                controller: _searchController.refreshController,
+                enablePullUp: true,
+                header: const MyCustomHeader(),
+                footer: const MyCustomFooter(),
+                onRefresh: _searchController.onRefresh,
+                onLoading: _searchController.onLoading,
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -159,20 +120,26 @@ class SearchScreen extends StatelessWidget {
                         height: 14,
                       ),
                       SizedBox(
-                        height: 105,
-                        child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            itemBuilder: (context, index) {
-                              return Container();
-                            },
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(
-                                width: 14,
-                              );
-                            },
-                            itemCount: _searchController.recommandUsers.length),
-                      ),
+                          height: 105,
+                          child: Center(
+                            child: Text(
+                              "준비중입니다",
+                              style: kmain.copyWith(color: maingray),
+                            ),
+                          )
+                          // ListView.separated(
+                          //     scrollDirection: Axis.horizontal,
+                          //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                          //     itemBuilder: (context, index) {
+                          //       return Container();
+                          //     },
+                          //     separatorBuilder: (context, index) {
+                          //       return const SizedBox(
+                          //         width: 14,
+                          //       );
+                          //     },
+                          //     itemCount: _searchController.recommandUsers.length),
+                          ),
                       DivideWidget(),
                       const Padding(
                         padding: EdgeInsets.symmetric(
@@ -202,8 +169,8 @@ class SearchScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              )),
-        ),
+              ),
+            )),
       ),
     );
   }

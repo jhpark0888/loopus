@@ -94,8 +94,7 @@ class MessageWidget extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     // Get.to(() => OtherProfileScreen(
-                    //       isuser: user.isuser!,
-                    //       userid: user.userid,
+                    //       userid: message.sender!,
                     //       realname: user.realName,
                     //     ));
                   },

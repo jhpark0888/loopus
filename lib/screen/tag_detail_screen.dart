@@ -6,7 +6,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/tag_detail_controller.dart';
 import 'package:loopus/model/tag_model.dart';
-import 'package:loopus/widget/custom_footer.dart';
+import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';

@@ -9,7 +9,7 @@ class EmptyContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.symmetric(vertical: 20),
       alignment: Alignment.center,
       child: Text(
         text,

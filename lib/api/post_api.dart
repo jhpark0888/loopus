@@ -16,6 +16,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/likepeople_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
+import 'package:loopus/controller/posting_update_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
@@ -164,19 +165,19 @@ enum PostingUpdateType {
   thumbnail,
 }
 
-Future updateposting(int postid, PostingUpdateType updateType) async {
+Future<HTTPResponse> updateposting(
+    int postid, PostingUpdateType updateType) async {
   ConnectivityResult result = await initConnectivity();
   PostingDetailController controller =
       Get.find<PostingDetailController>(tag: postid.toString());
 
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
-    final PostingAddController postingAddController = Get.find();
+    TagController tagController = Get.find(tag: Tagtype.Posting.toString());
 
     String? token = await const FlutterSecureStorage().read(key: "token");
-    Uri uri = Uri.parse(
-        '$serverUri/post_api/posting?id=$postid&type=${updateType.name}');
+    Uri uri = Uri.parse('$serverUri/post_api/posting?id=$postid');
 
     var request = http.MultipartRequest('PUT', uri);
 
@@ -187,127 +188,32 @@ Future updateposting(int postid, PostingUpdateType updateType) async {
 
     request.headers.addAll(headers);
 
-    // if (updateType == PostingUpdateType.title) {
-    //   request.fields['title'] = postingAddController.titlecontroller.text;
-    // } else if (updateType == PostingUpdateType.contents) {
-    //   List<Map> postcontent = [];
+    request.fields['contents'] = PostingUpdateController.to.textcontroller.text;
 
-    //   for (int i = 0;
-    //       i < postingAddController.editorController.types.length;
-    //       i++) {
-    //     SmartTextType type = postingAddController.editorController.types[i];
-    //     Map map = {};
-    //     print(type);
-    //     print(postingAddController.editorController.textcontrollers[i].text);
-    //     print(postingAddController.editorController.linkindex[i]);
-    //     if (type == SmartTextType.T) {
-    //       map['type'] = type.name;
-    //       map['content'] =
-    //           postingAddController.editorController.textcontrollers[i].text;
-    //       postcontent.add(map);
-    //     } else if (type == SmartTextType.H1) {
-    //       map['type'] = type.name;
-    //       map['content'] =
-    //           postingAddController.editorController.textcontrollers[i].text;
-    //       postcontent.add(map);
-    //     } else if (type == SmartTextType.H2) {
-    //       map['type'] = type.name;
-    //       map['content'] =
-    //           postingAddController.editorController.textcontrollers[i].text;
-    //       postcontent.add(map);
-    //     }
-    //     // else if (type == SmartTextType.QUOTE) {
-    //     //   map['type'] = type.name;
-    //     //   map['content'] =
-    //     //       postingAddController.editorController.textcontrollers[i].text;
-    //     //   postcontent.add(map);
-    //     // }
-    //     else if (type == SmartTextType.BULLET) {
-    //       map['type'] = type.name;
-    //       map['content'] =
-    //           postingAddController.editorController.textcontrollers[i].text;
-    //       postcontent.add(map);
-    //     } else if (type == SmartTextType.IMAGE) {
-    //       if (postingAddController.editorController.imageindex[i] != null) {
-    //         map['type'] = type.name;
-    //         map['content'] = 'image';
-    //         var multipartFile = await http.MultipartFile.fromPath('image',
-    //             postingAddController.editorController.imageindex[i]!.path);
-    //         request.files.add(multipartFile);
-    //       } else {
-    //         map['type'] = type.name;
-    //         map['content'] =
-    //             postingAddController.editorController.urlimageindex[i];
-    //       }
-    //       postcontent.add(map);
-    //     } else if (type == SmartTextType.LINK) {
-    //       map['type'] = type.name;
-    //       map['content'] =
-    //           postingAddController.editorController.textcontrollers[i].text;
-    //       map['url'] = postingAddController.editorController.linkindex[i];
-    //       postcontent.add(map);
-    //     } else if (type == SmartTextType.IMAGEINFO) {
-    //       map['type'] = type.name;
-    //       map['content'] =
-    //           postingAddController.editorController.textcontrollers[i].text;
-    //       postcontent.add(map);
-    //     }
-    //   }
-    //   request.fields['contents'] = json.encode(postcontent);
-    // } else if (updateType == PostingUpdateType.thumbnail) {
-    //   if (postingAddController.thumbnail.value.path != '') {
-    //     var multipartFile = await http.MultipartFile.fromPath(
-    //         'thumbnail', postingAddController.thumbnail.value.path);
-    //     request.files.add(multipartFile);
-    //   }
-    // }
+    for (var tag in tagController.selectedtaglist) {
+      var multipartFile = await http.MultipartFile.fromString('tag', tag.text);
+      request.files.add(multipartFile);
+    }
 
     try {
       http.StreamedResponse response = await request.send();
 
+      print("포스팅 수정: ${response.statusCode}");
       if (response.statusCode == 200) {
-        print(response.statusCode);
-        HTTPResponse? result = await getposting(postid);
-        if (result.isError == false) {
-          if (Get.isRegistered<ProjectDetailController>(
-              tag: result.data.project!.id.toString())) {
-            ProjectDetailController projectDetailController =
-                Get.find<ProjectDetailController>(
-                    tag: result.data.project!.id.toString());
-            int postindex = projectDetailController.project.value.posts
-                .indexWhere((pjinpost) => pjinpost.id == result.data.id);
-            projectDetailController.project.value.posts.removeAt(postindex);
-            projectDetailController.project.value.posts
-                .insert(postindex, result.data);
-            // int widgetindex = projectDetailController.postinglist.indexWhere(
-            //     (postwidget) => postwidget.item.value.id == post.id);
-            // projectDetailController.postinglist.removeAt(widgetindex);
-            // projectDetailController.postinglist.insert(
-            //     widgetindex,
-            //     ProjectPostingWidget(
-            //         isuser: 1,
-            //         item: post.obs,
-            //         realname: post.user.realName,
-            //         profileimage: post.user.profileImage,
-            //         department: post.user.department));
-          }
-        }
-        Get.back();
-        showCustomDialog('변경이 완료되었어요', 1000);
-        // String responsebody = await response.stream.bytesToString();
-        // print(responsebody);
+        String responsebody = await response.stream.bytesToString();
+        print(responsebody);
         // var responsemap = json.decode(responsebody);
         // print(responsemap);
         // Project project = Project.fromJson(responsemap);
-        return;
+        return HTTPResponse.success("success");
       } else {
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }

@@ -6,8 +6,10 @@ import 'package:loopus/api/login_api.dart';
 import 'package:loopus/constant.dart';
 
 import 'package:loopus/controller/login_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
+import 'package:loopus/utils/error_control.dart';
 
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
@@ -23,112 +25,135 @@ class PwFindScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Stack(
-          children: [
-            Scaffold(
-              appBar: AppBarWidget(
-                bottomBorder: false,
-                title: '비밀번호 재설정',
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      if (pwChangeController.pwcertification.value ==
-                          Emailcertification.success) {
-                        Get.to(() => PwChangeScreen(
-                              pwType: PwType.pwfind,
-                            ));
-                      }
-                    },
-                    child: Obx(
-                      () => Text(
-                        '다음',
-                        style: kSubTitle2Style.copyWith(
-                            color: pwChangeController.pwcertification.value ==
-                                    Emailcertification.success
-                                ? mainblue
-                                : mainblack.withOpacity(0.38)),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              body: GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      32,
-                      24,
-                      32,
-                      40,
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const Text(
-                            '이메일 주소',
-                            style: kSubTitle2Style,
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          CustomTextField(
-                            counterText: null,
-                            maxLength: null,
-                            textController: _loginController.idcontroller,
-                            hintText: '',
-                            obscureText: false,
-                            validator: (value) =>
-                                (CheckValidate().validateEmail(value!)),
-                            maxLines: 1,
-                          ),
-                          const SizedBox(
-                            height: 32,
-                          ),
-                          Obx(
-                            () => CustomExpandedButton(
-                                buttonTag: "비밀번호 재설정 메일 보내기",
-                                onTap: () {
-                                  if (pwChangeController
-                                          .pwcertification.value ==
-                                      Emailcertification.fail) {
-                                    postpwfindemailcheck();
-                                  }
-                                },
-                                isBlue:
-                                    pwChangeController.pwcertification.value ==
-                                            Emailcertification.fail
-                                        ? true
-                                        : false,
-                                isBig: true,
-                                title: "비밀번호 재설정 메일 보내기"),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Center(
-                                child: Text(
-                                  "로그인 화면으로",
-                                  style: kButtonStyle.copyWith(
-                                    color: mainblack.withOpacity(0.6),
-                                  ),
-                                ),
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBarWidget(
+          bottomBorder: false,
+          title: '비밀번호 재설정',
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (pwChangeController.pwcertification.value ==
+                    Emailcertification.success) {
+                  Get.to(() => PwChangeScreen(
+                        pwType: PwType.pwfind,
+                      ));
+                }
+              },
+              child: Obx(
+                () => Text(
+                  '다음',
+                  style: kSubTitle2Style.copyWith(
+                      color: pwChangeController.pwcertification.value ==
+                              Emailcertification.success
+                          ? mainblue
+                          : mainblack.withOpacity(0.38)),
                 ),
               ),
             ),
           ],
-        ));
+        ),
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                32,
+                24,
+                32,
+                40,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                      '이메일 주소',
+                      style: kSubTitle2Style,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    CustomTextField(
+                      counterText: null,
+                      maxLength: null,
+                      textController: _loginController.idcontroller,
+                      hintText: '',
+                      obscureText: false,
+                      validator: (value) =>
+                          (CheckValidate().validateEmail(value!)),
+                      maxLines: 1,
+                    ),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    Obx(
+                      () => CustomExpandedButton(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              if (pwChangeController.pwcertification.value ==
+                                  Emailcertification.fail) {
+                                postpwfindemailcheck(
+                                        _loginController.idcontroller.text)
+                                    .then((value) {
+                                  if (value.isError == false) {
+                                    pwChangeController.pwcertification(
+                                        Emailcertification.success);
+                                    Get.to(() => PwChangeScreen(
+                                          pwType: PwType.pwfind,
+                                        ));
+                                    // _modalController.showCustomDialog('입력하신 이메일로 새로운 비밀번호를 알려드렸어요', 1400);
+                                  } else {
+                                    pwChangeController.pwcertification(
+                                        Emailcertification.fail);
+                                    if (value.errorData!["statusCode"] == 401) {
+                                      dialogBack();
+                                      showCustomDialog(
+                                          '아직 가입 되지 않은 이메일입니다', 1400);
+                                    } else {
+                                      errorSituation(value);
+                                    }
+                                  }
+                                });
+                              }
+                            } else {
+                              showCustomDialog('이메일 형식을 다시 확인해주세요', 1400);
+                            }
+                          },
+                          isBlue: pwChangeController.pwcertification.value ==
+                                  Emailcertification.fail
+                              ? true
+                              : false,
+                          isBig: true,
+                          title: "비밀번호 재설정 메일 보내기"),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Center(
+                          child: Text(
+                            "로그인 화면으로",
+                            style: kButtonStyle.copyWith(
+                              color: mainblack.withOpacity(0.6),
+                            ),
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

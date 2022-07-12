@@ -5,20 +5,180 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/scout_report_controller.dart';
 import 'package:loopus/widget/company_widget.dart';
 import 'package:loopus/widget/contact_widget.dart';
+import 'package:loopus/widget/custom_header_footer.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/divide_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
+import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ScoutScreen extends StatelessWidget {
   ScoutScreen({Key? key}) : super(key: key);
 
   final ScoutReportController _controller = Get.put(ScoutReportController());
 
-  Widget _tabWidget({required String text, bool right = true}) {
+  // Widget _scoutCompany() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       const SizedBox(
+  //         height: 24,
+  //       ),
+  //       const Padding(
+  //         padding: EdgeInsets.symmetric(horizontal: 20),
+  //         child: Text(
+  //           "스카우트 중인 기업",
+  //           style: kmainbold,
+  //         ),
+  //       ),
+  //       const SizedBox(
+  //         height: 14,
+  //       ),
+  //       SizedBox(
+  //         height: 100,
+  //         child: ListView.separated(
+  //             scrollDirection: Axis.horizontal,
+  //             shrinkWrap: true,
+  //             padding: const EdgeInsets.symmetric(horizontal: 20),
+  //             itemBuilder: (context, index) {
+  //               return CompanyWidget(company: _controller.companyList[index]);
+  //             },
+  //             separatorBuilder: (context, index) {
+  //               return const SizedBox(
+  //                 width: 14,
+  //               );
+  //             },
+  //             itemCount: _controller.companyList.length),
+  //       ),
+  //       const SizedBox(
+  //         height: 24,
+  //       ),
+  //     ],
+  //   );
+  // }
+
+  // Widget _scouterContact() {
+  //   return Column(
+  //     children: [
+  //       const SizedBox(
+  //         height: 12,
+  //       ),
+  //       Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 20),
+  //         child: Row(
+  //           children: [
+  //             const Text(
+  //               "스카우트 컨택",
+  //               style: kmainbold,
+  //             ),
+  //             const Spacer(),
+  //             GestureDetector(
+  //               onTap: () {},
+  //               child: SvgPicture.asset(
+  //                 "assets/icons/Search_Inactive.svg",
+  //                 width: 20,
+  //                 height: 20,
+  //                 color: mainblack,
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //       const SizedBox(
+  //         height: 24,
+  //       ),
+  //       Obx(
+  //         () => ListView.separated(
+  //             primary: false,
+  //             shrinkWrap: true,
+  //             itemBuilder: (context, index) {
+  //               return ContactWidget(contact: _controller.contactList[index]);
+  //             },
+  //             separatorBuilder: (context, index) => DivideWidget(
+  //                   height: 24,
+  //                 ),
+  //             itemCount: _controller.contactList.length),
+  //       ),
+  //       const SizedBox(
+  //         height: 12,
+  //       ),
+  //     ],
+  //   );
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            centerTitle: false,
+            titleSpacing: 20,
+            title: const Padding(
+              padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
+              child: Text(
+                '스카우트 리포트',
+                style: ktitle,
+              ),
+            ),
+            excludeHeaderSemantics: false,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {},
+                  child: SvgPicture.asset(
+                    'assets/icons/Question_copy.svg',
+                  ),
+                ),
+              ),
+            ],
+            bottom: TabBar(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              controller: _controller.tabController,
+              indicatorColor: Colors.transparent,
+              labelPadding: EdgeInsets.zero,
+              labelColor: mainblack,
+              labelStyle: ktitle,
+              isScrollable: true,
+              unselectedLabelColor: dividegray,
+              tabs: List.from(_controller.careerField.values).map((field) {
+                if (field == List.from(_controller.careerField.values).last) {
+                  return _tabWidget(field, right: false);
+                } else {
+                  return _tabWidget(field);
+                }
+              }).toList(),
+              // onTap: (index) {
+              //   controller.currentField.value = index;
+              //   controller.currentFieldMap({
+              //     controller
+              //             .careerFieldList[controller.currentField.value].key:
+              //         controller
+              //             .careerFieldList[controller.currentField.value]
+              //             .value
+              //   });
+              // },
+            ),
+          ),
+          body: ScrollNoneffectWidget(
+            child: TabBarView(
+              controller: _controller.tabController,
+              children: List.generate(_controller.careerField.length,
+                  (index) => tabViews(_controller.careerFieldList[index])),
+            ),
+          )),
+    );
+  }
+
+  Widget _tabWidget(String field, {bool right = true}) {
     return IntrinsicHeight(
       child: Row(
         children: [
           Tab(
-            text: text,
+            text: field,
           ),
           if (right)
             VerticalDivider(
@@ -33,245 +193,106 @@ class ScoutScreen extends StatelessWidget {
     );
   }
 
-  Widget _scoutCompany() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 24,
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text(
-            "스카우트 중인 기업",
-            style: kmainbold,
-          ),
-        ),
-        const SizedBox(
-          height: 14,
-        ),
-        SizedBox(
-          height: 100,
-          child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemBuilder: (context, index) {
-                return CompanyWidget(company: _controller.companyList[index]);
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  width: 14,
-                );
-              },
-              itemCount: _controller.companyList.length),
-        ),
-        const SizedBox(
-          height: 24,
-        ),
-      ],
+  Widget tabViews(MapEntry<String, String> currentField) {
+    return Obx(
+      () => _controller.screenStateMap[currentField.key]!.value ==
+              ScreenState.loading
+          ? const LoadingWidget()
+          : _controller.screenStateMap[currentField.key]!.value ==
+                  ScreenState.normal
+              ? Container()
+              : _controller.screenStateMap[currentField.key]!.value ==
+                      ScreenState.disconnect
+                  ? DisconnectReloadWidget(reload: () {
+                      // _controller.careerBoardLoad(currentField.key);
+                    })
+                  : _controller.screenStateMap[currentField.key]!.value ==
+                          ScreenState.error
+                      ? ErrorReloadWidget(reload: () {
+                          // _controller.careerBoardLoad(currentField.key);
+                        })
+                      : SmartRefresher(
+                          physics: const BouncingScrollPhysics(),
+                          controller: _controller
+                              .refreshControllerMap[currentField.key]!,
+                          header: const MyCustomHeader(),
+                          footer: const MyCustomFooter(),
+                          onRefresh: _controller.onRefresh,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                // _scoutCompany(),
+                                // _scouterContact(),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 20.0, top: 24),
+                                  child: Text(
+                                    '스카우트 중인 기업',
+                                    style: kmainbold,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                                const SizedBox(height: 14),
+                                SizedBox(
+                                  height: 100,
+                                  child: _controller
+                                          .companyMap[currentField.key]!.isEmpty
+                                      ? const Center(
+                                          child: Text(
+                                          "최근 인기 기업이 없습니다",
+                                          style: kmain,
+                                        ))
+                                      : ScrollNoneffectWidget(
+                                          child: ListView.separated(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) {
+                                                return CompanyWidget(
+                                                    company:
+                                                        _controller.companyMap[
+                                                            currentField
+                                                                .key]![index]);
+                                              },
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                return const SizedBox(
+                                                    width: 14);
+                                              },
+                                              itemCount: _controller
+                                                  .companyMap[currentField.key]!
+                                                  .length),
+                                        ),
+                                ),
+                                const SizedBox(height: 26),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    children: [
+                                      const Text(
+                                        "스카우트 컨택",
+                                        style: kmainbold,
+                                      ),
+                                      const Spacer(),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: SvgPicture.asset(
+                                          "assets/icons/Search_Inactive.svg",
+                                          width: 20,
+                                          height: 20,
+                                          color: mainblack,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 26),
+                              ],
+                            ),
+                          ),
+                        ),
     );
-  }
-
-  Widget _scouterContact() {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 12,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            children: [
-              const Text(
-                "스카우트 컨택",
-                style: kmainbold,
-              ),
-              const Spacer(),
-              GestureDetector(
-                onTap: () {},
-                child: SvgPicture.asset(
-                  "assets/icons/Search_Inactive.svg",
-                  width: 20,
-                  height: 20,
-                  color: mainblack,
-                ),
-              )
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 24,
-        ),
-        Obx(
-          () => ListView.separated(
-              primary: false,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return ContactWidget(contact: _controller.contactList[index]);
-              },
-              separatorBuilder: (context, index) => DivideWidget(
-                    height: 24,
-                  ),
-              itemCount: _controller.contactList.length),
-        )
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          centerTitle: false,
-          titleSpacing: 20,
-          title: const Padding(
-            padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
-            child: Text(
-              '스카우트 리포트',
-              style: ktitle,
-            ),
-          ),
-          excludeHeaderSemantics: false,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: GestureDetector(
-                onTap: () {},
-                child: SvgPicture.asset(
-                  'assets/icons/Question copy.svg',
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: NestedScrollView(
-          headerSliverBuilder: (context, value) {
-            return [
-              SliverAppBar(
-                toolbarHeight: 80,
-                automaticallyImplyLeading: false,
-                elevation: 0,
-                floating: false,
-                pinned: false,
-                flexibleSpace: Column(
-                  children: [
-                    ScrollNoneffectWidget(
-                      child: TabBar(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        controller: _controller.tabController,
-                        indicatorColor: Colors.transparent,
-                        labelPadding: EdgeInsets.zero,
-                        labelColor: mainblack,
-                        labelStyle: ktitle,
-                        unselectedLabelColor: dividegray,
-                        tabs: [
-                          _tabWidget(
-                            text: "전체",
-                          ),
-                          _tabWidget(
-                            text: "IT",
-                          ),
-                          // Tab(
-                          //     child: Text(
-                          //   "IT",
-                          //   style: TextStyle(
-                          //       height: 1.4,
-                          //       fontSize: 27.5,
-                          //       fontWeight: FontWeight.w600,
-                          //       fontFamily: 'SUIT'),
-                          // )),
-                          _tabWidget(
-                            text: "디자인",
-                          ),
-                          _tabWidget(
-                            text: "경영",
-                          ),
-                          _tabWidget(
-                            text: "제조",
-                          ),
-                          _tabWidget(text: "건설", right: false),
-                        ],
-                        isScrollable: true,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    DivideWidget(
-                      height: 0,
-                    )
-                  ],
-                ),
-                // bottom: PreferredSize(child: DivideWidget(
-                //       height: 0,
-                //     ), preferredSize: const Size.fromHeight(24)),
-              ),
-            ];
-          },
-          body: ScrollNoneffectWidget(
-            child: TabBarView(
-              controller: _controller.tabController,
-              children: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _scoutCompany(),
-                      // // const SizedBox(height: 48),
-                      _scouterContact(),
-                      // _ScoutContactList(),
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _scoutCompany(),
-                      // _ScouterContact(),
-                      // _ScoutContactList(),
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _scoutCompany(),
-                      // _ScouterContact(),
-                      // _ScoutContactList(),
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _scoutCompany(),
-                      // _ScouterContact(),
-                      // _ScoutContactList(),
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _scoutCompany(),
-                      // _ScouterContact(),
-                      // _ScoutContactList(),
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _scoutCompany(),
-                      // _ScouterContact(),
-                      // _ScoutContactList(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ));
   }
 }

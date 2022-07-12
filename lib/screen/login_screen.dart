@@ -10,8 +10,10 @@ import 'package:loopus/app.dart';
 import 'package:loopus/constant.dart';
 
 import 'package:loopus/controller/login_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/pw_find_screen.dart';
+import 'package:loopus/utils/error_control.dart';
 
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
@@ -90,7 +92,6 @@ class LogInScreen extends StatelessWidget {
                         height: 32,
                       ),
                       CustomExpandedButton(
-                        buttonTag: '로그인하기',
                         onTap: () {
                           login(context);
                         },
@@ -145,6 +146,12 @@ class LogInScreen extends StatelessWidget {
           storage.write(key: 'token', value: token);
           storage.write(key: 'id', value: userid);
           Get.offAll(() => App());
+        } else {
+          if (value.errorData!["statusCode"] == 401) {
+            showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+          } else {
+            errorSituation(value);
+          }
         }
       });
     }

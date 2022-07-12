@@ -41,7 +41,6 @@ class StartScreen extends StatelessWidget {
                 height: 24,
               ),
               CustomExpandedButton(
-                buttonTag: '시작하기',
                 onTap: () => showContentModal(context),
                 isBlue: true,
                 isBig: true,
@@ -51,7 +50,6 @@ class StartScreen extends StatelessWidget {
                 height: 12,
               ),
               CustomExpandedButton(
-                buttonTag: '이미 계정이 있어요',
                 onTap: () async {
                   String? login =
                       await FlutterSecureStorage().read(key: 'login detect');
