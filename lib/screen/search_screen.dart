@@ -17,6 +17,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_student_widget.dart';
+import 'package:loopus/widget/search_text_field_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
@@ -51,43 +52,48 @@ class SearchScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextField(
-                          autocorrect: false,
-                          readOnly: true,
-                          onTap: () {
-                            Navigator.push(
+                      child: 
+                      SearchTextFieldWidget(hinttext: '무엇을 찾으시나요?', ontap: () { Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SearchFocusScreen()));
-                          },
-                          style: k16Normal,
-                          cursorColor: mainblack,
-                          cursorWidth: 1.2,
-                          cursorRadius: Radius.circular(5.0),
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: cardGray,
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(8)),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(8)),
-                            contentPadding: const EdgeInsets.only(right: 24),
-                            isDense: true,
-                            hintText: "무엇을 찾으시나요?",
-                            hintStyle: k16Normal.copyWith(color: maingray),
-                            prefixIcon: Padding(
-                              padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
-                              child: SvgPicture.asset(
-                                "assets/icons/Search_Inactive.svg",
-                                width: 20,
-                                height: 20,
-                                color: maingray,
-                              ),
-                            ),
-                          )),
+                                    builder: (context) => SearchFocusScreen()));}, readonly: true,),
+                      // TextField(
+                      //     autocorrect: false,
+                      //     readOnly: true,
+                      //     onTap: () {
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => SearchFocusScreen()));
+                      //     },
+                      //     style: k16Normal,
+                      //     cursorColor: mainblack,
+                      //     cursorWidth: 1.2,
+                      //     cursorRadius: Radius.circular(5.0),
+                      //     autofocus: false,
+                      //     decoration: InputDecoration(
+                      //       filled: true,
+                      //       fillColor: cardGray,
+                      //       enabledBorder: OutlineInputBorder(
+                      //           borderSide: BorderSide.none,
+                      //           borderRadius: BorderRadius.circular(8)),
+                      //       focusedBorder: OutlineInputBorder(
+                      //           borderSide: BorderSide.none,
+                      //           borderRadius: BorderRadius.circular(8)),
+                      //       contentPadding: const EdgeInsets.only(right: 24),
+                      //       isDense: true,
+                      //       hintText: "무엇을 찾으시나요?",
+                      //       hintStyle: k16Normal.copyWith(color: maingray),
+                      //       prefixIcon: Padding(
+                      //         padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
+                      //         child: SvgPicture.asset(
+                      //           "assets/icons/Search_Inactive.svg",
+                      //           width: 20,
+                      //           height: 20,
+                      //           color: maingray,
+                      //         ),
+                      //       ),
+                      //     )),
                     ),
                   ],
                 ),
