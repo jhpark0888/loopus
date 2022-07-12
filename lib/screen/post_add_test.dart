@@ -113,14 +113,9 @@ class PostingAddNameScreen1 extends StatelessWidget {
                                   )
                                 : Stack(children: [
                                     SwiperWidget(
-                                        item: postingAddController.images,
-                                        height: Get.width,
-                                        itembuilder: (context, index) {
-                                          return Image.file(
-                                              postingAddController
-                                                  .images[index],
-                                              fit: BoxFit.cover);
-                                        }),
+                                      items: postingAddController.images,
+                                      swiperType: SwiperType.file,
+                                    ),
                                     Positioned(
                                         child: GestureDetector(
                                             onTap: () {
@@ -133,7 +128,7 @@ class PostingAddNameScreen1 extends StatelessWidget {
                                                 style: k16Normal.copyWith(
                                                     color: mainblue))),
                                         right: 20,
-                                        bottom: 10)
+                                        bottom: 5)
                                   ])
                             : Column(children: [
                                 SizedBox(height: 23),
@@ -158,16 +153,11 @@ class PostingAddNameScreen1 extends StatelessWidget {
                                 SizedBox(height: 24),
                               ])
                         : postingAddController.scrapList.length >= 2
-                            ? SizedBox(
-                                height: 350,
-                                child: SwiperWidget(
-                                  item: postingAddController.scrapList,
-                                  height: 300,
-                                  itembuilder: (context, index) {
-                                    return postingAddController
-                                        .scrapList[index];
-                                  },
-                                ),
+                            ? SwiperWidget(
+                                items: postingAddController.scrapList
+                                    .map((linkwidget) => linkwidget.url)
+                                    .toList(),
+                                swiperType: SwiperType.link,
                               )
                             : postingAddController.scrapList.first,
                     Padding(

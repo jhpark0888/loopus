@@ -77,70 +77,78 @@ class PostUpdateScreen extends StatelessWidget {
                   children: [
                     if (postingUpdateController.post.images.isNotEmpty ||
                         postingUpdateController.post.links.isNotEmpty)
-                      Column(
-                        children: [
-                          Container(
-                              color: mainblack,
-                              constraints: BoxConstraints(
-                                  maxWidth: 600,
-                                  maxHeight: postingUpdateController
-                                          .post.images.isNotEmpty
-                                      ? Get.width
-                                      : 300),
-                              child: PageView.builder(
-                                controller: pageController,
-                                itemBuilder: (BuildContext context, int index) {
-                                  if (postingUpdateController
-                                      .post.images.isNotEmpty) {
-                                    return CachedNetworkImage(
-                                        imageUrl: postingUpdateController
-                                            .post.images[index],
-                                        fit: BoxFit.contain);
-                                    // Image.network(item.images[index],
-                                    //     fit: BoxFit.fill);
-                                  } else {
-                                    return KeepAlivePage(
-                                      child: LinkWidget(
-                                          url: postingUpdateController
-                                              .post.links[index],
-                                          widgetType: 'post'),
-                                    );
-                                  }
-                                },
-                                itemCount: postingUpdateController
-                                        .post.images.isNotEmpty
-                                    ? postingUpdateController.post.images.length
-                                    : postingUpdateController.post.links.length,
-                              )),
-                          const SizedBox(
-                            height: 14,
-                          ),
-                          if (postingUpdateController.post.images.length > 1 ||
-                              postingUpdateController.post.links.length > 1)
-                            Column(
-                              children: [
-                                PageIndicator(
-                                  size: 7,
-                                  activeSize: 7,
-                                  space: 7,
-                                  color: maingray,
-                                  activeColor: mainblue,
-                                  count: postingUpdateController
-                                          .post.images.isNotEmpty
-                                      ? postingUpdateController
-                                          .post.images.length
-                                      : postingUpdateController
-                                          .post.links.length,
-                                  controller: pageController,
-                                  layout: PageIndicatorLayout.SLIDE,
-                                ),
-                              ],
-                            ),
-                          const SizedBox(
-                            height: 14,
-                          ),
-                        ],
-                      ),
+                      SwiperWidget(
+                          items: postingUpdateController.post.images.isNotEmpty
+                              ? postingUpdateController.post.images
+                              : postingUpdateController.post.links,
+                          swiperType:
+                              postingUpdateController.post.images.isNotEmpty
+                                  ? SwiperType.image
+                                  : SwiperType.link),
+                    // Column(
+                    //   children: [
+                    //     Container(
+                    //         color: mainblack,
+                    //         constraints: BoxConstraints(
+                    //             maxWidth: 600,
+                    //             maxHeight: postingUpdateController
+                    //                     .post.images.isNotEmpty
+                    //                 ? Get.width
+                    //                 : 300),
+                    //         child: PageView.builder(
+                    //           controller: pageController,
+                    //           itemBuilder: (BuildContext context, int index) {
+                    //             if (postingUpdateController
+                    //                 .post.images.isNotEmpty) {
+                    //               return CachedNetworkImage(
+                    //                   imageUrl: postingUpdateController
+                    //                       .post.images[index],
+                    //                   fit: BoxFit.contain);
+                    //               // Image.network(item.images[index],
+                    //               //     fit: BoxFit.fill);
+                    //             } else {
+                    //               return KeepAlivePage(
+                    //                 child: LinkWidget(
+                    //                     url: postingUpdateController
+                    //                         .post.links[index],
+                    //                     widgetType: 'post'),
+                    //               );
+                    //             }
+                    //           },
+                    //           itemCount: postingUpdateController
+                    //                   .post.images.isNotEmpty
+                    //               ? postingUpdateController.post.images.length
+                    //               : postingUpdateController.post.links.length,
+                    //         )),
+                    //     const SizedBox(
+                    //       height: 14,
+                    //     ),
+                    //     if (postingUpdateController.post.images.length > 1 ||
+                    //         postingUpdateController.post.links.length > 1)
+                    //       Column(
+                    //         children: [
+                    //           PageIndicator(
+                    //             size: 7,
+                    //             activeSize: 7,
+                    //             space: 7,
+                    //             color: maingray,
+                    //             activeColor: mainblue,
+                    //             count: postingUpdateController
+                    //                     .post.images.isNotEmpty
+                    //                 ? postingUpdateController
+                    //                     .post.images.length
+                    //                 : postingUpdateController
+                    //                     .post.links.length,
+                    //             controller: pageController,
+                    //             layout: PageIndicatorLayout.SLIDE,
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     const SizedBox(
+                    //       height: 14,
+                    //     ),
+                    //   ],
+                    // ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Column(
@@ -313,13 +321,13 @@ class PostUpdateScreen extends StatelessWidget {
         await updateposting(post.id, PostingUpdateType.contents).then((value) {
           Get.back();
           if (value.isError == false) {
-            postingUpdateController.post.content.value =
-                postingUpdateController.textcontroller.text;
-            postingUpdateController.post.tags = tagController.selectedtaglist
+            postingUpdateController.post
+                .content(postingUpdateController.textcontroller.text);
+            postingUpdateController.post.tags.assignAll(tagController
+                .selectedtaglist
                 .map((tagwidget) =>
                     Tag(tagId: tagwidget.id!, tag: tagwidget.text, count: 0))
-                .toList()
-                .obs;
+                .toList());
 
             Get.back();
             dialogBack(modalIOS: true);

@@ -222,10 +222,9 @@ class ScoutScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                // _scoutCompany(),
-                                // _scouterContact(),
+                                const SizedBox(height: 24),
                                 const Padding(
-                                  padding: EdgeInsets.only(left: 20.0, top: 24),
+                                  padding: EdgeInsets.only(left: 20.0),
                                   child: Text(
                                     '스카우트 중인 기업',
                                     style: kmainbold,
@@ -237,9 +236,9 @@ class ScoutScreen extends StatelessWidget {
                                   height: 100,
                                   child: _controller
                                           .companyMap[currentField.key]!.isEmpty
-                                      ? const Center(
+                                      ? Center(
                                           child: Text(
-                                          "최근 인기 기업이 없습니다",
+                                          "${currentField.value} 분야 스카우트 중인 기업이 없습니다",
                                           style: kmain,
                                         ))
                                       : ScrollNoneffectWidget(
@@ -289,6 +288,30 @@ class ScoutScreen extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 26),
+                                if (_controller
+                                    .companyMap[currentField.key]!.isEmpty)
+                                  Center(
+                                      child: Text(
+                                    "${currentField.value} 분야 스카우트 컨택이 없습니다",
+                                    style: kmain,
+                                  ))
+                                else
+                                  ListView.separated(
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        return ContactWidget(
+                                            contact: _controller.contactMap[
+                                                currentField.key]![index]);
+                                      },
+                                      separatorBuilder: (context, index) =>
+                                          DivideWidget(
+                                            height: 24,
+                                          ),
+                                      itemCount: _controller
+                                          .contactMap[currentField.key]!
+                                          .length),
+                                const SizedBox(height: 10),
                               ],
                             ),
                           ),

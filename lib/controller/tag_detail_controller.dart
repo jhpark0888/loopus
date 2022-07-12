@@ -144,7 +144,7 @@ class TagDetailController extends GetxController
 
     for (var entry in teptNumMap.entries) {
       String key = entry.key;
-      double value = entry.value * (100 / maxNum);
+      double value = maxNum != 0 ? entry.value * (100 / maxNum) : 1;
 
       tagUsageTrendNum[key] = value == 0 ? 1 : value;
     }
