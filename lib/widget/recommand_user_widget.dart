@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class RecommandUserWidget extends StatelessWidget {
@@ -32,5 +34,12 @@ class RecommandUserWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void tapProfile() {
+    Get.to(
+        () => OtherProfileScreen(
+            user: user, userid: user.userid, realname: user.realName),
+        preventDuplicates: false);
   }
 }

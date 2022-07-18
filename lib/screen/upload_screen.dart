@@ -8,6 +8,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/upload_controller.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
 
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_view/photo_view.dart';
@@ -67,308 +68,325 @@ class UploadScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-            child: Column(children: [
-          Obx(
-            () => GestureDetector(
-              onTap: () {},
-              child: Stack(children: [
-                Container(
-                    width: Get.width,
-                    height: Get.width,
-                    decoration: const BoxDecoration(color: mainWhite),
-                    child: controller.isSelect.value
-                        ? controller.isCropped.value
-                            ? GestureDetector(
-                                onTap: () async {
-                                  // print((await controller.croppedImage!.value.readAsBytesSync()));
-                                  var a = await decodeImageFromList(controller
-                                      .croppedImage!.value
-                                      .readAsBytesSync());
-                                },
-                                child: InteractiveViewer(
-                                  child: Image.file(
-                                    controller.croppedImage!.value,
-                                    // width: controller.croppedWidth.value,
-                                    // height: controller.croppedHeight.value
-                                  ),
-                                ))
-                            : Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                    child: Container(
-                                      width: controller.croppedWidth.value,
-                                      height: controller.croppedWidth.value >=
-                                              Get.width
-                                          ? Get.width
-                                          : controller.croppedHeight.value,
-                                      child: _photoWidget(
-                                          controller.selectedImage!.value,
-                                          500,
-                                          500, builder: (data) {
-                                        return PhotoView.customChild(
-                                            tightMode: false,
-                                            child: Image.memory(
-                                              data,
-                                              fit: BoxFit.fitWidth,
-                                              // scale: 0.003,
-                                            ));
-                                      }),
+        child: ScrollNoneffectWidget(
+          child: SingleChildScrollView(
+              child: Column(children: [
+            Obx(
+              () => GestureDetector(
+                onTap: () {},
+                child: Stack(children: [
+                  Container(
+                      width: Get.width,
+                      height: Get.width,
+                      decoration: const BoxDecoration(color: mainWhite),
+                      child: controller.isSelect.value
+                          ? controller.isCropped.value
+                              ? GestureDetector(
+                                  onTap: () async {
+                                    // print((await controller.croppedImage!.value.readAsBytesSync()));
+                                    var a = await decodeImageFromList(controller
+                                        .croppedImage!.value
+                                        .readAsBytesSync());
+                                  },
+                                  child: InteractiveViewer(
+                                    child: Image.file(
+                                      controller.croppedImage!.value,
+                                      // width: controller.croppedWidth.value,
+                                      // height: controller.croppedHeight.value
+                                    ),
+                                  ))
+                              : Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        width: controller.croppedWidth.value,
+                                        height: controller.croppedWidth.value >=
+                                                Get.width
+                                            ? Get.width
+                                            : controller.croppedHeight.value,
+                                        child: _photoWidget(
+                                            controller.selectedImage!.value,
+                                            500,
+                                            500, builder: (data) {
+                                          return PhotoView.customChild(
+                                              tightMode: false,
+                                              child: Image.memory(
+                                                data,
+                                                fit: BoxFit.fitWidth,
+                                                // scale: 0.003,
+                                              ));
+                                        }),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                          : Center(
+                              child: Text(
+                              '이미지를 선택해주세요 \n 최대 10장까지 가능해요',
+                              style: kSubTitle3Style.copyWith(height: 1.5),
+                            ))),
+                  if (controller.isSelect.value)
+                    Positioned(
+                        child: GestureDetector(
+                            onTap: () async {
+                              var path2 = await controller.selectedImage!.value
+                                  .loadFile();
+                              await imageController
+                                  .profilecropImage(path2)
+                                  .then((value) {
+                                controller.croppedImage == null
+                                    ? controller.croppedImage = value!.obs
+                                    : controller.croppedImage!.value = value!;
+                                controller.isCropped.value = true;
+                              });
+                              if (controller.croppedImage != null) {
+                                var a = await decodeImageFromList(controller
+                                    .croppedImage!.value
+                                    .readAsBytesSync());
+                                controller.croppedHeight.value =
+                                    a.height.toDouble();
+                                controller.croppedWidth.value =
+                                    a.width.toDouble();
+                              }
+                            },
+                            child:
+                                SvgPicture.asset('assets/icons/PhotoEdit.svg')),
+                        top: 16,
+                        right: 16)
+                ]),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 20.0, right: 20, top: 10, bottom: 10),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      controller.isImage(true);
+                      showModalBottomSheet(
+                          barrierColor: Colors.transparent,
+                          context: context,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(16),
+                                  topRight: Radius.circular(16))),
+                          builder: (_) => Container(
+                                height: Get.height -
+                                    MediaQuery.of(context).padding.top -
+                                    44,
+                                color: Colors.white,
+                                child: SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: List.generate(
+                                          controller.albums.length,
+                                          (index) => Container(
+                                              height: 110,
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  controller.imageList.value =
+                                                      controller
+                                                              .titleImageList1[
+                                                          index];
+                                                  controller.headerTitle.value =
+                                                      controller
+                                                          .albums[index].name;
+                                                  controller.selectedImages!
+                                                      .clear();
+                                                  controller.isSelect(false);
+                                                  Get.back();
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          height: 100,
+                                                          width: 100,
+                                                          child: _photoWidget(
+                                                              controller
+                                                                      .titleImageList1[
+                                                                  index][0],
+                                                              500,
+                                                              500,
+                                                              builder: (data) {
+                                                            return Image.memory(
+                                                                data,
+                                                                fit: BoxFit
+                                                                    .cover);
+                                                          }),
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 15),
+                                                        Text(
+                                                          controller
+                                                              .albums[index]
+                                                              .name,
+                                                          style: k16semiBold,
+                                                        ),
+                                                        const Spacer(),
+                                                        Text(
+                                                          '${controller.albums[index].assetCount.toString()}개',
+                                                          style:
+                                                              kSubTitle3Style,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 10)
+                                                  ],
+                                                ),
+                                              ))),
                                     ),
                                   ),
-                                ],
-                              )
-                        : Center(
-                            child: Text(
-                            '이미지를 선택해주세요 \n 최대 10장까지 가능해요',
-                            style: kSubTitle3Style.copyWith(height: 1.5),
-                          ))),
-                if (controller.isSelect.value)
-                  Positioned(
-                      child: GestureDetector(
-                          onTap: () async {
-                            var path2 = await controller.selectedImage!.value
-                                .loadFile();
-                            await imageController
-                                .profilecropImage(path2)
-                                .then((value) {
-                              controller.croppedImage == null
-                                  ? controller.croppedImage = value!.obs
-                                  : controller.croppedImage!.value = value!;
-                              controller.isCropped.value = true;
-                            });
-                            if (controller.croppedImage != null) {
-                              var a = await decodeImageFromList(controller
-                                  .croppedImage!.value
-                                  .readAsBytesSync());
-                              controller.croppedHeight.value =
-                                  a.height.toDouble();
-                              controller.croppedWidth.value =
-                                  a.width.toDouble();
-                            }
-                          },
-                          child:
-                              SvgPicture.asset('assets/icons/PhotoEdit.svg')),
-                      top: 16,
-                      right: 16)
-              ]),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 20.0, right: 20, top: 10, bottom: 10),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    controller.isImage(true);
-                    showModalBottomSheet(
-                        barrierColor: Colors.transparent,
-                        context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(16),
-                                topRight: Radius.circular(16))),
-                        builder: (_) => Container(
-                              height: Get.height -
-                                  MediaQuery.of(context).padding.top -
-                                  44,
-                              color: Colors.white,
-                              child: SingleChildScrollView(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: List.generate(
-                                        controller.albums.length,
-                                        (index) => Container(
-                                            height: 110,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                controller.imageList.value =
-                                                    controller
-                                                        .titleImageList1[index];
-                                                controller.headerTitle.value =
-                                                    controller
-                                                        .albums[index].name;
-                                                controller.selectedImages!
-                                                    .clear();
-                                                controller.isSelect(false);
-                                                Get.back();
-                                              },
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        height: 100,
-                                                        width: 100,
-                                                        child: _photoWidget(
-                                                            controller
-                                                                    .titleImageList1[
-                                                                index][0],
-                                                            500,
-                                                            500,
-                                                            builder: (data) {
-                                                          return Image.memory(
-                                                              data,
-                                                              fit:
-                                                                  BoxFit.cover);
-                                                        }),
-                                                      ),
-                                                      const SizedBox(width: 15),
-                                                      Text(
-                                                        controller
-                                                            .albums[index].name,
-                                                        style: k16semiBold,
-                                                      ),
-                                                      const Spacer(),
-                                                      Text(
-                                                        '${controller.albums[index].assetCount.toString()}개',
-                                                        style: kSubTitle3Style,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 10)
-                                                ],
-                                              ),
-                                            ))),
-                                  ),
                                 ),
-                              ),
-                            )).then((value) => controller.isImage(false));
-                  },
-                  child: Row(
-                    children: [
-                      Obx(
-                        () => Text(
-                          controller.headerTitle.value,
-                          style: kmainbold,
+                              )).then((value) => controller.isImage(false));
+                    },
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Text(
+                            controller.headerTitle.value,
+                            style: kmainbold,
+                          ),
                         ),
-                      ),
-                      Icon(Icons.arrow_drop_down)
-                    ],
+                        Icon(Icons.arrow_drop_down)
+                      ],
+                    ),
                   ),
-                ),
-                //
-              ],
+                  //
+                ],
+              ),
             ),
-          ),
-          Obx(() => GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  mainAxisSpacing: 1,
-                  crossAxisSpacing: 1,
-                  childAspectRatio: 1),
-              itemCount: controller.imageList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Obx(() => Container(
-                      height: Get.width / 4,
-                      width: Get.width / 4,
-                      child: _photoWidget(controller.imageList[index], 200, 200,
-                          builder: (data) {
-                        return Obx(
-                          (() => GestureDetector(
-                                onTap: () {
-                                  controller.isCropped.value = false;
-                                  if (controller.isSelect.value == false) {
-                                    controller.selectedImage ??=
-                                        controller.imageList[index].obs;
-                                    controller.selectedImages!.value = [
-                                      controller.imageList[index]
-                                    ];
-                                    controller.selectedImages ??=
-                                        [controller.imageList[index]].obs;
-                                    controller.selectedImage!.value =
-                                        controller.imageList[index];
-                                    controller.isSelect.value = true;
-                                    controller.selectedImageSize.value =
-                                        controller.imageList[index].size;
-                                  } else if (!controller.selectedImages!
-                                      .contains(controller.imageList[index])) {
-                                    controller.selectedImage ??=
-                                        controller.imageList[index].obs;
-                                    if (controller.selectedImages!.length <
-                                        10) {
-                                      controller.selectedImages!
-                                          .add(controller.imageList[index]);
-                                      // controller.isSelect.value = true;
-                                      controller.selectedImage!.value =
-                                          controller.imageList[index];
-                                      controller.selectedImageSize.value =
-                                          controller.imageList[index].size;
-                                    } else {
+            Obx(() => GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 1,
+                    crossAxisSpacing: 1,
+                    childAspectRatio: 1),
+                itemCount: controller.imageList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Obx(() => Container(
+                        height: Get.width / 4,
+                        width: Get.width / 4,
+                        child:
+                            _photoWidget(controller.imageList[index], 200, 200,
+                                builder: (data) {
+                          return Obx(
+                            (() => GestureDetector(
+                                  onTap: () {
+                                    controller.isCropped.value = false;
+                                    if (controller.isSelect.value == false) {
                                       controller.selectedImage ??=
                                           controller.imageList[index].obs;
-                                    }
-                                    controller.isSelect.value = true;
-                                  } else {
-                                    if (controller.selectedImage!.value ==
-                                        controller.imageList[index]) {
-                                      controller.selectedImages!
-                                          .remove(controller.imageList[index]);
-                                      if (controller
-                                          .selectedImages!.isNotEmpty) {
-                                        controller.selectedImage!.value =
-                                            controller.selectedImages!.last;
-                                        controller.selectedImageSize.value =
-                                            controller
-                                                .selectedImages!.last.size;
-                                      } else {
-                                        controller.isSelect.value = false;
-                                      }
-                                    } else {
+                                      controller.selectedImages!.value = [
+                                        controller.imageList[index]
+                                      ];
+                                      controller.selectedImages ??=
+                                          [controller.imageList[index]].obs;
                                       controller.selectedImage!.value =
                                           controller.imageList[index];
+                                      controller.isSelect.value = true;
                                       controller.selectedImageSize.value =
                                           controller.imageList[index].size;
+                                    } else if (!controller.selectedImages!
+                                        .contains(
+                                            controller.imageList[index])) {
+                                      controller.selectedImage ??=
+                                          controller.imageList[index].obs;
+                                      if (controller.selectedImages!.length <
+                                          10) {
+                                        controller.selectedImages!
+                                            .add(controller.imageList[index]);
+                                        // controller.isSelect.value = true;
+                                        controller.selectedImage!.value =
+                                            controller.imageList[index];
+                                        controller.selectedImageSize.value =
+                                            controller.imageList[index].size;
+                                      } else {
+                                        controller.selectedImage ??=
+                                            controller.imageList[index].obs;
+                                      }
+                                      controller.isSelect.value = true;
+                                    } else {
+                                      if (controller.selectedImage!.value ==
+                                          controller.imageList[index]) {
+                                        controller.selectedImages!.remove(
+                                            controller.imageList[index]);
+                                        if (controller
+                                            .selectedImages!.isNotEmpty) {
+                                          controller.selectedImage!.value =
+                                              controller.selectedImages!.last;
+                                          controller.selectedImageSize.value =
+                                              controller
+                                                  .selectedImages!.last.size;
+                                        } else {
+                                          controller.isSelect.value = false;
+                                        }
+                                      } else {
+                                        controller.selectedImage!.value =
+                                            controller.imageList[index];
+                                        controller.selectedImageSize.value =
+                                            controller.imageList[index].size;
+                                      }
                                     }
-                                  }
-                                },
-                                child: Stack(children: [
-                                  Opacity(
-                                      opacity: controller.isSelect.value == true
-                                          ? controller.selectedImage!.value ==
-                                                  controller.imageList[index]
-                                              ? 0.3
-                                              : 1
-                                          : 1,
-                                      child: Image.memory(
-                                        data,
-                                        fit: BoxFit.cover,
-                                        height: Get.width / 4,
-                                        width: Get.width / 4,
-                                      )),
-                                  controller.isSelect.value == true
-                                      ? controller.selectedImages!.contains(
-                                              controller.imageList[index])
-                                          ? Positioned(
-                                              top: 5,
-                                              right: 5,
-                                              child: Container(
+                                  },
+                                  child: Stack(children: [
+                                    Opacity(
+                                        opacity: controller.isSelect.value ==
+                                                true
+                                            ? controller.selectedImage!.value ==
+                                                    controller.imageList[index]
+                                                ? 0.3
+                                                : 1
+                                            : 1,
+                                        child: Image.memory(
+                                          data,
+                                          fit: BoxFit.cover,
+                                          height: Get.width / 4,
+                                          width: Get.width / 4,
+                                        )),
+                                    controller.isSelect.value == true
+                                        ? controller.selectedImages!.contains(
+                                                controller.imageList[index])
+                                            ? Positioned(
+                                                top: 5,
+                                                right: 5,
+                                                child: Container(
                                                   width: 22,
                                                   height: 22,
                                                   decoration: BoxDecoration(
                                                       color: mainblue,
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              32))))
-                                          : const SizedBox.shrink()
-                                      : const SizedBox.shrink()
-                                ]),
-                              )),
-                        );
-                      }),
-                    ));
-              })),
-          // _imageSelectLis1t()
-        ])),
+                                                              32)),
+                                                  child: Center(
+                                                    child: Text(
+                                                      '${controller.selectedImages!.indexOf(controller.imageList[index]) + 1}',
+                                                      style: kmain.copyWith(
+                                                          color: mainWhite),
+                                                    ),
+                                                  ),
+                                                ))
+                                            : const SizedBox.shrink()
+                                        : const SizedBox.shrink()
+                                  ]),
+                                )),
+                          );
+                        }),
+                      ));
+                })),
+            // _imageSelectLis1t()
+          ])),
+        ),
       ),
     );
   }

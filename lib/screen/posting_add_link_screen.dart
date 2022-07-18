@@ -29,48 +29,45 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
       },
       child: Scaffold(
         appBar: AppBarWidget(
-            title: '링크 첨부',
-            bottomBorder: false,
-            actions: [
-              GestureDetector(
-                  onTap: () {
-                    if (postingAddController.scrapList.isNotEmpty) {
-                      postingAddController.isAddLink(true);
-                      Get.back();
-                    } else {
-                      postingAddController.isAddLink(false);
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 12, right: 17.5),
-                    child: Obx(
-                      () => Text('확인',
-                          style: kNavigationTitle.copyWith(
-                              color: postingAddController
-                                      .scrapList.value.isNotEmpty
-                                  ? mainblue
-                                  : mainblack.withOpacity(0.5))),
-                    ),
-                  ))
-            ],
-            leading: GestureDetector(
+          title: '링크 첨부',
+          bottomBorder: false,
+          actions: [
+            GestureDetector(
                 onTap: () {
-                  Get.back();
+                  if (postingAddController.scrapList.isNotEmpty) {
+                    postingAddController.isAddLink(true);
+                    Get.back();
+                  } else {
+                    postingAddController.isAddLink(false);
+                    showCustomDialog("링크를 추가해주세요", 1000);
+                  }
                 },
-                child: SvgPicture.asset('assets/icons/Back_icon.svg'))
-            // ],
-            // leading: GestureDetector(
-            //     onTap: () {
-            //       postingAddController.scrapList.clear();
-            //       Get.back();
-            //     },
-            //     child: Container(
-            //         width: 10,
-            //         height: 16,
-            //         child: SvgPicture.asset(
-            //           'assets/icons/Back_icon.svg',
-            //         ))),
-            ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 12, right: 17.5),
+                  child: Obx(
+                    () => Text('확인',
+                        style: kNavigationTitle.copyWith(
+                            color:
+                                postingAddController.scrapList.value.isNotEmpty
+                                    ? mainblue
+                                    : mainblack.withOpacity(0.5))),
+                  ),
+                ))
+          ],
+
+          // ],
+          // leading: GestureDetector(
+          //     onTap: () {
+          //       postingAddController.scrapList.clear();
+          //       Get.back();
+          //     },
+          //     child: Container(
+          //         width: 10,
+          //         height: 16,
+          //         child: SvgPicture.asset(
+          //           'assets/icons/Back_icon.svg',
+          //         ))),
+        ),
         body: ScrollNoneffectWidget(
           child: SingleChildScrollView(
             child: Padding(

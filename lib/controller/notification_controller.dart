@@ -198,7 +198,7 @@ class NotificationController extends GetxController {
         );
       }
 
-      print(event.notification!.body);
+      // print(event.notification!.body);
     });
 
     //Background, Killed 상태에서 알림을 받고, 그 알림을 클릭해서 앱에 접근했을 때

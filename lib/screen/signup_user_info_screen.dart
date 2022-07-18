@@ -89,8 +89,8 @@ class SignupUserInfoScreen extends StatelessWidget {
                     height: 32,
                   ),
                   //TODO: 학교 별 다른 UX Writing
-                  const Text(
-                    '인천대학교 이메일 주소',
+                  Text(
+                    '${signupController.selectUniv.value.univname} 이메일 주소',
                     style: kButtonStyle,
                   ),
                   const SizedBox(
@@ -119,7 +119,7 @@ class SignupUserInfoScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Text(
-                          '@inu.ac.kr',
+                          signupController.selectUniv.value.email,
                           style: kSubTitle3Style,
                         ),
                       ),

@@ -1,196 +1,69 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:loopus/constant.dart';
-// import 'package:loopus/controller/bookmark_controller.dart';
-// import 'package:loopus/widget/appbar_widget.dart';
-// import 'package:loopus/widget/bookmark_widget.dart';
-// import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
+import 'package:loopus/controller/bookmark_controller.dart';
+import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/bookmark_widget.dart';
+import 'package:loopus/widget/custom_header_footer.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/divide_widget.dart';
+import 'package:loopus/widget/empty_contents_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
+import 'package:loopus/widget/loading_widget.dart';
+import 'package:loopus/widget/posting_widget.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-// class BookmarkScreen extends StatelessWidget {
-//   final BookmarkController bookmarkController = Get.put(BookmarkController());
+class BookmarkScreen extends StatelessWidget {
+  final BookmarkController _controller = Get.put(BookmarkController());
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBarWidget(
-//         title: '북마크',
-//         bottomBorder: false,
-//       ),
-//       body: Obx(
-//         () => SmartRefresher(
-//           controller: bookmarkController.refreshController,
-//           enablePullDown: true,
-//           enablePullUp: bookmarkController.enableBookmarkPullup.value,
-//           header: ClassicHeader(
-//             textStyle: const TextStyle(color: mainblack),
-//             refreshingText: '',
-//             releaseText: "",
-//             completeText: "",
-//             idleText: "",
-//             refreshingIcon: Column(
-//               children: [
-//                 Image.asset(
-//                   'assets/icons/loading.gif',
-//                   scale: 6,
-//                 ),
-//                 const SizedBox(
-//                   height: 4,
-//                 ),
-//                 Text(
-//                   '북마크 새로고침 중...',
-//                   style: TextStyle(
-//                     fontWeight: FontWeight.w500,
-//                     fontSize: 10,
-//                     color: mainblue,
-//                   ),
-//                 )
-//               ],
-//             ),
-//             releaseIcon: Column(
-//               children: [
-//                 Image.asset(
-//                   'assets/icons/loading.gif',
-//                   scale: 6,
-//                 ),
-//                 const SizedBox(
-//                   height: 4,
-//                 ),
-//                 Text(
-//                   '북마크 새로고침 중...',
-//                   style: TextStyle(
-//                     fontWeight: FontWeight.w500,
-//                     fontSize: 10,
-//                     color: mainblue,
-//                   ),
-//                 )
-//               ],
-//             ),
-//             completeIcon: Column(
-//               children: [
-//                 const Icon(
-//                   Icons.check_rounded,
-//                   color: mainblue,
-//                 ),
-//                 const SizedBox(
-//                   height: 4,
-//                 ),
-//                 Text(
-//                   '완료!',
-//                   style: TextStyle(
-//                     fontWeight: FontWeight.w500,
-//                     fontSize: 10,
-//                     color: mainblue,
-//                   ),
-//                 )
-//               ],
-//             ),
-//             idleIcon: Column(
-//               children: [
-//                 Image.asset(
-//                   'assets/icons/loading.png',
-//                   scale: 12,
-//                 ),
-//                 const SizedBox(
-//                   height: 8,
-//                 ),
-//                 Text(
-//                   '당겨주세요',
-//                   style: TextStyle(
-//                     fontWeight: FontWeight.w500,
-//                     fontSize: 10,
-//                     color: mainblue,
-//                   ),
-//                 )
-//               ],
-//             ),
-//           ),
-//           footer: ClassicFooter(
-//             textStyle: TextStyle(color: mainblack),
-//             loadingText: "",
-//             canLoadingText: "",
-//             idleText: "",
-//             loadingIcon: Image.asset(
-//               'assets/icons/loading.gif',
-//               scale: 6,
-//             ),
-//             canLoadingIcon: Image.asset(
-//               'assets/icons/loading.gif',
-//               scale: 6,
-//             ),
-//           ),
-//           onRefresh: bookmarkController.onBookmarkRefresh,
-//           onLoading: bookmarkController.onBookmarkLoading,
-//           child: CustomScrollView(
-//             physics: const BouncingScrollPhysics(),
-//             key: const PageStorageKey("key1"),
-//             slivers: [
-//               (bookmarkController.isBookmarkEmpty.value == false)
-//                   ? SliverList(
-//                       delegate: SliverChildBuilderDelegate(
-//                       (context, index) {
-//                         return Padding(
-//                           padding: EdgeInsets.only(
-//                             top: (index == 0) ? 16 : 8,
-//                             right: 16,
-//                             left: 16,
-//                             bottom: (index ==
-//                                     bookmarkController.bookmarkResult.value
-//                                             .postingitems.length -
-//                                         1)
-//                                 ? 24
-//                                 : 8,
-//                           ),
-//                           child: (bookmarkController.isBookmarkLoading.value ==
-//                                   false)
-//                               ? BookmarkWidget(
-//                                   index: index,
-//                                   item: bookmarkController
-//                                       .bookmarkResult.value.postingitems[index],
-//                                 )
-//                               : Column(
-//                                   children: [
-//                                     Image.asset(
-//                                       'assets/icons/loading.gif',
-//                                       scale: 6,
-//                                     ),
-//                                     Text(
-//                                       '북마크한 포스팅 받아오는 중...',
-//                                       style: TextStyle(
-//                                         fontWeight: FontWeight.w500,
-//                                         fontSize: 10,
-//                                         color: mainblue,
-//                                       ),
-//                                     )
-//                                   ],
-//                                 ),
-//                         );
-//                       },
-//                       childCount:
-//                           (bookmarkController.isBookmarkLoading.value == false)
-//                               ? bookmarkController
-//                                   .bookmarkResult.value.postingitems.length
-//                               : 1,
-//                     ))
-//                   : SliverList(
-//                       delegate: SliverChildBuilderDelegate((context, index) {
-//                         return Container(
-//                           width: Get.width,
-//                           height: Get.height * 0.75,
-//                           child: Center(
-//                             child: Text(
-//                               '아직 북마크한 포스팅이 없어요',
-//                               style: kSubTitle3Style.copyWith(
-//                                 color: mainblack.withOpacity(0.38),
-//                               ),
-//                             ),
-//                           ),
-//                         );
-//                       }, childCount: 1),
-//                     ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBarWidget(
+        title: '북마크',
+        bottomBorder: false,
+      ),
+      body: Obx(
+        () => _controller.bookmarkScreenState.value == ScreenState.loading
+            ? const Center(child: LoadingWidget())
+            : _controller.bookmarkScreenState.value == ScreenState.normal
+                ? Container()
+                : _controller.bookmarkScreenState.value ==
+                        ScreenState.disconnect
+                    ? DisconnectReloadWidget(reload: () {})
+                    : _controller.bookmarkScreenState.value == ScreenState.error
+                        ? ErrorReloadWidget(reload: () {})
+                        : _controller.posts.isEmpty
+                            ? EmptyContentWidget(text: "북마크한 포스팅이 없습니다")
+                            : ScrollNoneffectWidget(
+                                child: SmartRefresher(
+                                  controller: _controller.refreshController,
+                                  enablePullDown: true,
+                                  enablePullUp: true,
+                                  header: const MyCustomHeader(),
+                                  footer: const MyCustomFooter(),
+                                  onRefresh: _controller.onBookmarkRefresh,
+                                  onLoading: _controller.onBookmarkLoading,
+                                  child: SingleChildScrollView(
+                                      child: Column(
+                                    children: [
+                                      ListView.separated(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          itemBuilder: ((context, index) {
+                                            return PostingWidget(
+                                                item: _controller.posts[index],
+                                                type: PostingWidgetType.normal);
+                                          }),
+                                          separatorBuilder: (context, index) =>
+                                              DivideWidget(),
+                                          itemCount: _controller.posts.length)
+                                    ],
+                                  )),
+                                ),
+                              ),
+      ),
+    );
+  }
+}

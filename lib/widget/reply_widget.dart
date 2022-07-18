@@ -7,6 +7,8 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/comment_model.dart';
+import 'package:loopus/screen/likepeople_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/user_image_widget.dart';
@@ -24,14 +26,6 @@ class ReplyWidget extends StatelessWidget {
   late final PostingDetailController postController =
       Get.find(tag: postid.toString());
 
-  // late final LikeController likeController = Get.put(
-  //     LikeController(
-  //         isLiked: reply.isLiked,
-  //         id: reply.id,
-  //         lastisliked: reply.isLiked.value,
-  //         liketype: Liketype.reply),
-  //     tag: 'reply${reply.id}');
-
   final Debouncer _debouncer = Debouncer();
 
   late int lastIsLiked;
@@ -44,10 +38,13 @@ class ReplyWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          UserImageWidget(
-            imageUrl: reply.user.profileImage ?? '',
-            width: 35,
-            height: 35,
+          GestureDetector(
+            onTap: tapProfile,
+            child: UserImageWidget(
+              imageUrl: reply.user.profileImage ?? '',
+              width: 35,
+              height: 35,
+            ),
           ),
           const SizedBox(
             width: 14,
@@ -58,9 +55,12 @@ class ReplyWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      reply.user.realName,
-                      style: kmainbold,
+                    GestureDetector(
+                      onTap: tapProfile,
+                      child: Text(
+                        reply.user.realName,
+                        style: kmainbold,
+                      ),
                     ),
                     const Spacer(),
                     Text(
@@ -77,7 +77,12 @@ class ReplyWidget extends StatelessWidget {
                   TextSpan(
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        print('dddd');
+                        Get.to(
+                            () => OtherProfileScreen(
+                                user: reply.taggedUser,
+                                userid: reply.taggedUser.userid,
+                                realname: reply.taggedUser.realName),
+                            preventDuplicates: false);
                       },
                     text: reply.taggedUser.realName,
                     style: kmainbold.copyWith(
@@ -98,10 +103,19 @@ class ReplyWidget extends StatelessWidget {
                 Obx(
                   () => Row(
                     children: [
-                      Text(
-                        '좋아요 ${reply.likecount.value}개',
-                        style: k16Normal.copyWith(
-                          color: maingray,
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          Get.to(() => LikePeopleScreen(
+                                id: reply.id,
+                                likeType: LikeType.cocomment,
+                              ));
+                        },
+                        child: Text(
+                          '좋아요 ${reply.likecount.value}개',
+                          style: k16Normal.copyWith(
+                            color: maingray,
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -149,6 +163,15 @@ class ReplyWidget extends StatelessWidget {
     );
   }
 
+  void tapProfile() {
+    Get.to(
+        () => OtherProfileScreen(
+            user: reply.user,
+            userid: reply.user.userid,
+            realname: reply.user.realName),
+        preventDuplicates: false);
+  }
+
   void tapLike() {
     if (num == 0) {
       lastIsLiked = reply.isLiked.value;
@@ -165,7 +188,7 @@ class ReplyWidget extends StatelessWidget {
 
     _debouncer.run(() {
       if (lastIsLiked != reply.isLiked.value) {
-        likepost(reply.id, 'cocomment');
+        likepost(reply.id, LikeType.cocomment);
         lastIsLiked = reply.isLiked.value;
         num = 0;
       }

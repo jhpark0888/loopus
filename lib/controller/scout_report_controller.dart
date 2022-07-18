@@ -26,11 +26,24 @@ class ScoutReportController extends GetxController
   RxList<MapEntry<String, String>> careerFieldList =
       <MapEntry<String, String>>[].obs;
 
+  Map<String, RxBool> isSearchFocusMap = {
+    "0": false.obs,
+    for (var key in fieldList.keys)
+      if (key != "10") key: false.obs
+  };
+
+  Map<String, RxList<Contact>> searchContactMap = {
+    "0": <Contact>[].obs,
+    for (var key in fieldList.keys)
+      if (key != "10") key: <Contact>[].obs
+  };
+
   Map<String, RxList<Company>> companyMap = {
     "0": <Company>[].obs,
     for (var key in fieldList.keys)
       if (key != "10") key: <Company>[].obs
   };
+
   Map<String, RxList<Contact>> contactMap = {
     "0": <Contact>[].obs,
     for (var key in fieldList.keys)
@@ -49,6 +62,8 @@ class ScoutReportController extends GetxController
       if (key != "10") key: RefreshController()
   };
 
+  RxBool isSearchLoading = false.obs;
+  TextEditingController searchContactController = TextEditingController();
   RxMap<String, String> currentFieldMap = <String, String>{}.obs;
   late TabController tabController;
 
@@ -59,6 +74,9 @@ class ScoutReportController extends GetxController
     tabController = TabController(length: careerField.length, vsync: this);
 
     tabController.addListener(() {
+      searchContactController.clear();
+      isSearchFocusMap[careerFieldList[currentField.value].key]!(false);
+
       currentField.value = tabController.index;
       currentFieldMap({
         careerFieldList[currentField.value].key:

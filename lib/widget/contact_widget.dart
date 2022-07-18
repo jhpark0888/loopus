@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/contact_model.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/company_image_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
@@ -57,29 +59,33 @@ class ContactWidget extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      UserImageWidget(
-                          imageUrl: contact.user.profileImage ?? ""),
-                      const SizedBox(
-                        height: 14,
-                      ),
-                      Text(
-                        contact.user.realName,
-                        style: kmain,
-                      ),
-                      const SizedBox(
-                        height: 14,
-                      ),
-                      Text(
-                        "땡땡대",
-                        style: kmainheight,
-                      ),
-                      Text(
-                        contact.user.department,
-                        style: kmainheight,
-                      ),
-                    ],
+                  child: GestureDetector(
+                    onTap: tapProfile,
+                    behavior: HitTestBehavior.translucent,
+                    child: Column(
+                      children: <Widget>[
+                        UserImageWidget(
+                            imageUrl: contact.user.profileImage ?? ""),
+                        const SizedBox(
+                          height: 14,
+                        ),
+                        Text(
+                          contact.user.realName,
+                          style: kmain,
+                        ),
+                        const SizedBox(
+                          height: 14,
+                        ),
+                        Text(
+                          "땡땡대",
+                          style: kmainheight,
+                        ),
+                        Text(
+                          contact.user.department,
+                          style: kmainheight,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -94,6 +100,15 @@ class ContactWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void tapProfile() {
+    Get.to(
+        () => OtherProfileScreen(
+            user: contact.user,
+            userid: contact.user.userid,
+            realname: contact.user.realName),
+        preventDuplicates: false);
   }
 }
 

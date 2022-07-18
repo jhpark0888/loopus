@@ -72,7 +72,7 @@ class MyProfileScreen extends StatelessWidget {
                   actions: [
                     IconButton(
                         onPressed: () {
-                          // Get.to(() => BookmarkScreen());
+                          Get.to(() => BookmarkScreen());
                         },
                         icon: SvgPicture.asset(
                           'assets/icons/Mark_Default.svg',
@@ -587,7 +587,7 @@ class MyProfileScreen extends StatelessWidget {
                                                     show: false,
                                                   ),
                                                   sectionsSpace: 0,
-                                                  centerSpaceRadius: 80,
+                                                  centerSpaceRadius: 100,
                                                   sections: profileController
                                                       .showingSections()),
                                               swapAnimationDuration:

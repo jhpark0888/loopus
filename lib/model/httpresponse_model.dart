@@ -10,8 +10,8 @@ class HTTPResponse {
   factory HTTPResponse.success(data) =>
       HTTPResponse(isError: false, data: data);
 
-  factory HTTPResponse.apiError(message, statuscode) => HTTPResponse(
-      isError: true, errorData: {"message": message, "statusCode": statuscode});
+  factory HTTPResponse.apiError(message, statusCode) => HTTPResponse(
+      isError: true, errorData: {"message": message, "statusCode": statusCode});
 
   factory HTTPResponse.networkError() => HTTPResponse(
       isError: true, errorData: {"message": '네트워크 오류입니다', "statusCode": 59});

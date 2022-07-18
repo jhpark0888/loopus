@@ -42,12 +42,11 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       backgroundColor: mainWhite,
       leading: leading ??
-          IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: SvgPicture.asset('assets/icons/Arrow.svg'),
-          ),
+          GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: SvgPicture.asset('assets/icons/Back_icon.svg')),
       actions: actions,
     );
   }

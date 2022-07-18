@@ -24,22 +24,22 @@ class SearchUserWidget extends StatelessWidget {
       },
       splashColor: kSplashColor,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
         child: Row(
           children: [
+            const SizedBox(width: 20),
             UserImageWidget(
-              imageUrl: user.profileImage ?? '',
-              width: 36,
-              height: 36,
+                imageUrl: user.profileImage ?? "", width: 36, height: 36),
+            const SizedBox(width: 14),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(user.realName, style: kmainbold),
+                const SizedBox(height: 7),
+                Text('땡땡대 · ${user.department}', style: kmain),
+              ],
             ),
-            const SizedBox(
-              width: 14,
-            ),
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(text: user.realName, style: kmainbold),
-              TextSpan(text: ' · 땡땡대 · ${user.department}', style: kmain),
-            ]))
+            const SizedBox(width: 20),
           ],
         ),
       ),

@@ -55,11 +55,6 @@ class PostingAddNameScreen1 extends StatelessWidget {
         appBar: AppBarWidget(
           bottomBorder: false,
           title: '포스트 작성',
-          leading: GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: SvgPicture.asset('assets/icons/Back_icon.svg')),
         ),
         body: Obx(
           () => ScrollNoneffectWidget(

@@ -40,7 +40,9 @@ class PostingWidget extends StatelessWidget {
   final Debouncer _debouncer = Debouncer();
 
   late int lastIsLiked;
-  int num = 0;
+  int likenum = 0;
+  late int lastIsMaked;
+  int marknum = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -300,9 +302,12 @@ class PostingWidget extends StatelessWidget {
                             GestureDetector(
                                 behavior: HitTestBehavior.translucent,
                                 onTap: () {
-                                  Get.to(() => LikePeopleScreen(
-                                        postid: item.id,
-                                      ));
+                                  Get.to(
+                                    () => LikePeopleScreen(
+                                      id: item.id,
+                                      likeType: LikeType.post,
+                                    ),
+                                  );
                                 },
                                 child: Obx(
                                   () => Text(
@@ -354,8 +359,6 @@ class PostingWidget extends StatelessWidget {
         () => PostingScreen(
               post: item,
               postid: item.id,
-              // likecount: item.likeCount,
-              // isLiked: item.isLiked,
             ),
         opaque: false);
   }
@@ -368,15 +371,31 @@ class PostingWidget extends StatelessWidget {
   }
 
   void tapBookmark() {
-    // if (item.isMarked.value == 0) {
-    //   homeController.tapBookmark(item.id);
-    // } else {
-    //   homeController.tapunBookmark(item.id);
-    // }
+    if (marknum == 0) {
+      lastIsMaked = item.isMarked.value;
+    }
+    if (item.isMarked.value == 0) {
+      item.isMarked(1);
+
+      HomeController.to.tapBookmark(item.id);
+    } else {
+      item.isMarked(0);
+
+      HomeController.to.tapunBookmark(item.id);
+    }
+    marknum += 1;
+
+    _debouncer.run(() {
+      if (lastIsMaked != item.isMarked.value) {
+        bookmarkpost(item.id);
+        lastIsMaked = item.isMarked.value;
+        marknum = 0;
+      }
+    });
   }
 
   void tapLike() {
-    if (num == 0) {
+    if (likenum == 0) {
       lastIsLiked = item.isLiked.value;
     }
     if (item.isLiked.value == 0) {
@@ -384,23 +403,23 @@ class PostingWidget extends StatelessWidget {
       item.likeCount += 1;
 
       HomeController.to.tapLike(item.id, item.likeCount.value);
-      ProfileController.to
-          .tapLike(item.project!.id, item.id, item.likeCount.value);
+      // ProfileController.to
+      //     .tapLike(item.project!.id, item.id, item.likeCount.value);
     } else {
       item.isLiked(0);
       item.likeCount -= 1;
 
       HomeController.to.tapunLike(item.id, item.likeCount.value);
-      ProfileController.to
-          .tapunLike(item.project!.id, item.id, item.likeCount.value);
+      // ProfileController.to
+      //     .tapunLike(item.project!.id, item.id, item.likeCount.value);
     }
-    num += 1;
+    likenum += 1;
 
     _debouncer.run(() {
       if (lastIsLiked != item.isLiked.value) {
-        likepost(item.id, 'post');
+        likepost(item.id, LikeType.post);
         lastIsLiked = item.isLiked.value;
-        num = 0;
+        likenum = 0;
       }
     });
   }
