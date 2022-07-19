@@ -17,54 +17,54 @@ import 'package:loopus/widget/messageroom_widget.dart';
 import '../constant.dart';
 import '../controller/error_controller.dart';
 
-Future<void> getmessageroomlist() async {
-  ConnectivityResult result = await initConnectivity();
-  MessageController.to.chatroomscreenstate(ScreenState.loading);
-  if (result == ConnectivityResult.none) {
-    MessageController.to.chatroomscreenstate(ScreenState.disconnect);
-    showdisconnectdialog();
-  } else {
-    String? token = await const FlutterSecureStorage().read(key: 'token');
-    String? myid = await const FlutterSecureStorage().read(key: 'id');
+// Future<void> getmessageroomlist() async {
+//   ConnectivityResult result = await initConnectivity();
+//   MessageController.to.chatroomscreenstate(ScreenState.loading);
+//   if (result == ConnectivityResult.none) {
+//     MessageController.to.chatroomscreenstate(ScreenState.disconnect);
+//     showdisconnectdialog();
+//   } else {
+//     String? token = await const FlutterSecureStorage().read(key: 'token');
+//     String? myid = await const FlutterSecureStorage().read(key: 'id');
 
-    final url = Uri.parse("$serverUri/chat/get_list");
-    try {
-      http.Response response = await http.get(
-        url,
-        headers: {
-          'Authorization': 'Token $token',
-          'Content-Type': 'application/json'
-        },
-      );
+//     final url = Uri.parse("$serverUri/chat/get_list");
+//     try {
+//       http.Response response = await http.get(
+//         url,
+//         headers: {
+//           'Authorization': 'Token $token',
+//           'Content-Type': 'application/json'
+//         },
+//       );
 
-      print('채팅방 리스트 statuscode: ${response.statusCode}');
-      if (response.statusCode == 200) {
-        List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-        MessageController.to.chattingroomlist(responseBody
-            .map((messageroom) => MessageRoomWidget(
-                chatRoom: ChatRoom.fromJson(messageroom).obs))
-            .toList());
-        MessageController.to.chatroomscreenstate(ScreenState.success);
-        print("---------------------------");
-        print(responseBody);
-        print(response.statusCode);
-        return;
-      } else {
-        MessageController.to.chatroomscreenstate(ScreenState.error);
-        return Future.error(response.statusCode);
-      }
-    } on SocketException {
-      print("서버에러 발생");
+//       print('채팅방 리스트 statuscode: ${response.statusCode}');
+//       if (response.statusCode == 200) {
+//         List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+//         MessageController.to.chattingRoomList(responseBody
+//             .map((messageroom) => MessageRoomWidget(
+//                 chatRoom: ChatRoom.fromJson(messageroom).obs))
+//             .toList());
+//         MessageController.to.chatroomscreenstate(ScreenState.success);
+//         print("---------------------------");
+//         print(responseBody);
+//         print(response.statusCode);
+//         return;
+//       } else {
+//         MessageController.to.chatroomscreenstate(ScreenState.error);
+//         return Future.error(response.statusCode);
+//       }
+//     } on SocketException {
+//       print("서버에러 발생");
 
-      // ErrorController.to.isServerClosed(true);
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-    }
-  }
-}
+//       // ErrorController.to.isServerClosed(true);
+//     } catch (e) {
+//       print(e);
+//       // ErrorController.to.isServerClosed(true);
+//     }
+//   }
+// }
 
-Future<HTTPResponse> getChatroomlist() async {
+Future<HTTPResponse> getChatroomlist(int id) async {
   ConnectivityResult result = await initConnectivity();
   MessageController.to.chatroomscreenstate(ScreenState.loading);
   if (result == ConnectivityResult.none) {
@@ -74,19 +74,17 @@ Future<HTTPResponse> getChatroomlist() async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
-    final url = Uri.parse("http://192.168.35.22:8000/chat/chat_list?id=1");
+    final url = Uri.parse("http://192.168.35.12:8000/chat/chat_list?id=${id}");
     try {
       http.Response response = await http.get(
         url,
         headers: {
-          // 'id': '1',
           'Content-Type': 'application/json'
         },
       );
 
       print('채팅방 리스트 statuscode: ${response.statusCode}');
       if (response.statusCode == 200) {
-
         List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
         List<ChatRoom> chatroom = responseBody.map((e) => ChatRoom.fromJson(e)).toList();
         MessageController.to.chatroomscreenstate(ScreenState.success);

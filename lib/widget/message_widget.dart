@@ -10,12 +10,13 @@ import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
 
 class MessageWidget extends StatelessWidget {
-  MessageWidget({required this.message});
+  MessageWidget({Key? key,required this.message, required this.isLast, required this.partnerId, required this.myId}):super(key: key);
   // late MessageDetailController controller =
   //     Get.find(tag: user.userid.toString());
-
+  RxBool isLast;
   Chat message;
-
+  int partnerId;
+  int myId;
   // var image;
   // String content;
   // int isSender;
@@ -27,66 +28,78 @@ class MessageWidget extends StatelessWidget {
         horizontal: 16,
         vertical: 12,
       ),
-      child: message.sender == 1
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: message.sender == myId
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                // Obx(() => (message.issending.value)
-                //     ? Container(
-                //         padding:
-                //             const EdgeInsets.fromLTRB(12.0, 12.0, 8.0, 12.0),
-                //         width: 20,
-                //         height: 20,
-                //         child: Opacity(
-                //           opacity: 0.6,
-                //           child: Icon(
-                //             Icons.reply_rounded,
-                //             color: mainblack,
-                //             size: 20,
-                //           ),
-                //         ),
-                //       )
-                //     : Container()),
-                // SizedBox(
-                //   width: 2,
-                // ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(12.0, 18.0, 8.0, 0.0),
-                  child: Text(
-                    "${messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
-                    style: kCaptionStyle.copyWith(
-                      color: mainblack.withOpacity(0.6),
-                    ),
-                  ),
-                ),
-                hasTextOverflow(message.content, kBody2Style)
-                    ? Container(
-                        constraints:
-                            BoxConstraints(maxWidth: Get.width * (2 / 3)),
-                        decoration: BoxDecoration(
-                            color: mainblue,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              message.content,
-                              style: kSubTitle3Style.copyWith(
-                                  height: 1.5, color: mainblack),
-                            )),
-                      )
-                    : Container(
-                        decoration: BoxDecoration(
-                            color: mainblue,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              message.content,
-                              style: kSubTitle3Style.copyWith(
-                                  height: 1.5, color: mainWhite),
-                            )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // Obx(() => (message.issending.value)
+                    //     ? Container(
+                    //         padding:
+                    //             const EdgeInsets.fromLTRB(12.0, 12.0, 8.0, 12.0),
+                    //         width: 20,
+                    //         height: 20,
+                    //         child: Opacity(
+                    //           opacity: 0.6,
+                    //           child: Icon(
+                    //             Icons.reply_rounded,
+                    //             color: mainblack,
+                    //             size: 20,
+                    //           ),
+                    //         ),
+                    //       )
+                    //     : Container()),
+                    // SizedBox(
+                    //   width: 2,
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12.0, 18.0, 8.0, 0.0),
+                      child: Text(
+                        "${messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
+                        style: kCaptionStyle.copyWith(
+                          color: mainblack,
+                        ),
                       ),
+                    ),
+                    hasTextOverflow(message.content, kBody2Style)
+                        ? Container(
+                            constraints:
+                                BoxConstraints(maxWidth: Get.width * (2 / 3)),
+                            decoration: BoxDecoration(
+                                color: mainblue,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  message.content,
+                                  style: kSubTitle3Style.copyWith(
+                                      height: 1.5, color: mainWhite),
+                                )),
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                                color: mainblue,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  message.content,
+                                  style: kSubTitle3Style.copyWith(
+                                      height: 1.5, color: mainWhite),
+                                )),
+                          ),
+                  ],
+                ),
+                Obx( () => isLast.value ? 
+                Column(children: [
+                  const SizedBox(height: 14),
+                  message.isRead!.value
+                          ? const Text('읽음', textAlign: TextAlign.end, style: kCaptionStyle,)
+                          : const SizedBox.shrink()
+                ]) : const SizedBox.shrink())
               ],
             )
           : Row(
@@ -138,22 +151,21 @@ class MessageWidget extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        hasTextOverflow(message.content, kBody2Style,
-                                maxWidth: Get.width * (2 / 3))
-                            ? Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Color(0xffe7e7e7),
-                                      ),
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        message.content,
-                                        style: kBody2Style,
-                                      )),
-                                ),
+                        hasTextOverflow(message.content, kBody2Style)
+                            ? Container(
+                                constraints: BoxConstraints(
+                                    maxWidth: Get.width * (3 / 5)),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Color(0xffe7e7e7),
+                                    ),
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      message.content,
+                                      style: kBody2Style,
+                                    )),
                               )
                             : Container(
                                 decoration: BoxDecoration(
@@ -166,6 +178,7 @@ class MessageWidget extends StatelessWidget {
                                     child: Text(
                                       message.content,
                                       style: kBody2Style,
+                                      softWrap: true,
                                     )),
                               ),
                         Padding(
@@ -175,8 +188,7 @@ class MessageWidget extends StatelessWidget {
                             messagedurationCaculate(
                                 startDate: message.date,
                                 endDate: DateTime.now()),
-                            style: kCaptionStyle.copyWith(
-                                color: mainblack.withOpacity(0.6)),
+                            style: kCaptionStyle.copyWith(color: mainblack),
                           ),
                         )
                       ],

@@ -1,6 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/socket_message_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -24,16 +27,10 @@ class SQLController extends GetxController {
       join(await getDatabasesPath(), 'MY_database.db'),
       onCreate: (db, version) {
         db.execute(
-          "CREATE TABLE user(id INTEGER PRIMARY KEY, name TEXT)",
-        );
-        db.execute(
-          "CREATE TABLE chat(id INTEGER PRIMARY KEY AUTOINCREMENT, userid INTEGER, roomid INTEGER, text TEXT, date TEXT, isread INTEGER, readcount INTEGER, isme INTEGER, FOREIGN KEY (userid) REFERENCES user (id) FOREIGN KEY (roomid) REFERENCES chatroom (id))",
+          "CREATE TABLE user(id INTEGER PRIMARY KEY, name TEXT, user_id INTEGER)",
         );
         db.execute(
           "CREATE TABLE chatroom(room_id INTEGER PRIMARY KEY AUTOINCREMENT, user_name Text, image Text, message Text, date Text, not_read INTEGER, del_id INTEGER)",
-        );
-        db.execute(
-          "CREATE TABLE dogs(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER)",
         );
         db.execute(
           "CREATE TABLE chatting(msg_id INTEGER PRIMARY KEY AUTOINCREMENT,type Text,sender INTEGER, date TEXT, is_read TEXT, message TEXT, room_id INTEGER)",
@@ -74,36 +71,25 @@ class SQLController extends GetxController {
 //       conflictAlgorithm: ConflictAlgorithm.replace,
 //     );
 //   }
-  Future<void> insertDog(Dog dog) async {
+  Future<void> insertUser(User user) async {
     // 데이터베이스 reference를 얻습니다.
     final Database db = await database!;
-
-    // Dog를 올바른 테이블에 추가합니다. 동일한 dog가 두번 추가되는 경우를 처리하기 위해
-    // `conflictAlgorithm`을 명시할 수 있습니다.
-    //
-    // 본 예제에서는, 이전 데이터를 갱신하도록 하겠습니다.
     await db.insert(
-      'dogs',
-      dog.toMap(),
+      'user',
+      {"name": user.realName, "user_id": user.userid},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   Future<void> insertmessage(Chat chat) async {
-    // 데이터베이스 reference를 얻습니다.
     final Database db = await database!;
-
-    // Dog를 올바른 테이블에 추가합니다. 동일한 dog가 두번 추가되는 경우를 처리하기 위해
-    // `conflictAlgorithm`을 명시할 수 있습니다.
-    //
-    // 본 예제에서는, 이전 데이터를 갱신하도록 하겠습니다.
-
     await db.insert(
       'chatting',
       chat.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
   Future<void> insertmessageRoom(ChatRoom chatRoom) async {
     // 데이터베이스 reference를 얻습니다.
     final Database db = await database!;
@@ -120,11 +106,17 @@ class SQLController extends GetxController {
     );
     print('추가되었습니다/');
   }
-  Future<List<Chat>> getDBMessage(int id) async {
-    final Database db = await database!;
 
-    final List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM chatting WHERE room_id = $id');
-    print(maps);
+  Future<List<Chat>> getDBMessage(int roomid, int msgid) async {
+    final Database db = await database!;
+    final List<Map<String, dynamic>> maps;
+    if (msgid == 0) {
+      maps = await db.rawQuery(
+          'SELECT * FROM chatting WHERE room_id = $roomid ORDER BY msg_id DESC LIMIT 50');
+    } else {
+      maps = await db.rawQuery(
+          'SELECT * FROM chatting WHERE room_id = $roomid and msg_id < $msgid ORDER BY msg_id DESC LIMIT 50');
+    }
     if (maps.isEmpty) {
       return [];
     } else {
@@ -133,43 +125,12 @@ class SQLController extends GetxController {
             content: maps[index]['message'],
             date: DateTime.parse(maps[index]['date']),
             sender: maps[index]['sender'],
-            isRead: maps[index]['is_read'] == 'true' ? true : false,
+            isRead: maps[index]['is_read'] == 'true' ? true.obs : false.obs,
             messageId: maps[index]['msg_id'],
             type: maps[index]['type'],
             roomId: maps[index]['room_id']);
       });
-      print(messageList);
       return messageList;
     }
-  }
-
-// 이제 Dog를 생성하고 dogs 테이블에 추가할 수 있습니다.
-  final fido = Dog(
-    id: 0,
-    name: 'Fido',
-    age: 35,
-  );
-
-  final alex = Dog(
-    id: 1,
-    name: 'alex',
-    age: 35,
-  );
-  final brodie = Dog(
-    id: 2,
-    name: 'brodie',
-    age: 35,
-  );
-}
-
-class Dog {
-  final int id;
-  final String name;
-  final int age;
-
-  Dog({required this.id, required this.name, required this.age});
-
-  Map<String, dynamic> toMap() {
-    return {'id': id, 'name': name, 'age': age};
   }
 }

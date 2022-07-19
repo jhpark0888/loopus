@@ -3,24 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
+import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
+import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class MessageRoomWidget extends StatelessWidget {
   MessageRoomWidget({
     Key? key,
     required this.chatRoom,
+    required this.userid
   }) : super(key: key);
 
   // late final MessageDetailController controller = Get.put(
   //     MessageDetailController(userid: messageRoom.user.userid),
   //     tag: messageRoom.user.userid.toString());
   Rx<ChatRoom> chatRoom;
+  int userid;
   // late final HoverController _hoverController =
   //     Get.put(HoverController(), tag: messageRoom.value.user.userid.toString());
 
@@ -178,36 +182,76 @@ class MessageRoomWidget extends StatelessWidget {
         //   ),
         // );
         GestureDetector(
-          onTap: (){
-            print(chatRoom.value.roomId);
-            Get.to(() => WebsoketScreen(roomid: chatRoom.value.roomId, userid: chatRoom.value.user,));
-            },
-          child: Row(
+      onTap: () {
+        print(chatRoom.value.user);
+        print(userid);
+        Get.to(() => WebsoketScreen(
+              partnerId: chatRoom.value.user,
+            ));
+      },
+      child: Container(
+        width: Get.width,
+        color: mainWhite,
+        child: Row(
+          children: [
+            UserImageWidget(
+                imageUrl:
+                    'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202203/23/d58e7390-afda-42cd-9374-ca327df1cad8.jpg',
+                width: 36,
+                height: 36),
+            const SizedBox(width: 14),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-          UserImageWidget(
-              imageUrl:
-                  'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202203/23/d58e7390-afda-42cd-9374-ca327df1cad8.jpg',
-              width: 36,
-              height: 36),
-          const SizedBox(width: 14),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('한근형', style: k16semiBold),
-              const SizedBox(height: 7),
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: chatRoom.value.message.value.content, style: k16Normal),
-                TextSpan(
-                    text:
+                Text('한근형', style: k16semiBold),
+                const SizedBox(height: 7),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    hasTextOverflow(
+                            chatRoom.value.message.value.content, k16Normal,
+                            maxWidth: Get.width - 165)
+                        ? SizedBox(
+                            width: Get.width - 165,
+                            child: Text(
+                              chatRoom.value.message.value.content,
+                              style: k16Normal,
+                              overflow: TextOverflow.ellipsis,
+                            ))
+                        : Text(
+                            chatRoom.value.message.value.content,
+                            style: k16Normal,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                    Text(
                         '· ${messagedurationCaculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
-                    style: k16Normal.copyWith(color: maingray))
-              ]))
-            ],
-          ),
+                        style: k16Normal.copyWith(color: maingray)),
+                  ],
+                ),
+                // RichText(
+                //     text: TextSpan(children: [
+                //   TextSpan(
+                //       text: chatRoom.value.message.value.content, style: k16Normal),
+                //   TextSpan(
+                //       text:
+                //           '· ${messagedurationCaculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
+                //       style: k16Normal.copyWith(color: maingray))
+                // ]), maxLines: 1)
               ],
             ),
-        );
+          ],
+        ),
+      ),
+    );
+  }
+
+  bool hasTextOverflow(String text, TextStyle style,
+      {double minWidth = 0, double maxWidth = 10, int maxLines = 1}) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: maxLines,
+      textDirection: TextDirection.ltr,
+    )..layout(minWidth: minWidth, maxWidth: maxWidth);
+    return textPainter.didExceedMaxLines;
   }
 }

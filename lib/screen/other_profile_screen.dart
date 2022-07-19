@@ -22,6 +22,7 @@ import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
+import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -461,21 +462,31 @@ class OtherProfileScreen extends StatelessWidget {
                                                       //             .toString());
                                                       // messagecontroller
                                                       //     .firstmessagesload();
+
+
                                                       Get.to(() =>
-                                                          MessageDetailScreen(
-                                                            realname:
-                                                                _controller
-                                                                    .otherUser
-                                                                    .value
-                                                                    .realName,
-                                                            userid: _controller
+                                                          WebsoketScreen(partnerId: _controller
                                                                 .otherUser
                                                                 .value
-                                                                .userid,
-                                                            user: _controller
-                                                                .otherUser
-                                                                .value,
-                                                          ));
+                                                                .userid)
+
+
+                                                          // MessageDetailScreen(
+                                                          //   realname:
+                                                          //       _controller
+                                                          //           .otherUser
+                                                          //           .value
+                                                          //           .realName,
+                                                          //   userid: _controller
+                                                          //       .otherUser
+                                                          //       .value
+                                                          //       .userid,
+                                                          //   user: _controller
+                                                          //       .otherUser
+                                                          //       .value,
+                                                          // )
+                                                          
+                                                          );
                                                     },
                                               isBlue: false,
                                               isBig: false,
