@@ -11,6 +11,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
+import 'package:loopus/widget/search_text_field_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ScoutScreen extends StatelessWidget {
@@ -110,66 +111,71 @@ class ScoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            centerTitle: false,
-            titleSpacing: 20,
-            title: const Padding(
-              padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
-              child: Text(
-                '스카우트 리포트',
-                style: ktitle,
-              ),
-            ),
-            excludeHeaderSemantics: false,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {},
-                  child: SvgPicture.asset(
-                    'assets/icons/Question_copy.svg',
-                  ),
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+            appBar: AppBar(
+              elevation: 0,
+              centerTitle: false,
+              titleSpacing: 20,
+              title: const Padding(
+                padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
+                child: Text(
+                  '스카우트 리포트',
+                  style: ktitle,
                 ),
               ),
-            ],
-            bottom: TabBar(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              controller: _controller.tabController,
-              indicatorColor: Colors.transparent,
-              labelPadding: EdgeInsets.zero,
-              labelColor: mainblack,
-              labelStyle: ktitle,
-              isScrollable: true,
-              unselectedLabelColor: dividegray,
-              tabs: List.from(_controller.careerField.values).map((field) {
-                if (field == List.from(_controller.careerField.values).last) {
-                  return _tabWidget(field, right: false);
-                } else {
-                  return _tabWidget(field);
-                }
-              }).toList(),
-              // onTap: (index) {
-              //   controller.currentField.value = index;
-              //   controller.currentFieldMap({
-              //     controller
-              //             .careerFieldList[controller.currentField.value].key:
-              //         controller
-              //             .careerFieldList[controller.currentField.value]
-              //             .value
-              //   });
-              // },
+              excludeHeaderSemantics: false,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {},
+                    child: SvgPicture.asset(
+                      'assets/icons/Question_copy.svg',
+                    ),
+                  ),
+                ),
+              ],
+              bottom: TabBar(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                controller: _controller.tabController,
+                indicatorColor: Colors.transparent,
+                labelPadding: EdgeInsets.zero,
+                labelColor: mainblack,
+                labelStyle: ktitle,
+                isScrollable: true,
+                unselectedLabelColor: dividegray,
+                tabs: List.from(_controller.careerField.values).map((field) {
+                  if (field == List.from(_controller.careerField.values).last) {
+                    return _tabWidget(field, right: false);
+                  } else {
+                    return _tabWidget(field);
+                  }
+                }).toList(),
+                // onTap: (index) {
+                //   controller.currentField.value = index;
+                //   controller.currentFieldMap({
+                //     controller
+                //             .careerFieldList[controller.currentField.value].key:
+                //         controller
+                //             .careerFieldList[controller.currentField.value]
+                //             .value
+                //   });
+                // },
+              ),
             ),
-          ),
-          body: ScrollNoneffectWidget(
-            child: TabBarView(
-              controller: _controller.tabController,
-              children: List.generate(_controller.careerField.length,
-                  (index) => tabViews(_controller.careerFieldList[index])),
-            ),
-          )),
+            body: ScrollNoneffectWidget(
+              child: TabBarView(
+                controller: _controller.tabController,
+                children: List.generate(_controller.careerField.length,
+                    (index) => tabViews(_controller.careerFieldList[index])),
+              ),
+            )),
+      ),
     );
   }
 
@@ -193,6 +199,81 @@ class ScoutScreen extends StatelessWidget {
     );
   }
 
+  Widget _searchView(MapEntry<String, String> currentField) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 24),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            height: 36,
+            child: Row(
+              children: [
+                Expanded(
+                  child: SearchTextFieldWidget(
+                      ontap: () {},
+                      hinttext: "기업 이름을 검색하세요",
+                      readonly: false,
+                      textInputAction: TextInputAction.search,
+                      onEditingComplete: () {},
+                      controller: _controller.searchContactController),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 14),
+                  child: GestureDetector(
+                    onTap: () {
+                      _controller.isSearchFocusMap[currentField.key]!(false);
+                      _controller.searchContactController.clear();
+                    },
+                    behavior: HitTestBehavior.translucent,
+                    child: SizedBox(
+                      height: 36,
+                      width: 36,
+                      child: Center(
+                        child: Text(
+                          '취소',
+                          style: kmain.copyWith(color: mainblue),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          if (_controller.isSearchLoading.value == true)
+            const LoadingWidget()
+          else if (_controller.searchContactMap[currentField.key]!.isEmpty &&
+              _controller.searchContactController.text.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Center(
+                  child: Text(
+                "'${_controller.searchContactController.text}' 검색 결과가 없습니다",
+                style: kmain,
+              )),
+            )
+          else
+            ListView.separated(
+                primary: false,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return ContactWidget(
+                      contact: _controller
+                          .searchContactMap[currentField.key]![index]);
+                },
+                separatorBuilder: (context, index) => DivideWidget(
+                      height: 24,
+                    ),
+                itemCount:
+                    _controller.searchContactMap[currentField.key]!.length),
+        ],
+      ),
+    );
+  }
+
   Widget tabViews(MapEntry<String, String> currentField) {
     return Obx(
       () => _controller.screenStateMap[currentField.key]!.value ==
@@ -211,110 +292,128 @@ class ScoutScreen extends StatelessWidget {
                       ? ErrorReloadWidget(reload: () {
                           // _controller.careerBoardLoad(currentField.key);
                         })
-                      : SmartRefresher(
-                          physics: const BouncingScrollPhysics(),
-                          controller: _controller
-                              .refreshControllerMap[currentField.key]!,
-                          header: const MyCustomHeader(),
-                          footer: const MyCustomFooter(),
-                          onRefresh: _controller.onRefresh,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                const SizedBox(height: 24),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 20.0),
-                                  child: Text(
-                                    '스카우트 중인 기업',
-                                    style: kmainbold,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                                const SizedBox(height: 14),
-                                SizedBox(
-                                  height: 100,
-                                  child: _controller
-                                          .companyMap[currentField.key]!.isEmpty
-                                      ? Center(
+                      : Obx(
+                          () => _controller.isSearchFocusMap[currentField.key]!
+                                      .value ==
+                                  true
+                              ? _searchView(currentField)
+                              : SmartRefresher(
+                                  physics: const BouncingScrollPhysics(),
+                                  controller: _controller
+                                      .refreshControllerMap[currentField.key]!,
+                                  header: const MyCustomHeader(),
+                                  footer: const MyCustomFooter(),
+                                  onRefresh: _controller.onRefresh,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        const SizedBox(height: 24),
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 20.0),
                                           child: Text(
-                                          "${currentField.value} 분야 스카우트 중인 기업이 없습니다",
-                                          style: kmain,
-                                        ))
-                                      : ScrollNoneffectWidget(
-                                          child: ListView.separated(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                              scrollDirection: Axis.horizontal,
+                                            '스카우트 중인 기업',
+                                            style: kmainbold,
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 14),
+                                        SizedBox(
+                                          height: 100,
+                                          child: _controller
+                                                  .companyMap[currentField.key]!
+                                                  .isEmpty
+                                              ? Center(
+                                                  child: Text(
+                                                  "${currentField.value} 분야 스카우트 중인 기업이 없습니다",
+                                                  style: kmain,
+                                                ))
+                                              : ScrollNoneffectWidget(
+                                                  child: ListView.separated(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 20),
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return CompanyWidget(
+                                                            company: _controller
+                                                                    .companyMap[
+                                                                currentField
+                                                                    .key]![index]);
+                                                      },
+                                                      separatorBuilder:
+                                                          (context, index) {
+                                                        return const SizedBox(
+                                                            width: 14);
+                                                      },
+                                                      itemCount: _controller
+                                                          .companyMap[
+                                                              currentField.key]!
+                                                          .length),
+                                                ),
+                                        ),
+                                        const SizedBox(height: 26),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Row(
+                                            children: [
+                                              const Text(
+                                                "스카우트 컨택",
+                                                style: kmainbold,
+                                              ),
+                                              const Spacer(),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  _controller.isSearchFocusMap[
+                                                      currentField.key]!(true);
+                                                },
+                                                child: SvgPicture.asset(
+                                                  "assets/icons/Search_Inactive.svg",
+                                                  width: 20,
+                                                  height: 20,
+                                                  color: mainblack,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 26),
+                                        if (_controller
+                                            .companyMap[currentField.key]!
+                                            .isEmpty)
+                                          Center(
+                                              child: Text(
+                                            "${currentField.value} 분야 스카우트 컨택이 없습니다",
+                                            style: kmain,
+                                          ))
+                                        else
+                                          ListView.separated(
+                                              primary: false,
+                                              shrinkWrap: true,
                                               itemBuilder: (context, index) {
-                                                return CompanyWidget(
-                                                    company:
-                                                        _controller.companyMap[
+                                                return ContactWidget(
+                                                    contact:
+                                                        _controller.contactMap[
                                                             currentField
                                                                 .key]![index]);
                                               },
                                               separatorBuilder:
-                                                  (context, index) {
-                                                return const SizedBox(
-                                                    width: 14);
-                                              },
+                                                  (context, index) =>
+                                                      DivideWidget(
+                                                        height: 24,
+                                                      ),
                                               itemCount: _controller
-                                                  .companyMap[currentField.key]!
+                                                  .contactMap[currentField.key]!
                                                   .length),
-                                        ),
-                                ),
-                                const SizedBox(height: 26),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Row(
-                                    children: [
-                                      const Text(
-                                        "스카우트 컨택",
-                                        style: kmainbold,
-                                      ),
-                                      const Spacer(),
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: SvgPicture.asset(
-                                          "assets/icons/Search_Inactive.svg",
-                                          width: 20,
-                                          height: 20,
-                                          color: mainblack,
-                                        ),
-                                      )
-                                    ],
+                                        const SizedBox(height: 10),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(height: 26),
-                                if (_controller
-                                    .companyMap[currentField.key]!.isEmpty)
-                                  Center(
-                                      child: Text(
-                                    "${currentField.value} 분야 스카우트 컨택이 없습니다",
-                                    style: kmain,
-                                  ))
-                                else
-                                  ListView.separated(
-                                      primary: false,
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        return ContactWidget(
-                                            contact: _controller.contactMap[
-                                                currentField.key]![index]);
-                                      },
-                                      separatorBuilder: (context, index) =>
-                                          DivideWidget(
-                                            height: 24,
-                                          ),
-                                      itemCount: _controller
-                                          .contactMap[currentField.key]!
-                                          .length),
-                                const SizedBox(height: 10),
-                              ],
-                            ),
-                          ),
                         ),
     );
   }

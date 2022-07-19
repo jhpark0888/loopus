@@ -5,18 +5,16 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class BookmarkController extends GetxController {
   static BookmarkController get to => Get.find();
-  RxBool enableBookmarkPullup = true.obs;
-  RxBool isBookmarkEmpty = false.obs;
-  RxBool isBookmarkLoading = true.obs;
-  // Rx<ScreenState> followerscreenstate = ScreenState.loading.obs;
+  // RxBool isBookmarkEmpty = false.obs;
+  Rx<ScreenState> bookmarkScreenState = ScreenState.loading.obs;
   int pageNumber = 1;
 
-  // Rx<PostingModel> bookmarkResult =
-  //     PostingModel(postingitems: <Post>[].obs).obs;
+  RxList posts = <Post>[].obs;
 
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
@@ -28,47 +26,37 @@ class BookmarkController extends GetxController {
   }
 
   void onBookmarkRefresh() async {
-    enableBookmarkPullup.value = true;
-    // bookmarkResult(PostingModel(postingitems: <Post>[].obs));
-
     pageNumber = 1;
-    // await bookmarkLoadItem().then((value) => isBookmarkLoading.value = false);
+    posts.clear();
+    bookmarkLoad();
     refreshController.refreshCompleted();
   }
 
   void onBookmarkLoading() async {
-    pageNumber += 1;
     //페이지 처리
-    // await bookmarkLoadItem();
-    refreshController.loadComplete();
+    bookmarkLoad();
   }
 
-  // Future<void> bookmarkLoadItem() async {
-  //   ConnectivityResult result = await initConnectivity();
-  //   if (result == ConnectivityResult.none) {
-  //     showdisconnectdialog();
-  //   } else {
-  //     HTTPResponse httpresult = await bookmarklist(pageNumber);
-  //     HTTPResponse nexthttpresult = await bookmarklist(pageNumber + 1);
-  //     if (httpresult.isError == false) {
-  //       PostingModel bookmarkModel = httpresult.data;
-  //       PostingModel nextBookmarkModel = nexthttpresult.data;
-  //       if (bookmarkModel.postingitems.isEmpty) {
-  //         isBookmarkEmpty.value = true;
-  //       } else {
-  //         isBookmarkEmpty.value = false;
+  void bookmarkLoad() async {
+    await bookmarklist(pageNumber).then((value) async {
+      if (value.isError == false) {
+        List postlist = List.from(value.data);
+        if (postlist.isNotEmpty) {
+          posts.addAll(postlist.map((post) => Post.fromJson(post)).toList());
+          pageNumber += 1;
+        }
 
-  //         if (bookmarkModel.postingitems[0].id ==
-  //             nextBookmarkModel.postingitems[0].id) {
-  //           enableBookmarkPullup.value = false;
-  //         }
-  //       }
-
-  //       print('bookmark length : ${bookmarkModel.postingitems.length}');
-  //       bookmarkResult.update((val) {
-  //         val!.postingitems.addAll(bookmarkModel.postingitems);
-  //       });
-  //     }
-  //   }
-  // }
+        refreshController.loadComplete();
+        bookmarkScreenState(ScreenState.success);
+      } else {
+        if (value.errorData!['statusCode'] == 204) {
+          refreshController.loadNoData();
+          bookmarkScreenState(ScreenState.success);
+        } else {
+          errorSituation(value, screenState: bookmarkScreenState);
+          refreshController.loadComplete();
+        }
+      }
+    });
+  }
 }

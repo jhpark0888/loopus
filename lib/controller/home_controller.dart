@@ -341,7 +341,6 @@ class HomeController extends GetxController
   static HomeController get to => Get.find();
   NotificationController notificationController =
       Get.put(NotificationController());
-  List<PostingWidget> posting = [];
 
   RxList<Post> posts = <Post>[].obs;
   RxList<Contact> contact = <Contact>[].obs;
@@ -454,12 +453,22 @@ class HomeController extends GetxController
     contents.value = teptlist;
   }
 
-  void tapBookmark(int postid) async {}
+  void tapBookmark(int postid) {
+    if (posts.where((post) => post.id == postid).isNotEmpty) {
+      Post post = posts.where((post) => post.id == postid).first;
+      post.isMarked(1);
+    }
+  }
 
-  void tapunBookmark(int postid) async {}
+  void tapunBookmark(int postid) {
+    if (posts.where((post) => post.id == postid).isNotEmpty) {
+      Post post = posts.where((post) => post.id == postid).first;
+      post.isMarked(0);
+    }
+  }
 
   void tapLike(int postid, int likecount) {
-    if (contents.where((post) => (post as Post).id == postid).isNotEmpty) {
+    if (posts.where((post) => post.id == postid).isNotEmpty) {
       Post post = posts.where((post) => post.id == postid).first;
       post.isLiked(1);
       post.likeCount(likecount);

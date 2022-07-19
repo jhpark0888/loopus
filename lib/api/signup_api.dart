@@ -17,6 +17,7 @@ import 'package:loopus/controller/search_controller.dart';
 
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 
 import '../app.dart';
 import '../constant.dart';
@@ -94,7 +95,7 @@ Future<void> signupRequest() async {
       "type": 0,
       "class_num": signupController.classnumcontroller.text,
       "real_name": signupController.namecontroller.text,
-      "department": signupController.selectdept.value,
+      "department": signupController.selectDept.value.id,
       "tag": tagController.selectedtaglist.map((tag) => tag.text).toList()
     };
     try {
@@ -118,7 +119,7 @@ Future<void> signupRequest() async {
         //!GA
         await _gaController.logSignup();
         await _gaController.setUserProperties(
-            userid, signupController.selectdept.value);
+            userid, signupController.selectDept.value.deptname);
 
         // Get.offAll(() => App());
 
@@ -140,42 +141,62 @@ Future<void> signupRequest() async {
   }
 }
 
-Future getdeptlist() async {
+Future<HTTPResponse> searchUniv(String text) async {
   ConnectivityResult result = await initConnectivity();
-  final SignupController signupController = Get.find();
   if (result == ConnectivityResult.none) {
-    signupController.deptscreenstate(ScreenState.disconnect);
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
-    String? token = await const FlutterSecureStorage().read(key: "token");
-    final GAController _gaController = Get.put(GAController());
+    // print(userid);
+    final searchUnivUri =
+        Uri.parse("$serverUri/search_api/search_uni?type=school&query=$text");
 
-    final uri = Uri.parse("$serverUri/user_api/department_list");
     try {
       http.Response response = await http.get(
-        uri,
+        searchUnivUri,
       );
 
-      print('학과 리스트 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
-        Map<String, dynamic> responseBody =
-            json.decode(utf8.decode(response.bodyBytes));
-        responseBody
-            .forEach((key, value) => SignupController.to.deptlist.add(value));
-        signupController.deptscreenstate(ScreenState.success);
-        await _gaController.logScreenView('signup_2');
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-        return;
+        return HTTPResponse.success(responseBody);
       } else {
-        signupController.deptscreenstate(ScreenState.error);
-        await _gaController.logScreenView('signup_2');
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError('', response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+
+Future<HTTPResponse> searchDept(int univId, String text) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    // print(userid);
+    final searchDeptUri = Uri.parse(
+        "$serverUri/search_api/search_uni?type=department&id=$univId&query=$text");
+
+    try {
+      http.Response response = await http.get(
+        searchDeptUri,
+      );
+
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+        return HTTPResponse.success(responseBody);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }

@@ -24,7 +24,6 @@ import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/widget/post_content_widget.dart';
-import 'package:loopus/widget/search_posting_widget.dart';
 
 import '../constant.dart';
 import '../controller/error_controller.dart';
@@ -327,33 +326,35 @@ Future<HTTPResponse> mainload(int lastindex) async {
 // }
 
 Future<HTTPResponse> bookmarklist(int pageNumber) async {
-  // print('북마크페이지 번호 : $pageNumber');
-  String? token;
-  await const FlutterSecureStorage().read(key: 'token').then((value) {
-    token = value;
-  });
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    String? token;
+    await const FlutterSecureStorage().read(key: 'token').then((value) {
+      token = value;
+    });
 
-  final bookmarkListUri =
-      Uri.parse("$serverUri/post_api/bookmark_list?page=$pageNumber");
+    final bookmarkListUri =
+        Uri.parse("$serverUri/post_api/bookmark_list?page=$pageNumber");
 
-  try {
-    final response = await http
-        .get(bookmarkListUri, headers: {"Authorization": "Token $token"});
-    var responseBody = utf8.decode(response.bodyBytes);
-    List<dynamic> list = jsonDecode(responseBody);
+    try {
+      final response = await http
+          .get(bookmarkListUri, headers: {"Authorization": "Token $token"});
 
-    if (response.statusCode != 200) {
-      return HTTPResponse.apiError('', response.statusCode);
-    } else {
-      return HTTPResponse.success([]);
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+        return HTTPResponse.success(responseBody);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
     }
-  } on SocketException {
-    // ErrorController.to.isServerClosed(true);
-    return HTTPResponse.serverError();
-  } catch (e) {
-    print(e);
-    return HTTPResponse.unexpectedError(e);
-    // ErrorController.to.isServerClosed(true);
   }
 }
 
@@ -378,7 +379,7 @@ Future<HTTPResponse> bookmarklist(int pageNumber) async {
 //   }
 // }
 
-Future<HTTPResponse> bookmarkpost(int id) async {
+Future<HTTPResponse> bookmarkpost(int postId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
@@ -388,14 +389,17 @@ Future<HTTPResponse> bookmarkpost(int id) async {
       token = value;
     });
 
-    final bookmarkUri = Uri.parse("$serverUri/post_api/bookmark/$id");
+    final bookmarkUri = Uri.parse("$serverUri/post_api/bookmark?id=$postId");
     try {
       final response = await http
           .post(bookmarkUri, headers: {"Authorization": "Token $token"});
-      print('좋아요 : ${response.statusCode}');
-      var responseBody = utf8.decode(response.bodyBytes);
-      String result = jsonDecode(responseBody);
-      return HTTPResponse.success('');
+      print('북마크 : ${response.statusCode}');
+      if (response.statusCode == 202) {
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+        return HTTPResponse.success("success");
+      } else {
+        return HTTPResponse.apiError("fail", response.statusCode);
+      }
     } on SocketException {
       // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
@@ -406,7 +410,9 @@ Future<HTTPResponse> bookmarkpost(int id) async {
   }
 }
 
-Future<HTTPResponse> likepost(int id, String type) async {
+enum LikeType { post, comment, cocomment }
+
+Future<HTTPResponse> likepost(int id, LikeType type) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
@@ -416,18 +422,18 @@ Future<HTTPResponse> likepost(int id, String type) async {
       token = value;
     });
 
-    if (type == 'reply') {
-      type = 'cocomment';
-    }
-
-    final likeUri = Uri.parse("$serverUri/post_api/like?id=$id&type=$type");
+    final likeUri =
+        Uri.parse("$serverUri/post_api/like?id=$id&type=${type.name}");
     try {
       final response =
           await http.post(likeUri, headers: {"Authorization": "Token $token"});
-      print('좋아요 : ${response.statusCode}');
-      var responseBody = utf8.decode(response.bodyBytes);
-      String result = jsonDecode(responseBody);
-      return HTTPResponse.success('');
+      print('좋아요 $type : ${response.statusCode}');
+      if (response.statusCode == 202) {
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+        return HTTPResponse.success("success");
+      } else {
+        return HTTPResponse.apiError("fail", response.statusCode);
+      }
     } on SocketException {
       // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
@@ -438,16 +444,17 @@ Future<HTTPResponse> likepost(int id, String type) async {
   }
 }
 
-Future<void> getlikepeoele(int postid) async {
+Future<HTTPResponse> getlikepeoele(int postid, LikeType type) async {
   ConnectivityResult result = await initConnectivity();
   LikePeopleController controller = Get.find(tag: postid.toString());
   if (result == ConnectivityResult.none) {
-    controller.likepeoplescreenstate(ScreenState.disconnect);
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    final uri = Uri.parse("$serverUri/post_api/like_list_load/$postid");
+    final uri = Uri.parse(
+        "$serverUri/post_api/like_list_load?id=$postid&type=${type.name}");
+    //"$serverUri/post_api/like_list_load/$postid"
 
     try {
       http.Response response =
@@ -455,24 +462,16 @@ Future<void> getlikepeoele(int postid) async {
 
       print('like 리스트 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
-        List responseBody = json.decode(utf8.decode(response.bodyBytes));
-        List<User> likepeople =
-            responseBody.map((user) => User.fromJson(user)).toList();
-        controller.likelist(likepeople);
-
-        controller.likepeoplescreenstate(ScreenState.success);
-
-        return;
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+        return HTTPResponse.success(responseBody);
       } else {
-        controller.likepeoplescreenstate(ScreenState.error);
-
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }

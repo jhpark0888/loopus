@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
@@ -568,11 +569,14 @@ class PostingScreen extends StatelessWidget {
                                                     behavior: HitTestBehavior
                                                         .translucent,
                                                     onTap: () {
-                                                      Get.to(() =>
-                                                          LikePeopleScreen(
-                                                            postid: controller
-                                                                .post.value!.id,
-                                                          ));
+                                                      Get.to(
+                                                        () => LikePeopleScreen(
+                                                          id: controller
+                                                              .post.value!.id,
+                                                          likeType:
+                                                              LikeType.post,
+                                                        ),
+                                                      );
                                                     },
                                                     child: Obx(
                                                       () => Text(
@@ -647,11 +651,20 @@ class PostingScreen extends StatelessWidget {
   }
 
   void tapBookmark() {
-    // if (item.isMarked.value == 0) {
-    //   homeController.tapBookmark(item.id);
-    // } else {
-    //   homeController.tapunBookmark(item.id);
-    // }
+    if (controller.post.value!.isMarked.value == 0) {
+      controller.post.value!.isMarked(1);
+      HomeController.to.tapBookmark(controller.post.value!.id);
+    } else {
+      controller.post.value!.isMarked(0);
+      HomeController.to.tapunBookmark(controller.post.value!.id);
+    }
+
+    _debouncer.run(() {
+      if (controller.lastIsMarked != controller.post.value!.isMarked.value) {
+        bookmarkpost(controller.post.value!.id);
+        controller.lastIsMarked = controller.post.value!.isMarked.value;
+      }
+    });
   }
 
   void tapLike() {
@@ -659,17 +672,19 @@ class PostingScreen extends StatelessWidget {
       controller.post.value!.isLiked(1);
       // likepost(controller.post.value!.id, 'post');
       controller.post.value!.likeCount += 1;
-      // homeController.tapLike(item.id, item.likeCount.value);
+      HomeController.to.tapLike(
+          controller.post.value!.id, controller.post.value!.likeCount.value);
     } else {
       controller.post.value!.isLiked(0);
       // likepost(controller.post.value!.id, 'post');
       controller.post.value!.likeCount -= 1;
-      // homeController.tapunLike(item.id, item.likeCount.value);
+      HomeController.to.tapunLike(
+          controller.post.value!.id, controller.post.value!.likeCount.value);
     }
 
     _debouncer.run(() {
       if (controller.lastIsLiked != controller.post.value!.isLiked.value) {
-        likepost(controller.post.value!.id, 'post');
+        likepost(controller.post.value!.id, LikeType.post);
         controller.lastIsLiked = controller.post.value!.isLiked.value;
       }
     });

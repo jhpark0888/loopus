@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/overflow_text_widget.dart';
@@ -36,19 +37,27 @@ class CareerBoardPostWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      UserImageWidget(
-                        imageUrl: post.user.profileImage ?? '',
-                        width: 32,
-                        height: 32,
+                      GestureDetector(
+                        onTap: tapProfile,
+                        child: Row(
+                          children: [
+                            UserImageWidget(
+                              imageUrl: post.user.profileImage ?? '',
+                              width: 32,
+                              height: 32,
+                            ),
+                            const SizedBox(width: 8),
+                            RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: '${post.user.realName} · ',
+                                  style: k15semiBold),
+                              TextSpan(
+                                  text: post.user.department, style: k15normal)
+                            ])),
+                          ],
+                        ),
                       ),
-                      const SizedBox(width: 8),
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: '${post.user.realName} · ',
-                            style: k15semiBold),
-                        TextSpan(text: post.user.department, style: k15normal)
-                      ])),
                       const Spacer(),
                       GestureDetector(
                         onTap: () {},
@@ -128,5 +137,14 @@ class CareerBoardPostWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void tapProfile() {
+    Get.to(
+        () => OtherProfileScreen(
+            user: post.user,
+            userid: post.user.userid,
+            realname: post.user.realName),
+        preventDuplicates: false);
   }
 }

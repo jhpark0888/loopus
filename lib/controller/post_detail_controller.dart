@@ -55,6 +55,7 @@ class PostingDetailController extends GetxController {
       .obs;
 
   late int lastIsLiked;
+  late int lastIsMarked;
 
   @override
   void onInit() async {
@@ -67,6 +68,7 @@ class PostingDetailController extends GetxController {
         post.value!.copywith(value.data);
         // print('변화 후 : ${post.hashCode}');
         lastIsLiked = post.value!.isLiked.value;
+        lastIsMarked = post.value!.isMarked.value;
         commentToList();
         postscreenstate(ScreenState.success);
       } else {

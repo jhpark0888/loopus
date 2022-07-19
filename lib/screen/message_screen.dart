@@ -22,8 +22,7 @@ class MessageScreen extends StatelessWidget {
         appBar: AppBarWidget(
           leading: IconButton(
             onPressed: () {
-              // Get.back();
-             Get.to(() => DatabaseList());
+              Get.back();
             },
             icon: SvgPicture.asset('assets/icons/Arrow.svg'),
           ),

@@ -89,8 +89,8 @@ class SignupEmailcheckScreen extends StatelessWidget {
                   color: mainblack.withOpacity(0.6),
                 ),
                 //TODO: 학교 도메인 확인
-                initialValue:
-                    signupController.emailidcontroller.text + '@inu.ac.kr',
+                initialValue: signupController.emailidcontroller.text +
+                    signupController.selectUniv.value.univname,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.only(bottom: 0),
                   isDense: false,

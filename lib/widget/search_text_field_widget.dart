@@ -3,19 +3,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loopus/constant.dart';
 
 class SearchTextFieldWidget extends StatelessWidget {
-  SearchTextFieldWidget(
-      {Key? key,
-      required this.ontap,
-      required this.hinttext,
-      required this.readonly,
-      required this.controller,
-      this.onchanged})
-      : super(key: key);
+  SearchTextFieldWidget({
+    Key? key,
+    required this.ontap,
+    required this.hinttext,
+    required this.readonly,
+    required this.controller,
+    this.textInputAction,
+    this.onchanged,
+    this.onEditingComplete,
+  }) : super(key: key);
   void Function()? ontap;
   void Function(String)? onchanged;
   String hinttext;
   bool readonly;
   TextEditingController? controller;
+  TextInputAction? textInputAction;
+  Function()? onEditingComplete;
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -23,12 +27,13 @@ class SearchTextFieldWidget extends StatelessWidget {
         autocorrect: false,
         readOnly: readonly,
         onTap: ontap,
-        onChanged: onchanged,
         style: k16Normal,
         cursorColor: mainblack,
         cursorWidth: 1.2,
         cursorRadius: Radius.circular(5.0),
         autofocus: false,
+        textInputAction: textInputAction,
+        onEditingComplete: onEditingComplete,
         decoration: InputDecoration(
           filled: true,
           fillColor: cardGray,

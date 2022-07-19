@@ -6,6 +6,8 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/comment_model.dart';
+import 'package:loopus/screen/likepeople_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/reply_widget.dart';
@@ -46,10 +48,13 @@ class CommentWidget extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              UserImageWidget(
-                imageUrl: comment.user.profileImage ?? '',
-                width: 35,
-                height: 35,
+              GestureDetector(
+                onTap: tapProfile,
+                child: UserImageWidget(
+                  imageUrl: comment.user.profileImage ?? '',
+                  width: 35,
+                  height: 35,
+                ),
               ),
               const SizedBox(
                 width: 14,
@@ -60,9 +65,12 @@ class CommentWidget extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          comment.user.realName,
-                          style: k16semiBold,
+                        GestureDetector(
+                          onTap: tapProfile,
+                          child: Text(
+                            comment.user.realName,
+                            style: k16semiBold,
+                          ),
                         ),
                         const Spacer(),
                         Text(
@@ -87,10 +95,19 @@ class CommentWidget extends StatelessWidget {
                     Obx(
                       () => Row(
                         children: [
-                          Text(
-                            '좋아요 ${comment.likecount.value}개',
-                            style: k16Normal.copyWith(
-                              color: maingray,
+                          GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              Get.to(() => LikePeopleScreen(
+                                    id: comment.id,
+                                    likeType: LikeType.comment,
+                                  ));
+                            },
+                            child: Text(
+                              '좋아요 ${comment.likecount.value}개',
+                              style: k16Normal.copyWith(
+                                color: maingray,
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -137,30 +154,17 @@ class CommentWidget extends StatelessWidget {
             ],
           ),
         ),
-        // if (comment.replyList.isNotEmpty)
-        //   const SizedBox(
-        //     height: 14,
-        //   ),
-        // Obx(
-        //   () => ListView.separated(
-        //     primary: false,
-        //     shrinkWrap: true,
-        //     itemBuilder: (context, index) {
-        //       return ReplyWidget(
-        //         postid: postid,
-        //         reply: comment.replyList[index],
-        //       );
-        //     },
-        //     separatorBuilder: (context, index) {
-        //       return const SizedBox(
-        //         height: 14,
-        //       );
-        //     },
-        //     itemCount: comment.replyList.length,
-        //   ),
-        // )
       ],
     );
+  }
+
+  void tapProfile() {
+    Get.to(
+        () => OtherProfileScreen(
+            user: comment.user,
+            userid: comment.user.userid,
+            realname: comment.user.realName),
+        preventDuplicates: false);
   }
 
   void tapLike() {
@@ -178,7 +182,7 @@ class CommentWidget extends StatelessWidget {
 
     _debouncer.run(() {
       if (lastIsLiked != comment.isLiked.value) {
-        likepost(comment.id, 'comment');
+        likepost(comment.id, LikeType.comment);
         lastIsLiked = comment.isLiked.value;
         num = 0;
       }

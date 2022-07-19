@@ -8,6 +8,8 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
+import 'package:loopus/widget/loading_widget.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
 
 import '../controller/ga_controller.dart';
 
@@ -23,7 +25,7 @@ class SignupDepartmentScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () async {
-              if (signupController.selectdept.value != "") {
+              if (signupController.selectDept.value.id != 0) {
                 //TODO: 학과 선택 시 활성화되어야 함
                 Get.to(() => SignupUserInfoScreen());
                 await _gaController.logScreenView('signup_3');
@@ -33,9 +35,9 @@ class SignupDepartmentScreen extends StatelessWidget {
               () => Text(
                 '다음',
                 style: kSubTitle2Style.copyWith(
-                    color: signupController.selectdept.value != ""
+                    color: signupController.selectDept.value.id != 0
                         ? mainblue
-                        : mainblack.withOpacity(0.38)),
+                        : maingray),
               ),
             ),
           ),
@@ -45,14 +47,14 @@ class SignupDepartmentScreen extends StatelessWidget {
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            32,
-            24,
-            32,
-            40,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 32,
           ),
           child: Column(
             children: [
+              const SizedBox(
+                height: 24,
+              ),
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
@@ -93,11 +95,11 @@ class SignupDepartmentScreen extends StatelessWidget {
                             fontWeight: FontWeight.w400),
                       ),
                       TextSpan(
-                        text: signupController.selectdept.value != ''
-                            ? '${signupController.selectdept.value}'
+                        text: signupController.selectDept.value.id != 0
+                            ? signupController.selectDept.value.deptname
                             : '검색 탭에서 선택해주세요',
                         style: kSubTitle1Style.copyWith(
-                          color: signupController.selectdept.value != ''
+                          color: signupController.selectDept.value.id != 0
                               ? mainblue
                               : mainblack.withOpacity(0.38),
                         ),
@@ -117,83 +119,82 @@ class SignupDepartmentScreen extends StatelessWidget {
                 hintText: '학과 이름 검색',
                 validator: null,
                 obscureText: false,
+                textInputAction: TextInputAction.search,
+                onfieldSubmitted: (text) {
+                  if (text.trim().isNotEmpty) {
+                    signupController.searchDeptLoad(text.trim());
+                  }
+                },
                 maxLines: 1,
+              ),
+              const SizedBox(
+                height: 14,
               ),
               Obx(
                 () => signupController.deptscreenstate.value ==
                         ScreenState.loading
-                    ? Column(
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Image.asset(
-                            'assets/icons/loading.gif',
-                            scale: 6,
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            '검색중...',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: mainblue.withOpacity(0.6),
-                            ),
-                          ),
-                        ],
-                      )
+                    ? const Center(child: LoadingWidget())
                     : signupController.deptscreenstate.value ==
                             ScreenState.disconnect
                         ? DisconnectReloadWidget(reload: () {
-                            signupController
-                                .deptscreenstate(ScreenState.loading);
-
-                            getdeptlist();
+                            if (signupController.departmentcontroller.text
+                                .trim()
+                                .isNotEmpty) {
+                              signupController.searchDeptLoad(signupController
+                                  .departmentcontroller.text
+                                  .trim());
+                            }
                           })
                         : signupController.deptscreenstate.value ==
                                 ScreenState.error
                             ? ErrorReloadWidget(reload: () {
-                                signupController
-                                    .deptscreenstate(ScreenState.loading);
-
-                                getdeptlist();
+                                if (signupController.departmentcontroller.text
+                                    .trim()
+                                    .isNotEmpty) {
+                                  signupController.searchDeptLoad(
+                                      signupController.departmentcontroller.text
+                                          .trim());
+                                }
                               })
                             : Obx(
                                 () => Expanded(
-                                  child: ListView(
-                                    children: signupController.searchdeptlist
-                                        .map((dept) => GestureDetector(
-                                              behavior:
-                                                  HitTestBehavior.translucent,
-                                              onTap: () {
+                                  child: ScrollNoneffectWidget(
+                                    child: ListView.separated(
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          behavior: HitTestBehavior.translucent,
+                                          onTap: () {
+                                            signupController.selectDept(
                                                 signupController
-                                                    .selectdept(dept);
+                                                    .searchDeptList[index]);
+                                            signupController
+                                                    .departmentcontroller.text =
                                                 signupController
-                                                    .departmentcontroller
-                                                    .text = dept;
-                                              },
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const Divider(),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 16.0),
-                                                    child: Text(
-                                                      dept,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ))
-                                        .toList(),
+                                                    .searchDeptList[index]
+                                                    .deptname;
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 16.0),
+                                            child: Text(
+                                              signupController
+                                                  .searchDeptList[index]
+                                                  .deptname,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) =>
+                                          const Divider(),
+                                      itemCount: signupController
+                                          .searchDeptList.length,
+                                    ),
                                   ),
                                 ),
                               ),
+              ),
+              const SizedBox(
+                height: 20,
               )
             ],
           ),

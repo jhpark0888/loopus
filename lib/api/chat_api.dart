@@ -108,6 +108,52 @@ Future<HTTPResponse> getChatroomlist(int id) async {
   }
 }
 
+// Future<HTTPResponse> getUserProfile(List<int>membersId) async {
+//   ConnectivityResult result = await initConnectivity();
+//   MessageController.to.chatroomscreenstate(ScreenState.loading);
+//   if (result == ConnectivityResult.none) {
+//     MessageController.to.chatroomscreenstate(ScreenState.disconnect);
+//     showdisconnectdialog();
+//     return HTTPResponse.networkError();
+//   } else {
+//     String? token = await const FlutterSecureStorage().read(key: 'token');
+//     String? myid = await const FlutterSecureStorage().read(key: 'id');
+//     final url = Uri.parse("$serverUri/get_profile?members=$membersId");
+//     try {
+//       http.Response response = await http.get(
+//         url,
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization' : "Token $token"
+//         },
+//       );
+
+//       print('유저들 프로필 리스트 statuscode: ${response.statusCode}');
+//       if (response.statusCode == 200) {
+//         List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+//         List<User> chatroom = 
+//         MessageController.to.chatroomscreenstate(ScreenState.success);
+//         print("---------------------------");
+//         print(responseBody);
+//         print(response.statusCode);
+//         return HTTPResponse.success(chatroom);
+//       } else {
+//         MessageController.to.chatroomscreenstate(ScreenState.error);
+//         return HTTPResponse.apiError('', response.statusCode);
+//       }
+//     } on SocketException {
+//       print("서버에러 발생");
+//       return HTTPResponse.serverError();
+//       // ErrorController.to.isServerClosed(true);
+//     } catch (e) {
+//       print(e);
+//       // ErrorController.to.isServerClosed(true);
+//       return HTTPResponse.unexpectedError(e);
+//     }
+//   }
+// }
+
+
 Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
