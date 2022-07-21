@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/ban_api.dart';
+import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/follow_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
@@ -446,7 +448,7 @@ class OtherProfileScreen extends StatelessWidget {
                                                       Get.to(() =>
                                                           ProfileTagChangeScreen());
                                                     }
-                                                  : () {
+                                                  : () async {
                                                       // MessageDetailController
                                                       //     messagecontroller =
                                                       //     Get.put(
@@ -463,30 +465,36 @@ class OtherProfileScreen extends StatelessWidget {
                                                       // messagecontroller
                                                       //     .firstmessagesload();
 
+                                                      await getPartnerToken(
+                                                              _controller
+                                                                  .userid)
+                                                          .then((value) {
+                                                        if (value.isError ==
+                                                            false) {
+                                                          Get.to(() =>
+                                                              WebsoketScreen(
+                                                                partner: _controller.otherUser.value,
+                                                                token:
+                                                                    value.data,
+                                                                    myProfile: HomeController.to.myProfile.value,
+                                                              ));
+                                                        }
+                                                      });
 
-                                                      Get.to(() =>
-                                                          WebsoketScreen(partnerId: _controller
-                                                                .otherUser
-                                                                .value
-                                                                .userid)
-
-
-                                                          // MessageDetailScreen(
-                                                          //   realname:
-                                                          //       _controller
-                                                          //           .otherUser
-                                                          //           .value
-                                                          //           .realName,
-                                                          //   userid: _controller
-                                                          //       .otherUser
-                                                          //       .value
-                                                          //       .userid,
-                                                          //   user: _controller
-                                                          //       .otherUser
-                                                          //       .value,
-                                                          // )
-                                                          
-                                                          );
+                                                      // MessageDetailScreen(
+                                                      //   realname:
+                                                      //       _controller
+                                                      //           .otherUser
+                                                      //           .value
+                                                      //           .realName,
+                                                      //   userid: _controller
+                                                      //       .otherUser
+                                                      //       .value
+                                                      //       .userid,
+                                                      //   user: _controller
+                                                      //       .otherUser
+                                                      //       .value,
+                                                      // )
                                                     },
                                               isBlue: false,
                                               isBig: false,

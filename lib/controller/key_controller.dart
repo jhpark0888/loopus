@@ -39,13 +39,10 @@ class KeyController extends GetxController {
     }
     if (ismessage == true) {
       WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-        print('durl');
-        await Future.delayed(Duration(microseconds: 300));
         if (viewKey.currentContext != null) {
           viewBox = viewKey.currentContext!.findRenderObject() as RenderBox;
           Get.find<WebsoketController>().messageHeight.value +=
               viewBox.size.height;
-          print(Get.find<WebsoketController>().messageHeight.value);
         }
       });
     }

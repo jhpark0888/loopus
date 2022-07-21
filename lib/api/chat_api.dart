@@ -74,19 +74,18 @@ Future<HTTPResponse> getChatroomlist(int id) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
-    final url = Uri.parse("http://192.168.35.12:8000/chat/chat_list?id=${id}");
+    final url = Uri.parse("http://$chatServerUri/chat/chat_list?id=${id}");
     try {
       http.Response response = await http.get(
         url,
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: {'Content-Type': 'application/json'},
       );
 
       print('채팅방 리스트 statuscode: ${response.statusCode}');
       if (response.statusCode == 200) {
         List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-        List<ChatRoom> chatroom = responseBody.map((e) => ChatRoom.fromJson(e)).toList();
+        List<ChatRoom> chatroom =
+            responseBody.map((e) => ChatRoom.fromJson(e)).toList();
         MessageController.to.chatroomscreenstate(ScreenState.success);
         print("---------------------------");
         print(responseBody);
@@ -108,51 +107,99 @@ Future<HTTPResponse> getChatroomlist(int id) async {
   }
 }
 
-// Future<HTTPResponse> getUserProfile(List<int>membersId) async {
-//   ConnectivityResult result = await initConnectivity();
-//   MessageController.to.chatroomscreenstate(ScreenState.loading);
-//   if (result == ConnectivityResult.none) {
-//     MessageController.to.chatroomscreenstate(ScreenState.disconnect);
-//     showdisconnectdialog();
-//     return HTTPResponse.networkError();
-//   } else {
-//     String? token = await const FlutterSecureStorage().read(key: 'token');
-//     String? myid = await const FlutterSecureStorage().read(key: 'id');
-//     final url = Uri.parse("$serverUri/get_profile?members=$membersId");
-//     try {
-//       http.Response response = await http.get(
-//         url,
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'Authorization' : "Token $token"
-//         },
-//       );
+Future<HTTPResponse> getUserProfile(List<int> membersId) async {
+  ConnectivityResult result = await initConnectivity();
+  // MessageController.to.chatroomscreenstate(ScreenState.loading);
+  if (result == ConnectivityResult.none) {
+    // MessageController.to.chatroomscreenstate(ScreenState.disconnect);
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: 'token');
+    String? myid = await const FlutterSecureStorage().read(key: 'id');
+    final url = Uri.parse("$serverUri/chat/get_profile?members=$membersId");
+    try {
+      http.Response response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': "Token $token"
+        },
+      );
 
-//       print('유저들 프로필 리스트 statuscode: ${response.statusCode}');
-//       if (response.statusCode == 200) {
-//         List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-//         List<User> chatroom = 
-//         MessageController.to.chatroomscreenstate(ScreenState.success);
-//         print("---------------------------");
-//         print(responseBody);
-//         print(response.statusCode);
-//         return HTTPResponse.success(chatroom);
-//       } else {
-//         MessageController.to.chatroomscreenstate(ScreenState.error);
-//         return HTTPResponse.apiError('', response.statusCode);
-//       }
-//     } on SocketException {
-//       print("서버에러 발생");
-//       return HTTPResponse.serverError();
-//       // ErrorController.to.isServerClosed(true);
-//     } catch (e) {
-//       print(e);
-//       // ErrorController.to.isServerClosed(true);
-//       return HTTPResponse.unexpectedError(e);
-//     }
-//   }
-// }
+      print('유저들 프로필 리스트 statuscode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        List<dynamic> responseBody =
+            jsonDecode(utf8.decode(response.bodyBytes));
+        List<User> userList = responseBody.map((e) {
+          return User.fromJson(e);
+        }).toList();
+        // MessageController.to.chatroomscreenstate(ScreenState.success);
+        print("---------------------------");
+        print(responseBody);
+        print(response.statusCode);
+        return HTTPResponse.success(userList);
+      } else {
+        // MessageController.to.chatroomscreenstate(ScreenState.error);
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      print("서버에러 발생");
+      return HTTPResponse.serverError();
+      // ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
 
+Future<HTTPResponse> getPartnerToken(int memberId) async {
+  ConnectivityResult result = await initConnectivity();
+  // MessageController.to.chatroomscreenstate(ScreenState.loading);
+  if (result == ConnectivityResult.none) {
+    // MessageController.to.chatroomscreenstate(ScreenState.disconnect);
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: 'token');
+    String? myid = await const FlutterSecureStorage().read(key: 'id');
+    final url = Uri.parse("$serverUri/chat/get_token?id=$memberId");
+    try {
+      http.Response response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': "Token $token"
+        },
+      );
+      print(memberId);
+      print('유저들 프로필 리스트 statuscode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseBody =
+            jsonDecode(utf8.decode(response.bodyBytes));
+        String token = responseBody['token'];
+        print("---------------------------");
+        print(responseBody);
+        print(response.statusCode);
+        return HTTPResponse.success(token);
+      } else if (response.statusCode == 404) {
+        return HTTPResponse.success('');
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      print("서버에러 발생");
+      return HTTPResponse.serverError();
+      // ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
 
 Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
   ConnectivityResult result = await initConnectivity();
@@ -232,28 +279,28 @@ Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
 //     // ErrorController.to.isServerClosed(true);
 //   }
 
-  // print(map);
-  // String username = map["real_name"];
-  // userid = map["user_id"];
-  // if (map["messages"].length != 0) {
-  //   map["messages"].forEach((element) {
-  //     if (element["sender_id"] == map["user_id"]) {
-  //       MessageController.to.messagelist.add(MessageWidget(
-  //         content: element["message"],
-  //         image: map["profile_image"],
-  //         isSender: 1,
-  //       ));
-  //     } else {
-  //       MessageController.to.messagelist.add(MessageWidget(
-  //         content: element["message"],
-  //         image: map["profile_image"],
-  //         isSender: 0,
-  //       ));
-  //     }
-  //   });
-  // } else {
-  //   return;
-  // }
+// print(map);
+// String username = map["real_name"];
+// userid = map["user_id"];
+// if (map["messages"].length != 0) {
+//   map["messages"].forEach((element) {
+//     if (element["sender_id"] == map["user_id"]) {
+//       MessageController.to.messagelist.add(MessageWidget(
+//         content: element["message"],
+//         image: map["profile_image"],
+//         isSender: 1,
+//       ));
+//     } else {
+//       MessageController.to.messagelist.add(MessageWidget(
+//         content: element["message"],
+//         image: map["profile_image"],
+//         isSender: 0,
+//       ));
+//     }
+//   });
+// } else {
+//   return;
+// }
 // }
 
 Future<void> postmessage(String content, int userid) async {

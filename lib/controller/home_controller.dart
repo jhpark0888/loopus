@@ -317,6 +317,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:link_preview_generator/link_preview_generator.dart';
+import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/api/question_api.dart';
@@ -366,6 +367,11 @@ class HomeController extends GetxController
   Rx<ScreenState> populartagstate = ScreenState.loading.obs;
   RxList<Tag> populartaglist = <Tag>[].obs;
   RxList<Tag> topTagList = <Tag>[].obs;
+
+  Rx<User> myProfile = User.defaultuser().obs;
+
+
+  late String? myId;
   @override
   void onInit() async {
     // hometabcontroller = TabController(length: 3, vsync: this);
@@ -395,6 +401,13 @@ class HomeController extends GetxController
         oneText: '확인',
       );
     }
+    myId = await const FlutterSecureStorage().read(key: "id");
+
+    await getUserProfile([int.parse((await const FlutterSecureStorage().read(key: "id"))!)]).then((value) {
+      if (value.isError == false) {
+        myProfile.value = (value.data as List<User>).first;
+      }
+    });
 
     postloadItem();
     super.onInit();

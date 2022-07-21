@@ -1,11 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/socket_message_model.dart';
@@ -17,13 +21,15 @@ class MessageRoomWidget extends StatelessWidget {
   MessageRoomWidget({
     Key? key,
     required this.chatRoom,
-    required this.userid
+    required this.userid,
+    required this.user
   }) : super(key: key);
 
   // late final MessageDetailController controller = Get.put(
   //     MessageDetailController(userid: messageRoom.user.userid),
   //     tag: messageRoom.user.userid.toString());
   Rx<ChatRoom> chatRoom;
+  User user;
   int userid;
   // late final HoverController _hoverController =
   //     Get.put(HoverController(), tag: messageRoom.value.user.userid.toString());
@@ -182,62 +188,75 @@ class MessageRoomWidget extends StatelessWidget {
         //   ),
         // );
         GestureDetector(
-      onTap: () {
-        print(chatRoom.value.user);
-        print(userid);
-        Get.to(() => WebsoketScreen(
-              partnerId: chatRoom.value.user,
+      onTap: () async{
+        print(user.userid);
+        await getPartnerToken(user.userid).then((value) {if(value.isError == false){
+          Get.to(() => WebsoketScreen(
+              partner: user,
+              token: value.data,
+              myProfile: HomeController.to.myProfile.value,
             ));
+        }});
+        
       },
       child: Container(
         width: Get.width,
         color: mainWhite,
         child: Row(
+          mainAxisSize: MainAxisSize.max,
           children: [
             UserImageWidget(
                 imageUrl:
-                    'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202203/23/d58e7390-afda-42cd-9374-ca327df1cad8.jpg',
+                    user.profileImage ?? '',
                 width: 36,
                 height: 36),
             const SizedBox(width: 14),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('한근형', style: k16semiBold),
-                const SizedBox(height: 7),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    hasTextOverflow(
-                            chatRoom.value.message.value.content, k16Normal,
-                            maxWidth: Get.width - 165)
-                        ? SizedBox(
-                            width: Get.width - 165,
-                            child: Text(
-                              chatRoom.value.message.value.content,
-                              style: k16Normal,
-                              overflow: TextOverflow.ellipsis,
-                            ))
-                        : Text(
-                            chatRoom.value.message.value.content,
-                            style: k16Normal,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                    Text(
-                        '· ${messagedurationCaculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
-                        style: k16Normal.copyWith(color: maingray)),
-                  ],
-                ),
-                // RichText(
-                //     text: TextSpan(children: [
-                //   TextSpan(
-                //       text: chatRoom.value.message.value.content, style: k16Normal),
-                //   TextSpan(
-                //       text:
-                //           '· ${messagedurationCaculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
-                //       style: k16Normal.copyWith(color: maingray))
-                // ]), maxLines: 1)
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(user.realName, style: k16semiBold),
+                  const SizedBox(height: 7),
+                  Obx(
+                    () => Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        hasTextOverflow(
+                                chatRoom.value.message.value.content, k16Normal,
+                                maxWidth: Get.width - 190)
+                            ? SizedBox(
+                                width: Get.width - 190,
+                                child: Text(
+                                  chatRoom.value.message.value.content,
+                                  style: k16Normal,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ))
+                            : Text(
+                                chatRoom.value.message.value.content,
+                                style: k16Normal,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              const Spacer(),
+                        Text(
+                            '· ${messagedurationCaculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
+                            style: k16Normal.copyWith(color: maingray)),
+                      ],
+                    ),
+                  ),
+                  // RichText(
+                  //     text: TextSpan(children: [
+                  //   TextSpan(
+                  //       text: chatRoom.value.message.value.content, style: k16Normal),
+                  //   TextSpan(
+                  //       text:
+                  //           '· ${messagedurationCaculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
+                  //       style: k16Normal.copyWith(color: maingray))
+                  // ]), maxLines: 1)
+                ],
+              ),
             ),
           ],
         ),

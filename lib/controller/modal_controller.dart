@@ -819,7 +819,7 @@ void showCustomBottomSheet() {
   );
 }
 
-void showCustomSnackbar(String? title, String? body) {
+void showCustomSnackbar(String? title, String? body, void Function(GetSnackBar)? ontap) {
   Get.snackbar(
     title!,
     body!,
@@ -831,6 +831,7 @@ void showCustomSnackbar(String? title, String? body) {
       body,
       style: kBody2Style,
     ),
+    onTap: ontap,
     snackPosition: SnackPosition.TOP,
     duration: Duration(seconds: 4),
     forwardAnimationCurve: kAnimationCurve,

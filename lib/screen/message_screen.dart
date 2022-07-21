@@ -10,6 +10,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/no_ul_textfield_widget.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_text_field_widget.dart';
 import 'package:sqlite_viewer/sqlite_viewer.dart';
 
@@ -83,30 +84,34 @@ class MessageScreen extends StatelessWidget {
                             readonly: false,
                             controller: messageController.searchName,
                             onchanged: (name) {
-                              if (name != '') {
+                              if (name.trim() != '') {
                                 messageController.searchRoomList.value =
                                     messageController.chattingRoomList
-                                        .where((p0) =>
-                                            p0.chatRoom.value.user.toString() ==
-                                            name)
+                                        .where((chattingRoom) =>
+                                            chattingRoom.user.realName.contains(
+                                            name))
                                         .toList();
+                                  
                               } else {
                                 messageController.searchRoomList.value =
                                     messageController.chattingRoomList;
                               }
                             },
                           )),
-                      Expanded(
-                        child: ListView.separated(
-                          padding: EdgeInsets.only(top: 24),
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(height: 24);
-                          },
-                          itemBuilder: (context, index) {
-                            return messageController.searchRoomList[index];
-                          },
-                          itemCount: messageController.searchRoomList.length,
-                          // children: messageController.cacac.map((element) => Text(element)).toList(),
+                          const SizedBox(height: 24),
+                      ScrollNoneffectWidget(
+                        child: Expanded(
+                          child: ListView.separated(
+                            padding: const EdgeInsets.only(bottom: 24),
+                            separatorBuilder: (context, index) {
+                              return const SizedBox(height: 30);
+                            },
+                            itemBuilder: (context, index) {
+                              return messageController.searchRoomList[index];
+                            },
+                            itemCount: messageController.searchRoomList.length,
+                            // children: messageController.cacac.map((element) => Text(element)).toList(),
+                          ),
                         ),
                       ),
                     ],
@@ -114,7 +119,6 @@ class MessageScreen extends StatelessWidget {
                 )
               : Container(
                   width: Get.width,
-                  height: Get.height * 0.75,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,

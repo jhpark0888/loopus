@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
+import 'package:loopus/model/user_model.dart';
 
 enum RouteName {
   home,
@@ -31,6 +33,9 @@ class AppController extends GetxService {
       GlobalKey<NavigatorState>();
   List<int> bottomHistory = [0];
   SQLController sqlcontroller = Get.put(SQLController());
+
+
+
   void changeBottomNav(int value, {bool hasGesture = true}) {
     var page = RouteName.values[value];
     switch (page) {

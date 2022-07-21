@@ -100,6 +100,7 @@ class NotificationController extends GetxController {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
       print("message recieved");
       print(event.data["type"]);
+      print('알림 데이터 : ${event.data}');
       if (event.data["type"] == "msg") {
         if (Get.isRegistered<MessageDetailController>(
             tag: event.data["id"].toString())) {
@@ -169,6 +170,7 @@ class NotificationController extends GetxController {
             showCustomSnackbar(
               event.notification!.title,
               event.notification!.body,
+              (snackbar){}
             );
           }
         }
@@ -195,6 +197,7 @@ class NotificationController extends GetxController {
         showCustomSnackbar(
           event.notification!.title,
           event.notification!.body,
+          (snackbar){print('눌림');}
         );
       }
 

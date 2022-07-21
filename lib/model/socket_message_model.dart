@@ -77,10 +77,12 @@ class ChatRoom {
       delId: json['del_id']);
 
   Map<String, dynamic> toJson() => {
-        "message": message,
-        "profile": user,
-        "not_read": notread,
-        'room_ id': roomId,
-        'del_id': delId
+        'room_id': roomId,
+        "user_id": user,
+        "message": message.value.content.toString(),
+        'date': message.value.date.toString(),
+        "not_read": notread.value,
+        'del_id': delId,
       };
 }
+// room_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, message Text, date Text, not_read INTEGER, del_id INTEGER

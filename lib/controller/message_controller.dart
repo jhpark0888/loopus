@@ -10,6 +10,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/socket_message_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
 
 class MessageController extends GetxController {
@@ -19,26 +20,44 @@ class MessageController extends GetxController {
   RxList<MessageRoomWidget> searchRoomList = <MessageRoomWidget>[].obs;
   // RxBool isMessageRoomListLoading = true.obs;
   Rx<ScreenState> chatroomscreenstate = ScreenState.loading.obs;
-
   @override
-  void onInit() async{
-    // getmessageroomlist();
+  void onInit() async {
     String? userId = await const FlutterSecureStorage().read(key: "id");
     print('$userId 유저아이디가 이거입니다');
-    getChatroomlist(int.parse(userId!)).then((value) {
-      if (value.isError == false) {
-        List<ChatRoom> temp = value.data;
-        chattingRoomList.value = temp
-            .map((messageRoom) => MessageRoomWidget(chatRoom: messageRoom.obs,userid: int.parse(userId)))
-            .toList();
-        searchRoomList.value = chattingRoomList.toList();
-        // for (var element in temp) {
-        //   SQLController.to.insertmessageRoom(element);
-        // }
+    
+
+    getChatroomlist(int.parse(userId!)).then((chatroom) {
+      if (chatroom.isError == false) {
+        List<ChatRoom> temp = chatroom.data;
+        List<int> membersId =
+            List.generate(temp.length, (index) => temp[index].user);
+        getUserProfile(membersId).then((usersList) {
+          if (usersList.isError == false) {
+            List<User> userList = usersList.data;
+            chattingRoomList.value = temp
+                .map((messageRoom) => MessageRoomWidget(
+                    chatRoom: messageRoom.obs,
+                    userid: int.parse(userId),
+                    user: userList
+                        .where((element) => element.userid == messageRoom.user) 
+                        .toList().isNotEmpty ?userList
+                        .where((element) => element.userid == messageRoom.user) 
+                        .toList()[0] : User.defaultuser()))
+                .toList();
+            searchRoomList.value = chattingRoomList.toList();
+
+
+            userList.forEach((element) {
+           
+              SQLController.to.insertUser(element);
+             
+            });
+            temp.forEach((element) {
+              SQLController.to.insertmessageRoom(element);
+            });
+          }
+        });
       }
-    // getProfile(143).then((value) {if(value.isError == false){
-    //   print(value.data);
-    // }});
     });
     super.onInit();
   }

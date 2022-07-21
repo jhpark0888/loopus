@@ -5,11 +5,16 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/key_controller.dart';
+import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
+import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/socket_message_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
@@ -25,18 +30,26 @@ import 'package:sqlite_viewer/sqlite_viewer.dart';
 import 'package:web_socket_channel/io.dart';
 
 class WebsoketScreen extends StatelessWidget {
-  WebsoketScreen({Key? key, required this.partnerId}) : super(key: key);
-  int partnerId;
+  WebsoketScreen(
+      {Key? key,
+      required this.partner,
+      required this.myProfile,
+      required this.token})
+      : super(key: key);
+  User partner;
+  String? token;
+  User myProfile;
   late WebsoketController controller =
-      Get.put(WebsoketController(partnerId: partnerId));
+      Get.put(WebsoketController(partnerId: partner.userid));
   Key centerKey = const ValueKey('QueryList');
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       child: Scaffold(
+          resizeToAvoidBottomInset: true,
           appBar: AppBarWidget(
-            title: '한근형',
+            title: partner.realName,
             bottomBorder: false,
             leading: GestureDetector(
                 onTap: () {
@@ -47,9 +60,9 @@ class WebsoketScreen extends StatelessWidget {
             actions: [
               GestureDetector(
                 onTap: () async {
-                  // Get.to(() => DatabaseList());
-                  deleteDatabase(
-                                  join(await getDatabasesPath(), 'MY_database.db'));
+                  Get.to(() => DatabaseList());
+                  // deleteDatabase(
+                  //                 join(await getDatabasesPath(), 'MY_database.db'));
                 },
                 child: SizedBox(
                     height: 44,
@@ -59,76 +72,74 @@ class WebsoketScreen extends StatelessWidget {
               )
             ],
           ),
+          bottomNavigationBar: Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: sendField()),
           body: Obx(
             () => controller.screenState.value == ScreenState.loading
                 ? const Center(child: LoadingWidget())
                 : controller.screenState.value == ScreenState.success
-                    ? Column(
-                        children: [
-                          Expanded(
-                            child: ScrollNoneffectWidget(
-                                // child: SmartRefresher(
-                                //   controller: controller.refreshController,
-                                //   enablePullUp: false,
-                                //   enablePullDown:
-                                //       controller.refreshEnablePullUp.value,
-                                //   onRefresh: controller.onLoading,
-                                //   physics: const BouncingScrollPhysics(),
-                                //   footer: const MyCustomFooter(),
-                                //   header: ClassicHeader(
-                                //     releaseIcon: Container(),
-                                //     releaseText: '',
-                                //     refreshingIcon: Container(),
-                                //     refreshingText: '',
-                                //     idleIcon: Container(),
-                                //     idleText: '',
-                                //     completeIcon: Container(),
-                                //     completeText: '',
-                                //   ),
-                                // child: ListView(
-                                //     controller: controller.scrollController,
-                                //     // reverse: true,
-                                //     children: controller.messageList
-                                //         .map((element) {
-                                //           if (element ==
-                                //               controller.messageList.first) {
-                                //             return MessageWidget(
-                                //               message: element,
-                                //               isLast: true.obs,
-                                //               partnerId: partnerId,
-                                //               myId: controller.myId!,
-                                //             );
-                                //           }
-                                //           return MessageWidget(
-                                //             message: element,
-                                //             isLast: false.obs,
-                                //             partnerId: partnerId,
-                                //             myId: controller.myId!,
-                                //           );
-                                //         })
-                                //         .toList()
-                                //         .reversed
-                                //         .toList()),
-                                child: SizedBox(
-                              key: Get.put(KeyController(
-                                      isTextField: false.obs,
-                                      isMessageBox: true))
-                                  .viewKey,
-                              child: CustomScrollView(
-                                  key: centerKey,
-                                  reverse: controller
-                                          .checkFirstScreenPosition()
-                                          .value
-                                      ? true
-                                      : false,
-                                  controller: controller.scrollController,
-                                  physics: const BouncingScrollPhysics(),
-                                  slivers: messageBox()),
-                            )),
+                    ? SmartRefresher(
+                        controller: controller.refreshController,
+                        scrollController: controller.scrollController,
+                        enablePullUp: controller.refreshEnablePullUp.value,
+                        enablePullDown: false,
+                        onLoading: controller.onLoading,
+                        header: ClassicHeader(
+                          releaseIcon: Container(),
+                          releaseText: '',
+                          refreshingIcon: Container(),
+                          refreshingText: '',
+                          idleIcon: Container(),
+                          idleText: '',
+                        ),
+                        footer: ClassicFooter(
+                          loadingIcon: Container(),
+                          loadingText: '',
+                          idleIcon: Container(),
+                          idleText: '',
+                        ),
+                        physics: const BouncingScrollPhysics(),
+                        reverse: true,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              ListView.builder(
+                                  shrinkWrap: true,
+                                  primary: false,
+                                  reverse: true,
+                                  itemBuilder: (context, index) {
+                                    if (controller.messageList[index] ==
+                                        controller.messageList.first) {
+                                      return MessageWidget(
+                                          key: Get.put(
+                                                  KeyController(
+                                                      isTextField: false.obs,
+                                                      ismessage: true),
+                                                  tag: controller
+                                                      .messageList[index]
+                                                      .messageId
+                                                      .toString())
+                                              .viewKey,
+                                          message:
+                                              controller.messageList[index],
+                                          isLast: true.obs,
+                                          partner: partner,
+                                          myId: controller.myId!);
+                                    } else {
+                                      return MessageWidget(
+                                          message:
+                                              controller.messageList[index],
+                                          isLast: false.obs,
+                                          partner: partner,
+                                          myId: controller.myId!);
+                                    }
+                                  },
+                                  itemCount: controller.messageList.length)
+                            ],
                           ),
-                          // ),
-                          sendField()
-                        ],
+                        ),
                       )
                     : controller.screenState.value == ScreenState.normal
                         ? Container()
@@ -137,75 +148,77 @@ class WebsoketScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> messageBox() {
-    return [
-      SliverList(
-          key: centerKey,
-          delegate: SliverChildBuilderDelegate((context, index) {
-            if (controller.checkFirstScreenPosition().value == true) {
-              if (controller.messageList[index] ==
-                  controller.messageList.first) {
-                return MessageWidget(
-                    key: Get.put(
-                            KeyController(
-                                isTextField: false.obs, ismessage: true),
-                            tag: index.toString())
-                        .viewKey,
-                    message: controller.messageList[index],
-                    isLast: true.obs,
-                    partnerId: partnerId,
-                    myId: controller.myId!);
-              } else {
-                if (index < 9) {
-                  return MessageWidget(
-                      key: Get.put(
-                              KeyController(
-                                  isTextField: false.obs, ismessage: true),
-                              tag: index.toString())
-                          .viewKey,
-                      message: controller.messageList[index],
-                      isLast: false.obs,
-                      partnerId: partnerId,
-                      myId: controller.myId!);
-                } else {
-                  return MessageWidget(
-                      message: controller.messageList[index],
-                      isLast: false.obs,
-                      partnerId: partnerId,
-                      myId: controller.myId!);
-                }
-              }
-            } else {
-              if (controller.messageList[index] ==
-                  controller.messageList.last) {
-                return MessageWidget(
-                    message: controller.messageList.reversed.toList()[index],
-                    isLast: true.obs,
-                    partnerId: partnerId,
-                    myId: controller.myId!);
-              } else {
-                return MessageWidget(
-                    message: controller.messageList.reversed.toList()[index],
-                    isLast: false.obs,
-                    partnerId: partnerId,
-                    myId: controller.myId!);
-              }
-            }
-          }, childCount: controller.messageList.length)),
-      SliverList(
-          delegate: SliverChildBuilderDelegate(((context, index) {
-        return MessageWidget(
-            message: controller.refreshList[index],
-            isLast: false.obs,
-            partnerId: partnerId,
-            myId: controller.myId!);
-      }), childCount: controller.refreshList.length)),
-    ];
-  }
+  // List<Widget> messageBox() {
+  //   return [
+  //     SliverList(
+  //         key: centerKey,
+  //         delegate: SliverChildBuilderDelegate((context, index) {
+  //           if (controller.checkFirstScreenPosition().value == true) {
+  //             if (controller.messageList[index] ==
+  //                 controller.messageList.first) {
+  //               return MessageWidget(
+  //                   key: Get.put(
+  //                           KeyController(
+  //                               isTextField: false.obs, ismessage: true),
+  //                           tag: index.toString())
+  //                       .viewKey,
+  //                   message: controller.messageList[index],
+  //                   isLast: true.obs,
+  //                   partner: partner,
+  //                   myId: controller.myId!);
+  //             } else {
+  //               if (index < 9) {
+  //                 return MessageWidget(
+  //                     key: Get.put(
+  //                             KeyController(
+  //                                 isTextField: false.obs, ismessage: true),
+  //                             tag: index.toString())
+  //                         .viewKey,
+  //                     message: controller.messageList[index],
+  //                     isLast: false.obs,
+  //                     partner: partner,
+  //                     myId: controller.myId!);
+  //               } else {
+  //                 return MessageWidget(
+  //                     message: controller.messageList[index],
+  //                     isLast: false.obs,
+  //                     partner: partner,
+  //                     myId: controller.myId!);
+  //               }
+  //             }
+  //           } else {
+  //             if (controller.messageList[index] ==
+  //                 controller.messageList.last) {
+  //               return MessageWidget(
+  //                   message: controller.messageList.reversed.toList()[index],
+  //                   isLast: true.obs,
+  //                   partner: partner,
+  //                   myId: controller.myId!);
+  //             } else {
+  //               return MessageWidget(
+  //                   message: controller.messageList.reversed.toList()[index],
+  //                   isLast: false.obs,
+  //                   partner: partner,
+  //                   myId: controller.myId!);
+  //             }
+  //           }
+  //         }, childCount: controller.messageList.length)),
+  //     SliverList(
+  //         delegate: SliverChildBuilderDelegate(((context, index) {
+  //       return MessageWidget(
+  //           message: controller.refreshList[index],
+  //           isLast: false.obs,
+  //           partner: partner,
+  //           myId: controller.myId!);
+  //     }), childCount: controller.refreshList.length)),
+  //   ];
+  // }
 
   Widget sendField() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
+      decoration: BoxDecoration(
+          border: Border(top: BorderSide(width: 1, color: dividegray))),
       child: Row(
         children: [
           Expanded(
@@ -243,8 +256,8 @@ class WebsoketScreen extends StatelessWidget {
                   controller.channel.sink.add(jsonEncode({
                     'content': controller.sendText.text,
                     'type': 'msg',
-                    'token': controller.token,
-                    'name': '김원우'
+                    'token': token,
+                    'name': myProfile.realName
                   }));
                   controller.sendText.clear();
                 }
@@ -262,10 +275,10 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
   late int roomid;
   late RxBool hasInternet;
   late var listener;
+
   String? token;
   int partnerId;
   int? myId;
-
   TextEditingController sendText = TextEditingController();
   ScrollController scrollController = ScrollController();
   RefreshController refreshController = RefreshController();
@@ -292,9 +305,9 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
     screenState.value = ScreenState.loading;
     print('${partnerId}파트너아이디입니다.');
     WidgetsBinding.instance!.addObserver(this);
-    token = await const FlutterSecureStorage().read(key: "token");
     myId = int.parse(
         (await const FlutterSecureStorage().read(key: "id")).toString());
+
     print('${myId}자기아이디입니다.');
     listener = InternetConnectionChecker().onStatusChange.listen((event) {
       bool connection =
@@ -306,8 +319,7 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
       } else {
         // if (isFirst.value == false) {
         channel = IOWebSocketChannel.connect(
-            Uri.parse(
-                'ws://192.168.35.12:8000/ws/chat/${partnerId.toString()}/'),
+            Uri.parse('ws://$chatServerUri/ws/chat/${partnerId.toString()}/'),
             headers: <String, String>{
               'Content-Type': 'application/json',
               'id': '$myId'
@@ -363,12 +375,13 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
         (await SQLController.to.getDBMessage(roomid, lastid.value));
     print(list);
     if (list.isNotEmpty) {
-      refreshList.addAll(list);
-      lastid.value = refreshList.last.messageId!;
+      messageList.addAll(list);
+      lastid.value = messageList.last.messageId!;
       refreshEnablePullUp(true);
     } else {
       refreshEnablePullUp.value = false;
     }
+    refreshController.loadComplete();
   }
 
   void messageTypeCheck(Map<String, dynamic> json) async {
@@ -380,7 +393,6 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
           roomid = int.parse(json['room_id']);
           messageList.addAll(
               await SQLController.to.getDBMessage(roomid, lastid.value));
-          screenState.value = ScreenState.success;
           checkRoomId(roomid).then((value) {
             if (value.isNotEmpty) {
               print(messageList[0].messageId);
@@ -389,7 +401,10 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
               sendLastView(0);
             }
           });
-          lastid.value = messageList.last.messageId!;
+          lastid.value = messageList.isNotEmpty
+              ? messageList.last.messageId ?? lastid.value
+              : lastid.value;
+          screenState.value = ScreenState.success;
         } else {
           print('상대가 접속함');
           changeReadMessage(roomid, null);
@@ -402,16 +417,43 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
         SQLController.to.insertmessage(Chat.fromMsg(json, roomid));
         messageList.insert(0, Chat.fromJson(json));
         await Future.delayed(const Duration(milliseconds: 100));
-        scrollController.jumpTo(scrollController.position.minScrollExtent);
+        SQLController.to
+            .updateLastMessage(json['content'], json['date'], roomid);
+        if (Get.isRegistered<MessageController>()) {
+          MessageController.to.searchRoomList
+              .where((p0) => p0.chatRoom.value.roomId == roomid)
+              .first
+              .chatRoom
+              .value
+              .message
+              .value
+              .content = json['content'];
+          MessageController.to.searchRoomList
+              .where((p0) => p0.chatRoom.value.roomId == roomid)
+              .first
+              .chatRoom
+              .value
+              .message
+              .value
+              .date = DateTime.parse(json['date']);
+          MessageController.to.searchRoomList.sort((a, b) => b
+              .chatRoom.value.message.value.date
+              .compareTo(a.chatRoom.value.message.value.date));
+          MessageController.to.searchRoomList.forEach((element) {
+            element.chatRoom.value.message.refresh();
+            element.chatRoom.refresh();
+          });
+          MessageController.to.searchRoomList.refresh();
+        }
         break;
       case 'chat_log':
         json['content'].forEach((element) {
           SQLController.to.insertmessage(Chat.fromJson(element));
-          messageList.add(Chat.fromJson(element));
+          messageList.insert(0, Chat.fromJson(element));
         });
         print('저장완료');
         await Future.delayed(const Duration(milliseconds: 100));
-        scrollController.jumpTo(scrollController.position.minScrollExtent);
+        // scrollController.jumpTo(scrollController.position.minScrollExtent);
         break;
       case 'other_view':
         if (json['content'] != null) {
@@ -459,7 +501,7 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
   }
 
   RxBool checkFirstScreenPosition() {
-    if (messageHeight.value >= messagesBoxPositionHeight.value) {
+    if (messageHeight.value >= messagesBoxPositionHeight.value - 30) {
       return true.obs;
     } else {
       return false.obs;

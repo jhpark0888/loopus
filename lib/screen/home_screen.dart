@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
@@ -131,12 +132,16 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => Get.to(() => MyProfileScreen()),
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: UserImageWidget(
-                    imageUrl:
-                        ProfileController.to.myUserInfo.value.profileImage ??
-                            '',
-                    width: 32,
-                    height: 32,
+                  child: Obx(
+                    () => UserImageWidget(
+                        imageUrl:
+                          HomeController.to.myProfile.value.profileImage ??
+                            // ProfileController.to.myUserInfo.value.profileImage ??
+                                '',
+                        width: 32,
+                        height: 32,
+                              
+                    ),
                   ),
                 ),
               ),

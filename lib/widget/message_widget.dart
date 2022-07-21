@@ -8,14 +8,15 @@ import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/widget/user_image_widget.dart';
 
 class MessageWidget extends StatelessWidget {
-  MessageWidget({Key? key,required this.message, required this.isLast, required this.partnerId, required this.myId}):super(key: key);
+  MessageWidget({Key? key,required this.message, required this.isLast, required this.partner, required this.myId}):super(key: key);
   // late MessageDetailController controller =
   //     Get.find(tag: user.userid.toString());
   RxBool isLast;
   Chat message;
-  int partnerId;
+  User partner;
   int myId;
   // var image;
   // String content;
@@ -25,8 +26,8 @@ class MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
+        horizontal: 20,
+        vertical: 14,
       ),
       child: message.sender == myId
           ? Column(
@@ -108,32 +109,12 @@ class MessageWidget extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    // Get.to(() => OtherProfileScreen(
-                    //       userid: message.sender!,
-                    //       realname: user.realName,
-                    //     ));
+                    Get.to(() => OtherProfileScreen(
+                          userid: partner.userid,
+                          realname: partner.realName,
+                        ));
                   },
-                  child: SizedBox(
-                    height: 40,
-                    width: 40,
-                    child: ClipOval(
-                        child:
-                            // user.profileImage == null
-                            //     ?
-                            Image.asset(
-                      "assets/illustrations/default_profile.png",
-                    )
-                        // : CachedNetworkImage(
-                        //     height: 32,
-                        //     width: 32,
-                        //     imageUrl: user.profileImage!,
-                        //     placeholder: (context, url) => CircleAvatar(
-                        //       backgroundColor: Color(0xffe7e7e7),
-                        //       child: Container(),
-                        //     ),
-                        //     fit: BoxFit.cover,
-                        ),
-                  ),
+                  child: UserImageWidget(imageUrl: partner.profileImage ?? '', width: 36, height: 36)
                 ),
                 SizedBox(
                   width: 10,
@@ -143,7 +124,7 @@ class MessageWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      '한근형',
+                      partner.realName,
                       style: k16semiBold,
                     ),
                     const SizedBox(
@@ -157,8 +138,9 @@ class MessageWidget extends StatelessWidget {
                                     maxWidth: Get.width * (3 / 5)),
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: Color(0xffe7e7e7),
+                                      color: cardGray,
                                     ),
+                                    color: cardGray,
                                     borderRadius: BorderRadius.circular(8)),
                                 child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -170,8 +152,9 @@ class MessageWidget extends StatelessWidget {
                             : Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: Color(0xffe7e7e7),
+                                      color: cardGray,
                                     ),
+                                    color: cardGray,
                                     borderRadius: BorderRadius.circular(8)),
                                 child: Padding(
                                     padding: const EdgeInsets.all(8.0),

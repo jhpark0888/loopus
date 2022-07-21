@@ -27,6 +27,7 @@ class SearchTextFieldWidget extends StatelessWidget {
         autocorrect: false,
         readOnly: readonly,
         onTap: ontap,
+        onChanged: onchanged,
         style: k16Normal,
         cursorColor: mainblack,
         cursorWidth: 1.2,
