@@ -110,6 +110,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "루프어스",
       theme: themeData,
+      scrollBehavior: const ScrollBehavior(
+          androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
       // initialBinding: InitBinding(),
       getPages: [
         GetPage(

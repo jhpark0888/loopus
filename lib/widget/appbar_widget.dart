@@ -6,7 +6,7 @@ import 'package:loopus/constant.dart';
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   AppBarWidget(
       {Key? key,
-      @required this.title,
+      this.title,
       this.leading,
       this.actions,
       this.bottomBorder = true})

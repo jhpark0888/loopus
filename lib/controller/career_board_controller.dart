@@ -151,8 +151,13 @@ class CareerBoardController extends GetxController
           return Post.fromJson(post);
         }).toList();
 
+        campusRankerMap[id.toString()]!.value =
+            List.from(value.data["school_ranking"]).map((user) {
+          return User.fromJson(user);
+        }).toList();
+
         koreaRankerMap[id.toString()]!.value =
-            List.from(value.data["profile"]).map((user) {
+            List.from(value.data["group_ranking"]).map((user) {
           return User.fromJson(user);
         }).toList();
         if (popPostMap[id.toString()] == null) {
