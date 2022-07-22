@@ -102,6 +102,7 @@ class MessageScreen extends StatelessWidget {
                       ScrollNoneffectWidget(
                         child: Expanded(
                           child: ListView.separated(
+                            physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.only(bottom: 24),
                             separatorBuilder: (context, index) {
                               return const SizedBox(height: 30);
