@@ -13,11 +13,14 @@ import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/model/message_model.dart';
+import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
@@ -76,8 +79,26 @@ class NotificationController extends GetxController {
     int id = int.parse(message.data["id"]);
     if (message.data["type"] == "msg") {
       // Get.put(MessageDetailController(userid: id)).firstmessagesload();
-      Get.to(() =>
-          MessageDetailScreen(userid: id, realname: message.data["real_name"]));
+      Map<String, dynamic> json = message.data;
+      json["date"] = DateTime.now().toString();
+      json["content"] = message.notification!.body;
+      int partnerId = int.parse(message.data['sender']);
+      getUserProfile([partnerId]).then((user) async {
+        if (user.isError == false) {
+          getPartnerToken(partnerId).then((token) {
+            Get.to(() => WebsoketScreen(
+                  partner: user.data[0],
+                  myProfile: HomeController.to.myProfile.value,
+                  partnerToken: token.data,
+                  enterRoute: EnterRoute.popUp,
+                ));
+            HomeController.to.enterMessageRoom.value = user.data.first.userid;
+          });
+          await SQLController.to.findMessageRoom(
+              roomid: int.parse(json['room_id']),
+              chatRoom: ChatRoom.fromMsg(json).toJson());
+        }
+      });
     } else if (message.data["type"] == "like") {
       Get.to(() => NotificationScreen());
     } else if (message.data["type"] == "tag") {
@@ -99,11 +120,12 @@ class NotificationController extends GetxController {
     //Foreground 상태에서 알림을 받았을 때
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
       print("message recieved");
+      print(event);
       print(event.data["type"]);
       print('알림 데이터 : ${event.data}');
       if (event.data["type"] == "msg") {
-        if (Get.isRegistered<MessageDetailController>(
-            tag: event.data["id"].toString())) {
+        if (Get.isRegistered<WebsoketController>(
+            tag: event.data['sender'].toString())) {
           String? myid = await const FlutterSecureStorage().read(key: 'id');
           // Get.find<MessageDetailController>(tag: event.data["id"].toString())
           //     .messagelist
@@ -124,7 +146,8 @@ class NotificationController extends GetxController {
           //             .value)
           //             );
           // 새로 추가
-          putonmessagescreen(event.data["id"].toString());
+          // putonmessagescreen(event.data["id"].toString());
+
           if (Get.isRegistered<MessageController>()) {
             // MessageRoomWidget messageroomwidget = MessageController
             //     .to.chattingroomlist
@@ -143,10 +166,54 @@ class NotificationController extends GetxController {
             //     issending: true.obs);
             // MessageController.to.chattingroomlist.remove(messageroomwidget);
             // MessageController.to.chattingroomlist.insert(0, messageroomwidget);
+
           }
         } else {
           if (Get.isRegistered<MessageController>()) {
             String? myid = await const FlutterSecureStorage().read(key: 'id');
+
+            showCustomSnackbar(
+                event.notification!.title, event.notification!.body,
+                (snackbar) async {
+              Get.back();
+              int partnerId = int.parse(event.data['sender']);
+              getUserProfile([partnerId]).then((user) async {
+                if (user.isError == false) {
+                  getPartnerToken(partnerId).then((token) {
+                    if (Get.isRegistered<WebsoketController>(
+                        tag: HomeController.to.enterMessageRoom.value
+                            .toString())) {
+                      print('ㅇㅇㅇ');
+                      Get.delete<WebsoketController>(
+                          tag: HomeController.to.enterMessageRoom.value
+                              .toString());
+                      Future.delayed(const Duration(milliseconds: 100));
+                      Get.off(
+                          () => WebsoketScreen(
+                                partner: user.data[0],
+                                myProfile: HomeController.to.myProfile.value,
+                                partnerToken: token.data,
+                                enterRoute: EnterRoute.popUp,
+                              ),
+                          preventDuplicates: false);
+                    } else {
+                      Get.to(
+                          () => WebsoketScreen(
+                                partner: user.data[0],
+                                myProfile: HomeController.to.myProfile.value,
+                                partnerToken: token.data,
+                                enterRoute: EnterRoute.popUp,
+                              ),
+                          preventDuplicates: true);
+                    }
+
+                    HomeController.to.enterMessageRoom.value =
+                        user.data.first.userid;
+                  });
+                }
+              });
+            });
+
             // MessageRoomWidget messageroomwidget = MessageController
             //     .to.chattingroomlist
             //     .where((messageroomwidget) =>
@@ -165,13 +232,99 @@ class NotificationController extends GetxController {
             //     issending: true.obs);
             // MessageController.to.chattingroomlist.remove(messageroomwidget);
             // MessageController.to.chattingroomlist.insert(0, messageroomwidget);
+            Map<String, dynamic> json = event.data;
+            json["date"] = DateTime.now().toString();
+            json["content"] = event.notification!.body;
+            json["not_read"] = 1;
+            Chat chat = Chat.fromMsg(json, int.parse(json['room_id']));
+            ChatRoom chatRoom = ChatRoom.fromMsg(json);
+            SQLController.to
+                .findMessageRoom(
+                    roomid: chat.roomId!, chatRoom: chatRoom.toJson())
+                .then((value) async {
+              if (value == false) {
+                await getUserProfile([chatRoom.user]).then((value) {
+                  if (value.isError == false) {
+                    MessageController.to.searchRoomList.add(MessageRoomWidget(
+                        chatRoom: chatRoom.obs,
+                        userid: chatRoom.user,
+                        user: value.data[0]));
+                    MessageController.to.chattingRoomList.add(MessageRoomWidget(
+                        chatRoom: chatRoom.obs,
+                        userid: chatRoom.user,
+                        user: value.data[0]));
+                  }
+                });
+              } else {
+                SQLController.to.updateLastMessage(
+                    chat.content, chat.date.toString(), chat.roomId!);
+                MessageController.to.searchRoomList
+                    .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
+                    .first
+                    .chatRoom
+                    .value
+                    .message
+                    .value
+                    .content = json['content'];
+                MessageController.to.searchRoomList
+                    .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
+                    .first
+                    .chatRoom
+                    .value
+                    .message
+                    .value
+                    .date = DateTime.parse(json['date']);
+                MessageController.to.searchRoomList
+                    .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
+                    .first
+                    .chatRoom
+                    .value
+                    .notread
+                    .value += 1;
+                MessageController.to.searchRoomList.refresh();
+                MessageController.to.searchRoomList
+                    .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
+                    .first
+                    .chatRoom
+                    .refresh();
+              }
+              MessageController.to.searchRoomList.sort((a, b) => b
+                  .chatRoom.value.message.value.date
+                  .compareTo(a.chatRoom.value.message.value.date));
+            });
           } else {
             ProfileController.to.isnewmessage(true);
+            Map<String, dynamic> json = event.data;
+            json["date"] = DateTime.now().toString();
+            json["content"] = event.notification!.body;
+            Chat chat = Chat.fromMsg(json, int.parse(json['room_id']));
+            SQLController.to.insertmessage(chat);
+            SQLController.to.updateLastMessage(
+                chat.content, chat.date.toString(), chat.roomId!);
             showCustomSnackbar(
-              event.notification!.title,
-              event.notification!.body,
-              (snackbar){}
-            );
+                event.notification!.title, event.notification!.body,
+                (snackbar) async {
+              Get.back();
+              int partnerId = int.parse(event.data['sender']);
+              getUserProfile([partnerId]).then((user) async {
+                if (user.isError == false) {
+                  getPartnerToken(partnerId).then((token) {
+                    Get.to(() => WebsoketScreen(
+                          partner: user.data[0],
+                          myProfile: HomeController.to.myProfile.value,
+                          partnerToken: token.data,
+                          enterRoute: EnterRoute.popUp,
+                        ));
+                    HomeController.to.enterMessageRoom.value =
+                        user.data.first.userid;
+                  });
+                  await SQLController.to.findMessageRoom(
+                      roomid: int.parse(json['room_id']),
+                      chatRoom: ChatRoom.fromMsg(json).toJson());
+                  // Get.put(MessageController());
+                }
+              });
+            });
           }
         }
       } else if (event.data["type"] == "logout") {
@@ -194,11 +347,10 @@ class NotificationController extends GetxController {
       } else {
         ProfileController.to.isnewalarm(true);
 
-        showCustomSnackbar(
-          event.notification!.title,
-          event.notification!.body,
-          (snackbar){print('눌림');}
-        );
+        showCustomSnackbar(event.notification!.title, event.notification!.body,
+            (snackbar) {
+          print('눌림');
+        });
       }
 
       // print(event.notification!.body);

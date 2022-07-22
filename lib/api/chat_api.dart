@@ -201,6 +201,41 @@ Future<HTTPResponse> getPartnerToken(int memberId) async {
   }
 }
 
+Future<HTTPResponse> deleteChatRoom(int roomId,int myId) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: 'token');
+    String? myid = await const FlutterSecureStorage().read(key: 'id');
+    final url = Uri.parse("http://$chatServerUri/chat/chat_list?id=$myId");
+    try {
+      http.Response response = await http.delete(
+        url,
+        body: jsonEncode({'room_id' : roomId}),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      print('채팅방 삭제 statuscode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        return HTTPResponse.success(null);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      print("서버에러 발생");
+      return HTTPResponse.serverError();
+      // ErrorController.to.isServerClosed(true);
+    } catch (e) {
+      print(e);
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+
+
 Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {

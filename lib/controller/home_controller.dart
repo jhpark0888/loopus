@@ -370,6 +370,7 @@ class HomeController extends GetxController
 
   Rx<User> myProfile = User.defaultuser().obs;
 
+  RxInt enterMessageRoom = 0.obs;
 
   late String? myId;
   @override
@@ -403,9 +404,9 @@ class HomeController extends GetxController
     }
     myId = await const FlutterSecureStorage().read(key: "id");
 
-    await getUserProfile([int.parse((await const FlutterSecureStorage().read(key: "id"))!)]).then((value) {
+    await getProfile(int.parse(myId!)).then((value) {
       if (value.isError == false) {
-        myProfile.value = (value.data as List<User>).first;
+        myProfile.value = User.fromJson(value.data);
       }
     });
 

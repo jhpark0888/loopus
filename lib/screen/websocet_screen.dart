@@ -9,12 +9,15 @@ import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/message_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
@@ -29,18 +32,23 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqlite_viewer/sqlite_viewer.dart';
 import 'package:web_socket_channel/io.dart';
 
+enum EnterRoute { popUp, messageScreen, otherProfile }
+
 class WebsoketScreen extends StatelessWidget {
   WebsoketScreen(
       {Key? key,
       required this.partner,
       required this.myProfile,
-      required this.token})
+      required this.partnerToken,
+      required this.enterRoute})
       : super(key: key);
   User partner;
-  String? token;
+  String? partnerToken;
   User myProfile;
-  late WebsoketController controller =
-      Get.put(WebsoketController(partnerId: partner.userid));
+  EnterRoute enterRoute;
+  late WebsoketController controller = Get.put(
+      WebsoketController(partnerId: partner.userid),
+      tag: partner.userid.toString());
   Key centerKey = const ValueKey('QueryList');
   @override
   Widget build(BuildContext context) {
@@ -53,16 +61,68 @@ class WebsoketScreen extends StatelessWidget {
             bottomBorder: false,
             leading: GestureDetector(
                 onTap: () {
-                  Get.back();
+                  if (enterRoute == EnterRoute.popUp) {
+                    if (Get.isRegistered<MessageController>()) {
+                      Get.back();
+                    } else {
+                      Get.off(() => MessageScreen());
+                    }
+                  } else {
+                    Get.back();
+                  }
                 },
                 child: Center(
                     child: SvgPicture.asset('assets/icons/Arrow_left.svg'))),
             actions: [
               GestureDetector(
                 onTap: () async {
-                  Get.to(() => DatabaseList());
-                  // deleteDatabase(
-                  //                 join(await getDatabasesPath(), 'MY_database.db'));
+                  // // deleteDatabase(
+                  // //                 join(await getDatabasesPath(), 'MY_database.db'));
+                  showModalIOS(context, func1: () {
+                    int roomId = controller.roomid;
+                    if (controller.messageList.isNotEmpty) {
+                      deleteChatRoom(controller.roomid, myProfile.userid)
+                          .then((value) {
+                        if (value.isError == false) {
+                          SQLController.to.deleteMessage(roomId);
+                          SQLController.to.deleteMessageRoom(roomId);
+                          SQLController.to.deleteUser(partner.userid);
+                          if (Get.isRegistered<MessageController>()) {
+                            MessageController.to.searchRoomList.removeAt(
+                                MessageController.to.searchRoomList.indexWhere(
+                                    (messageRoom) =>
+                                        messageRoom.chatRoom.value.roomId ==
+                                        roomId));
+                            MessageController.to.chattingRoomList.removeAt(
+                                MessageController.to.chattingRoomList
+                                    .indexWhere((messageRoom) =>
+                                        messageRoom.chatRoom.value.roomId ==
+                                        roomId));
+                          }
+                          Get.back();
+                          if (enterRoute == EnterRoute.popUp) {
+                            Get.off(() => MessageScreen());
+                          } else {
+                            Get.back();
+                          }
+                        }
+                      });
+                    } else {
+                      Get.back();
+                      if (enterRoute == EnterRoute.popUp) {
+                        Get.off(() => MessageScreen());
+                      } else {
+                        Get.back();
+                      }
+                    }
+                  }, func2: () {
+                    Get.to(() => DatabaseList());
+                  },
+                      value1: '채팅방 나가기',
+                      value2: '',
+                      isValue1Red: true,
+                      isValue2Red: false,
+                      isOne: true);
                 },
                 child: SizedBox(
                     height: 44,
@@ -103,40 +163,32 @@ class WebsoketScreen extends StatelessWidget {
                         physics: const BouncingScrollPhysics(),
                         reverse: true,
                         child: SingleChildScrollView(
+                          reverse: false,
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               ListView.builder(
-                                  shrinkWrap: true,
-                                  primary: false,
-                                  reverse: true,
-                                  itemBuilder: (context, index) {
-                                    if (controller.messageList[index] ==
-                                        controller.messageList.first) {
-                                      return MessageWidget(
-                                          key: Get.put(
-                                                  KeyController(
-                                                      isTextField: false.obs,
-                                                      ismessage: true),
-                                                  tag: controller
-                                                      .messageList[index]
-                                                      .messageId
-                                                      .toString())
-                                              .viewKey,
-                                          message:
-                                              controller.messageList[index],
-                                          isLast: true.obs,
-                                          partner: partner,
-                                          myId: controller.myId!);
-                                    } else {
-                                      return MessageWidget(
-                                          message:
-                                              controller.messageList[index],
-                                          isLast: false.obs,
-                                          partner: partner,
-                                          myId: controller.myId!);
-                                    }
-                                  },
-                                  itemCount: controller.messageList.length)
+                                shrinkWrap: true,
+                                primary: false,
+                                reverse: true,
+                                itemBuilder: (context, index) {
+                                  if (controller.messageList[index] ==
+                                      controller.messageList.first) {
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isLast: true.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  } else {
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isLast: false.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  }
+                                },
+                                itemCount: controller.messageList.length,
+                              )
                             ],
                           ),
                         ),
@@ -256,7 +308,7 @@ class WebsoketScreen extends StatelessWidget {
                   controller.channel.sink.add(jsonEncode({
                     'content': controller.sendText.text,
                     'type': 'msg',
-                    'token': token,
+                    'token': partnerToken,
                     'name': myProfile.realName
                   }));
                   controller.sendText.clear();
@@ -288,7 +340,7 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
   Rx<ScreenState> screenState = ScreenState.normal.obs;
   RxBool isFirst = true.obs;
   RxBool refreshEnablePullUp = true.obs;
-  RxInt lastid = 0.obs;
+  RxString lastid = '0'.obs;
   RxDouble messageHeight = 0.0.obs;
   RxDouble messagesBoxPositionHeight = 0.0.obs;
   @override
@@ -323,7 +375,8 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
             headers: <String, String>{
               'Content-Type': 'application/json',
               'id': '$myId'
-            });
+            },
+            pingInterval: const Duration(seconds: 1));
         channel.stream.listen((event) {
           print(event);
           messageTypeCheck(jsonDecode(event));
@@ -351,9 +404,7 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
     switch (state) {
       case AppLifecycleState.resumed:
       case AppLifecycleState.inactive:
-
       case AppLifecycleState.detached:
-
       case AppLifecycleState.paused:
         print(state);
         break;
@@ -366,16 +417,18 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
     listener.cancel();
     print('웹소켓 연결 해제');
     messageList.clear();
+    HomeController.to.enterMessageRoom.value = 0;
     super.onClose();
   }
 
   void onLoading() async {
     print(lastid);
     List<Chat> list =
-        (await SQLController.to.getDBMessage(roomid, lastid.value));
+        (await SQLController.to.getDBMessage(roomid, int.parse(lastid.value)));
     print(list);
     if (list.isNotEmpty) {
       messageList.addAll(list);
+      // messageList.insertAll(0, list);
       lastid.value = messageList.last.messageId!;
       refreshEnablePullUp(true);
     } else {
@@ -391,12 +444,12 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
         if (json['user_id'] == myId) {
           print('내가 접속함');
           roomid = int.parse(json['room_id']);
-          messageList.addAll(
-              await SQLController.to.getDBMessage(roomid, lastid.value));
+          messageList.addAll(await SQLController.to
+              .getDBMessage(roomid, int.parse(lastid.value)));
           checkRoomId(roomid).then((value) {
             if (value.isNotEmpty) {
               print(messageList[0].messageId);
-              sendLastView(messageList.first.messageId!);
+              sendLastView(int.parse(messageList.first.messageId!));
             } else {
               sendLastView(0);
             }
@@ -447,13 +500,14 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
         }
         break;
       case 'chat_log':
-        json['content'].forEach((element) {
-          SQLController.to.insertmessage(Chat.fromJson(element));
-          messageList.insert(0, Chat.fromJson(element));
-        });
-        print('저장완료');
-        await Future.delayed(const Duration(milliseconds: 100));
-        // scrollController.jumpTo(scrollController.position.minScrollExtent);
+        List<dynamic> content = json['content'];
+        if (content.isNotEmpty) {
+          content.forEach((element) {
+            SQLController.to.insertmessage(Chat.fromJson(element));
+            messageList.insert(0, Chat.fromJson(element));
+          });
+          print('저장완료');
+        }
         break;
       case 'other_view':
         if (json['content'] != null) {

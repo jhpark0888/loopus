@@ -13,6 +13,7 @@ import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:path/path.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
@@ -21,6 +22,8 @@ import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/screen/message_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqlite_viewer/sqlite_viewer.dart';
 
 class HomeScreen extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
@@ -129,7 +132,12 @@ class HomeScreen extends StatelessWidget {
             ),
             Center(
               child: GestureDetector(
-                onTap: () => Get.to(() => MyProfileScreen()),
+                onTap: () async=>
+                 Get.to(() => MyProfileScreen())
+                // Get.to(() => DatabaseList())
+                // deleteDatabase(
+                //                   join(await getDatabasesPath(), 'MY_database.db'))
+                 ,
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Obx(

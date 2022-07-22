@@ -9,6 +9,7 @@ import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
@@ -18,12 +19,12 @@ import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class MessageRoomWidget extends StatelessWidget {
-  MessageRoomWidget({
-    Key? key,
-    required this.chatRoom,
-    required this.userid,
-    required this.user
-  }) : super(key: key);
+  MessageRoomWidget(
+      {Key? key,
+      required this.chatRoom,
+      required this.userid,
+      required this.user})
+      : super(key: key);
 
   // late final MessageDetailController controller = Get.put(
   //     MessageDetailController(userid: messageRoom.user.userid),
@@ -188,16 +189,21 @@ class MessageRoomWidget extends StatelessWidget {
         //   ),
         // );
         GestureDetector(
-      onTap: () async{
+      onTap: () async {
         print(user.userid);
-        await getPartnerToken(user.userid).then((value) {if(value.isError == false){
-          Get.to(() => WebsoketScreen(
-              partner: user,
-              token: value.data,
-              myProfile: HomeController.to.myProfile.value,
-            ));
-        }});
-        
+        await getPartnerToken(user.userid).then((value) {
+          if (value.isError == false) {
+            Get.to(() => WebsoketScreen(
+                  partner: user,
+                  partnerToken: value.data,
+                  myProfile: HomeController.to.myProfile.value,
+                  enterRoute: EnterRoute.messageScreen,
+                ));
+          }
+        });
+        SQLController.to.updateNotReadCount(chatRoom.value.roomId);
+        chatRoom.value.notread.value = 0;
+        HomeController.to.enterMessageRoom.value = user.userid;
       },
       child: Container(
         width: Get.width,
@@ -206,10 +212,7 @@ class MessageRoomWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             UserImageWidget(
-                imageUrl:
-                    user.profileImage ?? '',
-                width: 36,
-                height: 36),
+                imageUrl: user.profileImage ?? '', width: 36, height: 36),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -229,17 +232,22 @@ class MessageRoomWidget extends StatelessWidget {
                                 width: Get.width - 190,
                                 child: Text(
                                   chatRoom.value.message.value.content,
-                                  style: k16Normal,
+                                  style: chatRoom.value.notread.value == 0
+                                      ? k16Normal
+                                      : k16Normal.copyWith(
+                                          fontWeight: FontWeight.w500),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ))
                             : Text(
                                 chatRoom.value.message.value.content,
-                                style: k16Normal,
+                                style: chatRoom.value.notread.value == 0
+                                    ? k16Normal
+                                    : k16Normal.copyWith(
+                                        fontWeight: FontWeight.w500),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                              const Spacer(),
                         Text(
                             '· ${messagedurationCaculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
                             style: k16Normal.copyWith(color: maingray)),
@@ -258,6 +266,18 @@ class MessageRoomWidget extends StatelessWidget {
                 ],
               ),
             ),
+            Obx(() {
+              if (chatRoom.value.notread.value == 0) {
+                return const SizedBox.shrink();
+              } else {
+                return Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(36), color: mainblue),
+                  width: 7,
+                  height: 7,
+                );
+              }
+            })
           ],
         ),
       ),

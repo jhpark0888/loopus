@@ -107,9 +107,9 @@ class MessageScreen extends StatelessWidget {
                               return const SizedBox(height: 30);
                             },
                             itemBuilder: (context, index) {
-                              return messageController.searchRoomList[index];
+                              return messageController.searchRoomList[index] ;
                             },
-                            itemCount: messageController.searchRoomList.length,
+                            itemCount: messageController.searchRoomList.length ,
                             // children: messageController.cacac.map((element) => Text(element)).toList(),
                           ),
                         ),

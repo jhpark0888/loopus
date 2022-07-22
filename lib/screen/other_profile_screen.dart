@@ -15,6 +15,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/model/project_model.dart';
@@ -464,23 +465,49 @@ class OtherProfileScreen extends StatelessWidget {
                                                       //             .toString());
                                                       // messagecontroller
                                                       //     .firstmessagesload();
-
-                                                      await getPartnerToken(
-                                                              _controller
-                                                                  .userid)
-                                                          .then((value) {
-                                                        if (value.isError ==
-                                                            false) {
-                                                          Get.to(() =>
-                                                              WebsoketScreen(
-                                                                partner: _controller.otherUser.value,
-                                                                token:
-                                                                    value.data,
-                                                                    myProfile: HomeController.to.myProfile.value,
-                                                              ));
-                                                        }
-                                                      });
-
+                                                      if (HomeController
+                                                              .to
+                                                              .enterMessageRoom
+                                                              .value ==
+                                                          _controller.otherUser
+                                                              .value.userid) {
+                                                        Get.back();
+                                                      } else {
+                                                        await getPartnerToken(
+                                                                _controller
+                                                                    .userid)
+                                                            .then((value) {
+                                                          if (value.isError ==
+                                                              false) {
+                                                            Get.to(() =>
+                                                                WebsoketScreen(
+                                                                  partner: _controller
+                                                                      .otherUser
+                                                                      .value,
+                                                                  partnerToken:
+                                                                      value
+                                                                          .data,
+                                                                  myProfile:
+                                                                      HomeController
+                                                                          .to
+                                                                          .myProfile
+                                                                          .value,
+                                                                  enterRoute:
+                                                                      EnterRoute
+                                                                          .otherProfile,
+                                                                ));
+                                                            // Get.put(MessageController());
+                                                            HomeController
+                                                                    .to
+                                                                    .enterMessageRoom
+                                                                    .value =
+                                                                _controller
+                                                                    .otherUser
+                                                                    .value
+                                                                    .userid;
+                                                          }
+                                                        });
+                                                      }
                                                       // MessageDetailScreen(
                                                       //   realname:
                                                       //       _controller

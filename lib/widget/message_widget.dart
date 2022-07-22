@@ -29,7 +29,7 @@ class MessageWidget extends StatelessWidget {
         horizontal: 20,
         vertical: 14,
       ),
-      child: message.sender == myId
+      child: message.sender == myId.toString()
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
