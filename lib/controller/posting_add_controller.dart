@@ -6,6 +6,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PostingAddController extends GetxController {
   static PostingAddController get to => Get.find();
@@ -52,7 +53,10 @@ class PostingAddController extends GetxController {
   RxDouble croppedWidth = 500.0.obs;
   Rx<Size> selectedImageSize = Size(Get.width, Get.height).obs;
   RxList<List<AssetEntity>> titleImageList1 = <List<AssetEntity>>[].obs;
+  List<int> albumPageNums = <int>[].obs;
+  int albumIndex = 0;
   RxList<File> titleImageList = <File>[].obs;
+  RefreshController refreshController = RefreshController();
   TransformationController transformationController =
       TransformationController();
   // @override
@@ -64,6 +68,19 @@ class PostingAddController extends GetxController {
   void _loadData() async {
     headerTitle.value = albums.first.name;
     await _pagingPhotos().then((value) => isLoad.value = true);
+  }
+
+  Future<void> onPageLoad() async {
+    var photos = await albums[albumIndex]
+        .getAssetListPaged(page: albumPageNums[albumIndex], size: 30);
+
+    if (photos.isEmpty) {
+      refreshController.loadNoData();
+    } else {
+      imageList.addAll(photos);
+      albumPageNums[albumIndex] += 1;
+      refreshController.loadComplete();
+    }
   }
 
   Future<void> _pagingPhotos() async {
@@ -78,8 +95,9 @@ class PostingAddController extends GetxController {
   Future<void> getPhotos() async {
     print(albums);
     for (int i = 0; i < albums.length; i++) {
-      var photos = await albums.first.getAssetListPaged(page: i, size: 30);
+      var photos = await albums[i].getAssetListPaged(page: 0, size: 30);
       titleImageList1.add(photos);
+      albumPageNums[i] += 1;
     }
   }
 
@@ -96,6 +114,7 @@ class PostingAddController extends GetxController {
               const OrderOption(type: OrderOptionType.createDate, asc: false),
             ],
           ));
+      albumPageNums = List.generate(albums.length, (index) => 0);
       getPhotos();
       _loadData();
     } else {}

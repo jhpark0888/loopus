@@ -94,7 +94,9 @@ class CareerRankWidget extends StatelessWidget {
             style: k15normal.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 3),
-          rate(user.trend)
+          rate(isUniversity
+              ? user.schoolRank - user.schoolLastRank
+              : user.rank - user.lastRank)
         ]),
         const SizedBox(width: 14),
         Column(

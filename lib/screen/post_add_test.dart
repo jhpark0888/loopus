@@ -345,33 +345,35 @@ class PostingAddNameScreen1 extends StatelessWidget {
   Widget uploadButton() {
     return GestureDetector(
       onTap: () async {
-        loading();
-        await addposting(project_id).then((value) {
-          Get.back();
-          if (value.isError == false) {
-            Post post = Post.fromJson(value.data);
+        if (checkContent()) {
+          loading();
+          await addposting(project_id).then((value) {
+            Get.back();
+            if (value.isError == false) {
+              Post post = Post.fromJson(value.data);
 
-            if (Get.isRegistered<ProfileController>()) {
-              Project? career =
-                  ProfileController.to.myProjectList.firstWhereOrNull(
-                (career) => career.id == project_id,
-              );
+              if (Get.isRegistered<ProfileController>()) {
+                Project? career =
+                    ProfileController.to.myProjectList.firstWhereOrNull(
+                  (career) => career.id == project_id,
+                );
 
-              if (career != null) {
-                career.posts.insert(0, post);
+                if (career != null) {
+                  career.posts.insert(0, post);
+                }
+
+                getbacks(2);
+                dialogBack();
+                showCustomDialog('포스팅을 업로드했어요', 1000);
+              } else {
+                errorSituation(value);
               }
-
-              getbacks(2);
-              dialogBack();
-              showCustomDialog('포스팅을 업로드했어요', 1000);
-            } else {
-              errorSituation(value);
             }
-          }
-        });
+          });
+        }
       },
       child: Container(
-        padding: const EdgeInsets.fromLTRB(146.5, 13, 146.5, 13),
+        padding: const EdgeInsets.fromLTRB(0, 13, 0, 13),
         decoration: BoxDecoration(
             color: checkContent() ? mainblue : maingray.withOpacity(0.5),
             borderRadius: BorderRadius.circular(8)),
