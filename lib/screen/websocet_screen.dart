@@ -311,17 +311,17 @@ class WebsoketScreen extends StatelessWidget {
                     'token': partnerToken,
                     'name': myProfile.realName
                   }));
-                  controller.messageList.insert(
-                      0,
-                      Chat(
-                          content: controller.sendText.text,
-                          date: DateTime.now(),
-                          sender: controller.myId.toString(),
-                          isRead: false.obs,
-                          messageId: '0',
-                          type: 'msg',
-                          roomId: controller.roomid,
-                          sendsuccess: false.obs));
+                  // controller.messageList.insert(
+                  //     0,
+                  //     Chat(
+                  //         content: controller.sendText.text,
+                  //         date: DateTime.now(),
+                  //         sender: controller.myId.toString(),
+                  //         isRead: false.obs,
+                  //         messageId: '0',
+                  //         type: 'msg',
+                  //         roomId: controller.roomid,
+                  //         sendsuccess: false.obs));
                   controller.sendText.clear();
                 }
               },
