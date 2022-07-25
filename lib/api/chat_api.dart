@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
@@ -254,6 +255,39 @@ Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
       if (response.statusCode == 200) {
         Get.back();
         return HTTPResponse.success(null);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+      // ErrorController.to.isServerClosed(true);
+    }
+  }
+}
+
+Future<HTTPResponse> updateNotreadMsg(int userId) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+    final uri = Uri.parse("http://$chatServerUri/chat/check_msg?id=$userId");
+
+    try {
+      http.Response response =
+          await http.get(uri);
+
+      print("안읽은 메세지 개수 업데이트: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        bool responseBody =
+            jsonDecode(utf8.decode(response.bodyBytes));
+        return HTTPResponse.success(responseBody);
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }

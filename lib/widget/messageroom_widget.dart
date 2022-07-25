@@ -190,8 +190,16 @@ class MessageRoomWidget extends StatelessWidget {
         // );
         GestureDetector(
       onTap: () async {
-        print(user.userid);
         await getPartnerToken(user.userid).then((value) {
+          chatRoom.value.notread.value = 0;
+          if (MessageController.to.chattingRoomList
+              .where((messageroomwidget) =>
+                  messageroomwidget.chatRoom.value.notread.value != 0)
+              .isNotEmpty) {
+            HomeController.to.isNewMsg(true);
+          } else {
+            HomeController.to.isNewMsg(false);
+          }
           if (value.isError == false) {
             Get.to(() => WebsoketScreen(
                   partner: user,
@@ -201,8 +209,8 @@ class MessageRoomWidget extends StatelessWidget {
                 ));
           }
         });
-        SQLController.to.updateNotReadCount(chatRoom.value.roomId);
-        chatRoom.value.notread.value = 0;
+        SQLController.to.updateNotReadCount(chatRoom.value.roomId, 0);
+
         HomeController.to.enterMessageRoom.value = user.userid;
       },
       child: Container(

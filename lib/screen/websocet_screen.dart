@@ -311,6 +311,17 @@ class WebsoketScreen extends StatelessWidget {
                     'token': partnerToken,
                     'name': myProfile.realName
                   }));
+                  controller.messageList.insert(
+                      0,
+                      Chat(
+                          content: controller.sendText.text,
+                          date: DateTime.now(),
+                          sender: controller.myId.toString(),
+                          isRead: false.obs,
+                          messageId: '0',
+                          type: 'msg',
+                          roomId: controller.roomid,
+                          sendsuccess: false.obs));
                   controller.sendText.clear();
                 }
               },
@@ -375,8 +386,7 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
             headers: <String, String>{
               'Content-Type': 'application/json',
               'id': '$myId'
-            },
-            pingInterval: const Duration(seconds: 1));
+            });
         channel.stream.listen((event) {
           print(event);
           messageTypeCheck(jsonDecode(event));
@@ -448,8 +458,8 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
               .getDBMessage(roomid, int.parse(lastid.value)));
           checkRoomId(roomid).then((value) {
             if (value.isNotEmpty) {
-              print(messageList[0].messageId);
               sendLastView(int.parse(messageList.first.messageId!));
+              updateNotreadMsg();
             } else {
               sendLastView(0);
             }
@@ -542,7 +552,6 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
           .where((p0) => p0.isRead!.value == false)
           .toList()
           .isNotEmpty) {
-        print('실행되는중');
         if (checkFirstScreenPosition().value == true) {
           messageList.first.isRead!.value = true;
         } else {
@@ -560,5 +569,16 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
     } else {
       return false.obs;
     }
+  }
+
+  void updateNotreadMsg() async {
+    await SQLController.to.updateNotReadCount(roomid, 0);
+    SQLController.to.findNotReadMessage(roomid: roomid).then((value) {
+      if (value == false) {
+        HomeController.to.isNewMsg.value = false;
+      } else {
+        HomeController.to.isNewMsg.value = true;
+      }
+    });
   }
 }

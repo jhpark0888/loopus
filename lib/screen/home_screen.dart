@@ -64,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       // ProfileController.to.isnewalarm(false);
-
+                      Get.to(() => DatabaseList());
                       // Get.to(() => NotificationScreen());
                     },
                     child: SvgPicture.asset(
@@ -114,7 +114,7 @@ class HomeScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.topRight,
                       child: Obx(
-                          () => ProfileController.to.isnewmessage.value == true
+                          () => HomeController.to.isNewMsg.value == true
                               ? Container(
                                   height: 8,
                                   width: 8,

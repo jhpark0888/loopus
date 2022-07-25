@@ -361,6 +361,8 @@ class HomeController extends GetxController
 
   RxBool enablePostingPullup = true.obs;
 
+  RxBool isNewMsg = false.obs;
+
   RefreshController postingRefreshController =
       RefreshController(initialRefresh: false);
 
@@ -404,9 +406,13 @@ class HomeController extends GetxController
     }
     myId = await const FlutterSecureStorage().read(key: "id");
 
-    await getProfile(int.parse(myId!)).then((value) {
+    await getProfile(int.parse(myId!)).then((value) async{
       if (value.isError == false) {
         myProfile.value = User.fromJson(value.data);
+        print(myProfile.value.userid);
+        await updateNotreadMsg(myProfile.value.userid).then((value) { if(value.isError == false){
+          isNewMsg.value = value.data;
+          print(value.data);        }});
       }
     });
 

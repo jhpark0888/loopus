@@ -14,8 +14,8 @@ class Chat {
   DateTime date;
   String? sender;
   RxBool? isRead;
+  RxBool? sendsuccess;
   int? roomId;
-
   Chat(
       {required this.content,
       required this.date,
@@ -23,7 +23,8 @@ class Chat {
       required this.isRead,
       required this.messageId,
       required this.type,
-      required this.roomId});
+      required this.roomId,
+      this.sendsuccess});
 
   factory Chat.fromJson(Map<String, dynamic> json) => Chat(
       type: json['type'],
@@ -32,7 +33,8 @@ class Chat {
       date: DateTime.parse(json["date"]),
       sender: json['sender'].toString(),
       isRead: json['is_read'] != null ? RxBool(json['is_read']) : null,
-      roomId: json['room_id']);
+      roomId: json['room_id'],
+      sendsuccess: true.obs);
 
   factory Chat.fromMsg(Map<String, dynamic> json, int roomId) => Chat(
       type: json['type'],

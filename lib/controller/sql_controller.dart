@@ -69,13 +69,21 @@ class SQLController extends GetxController {
     });
   }
 
-  Future<void> updateNotReadCount(int roomId) async {
+  Future<void> updateNotReadCount(int roomId,int read) async {
     final Database db = await database!;
+    if(read == 0){
     db.rawUpdate('UPDATE chatroom SET not_read = ? WHERE room_id = ?',
-        [0, roomId]).then((value) {
+        [read, roomId]).then((value) {
       print(value);
     });
+    }else{
+      db.rawUpdate('UPDATE chatroom SET not_read = ? WHERE room_id = ?',
+        [read, roomId]).then((value) {
+      print(value);
+    });
+    }
   }
+
 
   Future<void> insertMessageRoom(ChatRoom chatRoom) async {
     final Database db = await database!;
@@ -190,6 +198,22 @@ class SQLController extends GetxController {
     } else {
       print('존재합니다');
       print(maps);  
+      return true;
+    }
+  }
+
+  Future<bool> findNotReadMessage(
+      {required int roomid}) async {
+    final Database db = await database!;
+    final List<Map<String, dynamic>> maps;
+    maps =
+        await db.rawQuery('SELECT * FROM chatroom WHERE not_read > ?', [0]);
+
+    if (maps.isEmpty) {
+      print('안읽은 메세지가 없습니다.');
+      return false;
+    } else {
+      print('안읽은 메세지가 존재합니다.');
       return true;
     }
   }

@@ -62,7 +62,7 @@ class ProfileController extends GetxController
   RxList<User> mylooplist = <User>[].obs;
 
   RxBool isnewalarm = false.obs;
-  RxBool isnewmessage = false.obs;
+  // RxBool isnewmessage = false.obs;
 
   RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> myprofilescreenstate = ScreenState.loading.obs;
@@ -88,7 +88,7 @@ class ProfileController extends GetxController
           User user = User.fromJson(value.data);
           myUserInfo(user);
           isnewalarm(value.data["new_alarm"]);
-          isnewmessage(value.data["new_message"]);
+          // isnewmessage(value.data["new_message"]);
         } else {
           errorSituation(value, screenState: myprofilescreenstate);
         }

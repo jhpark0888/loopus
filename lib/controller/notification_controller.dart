@@ -171,7 +171,8 @@ class NotificationController extends GetxController {
         } else {
           if (Get.isRegistered<MessageController>()) {
             String? myid = await const FlutterSecureStorage().read(key: 'id');
-
+            HomeController.to.isNewMsg(true);
+            SQLController.to.updateNotReadCount(int.parse(event.data['room_id']),1);
             showCustomSnackbar(
                 event.notification!.title, event.notification!.body,
                 (snackbar) async {
@@ -293,7 +294,8 @@ class NotificationController extends GetxController {
                   .compareTo(a.chatRoom.value.message.value.date));
             });
           } else {
-            ProfileController.to.isnewmessage(true);
+            HomeController.to.isNewMsg(true);
+            SQLController.to.updateNotReadCount(int.parse(event.data['room_id']),1);
             Map<String, dynamic> json = event.data;
             json["date"] = DateTime.now().toString();
             json["content"] = event.notification!.body;

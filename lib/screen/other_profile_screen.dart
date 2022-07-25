@@ -18,6 +18,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
+import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
@@ -496,7 +497,6 @@ class OtherProfileScreen extends StatelessWidget {
                                                                       EnterRoute
                                                                           .otherProfile,
                                                                 ));
-                                                            // Get.put(MessageController());
                                                             HomeController
                                                                     .to
                                                                     .enterMessageRoom
