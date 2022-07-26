@@ -19,13 +19,14 @@ class CareerBoardPostWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => PostingScreen(post: post, postid: post.id), opaque: false);
+        Get.to(() => PostingScreen(post: post, postid: post.id),
+            preventDuplicates: false);
       },
       child: Container(
         height: 430,
         width: 280,
         decoration: BoxDecoration(
-            color: lightcardgray, borderRadius: BorderRadius.circular(16)),
+            color: lightcardgray, borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.only(top: 20, bottom: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,17 +44,16 @@ class CareerBoardPostWidget extends StatelessWidget {
                           children: [
                             UserImageWidget(
                               imageUrl: post.user.profileImage ?? '',
-                              width: 32,
-                              height: 32,
+                              width: 36,
+                              height: 36,
                             ),
                             const SizedBox(width: 8),
                             RichText(
                                 text: TextSpan(children: [
                               TextSpan(
                                   text: '${post.user.realName} · ',
-                                  style: k15semiBold),
-                              TextSpan(
-                                  text: post.user.department, style: k15normal)
+                                  style: kmainbold),
+                              TextSpan(text: post.user.department, style: kmain)
                             ])),
                           ],
                         ),
@@ -72,7 +72,7 @@ class CareerBoardPostWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   Text(post.project!.careerName,
-                      style: k15normal.copyWith(color: maingray)),
+                      style: kmain.copyWith(color: maingray)),
                 ],
               ),
             ),
@@ -95,11 +95,11 @@ class CareerBoardPostWidget extends StatelessWidget {
                         () => ExpandableText(
                             textSpan: TextSpan(
                                 text: post.content.value,
-                                style: k15normal.copyWith(height: 1.5)),
+                                style: kmainheight.copyWith(height: 1.5)),
                             maxLines: 3,
                             moreSpan: TextSpan(
                                 text: '...',
-                                style: k15normal.copyWith(height: 1.5))),
+                                style: kmainheight.copyWith(height: 1.5))),
                       ),
                     ),
                   ],
@@ -110,8 +110,7 @@ class CareerBoardPostWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 14, right: 14),
                   child: Obx(
-                    () => Text(post.content.value,
-                        style: k15normal.copyWith(height: 1.5)),
+                    () => Text(post.content.value, style: kmainheight),
                   ),
                 ),
               ),
@@ -120,16 +119,16 @@ class CareerBoardPostWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Row(
                 children: [
-                  Text('좋아요 ', style: k15normal.copyWith(color: maingray)),
-                  Text('${post.likeCount}개', style: k15normal),
+                  Text('좋아요 ', style: kmain.copyWith(color: maingray)),
+                  Text('${post.likeCount}개', style: kmain),
                   const SizedBox(width: 7),
-                  Text('댓글 ', style: k15normal.copyWith(color: maingray)),
+                  Text('댓글 ', style: kmain.copyWith(color: maingray)),
                   Text(
                     '${(post.comments.length + 1).toString()}개',
-                    style: k15normal,
+                    style: kmain,
                   ),
                   const Spacer(),
-                  Text('교내추천', style: k15normal.copyWith(color: maingray))
+                  Text('교내추천', style: kmain.copyWith(color: maingray))
                 ],
               ),
             )

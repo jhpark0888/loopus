@@ -5,17 +5,20 @@ import 'package:loopus/controller/hover_controller.dart';
 import '../constant.dart';
 
 class CustomExpandedButton extends StatelessWidget {
-  CustomExpandedButton({
-    required this.onTap,
-    required this.isBlue,
-    required this.title,
-    required this.isBig,
-  });
+  CustomExpandedButton(
+      {required this.onTap,
+      required this.isBlue,
+      required this.title,
+      required this.isBig,
+      this.boxColor,
+      this.textColor});
 
   VoidCallback onTap;
-  bool? isBlue;
-  bool? isBig;
+  bool isBlue;
+  bool isBig;
   String? title;
+  Color? boxColor;
+  Color? textColor;
   final HoverController _hoverController = HoverController();
 
   @override
@@ -27,25 +30,31 @@ class CustomExpandedButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: isBig == true ? 12 : 8,
+          vertical: isBig == true ? 13 : 8,
           horizontal: 12,
         ),
         decoration: BoxDecoration(
-          color: isBlue! ? mainblue : const Color(0xffe7e7e7),
-          borderRadius: BorderRadius.circular(4),
+          // ignore: prefer_if_null_operators
+          color: boxColor != null
+              ? boxColor
+              : isBlue
+                  ? mainblue
+                  : maingray,
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Obx(
           () => Text(
             title!,
             textAlign: TextAlign.center,
-            style: kButtonStyle.copyWith(
-              color: _hoverController.isHover.value
-                  ? isBlue!
+            style: kmain.copyWith(
+              // ignore: prefer_if_null_operators
+              color: textColor != null
+                  ? _hoverController.isHover.value
+                      ? textColor!.withOpacity(0.6)
+                      : textColor
+                  : _hoverController.isHover.value
                       ? mainWhite.withOpacity(0.6)
-                      : mainblack.withOpacity(0.5)
-                  : isBlue!
-                      ? mainWhite
-                      : mainblack,
+                      : mainWhite,
             ),
           ),
         ),

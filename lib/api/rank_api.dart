@@ -11,8 +11,9 @@ import 'package:loopus/model/httpresponse_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/model/post_model.dart';
 
-//type: main(포스팅 및 사람), all(사람 순위 100명까지)
-Future<HTTPResponse> getTopPost(String id, String type, {int? page}) async {
+//type: main(포스팅 및 사람), school or group(사람 순위 100명까지)
+Future<HTTPResponse> getCareerBoardRequest(String id, String type,
+    {int? page}) async {
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {

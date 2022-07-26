@@ -5,14 +5,20 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/realtime_rank_screen.dart';
 import 'package:loopus/widget/person_image_widget.dart';
 import 'package:loopus/widget/persontile_widget.dart';
 
 class CareerRankWidget extends StatelessWidget {
-  CareerRankWidget({Key? key, required this.isUniversity, required this.ranker})
+  CareerRankWidget(
+      {Key? key,
+      required this.isUniversity,
+      required this.ranker,
+      required this.currentField})
       : super(key: key);
   bool isUniversity;
   List<User> ranker;
+  MapEntry<String, String> currentField;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,11 +36,15 @@ class CareerRankWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Text(isUniversity ? '교내' : '전국',
-                  style: k15normal.copyWith(fontWeight: FontWeight.w600)),
+                  style: kmain.copyWith(fontWeight: FontWeight.w600)),
               GestureDetector(
-                  onTap: () {},
-                  child:
-                      Text('전체보기', style: k15normal.copyWith(color: mainblue)))
+                  onTap: () {
+                    Get.to(() => RealTimeRankScreen(
+                          currentField: currentField,
+                          isUniversity: isUniversity,
+                        ));
+                  },
+                  child: Text('전체보기', style: kmain.copyWith(color: mainblue)))
             ],
           ),
           const SizedBox(height: 20),
@@ -42,8 +52,11 @@ class CareerRankWidget extends StatelessWidget {
             ListView.separated(
                 primary: false,
                 shrinkWrap: true,
-                itemBuilder: (context, index) =>
-                    personRankWidget(ranker[index]),
+                itemBuilder: (context, index) => PersonRankWidget(
+                      user: ranker[index],
+                      isUniversity: isUniversity,
+                      isFollow: false,
+                    ),
                 separatorBuilder: (context, index) => const SizedBox(
                       height: 20,
                     ),
@@ -57,17 +70,26 @@ class CareerRankWidget extends StatelessWidget {
                 ),
               ),
             )
-          // personRankWidget(ranker[0]),
-          // const SizedBox(height: 20),
-          // personRankWidget(ranker[1]),
-          // const SizedBox(height: 20),
-          // personRankWidget(ranker[2])
         ],
       ),
     );
   }
+}
 
-  Widget personRankWidget(User user) {
+class PersonRankWidget extends StatelessWidget {
+  PersonRankWidget(
+      {Key? key,
+      required this.isUniversity,
+      required this.user,
+      required this.isFollow})
+      : super(key: key);
+
+  User user;
+  bool isUniversity;
+  bool isFollow;
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Get.to(
@@ -83,54 +105,108 @@ class CareerRankWidget extends StatelessWidget {
             const SizedBox(height: 7),
             Text(
               user.realName,
-              style: k15normal,
+              style: kmain,
             )
           ],
         ),
         const SizedBox(width: 14),
         Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Text(
-            user.rank.toString(),
-            style: k15normal.copyWith(fontWeight: FontWeight.w600),
+            isUniversity ? user.schoolRank.toString() : user.rank.toString(),
+            style: kmainbold.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 3),
-          rate(isUniversity
-              ? user.schoolRank - user.schoolLastRank
-              : user.rank - user.lastRank)
+          rate(
+              rank: isUniversity ? user.schoolRank : user.rank,
+              lastRank: isUniversity ? user.schoolLastRank : user.lastRank)
         ]),
         const SizedBox(width: 14),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(user.univ != "" ? user.univ : '땡땡대', style: k15normal),
-            const SizedBox(height: 7),
-            Text(user.department, style: k15normal),
-            const SizedBox(height: 7),
-            RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                    text: '최근 포스트 ',
-                    style:
-                        k15normal.copyWith(color: maingray.withOpacity(0.5))),
-                TextSpan(
-                    text: '${user.resentPostCount.toString()}개',
-                    style: k15normal)
-              ]),
-              textAlign: TextAlign.start,
-            )
-          ],
-        )
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                user.univ != "" ? user.univ : '땡땡대',
+                style: kmain,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 7),
+              Text(
+                user.department,
+                style: kmain,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 7),
+              RichText(
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: '최근 포스트 ',
+                      style: kmain.copyWith(color: maingray.withOpacity(0.5))),
+                  TextSpan(
+                      text: '${user.resentPostCount.toString()}개', style: kmain)
+                ]),
+                textAlign: TextAlign.start,
+              )
+            ],
+          ),
+        ),
+        // 나 일때는 팔로우 버튼 없어야 함
+        //지금은 is_user를 안 주는 듯
+        if (isFollow && user.isuser != 1)
+          Obx(
+            () => Row(children: [
+              const SizedBox(
+                width: 14,
+              ),
+              GestureDetector(
+                onTap: () {
+                  user.looped.value = user.looped.value == FollowState.normal
+                      ? FollowState.following
+                      : user.looped.value == FollowState.follower
+                          ? FollowState.wefollow
+                          : user.looped.value == FollowState.following
+                              ? FollowState.normal
+                              : FollowState.follower;
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+                  decoration: BoxDecoration(
+                      color: user.looped.value == FollowState.normal ||
+                              user.looped.value == FollowState.follower
+                          ? mainblue
+                          : cardGray,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Center(
+                    child: Text(
+                      user.looped.value == FollowState.normal ||
+                              user.looped.value == FollowState.follower
+                          ? "팔로우"
+                          : "팔로잉",
+                      style: kmain.copyWith(
+                          color: user.looped.value == FollowState.normal ||
+                                  user.looped.value == FollowState.follower
+                              ? mainWhite
+                              : mainblack),
+                    ),
+                  ),
+                ),
+              )
+            ]),
+          )
       ]),
     );
   }
 
-  Widget rate(int variance) {
+  Widget rate({required int rank, required int lastRank}) {
+    int variance = rank - lastRank;
     return Row(children: [
       const SizedBox(width: 4),
       arrowDirection(variance),
       const SizedBox(width: 2),
       if (variance != 0)
-        Text('${variance.abs()}',
+        Text(lastRank != 0 ? '${variance.abs()}' : "NEW",
             style:
                 kcaption.copyWith(color: variance >= 1 ? rankred : rankblue)),
     ]);

@@ -12,14 +12,18 @@ class SearchTextFieldWidget extends StatelessWidget {
     this.textInputAction,
     this.onchanged,
     this.onEditingComplete,
+    this.autofocus,
+    this.onSubmitted,
   }) : super(key: key);
   void Function()? ontap;
   void Function(String)? onchanged;
   String hinttext;
   bool readonly;
+  bool? autofocus;
   TextEditingController? controller;
   TextInputAction? textInputAction;
   Function()? onEditingComplete;
+  Function(String)? onSubmitted;
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -32,9 +36,10 @@ class SearchTextFieldWidget extends StatelessWidget {
         cursorColor: mainblack,
         cursorWidth: 1.2,
         cursorRadius: Radius.circular(5.0),
-        autofocus: false,
+        autofocus: autofocus ?? false,
         textInputAction: textInputAction,
         onEditingComplete: onEditingComplete,
+        onSubmitted: onSubmitted,
         decoration: InputDecoration(
           filled: true,
           fillColor: cardGray,

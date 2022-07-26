@@ -331,9 +331,12 @@ class PostingWidget extends StatelessWidget {
                                         style: k16semiBold,
                                       ),
                                       const SizedBox(width: 7),
-                                      Text(
-                                        item.comments.first.content,
-                                        style: k16Normal,
+                                      Expanded(
+                                        child: Text(
+                                          item.comments.first.content,
+                                          style: k16Normal,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       )
                                     ],
                                   ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,7 +22,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  // debugPrintGestureArenaDiagnostics = true;
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

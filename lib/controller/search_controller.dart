@@ -107,7 +107,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   }
 
   void popPostLoad() async {
-    await getTopPost("10", "", page: popPagenum).then((value) {
+    await getCareerBoardRequest("10", "", page: popPagenum).then((value) {
       if (value.isError == false) {
         List<Post> postList =
             List.from(value.data).map((post) => Post.fromJson(post)).toList();
