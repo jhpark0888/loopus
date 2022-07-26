@@ -5,190 +5,120 @@ import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_emailcheck_screen.dart';
+import 'package:loopus/screen/signup_pw_screen.dart';
+import 'package:loopus/screen/univ_dept_search_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
-
+import 'package:loopus/widget/label_textfield_widget.dart';
+import 'package:loopus/widget/signup_text_widget.dart';
 import '../utils/check_form_validate.dart';
+import 'package:loopus/widget/custom_expanded_button.dart';
 
+// ignore: must_be_immutable
 class SignupUserInfoScreen extends StatelessWidget {
-  final SignupController signupController = Get.find();
-  final _formKey = GlobalKey<FormState>();
-  final GAController _gaController = Get.find();
-  // RxBool isbutton = false.obs;
+  SignupUserInfoScreen({Key? key}) : super(key: key);
+
+  final SignupController _signupController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        bottomBorder: false,
-        actions: [
-          TextButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                if (signupController.signupcertification.value ==
-                    Emailcertification.fail) {
-                  emailRequest();
-                }
-
-                Get.to(() => SignupEmailcheckScreen());
-                await _gaController.logScreenView('signup_4');
-              }
-            },
-            child: Text(
-              '다음',
-              style: kSubTitle2Style.copyWith(color: mainblue),
-            ),
-          ),
-        ],
-        title: '회원 가입',
-      ),
-      body: SingleChildScrollView(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              32,
-              24,
-              32,
-              40,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: '계정',
-                          style: kSubTitle1Style.copyWith(
-                            color: mainblue,
-                          ),
-                        ),
-                        const TextSpan(
-                          text: '을 만들어주세요',
-                          style: kSubTitle1Style,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  //Todo: UX Writing
-                  const Text(
-                    '공정한 이용을 위해 학교 이메일 주소를 받고 있어요',
-                    style: kBody2Style,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  //TODO: 학교 별 다른 UX Writing
-                  Text(
-                    '${signupController.selectUniv.value.univname} 이메일 주소',
-                    style: kButtonStyle,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: CustomTextField(
-                          counterText: null,
-                          maxLength: null,
-                          textController: signupController.emailidcontroller,
-                          //TODO: 선택한 학교에 따라 hintText의 Domain 주소 변경
-                          hintText: 'loopus',
-                          validator: (value) =>
-                              CheckValidate().validateSpecificWords(value!),
-                          obscureText: false,
-                          maxLines: 1,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      //TODO: 학교 별 다른 UX Writing
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          signupController.selectUniv.value.email,
-                          style: kSubTitle3Style,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  const Text(
-                    '이름',
-                    style: kButtonStyle,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  CustomTextField(
-                    counterText: null,
-                    maxLength: null,
-                    textController: signupController.namecontroller,
-                    hintText: '김루프',
-                    validator: null,
-                    obscureText: false,
-                    maxLines: 1,
-                  ),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  const Text(
-                    '비밀번호',
-                    style: kButtonStyle,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  CustomTextField(
-                    counterText: null,
-                    maxLength: null,
-                    textController: signupController.passwordcontroller,
-                    hintText: '8자리 이상',
-                    validator: (value) =>
-                        CheckValidate().validatePassword(value!),
-                    obscureText: true,
-                    maxLines: 1,
-                  ),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  const Text(
-                    '비밀번호 확인',
-                    style: kButtonStyle,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  CustomTextField(
-                    counterText: null,
-                    maxLength: null,
-                    textController: signupController.passwordcheckcontroller,
-                    hintText: '',
-                    validator: (value) {
-                      if (signupController.passwordcontroller.text != value) {
-                        return "입력하신 비밀번호와 일치하지 않아요";
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          extendBody: true,
+          bottomNavigationBar: BottomAppBar(
+            color: mainWhite,
+            elevation: 0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Obx(
+                () => CustomExpandedButton(
+                    onTap: () {
+                      if (_signupController.isUserInfoFill.value) {
+                        Get.to(() => SignupEmailcheckScreen());
                       }
                     },
-                    obscureText: true,
-                    maxLines: 1,
-                  ),
-                ],
+                    isBlue: _signupController.isUserInfoFill.value,
+                    title: "다음",
+                    isBig: true),
               ),
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                SignUpTextWidget(
+                    highlightText: "루프어스",
+                    oneLinetext: "에 오신걸 환영해요!",
+                    twoLinetext: "본인 정보를 입력해주세요"),
+                LabelTextFieldWidget(
+                    label: "이름",
+                    hintText: "본인 이름을 입력하세요",
+                    textController: _signupController.namecontroller),
+                LabelTextFieldWidget(
+                    ontap: () {
+                      Get.to(() => UnivDeptSearchScreen(
+                            searchType: UnivDeptSearchType.univ,
+                          ));
+                    },
+                    label: "대학",
+                    hintText: "출신 대학을 입력하세요",
+                    readOnly: true,
+                    textController: _signupController.univcontroller),
+                LabelTextFieldWidget(
+                    ontap: () {
+                      if (_signupController.selectUniv.value.id == 0) {
+                        showCustomDialog("출신 대학을 먼저 선택해주세요", 1000);
+                      } else {
+                        Get.to(() => UnivDeptSearchScreen(
+                              searchType: UnivDeptSearchType.dept,
+                            ));
+                      }
+                    },
+                    label: "학과",
+                    hintText: "출신 학과를 입력하세요",
+                    readOnly: true,
+                    textController: _signupController.departmentcontroller),
+                LabelTextFieldWidget(
+                    ontap: () {
+                      int year = DateTime.now().year;
+
+                      showCustomYearPicker(
+                          childCount: 50,
+                          builder: (context, index) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  (year - (50 - (index + 1))).toString(),
+                                  style: kmainbold,
+                                ),
+                              ),
+                          onItemTapCallback: (index) {
+                            _signupController.admissioncontroller.text =
+                                (year - (50 - (index + 1))).toString();
+                            Get.back();
+                          });
+                    },
+                    label: "입학 연도",
+                    hintText: "입학 연도를 입력하세요",
+                    readOnly: true,
+                    textController: _signupController.admissioncontroller),
+                const SizedBox(
+                  height: 24,
+                ),
+                Text(
+                  "대학 인증을 위해 정확한 정보를 입력해주세요",
+                  style: kmain.copyWith(color: maingray),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+              ],
             ),
           ),
         ),

@@ -171,16 +171,17 @@ class CareerBoardScreen extends StatelessWidget {
                                           scrollDirection: Axis.horizontal,
                                           itemBuilder: (context, index) {
                                             return CareerRankWidget(
-                                                isUniversity:
-                                                    index == 0 ? true : false,
-                                                ranker: index == 0
-                                                    ? _controller
-                                                            .campusRankerMap[
-                                                        currentField.key]!
-                                                    : _controller
-                                                        .koreaRankerMap[
-                                                            currentField.key]!
-                                                        .value);
+                                              isUniversity:
+                                                  index == 0 ? true : false,
+                                              ranker: index == 0
+                                                  ? _controller.campusRankerMap[
+                                                      currentField.key]!
+                                                  : _controller
+                                                      .koreaRankerMap[
+                                                          currentField.key]!
+                                                      .value,
+                                              currentField: currentField,
+                                            );
                                           },
                                           separatorBuilder: (context, index) {
                                             return const SizedBox(width: 14);
@@ -240,7 +241,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 14),
                                   SizedBox(
-                                    height: 425,
+                                    height: 430,
                                     child: _controller
                                             .popPostMap[currentField.key]!
                                             .isEmpty
@@ -277,43 +278,49 @@ class CareerBoardScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 24),
                                   const Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 20.0, right: 20),
-                                    child:
-                                        Divider(thickness: 1, color: cardGray),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  const Padding(
                                       padding: EdgeInsets.only(
                                           left: 20.0, right: 20),
                                       child:
                                           Text('해시태그 분석', style: k18semiBold)),
+                                  const SizedBox(height: 14),
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 20.0, right: 20, top: 6),
-                                    child: Obx(
-                                      () => ListView.separated(
-                                        padding: const EdgeInsets.only(top: 20),
-                                        primary: false,
-                                        shrinkWrap: true,
-                                        itemCount:
-                                            HomeController.to.topTagList.length,
-                                        itemBuilder: (context, index) {
-                                          return tagAnalize(HomeController
-                                              .to.topTagList[index]);
-                                        },
-                                        separatorBuilder: (context, index) {
-                                          return const SizedBox(height: 14);
-                                        },
-                                      ),
+                                      left: 20.0,
+                                      right: 20,
                                     ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  const Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 20.0, right: 20),
-                                    child:
-                                        Divider(thickness: 1, color: cardGray),
+                                    child: Obx(
+                                      () => _controller
+                                              .topTagMap[currentField.key]!
+                                              .isEmpty
+                                          ? const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 20),
+                                              child: Center(
+                                                  child: Text(
+                                                "최근 해시태그 분석이 없습니다",
+                                                style: kmain,
+                                              )),
+                                            )
+                                          : ListView.separated(
+                                              primary: false,
+                                              shrinkWrap: true,
+                                              itemCount: _controller
+                                                  .topTagMap[currentField.key]!
+                                                  .length,
+                                              itemBuilder: (context, index) {
+                                                return tagAnalize(
+                                                    _controller.topTagMap[
+                                                        currentField
+                                                            .key]![index],
+                                                    index + 1);
+                                              },
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                return const SizedBox(
+                                                    height: 14);
+                                              },
+                                            ),
+                                    ),
                                   ),
                                   const SizedBox(height: 24),
                                   const Padding(
@@ -431,18 +438,18 @@ class CareerBoardScreen extends StatelessWidget {
 
   // }
 
-  Widget tagAnalize(Tag tag) {
+  Widget tagAnalize(Tag tag, int index) {
     return Row(children: [
       Text(
-        tag.tagId.toString(),
-        style: k16semiBold,
+        index.toString(),
+        style: kmainbold,
       ),
       const SizedBox(width: 14),
       Tagwidget(tag: tag),
       const Spacer(),
       Text(
         '${tag.count.toString()}회',
-        style: k15normal,
+        style: kmain,
       )
     ]);
   }

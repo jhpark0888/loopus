@@ -5,11 +5,11 @@ import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
-import 'package:loopus/screen/signup_campus_info_screen.dart';
+import 'package:loopus/screen/signup_user_info_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 
 class SignupTypeScreen extends StatelessWidget {
-  final SignupController signupController = Get.put(SignupController());
+  final SignupController _signupController = Get.put(SignupController());
   final GAController _gaController = Get.put(GAController());
 
   @override
@@ -21,9 +21,9 @@ class SignupTypeScreen extends StatelessWidget {
           TextButton(
             onPressed: () async {
               //TODO: 학교 선택 시 활성화되어야 함
-              if (signupController.selectedType.value == UserType.student) {
-                Get.to(() => SignupCampusInfoScreen());
-              } else if (signupController.selectedType.value ==
+              if (_signupController.selectedType.value == UserType.student) {
+                Get.to(() => SignupUserInfoScreen());
+              } else if (_signupController.selectedType.value ==
                   UserType.professer) {
                 // Get.to(() => SignupCompanyScreen());
                 showCustomDialog('추후 업데이트 될 예정입니다', 1000);
@@ -65,7 +65,6 @@ class SignupTypeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   UserTypeWidget(
-                    hoverTag: '대학생',
                     title: '대학생',
                     userType: UserType.student,
                   ),
@@ -73,7 +72,6 @@ class SignupTypeScreen extends StatelessWidget {
                     width: 12,
                   ),
                   UserTypeWidget(
-                    hoverTag: '기업',
                     title: '기업',
                     userType: UserType.company,
                   ),
@@ -81,7 +79,6 @@ class SignupTypeScreen extends StatelessWidget {
                     width: 12,
                   ),
                   UserTypeWidget(
-                    hoverTag: '교직원',
                     title: '교직원',
                     userType: UserType.professer,
                   ),
@@ -100,17 +97,13 @@ class UserTypeWidget extends StatelessWidget {
     Key? key,
     required this.userType,
     required this.title,
-    required this.hoverTag,
   }) : super(key: key);
 
-  final SignupController signupController = Get.put(SignupController());
+  final SignupController signupController = Get.find();
   final UserType userType;
   final String title;
-  final String hoverTag;
-  late final HoverController _hoverController = Get.put(
-    HoverController(),
-    tag: hoverTag,
-  );
+
+  late final HoverController _hoverController = HoverController();
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +150,7 @@ class UserTypeWidget extends StatelessWidget {
             padding: const EdgeInsets.all(24),
             child: Text(
               title,
-              style: kSubTitle3Style.copyWith(
+              style: kmain.copyWith(
                   color: (signupController.selectedType.value == userType)
                       ? mainWhite
                       : _hoverController.isHover.value

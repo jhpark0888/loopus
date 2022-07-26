@@ -95,7 +95,7 @@ class _NewsWidgetState extends State<NewsWidget>
                       imageUrl: image,
                       height: 150,
                       width: 252,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                     )
                   : Container(
                       height: 150,

@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
   final void Function(String)? onfieldSubmitted;
   final bool? autofocus;
   final TextInputAction? textInputAction;
+  final bool? readOnly;
 
   CustomTextField(
       {required this.textController,
@@ -23,6 +24,7 @@ class CustomTextField extends StatelessWidget {
       required this.maxLines,
       required this.counterText,
       required this.maxLength,
+      this.readOnly,
       this.autofocus,
       this.ontap,
       this.textInputAction,
@@ -36,10 +38,11 @@ class CustomTextField extends StatelessWidget {
       onTap: ontap,
       obscureText: obscureText,
       autocorrect: false,
+      readOnly: readOnly ?? false,
       minLines: 1,
-      maxLines: maxLines,
+      maxLines: maxLines ?? 1,
       autofocus: autofocus ?? true,
-      style: kSubTitle3Style.copyWith(height: 1.5),
+      style: kmain,
       cursorColor: mainblue,
       cursorWidth: 1.2,
       cursorRadius: const Radius.circular(2),
@@ -54,11 +57,9 @@ class CustomTextField extends StatelessWidget {
           color: maingray,
         ),
         enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(2),
           borderSide: BorderSide(color: maingray, width: 1),
         ),
         disabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(2),
           borderSide: BorderSide(color: maingray, width: 1),
         ),
         focusedBorder: UnderlineInputBorder(

@@ -1,137 +1,250 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
+import 'package:loopus/screen/signup_complete_screen.dart';
+import 'package:loopus/screen/signup_pw_screen.dart';
 import 'package:loopus/screen/signup_tag_screen.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-
+import 'package:loopus/widget/custom_expanded_button.dart';
+import 'package:loopus/widget/signup_text_widget.dart';
 import '../controller/ga_controller.dart';
 
 class SignupEmailcheckScreen extends StatelessWidget {
-  final SignupController signupController = Get.find();
+  final SignupController _signupController = Get.find();
   final GAController _gaController = Get.find();
+
+  Map<Emailcertification, String> leftButtonText = {
+    Emailcertification.normal: "이전",
+    Emailcertification.waiting: "인증 취소하기",
+    Emailcertification.success: "이전",
+    Emailcertification.fail: "이전",
+  };
+
+  Map<Emailcertification, String> rightButtonText = {
+    Emailcertification.normal: "인증하기",
+    Emailcertification.waiting: "인증 대기중",
+    Emailcertification.success: "다음",
+    Emailcertification.fail: "다시 보내기",
+  };
+
+  Timer? validChecktimer;
+  Timer? displaytimer;
+  RxInt sec = 180.obs;
+
+  Widget timerDisplay() {
+    return Obx(
+      () => Text(
+        '0${sec.value ~/ 60}:${NumberFormat('00', "ko").format(sec.value % 60)}',
+        style: kmainbold.copyWith(color: mainblack),
+      ),
+    );
+  }
+
+  void timerOn() async {
+    displaytimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (sec.value != 0) {
+        sec.value -= 1;
+      } else {
+        timerClose();
+      }
+    });
+    validChecktimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+      if (sec.value != 0) {
+        await emailvalidRequest().then((value) {
+          if (value.isError == false) {
+            print("성공");
+            timerClose(dialogOn: false);
+            _signupController.signupcertification(Emailcertification.success);
+            Get.to(() => SignupPwScreen());
+          } else {}
+        });
+      }
+    });
+  }
+
+  void timerClose({bool dialogOn = true}) {
+    if (displaytimer != null) {
+      if (displaytimer!.isActive) {
+        displaytimer!.cancel();
+      }
+    }
+    if (validChecktimer != null) {
+      if (validChecktimer!.isActive) {
+        validChecktimer!.cancel();
+      }
+    }
+    if (dialogOn) {
+      _signupController.signupcertification(Emailcertification.fail);
+      Get.closeCurrentSnackbar();
+      showCustomDialog("인증이 취소되었습니다", 1000);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        bottomBorder: false,
-        actions: [
-          TextButton(
-            onPressed: () async {
-              if (signupController.signupcertification.value ==
-                  Emailcertification.success) {
-                Get.to(() => SignupTagScreen());
-                await _gaController.logScreenView('signup_5');
-              }
-            },
-            child: Obx(
-              () => Text(
-                '다음',
-                style: kSubTitle2Style.copyWith(
-                    color: signupController.signupcertification.value ==
-                            Emailcertification.success
-                        ? mainblue
-                        : mainblack.withOpacity(0.38)),
-              ),
-            ),
-          ),
-        ],
-        title: '회원 가입',
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          32,
-          24,
-          32,
-          40,
-        ),
-        child: Column(
-          children: [
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          bottomNavigationBar: BottomAppBar(
+            color: mainWhite,
+            elevation: 0,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextSpan(
-                    text: '받은 메일함',
-                    style: kSubTitle1Style.copyWith(
-                      color: mainblue,
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      "인증이 어려우신가요?",
+                      style: kcaption.copyWith(color: maingray),
                     ),
                   ),
-                  const TextSpan(
-                    text: '에서 학교 메일을 인증해주세요',
-                    style: kSubTitle1Style,
+                  const SizedBox(
+                    height: 14,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Obx(
+                          () => CustomExpandedButton(
+                              onTap: () {
+                                if (_signupController
+                                        .signupcertification.value ==
+                                    Emailcertification.waiting) {
+                                  timerClose();
+                                } else {
+                                  Get.back();
+                                }
+                              },
+                              isBlue: false,
+                              title: leftButtonText[
+                                  _signupController.signupcertification.value],
+                              isBig: true),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 14,
+                      ),
+                      Expanded(
+                        child: Obx(
+                          () => CustomExpandedButton(
+                              onTap: () async {
+                                if (_signupController
+                                            .signupcertification.value ==
+                                        Emailcertification.normal ||
+                                    _signupController
+                                            .signupcertification.value ==
+                                        Emailcertification.fail) {
+                                  if (_signupController.emailidcontroller.text
+                                          .trim() !=
+                                      "") {
+                                    await emailRequest().then((value) {
+                                      if (value.isError == false) {
+                                        sec(180);
+                                        timerOn();
+                                      } else {
+                                        if (value.errorData!["statusCode"] ==
+                                            400) {
+                                          // Get.back();
+                                          Get.closeCurrentSnackbar();
+                                          showCustomDialog(
+                                              "이미 가입된 회원입니다", 1000);
+                                        } else {
+                                          Get.closeCurrentSnackbar();
+                                          errorSituation(value);
+                                        }
+                                        // signupController.timer!.cancel();
+                                        _signupController.signupcertification(
+                                            Emailcertification.fail);
+                                      }
+                                    });
+                                  } else {
+                                    showCustomDialog("이메일을 입력해주세요", 1000);
+                                  }
+                                } else if (_signupController
+                                        .signupcertification.value ==
+                                    Emailcertification.success) {
+                                  Get.to(() => SignupPwScreen());
+                                }
+                              },
+                              isBlue: true,
+                              title: rightButtonText[
+                                  _signupController.signupcertification.value],
+                              isBig: true),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 16,
-            ),
-            //Todo: UX Writing
-            //TODO: 이메일 인증 완료 시 화면
-            //TODO: 회원가입 시 바로 로그인 되어야 함
-            const Text(
-              '이제 마지막 단계만 남았어요',
-              style: kBody2Style,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            Obx(
-              () => TextFormField(
-                readOnly: true,
-                style: kSubTitle1Style.copyWith(
-                  color: mainblack.withOpacity(0.6),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                SignUpTextWidget(
+                  oneLinetext: "학교 인증을 위해",
+                  twoLinetext: "대학 메일 주소를 입력해주세요",
                 ),
-                //TODO: 학교 도메인 확인
-                initialValue: signupController.emailidcontroller.text +
-                    signupController.selectUniv.value.univname,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(bottom: 0),
-                  isDense: false,
-                  enabledBorder: UnderlineInputBorder(
-                    borderRadius: BorderRadius.circular(2),
-                    borderSide: const BorderSide(color: mainblack, width: 1.2),
-                  ),
-                  disabledBorder: UnderlineInputBorder(
-                    borderRadius: BorderRadius.circular(2),
-                    borderSide: const BorderSide(color: mainblack, width: 1.2),
-                  ),
-                  suffixIconConstraints:
-                      BoxConstraints(minHeight: 24, minWidth: 24),
-                  suffixIcon: signupController.signupcertification.value ==
-                          Emailcertification.success
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 0, left: 0),
-                          child: SvgPicture.asset(
-                            'assets/icons/Check_Active_blue.svg',
+                const SizedBox(
+                  height: 62,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Obx(
+                    () => TextField(
+                      controller: _signupController.emailidcontroller,
+                      style: kmain,
+                      keyboardType: TextInputType.emailAddress,
+                      maxLines: 1,
+                      cursorColor: mainblack,
+                      textAlign: TextAlign.end,
+                      //TODO: 학교 도메인 확인
+                      decoration: InputDecoration(
+                        hintText: "본인 대학 이메일 아이디",
+                        hintStyle: kmain.copyWith(color: maingray),
+                        border: const UnderlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIconConstraints:
+                            const BoxConstraints(minHeight: 20, minWidth: 20),
+                        suffixIcon: SizedBox(
+                          width: 150,
+                          child: Text(
+                            "@${_signupController.selectUniv.value.email}",
+                            style: kmain,
                           ),
-                        )
-                      : signupController.signupcertification.value ==
-                              Emailcertification.waiting
-                          ? Obx(
-                              () => Text(
-                                '0${signupController.sec.value ~/ 60}:${NumberFormat('00', "ko").format(signupController.sec.value % 60)}',
-                                style: kButtonStyle.copyWith(color: mainblack),
-                              ),
-                            )
-                          : InkWell(
-                              onTap: () {
-                                emailRequest();
-                              },
-                              child: Text(
-                                '재전송',
-                                style: kButtonStyle.copyWith(color: mainblue),
-                              )),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Text(
+                  "이후 루프어스 로그인 아이디로 사용돼요",
+                  style: kmain.copyWith(color: maingray),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                timerDisplay(),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

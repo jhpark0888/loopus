@@ -22,29 +22,33 @@ import 'package:loopus/model/httpresponse_model.dart';
 import '../app.dart';
 import '../constant.dart';
 
-void emailRequest() async {
+Future<HTTPResponse> emailRequest() async {
   ConnectivityResult result = await initConnectivity();
   SignupController signupController = Get.put(SignupController());
   if (result == ConnectivityResult.none) {
     signupController.signupcertification(Emailcertification.fail);
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     Uri uri = Uri.parse('$serverUri/user_api/check_email');
 
     var checkemail = {
       //TODO: 학교 도메인 확인
-      "email": signupController.emailidcontroller.text + '@inu.ac.kr',
-      "password": signupController.passwordcontroller.text,
+      "email": signupController.emailidcontroller.text +
+          "@" +
+          signupController.selectUniv.value.email,
     };
     try {
-      signupController.sec(180);
-      signupController.timer =
-          Timer.periodic(const Duration(seconds: 1), (timer) {
-        if (signupController.sec.value != 0) {
-          signupController.sec.value -= 1;
-        }
-      });
+      // signupController.sec(180);
+      // signupController.timer =
+      //     Timer.periodic(const Duration(seconds: 1), (timer) {
+      //   if (signupController.sec.value != 0) {
+      //     signupController.sec.value -= 1;
+      //   }
+      // });
       signupController.signupcertification(Emailcertification.waiting);
+      showBottomSnackbar(
+          "${signupController.emailidcontroller.text}@${signupController.selectUniv.value.email}로\n인증 메일을 보냈어요\n메일을 확인하고 인증을 완료해주세요");
+
       http.Response response = await http.post(
         uri,
         headers: <String, String>{
@@ -53,50 +57,84 @@ void emailRequest() async {
         body: jsonEncode(checkemail),
       );
 
+      // response.
       print("이메일 체크 : ${response.statusCode}");
       if (response.statusCode == 200) {
-        signupController.timer!.cancel();
-        signupController.signupcertification(Emailcertification.success);
-      } else if (response.statusCode == 400) {
-        // Get.back();
-        signupController.timer!.cancel();
-        signupController.signupcertification(Emailcertification.fail);
-        showCustomDialog("이미 가입된 회원입니다", 1000);
+        return HTTPResponse.success("success");
       } else {
-        signupController.signupcertification(Emailcertification.fail);
-        showCustomDialog("인증에 실패하였습니다", 1000);
-        signupController.timer!.cancel();
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }
 
-Future<void> signupRequest() async {
+Future<HTTPResponse> emailvalidRequest() async {
+  ConnectivityResult result = await initConnectivity();
+  SignupController signupController = Get.put(SignupController());
+  if (result == ConnectivityResult.none) {
+    signupController.signupcertification(Emailcertification.fail);
+    return HTTPResponse.networkError();
+  } else {
+    Uri uri = Uri.parse(
+        '$serverUri/user_api/valid?email=${signupController.emailidcontroller.text}@${signupController.selectUniv.value.email}');
+
+    // var checkemail = {
+    //   //TODO: 학교 도메인 확인
+    //   "email": signupController.emailidcontroller.text +
+    //       "@" +
+    //       signupController.selectUniv.value.email,
+    // };
+    try {
+      http.Response response = await http.get(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+
+      // response.
+      print("이메일 인증 여부 체크 : ${response.statusCode}");
+      if (response.statusCode == 200) {
+        return HTTPResponse.success("success");
+      } else {
+        return HTTPResponse.apiError("fail", response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+
+Future<HTTPResponse> signupRequest() async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     final SignupController signupController = Get.find();
-    final TagController tagController =
-        Get.find(tag: Tagtype.profile.toString());
-    final GAController _gaController = Get.put(GAController());
 
     Uri uri = Uri.parse('$serverUri/user_api/signup');
     const FlutterSecureStorage storage = FlutterSecureStorage();
     //todo : @inu.ac.kr
     var user = {
-      "email": signupController.emailidcontroller.text + '@inu.ac.kr',
+      "email": signupController.emailidcontroller.text +
+          "@" +
+          signupController.selectUniv.value.email,
+      "password": signupController.passwordcontroller.text,
       "image": null,
       "type": 0,
-      "class_num": signupController.classnumcontroller.text,
+      "admission": signupController.admissioncontroller.text,
       "real_name": signupController.namecontroller.text,
+      "school": signupController.selectUniv.value.id,
       "department": signupController.selectDept.value.id,
-      "tag": tagController.selectedtaglist.map((tag) => tag.text).toList()
     };
     try {
       http.Response response = await http.post(
@@ -108,35 +146,17 @@ Future<void> signupRequest() async {
       );
 
       if (response.statusCode == 200) {
-        await loginRequest(
-            signupController.emailidcontroller.text + '@inu.ac.kr',
-            signupController.passwordcontroller.text);
-        // String token = jsonDecode(response.body)['token'];
-        String userid = jsonDecode(response.body)['user_id'];
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-        // await storage.write(key: 'token', value: token);
-        // await storage.write(key: 'id', value: userid);
-        //!GA
-        await _gaController.logSignup();
-        await _gaController.setUserProperties(
-            userid, signupController.selectDept.value.deptname);
-
-        // Get.offAll(() => App());
-
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
-          showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
-        });
-
-        await _gaController.logScreenView('signup_6');
+        return HTTPResponse.success(responseBody);
       } else {
-        await _gaController.logScreenView('signup_6');
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }

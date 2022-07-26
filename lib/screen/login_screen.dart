@@ -93,7 +93,12 @@ class LogInScreen extends StatelessWidget {
                       ),
                       CustomExpandedButton(
                         onTap: () {
-                          login(context);
+                          if (_formKey.currentState!.validate()) {}
+                          login(
+                            context,
+                            emailId: _loginController.idcontroller.text,
+                            password: _loginController.passwordcontroller.text,
+                          );
                         },
                         isBlue: true,
                         isBig: true,
@@ -124,36 +129,34 @@ class LogInScreen extends StatelessWidget {
       ],
     );
   }
+}
 
-  void login(context) async {
-    if (_formKey.currentState!.validate()) {
-      FocusScope.of(context).unfocus();
-      loading();
-      // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
-      await loginRequest(
-        _loginController.idcontroller.text,
-        _loginController.passwordcontroller.text,
-      ).then((value) {
-        Get.back();
-        if (value.isError == false) {
-          const FlutterSecureStorage storage = FlutterSecureStorage();
-          http.Response response = value.data;
-          String token = jsonDecode(response.body)['token'];
-          String userid = jsonDecode(response.body)['user_id'];
-          //! GA
-          // await _gaController.logLogin();
+void login(context, {required String emailId, required String password}) async {
+  FocusScope.of(context).unfocus();
+  loading();
+  // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
+  await loginRequest(
+    emailId,
+    password,
+  ).then((value) {
+    Get.back();
+    if (value.isError == false) {
+      const FlutterSecureStorage storage = FlutterSecureStorage();
+      http.Response response = value.data;
+      String token = jsonDecode(response.body)['token'];
+      String userid = jsonDecode(response.body)['user_id'];
+      //! GA
+      // await _gaController.logLogin();
 
-          storage.write(key: 'token', value: token);
-          storage.write(key: 'id', value: userid);
-          Get.offAll(() => App());
-        } else {
-          if (value.errorData!["statusCode"] == 401) {
-            showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
-          } else {
-            errorSituation(value);
-          }
-        }
-      });
+      storage.write(key: 'token', value: token);
+      storage.write(key: 'id', value: userid);
+      Get.offAll(() => App());
+    } else {
+      if (value.errorData!["statusCode"] == 401) {
+        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+      } else {
+        errorSituation(value);
+      }
     }
-  }
+  });
 }

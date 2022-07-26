@@ -20,6 +20,7 @@ import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
+import 'package:loopus/widget/label_textfield_widget.dart';
 
 import '../utils/check_form_validate.dart';
 
@@ -34,8 +35,6 @@ class ProjectAddTitleScreen extends StatelessWidget {
   final Screentype screenType;
   final ProjectAddController projectaddcontroller =
       Get.put(ProjectAddController());
-  TagController tagController = Get.put(TagController(tagtype: Tagtype.Posting),
-      tag: Tagtype.Posting.toString());
   int? projectid;
 
   @override
@@ -159,40 +158,32 @@ class ProjectAddTitleScreen extends StatelessWidget {
         body: Form(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 14,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 14,
+              ),
+              Text(
+                "본인의 새로운 경험을 추가해보세요",
+                style: kmain.copyWith(color: maingray),
+              ),
+              LabelTextFieldWidget(
+                  label: "커리어 이름",
+                  hintText: "커리어 이름을 입력하세요",
+                  maxLength: 32,
+                  validator: (value) => CheckValidate().validateName(value!),
+                  textController: projectaddcontroller.projectnamecontroller),
+              const SizedBox(
+                height: 48,
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Text(
+                  "기업과 연계된 인턴/채용 관련 커리어세요?",
+                  style: kmain.copyWith(color: mainblue),
                 ),
-                Text(
-                  "본인의 새로운 경험을 추가해보세요",
-                  style: kmain.copyWith(color: maingray),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "커리어 이름",
-                    style: kmain,
-                  ),
-                ),
-                const SizedBox(
-                  height: 14,
-                ),
-                CustomTextField(
-                    counterText: null,
-                    maxLength: 32,
-                    textController: projectaddcontroller.projectnamecontroller,
-                    hintText: '커리어 이름을 입력하세요',
-                    validator: (value) => CheckValidate().validateName(value!),
-                    obscureText: false,
-                    maxLines: 2),
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),

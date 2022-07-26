@@ -95,6 +95,9 @@ class CareerBoardController extends GetxController
   RxMap<String, double> teptNumMap = <String, double>{}.obs;
   RxMap<String, String> currentFieldMap = <String, String>{}.obs;
 
+  Rx<ScreenState> allrankerScreenstate = ScreenState.normal.obs;
+  RefreshController allrankerRefreshController = RefreshController();
+
   late TabController tabController;
 
   RxInt currentField = 1.obs;
@@ -135,7 +138,7 @@ class CareerBoardController extends GetxController
       screenStateMap[fieldId]!.value = ScreenState.loading;
     }
     await getPostingGraph(fieldId);
-    await getTopPosts(fieldId);
+    await getCareerBoard(fieldId);
     print(screenStateMap[fieldId]!.value);
   }
 
@@ -144,8 +147,8 @@ class CareerBoardController extends GetxController
     refreshControllerMap[currentFieldMap.keys.first]!.refreshCompleted();
   }
 
-  Future<void> getTopPosts(String id) async {
-    await getTopPost(id, "main").then((value) {
+  Future<void> getCareerBoard(String id) async {
+    await getCareerBoardRequest(id, "main").then((value) {
       if (value.isError == false) {
         List<Post> postlist = List.from(value.data["posting"]).map((post) {
           return Post.fromJson(post);
@@ -160,14 +163,41 @@ class CareerBoardController extends GetxController
             List.from(value.data["group_ranking"]).map((user) {
           return User.fromJson(user);
         }).toList();
+
+        topTagMap[id.toString()]!.value =
+            List.from(value.data["tag"]).map((tag) {
+          return Tag.fromJson(tag);
+        }).toList();
+
         if (popPostMap[id.toString()] == null) {
           popPostMap[id.toString()]!.value = postlist;
         }
 
         screenStateMap[id.toString()]!.value = ScreenState.success;
       } else {
-        print(screenStateMap[id.toString()]!.hashCode);
         errorSituation(value, screenState: screenStateMap[id.toString()]!);
+      }
+      // print(activeFieldsPost.value);
+    });
+  }
+
+  Future<void> getRanker(String id, bool isUniversity) async {
+    print(id);
+    allrankerScreenstate(ScreenState.loading);
+    await getCareerBoardRequest(id, isUniversity ? "school" : "group")
+        .then((value) {
+      if (value.isError == false) {
+        List<User> userlist = List.from(value.data).map((user) {
+          return User.fromJson(user);
+        }).toList();
+
+        isUniversity
+            ? campusRankerMap[id.toString()]!.value = userlist
+            : koreaRankerMap[id.toString()]!.value = userlist;
+
+        allrankerScreenstate(ScreenState.success);
+      } else {
+        errorSituation(value, screenState: allrankerScreenstate);
       }
       // print(activeFieldsPost.value);
     });
