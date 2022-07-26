@@ -100,7 +100,7 @@ class MessageWidget extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(16)),
                             child: Padding(
                                 padding:
-                                    const EdgeInsets.fromLTRB(14, 5, 14, 7),
+                                    const EdgeInsets.fromLTRB(14, 7, 14, 7),
                                 child: Text(
                                   message.content,
                                   style: kSubTitle3Style.copyWith(
