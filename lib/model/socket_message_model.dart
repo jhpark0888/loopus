@@ -24,7 +24,7 @@ class Chat {
       required this.messageId,
       required this.type,
       required this.roomId,
-      this.sendsuccess});
+      required this.sendsuccess});
 
   factory Chat.fromJson(Map<String, dynamic> json) => Chat(
       type: json['type'],
@@ -43,7 +43,8 @@ class Chat {
       date: DateTime.parse(json["date"]),
       sender: json['sender'].toString(),
       isRead: json['is_read'] != null ? RxBool(json['is_read']) : null,
-      roomId: roomId);
+      roomId: roomId,
+      sendsuccess: true.obs);
   Map<String, dynamic> toMap() {
     return {
       'msg_id': messageId,
@@ -77,7 +78,7 @@ class ChatRoom {
 );
 
   factory ChatRoom.fromMsg(Map<String, dynamic> json) => ChatRoom(
-      message: Chat(content: json['content'], date: DateTime.parse(json['date']), sender: json['sender'], isRead: false.obs, messageId: json['id'], type: null, roomId: int.parse(json['room_id'])).obs,
+      message: Chat(content: json['content'],sendsuccess: true.obs, date: DateTime.parse(json['date']), sender: json['sender'], isRead: false.obs, messageId: json['id'], type: null, roomId: int.parse(json['room_id'])).obs,
       user: int.parse(json['sender']),
       notread: RxInt(1),
       roomId: int.parse(json['room_id']),

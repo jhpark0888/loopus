@@ -54,7 +54,7 @@ class ImageController extends GetxController {
         maxWidth: Get.width.toInt(),
         maxHeight: Get.width.toInt(),
         compressQuality: 90,
-        cropStyle: CropStyle.rectangle,
+        cropStyle: CropStyle.circle,
         sourcePath: pickimage.path,
         aspectRatioPresets: [
           CropAspectRatioPreset.original,

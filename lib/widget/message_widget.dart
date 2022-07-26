@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:intl/intl.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/model/socket_message_model.dart';
@@ -11,10 +12,18 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class MessageWidget extends StatelessWidget {
-  MessageWidget({Key? key,required this.message, required this.isLast, required this.partner, required this.myId}):super(key: key);
+  MessageWidget(
+      {Key? key,
+      required this.message,
+      required this.isFirst,
+      required this.isLast,
+      required this.partner,
+      required this.myId})
+      : super(key: key);
   // late MessageDetailController controller =
   //     Get.find(tag: user.userid.toString());
   RxBool isLast;
+  RxBool isFirst;
   Chat message;
   User partner;
   int myId;
@@ -27,39 +36,38 @@ class MessageWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
-        vertical: 14,
+        vertical: 7,
       ),
       child: message.sender == myId.toString()
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+                changeDay(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    // Obx(() => (message.issending.value)
-                    //     ? Container(
-                    //         padding:
-                    //             const EdgeInsets.fromLTRB(12.0, 12.0, 8.0, 12.0),
-                    //         width: 20,
-                    //         height: 20,
-                    //         child: Opacity(
-                    //           opacity: 0.6,
-                    //           child: Icon(
-                    //             Icons.reply_rounded,
-                    //             color: mainblack,
-                    //             size: 20,
-                    //           ),
-                    //         ),
-                    //       )
-                    //     : Container()),
-                    // SizedBox(
-                    //   width: 2,
-                    // ),
+                    Obx(() => (message.sendsuccess != null)
+                        ? message.sendsuccess!.value
+                            ? Container()
+                            : const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: Opacity(
+                                  opacity: 0.6,
+                                  child: Icon(
+                                    Icons.reply_rounded,
+                                    color: mainblue,
+                                    size: 20,
+                                  ),
+                                ),
+                              )
+                        : const SizedBox.shrink()),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(12.0, 18.0, 8.0, 0.0),
+                      padding: const EdgeInsets.fromLTRB(12.0, 0, 8.0, 0.0),
                       child: Text(
-                        "${messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
+                        // "${messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
+                        messageDurationCalculate(message.date),
                         style: kCaptionStyle.copyWith(
                           color: mainblack,
                         ),
@@ -68,112 +76,152 @@ class MessageWidget extends StatelessWidget {
                     hasTextOverflow(message.content, kBody2Style)
                         ? Container(
                             constraints:
-                                BoxConstraints(maxWidth: Get.width * (2 / 3)),
+                                BoxConstraints(maxWidth: Get.width * (3 / 5)),
                             decoration: BoxDecoration(
                                 color: mainblue,
-                                borderRadius: BorderRadius.circular(8)),
+                                borderRadius: BorderRadius.circular(16)),
                             child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding:
+                                    const EdgeInsets.fromLTRB(14, 7, 14, 7),
                                 child: Text(
                                   message.content,
                                   style: kSubTitle3Style.copyWith(
                                       height: 1.5, color: mainWhite),
+                                  textHeightBehavior: const TextHeightBehavior(
+                                    applyHeightToFirstAscent: true,
+                                    applyHeightToLastDescent: true,
+                                    leadingDistribution: TextLeadingDistribution.even
+                                  ),
                                 )),
                           )
                         : Container(
                             decoration: BoxDecoration(
                                 color: mainblue,
-                                borderRadius: BorderRadius.circular(8)),
+                                borderRadius: BorderRadius.circular(16)),
                             child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding:
+                                    const EdgeInsets.fromLTRB(14, 5, 14, 7),
                                 child: Text(
                                   message.content,
                                   style: kSubTitle3Style.copyWith(
-                                      height: 1.5, color: mainWhite),
+                                    height: 1.5,
+                                    color: mainWhite,
+                                  ),
+                                  textHeightBehavior: const TextHeightBehavior(
+                                    applyHeightToFirstAscent: true,
+                                    applyHeightToLastDescent: true,
+                                    leadingDistribution: TextLeadingDistribution.even
+                                  ),
                                 )),
                           ),
                   ],
                 ),
-                Obx( () => isLast.value ? 
-                Column(children: [
-                  const SizedBox(height: 14),
-                  message.isRead!.value
-                          ? const Text('읽음', textAlign: TextAlign.end, style: kCaptionStyle,)
-                          : const SizedBox.shrink()
-                ]) : const SizedBox.shrink())
+                Obx(() => isLast.value
+                    ? Column(children: [
+                        const SizedBox(height: 7),
+                        message.isRead!.value
+                            ? const Text(
+                                '읽음',
+                                textAlign: TextAlign.end,
+                                style: kCaptionStyle,
+                              )
+                            : const SizedBox.shrink()
+                      ])
+                    : const SizedBox.shrink())
               ],
             )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+          : Column(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => OtherProfileScreen(
-                          userid: partner.userid,
-                          realname: partner.realName,
-                        ));
-                  },
-                  child: UserImageWidget(imageUrl: partner.profileImage ?? '', width: 36, height: 36)
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
+                changeDay(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      partner.realName,
-                      style: k16semiBold,
-                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Get.to(() => OtherProfileScreen(
+                                userid: partner.userid,
+                                realname: partner.realName,
+                              ));
+                        },
+                        child: UserImageWidget(
+                            imageUrl: partner.profileImage ?? '',
+                            width: 36,
+                            height: 36)),
                     const SizedBox(
-                      height: 7,
+                      width: 10,
                     ),
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        hasTextOverflow(message.content, kBody2Style)
-                            ? Container(
-                                constraints: BoxConstraints(
-                                    maxWidth: Get.width * (3 / 5)),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: cardGray,
-                                    ),
-                                    color: cardGray,
-                                    borderRadius: BorderRadius.circular(8)),
-                                child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      message.content,
-                                      style: kBody2Style,
-                                    )),
-                              )
-                            : Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: cardGray,
-                                    ),
-                                    color: cardGray,
-                                    borderRadius: BorderRadius.circular(8)),
-                                child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      message.content,
-                                      style: kBody2Style,
-                                      softWrap: true,
-                                    )),
+                        Text(
+                          partner.realName,
+                          style: k16semiBold,
+                        ),
+                        const SizedBox(
+                          height: 7,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            hasTextOverflow(message.content, kBody2Style)
+                                ? Container(
+                                    constraints: BoxConstraints(
+                                        maxWidth: Get.width * (3 / 5)),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: cardGray,
+                                        ),
+                                        color: cardGray,
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            14, 7, 14, 7),
+                                        child: Text(
+                                          message.content,
+                                          style: kBody2Style,
+                                          textHeightBehavior: const TextHeightBehavior(
+                                    applyHeightToFirstAscent: true,
+                                    applyHeightToLastDescent: true,
+                                    leadingDistribution: TextLeadingDistribution.even
+                                  ),
+                                        )),
+                                  )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: cardGray,
+                                        ),
+                                        color: cardGray,
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            14, 7, 14, 7),
+                                        child: Text(
+                                          message.content,
+                                          style: kBody2Style,
+                                          softWrap: true,
+                                          textHeightBehavior: const TextHeightBehavior(
+                                    applyHeightToFirstAscent: true,
+                                    applyHeightToLastDescent: true,
+                                    leadingDistribution: TextLeadingDistribution.even
+                                  ),
+                                        )),
+                                  ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  8.0, 18.0, 12.0, 0.0),
+                              child: Text(
+                                messageDurationCalculate(message.date),
+                                style: kCaptionStyle.copyWith(color: mainblack),
+                                textAlign: TextAlign.end,
                               ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(8.0, 18.0, 12.0, 0.0),
-                          child: Text(
-                            messagedurationCaculate(
-                                startDate: message.date,
-                                endDate: DateTime.now()),
-                            style: kCaptionStyle.copyWith(color: mainblack),
-                          ),
-                        )
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -191,5 +239,31 @@ class MessageWidget extends StatelessWidget {
       textDirection: TextDirection.ltr,
     )..layout(minWidth: minWidth, maxWidth: maxWidth);
     return textPainter.didExceedMaxLines;
+  }
+
+  Widget changeDay() {
+    if (isFirst.value) {
+      return Padding(
+          padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: Divider(thickness: 0.5, color: maingray, height: 0.5),
+                ),
+                const SizedBox(width: 14),
+                Text(
+                  '${message.date.year}.${message.date.month}.${message.date.day}',
+                  style: k16Normal.copyWith(color: maingray),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Divider(thickness: 0.5, color: maingray, height: 0.5),
+                ),
+              ]));
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 }

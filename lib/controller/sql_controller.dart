@@ -28,7 +28,7 @@ class SQLController extends GetxController {
       join(await getDatabasesPath(), 'MY_database.db'),
       onCreate: (db, version) {
         db.execute(
-          "CREATE TABLE user(user_id INTEGER PRIMARY KEY, name TEXT)",
+          "CREATE TABLE user(user_id INTEGER PRIMARY KEY, name TEXT, profile_image TEXT)",
         );
         db.execute(
           "CREATE TABLE chatroom(room_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, message Text, date Text, not_read INTEGER)",
@@ -46,7 +46,7 @@ class SQLController extends GetxController {
     final Database db = await database!;
     await db.insert(
       'user',
-      {"name": user.realName, "user_id": user.userid},
+      {"name": user.realName, "user_id": user.userid, "profile_image" : user.profileImage},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -87,7 +87,6 @@ class SQLController extends GetxController {
 
   Future<void> insertMessageRoom(ChatRoom chatRoom) async {
     final Database db = await database!;
-
     await db.insert(
       'chatroom',
       chatRoom.toJson(),
@@ -154,18 +153,19 @@ class SQLController extends GetxController {
             isRead: maps[index]['is_read'] == 'true' ? true.obs : false.obs,
             messageId: maps[index]['msg_id'].toString(),
             type: maps[index]['type'],
-            roomId: maps[index]['room_id']);
+            roomId: maps[index]['room_id'],
+            sendsuccess: true.obs);
       });
       return messageList;
     }
   }
 
   Future<List<ChatRoom>> getDBMessageRoom(
-      {required int roomid, required int msgid, ChatRoom? chatRoom}) async {
+      {ChatRoom? chatRoom}) async {
     final Database db = await database!;
     final List<Map<String, dynamic>> maps;
 
-    maps = await db.rawQuery('SELECT * FROM chatting');
+    maps = await db.rawQuery('SELECT * FROM chatroom');
 
     if (maps.isEmpty) {
       if (chatRoom != null) {
@@ -237,6 +237,7 @@ class SQLController extends GetxController {
         return Chat(
             content: maps[index]['message'],
             date: DateTime.parse(maps[index]['date']),
+            sendsuccess: true.obs,
             sender: maps[index]['sender'],
             isRead: maps[index]['is_read'] == 'true' ? true.obs : false.obs,
             messageId: maps[index]['msg_id'],

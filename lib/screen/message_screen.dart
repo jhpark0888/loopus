@@ -12,6 +12,7 @@ import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/no_ul_textfield_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_text_field_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sqlite_viewer/sqlite_viewer.dart';
 
 class MessageScreen extends StatelessWidget {
@@ -99,20 +100,20 @@ class MessageScreen extends StatelessWidget {
                             },
                           )),
                           const SizedBox(height: 24),
-                      ScrollNoneffectWidget(
-                        child: Expanded(
-                          child: ListView.separated(
-                            physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.only(bottom: 24),
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(height: 30);
-                            },
-                            itemBuilder: (context, index) {
-                              return messageController.searchRoomList[index] ;
-                            },
-                            itemCount: messageController.searchRoomList.length ,
-                            // children: messageController.cacac.map((element) => Text(element)).toList(),
-                          ),
+                      Expanded(
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          primary: true,
+                          physics: const ClampingScrollPhysics(),
+                          padding: const EdgeInsets.only(bottom: 24),
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(height: 30);
+                          },
+                          itemBuilder: (context, index) {
+                            return messageController.searchRoomList[index] ;
+                          },
+                          itemCount: messageController.searchRoomList.length ,
+                          // children: messageController.cacac.map((element) => Text(element)).toList(),
                         ),
                       ),
                     ],

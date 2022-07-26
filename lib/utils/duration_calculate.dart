@@ -61,6 +61,11 @@ String messagedurationCaculate({
   return durationResult.value;
 }
 
+String messageDurationCalculate(DateTime time){
+    DateFormat dateFormat = DateFormat('aa hh:mm','ko');
+    return dateFormat.format(time);
+  }
+
 String calculateDate(DateTime date) {
   if (DateTime.now().difference(date).inMilliseconds < 1000) {
     return '방금 전';

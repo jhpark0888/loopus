@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
@@ -47,7 +48,7 @@ class WebsoketScreen extends StatelessWidget {
   User myProfile;
   EnterRoute enterRoute;
   late WebsoketController controller = Get.put(
-      WebsoketController(partnerId: partner.userid),
+      WebsoketController(partnerId: partner.userid, partnerToken: partnerToken),
       tag: partner.userid.toString());
   Key centerKey = const ValueKey('QueryList');
   @override
@@ -167,7 +168,7 @@ class WebsoketScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              ListView.builder(
+                              ListView.separated(
                                 shrinkWrap: true,
                                 primary: false,
                                 reverse: true,
@@ -177,17 +178,82 @@ class WebsoketScreen extends StatelessWidget {
                                     return MessageWidget(
                                         message: controller.messageList[index],
                                         isLast: true.obs,
+                                        isFirst: false.obs,
                                         partner: partner,
                                         myId: controller.myId!);
-                                  } else {
+                                  } else if (controller.messageList[index] ==
+                                      controller.messageList.last) {
                                     return MessageWidget(
                                         message: controller.messageList[index],
                                         isLast: false.obs,
+                                        isFirst: true.obs,
                                         partner: partner,
                                         myId: controller.myId!);
+                                  } else {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        print(controller.messageList[index] ==
+                                                controller.messageList.last ||
+                                            DateFormat('yyyy-MM-dd').parse(
+                                                    controller
+                                                        .messageList[index].date
+                                                        .toString()) !=
+                                                DateFormat('yyyy-MM-dd').parse(
+                                                    controller
+                                                        .messageList[index].date
+                                                        .toString()));
+                                      },
+                                      child: MessageWidget(
+                                          message:
+                                              controller.messageList[index],
+                                          isLast: false.obs,
+                                          isFirst: false.obs,
+                                          partner: partner,
+                                          myId: controller.myId!),
+                                    );
                                   }
                                 },
                                 itemCount: controller.messageList.length,
+                                separatorBuilder: (context, index) {
+                                  if (DateFormat('yyyy-MM-dd').parse(controller
+                                          .messageList[index].date
+                                          .toString()) !=
+                                      DateFormat('yyyy-MM-dd').parse(controller
+                                          .messageList[index + 1].date
+                                          .toString())) {
+                                    return Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 7, 20, 7),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Expanded(
+                                              child: Divider(
+                                                  thickness: 0.5,
+                                                  color: maingray,
+                                                  height: 0.5),
+                                            ),
+                                            const SizedBox(width: 14),
+                                            Text(
+                                              '${controller.messageList[index].date.year}.${controller.messageList[index].date.month}.${controller.messageList[index].date.day}',
+                                              style: k16Normal.copyWith(
+                                                  color: maingray),
+                                            ),
+                                            const SizedBox(width: 14),
+                                            Expanded(
+                                              child: Divider(
+                                                  thickness: 0.5,
+                                                  color: maingray,
+                                                  height: 0.5),
+                                            ),
+                                          ]),
+                                    );
+                                  } else {
+                                    return const SizedBox.shrink();
+                                  }
+                                },
                               )
                             ],
                           ),
@@ -305,23 +371,25 @@ class WebsoketScreen extends StatelessWidget {
           GestureDetector(
               onTap: () async {
                 if (controller.sendText.text.isNotEmpty) {
-                  controller.channel.sink.add(jsonEncode({
-                    'content': controller.sendText.text,
-                    'type': 'msg',
-                    'token': partnerToken,
-                    'name': myProfile.realName
-                  }));
-                  // controller.messageList.insert(
-                  //     0,
-                  //     Chat(
-                  //         content: controller.sendText.text,
-                  //         date: DateTime.now(),
-                  //         sender: controller.myId.toString(),
-                  //         isRead: false.obs,
-                  //         messageId: '0',
-                  //         type: 'msg',
-                  //         roomId: controller.roomid,
-                  //         sendsuccess: false.obs));
+                  if (controller.hasInternet.value == true) {
+                    controller.channel.sink.add(jsonEncode({
+                      'content': controller.sendText.text,
+                      'type': 'msg',
+                      'token': partnerToken,
+                      'name': myProfile.realName
+                    }));
+                  }
+                  controller.messageList.insert(
+                      0,
+                      Chat(
+                          content: controller.sendText.text,
+                          date: DateTime.now(),
+                          sender: controller.myId.toString(),
+                          isRead: false.obs,
+                          messageId: '0',
+                          type: 'msg',
+                          roomId: controller.roomid,
+                          sendsuccess: false.obs));
                   controller.sendText.clear();
                 }
               },
@@ -333,13 +401,14 @@ class WebsoketScreen extends StatelessWidget {
 }
 
 class WebsoketController extends GetxController with WidgetsBindingObserver {
-  WebsoketController({required this.partnerId});
+  WebsoketController({required this.partnerId, required this.partnerToken});
   late IOWebSocketChannel channel;
   late int roomid;
-  late RxBool hasInternet;
+  RxBool hasInternet = true.obs;
   late var listener;
 
   String? token;
+  String? partnerToken;
   int partnerId;
   int? myId;
   TextEditingController sendText = TextEditingController();
@@ -351,6 +420,7 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
   Rx<ScreenState> screenState = ScreenState.normal.obs;
   RxBool isFirst = true.obs;
   RxBool refreshEnablePullUp = true.obs;
+
   RxString lastid = '0'.obs;
   RxDouble messageHeight = 0.0.obs;
   RxDouble messagesBoxPositionHeight = 0.0.obs;
@@ -386,7 +456,8 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
             headers: <String, String>{
               'Content-Type': 'application/json',
               'id': '$myId'
-            });
+            },
+            pingInterval: const Duration(seconds: 1));
         channel.stream.listen((event) {
           print(event);
           messageTypeCheck(jsonDecode(event));
@@ -395,6 +466,7 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
         }, onDone: () {
           print('끊김');
           channel.sink.close();
+          hasInternet.value = false;
         });
         // }
       }
@@ -454,8 +526,23 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
         if (json['user_id'] == myId) {
           print('내가 접속함');
           roomid = int.parse(json['room_id']);
-          messageList.addAll(await SQLController.to
-              .getDBMessage(roomid, int.parse(lastid.value)));
+          hasInternet.value = true;
+          if (messageList.isEmpty) {
+            messageList.addAll(await SQLController.to
+                .getDBMessage(roomid, int.parse(lastid.value)));
+          } else {
+            for (Chat chat in messageList
+                .where((chat) => chat.sendsuccess!.value == false)
+                .toList()
+                .reversed) {
+              channel.sink.add(jsonEncode({
+                'content': chat.content,
+                'type': 'msg',
+                'token': partnerToken,
+                'name': HomeController.to.myProfile.value.realName
+              }));
+            }
+          }
           checkRoomId(roomid).then((value) {
             if (value.isNotEmpty) {
               sendLastView(int.parse(messageList.first.messageId!));
@@ -477,8 +564,18 @@ class WebsoketController extends GetxController with WidgetsBindingObserver {
         print('상대가 나감');
         break;
       case ('msg'):
+        if (json['sender'] == myId) {
+          messageList
+              .where((p0) =>
+                  p0.sendsuccess != null && p0.sendsuccess!.value == false)
+              .last
+              .sendsuccess!
+              .value = true;
+        } else {
+          messageList.insert(0, Chat.fromJson(json));
+        }
         SQLController.to.insertmessage(Chat.fromMsg(json, roomid));
-        messageList.insert(0, Chat.fromJson(json));
+
         await Future.delayed(const Duration(milliseconds: 100));
         SQLController.to
             .updateLastMessage(json['content'], json['date'], roomid);

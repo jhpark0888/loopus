@@ -12,9 +12,11 @@ import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MessageController extends GetxController {
   static MessageController get to => Get.find();
+  RefreshController refreshController = RefreshController();
   TextEditingController searchName = TextEditingController();
   RxList<MessageRoomWidget> chattingRoomList = <MessageRoomWidget>[].obs;
   RxList<MessageRoomWidget> searchRoomList = <MessageRoomWidget>[].obs;
