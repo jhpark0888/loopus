@@ -108,6 +108,7 @@ class NotificationWidget extends StatelessWidget {
                 horizontal: 20,
               ),
               child: Row(
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   GestureDetector(
                     onTap: () {
@@ -124,7 +125,6 @@ class NotificationWidget extends StatelessWidget {
                   ),
                   Flexible(
                     child: RichText(
-                        maxLines: 2,
                         text: TextSpan(children: [
                           TextSpan(
                               recognizer: TapGestureRecognizer()
@@ -138,15 +138,15 @@ class NotificationWidget extends StatelessWidget {
                             style: kSubTitle1Style.copyWith(
                                 fontWeight: FontWeight.w400),
                           ),
-                          TextSpan(
-                              text: notification.content,
-                              style: kSubTitle1Style),
+                          // TextSpan(
+                          //     text: notification.content,
+                          //     style: kSubTitle1Style),
                           TextSpan(
                             text: notification.type == NotificationType.question
-                                ? " 질문에 답변을 남겼어요 "
+                                ? "회원님의 포스트에 댓글을 남겼습니다."
                                 : notification.type == NotificationType.tag
                                     ? " 활동에 회원님을 태그했어요 "
-                                    : " 포스팅에 좋아요를 남겼어요 ",
+                                    : "회원님의 포스트를 좋아합니다.",
                             style: kSubTitle1Style.copyWith(
                                 fontWeight: FontWeight.w400),
                           ),
