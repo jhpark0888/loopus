@@ -41,7 +41,7 @@ String messagedurationCaculate({
   int _dateDiffenceHours = (endDate.difference(startDate).inHours).toInt();
   int _dateDiffenceMinutes = (endDate.difference(startDate).inMinutes).toInt();
   int _dateDiffenceSeconds = (endDate.difference(startDate).inSeconds).toInt();
-  
+
   // print('일 $_dateDiffence');
   // print('시간 $_dateDiffenceHours');
   // print('분 $_dateDiffenceMinutes');
@@ -73,10 +73,31 @@ String messagedurationCaculate({
   return durationResult.value;
 }
 
-String messageDurationCalculate(DateTime time){
-    DateFormat dateFormat = DateFormat('aa hh:mm','ko');
-    return dateFormat.format(time);
+String notiDurationCaculate({
+  required DateTime startDate,
+  required DateTime endDate,
+}) {
+  RxString durationResult = ''.obs;
+  DateFormat dateFormat = DateFormat('aa h:mm','ko');
+  DateFormat dateonlyFormat = DateFormat('yyyy-MM-dd');
+  DateTime startDateOnlyDay = DateTime.parse(dateonlyFormat.format(startDate));
+  DateTime endDateOnlyDay = DateTime.parse(dateonlyFormat.format(endDate));
+  int _dateOnlyDiffence = (endDateOnlyDay.difference(startDateOnlyDay).inDays).toInt();
+  int _dateDiffence = (endDate.difference(startDate).inDays).toInt();
+
+   if ((_dateOnlyDiffence / 30).floor() < 1) {
+    durationResult.value = '이번 달';
+    if(_dateOnlyDiffence <= 7){
+      durationResult.value = '이번 주';
+    }
+  }else if((_dateOnlyDiffence / 30).floor() >= 1){
+    durationResult.value = '지난 알림';
   }
+
+  return durationResult.value;
+}
+
+
 
 String calculateDate(DateTime date) {
   if (DateTime.now().difference(date).inMilliseconds < 1000) {

@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/controller/modal_controller.dart';
 
 import 'package:loopus/controller/notification_detail_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/widget/notification_widget.dart';
 
@@ -38,6 +39,7 @@ Future<void> getNotificationlist(String type, int lastindex) async {
       print("알림 $type 리스트 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
         List responseBody = json.decode(utf8.decode(response.bodyBytes));
+        print(responseBody);
         List<NotificationModel> notificationlist = responseBody
             .map((project) => NotificationModel.fromJson(project))
             .toList();
@@ -50,10 +52,9 @@ Future<void> getNotificationlist(String type, int lastindex) async {
             controller.enablefollowreqPullup.value = false;
           }
 
-          for (var notification in notificationlist) {
-            controller.followalarmlist.add(NotificationWidget(
-                key: UniqueKey(), notification: notification));
-          }
+          controller.followalarmlist.value = notificationlist
+              .map((e) => NotificationWidget(key: UniqueKey(), notification: e))
+              .toList();
           controller.followreqscreenstate(ScreenState.success);
         } else {
           if (notificationlist.isEmpty && controller.alarmlist.isEmpty) {
@@ -63,10 +64,9 @@ Future<void> getNotificationlist(String type, int lastindex) async {
             controller.enablealarmPullup.value = false;
           }
 
-          for (var notification in notificationlist) {
-            controller.alarmlist.add(NotificationWidget(
-                key: UniqueKey(), notification: notification));
-          }
+          controller.alarmlist.value = notificationlist
+              .map((e) => NotificationWidget(key: UniqueKey(), notification: e))
+              .toList();
           controller.notificationscreenstate(ScreenState.success);
         }
 
@@ -108,5 +108,43 @@ Future deleteNotification(int noticeid) async {
   } catch (e) {
     print(e);
     // ErrorController.to.isServerClosed(true);
+  }
+}
+
+Future<HTTPResponse> isRead(int notiId, NotificationType type,int senderId) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    late int type_id = type == NotificationType.question
+        ? 1
+        : type == NotificationType.follow
+            ? 2
+            : type == NotificationType.tag
+                ? 3
+                : 4;
+    final isReadURI = Uri.parse(
+        "$serverUri/user_api/alarm?type=read&id=$notiId&type_id=$type_id&sender_id=$senderId");
+
+    try {
+      http.Response response =
+          await http.get(isReadURI, headers: {"Authorization": "Token $token"});
+
+      if (response.statusCode == 200) {
+        print(response.statusCode);
+        return HTTPResponse.success(null);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+      // ErrorController.to.isServerClosed(true);
+    }
   }
 }

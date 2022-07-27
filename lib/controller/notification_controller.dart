@@ -185,7 +185,6 @@ class NotificationController extends GetxController {
                     if (Get.isRegistered<MessageDetailController>(
                         tag: HomeController.to.enterMessageRoom.value
                             .toString())) {
-                      print('ㅇㅇㅇ');
                       Get.delete<MessageDetailController>(
                           tag: HomeController.to.enterMessageRoom.value
                               .toString());

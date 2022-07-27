@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/follow_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -51,35 +53,36 @@ class NotificationWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
-                vertical: 7,
               ),
               child: Row(
                 children: [
-                  UserImageWidget(imageUrl: notification.user.profileImage ?? '', width: 36,height: 36,),
+                  UserImageWidget(
+                    imageUrl: notification.user.profileImage ?? '',
+                    width: 36,
+                    height: 36,
+                  ),
                   const SizedBox(
                     width: 12,
                   ),
                   Flexible(
                     child: RichText(
                         text: TextSpan(children: [
-                          TextSpan(
-                              text: notification.user.realName,
-                              style: kmainbold),
-                          TextSpan(
-                            text: "님이 회원님을 팔로우합니다.",
-                            style: kSubTitle1Style.copyWith(
-                                fontWeight: FontWeight.w400),
-                          ),
-                          TextSpan(
-                            text:' · ${messagedurationCaculate(
-                                startDate: notification.date,
-                                endDate: DateTime.now())}',
-                            style: kSubTitle1Style.copyWith(
-                              color: mainblack.withOpacity(0.38),
-                              fontWeight: FontWeight.w400,
-                            ),
-                          )
-                        ])),
+                      TextSpan(
+                          text: notification.user.realName, style: kmainbold),
+                      TextSpan(
+                        text: "님이 회원님을 팔로우합니다.",
+                        style: kSubTitle1Style.copyWith(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      TextSpan(
+                        text:
+                            ' · ${alarmDurationCaculate(startDate: notification.date)}',
+                        style: kSubTitle1Style.copyWith(
+                          color: mainblack.withOpacity(0.38),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      )
+                    ])),
                   ),
                   // const SizedBox(
                   //   width: 12,
@@ -102,8 +105,7 @@ class NotificationWidget extends StatelessWidget {
             onTap: clicknotice,
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
+                horizontal: 20,
               ),
               child: Row(
                 children: [
@@ -111,21 +113,11 @@ class NotificationWidget extends StatelessWidget {
                     onTap: () {
                       clickprofile(notification.type);
                     },
-                    child: ClipOval(
-                        child: notification.user.profileImage == null
-                            ? Image.asset(
-                                "assets/illustrations/default_profile.png",
-                                width: 56,
-                                height: 56,
-                              )
-                            : CachedNetworkImage(
-                                height: 56,
-                                width: 56,
-                                imageUrl: notification.user.profileImage!,
-                                placeholder: (context, url) =>
-                                    kProfilePlaceHolder(),
-                                fit: BoxFit.cover,
-                              )),
+                    child: UserImageWidget(
+                      imageUrl: notification.user.profileImage ?? '',
+                      width: 36,
+                      height: 36,
+                    ),
                   ),
                   const SizedBox(
                     width: 12,
@@ -159,9 +151,9 @@ class NotificationWidget extends StatelessWidget {
                                 fontWeight: FontWeight.w400),
                           ),
                           TextSpan(
-                              text: messagedurationCaculate(
+                              text: ' · ${alarmDurationCaculate(
                                   startDate: notification.date,
-                                  endDate: DateTime.now()),
+                                  )}',
                               style: kSubTitle3Style.copyWith(
                                   color: mainblack.withOpacity(0.38)))
                         ])),
@@ -219,6 +211,45 @@ class NotificationWidget extends StatelessWidget {
                 // isLiked: 0.obs,
               ),
           opaque: false);
+    } else if (notification.type == NotificationType.follow) {
+      Get.to(() => OtherProfileScreen(
+          userid: notification.targetId, realname: notification.user.realName));
+    }
+
+    if (notification.isread.value == false) {
+      print('실행되었다.');
+
+      isRead(
+        notification.targetId,
+        notification.type,
+        notification.user.userid,
+      );
     }
   }
+
+  String alarmDurationCaculate({
+  required DateTime startDate,
+}) {
+  RxString durationResult = ''.obs;
+ DateTime endDate = DateTime.now();
+ DateFormat dateonlyFormat = DateFormat('yyyy-MM-dd');
+    DateTime startDateOnlyDay =
+        DateTime.parse(dateonlyFormat.format(startDate));
+    DateTime endDateOnlyDay = DateTime.parse(dateonlyFormat.format(endDate));
+  int _dateDiffence = (endDate.difference(startDate).inDays).toInt();
+  int _dateOnlyDiffence =
+        (endDateOnlyDay.difference(startDateOnlyDay).inDays).toInt();
+    if ((_dateOnlyDiffence / 30).floor() > 0) {
+    durationResult.value = '${((_dateOnlyDiffence / 7)).floor().toString()}주';
+    }
+    else if (_dateOnlyDiffence == 0) {
+      durationResult.value = '오늘';
+    }
+    else if (_dateOnlyDiffence <= 30) {
+      durationResult.value = '$_dateOnlyDiffence일';
+    }
+  
+
+  return durationResult.value;
+}
 }

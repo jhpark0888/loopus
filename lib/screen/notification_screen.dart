@@ -8,6 +8,7 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/notification_widget.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
@@ -262,6 +263,7 @@ class NotificationScreen extends StatelessWidget {
             // ),
             Obx(() => SmartRefresher(
                 controller: controller.followreqRefreshController,
+                physics: const BouncingScrollPhysics(),
                 enablePullDown: (controller.followreqscreenstate.value ==
                         ScreenState.loading)
                     ? false
@@ -296,8 +298,8 @@ class NotificationScreen extends StatelessWidget {
                     ],
                   ),
                   completeIcon: Column(
-                    children: [
-                      const Icon(
+                    children: const [
+                      Icon(
                         Icons.check_rounded,
                         color: mainblue,
                       ),
@@ -330,9 +332,133 @@ class NotificationScreen extends StatelessWidget {
                     scale: 6,
                   ),
                 ),
-                onRefresh: controller.followreqRefresh,
-                onLoading: controller.followreqLoading,
-                child: alarmType(controller.followalarmlist)
+                onRefresh: controller.alarmRefresh,
+                onLoading: controller.alarmLoading,
+                child: ScrollNoneffectWidget(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 14),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (controller.newalarmList.isNotEmpty)
+                              Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 20),
+                                      child: Text(
+                                        '새로운 알림',
+                                        style:
+                                            k16Normal.copyWith(color: maingray),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                    ListView.separated(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 28, top: 14),
+                                      shrinkWrap: true,
+                                      primary: false,
+                                      itemBuilder: (context, index) {
+                                        return controller.newalarmList[index];
+                                      },
+                                      itemCount: controller.newalarmList.length,
+                                      separatorBuilder: (context, index) {
+                                        return const SizedBox(height: 14);
+                                      },
+                                    ),
+                                  ]),
+                            if (controller.weekalarmList.isNotEmpty)
+                              Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 20),
+                                      child: Text(
+                                        '이번 주',
+                                        style:
+                                            k16Normal.copyWith(color: maingray),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                    ListView.separated(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 28, top: 14),
+                                      shrinkWrap: true,
+                                      primary: false,
+                                      itemBuilder: (context, index) {
+                                        return controller.weekalarmList[index];
+                                      },
+                                      itemCount:
+                                          controller.weekalarmList.length,
+                                      separatorBuilder: (context, index) {
+                                        return const SizedBox(height: 14);
+                                      },
+                                    )
+                                  ]),
+                            if (controller.monthalarmList.isNotEmpty)
+                              Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 20),
+                                      child: Text(
+                                        '이번 달',
+                                        style:
+                                            k16Normal.copyWith(color: maingray),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                    ListView.separated(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 28, top: 14),
+                                      shrinkWrap: true,
+                                      primary: false,
+                                      itemBuilder: (context, index) {
+                                        return controller.monthalarmList[index];
+                                      },
+                                      itemCount:
+                                          controller.monthalarmList.length,
+                                      separatorBuilder: (context, index) {
+                                        return const SizedBox(height: 14);
+                                      },
+                                    )
+                                  ]),
+                            if (controller.oldalarmList.isNotEmpty)
+                              Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 20),
+                                      child: Text(
+                                        '지난 알림',
+                                        style:
+                                            k16Normal.copyWith(color: maingray),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                    ListView.separated(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 28, top: 14),
+                                      shrinkWrap: true,
+                                      primary: false,
+                                      itemBuilder: (context, index) {
+                                        return controller.oldalarmList[index];
+                                      },
+                                      itemCount: controller.oldalarmList.length,
+                                      separatorBuilder: (context, index) {
+                                        return const SizedBox(height: 14);
+                                      },
+                                    )
+                                  ]),
+                          ]),
+                    ),
+                  ),
+                )
                 // CustomScrollView(
                 //     physics: const BouncingScrollPhysics(),
                 // key: const PageStorageKey("key2"),
@@ -450,75 +576,5 @@ class NotificationScreen extends StatelessWidget {
                 //   ),
                 // ),
                 )));
-  }
-
-  Widget alarmType(List<NotificationWidget> noti) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 14),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        if (noti
-            .where((element) => !element.notification.isread.value)
-            .isNotEmpty)
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-              Padding(
-                padding: const EdgeInsets.only(left : 20),
-                child: Text(
-                  '새로운 알림',
-                  style: k16Normal.copyWith(color: maingray),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-              Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(top: 14),
-                shrinkWrap: true,
-                primary: false,
-                itemBuilder: (context, index) {
-                  return noti
-                      .where((element) => !element.notification.isread.value)
-                      .toList()[index];
-                },
-                itemCount: noti
-                    .where((element) => !element.notification.isread.value)
-                    .toList()
-                    .length,
-              ))
-            ]),
-          ),
-        if (noti.where((element) => !element.notification.isread.value).isEmpty)
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-              Padding(
-                padding: const EdgeInsets.only(left : 20),
-                child: Text(
-                  '지난 알림',
-                  style: k16Normal.copyWith(color: maingray),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-              Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(top: 14),
-                shrinkWrap: true,
-                primary: false,
-                itemBuilder: (context, index) {
-                  return noti
-                      .where((element) => element.notification.isread.value)
-                      .toList()[index];
-                },
-                itemCount: noti
-                    .where((element) => element.notification.isread.value)
-                    .toList()
-                    .length,
-              ))
-            ]),
-          ),
-      ]),
-    );
   }
 }
