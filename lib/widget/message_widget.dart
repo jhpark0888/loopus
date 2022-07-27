@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:intl/intl.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/message_detail_controller.dart';
+import 'package:loopus/controller/before_message_detail_controller.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
@@ -66,8 +66,7 @@ class MessageWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(12.0, 0, 8.0, 0.0),
                       child: Text(
-                        // "${messagedurationCaculate(startDate: message.date, endDate: DateTime.now())}",
-                        messageDurationCalculate(message.date),
+                        messagedurationCaculate(startDate: message.date, endDate: DateTime.now()),
                         style: kCaptionStyle.copyWith(
                           color: mainblack,
                         ),
@@ -215,7 +214,7 @@ class MessageWidget extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(
                                   8.0, 18.0, 12.0, 0.0),
                               child: Text(
-                                messageDurationCalculate(message.date),
+                                messagedurationCaculate(startDate: message.date, endDate: DateTime.now()),
                                 style: kCaptionStyle.copyWith(color: mainblack),
                                 textAlign: TextAlign.end,
                               ),

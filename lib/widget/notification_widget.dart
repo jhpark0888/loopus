@@ -12,6 +12,8 @@ import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
+import 'package:loopus/widget/person_image_widget.dart';
+import 'package:loopus/widget/user_image_widget.dart';
 
 class NotificationWidget extends StatelessWidget {
   NotificationWidget({
@@ -48,45 +50,30 @@ class NotificationWidget extends StatelessWidget {
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
+                horizontal: 20,
+                vertical: 7,
               ),
               child: Row(
                 children: [
-                  ClipOval(
-                      child: notification.user.profileImage == null
-                          ? Image.asset(
-                              "assets/illustrations/default_profile.png",
-                              width: 56,
-                              height: 56,
-                            )
-                          : CachedNetworkImage(
-                              height: 56,
-                              width: 56,
-                              imageUrl: notification.user.profileImage!,
-                              placeholder: (context, url) =>
-                                  kProfilePlaceHolder(),
-                              fit: BoxFit.cover,
-                            )),
+                  UserImageWidget(imageUrl: notification.user.profileImage ?? '', width: 36,height: 36,),
                   const SizedBox(
                     width: 12,
                   ),
                   Flexible(
                     child: RichText(
-                        maxLines: 2,
                         text: TextSpan(children: [
                           TextSpan(
                               text: notification.user.realName,
-                              style: kSubTitle1Style),
+                              style: kmainbold),
                           TextSpan(
-                            text: "님이 팔로우하기 시작했어요 ",
+                            text: "님이 회원님을 팔로우합니다.",
                             style: kSubTitle1Style.copyWith(
                                 fontWeight: FontWeight.w400),
                           ),
                           TextSpan(
-                            text: messagedurationCaculate(
+                            text:' · ${messagedurationCaculate(
                                 startDate: notification.date,
-                                endDate: DateTime.now()),
+                                endDate: DateTime.now())}',
                             style: kSubTitle1Style.copyWith(
                               color: mainblack.withOpacity(0.38),
                               fontWeight: FontWeight.w400,
@@ -94,9 +81,9 @@ class NotificationWidget extends StatelessWidget {
                           )
                         ])),
                   ),
-                  const SizedBox(
-                    width: 12,
-                  ),
+                  // const SizedBox(
+                  //   width: 12,
+                  // ),
                   // Obx(() => CustomExpandedButton(
                   //       onTap: followMotion,
                   //       title: followController.islooped.value == 0

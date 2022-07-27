@@ -21,12 +21,12 @@ import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/screen/message_detail_screen.dart';
+import 'package:loopus/screen/before_message_detail_screen.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/looppeople_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
-import 'package:loopus/screen/websocet_screen.dart';
+import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -481,7 +481,7 @@ class OtherProfileScreen extends StatelessWidget {
                                                           if (value.isError ==
                                                               false) {
                                                             Get.to(() =>
-                                                                WebsoketScreen(
+                                                                MessageDetatilScreen(
                                                                   partner: _controller
                                                                       .otherUser
                                                                       .value,

@@ -1,300 +1,403 @@
+import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/message_model.dart';
+import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/message_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/career_rank_widget.dart';
+import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
+import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/message_widget.dart';
-import 'package:loopus/widget/messageroom_widget.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
+import 'package:path/path.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqlite_viewer/sqlite_viewer.dart';
+import 'package:web_socket_channel/io.dart';
 
-class MessageDetailScreen extends StatelessWidget {
-  MessageDetailScreen(
-      {Key? key, required this.userid, required this.realname, this.user})
+enum EnterRoute { popUp, messageScreen, otherProfile }
+
+class MessageDetatilScreen extends StatelessWidget {
+  MessageDetatilScreen(
+      {Key? key,
+      required this.partner,
+      required this.myProfile,
+      required this.partnerToken,
+      required this.enterRoute})
       : super(key: key);
-
-  int userid;
-  String realname;
-  User? user;
+  User partner;
+  String? partnerToken;
+  User myProfile;
+  EnterRoute enterRoute;
   late MessageDetailController controller = Get.put(
-      MessageDetailController(
-          userid: userid,
-          user: user != null ? user!.obs : User.defaultuser().obs),
-      tag: userid.toString());
-
-  void _handleSubmitted(String text) async {
-    if (controller.isSendButtonon.value) {
-      if (controller.user!.value.banned != BanState.normal) {
-        controller.messagefocus.unfocus();
-        showCustomDialog("해당 유저에게 메세지를 보낼 수 없습니다", 1000);
-      } else {
-        controller.messagefocus.unfocus();
-        controller.messagetextController.clear();
-        // Message message = Message(
-        //     id: 0,
-        //     roomId: controller.messagelist.isEmpty
-        //         ? 0
-        //         : controller.messagelist.first.message.roomId,
-        //     receiverId: userid,
-        //     message: text,
-        //     date: DateTime.now(),
-        //     isRead: true,
-        //     issender: 1,
-        //     issending: true.obs);
-        // controller.messagelist.insert(controller.messagelist.length,
-        //     MessageWidget(message: message, user: controller.user!.value));
-        if (controller.scrollController.hasClients) {
-          if (controller.scrollController.offset != 0) {
-            controller.scrollController.jumpTo(
-              0,
-            );
-          }
-        }
-        await postmessage(text, controller.userid).then((value) {
-          // message.issending(false);
-
-          if (Get.isRegistered<MessageController>()) {
-            // MessageController messageController = Get.find<MessageController>();
-            // MessageRoomWidget messageroomwidget = messageController
-            //     .chattingroomlist
-            //     .where((messageroom) =>
-            //         messageroom.messageRoom.value.user.userid ==
-            //         controller.userid)
-            //     .first;
-            // messageroomwidget.messageRoom.value.message.value = Message(
-            //     id: 0,
-            //     roomId: controller.messagelist.isEmpty
-            //         ? 0
-            //         : controller.messagelist.first.message.roomId,
-            //     receiverId: userid,
-            //     message: text,
-            //     date: DateTime.now(),
-            //     isRead: true,
-            //     issender: 1,
-            //     issending: true.obs);
-            // messageController.chattingroomlist.remove(messageroomwidget);
-            // messageController.chattingroomlist.insert(0, messageroomwidget);
-          }
-        });
-      }
-    }
-  }
-
-  Widget _buildTextComposer() {
-    return Container(
-      key: controller.textFieldBoxKey.value,
-      decoration: BoxDecoration(
-        color: mainWhite,
-        border: Border(
-          top: BorderSide(
-            width: 1,
-            color: Color(0xffe7e7e7),
-          ),
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
-      child: TextFormField(
-        autocorrect: false,
-        enableSuggestions: false,
-        cursorWidth: 1.2,
-        style: const TextStyle(decoration: TextDecoration.none),
-        cursorColor: mainblack.withOpacity(0.6),
-        controller: controller.messagetextController,
-        onFieldSubmitted: _handleSubmitted,
-        minLines: 1,
-        maxLines: 5,
-        decoration: InputDecoration(
-          suffixIconConstraints: BoxConstraints(minWidth: 24),
-          suffixIcon: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Flexible(
-                child: GestureDetector(
-                  onTap: () {
-                    _handleSubmitted(
-                        controller.messagetextController.value.text);
+      MessageDetailController(partnerId: partner.userid, partnerToken: partnerToken),
+      tag: partner.userid.toString());
+  Key centerKey = const ValueKey('QueryList');
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBarWidget(
+            title: partner.realName,
+            bottomBorder: false,
+            leading: GestureDetector(
+                onTap: () {
+                  if (enterRoute == EnterRoute.popUp) {
+                    if (Get.isRegistered<MessageController>()) {
+                      Get.back();
+                    } else {
+                      Get.off(() => MessageScreen());
+                    }
+                  } else {
+                    Get.back();
+                  }
+                },
+                child: Center(
+                    child: SvgPicture.asset('assets/icons/Arrow_left.svg'))),
+            actions: [
+              GestureDetector(
+                onTap: () async {
+                  // // deleteDatabase(
+                  // //                 join(await getDatabasesPath(), 'MY_database.db'));
+                  showModalIOS(context, func1: () {
+                    int roomId = controller.roomid;
+                    if (controller.messageList.isNotEmpty) {
+                      deleteChatRoom(controller.roomid, myProfile.userid)
+                          .then((value) {
+                        if (value.isError == false) {
+                          SQLController.to.deleteMessage(roomId);
+                          SQLController.to.deleteMessageRoom(roomId);
+                          SQLController.to.deleteUser(partner.userid);
+                          if (Get.isRegistered<MessageController>()) {
+                            MessageController.to.searchRoomList.removeAt(
+                                MessageController.to.searchRoomList.indexWhere(
+                                    (messageRoom) =>
+                                        messageRoom.chatRoom.value.roomId ==
+                                        roomId));
+                            MessageController.to.chattingRoomList.removeAt(
+                                MessageController.to.chattingRoomList
+                                    .indexWhere((messageRoom) =>
+                                        messageRoom.chatRoom.value.roomId ==
+                                        roomId));
+                          }
+                          Get.back();
+                          if (enterRoute == EnterRoute.popUp) {
+                            Get.off(() => MessageScreen());
+                          } else {
+                            Get.back();
+                          }
+                        }
+                      });
+                    } else {
+                      Get.back();
+                      if (enterRoute == EnterRoute.popUp) {
+                        Get.off(() => MessageScreen());
+                      } else {
+                        Get.back();
+                      }
+                    }
+                  }, func2: () {
+                    Get.to(() => DatabaseList());
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 12),
-                    child: Obx(
-                      () => Text(
-                        '보내기',
-                        style: kButtonStyle.copyWith(
-                            color: controller.isSendButtonon.value
-                                ? mainblue
-                                : mainblack.withOpacity(0.38)),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+                      value1: '채팅방 나가기',
+                      value2: '',
+                      isValue1Red: true,
+                      isValue2Red: false,
+                      isOne: true);
+                },
+                child: SizedBox(
+                    height: 44,
+                    width: 44,
+                    child: Center(
+                        child: SvgPicture.asset('assets/icons/More.svg'))),
+              )
             ],
           ),
-          contentPadding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
-          isDense: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(
-              width: 0,
-              style: BorderStyle.none,
-            ),
-          ),
-          hintText: "메시지를 입력해주세요...",
-          hintStyle: TextStyle(
-            fontSize: 14,
-            color: mainblack.withOpacity(0.38),
-          ),
-          fillColor: lightcardgray,
-          filled: true,
-        ),
-      ),
+          bottomNavigationBar: Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: sendField()),
+          body: Obx(
+            () => controller.screenState.value == ScreenState.loading
+                ? const Center(child: LoadingWidget())
+                : controller.screenState.value == ScreenState.success
+                    ? SmartRefresher(
+                        controller: controller.refreshController,
+                        scrollController: controller.scrollController,
+                        enablePullUp: controller.refreshEnablePullUp.value,
+                        enablePullDown: false,
+                        onLoading: controller.onLoading,
+                        header: ClassicHeader(
+                          releaseIcon: Container(),
+                          releaseText: '',
+                          refreshingIcon: Container(),
+                          refreshingText: '',
+                          idleIcon: Container(),
+                          idleText: '',
+                        ),
+                        footer: ClassicFooter(
+                          loadingIcon: Container(),
+                          loadingText: '',
+                          idleIcon: Container(),
+                          idleText: '',
+                        ),
+                        physics: const BouncingScrollPhysics(),
+                        reverse: true,
+                        child: SingleChildScrollView(
+                          reverse: false,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ListView.separated(
+                                shrinkWrap: true,
+                                primary: false,
+                                reverse: true,
+                                itemBuilder: (context, index) {
+                                  if (controller.messageList[index] ==
+                                      controller.messageList.first) {
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isLast: true.obs,
+                                        isFirst: false.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  } else if (controller.messageList[index] ==
+                                      controller.messageList.last) {
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isLast: false.obs,
+                                        isFirst: true.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  } else {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        print(controller.messageList[index] ==
+                                                controller.messageList.last ||
+                                            DateFormat('yyyy-MM-dd').parse(
+                                                    controller
+                                                        .messageList[index].date
+                                                        .toString()) !=
+                                                DateFormat('yyyy-MM-dd').parse(
+                                                    controller
+                                                        .messageList[index].date
+                                                        .toString()));
+                                      },
+                                      child: MessageWidget(
+                                          message:
+                                              controller.messageList[index],
+                                          isLast: false.obs,
+                                          isFirst: false.obs,
+                                          partner: partner,
+                                          myId: controller.myId!),
+                                    );
+                                  }
+                                },
+                                itemCount: controller.messageList.length,
+                                separatorBuilder: (context, index) {
+                                  if (DateFormat('yyyy-MM-dd').parse(controller
+                                          .messageList[index].date
+                                          .toString()) !=
+                                      DateFormat('yyyy-MM-dd').parse(controller
+                                          .messageList[index + 1].date
+                                          .toString())) {
+                                    return Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 7, 20, 7),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Expanded(
+                                              child: Divider(
+                                                  thickness: 0.5,
+                                                  color: maingray,
+                                                  height: 0.5),
+                                            ),
+                                            const SizedBox(width: 14),
+                                            Text(
+                                              '${controller.messageList[index].date.year}.${controller.messageList[index].date.month}.${controller.messageList[index].date.day}',
+                                              style: k16Normal.copyWith(
+                                                  color: maingray),
+                                            ),
+                                            const SizedBox(width: 14),
+                                            Expanded(
+                                              child: Divider(
+                                                  thickness: 0.5,
+                                                  color: maingray,
+                                                  height: 0.5),
+                                            ),
+                                          ]),
+                                    );
+                                  } else {
+                                    return const SizedBox.shrink();
+                                  }
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    : controller.screenState.value == ScreenState.normal
+                        ? Container()
+                        : Container(),
+          )),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // Get.put(OnMessageScreenController(), tag: userid.toString());
-    return Scaffold(
-        appBar: AppBarWidget(
-          bottomBorder: false,
-          title: '${realname}',
-        ),
-        bottomNavigationBar: Transform.translate(
-          offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
-          child: BottomAppBar(
-            elevation: 0,
-            child: _buildTextComposer(),
+  // List<Widget> messageBox() {
+  //   return [
+  //     SliverList(
+  //         key: centerKey,
+  //         delegate: SliverChildBuilderDelegate((context, index) {
+  //           if (controller.checkFirstScreenPosition().value == true) {
+  //             if (controller.messageList[index] ==
+  //                 controller.messageList.first) {
+  //               return MessageWidget(
+  //                   key: Get.put(
+  //                           KeyController(
+  //                               isTextField: false.obs, ismessage: true),
+  //                           tag: index.toString())
+  //                       .viewKey,
+  //                   message: controller.messageList[index],
+  //                   isLast: true.obs,
+  //                   partner: partner,
+  //                   myId: controller.myId!);
+  //             } else {
+  //               if (index < 9) {
+  //                 return MessageWidget(
+  //                     key: Get.put(
+  //                             KeyController(
+  //                                 isTextField: false.obs, ismessage: true),
+  //                             tag: index.toString())
+  //                         .viewKey,
+  //                     message: controller.messageList[index],
+  //                     isLast: false.obs,
+  //                     partner: partner,
+  //                     myId: controller.myId!);
+  //               } else {
+  //                 return MessageWidget(
+  //                     message: controller.messageList[index],
+  //                     isLast: false.obs,
+  //                     partner: partner,
+  //                     myId: controller.myId!);
+  //               }
+  //             }
+  //           } else {
+  //             if (controller.messageList[index] ==
+  //                 controller.messageList.last) {
+  //               return MessageWidget(
+  //                   message: controller.messageList.reversed.toList()[index],
+  //                   isLast: true.obs,
+  //                   partner: partner,
+  //                   myId: controller.myId!);
+  //             } else {
+  //               return MessageWidget(
+  //                   message: controller.messageList.reversed.toList()[index],
+  //                   isLast: false.obs,
+  //                   partner: partner,
+  //                   myId: controller.myId!);
+  //             }
+  //           }
+  //         }, childCount: controller.messageList.length)),
+  //     SliverList(
+  //         delegate: SliverChildBuilderDelegate(((context, index) {
+  //       return MessageWidget(
+  //           message: controller.refreshList[index],
+  //           isLast: false.obs,
+  //           partner: partner,
+  //           myId: controller.myId!);
+  //     }), childCount: controller.refreshList.length)),
+  //   ];
+  // }
+
+  Widget sendField() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
+      decoration: BoxDecoration(
+          border: Border(top: BorderSide(width: 1, color: dividegray))),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+                keyboardType: TextInputType.multiline,
+                controller: controller.sendText,
+                minLines: 1,
+                maxLines: 3,
+                autocorrect: false,
+                readOnly: false,
+                style: k16Normal,
+                cursorColor: mainblack,
+                cursorWidth: 1.2,
+                cursorRadius: Radius.circular(5.0),
+                autofocus: false,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: cardGray,
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(8)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(8)),
+                  contentPadding: const EdgeInsets.fromLTRB(24, 8, 24, 8),
+                  isDense: true,
+                  hintText: '메세지 입력',
+                  hintStyle: k16Normal.copyWith(color: maingray),
+                )),
           ),
-        ),
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Obx(() => controller.messagescreenstate.value ==
-                  ScreenState.loading
-              ? Center(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/icons/loading.gif',
-                          scale: 9,
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          '메세지 목록을 받아오는 중이에요...',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: mainblue,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        )
-                      ]),
-                )
-              : controller.messagescreenstate.value == ScreenState.disconnect
-                  ? DisconnectReloadWidget(reload: () {
-                      controller.firstmessagesload();
-                    })
-                  : controller.messagescreenstate.value == ScreenState.error
-                      ? ErrorReloadWidget(reload: () {
-                          controller.firstmessagesload();
-                        })
-                      : SmartRefresher(
-                          reverse: true,
-                          controller: controller.messageRefreshController,
-                          enablePullDown: false,
-                          enablePullUp: controller.enablemessagePullup.value,
-                          header: ClassicHeader(
-                            spacing: 0.0,
-                            height: 60,
-                            completeDuration: Duration(milliseconds: 600),
-                            textStyle: TextStyle(color: mainblack),
-                            refreshingText: '',
-                            releaseText: "",
-                            completeText: "",
-                            idleText: "",
-                            refreshingIcon: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/icons/loading.gif',
-                                  scale: 6,
-                                ),
-                              ],
-                            ),
-                            releaseIcon: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/icons/loading.gif',
-                                  scale: 6,
-                                ),
-                              ],
-                            ),
-                            completeIcon: Column(
-                              children: [
-                                const Icon(
-                                  Icons.check_rounded,
-                                  color: mainblue,
-                                ),
-                              ],
-                            ),
-                            idleIcon: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/icons/loading.png',
-                                  scale: 12,
-                                ),
-                              ],
-                            ),
-                          ),
-                          footer: ClassicFooter(
-                            completeDuration: Duration.zero,
-                            loadingText: "",
-                            canLoadingText: "",
-                            idleText: "",
-                            idleIcon: Container(),
-                            noMoreIcon: Container(
-                              child: Text('as'),
-                            ),
-                            loadingIcon: Image.asset(
-                              'assets/icons/loading.gif',
-                              scale: 6,
-                            ),
-                            canLoadingIcon: Image.asset(
-                              'assets/icons/loading.gif',
-                              scale: 6,
-                            ),
-                          ),
-                          onLoading: controller.messageLoading,
-                          child: SingleChildScrollView(
-                            reverse: true,
-                            controller: controller.scrollController,
-                            child: Obx(
-                              () => Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: controller
-                                            .keyboardController.isVisible
-                                        ? controller.textBoxSize.value.height
-                                        : 0),
-                                child: Column(
-                                  children: controller.messagelist.value,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )),
-        ));
+          const SizedBox(width: 14),
+          GestureDetector(
+              onTap: () async {
+                if (controller.sendText.text.isNotEmpty) {
+                  if (controller.hasInternet.value == true) {
+                    controller.channel.sink.add(jsonEncode({
+                      'content': controller.sendText.text,
+                      'type': 'msg',
+                      'token': partnerToken,
+                      'name': myProfile.realName
+                    }));
+                  }
+                  controller.messageList.insert(
+                      0,
+                      Chat(
+                          content: controller.sendText.text,
+                          date: DateTime.now(),
+                          sender: controller.myId.toString(),
+                          isRead: false.obs,
+                          messageId: '0',
+                          type: 'msg',
+                          roomId: controller.roomid,
+                          sendsuccess: false.obs));
+                  controller.sendText.clear();
+                }
+              },
+              child: SvgPicture.asset('assets/icons/Enter_Icon.svg'))
+        ],
+      ),
+    );
   }
 }
+

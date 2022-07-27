@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_crop/image_crop.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
-import 'package:loopus/screen/websocet_screen.dart';
+import 'package:loopus/screen/message_detail_screen.dart';
 
 class KeyController extends GetxController {
   GlobalKey viewKey = GlobalKey();
@@ -41,7 +42,7 @@ class KeyController extends GetxController {
       WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
         if (viewKey.currentContext != null) {
           viewBox = viewKey.currentContext!.findRenderObject() as RenderBox;
-          Get.find<WebsoketController>().messageHeight.value +=
+          Get.find<MessageDetailController>().messageHeight.value +=
               viewBox.size.height;
         }
       });
@@ -49,9 +50,9 @@ class KeyController extends GetxController {
     if (isMessageBox == true) {
       WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
         viewBox = viewKey.currentContext!.findRenderObject() as RenderBox;
-        Get.find<WebsoketController>().messagesBoxPositionHeight.value =
+        Get.find<MessageDetailController>().messagesBoxPositionHeight.value =
             viewBox.size.height;
-        print(Get.find<WebsoketController>().messagesBoxPositionHeight.value);
+        print(Get.find<MessageDetailController>().messagesBoxPositionHeight.value);
       });
     }
     super.onInit();

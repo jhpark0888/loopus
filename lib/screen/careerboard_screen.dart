@@ -13,7 +13,7 @@ import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/post_add_test.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
-import 'package:loopus/screen/websocet_screen.dart';
+import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
 import 'package:loopus/widget/careerborad_post_widget.dart';
 import 'package:loopus/widget/company_image_widget.dart';

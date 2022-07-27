@@ -35,7 +35,7 @@ Future<void> getNotificationlist(String type, int lastindex) async {
       http.Response response =
           await http.get(uri, headers: {"Authorization": "Token $token"});
 
-      print("알림 리스트 로드: ${response.statusCode}");
+      print("알림 $type 리스트 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
         List responseBody = json.decode(utf8.decode(response.bodyBytes));
         List<NotificationModel> notificationlist = responseBody

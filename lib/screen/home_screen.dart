@@ -64,8 +64,8 @@ class HomeScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       // ProfileController.to.isnewalarm(false);
-                      Get.to(() => DatabaseList());
-                      // Get.to(() => NotificationScreen());
+                      // Get.to(() => DatabaseList());
+                      Get.to(() => NotificationScreen());
                     },
                     child: SvgPicture.asset(
                       "assets/icons/Bell_Inactive.svg",

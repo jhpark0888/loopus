@@ -39,13 +39,13 @@ class NotificationDetailController extends GetxController {
     isalarmEmpty(false);
     enablealarmPullup.value = true;
 
-    await alarmloadItem();
+    // await alarmloadItem();
     alarmRefreshController.refreshCompleted();
   }
 
   void alarmLoading() async {
     //페이지 처리
-    await alarmloadItem();
+    // await alarmloadItem();
     alarmRefreshController.loadComplete();
   }
 
@@ -66,10 +66,10 @@ class NotificationDetailController extends GetxController {
     followreqRefreshController.loadComplete();
   }
 
-  Future<void> alarmloadItem() async {
-    await getNotificationlist(
-        "", alarmlist.isEmpty ? 0 : alarmlist.last.notification.id);
-  }
+  // Future<void> alarmloadItem() async {
+  //   await getNotificationlist(
+  //       "", alarmlist.isEmpty ? 0 : alarmlist.last.notification.id);
+  // }
 
   Future<void> followreqloadItem() async {
     await getNotificationlist(NotificationType.follow.name,
