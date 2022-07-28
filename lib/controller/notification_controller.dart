@@ -12,22 +12,26 @@ import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/before_message_detail_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/model/message_model.dart';
+import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/screen/before_message_detail_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
+import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/widget/message_widget.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
+import 'package:loopus/widget/notification_widget.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
@@ -173,7 +177,8 @@ class NotificationController extends GetxController {
           if (Get.isRegistered<MessageController>()) {
             String? myid = await const FlutterSecureStorage().read(key: 'id');
             HomeController.to.isNewMsg(true);
-            SQLController.to.updateNotReadCount(int.parse(event.data['room_id']),1);
+            SQLController.to
+                .updateNotReadCount(int.parse(event.data['room_id']), 1);
             showCustomSnackbar(
                 event.notification!.title, event.notification!.body,
                 (snackbar) async {
@@ -295,7 +300,8 @@ class NotificationController extends GetxController {
             });
           } else {
             HomeController.to.isNewMsg(true);
-            SQLController.to.updateNotReadCount(int.parse(event.data['room_id']),1);
+            SQLController.to
+                .updateNotReadCount(int.parse(event.data['room_id']), 1);
             Map<String, dynamic> json = event.data;
             json["date"] = DateTime.now().toString();
             json["content"] = event.notification!.body;
@@ -348,11 +354,20 @@ class NotificationController extends GetxController {
         );
       } else {
         ProfileController.to.isnewalarm(true);
-
+        int type = int.parse(event.data['type']);
+        int id = int.parse(event.data['id']);
+        int senderId = int.parse(event.data['sender_id']);
         showCustomSnackbar(event.notification!.title, event.notification!.body,
             (snackbar) {
-          print('눌림');
+          if (type == 4) {
+            Get.to(() => PostingScreen(postid: id));
+          } else if (type == 2) {
+            Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
+          }
         });
+        if(Get.isRegistered<NotificationDetailController>()){
+          NotificationDetailController.to.alarmRefresh();
+        }
       }
 
       // print(event.notification!.body);

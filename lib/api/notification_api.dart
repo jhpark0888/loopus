@@ -88,26 +88,58 @@ Future<void> getNotificationlist(String type, int lastindex) async {
   }
 }
 
-Future deleteNotification(int noticeid) async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
+// Future deleteNotification(int noticeid) async {
+//   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  var uri = Uri.parse("$serverUri/user_api/alarm?id=$noticeid");
+//   var uri = Uri.parse("$serverUri/user_api/alarm?id=$noticeid");
 
-  try {
-    http.Response response =
-        await http.delete(uri, headers: {"Authorization": "Token $token"});
+//   try {
+//     http.Response response =
+//         await http.delete(uri, headers: {"Authorization": "Token $token"});
 
-    print("알림 삭제: ${response.statusCode}");
-    if (response.statusCode == 200) {
-      return;
-    } else {
-      return Future.error(response.statusCode);
+//     print("알림 삭제: ${response.statusCode}");
+//     if (response.statusCode == 200) {
+//       return;
+//     } else {
+//       return Future.error(response.statusCode);
+//     }
+//   } on SocketException {
+//     // ErrorController.to.isServerClosed(true);
+//   } catch (e) {
+//     print(e);
+//     // ErrorController.to.isServerClosed(true);
+//   }
+// }
+
+Future<HTTPResponse> deleteNotification(int noticeid) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+      var uri = Uri.parse("$serverUri/user_api/alarm?id=$noticeid");
+
+    try {
+      http.Response response =
+          await http.delete(uri, headers: {"Authorization": "Token $token"});
+
+      print("알림 삭제: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        return HTTPResponse.success(null);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+      // ErrorController.to.isServerClosed(true);
     }
-  } on SocketException {
-    // ErrorController.to.isServerClosed(true);
-  } catch (e) {
-    print(e);
-    // ErrorController.to.isServerClosed(true);
   }
 }
 

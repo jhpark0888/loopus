@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/notification_detail_controller.dart';
@@ -361,7 +362,40 @@ class NotificationScreen extends StatelessWidget {
                                       shrinkWrap: true,
                                       primary: false,
                                       itemBuilder: (context, index) {
-                                        return controller.newalarmList[index];
+                                        return Dismissible(
+                                          key: controller
+                                              .newalarmList[index].key!,
+                                          child:
+                                              controller.newalarmList[index],
+                                          onDismissed: (direction) {
+                                            deleteNotification(controller
+                                                    .newalarmList[index]
+                                                    .notification
+                                                    .id)
+                                                .then((value) {
+                                              if (value.isError == false) {
+                                                controller.newalarmList
+                                                    .removeAt(index);
+                                              }
+                                            });
+                                          },
+                                          direction:
+                                              DismissDirection.endToStart,
+                                          background: Container(
+                                            color: rankred,
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 16),
+                                                    child: SvgPicture.asset(
+                                                        'assets/icons/Trash.svg'),
+                                                  )
+                                                ]),
+                                          ),
+                                        );
                                       },
                                       itemCount: controller.newalarmList.length,
                                       separatorBuilder: (context, index) {
@@ -389,8 +423,40 @@ class NotificationScreen extends StatelessWidget {
                                       shrinkWrap: true,
                                       primary: false,
                                       itemBuilder: (context, index) {
-                                        return controller.weekalarmList[index];
-                                      },
+                                        return Dismissible(
+                                          key: controller
+                                              .weekalarmList[index].key!,
+                                          child:
+                                              controller.weekalarmList[index],
+                                          onDismissed: (direction) {
+                                            deleteNotification(controller
+                                                    .weekalarmList[index]
+                                                    .notification
+                                                    .id)
+                                                .then((value) {
+                                              if (value.isError == false) {
+                                                controller.weekalarmList
+                                                    .removeAt(index);
+                                              }
+                                            });
+                                          },
+                                          direction:
+                                              DismissDirection.endToStart,
+                                          background: Container(
+                                            color: rankred,
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 16),
+                                                    child: SvgPicture.asset(
+                                                        'assets/icons/Trash.svg'),
+                                                  )
+                                                ]),
+                                          ),
+                                        );},
                                       itemCount:
                                           controller.weekalarmList.length,
                                       separatorBuilder: (context, index) {
@@ -418,7 +484,40 @@ class NotificationScreen extends StatelessWidget {
                                       shrinkWrap: true,
                                       primary: false,
                                       itemBuilder: (context, index) {
-                                        return controller.monthalarmList[index];
+                                        return Dismissible(
+                                          key: controller
+                                              .monthalarmList[index].key!,
+                                          child:
+                                              controller.monthalarmList[index],
+                                          onDismissed: (direction) {
+                                            deleteNotification(controller
+                                                    .monthalarmList[index]
+                                                    .notification
+                                                    .id)
+                                                .then((value) {
+                                              if (value.isError == false) {
+                                                controller.monthalarmList
+                                                    .removeAt(index);
+                                              }
+                                            });
+                                          },
+                                          direction:
+                                              DismissDirection.endToStart,
+                                          background: Container(
+                                            color: rankred,
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 16),
+                                                    child: SvgPicture.asset(
+                                                        'assets/icons/Trash.svg'),
+                                                  )
+                                                ]),
+                                          ),
+                                        );
                                       },
                                       itemCount:
                                           controller.monthalarmList.length,
@@ -447,7 +546,40 @@ class NotificationScreen extends StatelessWidget {
                                       shrinkWrap: true,
                                       primary: false,
                                       itemBuilder: (context, index) {
-                                        return controller.oldalarmList[index];
+                                        return Dismissible(
+                                          key: controller
+                                              .oldalarmList[index].key!,
+                                          child:
+                                              controller.oldalarmList[index],
+                                          onDismissed: (direction) {
+                                            deleteNotification(controller
+                                                    .oldalarmList[index]
+                                                    .notification
+                                                    .id)
+                                                .then((value) {
+                                              if (value.isError == false) {
+                                                controller.oldalarmList
+                                                    .removeAt(index);
+                                              }
+                                            });
+                                          },
+                                          direction:
+                                              DismissDirection.endToStart,
+                                          background: Container(
+                                            color: rankred,
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 16),
+                                                    child: SvgPicture.asset(
+                                                        'assets/icons/Trash.svg'),
+                                                  )
+                                                ]),
+                                          ),
+                                        );
                                       },
                                       itemCount: controller.oldalarmList.length,
                                       separatorBuilder: (context, index) {
