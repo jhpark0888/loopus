@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>617535814375-9hdrv4j4js2d7uouvgeije4no9c4imc7.apps.googleusercontent.com</string>
+	<string>740891150633-7jam9mi0h0vehsas8d1fjr3anc90mtql.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.617535814375-9hdrv4j4js2d7uouvgeije4no9c4imc7</string>
+	<string>com.googleusercontent.apps.740891150633-7jam9mi0h0vehsas8d1fjr3anc90mtql</string>
 	<key>API_KEY</key>
-	<string>AIzaSyA5C4B0PW_FYVuI1giRYISi5Y4jTqHm1jM</string>
+	<string>AIzaSyBinEhX3Te1BP6PqebMxklazURPNjgh6g0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>617535814375</string>
+	<string>740891150633</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.loopus.loopusfrontend</string>
 	<key>PROJECT_ID</key>
-	<string>loopus-gh</string>
+	<string>loopus-jhtest</string>
 	<key>STORAGE_BUCKET</key>
-	<string>loopus-gh.appspot.com</string>
+	<string>loopus-jhtest.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:617535814375:ios:a2a72b670f9fa905a7c042</string>
+	<string>1:740891150633:ios:c28ec83bedea7be40d4f38</string>
 </dict>
 </plist>
