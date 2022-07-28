@@ -12,6 +12,7 @@ import 'package:loopus/controller/error_controller.dart';
 import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 
@@ -25,18 +26,24 @@ import '../constant.dart';
 Future<HTTPResponse> emailRequest() async {
   ConnectivityResult result = await initConnectivity();
   SignupController signupController = Get.put(SignupController());
+  // NotificationController notifiController = Get.put(NotificationController());
   if (result == ConnectivityResult.none) {
     signupController.signupcertification(Emailcertification.fail);
     return HTTPResponse.networkError();
   } else {
     Uri uri = Uri.parse('$serverUri/user_api/check_email');
 
+    String? fcmToken = await NotificationController.getToken();
+
     var checkemail = {
       //TODO: 학교 도메인 확인
       "email": signupController.emailidcontroller.text +
           "@" +
+          // "naver.com",
           signupController.selectUniv.value.email,
+      "token": fcmToken
     };
+
     try {
       // signupController.sec(180);
       // signupController.timer =
@@ -45,6 +52,7 @@ Future<HTTPResponse> emailRequest() async {
       //     signupController.sec.value -= 1;
       //   }
       // });
+
       signupController.signupcertification(Emailcertification.waiting);
       showBottomSnackbar(
           "${signupController.emailidcontroller.text}@${signupController.selectUniv.value.email}로\n인증 메일을 보냈어요\n메일을 확인하고 인증을 완료해주세요");
@@ -73,45 +81,45 @@ Future<HTTPResponse> emailRequest() async {
   }
 }
 
-Future<HTTPResponse> emailvalidRequest() async {
-  ConnectivityResult result = await initConnectivity();
-  SignupController signupController = Get.put(SignupController());
-  if (result == ConnectivityResult.none) {
-    signupController.signupcertification(Emailcertification.fail);
-    return HTTPResponse.networkError();
-  } else {
-    Uri uri = Uri.parse(
-        '$serverUri/user_api/valid?email=${signupController.emailidcontroller.text}@${signupController.selectUniv.value.email}');
+// Future<HTTPResponse> emailvalidRequest() async {
+//   ConnectivityResult result = await initConnectivity();
+//   SignupController signupController = Get.put(SignupController());
+//   if (result == ConnectivityResult.none) {
+//     signupController.signupcertification(Emailcertification.fail);
+//     return HTTPResponse.networkError();
+//   } else {
+//     Uri uri = Uri.parse(
+//         '$serverUri/user_api/valid?email=${signupController.emailidcontroller.text}@${signupController.selectUniv.value.email}');
 
-    // var checkemail = {
-    //   //TODO: 학교 도메인 확인
-    //   "email": signupController.emailidcontroller.text +
-    //       "@" +
-    //       signupController.selectUniv.value.email,
-    // };
-    try {
-      http.Response response = await http.get(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-      );
+//     // var checkemail = {
+//     //   //TODO: 학교 도메인 확인
+//     //   "email": signupController.emailidcontroller.text +
+//     //       "@" +
+//     //       signupController.selectUniv.value.email,
+//     // };
+//     try {
+//       http.Response response = await http.get(
+//         uri,
+//         headers: <String, String>{
+//           'Content-Type': 'application/json',
+//         },
+//       );
 
-      // response.
-      print("이메일 인증 여부 체크 : ${response.statusCode}");
-      if (response.statusCode == 200) {
-        return HTTPResponse.success("success");
-      } else {
-        return HTTPResponse.apiError("fail", response.statusCode);
-      }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
-  }
-}
+//       // response.
+//       print("이메일 인증 여부 체크 : ${response.statusCode}");
+//       if (response.statusCode == 200) {
+//         return HTTPResponse.success("success");
+//       } else {
+//         return HTTPResponse.apiError("fail", response.statusCode);
+//       }
+//     } on SocketException {
+//       return HTTPResponse.serverError();
+//     } catch (e) {
+//       print(e);
+//       return HTTPResponse.unexpectedError(e);
+//     }
+//   }
+// }
 
 Future<HTTPResponse> signupRequest() async {
   ConnectivityResult result = await initConnectivity();

@@ -15,6 +15,7 @@ class CustomTextField extends StatelessWidget {
   final bool? autofocus;
   final TextInputAction? textInputAction;
   final bool? readOnly;
+  final Widget? suffix;
 
   CustomTextField(
       {required this.textController,
@@ -26,6 +27,7 @@ class CustomTextField extends StatelessWidget {
       required this.maxLength,
       this.readOnly,
       this.autofocus,
+      this.suffix,
       this.ontap,
       this.textInputAction,
       this.onfieldSubmitted});
@@ -56,6 +58,7 @@ class CustomTextField extends StatelessWidget {
         hintStyle: kmain.copyWith(
           color: maingray,
         ),
+        suffix: suffix,
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: maingray, width: 1),
         ),

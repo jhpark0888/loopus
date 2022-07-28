@@ -13,12 +13,15 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/project_add_company_screen.dart';
 import 'package:loopus/trash_bin/project_add_intro_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/company_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 import 'package:loopus/widget/label_textfield_widget.dart';
 
@@ -31,10 +34,8 @@ class ProjectAddTitleScreen extends StatelessWidget {
     required this.screenType,
   }) : super(key: key);
 
-  final _formKey = GlobalKey<FormState>();
   final Screentype screenType;
-  final ProjectAddController projectaddcontroller =
-      Get.put(ProjectAddController());
+  final ProjectAddController _controller = Get.put(ProjectAddController());
   int? projectid;
 
   @override
@@ -48,56 +49,64 @@ class ProjectAddTitleScreen extends StatelessWidget {
             screenType == Screentype.add
                 ? TextButton(
                     onPressed: () async {
-                      // if (_formKey.currentState!.validate()) {
-                      //   Get.to(() => ProjectAddPeriodScreen(
-                      //         screenType: Screentype.add,
-                      //       ));
-                      // }
-                      projectaddcontroller.selectedStartDateTime.value =
-                          DateTime.parse(DateTime.now().toString()).toString();
-                      projectaddcontroller.isEndedProject(false);
-                      loading();
+                      if (_controller.onTitleButton.value) {
+                        _controller.selectedStartDateTime.value =
+                            DateTime.parse(DateTime.now().toString())
+                                .toString();
+                        _controller.isEndedProject(false);
+                        loading();
 
-                      await addproject().then((value) async {
-                        Get.back();
-                        final LocalDataController _localDataController =
-                            Get.put(LocalDataController());
-                        final GAController _gaController =
-                            Get.put(GAController());
-                        if (value.isError == false) {
-                          await _gaController.logProjectCreated(true);
-
-                          Project project = Project.fromJson(value.data);
-                          project.is_user = 1;
-
-                          ProfileController.to.myProjectList.add(project);
-                          ProfileController.to.careerPagenums.add(1);
+                        await addproject().then((value) async {
                           Get.back();
+                          final LocalDataController _localDataController =
+                              Get.put(LocalDataController());
+                          final GAController _gaController =
+                              Get.put(GAController());
+                          if (value.isError == false) {
+                            await _gaController.logProjectCreated(true);
 
-                          SchedulerBinding.instance!.addPostFrameCallback((_) {
-                            showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
-                          });
+                            Project project = Project.fromJson(value.data);
+                            project.is_user = 1;
 
-                          if (_localDataController.isAddFirstProject == true) {
-                            final InAppReview inAppReview =
-                                InAppReview.instance;
+                            ProfileController.to.myProjectList.add(project);
+                            ProfileController.to.careerPagenums.add(1);
+                            Get.back();
 
-                            if (await inAppReview.isAvailable()) {
-                              inAppReview.requestReview();
+                            SchedulerBinding.instance!
+                                .addPostFrameCallback((_) {
+                              showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
+                            });
+
+                            if (_localDataController.isAddFirstProject ==
+                                true) {
+                              final InAppReview inAppReview =
+                                  InAppReview.instance;
+
+                              if (await inAppReview.isAvailable()) {
+                                inAppReview.requestReview();
+                              }
                             }
+                            _localDataController.firstProjectAdd();
+                          } else {
+                            await _gaController.logProjectCreated(false);
+                            errorSituation(value);
                           }
-                          _localDataController.firstProjectAdd();
+                        });
+                      } else {
+                        if (_controller.projectnamecontroller.text
+                            .trim()
+                            .isEmpty) {
+                          showCustomDialog("커리어 이름을 입력해주세요", 1000);
                         } else {
-                          await _gaController.logProjectCreated(false);
-                          errorSituation(value);
+                          showCustomDialog("특수문자를 제거해주세요", 1000);
                         }
-                      });
+                      }
                     },
                     child: Obx(
                       () => Text(
                         '확인',
                         style: kNavigationTitle.copyWith(
-                          color: projectaddcontroller.ontitlebutton.value
+                          color: _controller.onTitleButton.value
                               ? mainblue
                               : mainblack.withOpacity(0.38),
                         ),
@@ -114,7 +123,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                           )
                         : TextButton(
                             onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
+                              if (_controller.onTitleButton.value) {
                                 Get.find<ProjectDetailController>(
                                         tag: projectid.toString())
                                     .isProjectUpdateLoading
@@ -138,10 +147,9 @@ class ProjectAddTitleScreen extends StatelessWidget {
                               () => Text(
                                 '저장',
                                 style: kNavigationTitle.copyWith(
-                                  color:
-                                      projectaddcontroller.ontitlebutton.value
-                                          ? mainblue
-                                          : mainblack.withOpacity(0.38),
+                                  color: _controller.onTitleButton.value
+                                      ? mainblue
+                                      : mainblack.withOpacity(0.38),
                                 ),
                               ),
                             ),
@@ -155,57 +163,57 @@ class ProjectAddTitleScreen extends StatelessWidget {
           ),
           title: '커리어 추가',
         ),
-        body: Form(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          key: _formKey,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 14,
-              ),
-              Text(
-                "본인의 새로운 경험을 추가해보세요",
-                style: kmain.copyWith(color: maingray),
-              ),
-              LabelTextFieldWidget(
-                  label: "커리어 이름",
-                  hintText: "커리어 이름을 입력하세요",
-                  maxLength: 32,
-                  validator: (value) => CheckValidate().validateName(value!),
-                  textController: projectaddcontroller.projectnamecontroller),
-              const SizedBox(
-                height: 48,
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Text(
-                  "기업과 연계된 인턴/채용 관련 커리어세요?",
-                  style: kmain.copyWith(color: mainblue),
-                ),
-              )
-            ],
-          ),
+        body: Column(
+          children: [
+            const SizedBox(
+              height: 14,
+            ),
+            Text(
+              "본인의 새로운 경험을 추가해보세요",
+              style: kmain.copyWith(color: maingray),
+            ),
+            LabelTextFieldWidget(
+                label: "커리어 이름",
+                hintText: "커리어 이름을 입력하세요",
+                maxLength: 15,
+                textController: _controller.projectnamecontroller),
+            const SizedBox(
+              height: 48,
+            ),
+            Obx(() => _controller.selectCompany.value.companyName == ""
+                ? GestureDetector(
+                    onTap: () {
+                      Get.to(() => ProjectAddCompanyScreen());
+                    },
+                    child: Text(
+                      "기업과 연계된 인턴/채용 관련 커리어세요?",
+                      style: kmain.copyWith(color: mainblue),
+                    ),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          "함께한 기업",
+                          style: kmain,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 14,
+                      ),
+                      CompanyTileWidget(
+                        company: _controller.selectCompany.value,
+                        onTap: () {
+                          _controller.selectCompany(Company.defaultCompany());
+                        },
+                      ),
+                    ],
+                  ))
+          ],
         ),
       ),
     );
   }
 }
-
-
-
-
-  // String? validatePassword(String value) {
-  //   if (value.isEmpty) {
-  //     return '비밀번호를 입력하세요.';
-  //   } else {
-  //     Pattern pattern =
-  //         r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,15}$';
-  //     RegExp regExp = new RegExp(pattern.toString());
-  //     if (!regExp.hasMatch(value)) {
-  //       return '특수문자, 대소문자, 숫자 포함 8자 이상 15자 이내로 입력하세요.';
-  //     } else {
-  //       return null;
-  //     }
-  //   }
-  // }
-

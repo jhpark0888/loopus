@@ -43,17 +43,30 @@ class CheckValidate {
     }
   }
 
-  String? validateSpecificWords(String value) {
-    if (value.isEmpty) {
-      return null;
+  // bool validateSpecificWords(String value) {
+  //   if (value.trim().isEmpty) {
+  //     return false;
+  //   } else {
+  //     Pattern pattern =
+  //         r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,15}$';
+  //     RegExp regExp = RegExp(pattern.toString());
+  //     if (regExp.hasMatch(value)) {
+  //       return false;
+  //     } else {
+  //       return true;
+  //     }
+  //   }
+  // }
+  static bool validateSpecificWords(String value) {
+    if (value.trim().isEmpty) {
+      return false;
     } else {
-      Pattern pattern =
-          r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,15}$';
-      RegExp regExp = new RegExp(pattern.toString());
+      Pattern pattern = r'[\-\_\/\\\[\]\(\)\|\{\}*$@$!%*#?~^<>,.&+=]';
+      RegExp regExp = RegExp(pattern.toString());
       if (regExp.hasMatch(value)) {
-        return '특수문자가 포함되어 있어요';
+        return false;
       } else {
-        return null;
+        return true;
       }
     }
   }

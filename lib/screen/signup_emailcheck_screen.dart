@@ -35,57 +35,15 @@ class SignupEmailcheckScreen extends StatelessWidget {
     Emailcertification.fail: "다시 보내기",
   };
 
-  Timer? validChecktimer;
-  Timer? displaytimer;
-  RxInt sec = 180.obs;
+  // Timer? validChecktimer;
 
   Widget timerDisplay() {
     return Obx(
       () => Text(
-        '0${sec.value ~/ 60}:${NumberFormat('00', "ko").format(sec.value % 60)}',
+        '0${_signupController.sec.value ~/ 60}:${NumberFormat('00', "ko").format(_signupController.sec.value % 60)}',
         style: kmainbold.copyWith(color: mainblack),
       ),
     );
-  }
-
-  void timerOn() async {
-    displaytimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (sec.value != 0) {
-        sec.value -= 1;
-      } else {
-        timerClose();
-      }
-    });
-    validChecktimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-      if (sec.value != 0) {
-        await emailvalidRequest().then((value) {
-          if (value.isError == false) {
-            print("성공");
-            timerClose(dialogOn: false);
-            _signupController.signupcertification(Emailcertification.success);
-            Get.to(() => SignupPwScreen());
-          } else {}
-        });
-      }
-    });
-  }
-
-  void timerClose({bool dialogOn = true}) {
-    if (displaytimer != null) {
-      if (displaytimer!.isActive) {
-        displaytimer!.cancel();
-      }
-    }
-    if (validChecktimer != null) {
-      if (validChecktimer!.isActive) {
-        validChecktimer!.cancel();
-      }
-    }
-    if (dialogOn) {
-      _signupController.signupcertification(Emailcertification.fail);
-      Get.closeCurrentSnackbar();
-      showCustomDialog("인증이 취소되었습니다", 1000);
-    }
   }
 
   @override
@@ -123,7 +81,7 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                 if (_signupController
                                         .signupcertification.value ==
                                     Emailcertification.waiting) {
-                                  timerClose();
+                                  _signupController.timerClose();
                                 } else {
                                   Get.back();
                                 }
@@ -152,8 +110,8 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                       "") {
                                     await emailRequest().then((value) {
                                       if (value.isError == false) {
-                                        sec(180);
-                                        timerOn();
+                                        _signupController.sec(180);
+                                        _signupController.timerOn();
                                       } else {
                                         if (value.errorData!["statusCode"] ==
                                             400) {

@@ -40,6 +40,9 @@ class SignupController extends GetxController {
   RxBool isUserInfoFill = false.obs;
   RxBool isPassWordCheck = false.obs;
 
+  Timer? displaytimer;
+  RxInt sec = 180.obs;
+
   static final FlutterSecureStorage storage = FlutterSecureStorage();
 
   @override
@@ -128,6 +131,46 @@ class SignupController extends GetxController {
       isPassWordCheck(true);
     } else {
       isPassWordCheck(false);
+    }
+  }
+
+  void timerOn() async {
+    displaytimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (sec.value != 0) {
+        sec.value -= 1;
+      } else {
+        timerClose();
+      }
+    });
+    // validChecktimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+    //   if (sec.value != 0) {
+    //     await emailvalidRequest().then((value) {
+    //       if (value.isError == false) {
+    //         print("성공");
+    //         timerClose(dialogOn: false);
+    //         _signupController.signupcertification(Emailcertification.success);
+    //         Get.to(() => SignupPwScreen());
+    //       } else {}
+    //     });
+    //   }
+    // });
+  }
+
+  void timerClose({bool dialogOn = true}) {
+    if (displaytimer != null) {
+      if (displaytimer!.isActive) {
+        displaytimer!.cancel();
+      }
+    }
+    // if (validChecktimer != null) {
+    //   if (validChecktimer!.isActive) {
+    //     validChecktimer!.cancel();
+    //   }
+    // }
+    if (dialogOn) {
+      signupcertification(Emailcertification.fail);
+      Get.closeCurrentSnackbar();
+      showCustomDialog("인증이 취소되었습니다", 1000);
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
@@ -13,6 +14,7 @@ import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/model/message_model.dart';
@@ -20,6 +22,7 @@ import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/signup_pw_screen.dart';
 import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/trash_bin/question_detail_screen.dart';
@@ -172,7 +175,8 @@ class NotificationController extends GetxController {
           if (Get.isRegistered<MessageController>()) {
             String? myid = await const FlutterSecureStorage().read(key: 'id');
             HomeController.to.isNewMsg(true);
-            SQLController.to.updateNotReadCount(int.parse(event.data['room_id']),1);
+            SQLController.to
+                .updateNotReadCount(int.parse(event.data['room_id']), 1);
             showCustomSnackbar(
                 event.notification!.title, event.notification!.body,
                 (snackbar) async {
@@ -295,7 +299,8 @@ class NotificationController extends GetxController {
             });
           } else {
             HomeController.to.isNewMsg(true);
-            SQLController.to.updateNotReadCount(int.parse(event.data['room_id']),1);
+            SQLController.to
+                .updateNotReadCount(int.parse(event.data['room_id']), 1);
             Map<String, dynamic> json = event.data;
             json["date"] = DateTime.now().toString();
             json["content"] = event.notification!.body;
@@ -346,6 +351,12 @@ class NotificationController extends GetxController {
           },
           oneText: '확인',
         );
+      } else if (event.data["type"] == "certification") {
+        if (Get.isRegistered<SignupController>()) {
+          SignupController.to.signupcertification(Emailcertification.success);
+          SignupController.to.timerClose();
+          Get.to(() => SignupPwScreen());
+        }
       } else {
         ProfileController.to.isnewalarm(true);
 
@@ -368,9 +379,9 @@ class NotificationController extends GetxController {
   }
 
   //사용자 고유의 알림 토근 가져오기
-  Future<String?> getToken() async {
+  static Future<String?> getToken() async {
     try {
-      String? userMessageToken = await messaging.getToken(
+      String? userMessageToken = await FirebaseMessaging.instance.getToken(
           //TODO: WEB KEY 추가
           // vapidKey:
           //     'BCLIUKVcUhNC9-qwvJ01m_YQ3l46lrehYmmBVcXOtMp21iwY6x-EKTOLg8v4wNPNRcjrLMReFfAq0ohfvHjWZOw',

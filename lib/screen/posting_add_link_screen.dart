@@ -21,6 +21,25 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
   PostingAddController postingAddController =
       Get.put(PostingAddController(route: PostaddRoute.bottom));
 
+  void addLink() {
+    if (postingAddController.linkcontroller.text.trim().isNotEmpty) {
+      if (postingAddController.scrapList
+          .where((scrapwidget) =>
+              scrapwidget.url ==
+              changeUrl(postingAddController.linkcontroller.text))
+          .isEmpty) {
+        postingAddController.scrapList.add(LinkWidget(
+          url: changeUrl(postingAddController.linkcontroller.text),
+          widgetType: 'add',
+        ));
+
+        postingAddController.linkcontroller.clear();
+      } else {
+        showCustomDialog('중복된 주소는 하나만 게시됩니다.', 1000);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -77,38 +96,31 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
                   children: [
                     const Text('링크', style: k16Normal),
                     const SizedBox(height: 14),
-                    CustomTextField(
-                        textController: postingAddController.linkcontroller,
-                        hintText: '링크 주소를 입력해주세요. 최대 10개까지 가능해요',
-                        validator: null,
-                        obscureText: false,
-                        maxLines: 1,
-                        counterText: '',
-                        maxLength: null,
-                        onfieldSubmitted: (string) {
-                          print(postingAddController.linkcontroller.text);
-                          print(string);
-                          if (postingAddController.scrapList
-                              .where((scrapwidget) =>
-                                  scrapwidget.url == changeUrl(string))
-                              .isEmpty) {
-                            postingAddController.scrapList.add(LinkWidget(
-                              // key: Get.put(
-                              //     KeyController(isTextField: false.obs).linkKey,
-                              //     tag:
-                              //         postingAddController.scrapList.length.toString()),
-                              url: changeUrl(string),
-                              widgetType: 'add',
-                              // length: postingAddController.scrapList.length,
-                            ));
-
-                            postingAddController.linkcontroller.clear();
-                          } else {
-                            showCustomDialog('중복된 주소는 하나만 게시됩니다.', 1000);
-                          }
-
-                          print(postingAddController.scrapList);
-                        }),
+                    Obx(
+                      () => CustomTextField(
+                          textController: postingAddController.linkcontroller,
+                          hintText: '링크 주소를 입력해주세요. 최대 10개까지 가능해요',
+                          validator: null,
+                          obscureText: false,
+                          maxLines: 1,
+                          counterText: '',
+                          maxLength: null,
+                          suffix: postingAddController.isLinkTextEmpty.value
+                              ? null
+                              : GestureDetector(
+                                  onTap: addLink,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 7),
+                                    child: Text(
+                                      "추가하기",
+                                      style: kmain.copyWith(color: mainblue),
+                                    ),
+                                  ),
+                                ),
+                          onfieldSubmitted: (string) {
+                            addLink();
+                          }),
+                    ),
                     const SizedBox(height: 24),
                     Obx(() => Column(
                         children: postingAddController.scrapList

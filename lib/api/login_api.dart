@@ -26,8 +26,8 @@ Future<HTTPResponse> loginRequest(String email, String pw) async {
     return HTTPResponse.networkError();
   } else {
     final LogInController logInController = Get.put(LogInController());
-    final NotificationController notificationController =
-        Get.put(NotificationController());
+    // final NotificationController notificationController =
+    //     Get.put(NotificationController());
     final GAController _gaController = Get.put(GAController());
 
     Uri uri = Uri.parse('$serverUri/user_api/login');
@@ -35,7 +35,7 @@ Future<HTTPResponse> loginRequest(String email, String pw) async {
     final user = {
       'username': email.trim(),
       'password': pw,
-      'fcm_token': await notificationController.getToken(),
+      'fcm_token': await NotificationController.getToken(),
     };
 
     try {

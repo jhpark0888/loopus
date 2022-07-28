@@ -37,7 +37,7 @@ class MyProfileScreen extends StatelessWidget {
   MyProfileScreen({Key? key}) : super(key: key);
   final ProfileController profileController = Get.put(ProfileController());
   final ImageController imageController = Get.put(ImageController());
-  final HoverController _hoverController = Get.put(HoverController());
+  final HoverController _hoverController = HoverController();
   TagController tagController = Get.put(TagController(tagtype: Tagtype.profile),
       tag: Tagtype.profile.toString());
 
