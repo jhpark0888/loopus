@@ -23,6 +23,7 @@ class PostingAddController extends GetxController {
   RxInt lines = 0.obs;
   RxBool isPostingTitleEmpty = true.obs;
   RxBool isPostingContentEmpty = true.obs;
+  RxBool isLinkTextEmpty = true.obs;
   RxBool isTagClick = false.obs;
   RxBool keyControllerAtive = false.obs;
   PostaddRoute route;
@@ -33,6 +34,13 @@ class PostingAddController extends GetxController {
         isPostingTitleEmpty.value = true;
       } else {
         isPostingTitleEmpty.value = false;
+      }
+    });
+    linkcontroller.addListener(() {
+      if (linkcontroller.text.trim().isEmpty) {
+        isLinkTextEmpty.value = true;
+      } else {
+        isLinkTextEmpty.value = false;
       }
     });
     _loadPhotos();

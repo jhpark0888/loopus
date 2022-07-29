@@ -12,8 +12,10 @@ import 'package:http/http.dart' as http;
 import 'package:loopus/model/post_model.dart';
 
 //type: main(포스팅 및 사람), school or group(사람 순위 100명까지)
-Future<HTTPResponse> getCareerBoardRequest(String id, String type,
-    {int? page}) async {
+Future<HTTPResponse> getCareerBoardRequest(
+  String id,
+  String type,
+) async {
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {
@@ -24,8 +26,7 @@ Future<HTTPResponse> getCareerBoardRequest(String id, String type,
     String? userid = await FlutterSecureStorage().read(key: "id");
 
     // print(userid);
-    final topPostUrl = Uri.parse("$serverUri/rank/ranking?id=$id&type=$type" +
-        (page != null ? "&page=$page" : ""));
+    final topPostUrl = Uri.parse("$serverUri/rank/ranking?id=$id&type=$type");
 
     try {
       http.Response response = await http

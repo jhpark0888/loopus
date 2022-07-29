@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/widget/company_image_widget.dart';
@@ -39,6 +40,50 @@ class CompanyWidget extends StatelessWidget {
               ]))
             ],
           )
+        ],
+      ),
+    );
+  }
+}
+
+class CompanyTileWidget extends StatelessWidget {
+  CompanyTileWidget({Key? key, required this.company, this.onTap})
+      : super(key: key);
+
+  Company company;
+  void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      child: Row(
+        children: [
+          CompanyImageWidget(
+            imageUrl: company.companyImage,
+            width: 36,
+            height: 36,
+          ),
+          const SizedBox(
+            width: 14,
+          ),
+          Expanded(
+            child: Text(
+              company.companyName,
+              style: kmainbold,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(
+            width: 14,
+          ),
+          if (onTap != null)
+            GestureDetector(
+              onTap: onTap,
+              child: SvgPicture.asset(
+                'assets/icons/Close.svg',
+              ),
+            )
         ],
       ),
     );

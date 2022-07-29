@@ -445,7 +445,6 @@ Future<HTTPResponse> likepost(int id, LikeType type) async {
 
 Future<HTTPResponse> getlikepeoele(int postid, LikeType type) async {
   ConnectivityResult result = await initConnectivity();
-  LikePeopleController controller = Get.find(tag: postid.toString());
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {

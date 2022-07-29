@@ -23,7 +23,7 @@ class LikePeopleScreen extends StatelessWidget {
       : super(key: key);
 
   late final LikePeopleController _controller =
-      Get.put(LikePeopleController(id: id, likeType: likeType), tag: "$id");
+      LikePeopleController(id: id, likeType: likeType)..likePeopleLoad();
 
   int id;
   LikeType likeType;

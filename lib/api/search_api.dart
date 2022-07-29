@@ -107,37 +107,37 @@ Future<HTTPResponse> search(
   }
 }
 
-// Future<HTTPResponse> searchPopPost(int fieldId) async {
-//   ConnectivityResult result = await initConnectivity();
-//   if (result == ConnectivityResult.none) {
-//     showdisconnectdialog();
-//     return HTTPResponse.networkError();
-//   } else {
-//     SearchController searchController = Get.find();
-//     String? token = await FlutterSecureStorage().read(key: 'token');
-//     // 수정
+Future<HTTPResponse> searchPopPost(int page) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    SearchController searchController = Get.find();
+    String? token = await FlutterSecureStorage().read(key: 'token');
+    // 수정
 
-//     final url = Uri.parse("$serverUri/rank/ranking?id=$fieldId");
+    final url = Uri.parse("$serverUri/search/recommend?page=$page");
 
-//     try {
-//       final response =
-//           await http.get(url, headers: {"Authorization": "Token $token"});
+    try {
+      final response =
+          await http.get(url, headers: {"Authorization": "Token $token"});
 
-//       print("검색 : ${response.statusCode}");
+      print("검색 : ${response.statusCode}");
 
-//       if (response.statusCode == 200) {
-//         List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-//         print(responseBody);
-//         return HTTPResponse.success(responseBody);
-//       } else {
-//         return HTTPResponse.apiError('', response.statusCode);
-//       }
-//     } on SocketException {
-//       // ErrorController.to.isServerClosed(true);
-//       return HTTPResponse.serverError();
-//     } catch (e) {
-//       print(e);
-//       return HTTPResponse.unexpectedError(e);
-//     }
-//   }
-// }
+      if (response.statusCode == 200) {
+        List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+        print(responseBody);
+        return HTTPResponse.success(responseBody);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}

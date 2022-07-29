@@ -182,8 +182,6 @@ class CareerBoardController extends GetxController
   }
 
   Future<void> getRanker(String id, bool isUniversity) async {
-    print(id);
-    allrankerScreenstate(ScreenState.loading);
     await getCareerBoardRequest(id, isUniversity ? "school" : "group")
         .then((value) {
       if (value.isError == false) {

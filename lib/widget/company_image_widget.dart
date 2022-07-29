@@ -16,11 +16,11 @@ class CompanyImageWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: dividegray, width: 0.5),
+        border: Border.all(color: dividegray, width: 1),
       ),
       child: imageUrl == ''
           ? Image.asset(
-              "assets/illustrations/default_profile.png",
+              "assets/illustrations/default_company.png",
               height: height ?? 50,
               width: width ?? 50,
               fit: BoxFit.cover,

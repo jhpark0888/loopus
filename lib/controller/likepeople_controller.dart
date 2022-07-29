@@ -8,9 +8,8 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class LikePeopleController extends GetxController {
+class LikePeopleController {
   LikePeopleController({required this.id, required this.likeType});
-  static LikePeopleController get to => Get.find();
   Rx<ScreenState> likepeoplescreenstate = ScreenState.normal.obs;
 
   RefreshController refreshController = RefreshController();
@@ -19,13 +18,6 @@ class LikePeopleController extends GetxController {
   LikeType likeType;
 
   int id;
-
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    likePeopleLoad();
-    super.onInit();
-  }
 
   void onRefresh() {
     likePeopleLoad();
