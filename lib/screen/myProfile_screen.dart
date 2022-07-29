@@ -6,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
@@ -895,6 +896,7 @@ class MyProfileScreen extends StatelessWidget {
         imageController.isProfileImagePickerLoading.value = false;
         if (user != null) {
           profileController.myUserInfo(user);
+          HomeController.to.myProfile(user);
         }
       });
     }
@@ -907,6 +909,7 @@ class MyProfileScreen extends StatelessWidget {
       imageController.isProfileImagePickerLoading.value = false;
       if (user != null) {
         profileController.myUserInfo(user);
+        HomeController.to.myProfile(user);
       }
     });
   }

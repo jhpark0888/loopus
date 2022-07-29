@@ -146,12 +146,14 @@ class ScoutScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(right : 20.0),
                         child: Center(
-                          child: UserImageWidget(
-                              imageUrl:
-                                  HomeController.to.myProfile.value.profileImage ??
-                                      "",
-                              height: 36,
-                              width: 36),
+                          child: Obx(
+                            () => UserImageWidget(
+                                imageUrl:
+                                    HomeController.to.myProfile.value.profileImage ??
+                                        "",
+                                height: 36,
+                                width: 36),
+                          ),
                         ),
                       ))]
                 ),

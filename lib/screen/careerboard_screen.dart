@@ -67,12 +67,14 @@ class CareerBoardScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(right : 20.0),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: UserImageWidget(
-                                imageUrl:
-                                    HomeController.to.myProfile.value.profileImage ??
-                                        "",
-                                height: 36,
-                                width: 36),
+                            child: Obx(
+                              () => UserImageWidget(
+                                  imageUrl:
+                                      HomeController.to.myProfile.value.profileImage ??
+                                          "",
+                                  height: 36,
+                                  width: 36),
+                            ),
                           ),
                         ))]
                   ),
