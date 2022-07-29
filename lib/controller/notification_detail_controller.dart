@@ -106,6 +106,7 @@ class NotificationDetailController extends GetxController {
       alarmList = alarmList
           .where((noti) => noti.notification.isread.value == true)
           .toList();
+          newalarmList.forEach((element) {element.isnewAlarm.value == true;});
     }
     alarmList.forEach((noti) {
       if (notiDurationCaculate(startDate: noti.notification.date) == 'month') {

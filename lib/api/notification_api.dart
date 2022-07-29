@@ -53,7 +53,7 @@ Future<void> getNotificationlist(String type, int lastindex) async {
           }
 
           controller.followalarmlist.value = notificationlist
-              .map((e) => NotificationWidget(key: UniqueKey(), notification: e))
+              .map((e) => NotificationWidget(key: UniqueKey(), notification: e,isnewAlarm: false.obs,))
               .toList();
           controller.followreqscreenstate(ScreenState.success);
         } else {
@@ -65,7 +65,7 @@ Future<void> getNotificationlist(String type, int lastindex) async {
           }
 
           controller.alarmlist.value = notificationlist
-              .map((e) => NotificationWidget(key: UniqueKey(), notification: e))
+              .map((e) => NotificationWidget(key: UniqueKey(), notification: e, isnewAlarm : false.obs))
               .toList();
           controller.notificationscreenstate(ScreenState.success);
         }

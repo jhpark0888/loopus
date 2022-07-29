@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/follow_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
@@ -18,12 +20,12 @@ import 'package:loopus/widget/person_image_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class NotificationWidget extends StatelessWidget {
-  NotificationWidget({
-    Key? key,
-    required this.notification,
-  }) : super(key: key);
+  NotificationWidget(
+      {Key? key, required this.notification, required this.isnewAlarm})
+      : super(key: key);
 
   NotificationModel notification;
+  RxBool isnewAlarm;
   // late final FollowController followController = Get.put(
   //     FollowController(
   //         islooped: notification.looped!.value == FollowState.normal
@@ -126,37 +128,37 @@ class NotificationWidget extends StatelessWidget {
                   Flexible(
                     child: RichText(
                         text: TextSpan(children: [
-                          TextSpan(
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  clickprofile(notification.type);
-                                },
-                              text: notification.user.realName,
-                              style: kSubTitle1Style),
-                          TextSpan(
-                            text: "님이 ",
-                            style: kSubTitle1Style.copyWith(
-                                fontWeight: FontWeight.w400),
-                          ),
-                          // TextSpan(
-                          //     text: notification.content,
-                          //     style: kSubTitle1Style),
-                          TextSpan(
-                            text: notification.type == NotificationType.question
-                                ? "회원님의 포스트에 댓글을 남겼습니다."
-                                : notification.type == NotificationType.tag
-                                    ? " 활동에 회원님을 태그했어요 "
-                                    : "회원님의 포스트를 좋아합니다.",
-                            style: kSubTitle1Style.copyWith(
-                                fontWeight: FontWeight.w400),
-                          ),
-                          TextSpan(
-                              text: ' · ${alarmDurationCaculate(
-                                  startDate: notification.date,
-                                  )}',
-                              style: kSubTitle3Style.copyWith(
-                                  color: mainblack.withOpacity(0.38)))
-                        ])),
+                      TextSpan(
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              clickprofile(notification.type);
+                            },
+                          text: notification.user.realName,
+                          style: kSubTitle1Style),
+                      TextSpan(
+                        text: "님이 ",
+                        style: kSubTitle1Style.copyWith(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      // TextSpan(
+                      //     text: notification.content,
+                      //     style: kSubTitle1Style),
+                      TextSpan(
+                        text: notification.type == NotificationType.question
+                            ? "회원님의 포스트에 댓글을 남겼습니다."
+                            : notification.type == NotificationType.tag
+                                ? " 활동에 회원님을 태그했어요 "
+                                : "회원님의 포스트를 좋아합니다.",
+                        style: kSubTitle1Style.copyWith(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      TextSpan(
+                          text: ' · ${alarmDurationCaculate(
+                            startDate: notification.date,
+                          )}',
+                          style: kSubTitle3Style.copyWith(
+                              color: mainblack.withOpacity(0.38)))
+                    ])),
                   ),
                 ],
               ),
@@ -199,7 +201,7 @@ class NotificationWidget extends StatelessWidget {
     }
   }
 
-  void clicknotice() {
+  void clicknotice() async {
     if (notification.type == NotificationType.tag) {
       // Get.to(() => ProjectScreen(projectid: notification.targetId, isuser: 0));
     } else if (notification.type == NotificationType.like) {
@@ -218,38 +220,53 @@ class NotificationWidget extends StatelessWidget {
 
     if (notification.isread.value == false) {
       print('실행되었다.');
-
+      notification.isread.value = true;
       isRead(
         notification.targetId,
         notification.type,
         notification.user.userid,
-      );
+      ).then((value) {
+        if (value.isError == false) {
+          if (NotificationDetailController.to.newalarmList
+              .where((noti) => noti.notification.isread.value == false)
+              .isEmpty) {
+            HomeController.to.isNewAlarm.value = false;
+          }
+          print(NotificationDetailController.to.newalarmList
+              .where((noti) => noti.notification.isread.value == false)
+              .isEmpty);
+          print(NotificationDetailController.to.newalarmList
+              .where((noti) => noti.notification.isread.value == false)
+              );    
+        }
+      });
     }
   }
 
   String alarmDurationCaculate({
-  required DateTime startDate,
-}) {
-  RxString durationResult = ''.obs;
- DateTime endDate = DateTime.now();
- DateFormat dateonlyFormat = DateFormat('yyyy-MM-dd');
+    required DateTime startDate,
+  }) {
+    RxString durationResult = ''.obs;
+    DateTime endDate = DateTime.now();
+    DateFormat dateonlyFormat = DateFormat('yyyy-MM-dd');
     DateTime startDateOnlyDay =
         DateTime.parse(dateonlyFormat.format(startDate));
     DateTime endDateOnlyDay = DateTime.parse(dateonlyFormat.format(endDate));
-  int _dateDiffence = (endDate.difference(startDate).inDays).toInt();
-  int _dateOnlyDiffence =
+    int _dateDiffence = (endDate.difference(startDate).inDays).toInt();
+    int _dateOnlyDiffence =
         (endDateOnlyDay.difference(startDateOnlyDay).inDays).toInt();
     if ((_dateOnlyDiffence / 30).floor() > 0) {
-    durationResult.value = '${((_dateOnlyDiffence / 7)).floor().toString()}주';
-    }
-    else if (_dateOnlyDiffence == 0) {
+      durationResult.value = '${((_dateOnlyDiffence / 7)).floor().toString()}주';
+    } else if (_dateOnlyDiffence == 0) {
       durationResult.value = '오늘';
-    }
-    else if (_dateOnlyDiffence <= 30) {
+    } else if (_dateOnlyDiffence <= 30) {
       durationResult.value = '$_dateOnlyDiffence일';
     }
-  
 
-  return durationResult.value;
-}
+    return durationResult.value;
+  }
+
+  void checkNewAlarmCount() {
+    if (isnewAlarm.value == true) {}
+  }
 }

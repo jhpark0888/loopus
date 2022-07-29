@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/scout_report_controller.dart';
+import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/widget/company_widget.dart';
 import 'package:loopus/widget/contact_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
@@ -10,8 +12,10 @@ import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
+import 'package:loopus/widget/person_image_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_text_field_widget.dart';
+import 'package:loopus/widget/user_image_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ScoutScreen extends StatelessWidget {
@@ -120,24 +124,36 @@ class ScoutScreen extends StatelessWidget {
               elevation: 0,
               centerTitle: false,
               titleSpacing: 20,
-              title: const Padding(
-                padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
-                child: Text(
-                  '스카우트 리포트',
-                  style: ktitle,
+              title: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
+                child: Row(
+                  children: [
+                    const Text(
+                      '스카우트 리포트',
+                      style: ktitle,
+                    ),
+                    const SizedBox(width: 7),
+                    SvgPicture.asset('assets/icons/information_icon.svg')
+                  ],
                 ),
               ),
               excludeHeaderSemantics: false,
               actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {},
-                    child: SvgPicture.asset(
-                      'assets/icons/Question_copy.svg',
-                    ),
-                  ),
+                Stack(
+                  children: [GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {Get.to(()=> MyProfileScreen());},
+                      child: Padding(
+                        padding: const EdgeInsets.only(right : 20.0),
+                        child: Center(
+                          child: UserImageWidget(
+                              imageUrl:
+                                  HomeController.to.myProfile.value.profileImage ??
+                                      "",
+                              height: 36,
+                              width: 36),
+                        ),
+                      ))]
                 ),
               ],
               bottom: TabBar(

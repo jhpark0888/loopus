@@ -353,7 +353,7 @@ class NotificationController extends GetxController {
           oneText: '확인',
         );
       } else {
-        ProfileController.to.isnewalarm(true);
+        HomeController.to.isNewAlarm(true);
         int type = int.parse(event.data['type']);
         int id = int.parse(event.data['id']);
         int senderId = int.parse(event.data['sender_id']);
