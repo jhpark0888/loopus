@@ -99,13 +99,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
-  collision:
-    dependency: transitive
-    description:
-      name: collision
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.3"
   connectivity_plus:
     dependency: "direct main"
     description:
@@ -148,13 +141,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  crop:
-    dependency: "direct main"
-    description:
-      name: crop
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.2"
   cross_file:
     dependency: transitive
     description:

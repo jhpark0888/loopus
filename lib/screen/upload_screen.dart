@@ -6,13 +6,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/image_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
-import 'package:loopus/controller/upload_controller.dart';
+import 'package:loopus/screen/image_crop_screen.dart';
+import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/utils/custom_crop.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
-import 'package:loopus/widget/scroll_noneffect_widget.dart';
-
 import 'package:photo_manager/photo_manager.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UploadScreen extends StatelessWidget {
@@ -48,11 +48,10 @@ class UploadScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 12.5, 12.5, 0),
             child: GestureDetector(
               onTap: () async {
-                Get.back();
+                loading();
                 if (controller.isSelect.value == true) {
                   if (controller.images != []) {
-                    controller.images.value =
-                        (await assetToFile(controller.selectedImages!));
+                    controller.images.value = (await cropImages());
                     controller.isAddImage(true);
                   } else {
                     controller.isAddImage(false);
@@ -62,6 +61,8 @@ class UploadScreen extends StatelessWidget {
                 }
                 print(controller.isAddImage.value);
                 print(controller.isSelect.value);
+                getbacks(2);
+                print(controller.cropAspectRatio.value);
               },
               child: const Text(
                 '확인',
@@ -76,9 +77,6 @@ class UploadScreen extends StatelessWidget {
           controller: nestedScrollController,
           floatHeaderSlivers: false,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                // SliverOverlapAbsorber(
-                //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                //   sliver:
                 SliverToBoxAdapter(
                   child: Obx(
                     () => GestureDetector(
@@ -89,53 +87,12 @@ class UploadScreen extends StatelessWidget {
                             height: Get.width,
                             decoration: const BoxDecoration(color: mainWhite),
                             child: controller.isSelect.value
-                                ? controller.isCropped.value
-                                    ? GestureDetector(
-                                        onTap: () async {
-                                          // print((await controller.croppedImage!.value.readAsBytesSync()));
-                                          var a = await decodeImageFromList(
-                                              controller.croppedImage!.value
-                                                  .readAsBytesSync());
-                                        },
-                                        child: InteractiveViewer(
-                                          child: Image.file(
-                                            controller.croppedImage!.value,
-                                            // width: controller.croppedWidth.value,
-                                            // height: controller.croppedHeight.value
-                                          ),
-                                        ))
-                                    : Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Center(
-                                            child: Container(
-                                              width:
-                                                  controller.croppedWidth.value,
-                                              height: controller
-                                                          .croppedWidth.value >=
-                                                      Get.width
-                                                  ? Get.width
-                                                  : controller
-                                                      .croppedHeight.value,
-                                              child: _photoWidget(
-                                                  controller
-                                                      .selectedImage!.value,
-                                                  500,
-                                                  500, builder: (data) {
-                                                return PhotoView.customChild(
-                                                    tightMode: false,
-                                                    child: Image.memory(
-                                                      data,
-                                                      fit: BoxFit.fitWidth,
-                                                      // scale: 0.003,
-                                                    ));
-                                              }),
-                                            ),
-                                          ),
-                                        ],
-                                      )
+                                ? Obx(
+                                    () => IndexedStack(
+                                      index: controller.selectedIndex.value,
+                                      children: controller.cropWidgetList.value,
+                                    ),
+                                  )
                                 : Center(
                                     child: Text(
                                     '이미지를 선택해주세요 \n 최대 10장까지 가능해요',
@@ -146,27 +103,13 @@ class UploadScreen extends StatelessWidget {
                           Positioned(
                               child: GestureDetector(
                                   onTap: () async {
-                                    var path2 = await controller
-                                        .selectedImage!.value
-                                        .loadFile();
-                                    await imageController
-                                        .profilecropImage(path2)
-                                        .then((value) {
-                                      controller.croppedImage == null
-                                          ? controller.croppedImage = value!.obs
-                                          : controller.croppedImage!.value =
-                                              value!;
-                                      controller.isCropped.value = true;
-                                    });
-                                    if (controller.croppedImage != null) {
-                                      var a = await decodeImageFromList(
-                                          controller.croppedImage!.value
-                                              .readAsBytesSync());
-                                      controller.croppedHeight.value =
-                                          a.height.toDouble();
-                                      controller.croppedWidth.value =
-                                          a.width.toDouble();
-                                    }
+                                    // File? image = await controller
+                                    //     .selectedImage.value.originFile;
+                                    // if (image != null) {
+                                    Get.to(() => ImageCropScreen(
+                                        assetEntity:
+                                            controller.selectedImage.value));
+                                    // }
                                   },
                                   child: SvgPicture.asset(
                                       'assets/icons/PhotoEdit.svg')),
@@ -237,8 +180,16 @@ class UploadScreen extends StatelessWidget {
                                                                   .albums[index]
                                                                   .name;
                                                           controller
-                                                              .selectedImages!
+                                                              .selectedImages
                                                               .clear();
+                                                          controller
+                                                              .cropWidgetList
+                                                              .clear();
+                                                          controller.cropKeyList
+                                                              .clear();
+                                                          controller
+                                                              .cropAspectRatio(
+                                                                  1);
                                                           controller
                                                               .isSelect(false);
                                                           Get.back();
@@ -330,10 +281,10 @@ class UploadScreen extends StatelessWidget {
               if (t is ScrollEndNotification) {
                 if (scrollController.position.pixels ==
                     scrollController.position.minScrollExtent) {
-                  // nestedScrollController.animateTo(
-                  //     nestedScrollController.position.minScrollExtent,
-                  //     duration: const Duration(milliseconds: 500),
-                  //     curve: Curves.ease);
+                  nestedScrollController.animateTo(
+                      nestedScrollController.position.minScrollExtent,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.ease);
                 } else if (scrollController.position.pixels ==
                     scrollController.position.maxScrollExtent) {
                   nestedScrollController.animateTo(
@@ -371,65 +322,51 @@ class UploadScreen extends StatelessWidget {
                         return Obx(
                           (() => GestureDetector(
                                 onTap: () {
-                                  controller.isCropped.value = false;
+                                  // controller.isCropped.value = false;
                                   if (controller.isSelect.value == false) {
-                                    controller.selectedImage ??=
-                                        controller.imageList[index].obs;
-                                    controller.selectedImages!.value = [
-                                      controller.imageList[index]
-                                    ];
-                                    controller.selectedImages ??=
-                                        [controller.imageList[index]].obs;
-                                    controller.selectedImage!.value =
-                                        controller.imageList[index];
+                                    //처음 이미지 클릭
+                                    _addImage(index);
                                     controller.isSelect.value = true;
-                                    controller.selectedImageSize.value =
-                                        controller.imageList[index].size;
-                                  } else if (!controller.selectedImages!
+                                  } else if (!controller.selectedImages
                                       .contains(controller.imageList[index])) {
-                                    controller.selectedImage ??=
-                                        controller.imageList[index].obs;
-                                    if (controller.selectedImages!.length <
-                                        10) {
-                                      controller.selectedImages!
-                                          .add(controller.imageList[index]);
-                                      // controller.isSelect.value = true;
-                                      controller.selectedImage!.value =
-                                          controller.imageList[index];
-                                      controller.selectedImageSize.value =
-                                          controller.imageList[index].size;
+                                    if (controller.selectedImages.length < 10) {
+                                      //이미지 추가 10장 이내
+                                      _addImage(index);
                                     } else {
-                                      controller.selectedImage ??=
-                                          controller.imageList[index].obs;
+                                      //이미지 추가 10장 넘음
+                                      showCustomDialog(
+                                          "최대 10개의 이미지만 선택할 수 있습니다", 1000);
                                     }
                                     controller.isSelect.value = true;
                                   } else {
-                                    if (controller.selectedImage!.value ==
+                                    if (controller.selectedImage.value ==
                                         controller.imageList[index]) {
-                                      controller.selectedImages!
-                                          .remove(controller.imageList[index]);
+                                      //이미지 제거
+                                      _removeImage(index);
                                       if (controller
-                                          .selectedImages!.isNotEmpty) {
-                                        controller.selectedImage!.value =
-                                            controller.selectedImages!.last;
-                                        controller.selectedImageSize.value =
-                                            controller
-                                                .selectedImages!.last.size;
+                                          .selectedImages.isNotEmpty) {
+                                        //선택된 이미지가 남아있음
+                                        controller.selectedImage.value =
+                                            controller.selectedImages.last;
                                       } else {
+                                        //선택된 이미지가 비어있음
                                         controller.isSelect.value = false;
+                                        controller.cropAspectRatio.value = 1.0;
                                       }
                                     } else {
-                                      controller.selectedImage!.value =
+                                      //선택된 이미지 중 다른 이미지 선택
+                                      controller.selectedImage.value =
                                           controller.imageList[index];
-                                      controller.selectedImageSize.value =
-                                          controller.imageList[index].size;
+                                      controller.selectedIndex(
+                                          controller.selectedImageIndex(
+                                              controller.imageList[index]));
                                     }
                                   }
                                 },
                                 child: Stack(children: [
                                   Opacity(
                                       opacity: controller.isSelect.value == true
-                                          ? controller.selectedImage!.value ==
+                                          ? controller.selectedImage.value ==
                                                   controller.imageList[index]
                                               ? 0.3
                                               : 1
@@ -441,7 +378,7 @@ class UploadScreen extends StatelessWidget {
                                         width: Get.width / 4,
                                       )),
                                   controller.isSelect.value == true
-                                      ? controller.selectedImages!.contains(
+                                      ? controller.selectedImages.contains(
                                               controller.imageList[index])
                                           ? Positioned(
                                               top: 5,
@@ -456,7 +393,7 @@ class UploadScreen extends StatelessWidget {
                                                             32)),
                                                 child: Center(
                                                   child: Text(
-                                                    '${controller.selectedImages!.indexOf(controller.imageList[index]) + 1}',
+                                                    '${controller.selectedImages.indexOf(controller.imageList[index]) + 1}',
                                                     style: kmain.copyWith(
                                                         color: mainWhite),
                                                   ),
@@ -483,7 +420,7 @@ class UploadScreen extends StatelessWidget {
         decoration: BoxDecoration(color: maingray),
         child: controller.selectedImages == null
             ? Container()
-            : _photoWidget(controller.selectedImages!.first, 500, 500,
+            : _photoWidget(controller.selectedImages.first, 500, 500,
                 builder: (data) {
                 return Image.memory(data, fit: BoxFit.cover);
               }));
@@ -509,34 +446,6 @@ class UploadScreen extends StatelessWidget {
     );
   }
 
-  // Widget _imageSelectList() {
-  //   return GridView.builder(
-  //       physics: NeverScrollableScrollPhysics(),
-  //       shrinkWrap: true,
-  //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //           crossAxisCount: 4,
-  //           mainAxisSpacing: 1,
-  //           crossAxisSpacing: 1,
-  //           childAspectRatio: 1),
-  //       itemCount: controller.imageList.length,
-  //       itemBuilder: (BuildContext context, int index) {
-  //         return Obx(() =>
-  //             _photoWidget(controller.imageList[index], 200, builder: (data) {
-  //               return GestureDetector(
-  //                 onTap: () {
-  //                   controller.selectedImages!.add(controller.imageList[index]);
-  //                 },
-  //                 child: Opacity(
-  //                     opacity: controller.imageList[index] ==
-  //                             controller.selectedImages!.value
-  //                         ? 0.3
-  //                         : 1,
-  //                     child: Image.memory(data, fit: BoxFit.cover)),
-  //               );
-  //             }));
-  //       });
-  // }
-
   Widget _photoWidget(AssetEntity asset, int height, int width,
       {required Widget Function(Uint8List) builder}) {
     return FutureBuilder(
@@ -546,10 +455,58 @@ class UploadScreen extends StatelessWidget {
             return builder(snapshot.data!);
           } else {
             return Container(
-              color: dividegray,
+              color: mainWhite,
             );
           }
         });
+  }
+
+  void _addImage(int index) async {
+    GlobalKey<CustomCropState> cropKey = GlobalKey<CustomCropState>();
+    // File? image = await assetToFile(controller.imageList[index]);
+    // controller.selectedImage ??= controller.imageList[index].obs;
+    controller.selectedImages.add(controller.imageList[index]);
+    controller.selectedImage.value = controller.imageList[index];
+    controller.cropKeyList.add(cropKey);
+
+    AssetEntity asset = controller.selectedImage.value;
+
+    controller.cropWidgetList.add(Obx(
+      () => CustomCrop(
+        image: AssetEntityImage(
+          asset,
+          thumbnailSize: const ThumbnailSize(500, 500),
+        ).image,
+        key: cropKey,
+        areaFixed: true,
+        aspectRatio: controller.cropAspectRatio.value,
+      ),
+    ));
+
+    // controller.cropWidgetList.add(Obx(
+    //   () => CustomCrop.file(
+    //     image!,
+    //     key: cropKey,
+    //     areaFixed: true,
+    //     aspectRatio: controller.cropAspectRatio.value,
+    //   ),
+    // ));
+    controller.selectedIndex(controller.cropKeyList.length - 1);
+  }
+
+  void _removeImage(int index) {
+    controller.cropWidgetList.removeAt(
+        controller.selectedImageIndex(controller.selectedImage.value));
+    controller.cropKeyList.removeAt(
+        controller.selectedImageIndex(controller.selectedImage.value));
+    controller.selectedImages.remove(controller.imageList[index]);
+    controller.selectedIndex(controller.cropKeyList.length - 1);
+  }
+
+  Future<File?> assetToFile(AssetEntity assetEntity) async {
+    File? image = await assetEntity.originFile;
+
+    return image;
   }
 
   void modalsheet(context) {
@@ -575,45 +532,37 @@ class UploadScreen extends StatelessWidget {
               ),
             ));
   }
-  // Widget _imageSelectLis1t() {
-  //   return GridView.builder(
-  //         physics: NeverScrollableScrollPhysics(),
-  //         shrinkWrap: true,
-  //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //             crossAxisCount: 4,
-  //             mainAxisSpacing: 1,
-  //             crossAxisSpacing: 1,
-  //             childAspectRatio: 1),
-  //         itemCount: controller.imageList1.length,
-  //         itemBuilder: (BuildContext context, int index) {
-  //           return Obx(() => controller.isLoad.value == false
-  //               ? const SizedBox.shrink()
-  //               : GestureDetector(
-  //                   onTap: () {
-  //                     controller.selectedImage1!.value =
-  //                         controller.imageList1[index];
-  //                         print(controller.selectedImage1!.value);
-  //                         print(controller.imageList1[index] ==
-  //                               controller.selectedImage1!.value);
-  //                               controller.selectedImage1!.refresh();
-  //                   },
-  //                   child: Opacity(
-  //                       opacity: controller.imageList1[index] ==
-  //                               controller.selectedImage1!.value
-  //                           ? 0.3
-  //                           : 1,
-  //                       child: Image.file(controller.imageList1[index],
-  //                           fit: BoxFit.cover)),
-  //                 ));
-  //         });
 
-  // }
-  Future<List<File>> assetToFile(List<AssetEntity> assetEntity) async {
+  Future<List<File>> assetsToFiles(List<AssetEntity> assetEntity) async {
     List<File> images = <File>[];
     for (AssetEntity assetentity in assetEntity) {
       File? image = await assetentity.file;
       images.add(image!);
     }
+    return images;
+  }
+
+  Future<List<File>> cropImages() async {
+    List<File> images = <File>[];
+    for (int i = 0; i < controller.cropKeyList.length; i++) {
+      GlobalKey<CustomCropState> cropKey = controller.cropKeyList[i];
+      AssetEntity assetEntity = controller.selectedImages[i];
+      // final scale = cropKey.currentState!.scale;
+      final area = cropKey.currentState!.area;
+      if (area == null) {
+        // cannot crop, widget is not setup
+        print(null);
+        return [];
+      }
+
+      File? teptfile = await assetEntity.originFile;
+      final file = await ImageCrop.cropImage(
+        file: teptfile!,
+        area: area,
+      );
+      images.add(file);
+    }
+
     return images;
   }
 }

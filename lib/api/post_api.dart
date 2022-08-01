@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:core';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -9,27 +10,17 @@ import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:loopus/controller/app_controller.dart';
-import 'package:loopus/controller/editorcontroller.dart';
 import 'package:loopus/controller/ga_controller.dart';
-import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/controller/likepeople_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/posting_update_controller.dart';
-import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
-import 'package:loopus/model/post_model.dart';
-import 'package:loopus/model/user_model.dart';
-import 'package:loopus/trash_bin/project_screen.dart';
-import 'package:loopus/widget/post_content_widget.dart';
 
 import '../constant.dart';
-import '../controller/error_controller.dart';
 import '../controller/modal_controller.dart';
 
-Future<HTTPResponse> addposting(int projectId) async {
+Future<HTTPResponse> addposting(int projectId, double aspectRatio) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
@@ -52,11 +43,13 @@ Future<HTTPResponse> addposting(int projectId) async {
     };
 
     request.headers.addAll(headers);
-
-    for (File image in postingAddController.images) {
-      var multipartFile =
-          await http.MultipartFile.fromPath('image', image.path);
+    for (int i = 0; i < postingAddController.images.length; i++) {
+      var multipartFile = await http.MultipartFile.fromPath(
+          'image', postingAddController.images[i].path,
+          filename:
+              "${DateTime.now().toIso8601String()}_${projectId}_${i}_aspectRatio=${aspectRatio.toStringAsFixed(3)}.jpg");
       request.files.add(multipartFile);
+      print(multipartFile.filename);
       print(request.files);
     }
     request.fields['contents'] = postingAddController.textcontroller.text;

@@ -71,3 +71,13 @@ class CheckValidate {
     }
   }
 }
+
+double getAspectRatioinUrl(String url) {
+  double aspectRatio = 1.0;
+  url.splitMapJoin(RegExp("(?<=aspectRatio)(.*?)(?=.jpg)"), onMatch: (m) {
+    aspectRatio = double.parse(m[0].toString());
+    return m[0].toString();
+  });
+
+  return aspectRatio;
+}

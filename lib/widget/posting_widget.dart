@@ -10,6 +10,7 @@ import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
+import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/divide_widget.dart';
@@ -100,125 +101,13 @@ class PostingWidget extends StatelessWidget {
           ]),
           if (item.images.isNotEmpty || item.links.isNotEmpty)
             SwiperWidget(
-                items: item.images.isNotEmpty ? item.images : item.links,
-                swiperType: item.images.isNotEmpty
-                    ? SwiperType.image
-                    : SwiperType.link),
-          // Column(
-          //   children: [
-          //     // Swiper(
-          //     //   outer: true,
-          //     //   loop: false,
-          //     //   itemCount: item.images.isNotEmpty
-          //     //       ? item.images.length
-          //     //       : item.links.length,
-          //     //   itemBuilder: (BuildContext context, int index) {
-          //     //     if (item.images.isNotEmpty) {
-          //     //       return CachedNetworkImage(
-          //     //           imageUrl: item.images[index], fit: BoxFit.fill);
-          //     //       // Image.network(item.images[index],
-          //     //       //     fit: BoxFit.fill);
-          //     //     } else {
-          //     //       return KeepAlivePage(
-          //     //         child: LinkWidget(
-          //     //             url: item.links[index], widgetType: 'post'),
-          //     //       );
-          //     //     }
-          //     //   },
-          //     //   pagination: SwiperPagination(
-          //     //       margin: const EdgeInsets.all(14),
-          //     //       alignment: Alignment.bottomCenter,
-          //     //       builder: DotSwiperPaginationBuilder(
-          //     //           color: Color(0xFF5A5A5A).withOpacity(0.5),
-          //     //           activeColor: mainblue,
-          //     //           size: 7,
-          //     //           activeSize: 7)),
-          //     // ),
-          //     // ),
-          //     Container(
-          //         decoration: const BoxDecoration(
-          //             color: mainblack,
-          //             border: Border.symmetric(
-          //                 horizontal: BorderSide(color: mainblack))),
-          //         constraints: BoxConstraints(
-          //             maxWidth: Get.width,
-          //             maxHeight: item.images.isNotEmpty ? Get.width : 300),
-          //         child: PageView.builder(
-          //           controller: pageController,
-          //           itemBuilder: (BuildContext context, int index) {
-          //             if (item.images.isNotEmpty) {
-          //               return CachedNetworkImage(
-          //                 imageUrl: item.images[index],
-          //                 fit: BoxFit.contain,
-          //               );
-          //               // Image.network(item.images[index],
-          //               //     fit: BoxFit.fill);
-          //             } else {
-          //               return KeepAlivePage(
-          //                 child: LinkWidget(
-          //                     url: item.links[index], widgetType: 'post'),
-          //               );
-          //             }
-          //           },
-          //           itemCount: item.images.isNotEmpty
-          //               ? item.images.length
-          //               : item.links.length,
-          //         )
-          //         // )
-          //         // Swiper(
-          //         //   outer: true,
-          //         //   loop: false,
-          //         //   itemCount: item.images.isNotEmpty
-          //         //       ? item.images.length
-          //         //       : item.links.length,
-          //         //   itemBuilder: (BuildContext context, int index) {
-          //         //     if (item.images.isNotEmpty) {
-          //         //       return CachedNetworkImage(
-          //         //           imageUrl: item.images[index], fit: BoxFit.fill);
-          //         //       // Image.network(item.images[index],
-          //         //       //     fit: BoxFit.fill);
-          //         //     } else {
-          //         //       return KeepAlivePage(
-          //         //         child: LinkWidget(
-          //         //             url: item.links[index], widgetType: 'post'),
-          //         //       );
-          //         //     }
-          //         //   },
-          //         //   pagination: SwiperPagination(
-          //         //       margin: const EdgeInsets.all(14),
-          //         //       alignment: Alignment.bottomCenter,
-          //         //       builder: DotSwiperPaginationBuilder(
-          //         //           color: Color(0xFF5A5A5A).withOpacity(0.5),
-          //         //           activeColor: mainblue,
-          //         //           size: 7,
-          //         //           activeSize: 7)),
-          //         // ),
-          //         ),
-          //     const SizedBox(
-          //       height: 14,
-          //     ),
-          //     if (item.images.length > 1 || item.links.length > 1)
-          //       Column(
-          //         children: [
-          //           PageIndicator(
-          //             size: 7,
-          //             activeSize: 7,
-          //             space: 7,
-          //             color: maingray,
-          //             activeColor: mainblue,
-          //             count: item.images.isNotEmpty
-          //                 ? item.images.length
-          //                 : item.links.length,
-          //             controller: pageController,
-          //             layout: PageIndicatorLayout.SLIDE,
-          //           ),
-          //           const SizedBox(
-          //             height: 14,
-          //           ),
-          //         ],
-          //       ),
-          //   ],
-          // ),
+              items: item.images.isNotEmpty ? item.images : item.links,
+              swiperType:
+                  item.images.isNotEmpty ? SwiperType.image : SwiperType.link,
+              aspectRatio: item.images.isNotEmpty
+                  ? getAspectRatioinUrl(item.images[0])
+                  : null,
+            ),
           Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,

@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
@@ -110,6 +111,8 @@ class PostingAddNameScreen1 extends StatelessWidget {
                                     SwiperWidget(
                                       items: postingAddController.images,
                                       swiperType: SwiperType.file,
+                                      aspectRatio: postingAddController
+                                          .cropAspectRatio.value,
                                     ),
                                     Positioned(
                                         child: GestureDetector(
@@ -347,7 +350,9 @@ class PostingAddNameScreen1 extends StatelessWidget {
       onTap: () async {
         if (checkContent()) {
           loading();
-          await addposting(project_id).then((value) {
+          await addposting(
+                  project_id, postingAddController.cropAspectRatio.value)
+              .then((value) {
             Get.back();
             if (value.isError == false) {
               Post post = Post.fromJson(value.data);
@@ -362,12 +367,14 @@ class PostingAddNameScreen1 extends StatelessWidget {
                   career.posts.insert(0, post);
                 }
 
-                getbacks(2);
+                getbacks(3);
                 dialogBack();
+
                 showCustomDialog('포스팅을 업로드했어요', 1000);
-              } else {
-                errorSituation(value);
               }
+              HomeController.to.onPostingRefresh();
+            } else {
+              errorSituation(value);
             }
           });
         }
