@@ -129,7 +129,6 @@ Future<HTTPResponse> getposting(int postingid) async {
 
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
-
         return HTTPResponse.success(responseBody);
       } else if (response.statusCode == 404) {
         Get.back();

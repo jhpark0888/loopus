@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -5,7 +6,7 @@ import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
-import 'package:loopus/screen/websocet_screen.dart';
+import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
@@ -88,18 +89,17 @@ class MessageScreen extends StatelessWidget {
                               if (name.trim() != '') {
                                 messageController.searchRoomList.value =
                                     messageController.chattingRoomList
-                                        .where((chattingRoom) =>
-                                            chattingRoom.user.realName.contains(
-                                            name))
+                                        .where((chattingRoom) => chattingRoom
+                                            .user.realName
+                                            .contains(name))
                                         .toList();
-                                  
                               } else {
                                 messageController.searchRoomList.value =
                                     messageController.chattingRoomList;
                               }
                             },
                           )),
-                          const SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       Expanded(
                         child: ListView.separated(
                           shrinkWrap: true,
@@ -110,9 +110,9 @@ class MessageScreen extends StatelessWidget {
                             return const SizedBox(height: 30);
                           },
                           itemBuilder: (context, index) {
-                            return messageController.searchRoomList[index] ;
+                            return messageController.searchRoomList[index];
                           },
-                          itemCount: messageController.searchRoomList.length ,
+                          itemCount: messageController.searchRoomList.length,
                           // children: messageController.cacac.map((element) => Text(element)).toList(),
                         ),
                       ),

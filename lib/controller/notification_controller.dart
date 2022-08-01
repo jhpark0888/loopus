@@ -10,26 +10,31 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
+import 'package:loopus/controller/before_message_detail_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/model/message_model.dart';
+import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/socket_message_model.dart';
-import 'package:loopus/screen/message_detail_screen.dart';
+import 'package:loopus/screen/before_message_detail_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/message_detail_screen.dart';
+import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/signup_pw_screen.dart';
-import 'package:loopus/screen/websocet_screen.dart';
 import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/widget/message_widget.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
+import 'package:loopus/widget/notification_widget.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
@@ -89,7 +94,7 @@ class NotificationController extends GetxController {
       getUserProfile([partnerId]).then((user) async {
         if (user.isError == false) {
           getPartnerToken(partnerId).then((token) {
-            Get.to(() => WebsoketScreen(
+            Get.to(() => MessageDetatilScreen(
                   partner: user.data[0],
                   myProfile: HomeController.to.myProfile.value,
                   partnerToken: token.data,
@@ -127,7 +132,7 @@ class NotificationController extends GetxController {
       print(event.data["type"]);
       print('알림 데이터 : ${event.data}');
       if (event.data["type"] == "msg") {
-        if (Get.isRegistered<WebsoketController>(
+        if (Get.isRegistered<MessageDetailController>(
             tag: event.data['sender'].toString())) {
           String? myid = await const FlutterSecureStorage().read(key: 'id');
           // Get.find<MessageDetailController>(tag: event.data["id"].toString())
@@ -185,16 +190,15 @@ class NotificationController extends GetxController {
               getUserProfile([partnerId]).then((user) async {
                 if (user.isError == false) {
                   getPartnerToken(partnerId).then((token) {
-                    if (Get.isRegistered<WebsoketController>(
+                    if (Get.isRegistered<MessageDetailController>(
                         tag: HomeController.to.enterMessageRoom.value
                             .toString())) {
-                      print('ㅇㅇㅇ');
-                      Get.delete<WebsoketController>(
+                      Get.delete<MessageDetailController>(
                           tag: HomeController.to.enterMessageRoom.value
                               .toString());
                       Future.delayed(const Duration(milliseconds: 100));
                       Get.off(
-                          () => WebsoketScreen(
+                          () => MessageDetatilScreen(
                                 partner: user.data[0],
                                 myProfile: HomeController.to.myProfile.value,
                                 partnerToken: token.data,
@@ -203,7 +207,7 @@ class NotificationController extends GetxController {
                           preventDuplicates: false);
                     } else {
                       Get.to(
-                          () => WebsoketScreen(
+                          () => MessageDetatilScreen(
                                 partner: user.data[0],
                                 myProfile: HomeController.to.myProfile.value,
                                 partnerToken: token.data,
@@ -316,7 +320,7 @@ class NotificationController extends GetxController {
               getUserProfile([partnerId]).then((user) async {
                 if (user.isError == false) {
                   getPartnerToken(partnerId).then((token) {
-                    Get.to(() => WebsoketScreen(
+                    Get.to(() => MessageDetatilScreen(
                           partner: user.data[0],
                           myProfile: HomeController.to.myProfile.value,
                           partnerToken: token.data,
@@ -358,12 +362,21 @@ class NotificationController extends GetxController {
           Get.to(() => SignupPwScreen());
         }
       } else {
-        ProfileController.to.isnewalarm(true);
-
+        HomeController.to.isNewAlarm(true);
+        int type = int.parse(event.data['type']);
+        int id = int.parse(event.data['id']);
+        int senderId = int.parse(event.data['sender_id']);
         showCustomSnackbar(event.notification!.title, event.notification!.body,
             (snackbar) {
-          print('눌림');
+          if (type == 4) {
+            Get.to(() => PostingScreen(postid: id));
+          } else if (type == 2) {
+            Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
+          }
         });
+        if(Get.isRegistered<NotificationDetailController>()){
+          NotificationDetailController.to.alarmRefresh();
+        }
       }
 
       // print(event.notification!.body);

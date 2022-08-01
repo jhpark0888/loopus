@@ -1,151 +1,292 @@
 import 'dart:convert';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:loopus/api/chat_api.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/model/httpresponse_model.dart';
-import 'package:loopus/model/user_model.dart';
-import 'package:loopus/widget/message_widget.dart';
+import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/message_controller.dart';
+import 'package:loopus/controller/sql_controller.dart';
+import 'package:loopus/model/socket_message_model.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:web_socket_channel/io.dart';
+class MessageDetailController extends GetxController with WidgetsBindingObserver {
+  MessageDetailController({required this.partnerId, required this.partnerToken});
+  late IOWebSocketChannel channel;
+  late int roomid;
+  RxBool hasInternet = true.obs;
+  late var listener;
 
-class MessageDetailController extends GetxController {
-  static MessageDetailController get to => Get.find();
-  MessageDetailController({required this.userid, this.user});
-
-  RxList<MessageWidget> messagelist = <MessageWidget>[].obs;
-  FocusNode messagefocus = FocusNode();
-  TextEditingController messagetextController = TextEditingController();
+  String? token;
+  String? partnerToken;
+  int partnerId;
+  int? myId;
+  TextEditingController sendText = TextEditingController();
   ScrollController scrollController = ScrollController();
-  KeyboardVisibilityController keyboardController =
-      KeyboardVisibilityController();
-  // RxBool isMessageListLoading = false.obs;
-  Rx<ScreenState> messagescreenstate = ScreenState.loading.obs;
-  RxBool isSendButtonon = false.obs;
+  RefreshController refreshController = RefreshController();
 
-  String username = "";
-  int userid;
-  Rx<User>? user = User.defaultuser().obs;
+  RxList<Chat> messageList = <Chat>[].obs;
+  RxList<Chat> refreshList = <Chat>[].obs;
+  Rx<ScreenState> screenState = ScreenState.normal.obs;
+  RxBool isFirst = true.obs;
+  RxBool refreshEnablePullUp = true.obs;
 
-  RxDouble textFormHeight = 0.0.obs;
-  Rx<GlobalKey> textFieldBoxKey = GlobalKey().obs;
-  Rx<Size> textBoxSize = Size(Get.width, 0).obs;
-
-  RefreshController messageRefreshController =
-      RefreshController(initialRefresh: false);
-
-  RxBool enablemessagePullup = true.obs;
-
-  getSize(GlobalKey key) {
-    if (key.currentContext != null) {
-      RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
-      Size size = renderBox.size;
-      return size;
-    }
-    return Size(Get.width, 36);
-  }
-
-  void messageLoading() async {
-    //페이지 처리
-    // await loadmessage(false);
-    messageRefreshController.loadComplete();
-  }
-
-  // Future<void> loadmessage(bool first) async {
-  //   ConnectivityResult result = await initConnectivity();
-  //   if (result == ConnectivityResult.none) {
-  //     if (first) {
-  //       messagescreenstate(ScreenState.disconnect);
-  //     }
-  //     showdisconnectdialog();
-  //   } else {
-  //     HTTPResponse httpresult = await getmessagelist(
-  //         userid,
-  //         first
-  //             ? 0
-  //             : messagelist.isNotEmpty
-  //                 ? messagelist.first.message.id
-  //                 : 0);
-
-  //     if (httpresult.isError == false) {
-  //       List<MessageWidget> messagewidgetlist = httpresult.data;
-  //       if (messagewidgetlist.isEmpty &&
-  //           messagelist.isEmpty &&
-  //           first == false) {
-  //         enablemessagePullup.value = false;
-  //         // isalarmEmpty.value = true;
-  //       } else if (messagewidgetlist.isEmpty && messagelist.isNotEmpty) {
-  //         enablemessagePullup.value = false;
-  //       }
-
-  //       if (first) {
-  //         messagelist(messagewidgetlist);
-  //         messagescreenstate(ScreenState.success);
-  //       } else {
-  //         for (var message in messagewidgetlist.reversed) {
-  //           messagelist.insert(0, message);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
-  void firstmessagesload() {
-    messagescreenstate(ScreenState.loading);
-    // loadmessage(true);
-  }
-
-  void bottomtoscroll() {
-    scrollController.animateTo(scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 500), curve: Curves.ease);
-  }
-
+  RxString lastid = '0'.obs;
+  RxDouble messageHeight = 0.0.obs;
+  RxDouble messagesBoxPositionHeight = 0.0.obs;
   @override
-  void onInit() {
-    firstmessagesload();
-
-    messagetextController.addListener(() {
-      textBoxSize.value = getSize(textFieldBoxKey.value);
-      if (messagetextController.text.replaceAll(" ", "") == "") {
-        isSendButtonon(false);
-      } else {
-        isSendButtonon(true);
+  void onInit() async {
+    scrollController.addListener(() {
+      if (refreshEnablePullUp.value == true) {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          print('실행되었습니다.');
+          onLoading();
+        }
       }
     });
+    screenState.value = ScreenState.loading;
+    print('${partnerId}파트너아이디입니다.');
+    WidgetsBinding.instance!.addObserver(this);
+    myId = int.parse(
+        (await const FlutterSecureStorage().read(key: "id")).toString());
 
-    keyboardController.onChange.listen((isVisible) {
-      if (isVisible) {
-        if (scrollController.hasClients) {
-          scrollController.animateTo(scrollController.offset,
-              duration: Duration(milliseconds: 500), curve: Curves.ease);
-        }
+    print('${myId}자기아이디입니다.');
+    listener = InternetConnectionChecker().onStatusChange.listen((event) {
+      bool connection =
+          event == InternetConnectionStatus.connected ? true : false;
+      hasInternet = connection.obs;
+      if (connection == false) {
+        channel.sink.close();
+        print('웹소켓 연결이 해제되었습니다.');
       } else {
-        if (scrollController.hasClients) {
-          scrollController.animateTo(scrollController.offset,
-              duration: Duration(milliseconds: 500), curve: Curves.ease);
-        }
+        // if (isFirst.value == false) {
+        channel = IOWebSocketChannel.connect(
+            Uri.parse('ws://$chatServerUri/ws/chat/${partnerId.toString()}/'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'id': '$myId'
+            },
+            pingInterval: const Duration(seconds: 1));
+        channel.stream.listen((event) {
+          print(event);
+          messageTypeCheck(jsonDecode(event));
+        }, onError: (error) {
+          print(error);
+        }, onDone: () {
+          print('끊김');
+          channel.sink.close();
+          hasInternet.value = false;
+        });
+        // }
       }
     });
     super.onInit();
   }
 
   @override
-  void onClose() {
-    scrollController.dispose();
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
   }
 
-  bool hasTextOverflow(String text, TextStyle style,
-      {double minWidth = 0, double maxWidth = 250, int maxLines = 1}) {
-    final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: text, style: style),
-      maxLines: maxLines,
-      textDirection: TextDirection.ltr,
-    )..layout(minWidth: minWidth, maxWidth: maxWidth);
-    return textPainter.didExceedMaxLines;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.paused:
+        print(state);
+        break;
+    }
+  }
+
+  @override
+  void onClose() {
+    channel.sink.close();
+    listener.cancel();
+    print('웹소켓 연결 해제');
+    messageList.clear();
+    HomeController.to.enterMessageRoom.value = 0;
+    super.onClose();
+  }
+
+  void onLoading() async {
+    print(lastid);
+    List<Chat> list =
+        (await SQLController.to.getDBMessage(roomid, int.parse(lastid.value)));
+    print(list);
+    if (list.isNotEmpty) {
+      messageList.addAll(list);
+      // messageList.insertAll(0, list);
+      lastid.value = messageList.last.messageId!;
+      refreshEnablePullUp(true);
+    } else {
+      refreshEnablePullUp.value = false;
+    }
+    refreshController.loadComplete();
+  }
+
+  void messageTypeCheck(Map<String, dynamic> json) async {
+    print(json['type']);
+    switch (json['type']) {
+      case ('user_join'):
+        if (json['user_id'] == myId) {
+          print('내가 접속함');
+          roomid = int.parse(json['room_id']);
+          hasInternet.value = true;
+          if (messageList.isEmpty) {
+            messageList.addAll(await SQLController.to
+                .getDBMessage(roomid, int.parse(lastid.value)));
+          } else {
+            for (Chat chat in messageList
+                .where((chat) => chat.sendsuccess!.value == false)
+                .toList()
+                .reversed) {
+              channel.sink.add(jsonEncode({
+                'content': chat.content,
+                'type': 'msg',
+                'token': partnerToken,
+                'name': HomeController.to.myProfile.value.realName
+              }));
+            }
+          }
+          checkRoomId(roomid).then((value) {
+            if (value.isNotEmpty) {
+              sendLastView(int.parse(messageList.first.messageId!));
+              updateNotreadMsg();
+            } else {
+              sendLastView(0);
+            }
+          });
+          lastid.value = messageList.isNotEmpty
+              ? messageList.last.messageId ?? lastid.value
+              : lastid.value;
+          screenState.value = ScreenState.success;
+        } else {
+          print('상대가 접속함');
+          changeReadMessage(roomid, null);
+        }
+        break;
+      case ('user_leave'):
+        print('상대가 나감');
+        break;
+      case ('msg'):
+        if (json['sender'] == myId) {
+          messageList
+              .where((p0) =>
+                  p0.sendsuccess != null && p0.sendsuccess!.value == false)
+              .last
+              .sendsuccess!
+              .value = true;
+        } else {
+          messageList.insert(0, Chat.fromJson(json));
+        }
+        SQLController.to.insertmessage(Chat.fromMsg(json, roomid));
+
+        await Future.delayed(const Duration(milliseconds: 100));
+        SQLController.to
+            .updateLastMessage(json['content'], json['date'], roomid);
+        if (Get.isRegistered<MessageController>()) {
+          MessageController.to.searchRoomList
+              .where((p0) => p0.chatRoom.value.roomId == roomid)
+              .first
+              .chatRoom
+              .value
+              .message
+              .value
+              .content = json['content'];
+          MessageController.to.searchRoomList
+              .where((p0) => p0.chatRoom.value.roomId == roomid)
+              .first
+              .chatRoom
+              .value
+              .message
+              .value
+              .date = DateTime.parse(json['date']);
+          MessageController.to.searchRoomList.sort((a, b) => b
+              .chatRoom.value.message.value.date
+              .compareTo(a.chatRoom.value.message.value.date));
+          MessageController.to.searchRoomList.forEach((element) {
+            element.chatRoom.value.message.refresh();
+            element.chatRoom.refresh();
+          });
+          MessageController.to.searchRoomList.refresh();
+        }
+        break;
+      case 'chat_log':
+        List<dynamic> content = json['content'];
+        if (content.isNotEmpty) {
+          content.forEach((element) {
+            SQLController.to.insertmessage(Chat.fromJson(element));
+            messageList.insert(0, Chat.fromJson(element));
+          });
+          print('저장완료');
+        }
+        break;
+      case 'other_view':
+        if (json['content'] != null) {
+          changeReadMessage(roomid, json['content']);
+        }
+        break;
+    }
+  }
+
+  Future<void> sendLastView(int id) async {
+    channel.sink.add(jsonEncode({'id': id, 'type': 'update'}));
+    print('보냈다.');
+  }
+
+  Future<List<Map<String, dynamic>>> checkRoomId(int id) async {
+    List<Map<String, dynamic>> list;
+    list = (await SQLController.to.database!
+        .rawQuery('SELECT * FROM chatting WHERE room_id = $id'));
+    return list;
+  }
+
+  Future<void> changeReadMessage(int roomid, int? msgid) async {
+    if (msgid != null) {
+      SQLController.to.database!.rawUpdate(
+          'UPDATE chatting SET is_read = ? WHERE is_read = ? and room_id = ? and msg_id <= ?',
+          ['true', 'false', roomid, msgid]);
+    } else {
+      SQLController.to.database!.rawUpdate(
+          'UPDATE chatting SET is_read = ? WHERE is_read = ? and room_id = ?',
+          ['true', 'false', roomid]);
+      if (messageList
+          .where((p0) => p0.isRead!.value == false)
+          .toList()
+          .isNotEmpty) {
+        if (checkFirstScreenPosition().value == true) {
+          messageList.first.isRead!.value = true;
+        } else {
+          messageList.last.isRead!.value = true;
+        }
+      }
+      messageList.refresh();
+    }
+    print('업데이트 성공!');
+  }
+
+  RxBool checkFirstScreenPosition() {
+    if (messageHeight.value >= messagesBoxPositionHeight.value - 30) {
+      return true.obs;
+    } else {
+      return false.obs;
+    }
+  }
+
+  void updateNotreadMsg() async {
+    await SQLController.to.updateNotReadCount(roomid, 0);
+    SQLController.to.findNotReadMessage(roomid: roomid).then((value) {
+      if (value == false) {
+        HomeController.to.isNewMsg.value = false;
+      } else {
+        HomeController.to.isNewMsg.value = true;
+      }
+    });
   }
 }

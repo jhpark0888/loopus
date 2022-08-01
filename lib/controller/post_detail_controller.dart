@@ -37,35 +37,41 @@ class PostingDetailController extends GetxController {
 
   int postid;
 
-  Rx<Post?> post = Post(
-          id: 0,
-          userid: 0,
-          content: ''.obs,
-          images: [],
-          links: [],
-          comments: <Comment>[].obs,
-          tags: <Tag>[].obs,
-          date: DateTime.now(),
-          project: null,
-          likeCount: 0.obs,
-          isLiked: 0.obs,
-          isMarked: 0.obs,
-          isuser: 0,
-          user: User.defaultuser())
-      .obs;
+  Rx<Post?> post;
 
   late int lastIsLiked;
   late int lastIsMarked;
 
   @override
   void onInit() async {
+    if (post.value == null) {
+      post = Post(
+              id: 0,
+              userid: 0,
+              content: ''.obs,
+              images: [],
+              links: [],
+              comments: <Comment>[].obs,
+              tags: <Tag>[].obs,
+              date: DateTime.now(),
+              project: null,
+              likeCount: 0.obs,
+              isLiked: 0.obs,
+              isMarked: 0.obs,
+              isuser: 0,
+              user: User.defaultuser())
+          .obs;
+    }
     await getposting(postid).then((value) async {
       if (value.isError == false) {
         // Post temppost = Post.fromJson(value.data);
         // print('변화 전 : ${post.hashCode}');
         // print('새로운 포스트 : ${temppost.hashCode}');
         // post.value = Post.fromJson(value.data);
-        post.value!.copywith(value.data);
+        if (post.value != null) {
+          post.value!.copywith(value.data);
+        }
+
         // print('변화 후 : ${post.hashCode}');
         lastIsLiked = post.value!.isLiked.value;
         lastIsMarked = post.value!.isMarked.value;

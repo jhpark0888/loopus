@@ -10,10 +10,11 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/post_add_test.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
-import 'package:loopus/screen/websocet_screen.dart';
+import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
 import 'package:loopus/widget/careerborad_post_widget.dart';
 import 'package:loopus/widget/company_image_widget.dart';
@@ -42,27 +43,42 @@ class CareerBoardScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: false,
         titleSpacing: 20,
-        title: const Padding(
-          padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
-          child: Text(
-            '커리어 보드',
-            style: ktitle,
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
+          child: Row(
+            children: [
+              const Text(
+                '커리어 보드',
+                style: ktitle,
+              ),
+              const SizedBox(width: 7),
+              SvgPicture.asset('assets/icons/information_icon.svg')
+            ],
           ),
         ),
         excludeHeaderSemantics: false,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                print("ddd");
-              },
-              child: SvgPicture.asset(
-                'assets/icons/Question_copy.svg',
-              ),
-            ),
-          ),
+           Center(
+             child: Stack(
+                    children: [GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {Get.to(() => MyProfileScreen());},
+                        child: Padding(
+                          padding: const EdgeInsets.only(right : 20.0),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Obx(
+                              () => UserImageWidget(
+                                  imageUrl:
+                                      HomeController.to.myProfile.value.profileImage ??
+                                          "",
+                                  height: 36,
+                                  width: 36),
+                            ),
+                          ),
+                        ))]
+                  ),
+           ),
         ],
         bottom: TabBar(
           padding: const EdgeInsets.symmetric(horizontal: 20),

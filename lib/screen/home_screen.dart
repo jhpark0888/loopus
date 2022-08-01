@@ -64,8 +64,8 @@ class HomeScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       // ProfileController.to.isnewalarm(false);
-                      Get.to(() => DatabaseList());
-                      // Get.to(() => NotificationScreen());
+                      // Get.to(() => DatabaseList());
+                      Get.to(() => NotificationScreen());
                     },
                     child: SvgPicture.asset(
                       "assets/icons/Bell_Inactive.svg",
@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.topRight,
                       child: Obx(
-                          () => ProfileController.to.isnewalarm.value == true
+                          () => HomeController.to.isNewAlarm.value == true
                               ? Container(
                                   height: 8,
                                   width: 8,
@@ -146,8 +146,8 @@ class HomeScreen extends StatelessWidget {
                           HomeController.to.myProfile.value.profileImage ??
                             // ProfileController.to.myUserInfo.value.profileImage ??
                                 '',
-                        width: 32,
-                        height: 32,
+                        width: 36,
+                        height: 36,
                               
                     ),
                   ),

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/widget/notification_widget.dart';
@@ -14,6 +15,10 @@ class NotificationDetailController extends GetxController {
 
   RxList<NotificationWidget> followalarmlist = <NotificationWidget>[].obs;
   RxList<NotificationWidget> alarmlist = <NotificationWidget>[].obs;
+  RxList<NotificationWidget> newalarmList = <NotificationWidget>[].obs;
+  RxList<NotificationWidget> weekalarmList = <NotificationWidget>[].obs;
+  RxList<NotificationWidget> monthalarmList = <NotificationWidget>[].obs;
+  RxList<NotificationWidget> oldalarmList = <NotificationWidget>[].obs;
 
   RefreshController alarmRefreshController =
       RefreshController(initialRefresh: false);
@@ -27,25 +32,34 @@ class NotificationDetailController extends GetxController {
   RxBool isfollowreqEmpty = false.obs;
 
   @override
-  void onInit() {
+  void onInit() async{
     alarmRefresh();
-    followreqRefresh();
+    // followreqRefresh();
     super.onInit();
   }
 
   void alarmRefresh() async {
     notificationscreenstate(ScreenState.loading);
     alarmlist.clear();
+    followalarmlist.clear();
+    newalarmList.clear();
+    weekalarmList.clear();
+    monthalarmList.clear();
+    oldalarmList.clear();
     isalarmEmpty(false);
     enablealarmPullup.value = true;
 
     await alarmloadItem();
+    await followreqloadItem();
+    sortAlarmList(alarmlist + followalarmlist);
     alarmRefreshController.refreshCompleted();
   }
 
   void alarmLoading() async {
     //페이지 처리
     await alarmloadItem();
+    await followreqloadItem();
+    sortAlarmList(alarmlist + followalarmlist);
     alarmRefreshController.loadComplete();
   }
 
@@ -67,12 +81,68 @@ class NotificationDetailController extends GetxController {
   }
 
   Future<void> alarmloadItem() async {
+    if(alarmlist.isNotEmpty){
+    print(alarmlist.last.notification.id);}
     await getNotificationlist(
-        "", alarmlist.isEmpty ? 0 : alarmlist.last.notification.id);
+        "else", alarmlist.isEmpty ? 0 : alarmlist.last.notification.id);
   }
 
   Future<void> followreqloadItem() async {
     await getNotificationlist(NotificationType.follow.name,
         followalarmlist.isEmpty ? 0 : followalarmlist.last.notification.id);
+  }
+
+  void sortAlarmList(List<NotificationWidget> alarmList) {
+    alarmList.sort((a, b) => b
+              .notification.date
+              .compareTo(a.notification.date));
+    if (alarmList
+        .where((noti) => noti.notification.isread.value == false)
+        .isNotEmpty) {
+      newalarmList.value = alarmList
+          .where((noti) => noti.notification.isread.value == false)
+          .toList()
+          .obs;
+      alarmList = alarmList
+          .where((noti) => noti.notification.isread.value == true)
+          .toList();
+          newalarmList.forEach((element) {element.isnewAlarm.value == true;});
+    }
+    alarmList.forEach((noti) {
+      if (notiDurationCaculate(startDate: noti.notification.date) == 'month') {
+        monthalarmList.add(noti);
+      } else if (notiDurationCaculate(startDate: noti.notification.date) ==
+          'week') {
+        weekalarmList.add(noti);
+      } else {
+        oldalarmList.add(noti);
+      }
+    });
+    print('끝');
+  }
+
+  String notiDurationCaculate({
+    required DateTime startDate,
+  }) {
+    RxString durationResult = ''.obs;
+    DateTime endDate = DateTime.now();
+    DateFormat dateonlyFormat = DateFormat('yyyy-MM-dd');
+    DateTime startDateOnlyDay =
+        DateTime.parse(dateonlyFormat.format(startDate));
+    DateTime endDateOnlyDay = DateTime.parse(dateonlyFormat.format(endDate));
+    int _dateOnlyDiffence =
+        (endDateOnlyDay.difference(startDateOnlyDay).inDays).toInt();
+    int _dateDiffence = (endDate.difference(startDate).inDays).toInt();
+
+    if ((_dateOnlyDiffence / 30).floor() < 1) {
+      durationResult.value = 'month';
+      if (_dateOnlyDiffence <= 7) {
+        durationResult.value = 'week';
+      }
+    } else if ((_dateOnlyDiffence / 30).floor() >= 1) {
+      durationResult.value = 'old';
+    }
+
+    return durationResult.value;
   }
 }

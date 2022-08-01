@@ -362,7 +362,7 @@ class HomeController extends GetxController
   RxBool enablePostingPullup = true.obs;
 
   RxBool isNewMsg = false.obs;
-
+  RxBool isNewAlarm = false.obs;
   RefreshController postingRefreshController =
       RefreshController(initialRefresh: false);
 
@@ -410,6 +410,7 @@ class HomeController extends GetxController
       if (value.isError == false) {
         myProfile.value = User.fromJson(value.data);
         print(myProfile.value.userid);
+        isNewAlarm.value = value.data['new_alarm'];
         await updateNotreadMsg(myProfile.value.userid).then((value) { if(value.isError == false){
           isNewMsg.value = value.data;
           print(value.data);        }});
