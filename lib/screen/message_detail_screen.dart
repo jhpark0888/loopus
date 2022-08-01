@@ -142,11 +142,10 @@ class MessageDetatilScreen extends StatelessWidget {
                 )
               ],
             ),
-            bottomNavigationBar: Obx(
-              ()=> Padding(
+            bottomNavigationBar: Padding(
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: sendField()),
+                  child: sendField()
             ),
             body: Obx(
               () => controller.screenState.value == ScreenState.loading
