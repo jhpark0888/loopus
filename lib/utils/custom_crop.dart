@@ -1,481 +1,917 @@
-import 'dart:ui' as ui;
+import 'dart:io';
 import 'dart:math';
 
-import 'package:crop/src/crop_render.dart';
-import 'package:collision/collision.dart';
-import 'package:crop/src/matrix_decomposition.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'dart:ui' as ui;
+
+import 'package:flutter/services.dart';
 import 'package:loopus/utils/custom_scale_recognizer.dart';
-import 'package:vector_math/vector_math_64.dart' as vm;
 
-// class CustomScaleRecognizer extends ScaleGestureRecognizer {
-//   @override
-//   void addAllowedPointer(PointerDownEvent event) {
-//     // TODO: implement addAllowedPointer
-//     super.addAllowedPointer(event);
-//     resolve(GestureDisposition.accepted);
-//   }
-// }
+const _kCropGridColumnCount = 3;
+const _kCropGridRowCount = 3;
+const _kCropGridColor = Color.fromRGBO(0xd0, 0xd0, 0xd0, 0.9);
+const _kCropOverlayActiveOpacity = 0.3;
+const _kCropOverlayInactiveOpacity = 0.7;
+const _kCropHandleColor = Color.fromRGBO(0xd0, 0xd0, 0xd0, 1.0);
+const _kCropHandleSize = 10.0;
+const _kCropHandleHitSize = 48.0;
+// 최소 사진 크롭 비율
+const _kCropMinFraction = 0.8;
 
-/// Used for cropping the [child] widget.
+enum _CropAction { none, moving, cropping, scaling }
+enum _CropHandleSide { none, topLeft, topRight, bottomLeft, bottomRight }
+
 class CustomCrop extends StatefulWidget {
-  final Widget child;
-  final CustomCropController controller;
-  final Color backgroundColor;
-  final Color dimColor;
-  final EdgeInsetsGeometry padding;
-  final Widget? background;
-  final Widget? foreground;
-  final Widget? helper;
-  final Widget? overlay;
-  final bool interactive;
-  final BoxShape shape;
-  final ValueChanged<MatrixDecomposition>? onChanged;
-  final Duration animationDuration;
+  final ImageProvider image;
+  final double? aspectRatio;
+  final double maximumScale;
+  final bool alwaysShowGrid;
+  final bool areaFixed;
+  final ImageErrorListener? onImageError;
 
   const CustomCrop({
     Key? key,
-    required this.child,
-    required this.controller,
-    this.padding = const EdgeInsets.all(8),
-    this.dimColor = const Color.fromRGBO(0, 0, 0, 0.8),
-    this.backgroundColor = Colors.black,
-    this.background,
-    this.foreground,
-    this.helper,
-    this.overlay,
-    this.interactive = true,
-    this.shape = BoxShape.rectangle,
-    this.onChanged,
-    this.animationDuration = const Duration(milliseconds: 200),
+    required this.image,
+    this.aspectRatio,
+    this.maximumScale = 2.0,
+    this.alwaysShowGrid = false,
+    this.areaFixed = false,
+    this.onImageError,
   }) : super(key: key);
 
-  @override
-  State<StatefulWidget> createState() {
-    return _CustomCropState();
-  }
+  CustomCrop.file(
+    File file, {
+    Key? key,
+    double scale = 1.0,
+    this.aspectRatio,
+    this.maximumScale = 2.0,
+    this.alwaysShowGrid = false,
+    this.areaFixed = false,
+    this.onImageError,
+  })  : image = FileImage(file, scale: scale),
+        super(key: key);
+
+  CustomCrop.asset(
+    String assetName, {
+    Key? key,
+    AssetBundle? bundle,
+    String? package,
+    this.aspectRatio,
+    this.maximumScale = 2.0,
+    this.alwaysShowGrid = false,
+    this.areaFixed = false,
+    this.onImageError,
+  })  : image = AssetImage(assetName, bundle: bundle, package: package),
+        super(key: key);
 
   @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding));
-    properties.add(ColorProperty('dimColor', dimColor));
-    properties.add(DiagnosticsProperty('child', child));
-    properties.add(DiagnosticsProperty('controller', controller));
-    properties.add(DiagnosticsProperty('background', background));
-    properties.add(DiagnosticsProperty('foreground', foreground));
-    properties.add(DiagnosticsProperty('helper', helper));
-    properties.add(DiagnosticsProperty('overlay', overlay));
-    properties.add(FlagProperty('interactive',
-        value: interactive,
-        ifTrue: 'enabled',
-        ifFalse: 'disabled',
-        showName: true));
-  }
+  State<StatefulWidget> createState() => CustomCropState();
+
+  static CustomCropState? of(BuildContext context) =>
+      context.findAncestorStateOfType<CustomCropState>();
 }
 
-class _CustomCropState extends State<CustomCrop> with TickerProviderStateMixin {
-  final _key = GlobalKey();
-  final _parent = GlobalKey();
-  final _repaintBoundaryKey = GlobalKey();
+class CustomCropState extends State<CustomCrop>
+    with TickerProviderStateMixin, Drag {
+  final _surfaceKey = GlobalKey();
 
-  double _previousScale = 1;
-  Offset _previousOffset = Offset.zero;
-  Offset _startOffset = Offset.zero;
-  Offset _endOffset = Offset.zero;
-  double _previousGestureRotation = 0.0;
+  late final AnimationController _activeController;
+  late final AnimationController _settleController;
 
-  /// Store the pointer count (finger involved to perform scaling).
-  ///
-  /// This is used to compare with the value in
-  /// [ScaleUpdateDetails.pointerCount]. Check [_onScaleUpdate] for detail.
-  int _previousPointerCount = 0;
+  double _scale = 1.0;
+  double _ratio = 1.0;
+  Rect _view = Rect.zero;
+  Rect _area = Rect.zero;
+  Offset _lastFocalPoint = Offset.zero;
+  _CropAction _action = _CropAction.none;
+  _CropHandleSide _handle = _CropHandleSide.none;
 
-  late AnimationController _controller;
-  late CurvedAnimation _animation;
+  late double _startScale;
+  late Rect _startView;
+  late Tween<Rect?> _viewTween;
+  late Tween<double> _scaleTween;
 
-  Future<ui.Image> _crop(double pixelRatio) {
-    final rrb = _repaintBoundaryKey.currentContext?.findRenderObject()
-        as RenderRepaintBoundary;
+  ImageStream? _imageStream;
+  ui.Image? _image;
+  ImageStreamListener? _imageListener;
 
-    return rrb.toImage(pixelRatio: pixelRatio);
-  }
+  double get scale => _area.shortestSide / _scale;
+
+  Rect? get area => _view.isEmpty
+      ? null
+      : Rect.fromLTWH(
+          _area.left * _view.width / _scale - _view.left,
+          _area.top * _view.height / _scale - _view.top,
+          _area.width * _view.width / _scale,
+          _area.height * _view.height / _scale,
+        );
+
+  bool get _isEnabled => _view.isEmpty == false && _image != null;
+
+  // Saving the length for the widest area for different aspectRatio's
+  final Map<double, double> _maxAreaWidthMap = {};
+
+  // Counting pointers(number of user fingers on screen)
+  int pointers = 0;
 
   @override
   void initState() {
-    widget.controller._cropCallback = _crop;
-    widget.controller.addListener(_reCenterImage);
-
-    //Setup animation.
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.animationDuration,
-    );
-
-    _animation = CurvedAnimation(curve: Curves.easeInOut, parent: _controller);
-    _animation.addListener(() {
-      if (_animation.isCompleted) {
-        _reCenterImage(false);
-      }
-      setState(() {});
-    });
     super.initState();
-  }
 
-  void _reCenterImage([bool animate = true]) {
-    //final totalSize = _parent.currentContext.size;
-
-    final sz = _key.currentContext!.size!;
-    final s = widget.controller._scale * 1;
-    final w = sz.width;
-    final h = sz.height;
-    final offset = _toVector2(widget.controller._offset);
-    final canvas = Rectangle.fromLTWH(0, 0, w, h);
-    final obb = Obb2(
-      center: offset + canvas.center,
-      width: w * s,
-      height: h * s,
-      rotation: widget.controller._rotation,
-    );
-
-    final bakedObb = obb.bake();
-
-    _startOffset = widget.controller._offset;
-    _endOffset = widget.controller._offset;
-
-    final ctl = canvas.topLeft;
-    final ctr = canvas.topRight;
-    final cbr = canvas.bottomRight;
-    final cbl = canvas.bottomLeft;
-
-    final ll = Line(bakedObb.topLeft, bakedObb.bottomLeft);
-    final tt = Line(bakedObb.topRight, bakedObb.topLeft);
-    final rr = Line(bakedObb.bottomRight, bakedObb.topRight);
-    final bb = Line(bakedObb.bottomLeft, bakedObb.bottomRight);
-
-    final tl = ll.project(ctl);
-    final tr = tt.project(ctr);
-    final br = rr.project(cbr);
-    final bl = bb.project(cbl);
-
-    final dtl = ll.distanceToPoint(ctl);
-    final dtr = tt.distanceToPoint(ctr);
-    final dbr = rr.distanceToPoint(cbr);
-    final dbl = bb.distanceToPoint(cbl);
-
-    if (dtl > 0) {
-      final d = _toOffset(ctl - tl);
-      _endOffset += d;
-    }
-
-    if (dtr > 0) {
-      final d = _toOffset(ctr - tr);
-      _endOffset += d;
-    }
-
-    if (dbr > 0) {
-      final d = _toOffset(cbr - br);
-      _endOffset += d;
-    }
-    if (dbl > 0) {
-      final d = _toOffset(cbl - bl);
-      _endOffset += d;
-    }
-
-    widget.controller._offset = _endOffset;
-
-    if (animate) {
-      if (_controller.isCompleted || _controller.isAnimating) {
-        _controller.reset();
-      }
-      _controller.forward();
-    } else {
-      _startOffset = _endOffset;
-    }
-
-    setState(() {});
-    _handleOnChanged();
-  }
-
-  void _onScaleUpdate(ScaleUpdateDetails details) {
-    widget.controller._offset += details.focalPoint - _previousOffset;
-    _previousOffset = details.focalPoint;
-    widget.controller._scale = _previousScale * details.scale;
-    _startOffset = widget.controller._offset;
-    _endOffset = widget.controller._offset;
-
-    // In the case where lesser than 2 fingers involved in scaling, we ignore
-    // the rotation handling.
-    if (details.pointerCount > 1) {
-      // In the first touch, we reset all the values.
-      if (_previousPointerCount != details.pointerCount) {
-        _previousPointerCount = details.pointerCount;
-        _previousGestureRotation = 0.0;
-      }
-
-      // Instead of directly embracing the details.rotation, we need to
-      // perform calculation to ensure that each round of rotation is smooth.
-      // A user rotate the image using finger and release is considered as a
-      // round. Without this calculation, the rotation degree of the image will
-      // be reset.
-      final gestureRotation = vm.degrees(details.rotation);
-
-      // Within a round of rotation, the details.rotation is provided with
-      // incremented value when user rotates. We don't need this, all we
-      // want is the offset.
-      final gestureRotationOffset = _previousGestureRotation - gestureRotation;
-
-      // Remove the offset and constraint the degree scope to 0° <= degree <=
-      // 360°. Constraint the scope is unnecessary, however, by doing this,
-      // it would make our life easier when debugging.
-      final rotationAfterCalculation =
-          (widget.controller.rotation - gestureRotationOffset) % 360;
-
-      /* details.rotation is in radians, convert this to degrees and set
-        our rotation */
-      widget.controller._rotation = 0;
-      _previousGestureRotation = gestureRotation;
-    }
-
-    setState(() {});
-    _handleOnChanged();
-  }
-
-  void _handleOnChanged() {
-    widget.onChanged?.call(MatrixDecomposition(
-        scale: widget.controller.scale,
-        rotation: widget.controller.rotation,
-        translation: widget.controller.offset));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final r = vm.radians(widget.controller._rotation);
-    final s = widget.controller._scale * 1;
-    final o = Offset.lerp(_startOffset, _endOffset, _animation.value)!;
-
-    Widget _buildInnerCanvas() {
-      final ip = IgnorePointer(
-        key: _key,
-        child: Transform(
-          alignment: Alignment.center,
-          transform: Matrix4.identity()
-            ..translate(o.dx, o.dy, 0)
-            ..rotateZ(0)
-            ..scale(s, s, 1),
-          child: FittedBox(
-            child: widget.child,
-            fit: BoxFit.contain,
-          ),
-        ),
-      );
-
-      List<Widget> widgets = [];
-
-      if (widget.background != null) {
-        widgets.add(widget.background!);
-      }
-
-      widgets.add(ip);
-
-      if (widget.foreground != null) {
-        widgets.add(widget.foreground!);
-      }
-
-      if (widgets.length == 1) {
-        return ip;
-      } else {
-        return Stack(
-          fit: StackFit.expand,
-          children: widgets,
-        );
-      }
-    }
-
-    Widget _buildRepaintBoundary() {
-      final repaint = RepaintBoundary(
-        key: _repaintBoundaryKey,
-        child: _buildInnerCanvas(),
-      );
-
-      if (widget.helper == null) {
-        return repaint;
-      }
-
-      return Stack(
-        fit: StackFit.expand,
-        children: [repaint, widget.helper!],
-      );
-    }
-
-    final gd = RawGestureDetector(
-      gestures: {
-        CustomScaleGestureRecognizer:
-            GestureRecognizerFactoryWithHandlers<CustomScaleGestureRecognizer>(
-          () => CustomScaleGestureRecognizer(),
-          (CustomScaleGestureRecognizer instance) {
-            instance
-              ..onStart = (ScaleStartDetails details) {
-                _previousOffset = details.focalPoint;
-                _previousScale =
-                    // min(maxScale,
-                    max(widget.controller._scale, 1);
-                // );
-              }
-              ..onUpdate = _onScaleUpdate
-              ..onEnd = (ScaleEndDetails details) {
-                widget.controller._scale =
-                    // min(maxScale,
-                    max(widget.controller._scale, 1);
-                // );
-                _previousPointerCount = 0;
-                _reCenterImage();
-              };
-          },
-        ),
-      },
-    );
-
-    List<Widget> over = [
-      CropRenderObjectWidget(
-        aspectRatio: widget.controller._aspectRatio,
-        backgroundColor: widget.backgroundColor,
-        shape: widget.shape,
-        dimColor: widget.dimColor,
-        child: _buildRepaintBoundary(),
-      ),
-    ];
-
-    if (widget.overlay != null) {
-      over.add(widget.overlay!);
-    }
-
-    if (widget.interactive) {
-      over.add(gd);
-    }
-
-    return ClipRect(
-      key: _parent,
-      child: Stack(
-        fit: StackFit.expand,
-        children: over,
-      ),
-    );
+    _activeController = AnimationController(
+      vsync: this,
+      value: widget.alwaysShowGrid ? 1.0 : 0.0,
+    )..addListener(() => setState(() {}));
+    _settleController = AnimationController(vsync: this)
+      ..addListener(_settleAnimationChanged);
+    //print("initState");
   }
 
   @override
   void dispose() {
-    _controller.dispose();
-    widget.controller.removeListener(_reCenterImage);
+    final listener = _imageListener;
+    if (listener != null) {
+      _imageStream?.removeListener(listener);
+    }
+    _activeController.dispose();
+    _settleController.dispose();
+
     super.dispose();
   }
-}
 
-typedef _CropCallback = Future<ui.Image> Function(double pixelRatio);
-
-/// The controller used to control the rotation, scale and actual cropping.
-class CustomCropController extends ChangeNotifier {
-  double _aspectRatio = 1;
-  double _rotation = 0;
-  double _scale = 1;
-  Offset _offset = Offset.zero;
-  _CropCallback? _cropCallback;
-
-  /// Gets the current aspect ratio.
-  double get aspectRatio => _aspectRatio;
-
-  /// Sets the desired aspect ratio.
-  set aspectRatio(double value) {
-    _aspectRatio = value;
-    notifyListeners();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //print("didChangeDependencies");
+    // await Future.delayed(const Duration(milliseconds: 1000));
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      _getImage();
+    });
   }
 
-  /// Gets the current scale.
-  double get scale => max(_scale, 1);
+  @override
+  void didUpdateWidget(CustomCrop oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    //print("didUpdateWidget");
 
-  /// Sets the desired scale.
-  set scale(double value) {
-    _scale = max(value, 1);
-    notifyListeners();
+    if (widget.image != oldWidget.image) {
+      _getImage();
+    } else if (widget.aspectRatio != oldWidget.aspectRatio) {
+      _area = _calculateDefaultArea(
+        viewWidth: _view.width,
+        viewHeight: _view.height,
+        imageWidth: _image?.width,
+        imageHeight: _image?.height,
+      );
+    }
+    if (widget.alwaysShowGrid != oldWidget.alwaysShowGrid) {
+      if (widget.alwaysShowGrid) {
+        _activate();
+      } else {
+        _deactivate();
+      }
+    }
   }
 
-  /// Gets the current rotation.
-  double get rotation => _rotation;
-
-  /// Sets the desired rotation.
-  set rotation(double value) {
-    _rotation = 0;
-    notifyListeners();
+  void _getImage({bool force = false}) {
+    final oldImageStream = _imageStream;
+    final newImageStream =
+        widget.image.resolve(createLocalImageConfiguration(context));
+    _imageStream = newImageStream;
+    if (newImageStream.key != oldImageStream?.key || force) {
+      final oldImageListener = _imageListener;
+      if (oldImageListener != null) {
+        oldImageStream?.removeListener(oldImageListener);
+      }
+      //print("_getImage");
+      final newImageListener =
+          ImageStreamListener(_updateImage, onError: widget.onImageError);
+      _imageListener = newImageListener;
+      newImageStream.addListener(newImageListener);
+    }
   }
 
-  /// Gets the current offset.
-  Offset get offset => _offset;
-
-  /// Sets the desired offset.
-  set offset(Offset value) {
-    _offset = value;
-    notifyListeners();
+  @override
+  Widget build(BuildContext context) {
+    //print("build surfaceKey ${_surfaceKey.currentContext}");
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.width,
+      // constraints: const BoxConstraints.expand(),
+      child: Listener(
+        onPointerDown: (event) => pointers++,
+        onPointerUp: (event) => pointers = 0,
+        child: RawGestureDetector(
+          key: _surfaceKey,
+          behavior: HitTestBehavior.opaque,
+          gestures: {
+            CustomScaleGestureRecognizer: GestureRecognizerFactoryWithHandlers<
+                CustomScaleGestureRecognizer>(
+              () => CustomScaleGestureRecognizer(),
+              (CustomScaleGestureRecognizer instance) {
+                instance
+                  ..onStart = _handleScaleStart
+                  ..onUpdate = _handleScaleUpdate
+                  ..onEnd = _handleScaleEnd;
+              },
+            ),
+          },
+          child: CustomPaint(
+            painter: _CropPainter(
+                image: _image,
+                ratio: _ratio,
+                view: _view,
+                area: _area,
+                scale: _scale,
+                active: _activeController.value,
+                areaFixed: widget.areaFixed),
+          ),
+        ),
+      ),
+    );
   }
 
-  /// Gets the transformation matrix.
-  Matrix4 get transform => Matrix4.identity()
-    ..translate(_offset.dx, _offset.dy, 0)
-    ..rotateZ(_rotation)
-    ..scale(_scale, _scale, 1);
-
-  /// Constructor
-  CustomCropController({
-    double aspectRatio = 1.0,
-    double scale = 1.0,
-    double rotation = 0,
-  }) {
-    _aspectRatio = aspectRatio;
-    _scale = scale;
-    _rotation = rotation;
+  void _activate() {
+    _activeController.animateTo(
+      1.0,
+      curve: Curves.fastOutSlowIn,
+      duration: const Duration(milliseconds: 250),
+    );
   }
 
-  double _getMinScale() {
-    print("_rotation % 360 ${_rotation % 360}");
-    final r = vm.radians(_rotation % 360);
-    final rabs = r.abs();
-    print("r $r");
-
-    final sinr = sin(rabs).abs();
-    final cosr = cos(rabs).abs();
-    print("sinr $sinr");
-    print("cosr $cosr");
-    final x = cosr * _aspectRatio + sinr;
-    final y = sinr * _aspectRatio + cosr;
-
-    print("x $x");
-    print("y $y");
-
-    final m = max(x / _aspectRatio, y);
-    print("m $m");
-
-    return m;
+  void _deactivate() {
+    if (widget.alwaysShowGrid == false) {
+      _activeController.animateTo(
+        0.0,
+        curve: Curves.fastOutSlowIn,
+        duration: const Duration(milliseconds: 250),
+      );
+    }
   }
 
-  /// Capture an image of the current state of this widget and its children.
-  ///
-  /// The returned [ui.Image] has uncompressed raw RGBA bytes, will have
-  /// dimensions equal to the size of the [child] widget multiplied by [pixelRatio].
-  ///
-  /// The [pixelRatio] describes the scale between the logical pixels and the
-  /// size of the output image. It is independent of the
-  /// [window.devicePixelRatio] for the device, so specifying 1.0 (the default)
-  /// will give you a 1:1 mapping between logical pixels and the output pixels
-  /// in the image.
-  Future<ui.Image> crop({double pixelRatio = 1}) {
-    if (_cropCallback == null) {
-      return Future.value(null);
+  Size? get _boundaries {
+    //print("_boundaries");
+    //print("_surfaceKey ${_surfaceKey}");
+    final context = _surfaceKey.currentContext;
+    if (context == null) {
+      return null;
     }
 
-    return _cropCallback!.call(pixelRatio);
+    final size = context.size;
+    if (size == null) {
+      return null;
+    }
+
+    return size - const Offset(_kCropHandleSize, _kCropHandleSize) as Size;
+  }
+
+  Offset? _getLocalPoint(Offset point) {
+    final context = _surfaceKey.currentContext;
+    if (context == null) {
+      return null;
+    }
+
+    final box = context.findRenderObject() as RenderBox;
+
+    return box.globalToLocal(point);
+  }
+
+  void _settleAnimationChanged() {
+    setState(() {
+      _scale = _scaleTween.transform(_settleController.value);
+      final nextView = _viewTween.transform(_settleController.value);
+      if (nextView != null) {
+        _view = nextView;
+      }
+    });
+  }
+
+  Rect _calculateDefaultArea({
+    required int? imageWidth,
+    required int? imageHeight,
+    required double viewWidth,
+    required double viewHeight,
+  }) {
+    if (imageWidth == null || imageHeight == null) {
+      return Rect.zero;
+    }
+
+    double height;
+    double width;
+    if ((widget.aspectRatio ?? 1.0) < 1) {
+      height = 1.0;
+      width =
+          ((widget.aspectRatio ?? 1.0) * imageHeight * viewHeight * height) /
+              imageWidth /
+              viewWidth;
+      if (width > 1.0) {
+        width = 1.0;
+        height = (imageWidth * viewWidth * width) /
+            (imageHeight * viewHeight * (widget.aspectRatio ?? 1.0));
+      }
+    } else {
+      width = 1.0;
+      height = (imageWidth * viewWidth * width) /
+          (imageHeight * viewHeight * (widget.aspectRatio ?? 1.0));
+      if (height > 1.0) {
+        height = 1.0;
+        width =
+            ((widget.aspectRatio ?? 1.0) * imageHeight * viewHeight * height) /
+                imageWidth /
+                viewWidth;
+      }
+    }
+    final aspectRatio = _maxAreaWidthMap[widget.aspectRatio];
+    if (aspectRatio != null) {
+      _maxAreaWidthMap[aspectRatio] = width;
+    }
+
+    return Rect.fromLTWH((1.0 - width) / 2, (1.0 - height) / 2, width, height);
+  }
+
+  void _updateImage(ImageInfo imageInfo, bool synchronousCall) {
+    //print("_updateImage");
+    final boundaries = _boundaries;
+    if (boundaries == null) {
+      return;
+    }
+
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      final image = imageInfo.image;
+      //print("image $image");
+      setState(() {
+        _image = image;
+        _scale = imageInfo.scale;
+        _ratio = max(
+          boundaries.width / image.width,
+          boundaries.height / image.height,
+        );
+
+        final viewWidth = boundaries.width / (image.width * _scale * _ratio);
+        final viewHeight = boundaries.height / (image.height * _scale * _ratio);
+        _area = _calculateDefaultArea(
+          viewWidth: viewWidth,
+          viewHeight: viewHeight,
+          imageWidth: image.width,
+          imageHeight: image.height,
+        );
+        _view = Rect.fromLTWH(
+          (viewWidth - 1.0) / 2,
+          (viewHeight - 1.0) / 2,
+          viewWidth,
+          viewHeight,
+        );
+      });
+    });
+
+    WidgetsBinding.instance?.ensureVisualUpdate();
+  }
+
+  _CropHandleSide _hitCropHandle(Offset? localPoint) {
+    final boundaries = _boundaries;
+    if (localPoint == null || boundaries == null) {
+      return _CropHandleSide.none;
+    }
+
+    final viewRect = Rect.fromLTWH(
+      boundaries.width * _area.left,
+      boundaries.height * _area.top,
+      boundaries.width * _area.width,
+      boundaries.height * _area.height,
+    ).deflate(_kCropHandleSize / 2);
+
+    if (widget.areaFixed == false) {
+      if (Rect.fromLTWH(
+        viewRect.left - _kCropHandleHitSize / 2,
+        viewRect.top - _kCropHandleHitSize / 2,
+        _kCropHandleHitSize,
+        _kCropHandleHitSize,
+      ).contains(localPoint)) {
+        return _CropHandleSide.topLeft;
+      }
+
+      if (Rect.fromLTWH(
+        viewRect.right - _kCropHandleHitSize / 2,
+        viewRect.top - _kCropHandleHitSize / 2,
+        _kCropHandleHitSize,
+        _kCropHandleHitSize,
+      ).contains(localPoint)) {
+        return _CropHandleSide.topRight;
+      }
+
+      if (Rect.fromLTWH(
+        viewRect.left - _kCropHandleHitSize / 2,
+        viewRect.bottom - _kCropHandleHitSize / 2,
+        _kCropHandleHitSize,
+        _kCropHandleHitSize,
+      ).contains(localPoint)) {
+        return _CropHandleSide.bottomLeft;
+      }
+
+      if (Rect.fromLTWH(
+        viewRect.right - _kCropHandleHitSize / 2,
+        viewRect.bottom - _kCropHandleHitSize / 2,
+        _kCropHandleHitSize,
+        _kCropHandleHitSize,
+      ).contains(localPoint)) {
+        return _CropHandleSide.bottomRight;
+      }
+    }
+
+    return _CropHandleSide.none;
+  }
+
+  void _handleScaleStart(ScaleStartDetails details) {
+    _activate();
+    _settleController.stop(canceled: false);
+    _lastFocalPoint = details.focalPoint;
+    _action = _CropAction.none;
+    _handle = _hitCropHandle(_getLocalPoint(details.focalPoint));
+    _startScale = _scale;
+    _startView = _view;
+  }
+
+  Rect _getViewInBoundaries(double scale) =>
+      Offset(
+        max(
+          min(
+            _view.left,
+            _area.left * _view.width / scale,
+          ),
+          _area.right * _view.width / scale - 1.0,
+        ),
+        max(
+          min(
+            _view.top,
+            _area.top * _view.height / scale,
+          ),
+          _area.bottom * _view.height / scale - 1.0,
+        ),
+      ) &
+      _view.size;
+
+  double get _maximumScale => widget.maximumScale;
+
+  double? get _minimumScale {
+    final boundaries = _boundaries;
+    final image = _image;
+    if (boundaries == null || image == null) {
+      return null;
+    }
+
+    final scaleX = boundaries.width * _area.width / (image.width * _ratio);
+    final scaleY = boundaries.height * _area.height / (image.height * _ratio);
+    return min(_maximumScale, max(scaleX, scaleY));
+  }
+
+  void _handleScaleEnd(ScaleEndDetails details) {
+    _deactivate();
+    final minimumScale = _minimumScale;
+    if (minimumScale == null) {
+      return;
+    }
+
+    final targetScale = _scale.clamp(minimumScale, _maximumScale);
+    _scaleTween = Tween<double>(
+      begin: _scale,
+      end: targetScale,
+    );
+
+    _startView = _view;
+    _viewTween = RectTween(
+      begin: _view,
+      end: _getViewInBoundaries(targetScale),
+    );
+
+    _settleController.value = 0.0;
+    _settleController.animateTo(
+      1.0,
+      curve: Curves.fastOutSlowIn,
+      duration: const Duration(milliseconds: 350),
+    );
+  }
+
+  void _updateArea({
+    required _CropHandleSide cropHandleSide,
+    double? left,
+    double? top,
+    double? right,
+    double? bottom,
+  }) {
+    final image = _image;
+    if (image == null) {
+      return;
+    }
+
+    var areaLeft = _area.left + (left ?? 0.0);
+    var areaBottom = _area.bottom + (bottom ?? 0.0);
+    var areaTop = _area.top + (top ?? 0.0);
+    var areaRight = _area.right + (right ?? 0.0);
+    double width = areaRight - areaLeft;
+    double height = (image.width * _view.width * width) /
+        (image.height * _view.height * (widget.aspectRatio ?? 1.0));
+    final maxAreaWidth = _maxAreaWidthMap[widget.aspectRatio];
+    if ((height >= 1.0 || width >= 1.0) && maxAreaWidth != null) {
+      height = 1.0;
+
+      if (cropHandleSide == _CropHandleSide.bottomLeft ||
+          cropHandleSide == _CropHandleSide.topLeft) {
+        areaLeft = areaRight - maxAreaWidth;
+      } else {
+        areaRight = areaLeft + maxAreaWidth;
+      }
+    }
+
+    // ensure minimum rectangle
+    if (areaRight - areaLeft < _kCropMinFraction) {
+      if (left != null) {
+        areaLeft = areaRight - _kCropMinFraction;
+      } else {
+        areaRight = areaLeft + _kCropMinFraction;
+      }
+    }
+
+    if (areaBottom - areaTop < _kCropMinFraction) {
+      if (top != null) {
+        areaTop = areaBottom - _kCropMinFraction;
+      } else {
+        areaBottom = areaTop + _kCropMinFraction;
+      }
+    }
+
+    // adjust to aspect ratio if needed
+    final aspectRatio = widget.aspectRatio;
+    if (aspectRatio != null && aspectRatio > 0.0) {
+      if (top != null) {
+        areaTop = areaBottom - height;
+        if (areaTop < 0.0) {
+          areaTop = 0.0;
+          areaBottom = height;
+        }
+      } else {
+        areaBottom = areaTop + height;
+        if (areaBottom > 1.0) {
+          areaTop = 1.0 - height;
+          areaBottom = 1.0;
+        }
+      }
+    }
+
+    // ensure to remain within bounds of the view
+    if (areaLeft < 0.0) {
+      areaLeft = 0.0;
+      areaRight = _area.width;
+    } else if (areaRight > 1.0) {
+      areaLeft = 1.0 - _area.width;
+      areaRight = 1.0;
+    }
+
+    if (areaTop < 0.0) {
+      areaTop = 0.0;
+      areaBottom = _area.height;
+    } else if (areaBottom > 1.0) {
+      areaTop = 1.0 - _area.height;
+      areaBottom = 1.0;
+    }
+
+    setState(() {
+      _area = Rect.fromLTRB(areaLeft, areaTop, areaRight, areaBottom);
+    });
+  }
+
+  void _handleScaleUpdate(ScaleUpdateDetails details) {
+    if (_action == _CropAction.none) {
+      if (_handle == _CropHandleSide.none) {
+        _action = pointers == 2 ? _CropAction.scaling : _CropAction.moving;
+      } else {
+        _action = _CropAction.cropping;
+      }
+    }
+
+    if (_action == _CropAction.cropping) {
+      final boundaries = _boundaries;
+      if (boundaries == null) {
+        return;
+      }
+
+      final delta = details.focalPoint - _lastFocalPoint;
+      _lastFocalPoint = details.focalPoint;
+
+      final dx = delta.dx / boundaries.width;
+      final dy = delta.dy / boundaries.height;
+
+      if (_handle == _CropHandleSide.topLeft) {
+        _updateArea(left: dx, top: dy, cropHandleSide: _CropHandleSide.topLeft);
+      } else if (_handle == _CropHandleSide.topRight) {
+        _updateArea(
+            top: dy, right: dx, cropHandleSide: _CropHandleSide.topRight);
+      } else if (_handle == _CropHandleSide.bottomLeft) {
+        _updateArea(
+            left: dx, bottom: dy, cropHandleSide: _CropHandleSide.bottomLeft);
+      } else if (_handle == _CropHandleSide.bottomRight) {
+        _updateArea(
+            right: dx, bottom: dy, cropHandleSide: _CropHandleSide.bottomRight);
+      }
+    } else if (_action == _CropAction.moving) {
+      final image = _image;
+      if (image == null) {
+        return;
+      }
+
+      final delta = details.focalPoint - _lastFocalPoint;
+      _lastFocalPoint = details.focalPoint;
+
+      setState(() {
+        _view = _view.translate(
+          delta.dx / (image.width * _scale * _ratio),
+          delta.dy / (image.height * _scale * _ratio),
+        );
+      });
+    } else if (_action == _CropAction.scaling) {
+      final image = _image;
+      final boundaries = _boundaries;
+      if (image == null || boundaries == null) {
+        return;
+      }
+
+      setState(() {
+        _scale = _startScale * details.scale;
+
+        final dx = boundaries.width *
+            (1.0 - details.scale) /
+            (image.width * _scale * _ratio);
+        final dy = boundaries.height *
+            (1.0 - details.scale) /
+            (image.height * _scale * _ratio);
+
+        _view = Rect.fromLTWH(
+          _startView.left + dx / 2,
+          _startView.top + dy / 2,
+          _startView.width,
+          _startView.height,
+        );
+      });
+    }
   }
 }
 
-vm.Vector2 _toVector2(Offset offset) => vm.Vector2(offset.dx, offset.dy);
-Offset _toOffset(vm.Vector2 v) => Offset(v.x, v.y);
+class _CropPainter extends CustomPainter {
+  final ui.Image? image;
+  final Rect view;
+  final double ratio;
+  final Rect area;
+  final double scale;
+  final double active;
+  final bool areaFixed;
+
+  _CropPainter({
+    required this.image,
+    required this.view,
+    required this.ratio,
+    required this.area,
+    required this.scale,
+    required this.active,
+    required this.areaFixed,
+  });
+
+  @override
+  bool shouldRepaint(_CropPainter oldDelegate) {
+    return oldDelegate.image != image ||
+        oldDelegate.view != view ||
+        oldDelegate.ratio != ratio ||
+        oldDelegate.area != area ||
+        oldDelegate.active != active ||
+        oldDelegate.scale != scale;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Rect.fromLTWH(
+      _kCropHandleSize / 2,
+      _kCropHandleSize / 2,
+      size.width - _kCropHandleSize,
+      size.height - _kCropHandleSize,
+    );
+
+    canvas.save();
+    canvas.translate(rect.left, rect.top);
+
+    final paint = Paint()..isAntiAlias = false;
+
+    final image = this.image;
+    if (image != null) {
+      final src = Rect.fromLTWH(
+        0.0,
+        0.0,
+        image.width.toDouble(),
+        image.height.toDouble(),
+      );
+      final dst = Rect.fromLTWH(
+        view.left * image.width * scale * ratio,
+        view.top * image.height * scale * ratio,
+        image.width * scale * ratio,
+        image.height * scale * ratio,
+      );
+
+      canvas.save();
+      canvas.clipRect(Rect.fromLTWH(0.0, 0.0, rect.width, rect.height));
+      canvas.drawImageRect(image, src, dst, paint);
+      canvas.restore();
+    }
+
+    paint.color = Color.fromRGBO(
+        0x0,
+        0x0,
+        0x0,
+        _kCropOverlayActiveOpacity * active +
+            _kCropOverlayInactiveOpacity * (1.0 - active));
+    final boundaries = Rect.fromLTWH(
+      rect.width * area.left,
+      rect.height * area.top,
+      rect.width * area.width,
+      rect.height * area.height,
+    );
+    canvas.drawRect(Rect.fromLTRB(0.0, 0.0, rect.width, boundaries.top), paint);
+    canvas.drawRect(
+        Rect.fromLTRB(0.0, boundaries.bottom, rect.width, rect.height), paint);
+    canvas.drawRect(
+        Rect.fromLTRB(0.0, boundaries.top, boundaries.left, boundaries.bottom),
+        paint);
+    canvas.drawRect(
+        Rect.fromLTRB(
+            boundaries.right, boundaries.top, rect.width, boundaries.bottom),
+        paint);
+
+    if (boundaries.isEmpty == false) {
+      _drawGrid(canvas, boundaries);
+      if (areaFixed == false) {
+        _drawHandles(canvas, boundaries);
+      }
+    }
+
+    canvas.restore();
+  }
+
+  void _drawHandles(Canvas canvas, Rect boundaries) {
+    final paint = Paint()
+      ..isAntiAlias = true
+      ..color = _kCropHandleColor;
+
+    canvas.drawOval(
+      Rect.fromLTWH(
+        boundaries.left - _kCropHandleSize / 2,
+        boundaries.top - _kCropHandleSize / 2,
+        _kCropHandleSize,
+        _kCropHandleSize,
+      ),
+      paint,
+    );
+
+    canvas.drawOval(
+      Rect.fromLTWH(
+        boundaries.right - _kCropHandleSize / 2,
+        boundaries.top - _kCropHandleSize / 2,
+        _kCropHandleSize,
+        _kCropHandleSize,
+      ),
+      paint,
+    );
+
+    canvas.drawOval(
+      Rect.fromLTWH(
+        boundaries.right - _kCropHandleSize / 2,
+        boundaries.bottom - _kCropHandleSize / 2,
+        _kCropHandleSize,
+        _kCropHandleSize,
+      ),
+      paint,
+    );
+
+    canvas.drawOval(
+      Rect.fromLTWH(
+        boundaries.left - _kCropHandleSize / 2,
+        boundaries.bottom - _kCropHandleSize / 2,
+        _kCropHandleSize,
+        _kCropHandleSize,
+      ),
+      paint,
+    );
+  }
+
+  void _drawGrid(Canvas canvas, Rect boundaries) {
+    if (active == 0.0) return;
+
+    final paint = Paint()
+      ..isAntiAlias = false
+      ..color = _kCropGridColor.withOpacity(_kCropGridColor.opacity * active)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+
+    final path = Path()
+      ..moveTo(boundaries.left, boundaries.top)
+      ..lineTo(boundaries.right, boundaries.top)
+      ..lineTo(boundaries.right, boundaries.bottom)
+      ..lineTo(boundaries.left, boundaries.bottom)
+      ..lineTo(boundaries.left, boundaries.top);
+
+    for (var column = 1; column < _kCropGridColumnCount; column++) {
+      path
+        ..moveTo(
+            boundaries.left + column * boundaries.width / _kCropGridColumnCount,
+            boundaries.top)
+        ..lineTo(
+            boundaries.left + column * boundaries.width / _kCropGridColumnCount,
+            boundaries.bottom);
+    }
+
+    for (var row = 1; row < _kCropGridRowCount; row++) {
+      path
+        ..moveTo(boundaries.left,
+            boundaries.top + row * boundaries.height / _kCropGridRowCount)
+        ..lineTo(boundaries.right,
+            boundaries.top + row * boundaries.height / _kCropGridRowCount);
+    }
+
+    canvas.drawPath(path, paint);
+  }
+}
+
+class ImageOptions {
+  final int width;
+  final int height;
+
+  ImageOptions({
+    required this.width,
+    required this.height,
+  });
+
+  @override
+  int get hashCode => hashValues(width, height);
+
+  @override
+  bool operator ==(other) =>
+      other is ImageOptions && other.width == width && other.height == height;
+
+  @override
+  String toString() => '$runtimeType(width: $width, height: $height)';
+}
+
+class ImageCrop {
+  static const _channel =
+      const MethodChannel('plugins.lykhonis.com/image_crop');
+
+  static Future<bool> requestPermissions() => _channel
+      .invokeMethod('requestPermissions')
+      .then<bool>((result) => result);
+
+  static Future<ImageOptions> getImageOptions({
+    required File file,
+  }) async {
+    final result =
+        await _channel.invokeMethod('getImageOptions', {'path': file.path});
+
+    return ImageOptions(
+      width: result['width'],
+      height: result['height'],
+    );
+  }
+
+  static Future<File> cropImage({
+    required File file,
+    required Rect area,
+    double? scale,
+  }) =>
+      _channel.invokeMethod('cropImage', {
+        'path': file.path,
+        'left': area.left,
+        'top': area.top,
+        'right': area.right,
+        'bottom': area.bottom,
+        'scale': scale ?? 1.0,
+      }).then<File>((result) => File(result));
+
+  static Future<File> sampleImage({
+    required File file,
+    int? preferredSize,
+    int? preferredWidth,
+    int? preferredHeight,
+  }) async {
+    assert(() {
+      if (preferredSize == null &&
+          (preferredWidth == null || preferredHeight == null)) {
+        throw ArgumentError(
+            'Preferred size or both width and height of a resampled image must be specified.');
+      }
+      return true;
+    }());
+
+    final String path = await _channel.invokeMethod('sampleImage', {
+      'path': file.path,
+      'maximumWidth': preferredSize ?? preferredWidth,
+      'maximumHeight': preferredSize ?? preferredHeight,
+    });
+
+    return File(path);
+  }
+}

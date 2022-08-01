@@ -19,6 +19,7 @@ import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/post_update_screen.dart';
+import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/utils/error_control.dart';
@@ -398,14 +399,20 @@ class PostingScreen extends StatelessWidget {
                                           .post.value!.images.isNotEmpty ||
                                       controller.post.value!.links.isNotEmpty)
                                     SwiperWidget(
-                                        items: controller
-                                                .post.value!.images.isNotEmpty
-                                            ? controller.post.value!.images
-                                            : controller.post.value!.links,
-                                        swiperType: controller
-                                                .post.value!.images.isNotEmpty
-                                            ? SwiperType.image
-                                            : SwiperType.link),
+                                      items: controller
+                                              .post.value!.images.isNotEmpty
+                                          ? controller.post.value!.images
+                                          : controller.post.value!.links,
+                                      swiperType: controller
+                                              .post.value!.images.isNotEmpty
+                                          ? SwiperType.image
+                                          : SwiperType.link,
+                                      aspectRatio: controller
+                                              .post.value!.images.isNotEmpty
+                                          ? getAspectRatioinUrl(
+                                              controller.post.value!.images[0])
+                                          : null,
+                                    ),
                                   // Column(
                                   //   children: [
                                   //     Container(

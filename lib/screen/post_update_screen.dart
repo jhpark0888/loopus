@@ -22,6 +22,7 @@ import 'package:loopus/screen/layout_builder.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/posting_add_link_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
+import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -73,13 +74,20 @@ class PostUpdateScreen extends StatelessWidget {
                     if (postingUpdateController.post.images.isNotEmpty ||
                         postingUpdateController.post.links.isNotEmpty)
                       SwiperWidget(
-                          items: postingUpdateController.post.images.isNotEmpty
-                              ? postingUpdateController.post.images
-                              : postingUpdateController.post.links,
-                          swiperType:
-                              postingUpdateController.post.images.isNotEmpty
-                                  ? SwiperType.image
-                                  : SwiperType.link),
+                        items: postingUpdateController.post.images.isNotEmpty
+                            ? postingUpdateController.post.images
+                            : postingUpdateController.post.links,
+                        swiperType:
+                            postingUpdateController.post.images.isNotEmpty
+                                ? SwiperType.image
+                                : SwiperType.link,
+                        aspectRatio:
+                            postingUpdateController.post.images.isNotEmpty
+                                ? getAspectRatioinUrl(
+                                    postingUpdateController.post.images[0])
+                                : null,
+                      ),
+
                     // Column(
                     //   children: [
                     //     Container(

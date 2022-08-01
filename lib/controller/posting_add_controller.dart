@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/editorcontroller.dart';
+import 'package:loopus/utils/custom_crop.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -50,16 +49,19 @@ class PostingAddController extends GetxController {
   var albums = <AssetPathEntity>[].obs;
   RxString headerTitle = ''.obs;
   RxList<AssetEntity> imageList = <AssetEntity>[].obs;
-  RxList<AssetEntity>? selectedImages;
-  Rx<AssetEntity>? selectedImage;
+  RxList<AssetEntity> selectedImages = <AssetEntity>[].obs;
+  List<GlobalKey<CustomCropState>> cropKeyList = <GlobalKey<CustomCropState>>[];
+  RxList<Widget> cropWidgetList = <Widget>[].obs;
+  Rx<AssetEntity> selectedImage =
+      AssetEntity(id: '', height: 0, width: 0, typeInt: 0).obs;
+  RxInt selectedIndex = 0.obs;
   Rx<File>? croppedImage;
   RxBool isLoad = false.obs;
   RxBool isSelect = false.obs;
   RxBool isImage = false.obs;
   RxBool isCropped = false.obs;
-  RxDouble croppedHeight = 500.0.obs;
-  RxDouble croppedWidth = 500.0.obs;
-  Rx<Size> selectedImageSize = Size(Get.width, Get.height).obs;
+  RxDouble cropAspectRatio = 1.0.obs;
+  // Rx<Size> selectedImageSize = Size(Get.width, Get.height).obs;
   RxList<List<AssetEntity>> titleImageList1 = <List<AssetEntity>>[].obs;
   List<int> albumPageNums = <int>[].obs;
   int albumIndex = 0;
@@ -96,8 +98,9 @@ class PostingAddController extends GetxController {
 
     imageList.addAll(photos);
 
-    selectedImages = [imageList.first].obs;
-    selectedImage = imageList.first.obs;
+    // selectedImages = [imageList.first].obs;
+    // selectedImage = imageList.first.obs;
+    // cropKeyList.add(GlobalKey<CropState>());
   }
 
   Future<void> getPhotos() async {
@@ -126,5 +129,10 @@ class PostingAddController extends GetxController {
       getPhotos();
       _loadData();
     } else {}
+  }
+
+  int selectedImageIndex(AssetEntity selectImage) {
+    int index = selectedImages.indexWhere((image) => image == selectImage);
+    return index;
   }
 }

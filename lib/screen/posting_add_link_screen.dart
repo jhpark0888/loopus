@@ -97,29 +97,37 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
                     const Text('링크', style: k16Normal),
                     const SizedBox(height: 14),
                     Obx(
-                      () => CustomTextField(
-                          textController: postingAddController.linkcontroller,
-                          hintText: '링크 주소를 입력해주세요. 최대 10개까지 가능해요',
-                          validator: null,
-                          obscureText: false,
-                          maxLines: 1,
-                          counterText: '',
-                          maxLength: null,
-                          suffix: postingAddController.isLinkTextEmpty.value
-                              ? null
-                              : GestureDetector(
-                                  onTap: addLink,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 7),
-                                    child: Text(
-                                      "추가하기",
-                                      style: kmain.copyWith(color: mainblue),
-                                    ),
-                                  ),
+                      () => Row(
+                        children: [
+                          Expanded(
+                            child: CustomTextField(
+                                textController:
+                                    postingAddController.linkcontroller,
+                                hintText: '링크 주소를 입력해주세요. 최대 10개까지 가능해요',
+                                validator: null,
+                                obscureText: false,
+                                maxLines: 1,
+                                counterText: '',
+                                maxLength: null,
+                                onfieldSubmitted: (string) {
+                                  addLink();
+                                }),
+                          ),
+                          if (postingAddController.isLinkTextEmpty.value ==
+                              false)
+                            GestureDetector(
+                              onTap: addLink,
+                              behavior: HitTestBehavior.translucent,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(7, 7, 0, 7),
+                                child: Text(
+                                  "추가하기",
+                                  style: kmain.copyWith(color: mainblue),
                                 ),
-                          onfieldSubmitted: (string) {
-                            addLink();
-                          }),
+                              ),
+                            )
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 24),
                     Obx(() => Column(
