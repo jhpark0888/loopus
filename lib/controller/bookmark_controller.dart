@@ -11,7 +11,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class BookmarkController extends GetxController {
   static BookmarkController get to => Get.find();
   // RxBool isBookmarkEmpty = false.obs;
-  Rx<ScreenState> bookmarkScreenState = ScreenState.loading.obs;
+  Rx<ScreenState> bookmarkScreenState = ScreenState.normal.obs;
   int pageNumber = 1;
 
   RxList posts = <Post>[].obs;
@@ -26,6 +26,7 @@ class BookmarkController extends GetxController {
   }
 
   void onBookmarkRefresh() async {
+    bookmarkScreenState(ScreenState.loading);
     pageNumber = 1;
     posts.clear();
     bookmarkLoad();

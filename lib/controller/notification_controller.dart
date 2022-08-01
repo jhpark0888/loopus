@@ -41,25 +41,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await const FlutterSecureStorage().write(key: "login detect", value: 'true');
-  // if (message.data["type"] == 'logout') {
-  //   showoneButtonDialog(
-  //     title: '로그인 감지',
-  //     content: '다른 기기에서 해당 계정으로 로그인 하여 로그아웃합니다',
-  //     oneFunction: () {
-  //       AppController.to.currentIndex.value = 0;
-  //       FlutterSecureStorage().delete(key: "token");
-  //       FlutterSecureStorage().delete(key: "id");
-
-  //       Get.delete<AppController>();
-  //       Get.delete<HomeController>();
-  //       Get.delete<SearchController>();
-  //       Get.delete<ProfileController>();
-  //       Get.offAll(() => StartScreen());
-  //     },
-  //     oneText: '확인',
-  //   );
-  // }
 }
 
 class NotificationController extends GetxController {
@@ -256,11 +237,9 @@ class NotificationController extends GetxController {
                 await getUserProfile([chatRoom.user]).then((value) {
                   if (value.isError == false) {
                     MessageController.to.searchRoomList.add(MessageRoomWidget(
-                        chatRoom: chatRoom.obs,
-                        user: Rx<User>(value.data[0])));
+                        chatRoom: chatRoom.obs, user: Rx<User>(value.data[0])));
                     MessageController.to.chattingRoomList.add(MessageRoomWidget(
-                        chatRoom: chatRoom.obs,
-                        user: Rx<User>(value.data[0])));
+                        chatRoom: chatRoom.obs, user: Rx<User>(value.data[0])));
                   }
                 });
               } else {
@@ -338,23 +317,6 @@ class NotificationController extends GetxController {
             });
           }
         }
-      } else if (event.data["type"] == "logout") {
-        showoneButtonDialog(
-          title: '로그인 감지',
-          content: '다른 기기에서 해당 계정으로 로그인 하여 로그아웃합니다',
-          oneFunction: () {
-            AppController.to.currentIndex.value = 0;
-            const FlutterSecureStorage().delete(key: "token");
-            const FlutterSecureStorage().delete(key: "id");
-            const FlutterSecureStorage().delete(key: "login detect");
-            Get.delete<AppController>();
-            Get.delete<HomeController>();
-            Get.delete<SearchController>();
-            Get.delete<ProfileController>();
-            Get.offAll(() => StartScreen());
-          },
-          oneText: '확인',
-        );
       } else if (event.data["type"] == "certification") {
         if (Get.isRegistered<SignupController>()) {
           SignupController.to.signupcertification(Emailcertification.success);

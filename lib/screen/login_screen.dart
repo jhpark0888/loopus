@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -138,7 +139,7 @@ void login(context, {required String emailId, required String password}) async {
   await loginRequest(
     emailId,
     password,
-  ).then((value) {
+  ).then((value) async {
     Get.back();
     if (value.isError == false) {
       const FlutterSecureStorage storage = FlutterSecureStorage();
@@ -150,6 +151,7 @@ void login(context, {required String emailId, required String password}) async {
 
       storage.write(key: 'token', value: token);
       storage.write(key: 'id', value: userid);
+      await FirebaseMessaging.instance.subscribeToTopic(userid);
       Get.offAll(() => App());
     } else {
       if (value.errorData!["statusCode"] == 401) {

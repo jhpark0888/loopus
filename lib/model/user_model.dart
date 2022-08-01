@@ -114,7 +114,7 @@ class User {
             ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
             : [],
         fieldId: json["group"] != null ? json["group"].toString() : "10",
-        univ: json["univ"] ?? '',
+        univ: json["school"] ?? '',
         department: json["department"] ?? '',
         isuser: json["is_user"] ?? 0,
         looped: json["looped"] != null

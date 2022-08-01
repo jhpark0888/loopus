@@ -117,7 +117,7 @@ Future<HTTPResponse> searchPopPost(int page) async {
     String? token = await FlutterSecureStorage().read(key: 'token');
     // 수정
 
-    final url = Uri.parse("$serverUri/search/recommend?page=$page");
+    final url = Uri.parse("$serverUri/search_api/recommend?page=$page");
 
     try {
       final response =
