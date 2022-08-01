@@ -150,13 +150,11 @@ Future<HTTPResponse> isRead(int notiId, NotificationType type,int senderId) asyn
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    late int type_id = type == NotificationType.question
-        ? 1
-        : type == NotificationType.follow
+    late int type_id =  type == NotificationType.follow
             ? 2
             : type == NotificationType.tag
                 ? 3
-                : 4;
+                : type == NotificationType.like ? 4 : type == NotificationType.comment ? 7 : 8;
     final isReadURI = Uri.parse(
         "$serverUri/user_api/alarm?type=read&id=$notiId&type_id=$type_id&sender_id=$senderId");
 

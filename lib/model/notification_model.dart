@@ -31,13 +31,12 @@ class NotificationModel {
           id: json["id"] ?? 0,
           userId: json["user_id"],
           user: User.fromJson(json["profile"]),
-          type: json["type"] == 1
-              ? NotificationType.question
-              : json["type"] == 2
+          type: json["type"] == 2
                   ? NotificationType.follow
                   : json["type"] == 3
                       ? NotificationType.tag
-                      : NotificationType.like,
+                      : json['type'] == 4 ?
+                      NotificationType.like : json['type'] == 7 ? NotificationType.comment : NotificationType.reply,
           targetId: json["target_id"],
           content: json["content"],
           date: DateTime.parse(json["date"]),

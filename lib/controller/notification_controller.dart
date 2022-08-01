@@ -368,7 +368,7 @@ class NotificationController extends GetxController {
         int senderId = int.parse(event.data['sender_id']);
         showCustomSnackbar(event.notification!.title, event.notification!.body,
             (snackbar) {
-          if (type == 4) {
+          if (type == 4 || type == 7 || type == 8) {
             Get.to(() => PostingScreen(postid: id));
           } else if (type == 2) {
             Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
