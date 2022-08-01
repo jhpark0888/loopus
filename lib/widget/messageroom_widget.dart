@@ -22,7 +22,6 @@ class MessageRoomWidget extends StatelessWidget {
   MessageRoomWidget(
       {Key? key,
       required this.chatRoom,
-      required this.userid,
       required this.user})
       : super(key: key);
 
@@ -30,8 +29,7 @@ class MessageRoomWidget extends StatelessWidget {
   //     MessageDetailController(userid: messageRoom.user.userid),
   //     tag: messageRoom.user.userid.toString());
   Rx<ChatRoom> chatRoom;
-  User user;
-  int userid;
+  Rx<User> user;
   // late final HoverController _hoverController =
   //     Get.put(HoverController(), tag: messageRoom.value.user.userid.toString());
 
@@ -190,7 +188,7 @@ class MessageRoomWidget extends StatelessWidget {
         // );
         GestureDetector(
       onTap: () async {
-        await getPartnerToken(user.userid).then((value) {
+        await getPartnerToken(user.value.userid).then((value) {
           chatRoom.value.notread.value = 0;
           if (MessageController.to.chattingRoomList
               .where((messageroomwidget) =>
@@ -202,7 +200,7 @@ class MessageRoomWidget extends StatelessWidget {
           }
           if (value.isError == false) {
             Get.to(() => MessageDetatilScreen(
-                  partner: user,
+                  partner: user.value,
                   partnerToken: value.data,
                   myProfile: HomeController.to.myProfile.value,
                   enterRoute: EnterRoute.messageScreen,
@@ -211,7 +209,7 @@ class MessageRoomWidget extends StatelessWidget {
         });
         SQLController.to.updateNotReadCount(chatRoom.value.roomId, 0);
 
-        HomeController.to.enterMessageRoom.value = user.userid;
+        HomeController.to.enterMessageRoom.value = user.value.userid;
       },
       child: Container(
         width: Get.width,
@@ -220,14 +218,14 @@ class MessageRoomWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             UserImageWidget(
-                imageUrl: user.profileImage ?? '', width: 36, height: 36),
+                imageUrl: user.value.profileImage ?? '', width: 36, height: 36),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(user.realName, style: k16semiBold),
+                  Text(user.value.realName, style: k16semiBold),
                   const SizedBox(height: 7),
                   Obx(
                     () => Row(

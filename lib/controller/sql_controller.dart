@@ -28,7 +28,7 @@ class SQLController extends GetxController {
       join(await getDatabasesPath(), 'MY_database.db'),
       onCreate: (db, version) {
         db.execute(
-          "CREATE TABLE user(user_id INTEGER PRIMARY KEY, name TEXT, profile_image TEXT)",
+          "CREATE TABLE user(user_id INTEGER PRIMARY KEY, real_name TEXT, profile_image TEXT)",
         );
         db.execute(
           "CREATE TABLE chatroom(room_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, message Text, date Text, not_read INTEGER)",
@@ -46,7 +46,7 @@ class SQLController extends GetxController {
     final Database db = await database!;
     await db.insert(
       'user',
-      {"name": user.realName, "user_id": user.userid, "profile_image" : user.profileImage},
+      {"real_name": user.realName, "user_id": user.userid, "profile_image" : user.profileImage},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -175,9 +175,9 @@ class SQLController extends GetxController {
     } else {
       List<ChatRoom> messageList = List.generate(maps.length, (index) {
         return ChatRoom(
-            message: maps[index]['message'],
+            message: Chat.fromJson({"content" : maps[index]['message'],"date" : maps[index]['date']}).obs,
             user: maps[index]['user_id'],
-            notread: maps[index]['not_read'],
+            notread: RxInt(maps[index]['not_read']),
             roomId: maps[index]['room_id']);
       });
       return messageList;
@@ -201,6 +201,24 @@ class SQLController extends GetxController {
       return true;
     }
   }
+   Future<bool> findUser(
+      {required int userId, required User user}) async {
+    final Database db = await database!;
+    final List<Map<String, dynamic>> maps;
+    maps =
+        await db.rawQuery('SELECT * FROM user WHERE user_id = ?', [userId]);
+
+    if (maps.isEmpty) {
+      insertUser(user);
+      print('새로 만들었습니다.');
+      return false;
+    } else {
+      print('존재합니다');
+      print(maps);  
+      return true;
+    }
+  }
+
 
   Future<bool> findNotReadMessage(
       {required int roomid}) async {
@@ -218,7 +236,7 @@ class SQLController extends GetxController {
     }
   }
 
-  Future<List<Chat>> getDBUser(int sender) async {
+  Future<User> getDBUser(int sender) async {
     final Database db = await database!;
     late List<Map<String, dynamic>> maps;
 
@@ -227,24 +245,15 @@ class SQLController extends GetxController {
         .then((value) {
       if (value.isNotEmpty) {
         maps = value;
-      }
+      }else{maps = [];}
     });
 
     if (maps.isEmpty) {
-      return [];
+      return User.defaultuser();
     } else {
-      List<Chat> messageList = List.generate(maps.length, (index) {
-        return Chat(
-            content: maps[index]['message'],
-            date: DateTime.parse(maps[index]['date']),
-            sendsuccess: true.obs,
-            sender: maps[index]['sender'],
-            isRead: maps[index]['is_read'] == 'true' ? true.obs : false.obs,
-            messageId: maps[index]['msg_id'],
-            type: maps[index]['type'],
-            roomId: maps[index]['room_id']);
-      });
-      return messageList;
+      User user = User.fromJson(maps.first);
+      
+      return user;
     }
   }
 }

@@ -90,7 +90,7 @@ class MessageScreen extends StatelessWidget {
                                 messageController.searchRoomList.value =
                                     messageController.chattingRoomList
                                         .where((chattingRoom) => chattingRoom
-                                            .user.realName
+                                            .user.value.realName
                                             .contains(name))
                                         .toList();
                               } else {

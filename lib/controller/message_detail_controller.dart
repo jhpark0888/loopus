@@ -35,6 +35,8 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
   RxString lastid = '0'.obs;
   RxDouble messageHeight = 0.0.obs;
   RxDouble messagesBoxPositionHeight = 0.0.obs;
+
+  FocusNode focusNode = FocusNode();
   @override
   void onInit() async {
     scrollController.addListener(() {
@@ -82,6 +84,7 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
         // }
       }
     });
+    focusNode.addListener(() { if(focusNode.hasFocus){print('내려가있습니다.');}});
     super.onInit();
   }
 
@@ -170,9 +173,6 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
           print('상대가 접속함');
           changeReadMessage(roomid, null);
         }
-        break;
-      case ('user_leave'):
-        print('상대가 나감');
         break;
       case ('msg'):
         if (json['sender'] == myId) {

@@ -22,6 +22,7 @@ import 'package:loopus/firebase_options.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/socket_message_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/before_message_detail_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
@@ -256,12 +257,10 @@ class NotificationController extends GetxController {
                   if (value.isError == false) {
                     MessageController.to.searchRoomList.add(MessageRoomWidget(
                         chatRoom: chatRoom.obs,
-                        userid: chatRoom.user,
-                        user: value.data[0]));
+                        user: Rx<User>(value.data[0])));
                     MessageController.to.chattingRoomList.add(MessageRoomWidget(
                         chatRoom: chatRoom.obs,
-                        userid: chatRoom.user,
-                        user: value.data[0]));
+                        user: Rx<User>(value.data[0])));
                   }
                 });
               } else {
@@ -306,12 +305,16 @@ class NotificationController extends GetxController {
             SQLController.to
                 .updateNotReadCount(int.parse(event.data['room_id']), 1);
             Map<String, dynamic> json = event.data;
+            json["not_read"] = 1;
             json["date"] = DateTime.now().toString();
             json["content"] = event.notification!.body;
             Chat chat = Chat.fromMsg(json, int.parse(json['room_id']));
             SQLController.to.insertmessage(chat);
             SQLController.to.updateLastMessage(
                 chat.content, chat.date.toString(), chat.roomId!);
+            SQLController.to.findMessageRoom(
+                roomid: int.parse(json['room_id']),
+                chatRoom: ChatRoom.fromMsg(json).toJson());
             showCustomSnackbar(
                 event.notification!.title, event.notification!.body,
                 (snackbar) async {
@@ -329,9 +332,6 @@ class NotificationController extends GetxController {
                     HomeController.to.enterMessageRoom.value =
                         user.data.first.userid;
                   });
-                  await SQLController.to.findMessageRoom(
-                      roomid: int.parse(json['room_id']),
-                      chatRoom: ChatRoom.fromMsg(json).toJson());
                   // Get.put(MessageController());
                 }
               });
@@ -374,7 +374,7 @@ class NotificationController extends GetxController {
             Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
           }
         });
-        if(Get.isRegistered<NotificationDetailController>()){
+        if (Get.isRegistered<NotificationDetailController>()) {
           NotificationDetailController.to.alarmRefresh();
         }
       }

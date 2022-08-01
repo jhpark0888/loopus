@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,7 @@ import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
+import 'package:loopus/controller/keyboard_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
@@ -49,290 +51,242 @@ class MessageDetatilScreen extends StatelessWidget {
   User myProfile;
   EnterRoute enterRoute;
   late MessageDetailController controller = Get.put(
-      MessageDetailController(partnerId: partner.userid, partnerToken: partnerToken),
+      MessageDetailController(
+          partnerId: partner.userid, partnerToken: partnerToken),
       tag: partner.userid.toString());
+      // KeyBoardController keyBoardController = Get.put(KeyBoardController());
   Key centerKey = const ValueKey('QueryList');
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
       behavior: HitTestBehavior.translucent,
-      child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          appBar: AppBarWidget(
-            title: partner.realName,
-            bottomBorder: false,
-            leading: GestureDetector(
-                onTap: () {
-                  if (enterRoute == EnterRoute.popUp) {
-                    if (Get.isRegistered<MessageController>()) {
-                      Get.back();
-                    } else {
-                      Get.off(() => MessageScreen());
-                    }
-                  } else {
-                    Get.back();
-                  }
-                },
-                child: Center(
-                    child: SvgPicture.asset('assets/icons/Arrow_left.svg'))),
-            actions: [
-              GestureDetector(
-                onTap: () async {
-                  // // deleteDatabase(
-                  // //                 join(await getDatabasesPath(), 'MY_database.db'));
-                  showModalIOS(context, func1: () {
-                    int roomId = controller.roomid;
-                    if (controller.messageList.isNotEmpty) {
-                      deleteChatRoom(controller.roomid, myProfile.userid)
-                          .then((value) {
-                        if (value.isError == false) {
-                          SQLController.to.deleteMessage(roomId);
-                          SQLController.to.deleteMessageRoom(roomId);
-                          SQLController.to.deleteUser(partner.userid);
-                          if (Get.isRegistered<MessageController>()) {
-                            MessageController.to.searchRoomList.removeAt(
-                                MessageController.to.searchRoomList.indexWhere(
-                                    (messageRoom) =>
-                                        messageRoom.chatRoom.value.roomId ==
-                                        roomId));
-                            MessageController.to.chattingRoomList.removeAt(
-                                MessageController.to.chattingRoomList
-                                    .indexWhere((messageRoom) =>
-                                        messageRoom.chatRoom.value.roomId ==
-                                        roomId));
-                          }
-                          Get.back();
-                          if (enterRoute == EnterRoute.popUp) {
-                            Get.off(() => MessageScreen());
-                          } else {
-                            Get.back();
-                          }
-                        }
-                      });
-                    } else {
-                      Get.back();
-                      if (enterRoute == EnterRoute.popUp) {
+      child: SafeArea(
+        child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: AppBarWidget(
+              title: partner.realName,
+              bottomBorder: false,
+              leading: GestureDetector(
+                  onTap: () {
+                    if (enterRoute == EnterRoute.popUp) {
+                      if (Get.isRegistered<MessageController>()) {
+                        Get.back();
+                      } else {
                         Get.off(() => MessageScreen());
+                      }
+                    } else {
+                      Get.back();
+                    }
+                  },
+                  child: Center(
+                      child: SvgPicture.asset('assets/icons/Arrow_left.svg'))),
+              actions: [
+                GestureDetector(
+                  onTap: () async {
+                    // // deleteDatabase(
+                    // //                 join(await getDatabasesPath(), 'MY_database.db'));
+                    showModalIOS(context, func1: () {
+                      int roomId = controller.roomid;
+                      if (controller.messageList.isNotEmpty) {
+                        deleteChatRoom(controller.roomid, myProfile.userid)
+                            .then((value) {
+                          if (value.isError == false) {
+                            SQLController.to.deleteMessage(roomId);
+                            SQLController.to.deleteMessageRoom(roomId);
+                            SQLController.to.deleteUser(partner.userid);
+                            if (Get.isRegistered<MessageController>()) {
+                              MessageController.to.searchRoomList.removeAt(
+                                  MessageController.to.searchRoomList.indexWhere(
+                                      (messageRoom) =>
+                                          messageRoom.chatRoom.value.roomId ==
+                                          roomId));
+                              MessageController.to.chattingRoomList.removeAt(
+                                  MessageController.to.chattingRoomList
+                                      .indexWhere((messageRoom) =>
+                                          messageRoom.chatRoom.value.roomId ==
+                                          roomId));
+                            }
+                            Get.back();
+                            if (enterRoute == EnterRoute.popUp) {
+                              Get.off(() => MessageScreen());
+                            } else {
+                              Get.back();
+                            }
+                          }
+                        });
                       } else {
                         Get.back();
+                        if (enterRoute == EnterRoute.popUp) {
+                          Get.off(() => MessageScreen());
+                        } else {
+                          Get.back();
+                        }
                       }
-                    }
-                  }, func2: () {
-                    Get.to(() => DatabaseList());
+                    }, func2: () {
+                      Get.to(() => DatabaseList());
+                    },
+                        value1: '채팅방 나가기',
+                        value2: '',
+                        isValue1Red: true,
+                        isValue2Red: false,
+                        isOne: true);
                   },
-                      value1: '채팅방 나가기',
-                      value2: '',
-                      isValue1Red: true,
-                      isValue2Red: false,
-                      isOne: true);
-                },
-                child: SizedBox(
-                    height: 44,
-                    width: 44,
-                    child: Center(
-                        child: SvgPicture.asset('assets/icons/More.svg'))),
-              )
-            ],
-          ),
-          bottomNavigationBar: Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: sendField()),
-          body: Obx(
-            () => controller.screenState.value == ScreenState.loading
-                ? const Center(child: LoadingWidget())
-                : controller.screenState.value == ScreenState.success
-                    ? SmartRefresher(
-                        controller: controller.refreshController,
-                        scrollController: controller.scrollController,
-                        enablePullUp: controller.refreshEnablePullUp.value,
-                        enablePullDown: false,
-                        onLoading: controller.onLoading,
-                        header: ClassicHeader(
-                          releaseIcon: Container(),
-                          releaseText: '',
-                          refreshingIcon: Container(),
-                          refreshingText: '',
-                          idleIcon: Container(),
-                          idleText: '',
-                        ),
-                        footer: ClassicFooter(
-                          loadingIcon: Container(),
-                          loadingText: '',
-                          idleIcon: Container(),
-                          idleText: '',
-                        ),
-                        physics: const BouncingScrollPhysics(),
-                        reverse: true,
-                        child: SingleChildScrollView(
-                          reverse: false,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              ListView.separated(
-                                shrinkWrap: true,
-                                primary: false,
-                                reverse: true,
-                                itemBuilder: (context, index) {
-                                  if (controller.messageList[index] ==
-                                      controller.messageList.first) {
-                                    return MessageWidget(
-                                        message: controller.messageList[index],
-                                        isLast: true.obs,
-                                        isFirst: false.obs,
-                                        partner: partner,
-                                        myId: controller.myId!);
-                                  } else if (controller.messageList[index] ==
-                                      controller.messageList.last) {
-                                    return MessageWidget(
-                                        message: controller.messageList[index],
-                                        isLast: false.obs,
-                                        isFirst: true.obs,
-                                        partner: partner,
-                                        myId: controller.myId!);
-                                  } else {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        print(controller.messageList[index] ==
-                                                controller.messageList.last ||
-                                            DateFormat('yyyy-MM-dd').parse(
-                                                    controller
-                                                        .messageList[index].date
-                                                        .toString()) !=
-                                                DateFormat('yyyy-MM-dd').parse(
-                                                    controller
-                                                        .messageList[index].date
-                                                        .toString()));
-                                      },
-                                      child: MessageWidget(
-                                          message:
-                                              controller.messageList[index],
-                                          isLast: false.obs,
+                  child: SizedBox(
+                      height: 44,
+                      width: 44,
+                      child: Center(
+                          child: SvgPicture.asset('assets/icons/More.svg'))),
+                )
+              ],
+            ),
+            bottomNavigationBar: Obx(
+              ()=> Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: sendField()),
+            ),
+            body: Obx(
+              () => controller.screenState.value == ScreenState.loading
+                  ? const Center(child: LoadingWidget())
+                  : controller.screenState.value == ScreenState.success
+                      ? SmartRefresher(
+                          controller: controller.refreshController,
+                          scrollController: controller.scrollController,
+                          enablePullUp: controller.refreshEnablePullUp.value,
+                          enablePullDown: false,
+                          onLoading: controller.onLoading,
+                          header: ClassicHeader(
+                            releaseIcon: Container(),
+                            releaseText: '',
+                            refreshingIcon: Container(),
+                            refreshingText: '',
+                            idleIcon: Container(),
+                            idleText: '',
+                          ),
+                          footer: ClassicFooter(
+                            loadingIcon: Container(),
+                            loadingText: '',
+                            idleIcon: Container(),
+                            idleText: '',
+                          ),
+                          physics: const BouncingScrollPhysics(),
+                          reverse: true,
+                          child: SingleChildScrollView(
+                            reverse: false,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                ListView.separated(
+                                  shrinkWrap: true,
+                                  primary: false,
+                                  reverse: true,
+                                  itemBuilder: (context, index) {
+                                    if(controller.messageList.length == 1){
+                                      return MessageWidget(
+                                          message: controller.messageList[index],
+                                          isLast: true.obs,
+                                          isFirst: true.obs,
+                                          partner: partner,
+                                          myId: controller.myId!);
+                                    }
+                                    else if (controller.messageList[index] ==
+                                        controller.messageList.first) {
+                                      return MessageWidget(
+                                          message: controller.messageList[index],
+                                          isLast: true.obs,
                                           isFirst: false.obs,
                                           partner: partner,
-                                          myId: controller.myId!),
-                                    );
-                                  }
-                                },
-                                itemCount: controller.messageList.length,
-                                separatorBuilder: (context, index) {
-                                  if (DateFormat('yyyy-MM-dd').parse(controller
-                                          .messageList[index].date
-                                          .toString()) !=
-                                      DateFormat('yyyy-MM-dd').parse(controller
-                                          .messageList[index + 1].date
-                                          .toString())) {
-                                    return Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 7, 20, 7),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Expanded(
-                                              child: Divider(
-                                                  thickness: 0.5,
-                                                  color: maingray,
-                                                  height: 0.5),
-                                            ),
-                                            const SizedBox(width: 14),
-                                            Text(
-                                              '${controller.messageList[index].date.year}.${controller.messageList[index].date.month}.${controller.messageList[index].date.day}',
-                                              style: k16Normal.copyWith(
-                                                  color: maingray),
-                                            ),
-                                            const SizedBox(width: 14),
-                                            Expanded(
-                                              child: Divider(
-                                                  thickness: 0.5,
-                                                  color: maingray,
-                                                  height: 0.5),
-                                            ),
-                                          ]),
-                                    );
-                                  } else {
-                                    return const SizedBox.shrink();
-                                  }
-                                },
-                              )
-                            ],
+                                          myId: controller.myId!);
+                                    } else if (controller.messageList[index] ==
+                                        controller.messageList.last) {
+                                      return MessageWidget(
+                                          message: controller.messageList[index],
+                                          isLast: false.obs,
+                                          isFirst: true.obs,
+                                          partner: partner,
+                                          myId: controller.myId!);
+                                    } else {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          print(controller.messageList[index] ==
+                                                  controller.messageList.last ||
+                                              DateFormat('yyyy-MM-dd').parse(
+                                                      controller
+                                                          .messageList[index].date
+                                                          .toString()) !=
+                                                  DateFormat('yyyy-MM-dd').parse(
+                                                      controller
+                                                          .messageList[index].date
+                                                          .toString()));
+                                        },
+                                        child: MessageWidget(
+                                            message:
+                                                controller.messageList[index],
+                                            isLast: false.obs,
+                                            isFirst: false.obs,
+                                            partner: partner,
+                                            myId: controller.myId!),
+                                      );
+                                    }
+                                  },
+                                  itemCount: controller.messageList.length,
+                                  separatorBuilder: (context, index) {
+                                    if (DateFormat('yyyy-MM-dd').parse(controller
+                                            .messageList[index].date
+                                            .toString()) !=
+                                        DateFormat('yyyy-MM-dd').parse(controller
+                                            .messageList[index + 1].date
+                                            .toString())) {
+                                      return Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 7, 20, 7),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Expanded(
+                                                child: Divider(
+                                                    thickness: 0.5,
+                                                    color: maingray,
+                                                    height: 0.5),
+                                              ),
+                                              const SizedBox(width: 14),
+                                              Text(
+                                                '${controller.messageList[index].date.year}.${controller.messageList[index].date.month}.${controller.messageList[index].date.day}',
+                                                style: k16Normal.copyWith(
+                                                    color: maingray),
+                                              ),
+                                              const SizedBox(width: 14),
+                                              Expanded(
+                                                child: Divider(
+                                                    thickness: 0.5,
+                                                    color: maingray,
+                                                    height: 0.5),
+                                              ),
+                                            ]),
+                                      );
+                                    } else {
+                                      return const SizedBox.shrink();
+                                    }
+                                  },
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    : controller.screenState.value == ScreenState.normal
-                        ? Container()
-                        : Container(),
-          )),
+                        )
+                      : controller.screenState.value == ScreenState.normal
+                          ? Container()
+                          : Container(),
+            )),
+      ),
     );
   }
 
-  // List<Widget> messageBox() {
-  //   return [
-  //     SliverList(
-  //         key: centerKey,
-  //         delegate: SliverChildBuilderDelegate((context, index) {
-  //           if (controller.checkFirstScreenPosition().value == true) {
-  //             if (controller.messageList[index] ==
-  //                 controller.messageList.first) {
-  //               return MessageWidget(
-  //                   key: Get.put(
-  //                           KeyController(
-  //                               isTextField: false.obs, ismessage: true),
-  //                           tag: index.toString())
-  //                       .viewKey,
-  //                   message: controller.messageList[index],
-  //                   isLast: true.obs,
-  //                   partner: partner,
-  //                   myId: controller.myId!);
-  //             } else {
-  //               if (index < 9) {
-  //                 return MessageWidget(
-  //                     key: Get.put(
-  //                             KeyController(
-  //                                 isTextField: false.obs, ismessage: true),
-  //                             tag: index.toString())
-  //                         .viewKey,
-  //                     message: controller.messageList[index],
-  //                     isLast: false.obs,
-  //                     partner: partner,
-  //                     myId: controller.myId!);
-  //               } else {
-  //                 return MessageWidget(
-  //                     message: controller.messageList[index],
-  //                     isLast: false.obs,
-  //                     partner: partner,
-  //                     myId: controller.myId!);
-  //               }
-  //             }
-  //           } else {
-  //             if (controller.messageList[index] ==
-  //                 controller.messageList.last) {
-  //               return MessageWidget(
-  //                   message: controller.messageList.reversed.toList()[index],
-  //                   isLast: true.obs,
-  //                   partner: partner,
-  //                   myId: controller.myId!);
-  //             } else {
-  //               return MessageWidget(
-  //                   message: controller.messageList.reversed.toList()[index],
-  //                   isLast: false.obs,
-  //                   partner: partner,
-  //                   myId: controller.myId!);
-  //             }
-  //           }
-  //         }, childCount: controller.messageList.length)),
-  //     SliverList(
-  //         delegate: SliverChildBuilderDelegate(((context, index) {
-  //       return MessageWidget(
-  //           message: controller.refreshList[index],
-  //           isLast: false.obs,
-  //           partner: partner,
-  //           myId: controller.myId!);
-  //     }), childCount: controller.refreshList.length)),
-  //   ];
-  // }
-
+ 
   Widget sendField() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
@@ -342,6 +296,7 @@ class MessageDetatilScreen extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              focusNode: controller.focusNode,
                 keyboardType: TextInputType.multiline,
                 controller: controller.sendText,
                 minLines: 1,
@@ -400,4 +355,3 @@ class MessageDetatilScreen extends StatelessWidget {
     );
   }
 }
-
