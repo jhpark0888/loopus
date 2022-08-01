@@ -52,11 +52,17 @@ class SearchScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: 
-                      SearchTextFieldWidget(hinttext: '무엇을 찾으시나요?', ontap: () { Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SearchFocusScreen()));}, readonly: true, controller: null,),
+                      child: SearchTextFieldWidget(
+                        hinttext: '무엇을 찾으시나요?',
+                        ontap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchFocusScreen()));
+                        },
+                        readonly: true,
+                        controller: null,
+                      ),
                       // TextField(
                       //     autocorrect: false,
                       //     readOnly: true,
@@ -101,7 +107,7 @@ class SearchScreen extends StatelessWidget {
             ),
             body: ScrollNoneffectWidget(
               child: SmartRefresher(
-                physics: const BouncingScrollPhysics(),
+                // physics: const BouncingScrollPhysics(),
                 controller: _searchController.refreshController,
                 enablePullUp: true,
                 header: const MyCustomHeader(),

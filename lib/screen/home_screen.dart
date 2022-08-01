@@ -78,8 +78,8 @@ class HomeScreen extends StatelessWidget {
                     top: 12,
                     child: Align(
                       alignment: Alignment.topRight,
-                      child: Obx(
-                          () => HomeController.to.isNewAlarm.value == true
+                      child:
+                          Obx(() => HomeController.to.isNewAlarm.value == true
                               ? Container(
                                   height: 8,
                                   width: 8,
@@ -113,15 +113,14 @@ class HomeScreen extends StatelessWidget {
                     top: 12,
                     child: Align(
                       alignment: Alignment.topRight,
-                      child: Obx(
-                          () => HomeController.to.isNewMsg.value == true
-                              ? Container(
-                                  height: 8,
-                                  width: 8,
-                                  decoration: const BoxDecoration(
-                                      color: rankred, shape: BoxShape.circle),
-                                )
-                              : Container()),
+                      child: Obx(() => HomeController.to.isNewMsg.value == true
+                          ? Container(
+                              height: 8,
+                              width: 8,
+                              decoration: const BoxDecoration(
+                                  color: rankred, shape: BoxShape.circle),
+                            )
+                          : Container()),
                     ),
                   ),
                 ],
@@ -132,23 +131,21 @@ class HomeScreen extends StatelessWidget {
             ),
             Center(
               child: GestureDetector(
-                onTap: () async=>
-                 Get.to(() => MyProfileScreen())
+                onTap: () async => Get.to(() => MyProfileScreen())
                 // Get.to(() => DatabaseList())
                 // deleteDatabase(
                 //                   join(await getDatabasesPath(), 'MY_database.db'))
-                 ,
+                ,
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Obx(
                     () => UserImageWidget(
-                        imageUrl:
-                          HomeController.to.myProfile.value.profileImage ??
-                            // ProfileController.to.myUserInfo.value.profileImage ??
-                                '',
-                        width: 36,
-                        height: 36,
-                              
+                      imageUrl: HomeController
+                              .to.myProfile.value.profileImage ??
+                          // ProfileController.to.myUserInfo.value.profileImage ??
+                          '',
+                      width: 36,
+                      height: 36,
                     ),
                   ),
                 ),

@@ -255,41 +255,41 @@ Future<HTTPResponse> putpwchange() async {
   }
 }
 
-Future postlogout() async {
-  ConnectivityResult result = await initConnectivity();
-  if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
-  } else {
-    String? token = await const FlutterSecureStorage().read(key: "token");
-    print('user token: $token');
+// Future postlogout() async {
+//   ConnectivityResult result = await initConnectivity();
+//   if (result == ConnectivityResult.none) {
+//     showdisconnectdialog();
+//   } else {
+//     String? token = await const FlutterSecureStorage().read(key: "token");
+//     print('user token: $token');
 
-    var uri = Uri.parse("$serverUri/user_api/logout");
+//     var uri = Uri.parse("$serverUri/user_api/logout");
 
-    try {
-      http.Response response =
-          await http.post(uri, headers: {"Authorization": "Token $token"});
+//     try {
+//       http.Response response =
+//           await http.post(uri, headers: {"Authorization": "Token $token"});
 
-      print("로그아웃: ${response.statusCode}");
-      if (response.statusCode == 200) {
-        AppController.to.currentIndex.value = 0;
-        FlutterSecureStorage().delete(key: "token");
-        FlutterSecureStorage().delete(key: "id");
-        Get.delete<AppController>();
-        Get.delete<HomeController>();
-        Get.delete<SearchController>();
-        Get.delete<ProfileController>();
-        Get.offAll(() => StartScreen());
-      } else {
-        return Future.error(response.statusCode);
-      }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-    }
-  }
-}
+//       print("로그아웃: ${response.statusCode}");
+//       if (response.statusCode == 200) {
+//         AppController.to.currentIndex.value = 0;
+//         FlutterSecureStorage().delete(key: "token");
+//         FlutterSecureStorage().delete(key: "id");
+//         Get.delete<AppController>();
+//         Get.delete<HomeController>();
+//         Get.delete<SearchController>();
+//         Get.delete<ProfileController>();
+//         Get.offAll(() => StartScreen());
+//       } else {
+//         return Future.error(response.statusCode);
+//       }
+//     } on SocketException {
+//       // ErrorController.to.isServerClosed(true);
+//     } catch (e) {
+//       print(e);
+//       // ErrorController.to.isServerClosed(true);
+//     }
+//   }
+// }
 
 Future<HTTPResponse> deleteuser(String pw) async {
   ConnectivityResult result = await initConnectivity();
@@ -444,55 +444,3 @@ Future inquiry() async {
     }
   }
 }
-
-// Future logindetect() async {
-//   ConnectivityResult result = await initConnectivity();
-//   NotificationController notificationController =
-//       Get.put(NotificationController());
-//   if (result == ConnectivityResult.none) {
-//     showdisconnectdialog();
-//   } else {
-//     String? token;
-//     await const FlutterSecureStorage().read(key: 'token').then((value) {
-//       token = value;
-//     });
-
-//     final Uri uri = Uri.parse("$serverUri/user_api/check_token");
-
-//     var body = {"fcm_token": await notificationController.getToken()};
-
-//     try {
-//       final response = await http.post(uri,
-//           headers: {
-//             'Content-Type': 'application/json',
-//             "Authorization": "Token $token"
-//           },
-//           body: json.encode(body));
-
-//       print('토큰 검사 statusCode: ${response.statusCode}');
-//       if (response.statusCode == 200) {
-//       } else {
-//         showoneButtonDialog(
-//           title: '로그인 감지',
-//           content: '다른 기기에서 해당 계정으로 로그인 하여 로그아웃합니다',
-//           oneFunction: () {
-//             AppController.to.currentIndex.value = 0;
-//             FlutterSecureStorage().delete(key: "token");
-//             FlutterSecureStorage().delete(key: "id");
-//             Get.delete<AppController>();
-//             Get.delete<HomeController>();
-//             Get.delete<SearchController>();
-//             Get.delete<ProfileController>();
-//             Get.offAll(() => StartScreen());
-//           },
-//           oneText: '확인',
-//         );
-//       }
-//     } on SocketException {
-//       ErrorController.to.isServerClosed(true);
-//     } catch (e) {
-//       print(e);
-//       // ErrorController.to.isServerClosed(true);
-//     }
-//   }
-// }
