@@ -39,8 +39,8 @@ class MessageController extends GetxController {
           ((index) => MessageRoomWidget(
               chatRoom: temp[index].obs, user: member[index].obs))));
       searchRoomList.value = chattingRoomList.toList();
+      sortList();
     });
-    print(chattingRoomList);
     getChatroomlist(int.parse(userId!)).then((chatroom) {
       if (chatroom.isError == false) {
         List<ChatRoom> temp = chatroom.data;
@@ -53,68 +53,53 @@ class MessageController extends GetxController {
               List<User> userList = usersList.data;
 
               temp.forEach((element) {
-                User user = userList
-                      .where((user) => user.userid == element.user)
-                      .first;
+                User user =
+                    userList.where((user) => user.userid == element.user).first;
                 if (chattingRoomList
-                    .where(
-                        (messageRoom) => messageRoom.chatRoom.value.roomId == element.roomId)
+                    .where((messageRoom) =>
+                        messageRoom.chatRoom.value.roomId == element.roomId)
                     .isEmpty) {
-                      print(element);
+                  print(element);
                   SQLController.to.insertMessageRoom(element);
                   SQLController.to.insertUser(user);
-                  chattingRoomList.add(MessageRoomWidget(chatRoom: element.obs, user: user.obs));
-                  searchRoomList.add(MessageRoomWidget(chatRoom: element.obs, user: user.obs));
+                  chattingRoomList.add(
+                      MessageRoomWidget(chatRoom: element.obs, user: user.obs));
+                  searchRoomList.add(
+                      MessageRoomWidget(chatRoom: element.obs, user: user.obs));
                 } else {
-                  chattingRoomList.where((messageRoom) => messageRoom.chatRoom.value.roomId == element.roomId).first.chatRoom.value = element;
-                  chattingRoomList.where((messageRoom) => messageRoom.user.value.userid== user.userid).first.user.value.profileImage = user.profileImage;
-                  searchRoomList.where((messageRoom) => messageRoom.chatRoom.value.roomId == element.roomId).first.chatRoom.value = element;
-                  searchRoomList.where((messageRoom) => messageRoom.user.value.userid== user.userid).first.user.value.profileImage = user.profileImage;
+                  chattingRoomList
+                      .where((messageRoom) =>
+                          messageRoom.chatRoom.value.roomId == element.roomId)
+                      .first
+                      .chatRoom
+                      .value = element;
+                  chattingRoomList
+                      .where((messageRoom) =>
+                          messageRoom.user.value.userid == user.userid)
+                      .first
+                      .user
+                      .value
+                      .profileImage = user.profileImage;
+                  searchRoomList
+                      .where((messageRoom) =>
+                          messageRoom.chatRoom.value.roomId == element.roomId)
+                      .first
+                      .chatRoom
+                      .value = element;
+                  searchRoomList
+                      .where((messageRoom) =>
+                          messageRoom.user.value.userid == user.userid)
+                      .first
+                      .user
+                      .value
+                      .profileImage = user.profileImage;
                 }
               });
 
               sortList();
-              // temp.forEach((element) {
-              //   SQLController.to.insertMessageRoom(element);
-              //   print(chattingRoomList.where((messageRoom) =>
-              //       messageRoom.chatRoom.value.roomId == element.roomId));
-              //   chattingRoomList
-              //       .where((messageRoom) =>
-              //           messageRoom.chatRoom.value.roomId == element.roomId)
-              //       .first
-              //       .chatRoom
-              //       .value = element;
-              //   searchRoomList
-              //       .where((messageRoom) =>
-              //           messageRoom.chatRoom.value.roomId == element.roomId)
-              //       .first
-              //       .chatRoom
-              //       .value = element;
-              // });
-
-              // userList.forEach((element) {
-              //   SQLController.to.insertUser(element);
-
-              //   chattingRoomList
-              //       .where((messageRoom) =>
-              //           messageRoom.user.value.userid == element.userid)
-              //       .first
-              //       .user
-              //       .value
-              //       .profileImage = element.profileImage;
-              //   searchRoomList
-              //       .where((messageRoom) =>
-              //           messageRoom.user.value.userid == element.userid)
-              //       .first
-              //       .user
-              //       .value
-              //       .profileImage = element.profileImage;
-              // });
-
             }
           });
         }
-        
       }
     });
     super.onInit();

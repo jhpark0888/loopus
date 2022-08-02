@@ -12,14 +12,12 @@ import 'package:loopus/model/socket_message_model.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:web_socket_channel/io.dart';
 class MessageDetailController extends GetxController with WidgetsBindingObserver {
-  MessageDetailController({required this.partnerId, required this.partnerToken});
+  MessageDetailController({required this.partnerId});
   late IOWebSocketChannel channel;
   late int roomid;
   RxBool hasInternet = true.obs;
   late var listener;
 
-  String? token;
-  String? partnerToken;
   int partnerId;
   int? myId;
   TextEditingController sendText = TextEditingController();
@@ -152,7 +150,6 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
               channel.sink.add(jsonEncode({
                 'content': chat.content,
                 'type': 'msg',
-                'token': partnerToken,
                 'name': HomeController.to.myProfile.value.realName
               }));
             }

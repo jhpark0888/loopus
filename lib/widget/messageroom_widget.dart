@@ -19,10 +19,7 @@ import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class MessageRoomWidget extends StatelessWidget {
-  MessageRoomWidget(
-      {Key? key,
-      required this.chatRoom,
-      required this.user})
+  MessageRoomWidget({Key? key, required this.chatRoom, required this.user})
       : super(key: key);
 
   Rx<ChatRoom> chatRoom;
@@ -30,28 +27,24 @@ class MessageRoomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-        GestureDetector(
+    return GestureDetector(
       onTap: () async {
-        await getPartnerToken(user.value.userid).then((value) {
-          chatRoom.value.notread.value = 0;
-          if (MessageController.to.chattingRoomList
-              .where((messageroomwidget) =>
-                  messageroomwidget.chatRoom.value.notread.value != 0)
-              .isNotEmpty) {
-            HomeController.to.isNewMsg(true);
-          } else {
-            HomeController.to.isNewMsg(false);
-          }
-          if (value.isError == false) {
-            Get.to(() => MessageDetatilScreen(
-                  partner: user.value,
-                  partnerToken: value.data,
-                  myProfile: HomeController.to.myProfile.value,
-                  enterRoute: EnterRoute.messageScreen,
-                ));
-          }
-        });
+        chatRoom.value.notread.value = 0;
+        if (MessageController.to.chattingRoomList
+            .where((messageroomwidget) =>
+                messageroomwidget.chatRoom.value.notread.value != 0)
+            .isNotEmpty) {
+          HomeController.to.isNewMsg(true);
+        } else {
+          HomeController.to.isNewMsg(false);
+        }
+
+        Get.to(() => MessageDetatilScreen(
+              partner: user.value,
+              myProfile: HomeController.to.myProfile.value,
+              enterRoute: EnterRoute.messageScreen,
+            ));
+
         SQLController.to.updateNotReadCount(chatRoom.value.roomId, 0);
 
         HomeController.to.enterMessageRoom.value = user.value.userid;

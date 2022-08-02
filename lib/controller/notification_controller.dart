@@ -37,12 +37,6 @@ import 'package:loopus/widget/message_widget.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
 import 'package:loopus/widget/notification_widget.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-}
-
 class NotificationController extends GetxController {
   static NotificationController get to => Get.find();
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -75,15 +69,13 @@ class NotificationController extends GetxController {
       int partnerId = int.parse(message.data['sender']);
       getUserProfile([partnerId]).then((user) async {
         if (user.isError == false) {
-          getPartnerToken(partnerId).then((token) {
-            Get.to(() => MessageDetatilScreen(
-                  partner: user.data[0],
-                  myProfile: HomeController.to.myProfile.value,
-                  partnerToken: token.data,
-                  enterRoute: EnterRoute.popUp,
-                ));
-            HomeController.to.enterMessageRoom.value = user.data.first.userid;
-          });
+          Get.to(() => MessageDetatilScreen(
+                partner: user.data[0],
+                myProfile: HomeController.to.myProfile.value,
+                enterRoute: EnterRoute.popUp,
+              ));
+          HomeController.to.enterMessageRoom.value = user.data.first.userid;
+
           await SQLController.to.findMessageRoom(
               roomid: int.parse(json['room_id']),
               chatRoom: ChatRoom.fromMsg(json).toJson());
@@ -171,36 +163,32 @@ class NotificationController extends GetxController {
               int partnerId = int.parse(event.data['sender']);
               getUserProfile([partnerId]).then((user) async {
                 if (user.isError == false) {
-                  getPartnerToken(partnerId).then((token) {
-                    if (Get.isRegistered<MessageDetailController>(
+                  if (Get.isRegistered<MessageDetailController>(
+                      tag: HomeController.to.enterMessageRoom.value
+                          .toString())) {
+                    Get.delete<MessageDetailController>(
                         tag: HomeController.to.enterMessageRoom.value
-                            .toString())) {
-                      Get.delete<MessageDetailController>(
-                          tag: HomeController.to.enterMessageRoom.value
-                              .toString());
-                      Future.delayed(const Duration(milliseconds: 100));
-                      Get.off(
-                          () => MessageDetatilScreen(
-                                partner: user.data[0],
-                                myProfile: HomeController.to.myProfile.value,
-                                partnerToken: token.data,
-                                enterRoute: EnterRoute.popUp,
-                              ),
-                          preventDuplicates: false);
-                    } else {
-                      Get.to(
-                          () => MessageDetatilScreen(
-                                partner: user.data[0],
-                                myProfile: HomeController.to.myProfile.value,
-                                partnerToken: token.data,
-                                enterRoute: EnterRoute.popUp,
-                              ),
-                          preventDuplicates: true);
-                    }
+                            .toString());
+                    Future.delayed(const Duration(milliseconds: 100));
+                    Get.off(
+                        () => MessageDetatilScreen(
+                              partner: user.data[0],
+                              myProfile: HomeController.to.myProfile.value,
+                              enterRoute: EnterRoute.popUp,
+                            ),
+                        preventDuplicates: false);
+                  } else {
+                    Get.to(
+                        () => MessageDetatilScreen(
+                              partner: user.data[0],
+                              myProfile: HomeController.to.myProfile.value,
+                              enterRoute: EnterRoute.popUp,
+                            ),
+                        preventDuplicates: true);
+                  }
 
-                    HomeController.to.enterMessageRoom.value =
-                        user.data.first.userid;
-                  });
+                  HomeController.to.enterMessageRoom.value =
+                      user.data.first.userid;
                 }
               });
             });
@@ -301,16 +289,14 @@ class NotificationController extends GetxController {
               int partnerId = int.parse(event.data['sender']);
               getUserProfile([partnerId]).then((user) async {
                 if (user.isError == false) {
-                  getPartnerToken(partnerId).then((token) {
-                    Get.to(() => MessageDetatilScreen(
-                          partner: user.data[0],
-                          myProfile: HomeController.to.myProfile.value,
-                          partnerToken: token.data,
-                          enterRoute: EnterRoute.popUp,
-                        ));
-                    HomeController.to.enterMessageRoom.value =
-                        user.data.first.userid;
-                  });
+                  Get.to(() => MessageDetatilScreen(
+                        partner: user.data[0],
+                        myProfile: HomeController.to.myProfile.value,
+                        enterRoute: EnterRoute.popUp,
+                      ));
+                  HomeController.to.enterMessageRoom.value =
+                      user.data.first.userid;
+
                   // Get.put(MessageController());
                 }
               });
@@ -348,7 +334,6 @@ class NotificationController extends GetxController {
     setupInteractedMessage();
 
     // Background, Killed 상태에서 알림을 받았을 때
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     super.onInit();
   }

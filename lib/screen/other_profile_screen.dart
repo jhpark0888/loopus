@@ -474,20 +474,12 @@ class OtherProfileScreen extends StatelessWidget {
                                                               .value.userid) {
                                                         Get.back();
                                                       } else {
-                                                        await getPartnerToken(
-                                                                _controller
-                                                                    .userid)
-                                                            .then((value) {
-                                                          if (value.isError ==
-                                                              false) {
+                                                        
                                                             Get.to(() =>
                                                                 MessageDetatilScreen(
                                                                   partner: _controller
                                                                       .otherUser
                                                                       .value,
-                                                                  partnerToken:
-                                                                      value
-                                                                          .data,
                                                                   myProfile:
                                                                       HomeController
                                                                           .to
@@ -505,8 +497,8 @@ class OtherProfileScreen extends StatelessWidget {
                                                                     .otherUser
                                                                     .value
                                                                     .userid;
-                                                          }
-                                                        });
+                                                          
+                                                    
                                                       }
                                                       // MessageDetailScreen(
                                                       //   realname:

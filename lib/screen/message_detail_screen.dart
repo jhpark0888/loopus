@@ -43,16 +43,14 @@ class MessageDetatilScreen extends StatelessWidget {
       {Key? key,
       required this.partner,
       required this.myProfile,
-      required this.partnerToken,
       required this.enterRoute})
       : super(key: key);
   User partner;
-  String? partnerToken;
   User myProfile;
   EnterRoute enterRoute;
   late MessageDetailController controller = Get.put(
       MessageDetailController(
-          partnerId: partner.userid, partnerToken: partnerToken),
+          partnerId: partner.userid),
       tag: partner.userid.toString());
       // KeyBoardController keyBoardController = Get.put(KeyBoardController());
   Key centerKey = const ValueKey('QueryList');
@@ -330,7 +328,6 @@ class MessageDetatilScreen extends StatelessWidget {
                     controller.channel.sink.add(jsonEncode({
                       'content': controller.sendText.text,
                       'type': 'msg',
-                      'token': partnerToken,
                       'name': myProfile.realName
                     }));
                   }

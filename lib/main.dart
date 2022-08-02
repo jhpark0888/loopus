@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -15,13 +16,23 @@ import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  print(message);
+  showCustomSnackbar('', '', (aa) {});
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // debugPrintGestureArenaDiagnostics = true;
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
