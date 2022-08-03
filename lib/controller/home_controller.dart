@@ -10,12 +10,14 @@ import 'package:loopus/api/question_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/model/contact_model.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -29,6 +31,7 @@ class HomeController extends GetxController
   NotificationController notificationController =
       Get.put(NotificationController());
 
+  Project? recommendCareer;
   RxList<Post> posts = <Post>[].obs;
   RxList<Contact> contact = <Contact>[].obs;
   RxList<User> growthUsers = <User>[].obs;
@@ -107,16 +110,23 @@ class HomeController extends GetxController
     await mainload(posts.isNotEmpty ? posts.last.id : 0).then((value) async {
       if (value.isError == false) {
         List postlist = List.from(value.data['posting']);
+
+        if (posts.isEmpty) {
+          if (value.data['news'] != null) {
+            newslist.value = List.from(value.data['news'])
+                .map((news) => news['urls'].toString())
+                .toList();
+          }
+
+          if (value.data['project'] != null) {
+            recommendCareer = Project.fromJson(value.data['project']);
+          }
+        }
+
         if (postlist.isNotEmpty) {
           posts.addAll(postlist.map((post) => Post.fromJson(post)).toList());
         } else {
           enablePostingPullup(false);
-        }
-
-        if (value.data['news'] != null) {
-          newslist.value = List.from(value.data['news'])
-              .map((news) => news['urls'].toString())
-              .toList();
         }
 
         contentsArrange();
@@ -142,10 +152,18 @@ class HomeController extends GetxController
     contents.value = teptlist;
   }
 
+  void scrollToTop() {
+    scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 500), curve: Curves.linear);
+  }
+
   void tapBookmark(int postid) {
     if (posts.where((post) => post.id == postid).isNotEmpty) {
       Post post = posts.where((post) => post.id == postid).first;
       post.isMarked(1);
+    }
+    if (Get.isRegistered<BookmarkController>()) {
+      BookmarkController.to.tapBookmark(postid);
     }
   }
 
@@ -153,6 +171,9 @@ class HomeController extends GetxController
     if (posts.where((post) => post.id == postid).isNotEmpty) {
       Post post = posts.where((post) => post.id == postid).first;
       post.isMarked(0);
+    }
+    if (Get.isRegistered<BookmarkController>()) {
+      BookmarkController.to.tapunBookmark(postid);
     }
   }
 
@@ -162,6 +183,9 @@ class HomeController extends GetxController
       post.isLiked(1);
       post.likeCount(likecount);
     }
+    if (Get.isRegistered<BookmarkController>()) {
+      BookmarkController.to.tapLike(postid, likecount);
+    }
   }
 
   void tapunLike(int postid, int likecount) {
@@ -169,6 +193,9 @@ class HomeController extends GetxController
       Post post = posts.where((post) => post.id == postid).first;
       post.isLiked(0);
       post.likeCount(likecount);
+    }
+    if (Get.isRegistered<BookmarkController>()) {
+      BookmarkController.to.tapunLike(postid, likecount);
     }
   }
 }

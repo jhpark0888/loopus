@@ -6,6 +6,7 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
+import 'package:loopus/screen/post_add_test.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/news_widget.dart';
@@ -74,8 +75,8 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    right: 14,
-                    top: 12,
+                    right: 0,
+                    top: 0,
                     child: Align(
                       alignment: Alignment.topRight,
                       child:
@@ -109,8 +110,8 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    right: 12,
-                    top: 12,
+                    right: 0,
+                    top: 0,
                     child: Align(
                       alignment: Alignment.topRight,
                       child: Obx(() => HomeController.to.isNewMsg.value == true
@@ -131,10 +132,13 @@ class HomeScreen extends StatelessWidget {
             ),
             Center(
               child: GestureDetector(
-                onTap: () async => Get.to(() => MyProfileScreen())
+                onTap: () async {
+                  Get.to(() => MyProfileScreen());
+                  // deleteDatabase(
+                  //     join(await getDatabasesPath(), 'MY_database.db'));
+                }
                 // Get.to(() => DatabaseList())
-                // deleteDatabase(
-                //                   join(await getDatabasesPath(), 'MY_database.db'))
+
                 ,
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 4),
@@ -176,32 +180,45 @@ class HomeScreen extends StatelessWidget {
                   primary: false,
                   child: Column(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              height: 14,
-                            ),
-                            Text(
-                              '\'커리어이름\'\n커리어엔 최근 어떤 일이 있었나요?',
-                              style: k16Normal.copyWith(height: 1.5),
-                            ),
-                            const SizedBox(
-                              height: 14,
-                            ),
-                            Text(
-                              '포스트를 바로 작성해 보세요',
-                              style: k16Normal.copyWith(color: maingray),
-                            ),
-                            const SizedBox(
-                              height: 7,
-                            ),
-                            Divider(thickness: 1, color: maingray),
-                          ],
-                        ),
-                      ),
+                      _homeController.recommendCareer != null
+                          ? GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {
+                                Get.to(() => PostingAddNameScreen(
+                                    project_id:
+                                        _homeController.recommendCareer!.id,
+                                    route: PostaddRoute.project));
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 14,
+                                    ),
+                                    Text(
+                                      '\'${_homeController.recommendCareer!.careerName}\'\n커리어엔 최근 어떤 일이 있었나요?',
+                                      style: k16Normal.copyWith(height: 1.5),
+                                    ),
+                                    const SizedBox(
+                                      height: 14,
+                                    ),
+                                    Text(
+                                      '포스트를 바로 작성해 보세요',
+                                      style:
+                                          k16Normal.copyWith(color: maingray),
+                                    ),
+                                    const SizedBox(
+                                      height: 7,
+                                    ),
+                                    Divider(thickness: 1, color: maingray),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : Container(),
                       Obx(
                         () => ListView.separated(
                           primary: false,

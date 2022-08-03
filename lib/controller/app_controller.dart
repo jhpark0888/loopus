@@ -34,8 +34,6 @@ class AppController extends GetxService {
   List<int> bottomHistory = [0];
   SQLController sqlcontroller = Get.put(SQLController());
 
-
-
   void changeBottomNav(int value, {bool hasGesture = true}) {
     var page = RouteName.values[value];
     switch (page) {
@@ -43,6 +41,11 @@ class AppController extends GetxService {
         showCustomBottomSheet();
         break;
       case RouteName.home:
+        if (currentIndex.value == 0) {
+          _homeController.scrollToTop();
+        }
+        _changePage(value, hasGesture: hasGesture);
+        break;
       case RouteName.search:
       case RouteName.scout:
       case RouteName.careerboard:
@@ -55,6 +58,12 @@ class AppController extends GetxService {
     currentIndex(value);
     if (!hasGesture) return;
     if (bottomHistory.last != value) {
+      if (bottomHistory.contains(value)) {
+        if (!(value == 0 &&
+            bottomHistory.where((element) => element == 0).length == 1)) {
+          bottomHistory.remove(value);
+        }
+      }
       bottomHistory.add(value);
     }
   }

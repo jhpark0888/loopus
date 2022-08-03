@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
@@ -33,8 +34,8 @@ import 'package:loopus/widget/tag_widget.dart';
 
 import '../controller/modal_controller.dart';
 
-class PostingAddNameScreen1 extends StatelessWidget {
-  PostingAddNameScreen1(
+class PostingAddNameScreen extends StatelessWidget {
+  PostingAddNameScreen(
       {Key? key, this.postid, required this.project_id, required this.route})
       : super(key: key);
   late PostingAddController postingAddController =
@@ -129,24 +130,34 @@ class PostingAddNameScreen1 extends StatelessWidget {
                                         bottom: 5)
                                   ])
                             : Column(children: [
-                                SizedBox(height: 23),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    addButton(
-                                        title: '이미지',
-                                        titleEng: 'image',
-                                        ontap: () {
-                                          Get.to(() => UploadScreen());
-                                        }),
-                                    addButton(
-                                        title: '링크',
-                                        titleEng: 'link',
-                                        ontap: () {
-                                          Get.to(() => PostingAddLinkScreen());
-                                        })
-                                  ],
+                                SizedBox(height: 24),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: addButton(
+                                            title: '이미지',
+                                            titleEng: 'image',
+                                            ontap: () {
+                                              Get.to(() => UploadScreen());
+                                            }),
+                                      ),
+                                      const SizedBox(
+                                        width: 14,
+                                      ),
+                                      Expanded(
+                                        child: addButton(
+                                            title: '링크',
+                                            titleEng: 'link',
+                                            ontap: () {
+                                              Get.to(
+                                                  () => PostingAddLinkScreen());
+                                            }),
+                                      )
+                                    ],
+                                  ),
                                 ),
                                 SizedBox(height: 24),
                               ])
@@ -328,10 +339,11 @@ class PostingAddNameScreen1 extends StatelessWidget {
     return GestureDetector(
       onTap: ontap,
       child: Container(
-        padding: EdgeInsets.fromLTRB(18.25, 14.5, 18.25, 14.5),
+        padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
             color: mainblue, borderRadius: BorderRadius.circular(8)),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset('assets/icons/Add_$titleEng.svg'),
             SizedBox(width: 7),
@@ -369,6 +381,8 @@ class PostingAddNameScreen1 extends StatelessWidget {
 
                 getbacks(3);
                 dialogBack();
+                AppController.to.changeBottomNav(0);
+                HomeController.to.scrollToTop();
 
                 showCustomDialog('포스팅을 업로드했어요', 1000);
               }

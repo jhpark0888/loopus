@@ -12,6 +12,7 @@ import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/utils/error_control.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PostingDetailController extends GetxController {
   PostingDetailController({
@@ -23,17 +24,14 @@ class PostingDetailController extends GetxController {
   Rx<ScreenState> postscreenstate = ScreenState.loading.obs;
 
   ScrollController scrollController = ScrollController();
+  RefreshController refreshController = RefreshController();
 
   TextEditingController commentController = TextEditingController();
   FocusNode commentFocus = FocusNode();
-  RxList<PostComment> postCommentList = <PostComment>[].obs;
+  // RxList<PostComment> postCommentList = <PostComment>[].obs;
 
   RxInt selectedCommentId = 0.obs;
   Rx<User> tagUser = User.defaultuser().obs;
-
-  // KeyboardVisibilityController keyboardController =
-  //     KeyboardVisibilityController();
-  // RxBool onKeyborad = false.obs;
 
   int postid;
 
@@ -64,34 +62,17 @@ class PostingDetailController extends GetxController {
     }
     await getposting(postid).then((value) async {
       if (value.isError == false) {
-        // Post temppost = Post.fromJson(value.data);
-        // print('변화 전 : ${post.hashCode}');
-        // print('새로운 포스트 : ${temppost.hashCode}');
-        // post.value = Post.fromJson(value.data);
         if (post.value != null) {
           post.value!.copywith(value.data);
         }
 
-        // print('변화 후 : ${post.hashCode}');
         lastIsLiked = post.value!.isLiked.value;
         lastIsMarked = post.value!.isMarked.value;
-        commentToList();
         postscreenstate(ScreenState.success);
       } else {
         errorSituation(value, screenState: postscreenstate);
       }
     });
-
-    // keyboardController.onChange.listen((isVisible) {
-    //   // onKeyborad(isVisible);
-    //   if (isVisible && selectedCommentId.value != 0) {
-    //     print('ddd');
-    //     Scrollable.ensureVisible(Get.context!,
-    //         alignment: 1,
-    //         duration: const Duration(milliseconds: 300),
-    //         curve: Curves.ease);
-    //   }
-    // });
 
     commentController.addListener(() {
       if (tagUser.value.userid != 0 && commentController.text == '') {
@@ -107,14 +88,36 @@ class PostingDetailController extends GetxController {
     selectedCommentId(0);
   }
 
-  void commentToList() {
-    List<PostComment> teptlist = [];
-    for (var comment in post.value!.comments) {
-      teptlist.add(comment);
-      for (var reply in comment.replyList.reversed) {
-        teptlist.add(reply);
+  Future commentListLoad() async {
+    await commentListGet(postid, "comment", post.value!.comments.last.id)
+        .then((value) {
+      if (value.isError == false) {
+        List<Comment> commentList = List.from(value.data)
+            .map((comment) => Comment.fromJson(comment))
+            .toList();
+
+        post.value!.comments.addAll(commentList);
+
+        if (commentList.length < 10) {
+          refreshController.loadNoData();
+          return;
+        }
+        refreshController.loadComplete();
+      } else {
+        errorSituation(value);
+        refreshController.loadComplete();
       }
-    }
-    postCommentList(teptlist);
+    });
   }
+
+  // void commentToList() {
+  //   List<PostComment> teptlist = [];
+  //   for (var comment in post.value!.comments) {
+  //     teptlist.add(comment);
+  //     for (var reply in comment.replyList.reversed) {
+  //       teptlist.add(reply);
+  //     }
+  //   }
+  //   postCommentList(teptlist);
+  // }
 }

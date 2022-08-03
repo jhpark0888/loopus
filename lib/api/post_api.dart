@@ -467,43 +467,6 @@ Future<HTTPResponse> getlikepeoele(int postid, LikeType type) async {
   }
 }
 
-//type : post, comment
-Future<HTTPResponse> commentPost(
-    int id, String type, String text, int? tagUserId) async {
-  String? token = await const FlutterSecureStorage().read(key: 'token');
-
-  final CommentUri = Uri.parse("$serverUri/post_api/comment?id=$id&type=$type");
-
-  final content = {"content": text.trim(), "tagged_user": tagUserId};
-
-  try {
-    final response = await http.post(
-      CommentUri,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Token $token"
-      },
-      body: json.encode(content),
-    );
-    // var responseBody = utf8.decode(response.bodyBytes);
-    print('댓글 작성 : ${response.statusCode}');
-    if (response.statusCode == 201) {
-      var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      print(responseBody);
-      return HTTPResponse.success(responseBody);
-    } else {
-      return HTTPResponse.apiError('', response.statusCode);
-    }
-  } on SocketException {
-    // ErrorController.to.isServerClosed(true);
-    return HTTPResponse.serverError();
-  } catch (e) {
-    print(e);
-    return HTTPResponse.unexpectedError(e);
-    // ErrorController.to.isServerClosed(true);
-  }
-}
-
 Future postingreport(int postingId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
@@ -540,5 +503,106 @@ Future postingreport(int postingId) async {
       print(e);
       // ErrorController.to.isServerClosed(true);
     }
+  }
+}
+
+//type : comment, cocomment
+Future<HTTPResponse> commentPost(
+    int id, String type, String text, int? tagUserId) async {
+  String? token = await const FlutterSecureStorage().read(key: 'token');
+
+  final CommentUri = Uri.parse("$serverUri/post_api/comment?id=$id&type=$type");
+
+  final content = {"content": text.trim(), "tagged_user": tagUserId};
+
+  try {
+    final response = await http.post(
+      CommentUri,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Token $token"
+      },
+      body: json.encode(content),
+    );
+    // var responseBody = utf8.decode(response.bodyBytes);
+    print('댓글 작성 : ${response.statusCode}');
+    if (response.statusCode == 201) {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
+      return HTTPResponse.success(responseBody);
+    } else {
+      return HTTPResponse.apiError('', response.statusCode);
+    }
+  } on SocketException {
+    // ErrorController.to.isServerClosed(true);
+    return HTTPResponse.serverError();
+  } catch (e) {
+    print(e);
+    return HTTPResponse.unexpectedError(e);
+    // ErrorController.to.isServerClosed(true);
+  }
+}
+
+//type : comment, cocomment
+Future<HTTPResponse> commentDelete(int id, String type) async {
+  String? token = await const FlutterSecureStorage().read(key: 'token');
+
+  final CommentUri = Uri.parse("$serverUri/post_api/comment?id=$id&type=$type");
+
+  try {
+    final response = await http.delete(
+      CommentUri,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Token $token"
+      },
+    );
+    // var responseBody = utf8.decode(response.bodyBytes);
+    print('댓글 삭제 : ${response.statusCode}');
+    if (response.statusCode == 200) {
+      return HTTPResponse.success("success");
+    } else {
+      return HTTPResponse.apiError('', response.statusCode);
+    }
+  } on SocketException {
+    // ErrorController.to.isServerClosed(true);
+    return HTTPResponse.serverError();
+  } catch (e) {
+    print(e);
+    return HTTPResponse.unexpectedError(e);
+    // ErrorController.to.isServerClosed(true);
+  }
+}
+
+//type : comment, cocomment
+Future<HTTPResponse> commentListGet(int id, String type, int last) async {
+  String? token = await const FlutterSecureStorage().read(key: 'token');
+
+  final CommentUri =
+      Uri.parse("$serverUri/post_api/comment?id=$id&type=$type&last=$last");
+
+  try {
+    final response = await http.get(
+      CommentUri,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Token $token"
+      },
+    );
+    // var responseBody = utf8.decode(response.bodyBytes);
+    print('댓글 로드 : ${response.statusCode}');
+    if (response.statusCode == 200) {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      return HTTPResponse.success(responseBody);
+    } else {
+      return HTTPResponse.apiError('', response.statusCode);
+    }
+  } on SocketException {
+    // ErrorController.to.isServerClosed(true);
+    return HTTPResponse.serverError();
+  } catch (e) {
+    print(e);
+    return HTTPResponse.unexpectedError(e);
+    // ErrorController.to.isServerClosed(true);
   }
 }

@@ -803,8 +803,8 @@ void showWithDrawalDialog({
 void showCustomBottomSheet() {
   Get.bottomSheet(
     Container(
-      padding: EdgeInsets.fromLTRB(20, 20, 12, 48),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.fromLTRB(20, 20, 12, 48),
+      decoration: const BoxDecoration(
         color: mainWhite,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16),
@@ -818,7 +818,7 @@ void showCustomBottomSheet() {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 '작성 및 추가',
                 style: kNavigationTitle,
               ),
@@ -828,19 +828,23 @@ void showCustomBottomSheet() {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           GestureDetector(
-            behavior: HitTestBehavior.translucent,
             onTap: () {
-              Get.to(() => SelectProjectScreen());
+              Navigator.of(Get.context!).push(
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => SelectProjectScreen(),
+                ),
+              );
+              // Get.to(() => SelectProjectScreen());
             },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   child: SvgPicture.asset(
                     'assets/icons/Edit.svg',
                     width: 24,
@@ -850,13 +854,13 @@ void showCustomBottomSheet() {
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 12,
                 ),
-                Expanded(
+                const Expanded(
                   child: Text(
                     '포스팅 작성하기',
-                    style: kSubTitle3Style,
+                    style: kmain,
                   ),
                 ),
               ],
@@ -866,15 +870,20 @@ void showCustomBottomSheet() {
             height: 20,
           ),
           GestureDetector(
-            behavior: HitTestBehavior.translucent,
             onTap: () {
-              Get.to(() => ProjectAddTitleScreen(screenType: Screentype.add));
+              Navigator.of(Get.context!).push(
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) =>
+                      ProjectAddTitleScreen(screenType: Screentype.add),
+                ),
+              );
+              // Get.to(() => ProjectAddTitleScreen(screenType: Screentype.add));
             },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   child: SvgPicture.asset(
                     'assets/icons/Add.svg',
                     width: 24,
@@ -885,13 +894,13 @@ void showCustomBottomSheet() {
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 12,
                 ),
-                Expanded(
+                const Expanded(
                   child: Text(
                     '새로운 활동 추가하기',
-                    style: kSubTitle3Style,
+                    style: kmain,
                   ),
                 ),
               ],
@@ -901,8 +910,8 @@ void showCustomBottomSheet() {
       ),
     ),
     barrierColor: mainblack.withOpacity(0.3),
-    enterBottomSheetDuration: Duration(milliseconds: 150),
-    exitBottomSheetDuration: Duration(milliseconds: 150),
+    enterBottomSheetDuration: const Duration(milliseconds: 150),
+    exitBottomSheetDuration: const Duration(milliseconds: 150),
   );
 }
 

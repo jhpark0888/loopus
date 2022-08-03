@@ -26,33 +26,32 @@ import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/comment_widget.dart';
+import 'package:loopus/widget/custom_header_footer.dart';
+import 'package:loopus/widget/disconnect_reload_widget.dart';
+import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/reply_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/swiper_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PostingScreen extends StatelessWidget {
   PostingScreen({
     Key? key,
     this.post,
+    this.autofocus,
     required this.postid,
   }) : super(key: key);
   late PostingDetailController controller = Get.put(
       PostingDetailController(
           postid: postid, post: post != null ? post.obs : null.obs),
       tag: postid.toString());
-  // late final LikeController likeController = Get.put(
-  //     LikeController(
-  //         isLiked: isLiked,
-  //         id: postid,
-  //         lastisliked: isLiked.value,
-  //         liketype: Liketype.post),
-  //     tag: 'post$postid');
 
   Post? post;
   int postid;
+  bool? autofocus;
   PageController pageController = PageController();
 
   final Debouncer _debouncer = Debouncer();
@@ -62,13 +61,13 @@ class PostingScreen extends StatelessWidget {
       showCustomDialog('내용을 입력해주세요', 1400);
     } else {
       if (controller.selectedCommentId.value == 0) {
-        commentPost(postid, 'post', controller.commentController.text, null)
+        commentPost(postid, 'comment', controller.commentController.text, null)
             .then((value) {
           if (value.isError == false) {
             controller.commentController.clear();
             Comment comment = Comment.fromJson(value.data);
             controller.post.value!.comments.insert(0, comment);
-            controller.commentToList();
+            // controller.commentToList();
           } else {
             showCustomDialog('댓글 작성에 실패하였습니다', 1400);
           }
@@ -76,7 +75,7 @@ class PostingScreen extends StatelessWidget {
       } else {
         commentPost(
                 controller.selectedCommentId.value,
-                'comment',
+                'cocomment',
                 controller.commentController.text,
                 controller.tagUser.value.userid)
             .then((value) {
@@ -90,7 +89,7 @@ class PostingScreen extends StatelessWidget {
                 .replyList
                 .add(reply);
             controller.commentController.clear();
-            controller.commentToList();
+            // controller.commentToList();
             controller.tagdelete();
           } else {
             showCustomDialog('대댓글 작성에 실패하였습니다', 1400);
@@ -146,6 +145,7 @@ class PostingScreen extends StatelessWidget {
                   cursorColor: mainblack,
                   controller: controller.commentController,
                   focusNode: controller.commentFocus,
+                  autofocus: autofocus ?? false,
                   onFieldSubmitted: _commentSubmitted,
                   minLines: 1,
                   maxLines: 5,
@@ -200,478 +200,495 @@ class PostingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.postscreenstate.value == ScreenState.success
-          ? SafeArea(
-            child: Scaffold(
-                // resizeToAvoidBottomInset: false,
-                appBar: AppBarWidget(
-                  leading: IconButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: SvgPicture.asset('assets/icons/Close.svg'),
-                  ),
-                  title: '게시물',
-                  actions: [
-                    IconButton(
-                      onPressed: controller.post.value!.isuser == 1
-                          ? () {
-                              showModalIOS(
-                                context,
-                                func1: () {
-                                  showButtonDialog(
-                                      leftText: '취소',
-                                      rightText: '삭제',
-                                      title: '포스팅을 삭제하시겠어요?',
-                                      content: '삭제한 포스팅은 복구할 수 없어요',
-                                      leftFunction: () => Get.back(),
-                                      rightFunction: () async {
-                                        dialogBack(modalIOS: true);
-                                        loading();
-                                        // await Future.delayed(
-                                        //         Duration(milliseconds: 1000))
-                                        //     .then((value) {
-                                        //   getbacks(2);
-                                        //   showCustomDialog("포스팅이 삭제되었습니다", 1400);
-                                        // });
-                                        deleteposting(
-                                                controller.post.value!.id,
-                                                controller
-                                                    .post.value!.project!.id)
-                                            .then((value) {
-                                          Get.back();
-                                          if (value.isError == false) {
-                                            Get.back();
-                                            Project project = ProfileController
-                                                .to.myProjectList
-                                                .where((career) =>
-                                                    career.id ==
-                                                    controller
-                                                        .post.value!.project!.id)
-                                                .first;
-                                            project.posts.removeWhere((post) =>
-                                                post.id ==
-                                                controller.post.value!.id);
-                                            showCustomDialog(
-                                                "포스팅이 삭제되었습니다", 1400);
-                                          } else {
-                                            errorSituation(value);
-                                          }
-          
-                                          // HomeController.to.recommandpostingResult.value.postingitems
-                                          //     .removeWhere((post) => post.id == postid);
-                                          // HomeController.to.latestpostingResult.value.postingitems
-                                          //     .removeWhere((post) => post.id == postid);
-                                        });
-                                      });
-                                },
-                                func2: () {
-                                  Get.to(() => PostUpdateScreen(
-                                        post: controller.post.value!,
-                                      ));
-                                },
-                                value1: '포스팅 삭제하기',
-                                value2: '포스팅 수정하기',
-                                isValue1Red: true,
-                                isValue2Red: false,
-                                isOne: false,
-                              );
-                            }
-                          : () {
-                              showModalIOS(
-                                context,
-                                func1: () {
-                                  showButtonDialog(
-                                      leftText: '취소',
-                                      rightText: '신고',
-                                      title: '정말 포스팅을 신고하시겠어요?',
-                                      content: '관리자가 검토 절차를 거칩니다',
-                                      leftFunction: () => Get.back(),
-                                      rightFunction: () {
-                                        postingreport(controller.post.value!.id);
-                                      });
-                                },
-                                func2: () {},
-                                value1: '이 포스팅 신고하기',
-                                value2: '',
-                                isValue1Red: true,
-                                isValue2Red: false,
-                                isOne: true,
-                              );
-                            },
-                      icon: SvgPicture.asset('assets/icons/More.svg'),
-                    ),
-                  ],
-                ),
-                // bottomNavigationBar: Transform.translate(
-                //   offset:
-                //       Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
-                //   child: BottomAppBar(
-                //     elevation: 0,
-                //     child: _buildTextComposer(),
-                //   ),
-                // ),
-                body: Column(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          FocusScope.of(context).unfocus();
-                        },
-                        child: ScrollNoneffectWidget(
-                          child: SingleChildScrollView(
-                            child: Obx(
-                              () => Column(children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Column(children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            20, 14, 20, 0),
-                                        child: Column(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.to(
-                                                    () => OtherProfileScreen(
-                                                        user: controller
-                                                            .post.value!.user,
-                                                        userid: controller.post
-                                                            .value!.user.userid,
-                                                        realname: controller
-                                                            .post
-                                                            .value!
-                                                            .user
-                                                            .realName),
-                                                    preventDuplicates: false);
+      () => controller.postscreenstate.value == ScreenState.loading
+          ? const LoadingScreen()
+          : controller.postscreenstate.value == ScreenState.normal
+              ? Container()
+              : controller.postscreenstate.value == ScreenState.disconnect
+                  ? DisconnectReloadWidget(reload: () {})
+                  : controller.postscreenstate.value == ScreenState.error
+                      ? ErrorReloadWidget(reload: () {})
+                      : SafeArea(
+                          child: Scaffold(
+                              // resizeToAvoidBottomInset: false,
+                              appBar: AppBarWidget(
+                                leading: IconButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  icon: SvgPicture.asset(
+                                      'assets/icons/Close.svg'),
+                                ),
+                                title: '게시물',
+                                actions: [
+                                  IconButton(
+                                    onPressed: controller.post.value!.isuser ==
+                                            1
+                                        ? () {
+                                            showModalIOS(
+                                              context,
+                                              func1: () {
+                                                showButtonDialog(
+                                                    leftText: '취소',
+                                                    rightText: '삭제',
+                                                    title: '포스팅을 삭제하시겠어요?',
+                                                    content:
+                                                        '삭제한 포스팅은 복구할 수 없어요',
+                                                    leftFunction: () =>
+                                                        Get.back(),
+                                                    rightFunction: () async {
+                                                      dialogBack(
+                                                          modalIOS: true);
+                                                      loading();
+                                                      // await Future.delayed(
+                                                      //         Duration(milliseconds: 1000))
+                                                      //     .then((value) {
+                                                      //   getbacks(2);
+                                                      //   showCustomDialog("포스팅이 삭제되었습니다", 1400);
+                                                      // });
+                                                      deleteposting(
+                                                              controller.post
+                                                                  .value!.id,
+                                                              controller
+                                                                  .post
+                                                                  .value!
+                                                                  .project!
+                                                                  .id)
+                                                          .then((value) {
+                                                        Get.back();
+                                                        if (value.isError ==
+                                                            false) {
+                                                          Get.back();
+                                                          Project project =
+                                                              ProfileController
+                                                                  .to
+                                                                  .myProjectList
+                                                                  .where((career) =>
+                                                                      career
+                                                                          .id ==
+                                                                      controller
+                                                                          .post
+                                                                          .value!
+                                                                          .project!
+                                                                          .id)
+                                                                  .first;
+                                                          project.posts
+                                                              .removeWhere(
+                                                                  (post) =>
+                                                                      post.id ==
+                                                                      controller
+                                                                          .post
+                                                                          .value!
+                                                                          .id);
+                                                          showCustomDialog(
+                                                              "포스팅이 삭제되었습니다",
+                                                              1400);
+                                                        } else {
+                                                          errorSituation(value);
+                                                        }
+
+                                                        // HomeController.to.recommandpostingResult.value.postingitems
+                                                        //     .removeWhere((post) => post.id == postid);
+                                                        // HomeController.to.latestpostingResult.value.postingitems
+                                                        //     .removeWhere((post) => post.id == postid);
+                                                      });
+                                                    });
                                               },
-                                              child: Row(
-                                                children: [
-                                                  UserImageWidget(
-                                                    imageUrl: controller
-                                                            .post
-                                                            .value!
-                                                            .user
-                                                            .profileImage ??
-                                                        '',
-                                                    width: 35,
-                                                    height: 35,
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 14,
-                                                  ),
-                                                  Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                            controller.post.value!
-                                                                .user.realName,
-                                                            style: k16semiBold),
-                                                        Text(
-                                                            controller.post.value!
-                                                                .user.department,
-                                                            style:
-                                                                kSubTitle3Style)
-                                                      ])
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(height: 14),
-                                            Container(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.post.value!.project!
-                                                    .careerName,
-                                                style: k16semiBold.copyWith(
-                                                    color: maingray),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 14),
-                                          ],
-                                        ),
-                                      ),
-                                    ]),
-                                    if (controller
-                                            .post.value!.images.isNotEmpty ||
-                                        controller.post.value!.links.isNotEmpty)
-                                      SwiperWidget(
-                                        items: controller
-                                                .post.value!.images.isNotEmpty
-                                            ? controller.post.value!.images
-                                            : controller.post.value!.links,
-                                        swiperType: controller
-                                                .post.value!.images.isNotEmpty
-                                            ? SwiperType.image
-                                            : SwiperType.link,
-                                        aspectRatio: controller
-                                                .post.value!.images.isNotEmpty
-                                            ? getAspectRatioinUrl(
-                                                controller.post.value!.images[0])
-                                            : null,
-                                      ),
-                                    // Column(
-                                    //   children: [
-                                    //     Container(
-                                    //         color: mainblack,
-                                    //         constraints: BoxConstraints(
-                                    //             maxWidth: 600,
-                                    //             maxHeight: controller.post.value!
-                                    //                     .images.isNotEmpty
-                                    //                 ? Get.width
-                                    //                 : 300),
-                                    //         child: PageView.builder(
-                                    //           controller: pageController,
-                                    //           itemBuilder: (BuildContext context,
-                                    //               int index) {
-                                    //             if (controller.post.value!.images
-                                    //                 .isNotEmpty) {
-                                    //               return CachedNetworkImage(
-                                    //                   imageUrl: controller.post
-                                    //                       .value!.images[index],
-                                    //                   fit: BoxFit.contain);
-                                    //               // Image.network(item.images[index],
-                                    //               //     fit: BoxFit.fill);
-                                    //             } else {
-                                    //               return KeepAlivePage(
-                                    //                 child: LinkWidget(
-                                    //                     url: controller.post
-                                    //                         .value!.links[index],
-                                    //                     widgetType: 'post'),
-                                    //               );
-                                    //             }
-                                    //           },
-                                    //           itemCount: controller.post.value!
-                                    //                   .images.isNotEmpty
-                                    //               ? controller
-                                    //                   .post.value!.images.length
-                                    //               : controller
-                                    //                   .post.value!.links.length,
-                                    //         )),
-                                    //     const SizedBox(
-                                    //       height: 14,
-                                    //     ),
-                                    //     if (controller.post.value!.images.length >
-                                    //             1 ||
-                                    //         controller.post.value!.links.length >
-                                    //             1)
-                                    //       Column(
-                                    //         children: [
-                                    //           PageIndicator(
-                                    //             size: 7,
-                                    //             activeSize: 7,
-                                    //             space: 7,
-                                    //             color: maingray,
-                                    //             activeColor: mainblue,
-                                    //             count: controller.post.value!
-                                    //                     .images.isNotEmpty
-                                    //                 ? controller
-                                    //                     .post.value!.images.length
-                                    //                 : controller
-                                    //                     .post.value!.links.length,
-                                    //             controller: pageController,
-                                    //             layout: PageIndicatorLayout.SLIDE,
-                                    //           ),
-                                    //         ],
-                                    //       ),
-                                    //     const SizedBox(
-                                    //       height: 14,
-                                    //     ),
-                                    //   ],
-                                    // ),
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 20,
-                                            right: 20,
-                                          ),
+                                              func2: () {
+                                                Get.to(() => PostUpdateScreen(
+                                                      post: controller
+                                                          .post.value!,
+                                                    ));
+                                              },
+                                              value1: '포스팅 삭제하기',
+                                              value2: '포스팅 수정하기',
+                                              isValue1Red: true,
+                                              isValue2Red: false,
+                                              isOne: false,
+                                            );
+                                          }
+                                        : () {
+                                            showModalIOS(
+                                              context,
+                                              func1: () {
+                                                showButtonDialog(
+                                                    leftText: '취소',
+                                                    rightText: '신고',
+                                                    title: '정말 포스팅을 신고하시겠어요?',
+                                                    content: '관리자가 검토 절차를 거칩니다',
+                                                    leftFunction: () =>
+                                                        Get.back(),
+                                                    rightFunction: () {
+                                                      postingreport(controller
+                                                          .post.value!.id);
+                                                    });
+                                              },
+                                              func2: () {},
+                                              value1: '이 포스팅 신고하기',
+                                              value2: '',
+                                              isValue1Red: true,
+                                              isValue2Red: false,
+                                              isOne: true,
+                                            );
+                                          },
+                                    icon: SvgPicture.asset(
+                                        'assets/icons/More.svg'),
+                                  ),
+                                ],
+                              ),
+                              // bottomNavigationBar: Transform.translate(
+                              //   offset:
+                              //       Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+                              //   child: BottomAppBar(
+                              //     elevation: 0,
+                              //     child: _buildTextComposer(),
+                              //   ),
+                              // ),
+                              body: Column(
+                                children: [
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        FocusScope.of(context).unfocus();
+                                      },
+                                      child: SmartRefresher(
+                                        controller:
+                                            controller.refreshController,
+                                        enablePullUp: true,
+                                        enablePullDown: false,
+                                        footer: const MyCustomFooter(),
+                                        onLoading: controller.commentListLoad,
+                                        child: SingleChildScrollView(
                                           child: Obx(
-                                            () => Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                    controller.post.value!.content
-                                                        .value,
-                                                    style: kSubTitle3Style
-                                                        .copyWith(height: 1.5)),
-                                                const SizedBox(
-                                                  height: 14,
-                                                ),
-                                                Wrap(
-                                                  spacing: 7,
-                                                  runSpacing: 7,
-                                                  children:
-                                                      controller.post.value!.tags
-                                                          .map((tag) => Tagwidget(
-                                                                tag: tag,
-                                                              ))
-                                                          .toList(),
-                                                ),
-                                                const SizedBox(height: 14),
-                                                Obx(
-                                                  () => Row(
+                                            () => Column(children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  Column(children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          20, 14, 20, 0),
+                                                      child: Column(
+                                                        children: [
+                                                          GestureDetector(
+                                                            onTap: () =>
+                                                                tapProfile(),
+                                                            child: Row(
+                                                              children: [
+                                                                UserImageWidget(
+                                                                  imageUrl: controller
+                                                                          .post
+                                                                          .value!
+                                                                          .user
+                                                                          .profileImage ??
+                                                                      '',
+                                                                  width: 35,
+                                                                  height: 35,
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 14,
+                                                                ),
+                                                                Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                          controller
+                                                                              .post
+                                                                              .value!
+                                                                              .user
+                                                                              .realName,
+                                                                          style:
+                                                                              k16semiBold),
+                                                                      Text(
+                                                                          controller
+                                                                              .post
+                                                                              .value!
+                                                                              .user
+                                                                              .department,
+                                                                          style:
+                                                                              kSubTitle3Style)
+                                                                    ])
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 14),
+                                                          Container(
+                                                            alignment: Alignment
+                                                                .centerLeft,
+                                                            child: Text(
+                                                              controller
+                                                                  .post
+                                                                  .value!
+                                                                  .project!
+                                                                  .careerName,
+                                                              style: k16semiBold
+                                                                  .copyWith(
+                                                                      color:
+                                                                          maingray),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 14),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ]),
+                                                  if (controller.post.value!
+                                                          .images.isNotEmpty ||
+                                                      controller.post.value!
+                                                          .links.isNotEmpty)
+                                                    SwiperWidget(
+                                                      items: controller
+                                                              .post
+                                                              .value!
+                                                              .images
+                                                              .isNotEmpty
+                                                          ? controller.post
+                                                              .value!.images
+                                                          : controller.post
+                                                              .value!.links,
+                                                      swiperType: controller
+                                                              .post
+                                                              .value!
+                                                              .images
+                                                              .isNotEmpty
+                                                          ? SwiperType.image
+                                                          : SwiperType.link,
+                                                      aspectRatio: controller
+                                                              .post
+                                                              .value!
+                                                              .images
+                                                              .isNotEmpty
+                                                          ? getAspectRatioinUrl(
+                                                              controller
+                                                                  .post
+                                                                  .value!
+                                                                  .images[0])
+                                                          : null,
+                                                    ),
+                                                  Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
                                                     children: [
-                                                      InkWell(
-                                                        onTap: tapLike,
-                                                        child: controller
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                          left: 20,
+                                                          right: 20,
+                                                        ),
+                                                        child: Obx(
+                                                          () => Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  controller
+                                                                      .post
+                                                                      .value!
+                                                                      .content
+                                                                      .value,
+                                                                  style: kSubTitle3Style
+                                                                      .copyWith(
+                                                                          height:
+                                                                              1.5)),
+                                                              const SizedBox(
+                                                                height: 14,
+                                                              ),
+                                                              Wrap(
+                                                                spacing: 7,
+                                                                runSpacing: 7,
+                                                                children: controller
                                                                     .post
                                                                     .value!
-                                                                    .isLiked
-                                                                    .value ==
-                                                                0
-                                                            ? SvgPicture.asset(
-                                                                "assets/icons/Favorite_Inactive.svg")
-                                                            : SvgPicture.asset(
-                                                                "assets/icons/Favorite_Active.svg"),
+                                                                    .tags
+                                                                    .map((tag) =>
+                                                                        Tagwidget(
+                                                                          tag:
+                                                                              tag,
+                                                                        ))
+                                                                    .toList(),
+                                                              ),
+                                                              const SizedBox(
+                                                                  height: 14),
+                                                              Obx(
+                                                                () => Row(
+                                                                  children: [
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          tapLike,
+                                                                      child: controller.post.value!.isLiked.value ==
+                                                                              0
+                                                                          ? SvgPicture.asset(
+                                                                              "assets/icons/Favorite_Inactive.svg")
+                                                                          : SvgPicture.asset(
+                                                                              "assets/icons/Favorite_Active.svg"),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      width: 15,
+                                                                    ),
+                                                                    // Obx(
+                                                                    //   () => SizedBox(
+                                                                    //     width: controller
+                                                                    //                 .post
+                                                                    //                 .value!
+                                                                    //                 .likeCount
+                                                                    //                 .value !=
+                                                                    //             0
+                                                                    //         ? 0
+                                                                    //         : 8,
+                                                                    //   ),
+                                                                    // ),
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                            "assets/icons/Comment.svg"),
+                                                                    const Spacer(),
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          tapBookmark,
+                                                                      child: (controller.post.value!.isMarked.value ==
+                                                                              0)
+                                                                          ? SvgPicture
+                                                                              .asset(
+                                                                              "assets/icons/Mark_Default.svg",
+                                                                              color: mainblack,
+                                                                            )
+                                                                          : SvgPicture.asset(
+                                                                              "assets/icons/Mark_Saved.svg"),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              // postingTag(),
+                                                              const SizedBox(
+                                                                height: 13,
+                                                              ),
+                                                              Row(children: [
+                                                                GestureDetector(
+                                                                    behavior:
+                                                                        HitTestBehavior
+                                                                            .translucent,
+                                                                    onTap: () {
+                                                                      Get.to(
+                                                                        () =>
+                                                                            LikePeopleScreen(
+                                                                          id: controller
+                                                                              .post
+                                                                              .value!
+                                                                              .id,
+                                                                          likeType:
+                                                                              LikeType.post,
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                    child: Obx(
+                                                                      () =>
+                                                                          Text(
+                                                                        '좋아요 ${controller.post.value!.likeCount}개',
+                                                                        style:
+                                                                            kSubTitle3Style,
+                                                                      ),
+                                                                    )),
+                                                                const Spacer(),
+                                                                Text(
+                                                                    calculateDate(
+                                                                        controller
+                                                                            .post
+                                                                            .value!
+                                                                            .date),
+                                                                    style:
+                                                                        kSubTitle3Style),
+                                                              ]),
+                                                              const SizedBox(
+                                                                  height: 13),
+                                                            ],
+                                                          ),
+                                                        ),
                                                       ),
-                                                      const SizedBox(
-                                                        width: 15,
-                                                      ),
-                                                      // Obx(
-                                                      //   () => SizedBox(
-                                                      //     width: controller
-                                                      //                 .post
-                                                      //                 .value!
-                                                      //                 .likeCount
-                                                      //                 .value !=
-                                                      //             0
-                                                      //         ? 0
-                                                      //         : 8,
-                                                      //   ),
-                                                      // ),
-                                                      SvgPicture.asset(
-                                                          "assets/icons/Comment.svg"),
-                                                      const Spacer(),
-                                                      InkWell(
-                                                        onTap: tapBookmark,
-                                                        child: (controller
-                                                                    .post
-                                                                    .value!
-                                                                    .isMarked
-                                                                    .value ==
-                                                                0)
-                                                            ? SvgPicture.asset(
-                                                                "assets/icons/Mark_Default.svg",
-                                                                color: mainblack,
-                                                              )
-                                                            : SvgPicture.asset(
-                                                                "assets/icons/Mark_Saved.svg"),
-                                                      ),
+                                                      // if (view != 'detail') const DivideWidget()
                                                     ],
                                                   ),
+                                                ],
+                                              ),
+                                              // PostingWidget(
+                                              //   controller.post.value!: controller.post.value!,
+                                              //   view: 'detail',
+                                              // ),
+                                              Obx(
+                                                () => ListView.separated(
+                                                  primary: false,
+                                                  shrinkWrap: true,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return PostCommentWidget(
+                                                      comment: controller
+                                                          .post
+                                                          .value!
+                                                          .comments[index],
+                                                      postid: postid,
+                                                    );
+                                                  },
+                                                  separatorBuilder:
+                                                      (context, index) {
+                                                    return const SizedBox(
+                                                      height: 14,
+                                                    );
+                                                  },
+                                                  itemCount: controller.post
+                                                      .value!.comments.length,
                                                 ),
-                                                // postingTag(),
-                                                const SizedBox(
-                                                  height: 13,
-                                                ),
-                                                Row(children: [
-                                                  GestureDetector(
-                                                      behavior: HitTestBehavior
-                                                          .translucent,
-                                                      onTap: () {
-                                                        Get.to(
-                                                          () => LikePeopleScreen(
-                                                            id: controller
-                                                                .post.value!.id,
-                                                            likeType:
-                                                                LikeType.post,
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: Obx(
-                                                        () => Text(
-                                                          '좋아요 ${controller.post.value!.likeCount}개',
-                                                          style: kSubTitle3Style,
-                                                        ),
-                                                      )),
-                                                  const Spacer(),
-                                                  Text(
-                                                      calculateDate(controller
-                                                          .post.value!.date),
-                                                      style: kSubTitle3Style),
-                                                ]),
-                                                const SizedBox(height: 13),
-                                              ],
-                                            ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              )
+                                            ]),
                                           ),
                                         ),
-                                        // if (view != 'detail') const DivideWidget()
-                                      ],
+                                      ),
                                     ),
-                                  ],
-                                ),
-                                // PostingWidget(
-                                //   controller.post.value!: controller.post.value!,
-                                //   view: 'detail',
-                                // ),
-                                Obx(
-                                  () => ListView.separated(
-                                    primary: false,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      if (controller.postCommentList[index]
-                                              .runtimeType ==
-                                          Comment) {
-                                        return CommentWidget(
-                                          comment: controller
-                                              .postCommentList[index] as Comment,
-                                          postid: postid,
-                                        );
-                                      } else {
-                                        return ReplyWidget(
-                                            reply: controller
-                                                .postCommentList[index] as Reply,
-                                            postid: postid);
-                                      }
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return const SizedBox(
-                                        height: 14,
-                                      );
-                                    },
-                                    itemCount: controller.postCommentList.length,
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                )
-                              ]),
-                            ),
-                          ),
+                                  _buildTextComposer()
+                                ],
+                              )),
                         ),
-                      ),
-                    ),
-                    _buildTextComposer()
-                  ],
-                )),
-          )
-          : controller.postscreenstate.value == ScreenState.loading
-              ? LoadingScreen()
-              : Container(),
     );
   }
 
   void tapBookmark() {
     if (controller.post.value!.isMarked.value == 0) {
       controller.post.value!.isMarked(1);
-      HomeController.to.tapBookmark(controller.post.value!.id);
     } else {
       controller.post.value!.isMarked(0);
-      HomeController.to.tapunBookmark(controller.post.value!.id);
     }
 
     _debouncer.run(() {
       if (controller.lastIsMarked != controller.post.value!.isMarked.value) {
-        bookmarkpost(controller.post.value!.id);
-        controller.lastIsMarked = controller.post.value!.isMarked.value;
+        bookmarkpost(controller.post.value!.id).then((value) {
+          if (value.isError == false) {
+            controller.lastIsMarked = controller.post.value!.isMarked.value;
+
+            if (controller.post.value!.isMarked.value == 1) {
+              HomeController.to.tapBookmark(controller.post.value!.id);
+              showCustomDialog("북마크에 추가되었습니다", 1000);
+            } else {
+              HomeController.to.tapunBookmark(controller.post.value!.id);
+            }
+          } else {
+            errorSituation(value);
+            controller.post.value!.isMarked(controller.lastIsMarked);
+          }
+        });
       }
     });
   }
@@ -700,10 +717,11 @@ class PostingScreen extends StatelessWidget {
   }
 
   void tapProfile() {
-    // Get.to(() => OtherProfileScreen(
-    //       userid: item.userid,
-    //       isuser: item.isuser,
-    //       realname: item.user.realName,
-    //     ));
+    Get.to(
+        () => OtherProfileScreen(
+            user: controller.post.value!.user,
+            userid: controller.post.value!.user.userid,
+            realname: controller.post.value!.user.realName),
+        preventDuplicates: false);
   }
 }
