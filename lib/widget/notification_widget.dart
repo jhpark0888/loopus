@@ -144,13 +144,20 @@ class NotificationWidget extends StatelessWidget {
                       //     text: notification.content,
                       //     style: kSubTitle1Style),
                       TextSpan(
-                        text: notification.type == NotificationType.comment
-                            ? "회원님의 포스트에 댓글을 남겼습니다."
-                            : notification.type == NotificationType.tag
-                                ? " 활동에 회원님을 태그했어요 "
-                                : notification.type == NotificationType.reply
-                                    ? "회원님의 댓글에 답변을 남겼습니다."
-                                    : "회원님의 포스트를 좋아합니다.",
+                        text: notification.type == NotificationType.careerTag
+                            ? " 활동에 회원님을 태그했습니다."
+                            : notification.type == NotificationType.postLike
+                                ? '회원님의 포스트를 좋아합니다'
+                                : notification.type ==
+                                        NotificationType.commentLike
+                                    ? '회원님의 댓글을 좋아합니다.'
+                                    : notification.type ==
+                                            NotificationType.reply
+                                        ? '회원님의 답변을 좋아합니다.'
+                                        : notification.type ==
+                                                NotificationType.comment
+                                            ? "회원님의 포스트에 댓글을 남겼습니다."
+                                            : "회원님의 댓글에 답변을 남겼습니다.",
                         style: kSubTitle1Style.copyWith(
                             fontWeight: FontWeight.w400),
                       ),
@@ -204,9 +211,9 @@ class NotificationWidget extends StatelessWidget {
   }
 
   void clicknotice() async {
-    if (notification.type == NotificationType.tag) {
+    if (notification.type == NotificationType.careerTag) {
       // Get.to(() => ProjectScreen(projectid: notification.targetId, isuser: 0));
-    } else if (notification.type == NotificationType.like) {
+    } else if (notification.type == NotificationType.postLike) {
       Get.to(
           () => PostingScreen(
                 post: null,
@@ -218,6 +225,12 @@ class NotificationWidget extends StatelessWidget {
     } else if (notification.type == NotificationType.follow) {
       Get.to(() => OtherProfileScreen(
           userid: notification.targetId, realname: notification.user.realName));
+    } else if (notification.type.name.contains('comment') ||
+        notification.type.name.contains('reply')) {
+      Get.to(() => PostingScreen(
+            postid: notification.contents!.postId,
+            post: null,
+          ));
     }
 
     if (notification.isread.value == false) {

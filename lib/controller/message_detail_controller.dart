@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -10,8 +12,11 @@ import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:web_socket_channel/io.dart';
-class MessageDetailController extends GetxController with WidgetsBindingObserver {
+
+class MessageDetailController extends GetxController
+    with WidgetsBindingObserver {
   MessageDetailController({required this.partnerId});
   late IOWebSocketChannel channel;
   late int roomid;
@@ -23,13 +28,14 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
   TextEditingController sendText = TextEditingController();
   ScrollController scrollController = ScrollController();
   RefreshController refreshController = RefreshController();
-
+  ItemScrollController itemcontroller = ItemScrollController();
+  FlutterListViewController listViewController = FlutterListViewController();
   RxList<Chat> messageList = <Chat>[].obs;
   RxList<Chat> refreshList = <Chat>[].obs;
   Rx<ScreenState> screenState = ScreenState.normal.obs;
   RxBool isFirst = true.obs;
   RxBool refreshEnablePullUp = true.obs;
-
+  RxBool connection = true.obs;
   RxString lastid = '0'.obs;
   RxDouble messageHeight = 0.0.obs;
   RxDouble messagesBoxPositionHeight = 0.0.obs;
@@ -37,10 +43,11 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
   FocusNode focusNode = FocusNode();
   @override
   void onInit() async {
-    scrollController.addListener(() {
+    WidgetsBinding.instance!.addObserver(this);
+    listViewController.addListener(() {
       if (refreshEnablePullUp.value == true) {
-        if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent) {
+        if (listViewController.position.pixels ==
+            listViewController.position.maxScrollExtent) {
           print('실행되었습니다.');
           onLoading();
         }
@@ -48,16 +55,12 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
     });
     screenState.value = ScreenState.loading;
     print('${partnerId}파트너아이디입니다.');
-    WidgetsBinding.instance!.addObserver(this);
     myId = int.parse(
         (await const FlutterSecureStorage().read(key: "id")).toString());
 
     print('${myId}자기아이디입니다.');
-    listener = InternetConnectionChecker().onStatusChange.listen((event) {
-      bool connection =
-          event == InternetConnectionStatus.connected ? true : false;
-      hasInternet = connection.obs;
-      if (connection == false) {
+    connection.listen((p0) {
+      if (p0 == false) {
         channel.sink.close();
         print('웹소켓 연결이 해제되었습니다.');
       } else {
@@ -82,7 +85,16 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
         // }
       }
     });
-    focusNode.addListener(() { if(focusNode.hasFocus){print('내려가있습니다.');}});
+    listener = InternetConnectionChecker().onStatusChange.listen((event) {
+      connection.value =
+          event == InternetConnectionStatus.connected ? true : false;
+      
+    });
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        print('내려가있습니다.');
+      }
+    });
     super.onInit();
   }
 
@@ -97,9 +109,15 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
     super.didChangeAppLifecycleState(state);
     switch (state) {
       case AppLifecycleState.resumed:
+      print(state);
+        connection.value = true;
+      print('연결되었습니다.');
+      break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.detached:
       case AppLifecycleState.paused:
+        connection.value =false;
+        listener.cancel();
         print(state);
         break;
     }
@@ -166,6 +184,10 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
               ? messageList.last.messageId ?? lastid.value
               : lastid.value;
           screenState.value = ScreenState.success;
+          // await Future.delayed(const Duration(milliseconds: 10));
+          // scrollController.jumpTo(scrollController.position.maxScrollExtent);
+          // scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 100), curve: Curves.easeIn);
+          // itemcontroller.jumpTo(index: messageList.length - 1);
         } else {
           print('상대가 접속함');
           changeReadMessage(roomid, null);
@@ -173,6 +195,12 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
         break;
       case ('msg'):
         if (json['sender'] == myId) {
+          messageList
+              .where((p0) =>
+                  p0.sendsuccess != null && p0.sendsuccess!.value == false)
+              .last
+              .isRead!
+              .value = json['is_read'];
           messageList
               .where((p0) =>
                   p0.sendsuccess != null && p0.sendsuccess!.value == false)
@@ -211,7 +239,12 @@ class MessageDetailController extends GetxController with WidgetsBindingObserver
             element.chatRoom.value.message.refresh();
             element.chatRoom.refresh();
           });
+          await Future.delayed(const Duration(milliseconds: 100));
           MessageController.to.searchRoomList.refresh();
+          if (listViewController.position.pixels <= 200) {
+            listViewController
+                .jumpTo(listViewController.position.minScrollExtent);
+          }
         }
         break;
       case 'chat_log':

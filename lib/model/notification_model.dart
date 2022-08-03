@@ -14,6 +14,7 @@ class NotificationModel {
       required this.content,
       required this.date,
       required this.isread,
+      required this.contents,
       this.looped});
 
   int id;
@@ -22,6 +23,7 @@ class NotificationModel {
   NotificationType type;
   int targetId;
   String? content;
+  Content? contents;
   DateTime date;
   RxBool isread;
   Rx<FollowState>? looped;
@@ -32,13 +34,25 @@ class NotificationModel {
           userId: json["user_id"],
           user: User.fromJson(json["profile"]),
           type: json["type"] == 2
-                  ? NotificationType.follow
-                  : json["type"] == 3
-                      ? NotificationType.tag
-                      : json['type'] == 4 ?
-                      NotificationType.like : json['type'] == 7 ? NotificationType.comment : NotificationType.reply,
+              ? NotificationType.follow
+              : json["type"] == 3
+                  ? NotificationType.careerTag
+                  : json['type'] == 4
+                      ? NotificationType.postLike
+                      : json['type'] == 5
+                          ? NotificationType.commentLike
+                          : json['type'] == 6
+                              ? NotificationType.replyLike
+                              : json['type'] == 7
+                                  ? NotificationType.comment
+                                  : NotificationType.reply,
           targetId: json["target_id"],
-          content: json["content"],
+          content: json['type'] <= 4 ? json["content"] : '',
+          contents: json['type'] > 4
+              ? json['content'] != null
+                  ? Content.fromJson(json["content"])
+                  : Content(content: '', postId: json["target_id"])
+              : null,
           date: DateTime.parse(json["date"]),
           isread: RxBool(json["is_read"]),
           looped: json["looped"] != null
@@ -52,4 +66,13 @@ class NotificationModel {
         "content": content,
         "date": date.toIso8601String(),
       };
+}
+
+class Content {
+  String content;
+  int postId;
+  Content({required this.content, required this.postId});
+
+  factory Content.fromJson(Map<String, dynamic> json) =>
+      Content(content: json['content'], postId: json['post_id']);
 }

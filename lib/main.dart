@@ -77,27 +77,30 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key, required this.token}) : super(key: key);
   final GAController _gaController = Get.put(GAController());
   final ThemeData themeData = ThemeData(
-    fontFamily: 'SUIT',
-    appBarTheme: const AppBarTheme(
-      backgroundColor: mainWhite,
-      foregroundColor: mainblack,
-    ),
-    canvasColor: mainWhite,
-    textTheme: const TextTheme(
-      bodyText1: TextStyle(color: mainblack),
-      bodyText2: TextStyle(color: mainblack),
-    ).apply(bodyColor: mainblack),
-    textSelectionTheme: const TextSelectionThemeData(cursorColor: mainblue),
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        primary: mainblack,
-        splashFactory: NoSplash.splashFactory,
+      fontFamily: 'SUIT',
+      appBarTheme: const AppBarTheme(
+        backgroundColor: mainWhite,
+        foregroundColor: mainblack,
       ),
-    ),
-    splashColor: Colors.transparent,
-    highlightColor: Colors.transparent,
-  );
+      canvasColor: mainWhite,
+      textTheme: const TextTheme(
+        bodyText1: TextStyle(color: mainblack),
+        bodyText2: TextStyle(color: mainblack),
+      ).apply(bodyColor: mainblack),
+      textSelectionTheme: const TextSelectionThemeData(cursorColor: mainblue),
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          primary: mainblack,
+          splashFactory: NoSplash.splashFactory,
+        ),
+      ),
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      scrollbarTheme: ScrollbarThemeData(
+          thickness: MaterialStateProperty.all(5),
+          thumbColor: MaterialStateProperty.all(maingray),
+          radius: const Radius.circular(10)));
 
   @override
   Widget build(BuildContext context) {

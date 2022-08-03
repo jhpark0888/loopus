@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
+import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
@@ -313,14 +314,20 @@ class NotificationController extends GetxController {
         HomeController.to.isNewAlarm(true);
         int type = int.parse(event.data['type']);
         int id = int.parse(event.data['id']);
+        int? post_id = event.data['post_id'] != null
+            ? int.parse(event.data['post_id'])
+            : null;
         int senderId = int.parse(event.data['sender_id']);
         showCustomSnackbar(event.notification!.title, event.notification!.body,
             (snackbar) {
-          if (type == 4 || type == 7 || type == 8) {
+          if (type == 4 || type == 7) {
             Get.to(() => PostingScreen(postid: id));
+          } else if (type == 5 || type == 6 || type == 8) {
+            Get.to(() => PostingScreen(postid: post_id!));
           } else if (type == 2) {
             Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
           }
+          isRead(id, convertType(type), senderId);
         });
         if (Get.isRegistered<NotificationDetailController>()) {
           NotificationDetailController.to.alarmRefresh();
@@ -403,5 +410,22 @@ class NotificationController extends GetxController {
 
       await messaging.unsubscribeFromTopic('promotion');
     }
+  }
+
+  NotificationType convertType(int type) {
+    NotificationType notiType = type == 2
+        ? NotificationType.follow
+        : type == 3
+            ? NotificationType.careerTag
+            : type == 4
+                ? NotificationType.postLike
+                : type == 5
+                    ? NotificationType.commentLike
+                    : type == 6
+                        ? NotificationType.replyLike
+                        : type == 7
+                            ? NotificationType.comment
+                            : NotificationType.reply;
+    return notiType;
   }
 }
