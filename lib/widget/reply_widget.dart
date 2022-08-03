@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/like_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/comment_model.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
@@ -66,7 +68,80 @@ class ReplyWidget extends StatelessWidget {
                     Text(
                       calculateDate(reply.date),
                       style: k16Normal.copyWith(color: maingray),
-                    )
+                    ),
+                    const SizedBox(
+                      width: 7,
+                    ),
+                    GestureDetector(
+                      onTap: reply.user.userid ==
+                              HomeController.to.myProfile.value.userid
+                          ? () {
+                              showModalIOS(
+                                context,
+                                func1: () {
+                                  showButtonDialog(
+                                      leftText: '취소',
+                                      rightText: '삭제',
+                                      title: '답글을 삭제하시겠어요?',
+                                      content: '삭제한 답글은 복구할 수 없어요',
+                                      leftFunction: () => Get.back(),
+                                      rightFunction: () async {
+                                        dialogBack(modalIOS: true);
+
+                                        await commentDelete(
+                                                reply.id, "cocomment")
+                                            .then((value) {
+                                          if (value.isError == false) {
+                                            Comment? comment = postController
+                                                .post.value!.comments
+                                                .firstWhereOrNull((element) =>
+                                                    element.id ==
+                                                    reply.commentId);
+                                            if (comment != null) {
+                                              comment.replyList.removeWhere(
+                                                  (element) =>
+                                                      element.id == reply.id);
+                                            }
+                                          } else {
+                                            showCustomDialog(
+                                                "답글 삭제에 실패하였습니다", 1000);
+                                          }
+                                        });
+                                      });
+                                },
+                                func2: () {},
+                                value1: '답글 삭제하기',
+                                value2: '',
+                                isValue1Red: true,
+                                isValue2Red: false,
+                                isOne: true,
+                              );
+                            }
+                          : () {
+                              showModalIOS(
+                                context,
+                                func1: () {
+                                  showButtonDialog(
+                                      leftText: '취소',
+                                      rightText: '신고',
+                                      title: '정말 답글을 신고하시겠어요?',
+                                      content: '관리자가 검토 절차를 거칩니다',
+                                      leftFunction: () => Get.back(),
+                                      rightFunction: () {
+                                        // postingreport(
+                                        //     controller.post.value!.id);
+                                      });
+                                },
+                                func2: () {},
+                                value1: '이 답글 신고하기',
+                                value2: '',
+                                isValue1Red: true,
+                                isValue2Red: false,
+                                isOne: true,
+                              );
+                            },
+                      child: SvgPicture.asset('assets/icons/More.svg'),
+                    ),
                   ],
                 ),
                 const SizedBox(

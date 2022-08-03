@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
@@ -13,6 +14,7 @@ import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/model/post_model.dart';
@@ -168,7 +170,12 @@ class PostingWidget extends StatelessWidget {
                                 //     width: item.likeCount.value != 0 ? 0 : 8,
                                 //   ),
                                 // ),
-                                SvgPicture.asset("assets/icons/Comment.svg"),
+                                InkWell(
+                                    onTap: () {
+                                      tapPosting(autoFocus: true);
+                                    },
+                                    child: SvgPicture.asset(
+                                        "assets/icons/Comment.svg")),
                                 const Spacer(),
                                 InkWell(
                                   onTap: tapBookmark,
@@ -246,11 +253,12 @@ class PostingWidget extends StatelessWidget {
     );
   }
 
-  void tapPosting() {
+  void tapPosting({bool? autoFocus}) {
     Get.to(
         () => PostingScreen(
               post: item,
               postid: item.id,
+              autofocus: autoFocus,
             ),
         opaque: false);
   }
@@ -268,20 +276,29 @@ class PostingWidget extends StatelessWidget {
     }
     if (item.isMarked.value == 0) {
       item.isMarked(1);
-
-      HomeController.to.tapBookmark(item.id);
     } else {
       item.isMarked(0);
-
-      HomeController.to.tapunBookmark(item.id);
     }
     marknum += 1;
 
     _debouncer.run(() {
       if (lastIsMaked != item.isMarked.value) {
-        bookmarkpost(item.id);
-        lastIsMaked = item.isMarked.value;
-        marknum = 0;
+        bookmarkpost(item.id).then((value) {
+          if (value.isError == false) {
+            lastIsMaked = item.isMarked.value;
+            marknum = 0;
+
+            if (item.isMarked.value == 1) {
+              HomeController.to.tapBookmark(item.id);
+              showCustomDialog("북마크에 추가되었습니다", 1000);
+            } else {
+              HomeController.to.tapunBookmark(item.id);
+            }
+          } else {
+            errorSituation(value);
+            item.isMarked(lastIsMaked);
+          }
+        });
       }
     });
   }

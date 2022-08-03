@@ -46,7 +46,11 @@ class SQLController extends GetxController {
     final Database db = await database!;
     await db.insert(
       'user',
-      {"real_name": user.realName, "user_id": user.userid, "profile_image" : user.profileImage},
+      {
+        "real_name": user.realName,
+        "user_id": user.userid,
+        "profile_image": user.profileImage
+      },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -69,21 +73,20 @@ class SQLController extends GetxController {
     });
   }
 
-  Future<void> updateNotReadCount(int roomId,int read) async {
+  Future<void> updateNotReadCount(int roomId, int read) async {
     final Database db = await database!;
-    if(read == 0){
-    db.rawUpdate('UPDATE chatroom SET not_read = ? WHERE room_id = ?',
-        [read, roomId]).then((value) {
-      print(value);
-    });
-    }else{
+    if (read == 0) {
       db.rawUpdate('UPDATE chatroom SET not_read = ? WHERE room_id = ?',
-        [read, roomId]).then((value) {
-      print(value);
-    });
+          [read, roomId]).then((value) {
+        print(value);
+      });
+    } else {
+      db.rawUpdate('UPDATE chatroom SET not_read = ? WHERE room_id = ?',
+          [read, roomId]).then((value) {
+        print(value);
+      });
     }
   }
-
 
   Future<void> insertMessageRoom(ChatRoom chatRoom) async {
     final Database db = await database!;
@@ -160,8 +163,7 @@ class SQLController extends GetxController {
     }
   }
 
-  Future<List<ChatRoom>> getDBMessageRoom(
-      {ChatRoom? chatRoom}) async {
+  Future<List<ChatRoom>> getDBMessageRoom({ChatRoom? chatRoom}) async {
     final Database db = await database!;
     final List<Map<String, dynamic>> maps;
 
@@ -175,7 +177,10 @@ class SQLController extends GetxController {
     } else {
       List<ChatRoom> messageList = List.generate(maps.length, (index) {
         return ChatRoom(
-            message: Chat.fromJson({"content" : maps[index]['message'],"date" : maps[index]['date']}).obs,
+            message: Chat.fromJson({
+              "content": maps[index]['message'],
+              "date": maps[index]['date']
+            }).obs,
             user: maps[index]['user_id'],
             notread: RxInt(maps[index]['not_read']),
             roomId: maps[index]['room_id']);
@@ -185,7 +190,7 @@ class SQLController extends GetxController {
   }
 
   Future<bool> findMessageRoom(
-      {required int roomid, required Map<String,dynamic> chatRoom}) async {
+      {required int roomid, required Map<String, dynamic> chatRoom}) async {
     final Database db = await database!;
     final List<Map<String, dynamic>> maps;
     maps =
@@ -197,16 +202,15 @@ class SQLController extends GetxController {
       return false;
     } else {
       print('존재합니다');
-      print(maps);  
+      print(maps);
       return true;
     }
   }
-   Future<bool> findUser(
-      {required int userId, required User user}) async {
+
+  Future<bool> findUser({required int userId, required User user}) async {
     final Database db = await database!;
     final List<Map<String, dynamic>> maps;
-    maps =
-        await db.rawQuery('SELECT * FROM user WHERE user_id = ?', [userId]);
+    maps = await db.rawQuery('SELECT * FROM user WHERE user_id = ?', [userId]);
 
     if (maps.isEmpty) {
       insertUser(user);
@@ -214,18 +218,15 @@ class SQLController extends GetxController {
       return false;
     } else {
       print('존재합니다');
-      print(maps);  
+      print(maps);
       return true;
     }
   }
 
-
-  Future<bool> findNotReadMessage(
-      {required int roomid}) async {
+  Future<bool> findNotReadMessage({required int roomid}) async {
     final Database db = await database!;
     final List<Map<String, dynamic>> maps;
-    maps =
-        await db.rawQuery('SELECT * FROM chatroom WHERE not_read > ?', [0]);
+    maps = await db.rawQuery('SELECT * FROM chatroom WHERE not_read > ?', [0]);
 
     if (maps.isEmpty) {
       print('안읽은 메세지가 없습니다.');
@@ -245,14 +246,17 @@ class SQLController extends GetxController {
         .then((value) {
       if (value.isNotEmpty) {
         maps = value;
-      }else{maps = [];}
+      } else {
+        maps = [];
+      }
     });
 
     if (maps.isEmpty) {
       return User.defaultuser();
     } else {
+      print(maps);
       User user = User.fromJson(maps.first);
-      
+
       return user;
     }
   }

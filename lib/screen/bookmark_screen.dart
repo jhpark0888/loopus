@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/bookmark_widget.dart';
+import 'package:loopus/trash_bin/bookmark_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/divide_widget.dart';
@@ -16,6 +16,11 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class BookmarkScreen extends StatelessWidget {
   final BookmarkController _controller = Get.put(BookmarkController());
+
+  void _reLoad() {
+    _controller.bookmarkScreenState(ScreenState.loading);
+    _controller.bookmarkLoad();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +36,9 @@ class BookmarkScreen extends StatelessWidget {
                 ? Container()
                 : _controller.bookmarkScreenState.value ==
                         ScreenState.disconnect
-                    ? DisconnectReloadWidget(reload: () {})
+                    ? DisconnectReloadWidget(reload: _reLoad)
                     : _controller.bookmarkScreenState.value == ScreenState.error
-                        ? ErrorReloadWidget(reload: () {})
+                        ? ErrorReloadWidget(reload: _reLoad)
                         : _controller.posts.isEmpty
                             ? EmptyContentWidget(text: "북마크한 포스팅이 없습니다")
                             : ScrollNoneffectWidget(

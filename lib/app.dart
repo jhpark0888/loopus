@@ -97,13 +97,9 @@ class App extends StatelessWidget {
                       tooltip: '',
                       icon: SvgPicture.asset(
                         "assets/icons/Plus_Inactive.svg",
-                        width: 35,
-                        height: 35,
                       ),
                       activeIcon: SvgPicture.asset(
                         "assets/icons/Plus_Inactive.svg",
-                        width: 35,
-                        height: 35,
                       ),
                       label: "추가"),
                   BottomNavigationBarItem(

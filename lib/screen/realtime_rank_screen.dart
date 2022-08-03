@@ -23,12 +23,12 @@ class RealTimeRankScreen extends StatelessWidget {
   MapEntry<String, String> currentField;
   bool isUniversity;
 
-  void reLoad() {
+  void _reLoad() {
     _controller.getRanker(currentField.key, isUniversity);
   }
 
   void onRefresh() {
-    reLoad();
+    _reLoad();
 
     _controller.allrankerRefreshController.refreshCompleted();
   }
@@ -48,12 +48,12 @@ class RealTimeRankScreen extends StatelessWidget {
                 : _controller.allrankerScreenstate.value ==
                         ScreenState.disconnect
                     ? DisconnectReloadWidget(reload: () {
-                        reLoad();
+                        _reLoad();
                       })
                     : _controller.allrankerScreenstate.value ==
                             ScreenState.error
                         ? ErrorReloadWidget(reload: () {
-                            reLoad();
+                            _reLoad();
                           })
                         : (isUniversity == true
                                 ? _controller

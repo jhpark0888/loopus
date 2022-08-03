@@ -45,7 +45,7 @@ class UploadScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 12.5, 12.5, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
             child: GestureDetector(
               onTap: () async {
                 loading();
@@ -64,9 +64,11 @@ class UploadScreen extends StatelessWidget {
                 getbacks(2);
                 print(controller.cropAspectRatio.value);
               },
-              child: const Text(
-                '확인',
-                style: kNavigationTitle,
+              child: const Center(
+                child: Text(
+                  '확인',
+                  style: kNavigationTitle,
+                ),
               ),
             ),
           )
