@@ -134,19 +134,22 @@ class PostingWidget extends StatelessWidget {
                                   height: 1.5, color: maingray)),
                           maxLines: 3),
                     ),
-                    const SizedBox(
-                      height: 14,
-                    ),
-                    Obx(
-                      () => Wrap(
-                          spacing: 7,
-                          runSpacing: 7,
-                          children: item.tags
-                              .map((tag) => Tagwidget(
-                                    tag: tag,
-                                  ))
-                              .toList()),
-                    ),
+                    if (item.tags.isNotEmpty)
+                      Column(children: [
+                        const SizedBox(
+                          height: 14,
+                        ),
+                        Obx(
+                          () => Wrap(
+                              spacing: 7,
+                              runSpacing: 7,
+                              children: item.tags
+                                  .map((tag) => Tagwidget(
+                                        tag: tag,
+                                      ))
+                                  .toList()),
+                        ),
+                      ]),
                     const SizedBox(height: 14),
                     if (type != PostingWidgetType.search)
                       Column(

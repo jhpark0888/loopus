@@ -25,804 +25,535 @@ class NotificationScreen extends StatelessWidget {
         appBar: AppBarWidget(
           bottomBorder: false,
           title: '알림',
+          actions: [
+            Center(
+                child: Row(
+                    children: [SvgPicture.asset('assets/icons/More.svg'), const SizedBox(width: 20)]))
+          ],
         ),
-        body:
-            //  DefaultTabController(
-            //   length: 2,
-            //   child: NestedScrollView(
-            //     headerSliverBuilder: (context, innerBoxIsScrolled) {
-            //       return [
-            //         SliverOverlapAbsorber(
-            //           handle:
-            //               NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-            //           sliver: SliverSafeArea(
-            //             top: false,
-            //             bottom: false,
-            //             sliver: SliverAppBar(
-            //               pinned: true,
-            //               automaticallyImplyLeading: false,
-            //               expandedHeight: 43,
-            //               toolbarHeight: 43,
-            //               elevation: 0,
-            //               flexibleSpace: Column(
-            //                 children: [
-            //                   TabBar(
-            //                     labelStyle: kButtonStyle,
-            //                     labelColor: mainblack,
-            //                     unselectedLabelStyle: kBody1Style,
-            //                     unselectedLabelColor: mainblack.withOpacity(0.6),
-            //                     indicator: const UnderlineIndicator(
-            //                       strokeCap: StrokeCap.round,
-            //                       borderSide: BorderSide(width: 1.2),
-            //                     ),
-            //                     indicatorColor: mainblack,
-            //                     tabs: const [
-            //                       Tab(
-            //                         height: 40,
-            //                         child: Text(
-            //                           "알림",
-            //                         ),
-            //                       ),
-            //                       Tab(
-            //                         height: 40,
-            //                         child: Text(
-            //                           "팔로우",
-            //                         ),
-            //                       )
-            //                     ],
-            //                   ),
-            //                   Container(
-            //                     height: 1,
-            //                     color: const Color(0xffe7e7e7),
-            //                   ),
-            //                 ],
-            //               ),
-            //             ),
-            //           ),
-            //         )
-            //       ];
-            //     },
-            //     body:
-            // TabBarView(
-            // children: [
-            // Obx(
-            //   () => SmartRefresher(
-            //     controller: controller.alarmRefreshController,
-            //     enablePullDown: (controller.notificationscreenstate.value ==
-            //             ScreenState.loading)
-            //         ? false
-            //         : true,
-            //     enablePullUp: (controller.notificationscreenstate.value ==
-            //             ScreenState.loading)
-            //         ? false
-            //         : controller.enablealarmPullup.value,
-            //     header: ClassicHeader(
-            //       spacing: 0.0,
-            //       height: 60,
-            //       completeDuration: Duration(milliseconds: 600),
-            //       textStyle: TextStyle(color: mainblack),
-            //       refreshingText: '',
-            //       releaseText: "",
-            //       completeText: "",
-            //       idleText: "",
-            //       refreshingIcon: Column(
-            //         children: [
-            //           Image.asset(
-            //             'assets/icons/loading.gif',
-            //             scale: 6,
-            //           ),
-            //         ],
-            //       ),
-            //       releaseIcon: Column(
-            //         children: [
-            //           Image.asset(
-            //             'assets/icons/loading.gif',
-            //             scale: 6,
-            //           ),
-            //         ],
-            //       ),
-            //       completeIcon: Column(
-            //         children: [
-            //           const Icon(
-            //             Icons.check_rounded,
-            //             color: mainblue,
-            //           ),
-            //         ],
-            //       ),
-            //       idleIcon: Column(
-            //         children: [
-            //           Image.asset(
-            //             'assets/icons/loading.png',
-            //             scale: 12,
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //     footer: ClassicFooter(
-            //       completeDuration: Duration.zero,
-            //       loadingText: "",
-            //       canLoadingText: "",
-            //       idleText: "",
-            //       idleIcon: Container(),
-            //       noMoreIcon: Container(
-            //         child: Text('as'),
-            //       ),
-            //       loadingIcon: Image.asset(
-            //         'assets/icons/loading.gif',
-            //         scale: 6,
-            //       ),
-            //       canLoadingIcon: Image.asset(
-            //         'assets/icons/loading.gif',
-            //         scale: 6,
-            //       ),
-            //     ),
-            //     onRefresh: controller.alarmRefresh,
-            //     onLoading: controller.alarmLoading,
-            //     child: CustomScrollView(
-            //         physics: const BouncingScrollPhysics(),
-            //         key: const PageStorageKey("key1"),
-            //         slivers: [
-            //           controller.isalarmEmpty.value
-            //               ? SliverList(
-            //                   delegate: SliverChildBuilderDelegate(
-            //                       (context, index) {
-            //                     return Container(
-            //                       width: Get.width,
-            //                       height: Get.height * 0.75,
-            //                       child: Center(
-            //                         child: Text(
-            //                           '새로운 알림이 없어요',
-            //                           style: kSubTitle3Style.copyWith(
-            //                             color: mainblack.withOpacity(0.38),
-            //                           ),
-            //                         ),
-            //                       ),
-            //                     );
-            //                   }, childCount: 1),
-            //                 )
-            //               : Obx(
-            //                   () => SliverList(
-            //                       delegate: SliverChildBuilderDelegate(
-            //                           (context, index) {
-            //                     return controller
-            //                                 .notificationscreenstate.value ==
-            //                             ScreenState.loading
-            //                         ? Padding(
-            //                             padding: EdgeInsets.zero,
-            //                             child: Column(
-            //                               children: [
-            //                                 SizedBox(
-            //                                   height: 20,
-            //                                 ),
-            //                                 Image.asset(
-            //                                   'assets/icons/loading.gif',
-            //                                   scale: 6,
-            //                                 ),
-            //                               ],
-            //                             ),
-            //                           )
-            //                         : controller.notificationscreenstate
-            //                                     .value ==
-            //                                 ScreenState.disconnect
-            //                             ? DisconnectReloadWidget(reload: () {
-            //                                 controller.alarmRefresh();
-            //                               })
-            //                             : controller.notificationscreenstate
-            //                                         .value ==
-            //                                     ScreenState.disconnect
-            //                                 ? ErrorReloadWidget(reload: () {
-            //                                     controller.alarmRefresh();
-            //                                   })
-            //                                 : Dismissible(
-            //                                     background: Container(
-            //                                       color: rankred,
-            //                                       child: Row(
-            //                                           mainAxisAlignment:
-            //                                               MainAxisAlignment
-            //                                                   .end,
-            //                                           children: [
-            //                                             Padding(
-            //                                               padding:
-            //                                                   EdgeInsets.only(
-            //                                                       right: 16),
-            //                                               child: SvgPicture.asset(
-            //                                                   'assets/icons/Trash.svg'),
-            //                                             )
-            //                                           ]),
-            //                                     ),
-            //                                     direction: DismissDirection
-            //                                         .endToStart,
-            //                                     onDismissed: (direction) {
-            //                                       deleteNotification(
-            //                                           controller
-            //                                               .alarmlist[index]
-            //                                               .notification
-            //                                               .id);
-            //                                       controller.alarmlist
-            //                                           .removeAt(index);
-            //                                       if (controller
-            //                                           .alarmlist.isEmpty) {
-            //                                         controller
-            //                                             .isalarmEmpty(true);
-            //                                       }
-            //                                     },
-            //                                     child: controller
-            //                                         .alarmlist[index],
-            //                                     key: controller
-            //                                         .alarmlist[index].key!,
-            //                                   );
-            //                   },
-            //                           childCount: controller
-            //                                       .notificationscreenstate
-            //                                       .value ==
-            //                                   ScreenState.success
-            //                               ? controller.alarmlist.length
-            //                               : 1)),
-            //                 )
-            //         ]),
-            //   ),
-            // ),
-            Obx(() => SmartRefresher(
-                controller: controller.alarmRefreshController,
-                physics: const BouncingScrollPhysics(),
-                enablePullDown: (controller.notificationscreenstate.value ==
-                        ScreenState.loading)
-                    ? false
-                    : true,
-                enablePullUp: (controller.notificationscreenstate.value ==
-                        ScreenState.loading)
-                    ? false
-                    : controller.enablealarmPullup.value,
-                header: ClassicHeader(
-                  spacing: 0.0,
-                  height: 60,
-                  completeDuration: Duration(milliseconds: 600),
-                  textStyle: TextStyle(color: mainblack),
-                  refreshingText: '',
-                  releaseText: "",
-                  completeText: "",
-                  idleText: "",
-                  refreshingIcon: Column(
-                    children: [
-                      Image.asset(
-                        'assets/icons/loading.gif',
-                        scale: 6,
-                      ),
-                    ],
-                  ),
-                  releaseIcon: Column(
-                    children: [
-                      Image.asset(
-                        'assets/icons/loading.gif',
-                        scale: 6,
-                      ),
-                    ],
-                  ),
-                  completeIcon: Column(
-                    children: const [
-                      Icon(
-                        Icons.check_rounded,
-                        color: mainblue,
-                      ),
-                    ],
-                  ),
-                  idleIcon: Column(
-                    children: [
-                      Image.asset(
-                        'assets/icons/loading.png',
-                        scale: 12,
-                      ),
-                    ],
-                  ),
-                ),
-                footer: ClassicFooter(
-                  completeDuration: Duration.zero,
-                  loadingText: "",
-                  canLoadingText: "",
-                  idleText: "",
-                  idleIcon: Container(),
-                  noMoreIcon: Container(
-                    child: Text('as'),
-                  ),
-                  loadingIcon: Image.asset(
+        body: Obx(() => SmartRefresher(
+            controller: controller.alarmRefreshController,
+            physics: const BouncingScrollPhysics(),
+            enablePullDown: (controller.notificationscreenstate.value ==
+                    ScreenState.loading)
+                ? false
+                : true,
+            enablePullUp: (controller.notificationscreenstate.value ==
+                    ScreenState.loading)
+                ? false
+                : controller.enablealarmPullup.value,
+            header: ClassicHeader(
+              spacing: 0.0,
+              height: 60,
+              completeDuration: Duration(milliseconds: 600),
+              textStyle: TextStyle(color: mainblack),
+              refreshingText: '',
+              releaseText: "",
+              completeText: "",
+              idleText: "",
+              refreshingIcon: Column(
+                children: [
+                  Image.asset(
                     'assets/icons/loading.gif',
                     scale: 6,
                   ),
-                  canLoadingIcon: Image.asset(
+                ],
+              ),
+              releaseIcon: Column(
+                children: [
+                  Image.asset(
                     'assets/icons/loading.gif',
                     scale: 6,
                   ),
-                ),
-                onRefresh: controller.alarmRefresh,
-                onLoading: controller.alarmLoading,
-                child: controller.notificationscreenstate.value ==
-                        ScreenState.loading
-                    ? Padding(
-                        padding: EdgeInsets.zero,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Image.asset(
-                              'assets/icons/loading.gif',
-                              scale: 6,
-                            ),
-                          ],
+                ],
+              ),
+              completeIcon: Column(
+                children: const [
+                  Icon(
+                    Icons.check_rounded,
+                    color: mainblue,
+                  ),
+                ],
+              ),
+              idleIcon: Column(
+                children: [
+                  Image.asset(
+                    'assets/icons/loading.png',
+                    scale: 12,
+                  ),
+                ],
+              ),
+            ),
+            footer: ClassicFooter(
+              completeDuration: Duration.zero,
+              loadingText: "",
+              canLoadingText: "",
+              idleText: "",
+              idleIcon: Container(),
+              noMoreIcon: Container(
+                child: Text('as'),
+              ),
+              loadingIcon: Image.asset(
+                'assets/icons/loading.gif',
+                scale: 6,
+              ),
+              canLoadingIcon: Image.asset(
+                'assets/icons/loading.gif',
+                scale: 6,
+              ),
+            ),
+            onRefresh: controller.alarmRefresh,
+            onLoading: controller.alarmLoading,
+            child: controller.notificationscreenstate.value ==
+                    ScreenState.loading
+                ? Padding(
+                    padding: EdgeInsets.zero,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 20,
                         ),
-                      )
+                        Image.asset(
+                          'assets/icons/loading.gif',
+                          scale: 6,
+                        ),
+                      ],
+                    ),
+                  )
+                : controller.notificationscreenstate.value ==
+                        ScreenState.disconnect
+                    ? DisconnectReloadWidget(reload: () {
+                        controller.followreqRefresh();
+                      })
                     : controller.notificationscreenstate.value ==
                             ScreenState.disconnect
-                        ? DisconnectReloadWidget(reload: () {
+                        ? ErrorReloadWidget(reload: () {
                             controller.followreqRefresh();
                           })
-                        : controller.notificationscreenstate.value ==
-                                ScreenState.disconnect
-                            ? ErrorReloadWidget(reload: () {
-                                controller.followreqRefresh();
-                              })
-                            : ScrollNoneffectWidget(
-                                child: SingleChildScrollView(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 14),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          if (controller
-                                              .newalarmList.isNotEmpty)
-                                            Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 20),
-                                                    child: Text(
-                                                      '새로운 알림',
-                                                      style: k16Normal.copyWith(
-                                                          color: maingray),
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                    ),
-                                                  ),
-                                                  ListView.separated(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 28,
-                                                            top: 14),
-                                                    shrinkWrap: true,
-                                                    primary: false,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Dismissible(
-                                                        key: controller
-                                                            .newalarmList[index]
-                                                            .key!,
-                                                        child: controller
-                                                                .newalarmList[
-                                                            index],
-                                                        onDismissed:
-                                                            (direction) {
-                                                          deleteNotification(controller
+                        : ScrollNoneffectWidget(
+                            child: SingleChildScrollView(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 14),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      if (controller.newalarmList.isNotEmpty)
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20),
+                                                child: Text(
+                                                  '새로운 알림',
+                                                  style: k16Normal.copyWith(
+                                                      color: maingray),
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                              ),
+                                              ListView.separated(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 28, top: 14),
+                                                shrinkWrap: true,
+                                                primary: false,
+                                                itemBuilder: (context, index) {
+                                                  return Dismissible(
+                                                    key: controller
+                                                        .newalarmList[index]
+                                                        .key!,
+                                                    child: controller
+                                                        .newalarmList[index],
+                                                    onDismissed: (direction) {
+                                                      deleteNotification(
+                                                              controller
                                                                   .newalarmList[
                                                                       index]
                                                                   .notification
                                                                   .id)
-                                                              .then((value) {
-                                                            if (value.isError ==
-                                                                false) {
-                                                              controller
-                                                                  .newalarmList
-                                                                  .removeAt(
-                                                                      index);
-                                                            }
-                                                          });
-                                                        },
-                                                        direction:
-                                                            DismissDirection
-                                                                .endToStart,
-                                                        background: Container(
-                                                          color: rankred,
-                                                          child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          right:
-                                                                              16),
-                                                                  child: SvgPicture
-                                                                      .asset(
-                                                                          'assets/icons/Trash.svg'),
-                                                                )
-                                                              ]),
-                                                        ),
-                                                      );
+                                                          .then((value) {
+                                                        if (value.isError ==
+                                                            false) {
+                                                          controller
+                                                              .newalarmList
+                                                              .removeAt(index);
+                                                        }
+                                                      });
                                                     },
-                                                    itemCount: controller
-                                                        .newalarmList.length,
-                                                    separatorBuilder:
-                                                        (context, index) {
-                                                      return const SizedBox(
-                                                          height: 14);
-                                                    },
-                                                  ),
-                                                ]),
-                                          if (controller
-                                              .weekalarmList.isNotEmpty)
-                                            Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 20),
-                                                    child: Text(
-                                                      '이번 주',
-                                                      style: k16Normal.copyWith(
-                                                          color: maingray),
-                                                      textAlign:
-                                                          TextAlign.start,
+                                                    direction: DismissDirection
+                                                        .endToStart,
+                                                    background: Container(
+                                                      color: rankred,
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      right:
+                                                                          16),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                      'assets/icons/Trash.svg'),
+                                                            )
+                                                          ]),
                                                     ),
-                                                  ),
-                                                  ListView.separated(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 28,
-                                                            top: 14),
-                                                    shrinkWrap: true,
-                                                    primary: false,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Dismissible(
-                                                        key: controller
-                                                            .weekalarmList[
-                                                                index]
-                                                            .key!,
-                                                        child: controller
-                                                                .weekalarmList[
-                                                            index],
-                                                        onDismissed:
-                                                            (direction) {
-                                                          deleteNotification(controller
+                                                  );
+                                                },
+                                                itemCount: controller
+                                                    .newalarmList.length,
+                                                separatorBuilder:
+                                                    (context, index) {
+                                                  return const SizedBox(
+                                                      height: 14);
+                                                },
+                                              ),
+                                            ]),
+                                      if (controller.weekalarmList.isNotEmpty)
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20),
+                                                child: Text(
+                                                  '이번 주',
+                                                  style: k16Normal.copyWith(
+                                                      color: maingray),
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                              ),
+                                              ListView.separated(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 28, top: 14),
+                                                shrinkWrap: true,
+                                                primary: false,
+                                                itemBuilder: (context, index) {
+                                                  return Dismissible(
+                                                    key: controller
+                                                        .weekalarmList[index]
+                                                        .key!,
+                                                    child: controller
+                                                        .weekalarmList[index],
+                                                    onDismissed: (direction) {
+                                                      deleteNotification(
+                                                              controller
                                                                   .weekalarmList[
                                                                       index]
                                                                   .notification
                                                                   .id)
-                                                              .then((value) {
-                                                            if (value.isError ==
-                                                                false) {
-                                                              controller
-                                                                  .weekalarmList
-                                                                  .removeAt(
-                                                                      index);
-                                                            }
-                                                          });
-                                                        },
-                                                        direction:
-                                                            DismissDirection
-                                                                .endToStart,
-                                                        background: Container(
-                                                          color: rankred,
-                                                          child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          right:
-                                                                              16),
-                                                                  child: SvgPicture
-                                                                      .asset(
-                                                                          'assets/icons/Trash.svg'),
-                                                                )
-                                                              ]),
-                                                        ),
-                                                      );
+                                                          .then((value) {
+                                                        if (value.isError ==
+                                                            false) {
+                                                          controller
+                                                              .weekalarmList
+                                                              .removeAt(index);
+                                                        }
+                                                      });
                                                     },
-                                                    itemCount: controller
-                                                        .weekalarmList.length,
-                                                    separatorBuilder:
-                                                        (context, index) {
-                                                      return const SizedBox(
-                                                          height: 14);
-                                                    },
-                                                  )
-                                                ]),
-                                          if (controller
-                                              .monthalarmList.isNotEmpty)
-                                            Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 20),
-                                                    child: Text(
-                                                      '이번 달',
-                                                      style: k16Normal.copyWith(
-                                                          color: maingray),
-                                                      textAlign:
-                                                          TextAlign.start,
+                                                    direction: DismissDirection
+                                                        .endToStart,
+                                                    background: Container(
+                                                      color: rankred,
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      right:
+                                                                          16),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                      'assets/icons/Trash.svg'),
+                                                            )
+                                                          ]),
                                                     ),
-                                                  ),
-                                                  ListView.separated(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 28,
-                                                            top: 14),
-                                                    shrinkWrap: true,
-                                                    primary: false,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Dismissible(
-                                                        key: controller
-                                                            .monthalarmList[
-                                                                index]
-                                                            .key!,
-                                                        child: controller
-                                                                .monthalarmList[
-                                                            index],
-                                                        onDismissed:
-                                                            (direction) {
-                                                          deleteNotification(controller
+                                                  );
+                                                },
+                                                itemCount: controller
+                                                    .weekalarmList.length,
+                                                separatorBuilder:
+                                                    (context, index) {
+                                                  return const SizedBox(
+                                                      height: 14);
+                                                },
+                                              )
+                                            ]),
+                                      if (controller.monthalarmList.isNotEmpty)
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20),
+                                                child: Text(
+                                                  '이번 달',
+                                                  style: k16Normal.copyWith(
+                                                      color: maingray),
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                              ),
+                                              ListView.separated(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 28, top: 14),
+                                                shrinkWrap: true,
+                                                primary: false,
+                                                itemBuilder: (context, index) {
+                                                  return Dismissible(
+                                                    key: controller
+                                                        .monthalarmList[index]
+                                                        .key!,
+                                                    child: controller
+                                                        .monthalarmList[index],
+                                                    onDismissed: (direction) {
+                                                      deleteNotification(
+                                                              controller
                                                                   .monthalarmList[
                                                                       index]
                                                                   .notification
                                                                   .id)
-                                                              .then((value) {
-                                                            if (value.isError ==
-                                                                false) {
-                                                              controller
-                                                                  .monthalarmList
-                                                                  .removeAt(
-                                                                      index);
-                                                            }
-                                                          });
-                                                        },
-                                                        direction:
-                                                            DismissDirection
-                                                                .endToStart,
-                                                        background: Container(
-                                                          color: rankred,
-                                                          child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          right:
-                                                                              16),
-                                                                  child: SvgPicture
-                                                                      .asset(
-                                                                          'assets/icons/Trash.svg'),
-                                                                )
-                                                              ]),
-                                                        ),
-                                                      );
+                                                          .then((value) {
+                                                        if (value.isError ==
+                                                            false) {
+                                                          controller
+                                                              .monthalarmList
+                                                              .removeAt(index);
+                                                        }
+                                                      });
                                                     },
-                                                    itemCount: controller
-                                                        .monthalarmList.length,
-                                                    separatorBuilder:
-                                                        (context, index) {
-                                                      return const SizedBox(
-                                                          height: 14);
-                                                    },
-                                                  )
-                                                ]),
-                                          if (controller
-                                              .oldalarmList.isNotEmpty)
-                                            Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 20),
-                                                    child: Text(
-                                                      '지난 알림',
-                                                      style: k16Normal.copyWith(
-                                                          color: maingray),
-                                                      textAlign:
-                                                          TextAlign.start,
+                                                    direction: DismissDirection
+                                                        .endToStart,
+                                                    background: Container(
+                                                      color: rankred,
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      right:
+                                                                          16),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                      'assets/icons/Trash.svg'),
+                                                            )
+                                                          ]),
                                                     ),
-                                                  ),
-                                                  ListView.separated(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 28,
-                                                            top: 14),
-                                                    shrinkWrap: true,
-                                                    primary: false,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Dismissible(
-                                                        key: controller
-                                                            .oldalarmList[index]
-                                                            .key!,
-                                                        child: controller
-                                                                .oldalarmList[
-                                                            index],
-                                                        onDismissed:
-                                                            (direction) {
-                                                          deleteNotification(controller
+                                                  );
+                                                },
+                                                itemCount: controller
+                                                    .monthalarmList.length,
+                                                separatorBuilder:
+                                                    (context, index) {
+                                                  return const SizedBox(
+                                                      height: 14);
+                                                },
+                                              )
+                                            ]),
+                                      if (controller.oldalarmList.isNotEmpty)
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20),
+                                                child: Text(
+                                                  '지난 알림',
+                                                  style: k16Normal.copyWith(
+                                                      color: maingray),
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                              ),
+                                              ListView.separated(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 28, top: 14),
+                                                shrinkWrap: true,
+                                                primary: false,
+                                                itemBuilder: (context, index) {
+                                                  return Dismissible(
+                                                    key: controller
+                                                        .oldalarmList[index]
+                                                        .key!,
+                                                    child: controller
+                                                        .oldalarmList[index],
+                                                    onDismissed: (direction) {
+                                                      deleteNotification(
+                                                              controller
                                                                   .oldalarmList[
                                                                       index]
                                                                   .notification
                                                                   .id)
-                                                              .then((value) {
-                                                            if (value.isError ==
-                                                                false) {
-                                                              controller
-                                                                  .oldalarmList
-                                                                  .removeAt(
-                                                                      index);
-                                                            }
-                                                          });
-                                                        },
-                                                        direction:
-                                                            DismissDirection
-                                                                .endToStart,
-                                                        background: Container(
-                                                          color: rankred,
-                                                          child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          right:
-                                                                              16),
-                                                                  child: SvgPicture
-                                                                      .asset(
-                                                                          'assets/icons/Trash.svg'),
-                                                                )
-                                                              ]),
-                                                        ),
-                                                      );
+                                                          .then((value) {
+                                                        if (value.isError ==
+                                                            false) {
+                                                          controller
+                                                              .oldalarmList
+                                                              .removeAt(index);
+                                                        }
+                                                      });
                                                     },
-                                                    itemCount: controller
-                                                        .oldalarmList.length,
-                                                    separatorBuilder:
-                                                        (context, index) {
-                                                      return const SizedBox(
-                                                          height: 14);
-                                                    },
-                                                  )
-                                                ]),
-                                        ]),
-                                  ),
-                                ),
-                              )
-                // CustomScrollView(
-                //     physics: const BouncingScrollPhysics(),
-                // key: const PageStorageKey("key2"),
-                // slivers: [
-                //   controller.isfollowreqEmpty.value
-                //       ? SliverList(
-                //           delegate: SliverChildBuilderDelegate(
-                //               (context, index) {
-                //             return Container(
-                //               width: Get.width,
-                //               height: Get.height * 0.75,
-                //               child: Center(
-                //                 child: Text(
-                //                   '아직 팔로우한 학생이 없어요',
-                //                   style: kSubTitle3Style.copyWith(
-                //                     color: mainblack.withOpacity(0.38),
-                //                   ),
-                //                 ),
-                //               ),
-                //             );
-                //           }, childCount: 1),
-                //         )
-                //       : Obx(
-                //           () => SliverList(
-                //               delegate: SliverChildBuilderDelegate(
-                //                   (context, index) {
-                //             return controller
-                //                         .followreqscreenstate.value ==
-                //                     ScreenState.loading
-                //                 ? Padding(
-                //                     padding: EdgeInsets.zero,
-                //                     child: Column(
-                //                       children: [
-                //                         SizedBox(
-                //                           height: 20,
-                //                         ),
-                //                         Image.asset(
-                //                           'assets/icons/loading.gif',
-                //                           scale: 6,
-                //                         ),
-                //                       ],
-                //                     ),
-                //                   )
-                //                 : controller.followreqscreenstate
-                //                             .value ==
-                //                         ScreenState.disconnect
-                //                     ? DisconnectReloadWidget(
-                //                         reload: () {
-                //                         controller.followreqRefresh();
-                //                       })
-                //                     : controller.followreqscreenstate
-                //                                 .value ==
-                //                             ScreenState.disconnect
-                //                         ? ErrorReloadWidget(reload: () {
-                //                             controller
-                //                                 .followreqRefresh();
-                //                           })
-                //                         : Dismissible(
-                //                             background: Container(
-                //                               color: rankred,
-                //                               child: Row(
-                //                                   mainAxisAlignment:
-                //                                       MainAxisAlignment
-                //                                           .end,
-                //                                   children: [
-                //                                     Padding(
-                //                                       padding: EdgeInsets
-                //                                           .only(
-                //                                               right:
-                //                                                   16),
-                //                                       child: SvgPicture
-                //                                           .asset(
-                //                                               'assets/icons/Trash.svg'),
-                //                                     )
-                //                                   ]),
-                //                             ),
-                //                             direction: DismissDirection
-                //                                 .endToStart,
-                //                             onDismissed: (direction) {
-                //                               deleteNotification(
-                //                                   controller
-                //                                       .followalarmlist[
-                //                                           index]
-                //                                       .notification
-                //                                       .id);
-                //                               controller.followalarmlist
-                //                                   .removeAt(index);
-                //                               if (controller
-                //                                   .followalarmlist
-                //                                   .isEmpty) {
-                //                                 controller
-                //                                     .isfollowreqEmpty(
-                //                                         true);
-                //                               }
-                //                             },
-                //                             child: controller
-                //                                 .followalarmlist[index],
-                //                             key: controller
-                //                                 .followalarmlist[index]
-                //                                 .key!,
-                //                           );
-                //           },
-                //                   childCount: controller
-                //                               .followreqscreenstate
-                //                               .value ==
-                //                           ScreenState.success
-                //                       ? controller
-                //                           .followalarmlist.length
-                //                       : 1)),
-                //         )
-                // ]),
-                // )),
-                //   ],
-                // ),
-                //   ),
-                // ),
-                )));
+                                                    direction: DismissDirection
+                                                        .endToStart,
+                                                    background: Container(
+                                                      color: rankred,
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      right:
+                                                                          16),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                      'assets/icons/Trash.svg'),
+                                                            )
+                                                          ]),
+                                                    ),
+                                                  );
+                                                },
+                                                itemCount: controller
+                                                    .oldalarmList.length,
+                                                separatorBuilder:
+                                                    (context, index) {
+                                                  return const SizedBox(
+                                                      height: 14);
+                                                },
+                                              )
+                                            ]),
+                                    ]),
+                              ),
+                            ),
+                          )
+            // CustomScrollView(
+            //     physics: const BouncingScrollPhysics(),
+            // key: const PageStorageKey("key2"),
+            // slivers: [
+            //   controller.isfollowreqEmpty.value
+            //       ? SliverList(
+            //           delegate: SliverChildBuilderDelegate(
+            //               (context, index) {
+            //             return Container(
+            //               width: Get.width,
+            //               height: Get.height * 0.75,
+            //               child: Center(
+            //                 child: Text(
+            //                   '아직 팔로우한 학생이 없어요',
+            //                   style: kSubTitle3Style.copyWith(
+            //                     color: mainblack.withOpacity(0.38),
+            //                   ),
+            //                 ),
+            //               ),
+            //             );
+            //           }, childCount: 1),
+            //         )
+            //       : Obx(
+            //           () => SliverList(
+            //               delegate: SliverChildBuilderDelegate(
+            //                   (context, index) {
+            //             return controller
+            //                         .followreqscreenstate.value ==
+            //                     ScreenState.loading
+            //                 ? Padding(
+            //                     padding: EdgeInsets.zero,
+            //                     child: Column(
+            //                       children: [
+            //                         SizedBox(
+            //                           height: 20,
+            //                         ),
+            //                         Image.asset(
+            //                           'assets/icons/loading.gif',
+            //                           scale: 6,
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   )
+            //                 : controller.followreqscreenstate
+            //                             .value ==
+            //                         ScreenState.disconnect
+            //                     ? DisconnectReloadWidget(
+            //                         reload: () {
+            //                         controller.followreqRefresh();
+            //                       })
+            //                     : controller.followreqscreenstate
+            //                                 .value ==
+            //                             ScreenState.disconnect
+            //                         ? ErrorReloadWidget(reload: () {
+            //                             controller
+            //                                 .followreqRefresh();
+            //                           })
+            //                         : Dismissible(
+            //                             background: Container(
+            //                               color: rankred,
+            //                               child: Row(
+            //                                   mainAxisAlignment:
+            //                                       MainAxisAlignment
+            //                                           .end,
+            //                                   children: [
+            //                                     Padding(
+            //                                       padding: EdgeInsets
+            //                                           .only(
+            //                                               right:
+            //                                                   16),
+            //                                       child: SvgPicture
+            //                                           .asset(
+            //                                               'assets/icons/Trash.svg'),
+            //                                     )
+            //                                   ]),
+            //                             ),
+            //                             direction: DismissDirection
+            //                                 .endToStart,
+            //                             onDismissed: (direction) {
+            //                               deleteNotification(
+            //                                   controller
+            //                                       .followalarmlist[
+            //                                           index]
+            //                                       .notification
+            //                                       .id);
+            //                               controller.followalarmlist
+            //                                   .removeAt(index);
+            //                               if (controller
+            //                                   .followalarmlist
+            //                                   .isEmpty) {
+            //                                 controller
+            //                                     .isfollowreqEmpty(
+            //                                         true);
+            //                               }
+            //                             },
+            //                             child: controller
+            //                                 .followalarmlist[index],
+            //                             key: controller
+            //                                 .followalarmlist[index]
+            //                                 .key!,
+            //                           );
+            //           },
+            //                   childCount: controller
+            //                               .followreqscreenstate
+            //                               .value ==
+            //                           ScreenState.success
+            //                       ? controller
+            //                           .followalarmlist.length
+            //                       : 1)),
+            //         )
+            // ]),
+            // )),
+            //   ],
+            // ),
+            //   ),
+            // ),
+            )));
   }
 }
