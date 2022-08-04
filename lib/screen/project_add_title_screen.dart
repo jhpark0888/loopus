@@ -159,7 +159,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
             onPressed: () {
               Get.back();
             },
-            icon: SvgPicture.asset('assets/icons/Close.svg'),
+            icon: SvgPicture.asset('assets/icons/appbar_exit.svg'),
           ),
           title: '커리어 추가',
         ),

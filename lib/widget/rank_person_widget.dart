@@ -127,8 +127,8 @@
 //   if (variance == 0) {
 //     return const SizedBox.shrink();
 //   } else if (variance >= 1) {
-//     return SvgPicture.asset('assets/icons/upper_arrow.svg');
+//     return SvgPicture.asset('assets/icons/rate_upper_arrow.svg');
 //   } else {
-//     return SvgPicture.asset('assets/icons/down_arrow.svg');
+//     return SvgPicture.asset('assets/icons/rate_down_arrow.svg');
 //   }
 // }

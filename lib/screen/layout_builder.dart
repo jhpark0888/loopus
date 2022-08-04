@@ -18,7 +18,7 @@ class Testscreen extends StatelessWidget {
         obscureText: false,
         onChanged: (string) {
           TextSpan span = TextSpan(
-              text: postingAddController.textcontroller.text, style: kSubTitle3Style);       
+              text: postingAddController.textcontroller.text, style: kmain);       
           TextPainter tp = TextPainter(text: span, textDirection: direction);
           tp.layout(maxWidth: Get.width - 40);
           int numLines = tp.computeLineMetrics().length;

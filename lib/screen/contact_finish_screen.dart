@@ -22,7 +22,7 @@ class ContactFinishScreen extends StatelessWidget {
             },
             child: Text(
               '완료',
-              style: kSubTitle2Style.copyWith(color: mainblue),
+              style: kmainbold.copyWith(color: mainblue),
             ),
           ),
         ],
@@ -38,7 +38,7 @@ class ContactFinishScreen extends StatelessWidget {
               Center(
                 child: Text(
                   '문의해주셔서 감사합니다',
-                  style: kSubTitle1Style,
+                  style: kmainbold.copyWith(height: 1.5),
                 ),
               ),
               SizedBox(
@@ -47,7 +47,7 @@ class ContactFinishScreen extends StatelessWidget {
               Center(
                 child: Text(
                   '최대한 빠르게 답변드리도록 하겠습니다!\n메일 문의 : loopus@loopus.co.kr',
-                  style: kBody1Style,
+                  style: kmainheight,
                   textAlign: TextAlign.center,
                 ),
               ),

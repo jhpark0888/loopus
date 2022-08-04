@@ -125,7 +125,7 @@
 //             bottomBorder: false,
 //             leading: IconButton(
 //               icon: SvgPicture.asset(
-//                 'assets/icons/Arrow.svg',
+//                 'assets/icons/appbar_back.svg',
 //               ),
 //               onPressed: () {
 //                 questionController.answertextController.clear();
@@ -153,7 +153,7 @@
 //                     },
 //                     icon: questionController.checkAlert.value == false
 //                         ? SvgPicture.asset(
-//                             'assets/icons/Bell_Inactive.svg',
+//                             'assets/icons/alarm_Inactive.svg',
 //                             width: 28,
 //                           )
 //                         : SvgPicture.asset(
@@ -236,7 +236,7 @@
 //                           );
 //                         },
 //                   icon: SvgPicture.asset(
-//                     'assets/icons/More.svg',
+//                     'assets/icons/more_option.svg',
 //                     width: 28,
 //                   ))
 //             ],

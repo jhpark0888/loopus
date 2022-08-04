@@ -61,12 +61,12 @@ class QuestionAnswerWidget extends StatelessWidget {
                       onTap: tapProfile,
                       child: Text(
                         "${answer.user.realName}",
-                        style: kButtonStyle,
+                        style: ktempFont,
                       ),
                     ),
                     Text(
                       " · ${messagedurationCaculate(startDate: answer.date, endDate: DateTime.now())}",
-                      style: kBody2Style.copyWith(
+                      style: ktempFont.copyWith(
                           color: mainblack.withOpacity(0.6)),
                     ),
                   ],
@@ -75,7 +75,7 @@ class QuestionAnswerWidget extends StatelessWidget {
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () => showModal(context),
-                child: SvgPicture.asset("assets/icons/More.svg"),
+                child: SvgPicture.asset("assets/icons/more_option.svg"),
               ),
             ],
           ),
@@ -90,7 +90,7 @@ class QuestionAnswerWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   "${answer.content}",
-                  style: kBody1Style,
+                  style: ktempFont,
                 ),
               ),
               SizedBox(

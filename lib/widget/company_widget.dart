@@ -35,8 +35,8 @@ class CompanyWidget extends StatelessWidget {
                   text: TextSpan(children: [
                 TextSpan(
                     text: company.contactField,
-                    style: k15normal.copyWith(color: mainblue)),
-                const TextSpan(text: ' 분야 컨택 중', style: k15normal)
+                    style: kmainheight.copyWith(color: mainblue)),
+                const TextSpan(text: ' 분야 컨택 중', style: kmainheight)
               ]))
             ],
           )
@@ -81,7 +81,7 @@ class CompanyTileWidget extends StatelessWidget {
             GestureDetector(
               onTap: onTap,
               child: SvgPicture.asset(
-                'assets/icons/Close.svg',
+                'assets/icons/appbar_exit.svg',
               ),
             )
         ],

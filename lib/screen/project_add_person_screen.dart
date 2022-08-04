@@ -84,7 +84,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                       //     ? '건너뛰기'
                       //     :
                       '만들기',
-                      style: kSubTitle2Style.copyWith(
+                      style: ktempFont.copyWith(
                         color: mainblue,
                       ),
                       textAlign: TextAlign.end,
@@ -124,7 +124,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                           child: Obx(
                             () => Text(
                               '저장',
-                              style: kSubTitle2Style.copyWith(
+                              style: ktempFont.copyWith(
                                 color: projectaddcontroller
                                         .selectedpersontaglist.isEmpty
                                     ? mainblack
@@ -156,17 +156,17 @@ class ProjectAddPersonScreen extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: '커리어를 ',
-                            style: kSubTitle1Style,
+                            style: ktempFont,
                           ),
                           TextSpan(
                             text: '같이 진행한 학생',
-                            style: kSubTitle1Style.copyWith(
+                            style: ktempFont.copyWith(
                               color: mainblue,
                             ),
                           ),
                           TextSpan(
                             text: '이 있나요?',
-                            style: kSubTitle1Style,
+                            style: ktempFont,
                           ),
                         ],
                       ),
@@ -176,7 +176,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                     ),
                     Text(
                       '팔로잉 중인 학생만 추가할 수 있어요',
-                      style: kBody1Style,
+                      style: ktempFont,
                     ),
                   ],
                 ),
@@ -196,7 +196,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                             const EdgeInsets.only(right: 16, left: 16, top: 20),
                         child: Text(
                           '선택한 학생',
-                          style: kSubTitle2Style,
+                          style: ktempFont,
                         ),
                       ),
                       SizedBox(
@@ -229,14 +229,14 @@ class ProjectAddPersonScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text('팔로잉 중인 학생', style: kSubTitle2Style),
+                  Text('팔로잉 중인 학생', style: ktempFont),
                   SizedBox(
                     width: 4,
                   ),
                   Obx(
                     () => Text(
                         '${projectaddcontroller.looppersonlist.value.length}명',
-                        style: kSubTitle2Style),
+                        style: ktempFont),
                   ),
                 ],
               ),
@@ -289,7 +289,7 @@ class ProjectAddPersonScreen extends StatelessWidget {
                                       ),
                                       Text(
                                         '아직 팔로잉 중인 학생이 없어요',
-                                        style: kSubTitle2Style.copyWith(
+                                        style: ktempFont.copyWith(
                                             color: mainblack.withOpacity(0.38)),
                                       )
                                     ],

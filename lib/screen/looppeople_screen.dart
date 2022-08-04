@@ -46,9 +46,9 @@ class LoopPeopleScreen extends StatelessWidget {
                         flexibleSpace: Column(
                           children: [
                             TabBar(
-                              labelStyle: kButtonStyle,
+                              labelStyle: ktempFont,
                               labelColor: mainblack,
-                              unselectedLabelStyle: kBody1Style,
+                              unselectedLabelStyle: ktempFont,
                               unselectedLabelColor: mainblack.withOpacity(0.6),
                               indicator: const UnderlineIndicator(
                                 strokeCap: StrokeCap.round,
@@ -121,7 +121,7 @@ class LoopPeopleScreen extends StatelessWidget {
                                         children: [
                                           Text(
                                             '아직 팔로워가 없어요',
-                                            style: kSubTitle3Style.copyWith(
+                                            style: ktempFont.copyWith(
                                               color:
                                                   mainblack.withOpacity(0.38),
                                             ),
@@ -172,7 +172,7 @@ class LoopPeopleScreen extends StatelessWidget {
                                         children: [
                                           Text(
                                             '아직 아무도 팔로잉하지 않았어요',
-                                            style: kSubTitle3Style.copyWith(
+                                            style: ktempFont.copyWith(
                                               color:
                                                   mainblack.withOpacity(0.38),
                                             ),

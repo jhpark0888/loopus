@@ -13,6 +13,7 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/select_project_screen.dart';
 
 enum RouteName {
   home,
@@ -38,7 +39,11 @@ class AppController extends GetxService {
     var page = RouteName.values[value];
     switch (page) {
       case RouteName.upload:
-        showCustomBottomSheet();
+        Navigator.of(Get.context!).push(
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => SelectProjectScreen(),
+                ),
+              );
         break;
       case RouteName.home:
         if (currentIndex.value == 0) {

@@ -46,8 +46,8 @@ class CommentWidget extends StatelessWidget {
             onTap: tapProfile,
             child: UserImageWidget(
               imageUrl: comment.user.profileImage ?? '',
-              width: 35,
-              height: 35,
+              width: 36,
+              height: 36,
             ),
           ),
           const SizedBox(
@@ -63,13 +63,13 @@ class CommentWidget extends StatelessWidget {
                       onTap: tapProfile,
                       child: Text(
                         comment.user.realName,
-                        style: k16semiBold,
+                        style: kmainbold,
                       ),
                     ),
                     const Spacer(),
                     Text(
                       calculateDate(comment.date),
-                      style: k16Normal.copyWith(color: maingray),
+                      style: kmain.copyWith(color: maingray),
                     ),
                     const SizedBox(
                       width: 7,
@@ -135,7 +135,7 @@ class CommentWidget extends StatelessWidget {
                                 isOne: true,
                               );
                             },
-                      child: SvgPicture.asset('assets/icons/More.svg'),
+                      child: SvgPicture.asset('assets/icons/more_option.svg'),
                     ),
                   ],
                 ),
@@ -144,10 +144,7 @@ class CommentWidget extends StatelessWidget {
                 ),
                 Text(
                   comment.content,
-                  style: k16semiBold.copyWith(
-                    height: 1.5,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: kmain,
                 ),
                 const SizedBox(
                   height: 7,
@@ -165,24 +162,22 @@ class CommentWidget extends StatelessWidget {
                         },
                         child: Text(
                           '좋아요 ${comment.likecount.value}개',
-                          style: k16Normal.copyWith(
+                          style: kmain.copyWith(
                             color: maingray,
                           ),
                         ),
                       ),
                       const SizedBox(
-                        width: 7,
+                        width: 14,
                       ),
                       InkWell(
                         onTap: tapLike,
                         child: comment.isLiked.value == 0
-                            ? SvgPicture.asset(
-                                "assets/icons/Favorite_Inactive.svg")
-                            : SvgPicture.asset(
-                                "assets/icons/Favorite_Active.svg"),
+                            ? SvgPicture.asset("assets/icons/unlike.svg", width: 16,height: 16)
+                            : SvgPicture.asset("assets/icons/like.svg", width: 16, height: 16),
                       ),
                       const SizedBox(
-                        width: 7,
+                        width: 14,
                       ),
                       InkWell(
                         onTap: () async {
@@ -202,14 +197,14 @@ class CommentWidget extends StatelessWidget {
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.ease);
                         },
-                        child: SvgPicture.asset("assets/icons/Reply_Arrow.svg"),
+                        child: SvgPicture.asset("assets/icons/reply.svg" , width: 16, height: 16),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

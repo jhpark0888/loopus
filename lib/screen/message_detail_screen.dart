@@ -81,7 +81,7 @@ class MessageDetatilScreen extends StatelessWidget {
                     }
                   },
                   child: Center(
-                      child: SvgPicture.asset('assets/icons/Arrow_left.svg'))),
+                      child: SvgPicture.asset('assets/icons/appbar_back.svg'))),
               actions: [
                 GestureDetector(
                   onTap: () async {
@@ -137,7 +137,7 @@ class MessageDetatilScreen extends StatelessWidget {
                       height: 44,
                       width: 44,
                       child: Center(
-                          child: SvgPicture.asset('assets/icons/More.svg'))),
+                          child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))),
                 )
               ],
             ),
@@ -250,7 +250,7 @@ class MessageDetatilScreen extends StatelessWidget {
                 maxLines: 3,
                 autocorrect: false,
                 readOnly: false,
-                style: k16Normal,
+                style: kmain,
                 cursorColor: mainblack,
                 cursorWidth: 1.2,
                 cursorRadius: Radius.circular(5.0),
@@ -267,7 +267,7 @@ class MessageDetatilScreen extends StatelessWidget {
                   contentPadding: const EdgeInsets.fromLTRB(24, 8, 24, 8),
                   isDense: true,
                   hintText: '메세지 입력',
-                  hintStyle: k16Normal.copyWith(color: maingray),
+                  hintStyle: kmain.copyWith(color: maingray),
                 )),
           ),
           const SizedBox(width: 14),
@@ -297,7 +297,7 @@ class MessageDetatilScreen extends StatelessWidget {
                       controller.listViewController.position.minScrollExtent);
                 }
               },
-              child: SvgPicture.asset('assets/icons/Enter_Icon.svg'))
+              child: SvgPicture.asset('assets/icons/enter.svg'))
         ],
       ),
     );

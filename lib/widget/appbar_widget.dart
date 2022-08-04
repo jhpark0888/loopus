@@ -46,7 +46,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               onTap: () {
                 Get.back();
               },
-              child: SvgPicture.asset('assets/icons/Back_icon.svg')),
+              child: SvgPicture.asset('assets/icons/appbar_back.svg')),
       actions: actions,
     );
   }

@@ -38,7 +38,7 @@ class ProfileTagChangeScreen extends StatelessWidget {
                   child: Obx(
                     () => Text(
                       '변경',
-                      style: kSubTitle2Style.copyWith(
+                      style: ktempFont.copyWith(
                         color: tagController.selectedtaglist.length == 3
                             ? mainblue
                             : mainblack.withOpacity(0.38),
@@ -70,13 +70,13 @@ class ProfileTagChangeScreen extends StatelessWidget {
                                   children: [
                                     TextSpan(
                                       text: '어떤 태그',
-                                      style: kSubTitle2Style.copyWith(
+                                      style: ktempFont.copyWith(
                                         color: mainblue,
                                       ),
                                     ),
                                     TextSpan(
                                       text: '로 변경하시겠어요?',
-                                      style: kSubTitle2Style,
+                                      style: ktempFont,
                                     ),
                                   ],
                                 ),
@@ -86,7 +86,7 @@ class ProfileTagChangeScreen extends StatelessWidget {
                               ),
                               Text(
                                 '관심태그와 관련된 포스팅과 질문을 추천해드려요',
-                                style: kBody1Style,
+                                style: ktempFont,
                               ),
                             ],
                           ),

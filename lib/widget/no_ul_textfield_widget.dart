@@ -27,7 +27,7 @@ class NoUlTextField extends StatelessWidget {
       minLines: 6,
       maxLines: maxLines,
       autofocus: false,
-      style: kSubTitle3Style.copyWith(height: 1.5),
+      style: kmain.copyWith(height: 1.5),
       cursorColor: mainblue,
       cursorWidth: 1.2,
       cursorRadius: const Radius.circular(2),
@@ -37,7 +37,7 @@ class NoUlTextField extends StatelessWidget {
         contentPadding: const EdgeInsets.only(bottom: 12),
         isDense: true,
         hintText: hintText,
-        hintStyle: kSubTitle3Style.copyWith(
+        hintStyle: kmain.copyWith(
           color: mainblack.withOpacity(0.38),
         ),
         enabledBorder: InputBorder.none,

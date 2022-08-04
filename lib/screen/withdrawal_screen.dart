@@ -49,7 +49,7 @@ class WithdrawalScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 4),
                   child: Text(
                     '탈퇴하기',
-                    style: kSubTitle2Style.copyWith(color: rankred),
+                    style: ktempFont.copyWith(color: rankred),
                   ),
                 ),
               ),
@@ -68,7 +68,7 @@ class WithdrawalScreen extends StatelessWidget {
                 children: [
                   Text(
                     '탈퇴 사유를 선택해주세요',
-                    style: kSubTitle1Style,
+                    style: ktempFont,
                   ),
                   SizedBox(
                     height: 20,

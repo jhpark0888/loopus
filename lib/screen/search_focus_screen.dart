@@ -151,7 +151,7 @@ import '../controller/modal_controller.dart';
 //                   prefixIcon: Padding(
 //                     padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
 //                     child: SvgPicture.asset(
-//                       "assets/icons/Search_Inactive.svg",
+//                       "assets/icons/search_inactive.svg",
 //                       width: 16,
 //                       height: 16,
 //                       color: mainblack.withOpacity(0.6),
@@ -482,7 +482,7 @@ class SearchFocusScreen extends StatelessWidget {
                         //       prefixIcon: Padding(
                         //         padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
                         //         child: SvgPicture.asset(
-                        //           "assets/icons/Search_Inactive.svg",
+                        //           "assets/icons/search_inactive.svg",
                         //           width: 20,
                         //           height: 20,
                         //           color: maingray,

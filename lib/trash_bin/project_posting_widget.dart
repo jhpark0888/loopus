@@ -160,9 +160,9 @@
 //                             },
 //                             child: item.value.isMarked.value == 0
 //                                 ? SvgPicture.asset(
-//                                     "assets/icons/Mark_Default.svg")
+//                                     "assets/icons/bookmark_inactive.svg")
 //                                 : SvgPicture.asset(
-//                                     "assets/icons/Mark_Saved.svg")))
+//                                     "assets/icons/bookmark_active.svg")))
 //                       ],
 //                     )
 //                   ],

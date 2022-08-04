@@ -161,11 +161,11 @@
 //                               onTap: tapBookmark,
 //                               child: item.isMarked.value == 0 //0: 비활성 1: 활성
 //                                   ? SvgPicture.asset(
-//                                       "assets/icons/Mark_Default.svg",
+//                                       "assets/icons/bookmark_inactive.svg",
 //                                       color: mainblack,
 //                                     )
 //                                   : SvgPicture.asset(
-//                                       "assets/icons/Mark_Saved.svg"),
+//                                       "assets/icons/bookmark_active.svg"),
 //                             ),
 //                           ],
 //                         ),

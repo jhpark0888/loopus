@@ -55,7 +55,7 @@ class SearchStudentWidget extends StatelessWidget {
             ),
             Text(
               '1,420점',
-              style: kSubTitle3Style,
+              style: ktempFont,
             ),
           ],
         ),

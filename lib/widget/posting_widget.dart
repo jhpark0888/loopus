@@ -78,9 +78,8 @@ class PostingWidget extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(item.user.realName, style: k16semiBold),
-                                Text(item.user.department,
-                                    style: kSubTitle3Style)
+                                Text(item.user.realName, style: kmainbold),
+                                Text(item.user.department, style: kmain)
                               ])
                         ],
                       ),
@@ -92,7 +91,7 @@ class PostingWidget extends StatelessWidget {
                         onTap: tapProjectname,
                         child: Text(
                           item.project!.careerName,
-                          style: k16semiBold.copyWith(color: maingray),
+                          style: kmain.copyWith(color: maingray),
                         ),
                       ),
                     ),
@@ -126,12 +125,10 @@ class PostingWidget extends StatelessWidget {
                     Obx(
                       () => ExpandableText(
                           textSpan: TextSpan(
-                              text: item.content.value,
-                              style: kSubTitle3Style.copyWith(height: 1.5)),
+                              text: item.content.value, style: kmainheight),
                           moreSpan: TextSpan(
                               text: ' ...더보기',
-                              style: kSubTitle3Style.copyWith(
-                                  height: 1.5, color: maingray)),
+                              style: kmainheight.copyWith(color: maingray)),
                           maxLines: 3),
                     ),
                     if (item.tags.isNotEmpty)
@@ -161,9 +158,9 @@ class PostingWidget extends StatelessWidget {
                                   onTap: tapLike,
                                   child: item.isLiked.value == 0
                                       ? SvgPicture.asset(
-                                          "assets/icons/Favorite_Inactive.svg")
+                                          "assets/icons/unlike.svg")
                                       : SvgPicture.asset(
-                                          "assets/icons/Favorite_Active.svg"),
+                                          "assets/icons/like.svg"),
                                 ),
                                 const SizedBox(
                                   width: 15,
@@ -178,17 +175,17 @@ class PostingWidget extends StatelessWidget {
                                       tapPosting(autoFocus: true);
                                     },
                                     child: SvgPicture.asset(
-                                        "assets/icons/Comment.svg")),
+                                        "assets/icons/comment.svg")),
                                 const Spacer(),
                                 InkWell(
                                   onTap: tapBookmark,
                                   child: (item.isMarked.value == 0)
                                       ? SvgPicture.asset(
-                                          "assets/icons/Mark_Default.svg",
+                                          "assets/icons/bookmark_inactive.svg",
                                           color: mainblack,
                                         )
                                       : SvgPicture.asset(
-                                          "assets/icons/Mark_Saved.svg"),
+                                          "assets/icons/bookmark_active.svg"),
                                 ),
                               ],
                             ),
@@ -211,12 +208,11 @@ class PostingWidget extends StatelessWidget {
                                 child: Obx(
                                   () => Text(
                                     '좋아요 ${item.likeCount.value}개',
-                                    style: kSubTitle3Style,
+                                    style: kmain,
                                   ),
                                 )),
                             const Spacer(),
-                            Text(calculateDate(item.date),
-                                style: kSubTitle3Style),
+                            Text(calculateDate(item.date), style: kmain),
                           ]),
                           const SizedBox(height: 14),
                           if (item.comments.isNotEmpty)
@@ -227,13 +223,13 @@ class PostingWidget extends StatelessWidget {
                                     children: [
                                       Text(
                                         item.comments.first.user.realName,
-                                        style: k16semiBold,
+                                        style: kmainbold,
                                       ),
                                       const SizedBox(width: 7),
                                       Expanded(
                                         child: Text(
                                           item.comments.first.content,
-                                          style: k16Normal,
+                                          style: kmain,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       )
@@ -267,10 +263,10 @@ class PostingWidget extends StatelessWidget {
   }
 
   void tapProjectname() {
-    // Get.to(() => ProjectScreen(
-    //       projectid: item.project!.id,
-    //       isuser: item.isuser,
-    //     ));
+    Get.to(() => OtherProfileScreen(
+        userid: item.userid,
+        realname: item.user.realName,
+        careerName: item.project!.careerName));
   }
 
   void tapBookmark() {

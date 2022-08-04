@@ -54,7 +54,7 @@ class BanPeopleScreen extends StatelessWidget {
                                               top: Get.height / 3),
                                           child: Text(
                                             '차단한 유저가 없어요',
-                                            style: kSubTitle3Style.copyWith(
+                                            style: kmain.copyWith(
                                               color:
                                                   mainblack.withOpacity(0.38),
                                             ),

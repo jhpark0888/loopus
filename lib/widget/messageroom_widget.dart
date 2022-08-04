@@ -63,22 +63,22 @@ class MessageRoomWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(user.value.realName, style: k16semiBold),
+                  Text(user.value.realName, style: kmainbold),
                   const SizedBox(height: 7),
                   Obx(
                     () => Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         hasTextOverflow(
-                                chatRoom.value.message.value.content, k16Normal,
+                                chatRoom.value.message.value.content, kmain,
                                 maxWidth: Get.width - 190)
                             ? SizedBox(
                                 width: Get.width - 190,
                                 child: Text(
                                   chatRoom.value.message.value.content,
                                   style: chatRoom.value.notread.value == 0
-                                      ? k16Normal.copyWith(color: maingray)
-                                      : k16Normal.copyWith(
+                                      ? kmain.copyWith(color: maingray)
+                                      : kmain.copyWith(
                                           fontWeight: FontWeight.w500),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -86,15 +86,15 @@ class MessageRoomWidget extends StatelessWidget {
                             : Text(
                                 chatRoom.value.message.value.content,
                                 style: chatRoom.value.notread.value == 0
-                                    ? k16Normal.copyWith(color: maingray)
-                                    : k16Normal.copyWith(
+                                    ? kmain.copyWith(color: maingray)
+                                    : kmain.copyWith(
                                         fontWeight: FontWeight.w500),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                         Text(
                             '· ${messagedurationCaculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
-                            style: k16Normal.copyWith(color: maingray)),
+                            style: kmain.copyWith(color: maingray)),
                       ],
                     ),
                   ),

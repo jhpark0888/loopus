@@ -36,7 +36,7 @@ class CareerRankWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Text(isUniversity ? '교내' : '전국',
-                  style: kmain.copyWith(fontWeight: FontWeight.w600)),
+                  style: kmain),
               GestureDetector(
                   onTap: () {
                     Get.to(() => RealTimeRankScreen(
@@ -47,7 +47,7 @@ class CareerRankWidget extends StatelessWidget {
                   child: Text('전체보기', style: kmain.copyWith(color: mainblue)))
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
           if (ranker.isNotEmpty)
             ListView.separated(
                 primary: false,
@@ -58,7 +58,7 @@ class CareerRankWidget extends StatelessWidget {
                       isFollow: false,
                     ),
                 separatorBuilder: (context, index) => const SizedBox(
-                      height: 20,
+                      height: 18,
                     ),
                 itemCount: ranker.length > 3 ? 3 : ranker.length)
           else
@@ -101,7 +101,7 @@ class PersonRankWidget extends StatelessWidget {
       child: Row(children: [
         Column(
           children: [
-            PersonImageWidget(user: user),
+            PersonImageWidget(user: user, width: 52),
             const SizedBox(height: 7),
             Text(
               user.realName,
@@ -216,9 +216,9 @@ class PersonRankWidget extends StatelessWidget {
     if (variance == 0) {
       return const SizedBox.shrink();
     } else if (variance >= 1) {
-      return SvgPicture.asset('assets/icons/upper_arrow.svg');
+      return SvgPicture.asset('assets/icons/rate_upper_arrow.svg');
     } else {
-      return SvgPicture.asset('assets/icons/down_arrow.svg');
+      return SvgPicture.asset('assets/icons/rate_down_arrow.svg');
     }
   }
 }

@@ -54,7 +54,7 @@ class LogInScreen extends StatelessWidget {
                     children: [
                       const Text(
                         '학교 이메일 주소',
-                        style: kSubTitle2Style,
+                        style: kmain,
                       ),
                       const SizedBox(
                         height: 16,
@@ -74,7 +74,7 @@ class LogInScreen extends StatelessWidget {
                       ),
                       const Text(
                         '비밀번호',
-                        style: kSubTitle2Style,
+                        style: kmain,
                       ),
                       const SizedBox(
                         height: 16,
@@ -115,7 +115,7 @@ class LogInScreen extends StatelessWidget {
                           child: Center(
                             child: Text(
                               "비밀번호를 잊으셨나요?",
-                              style: kButtonStyle.copyWith(
+                              style: kmain.copyWith(
                                 color: mainblack.withOpacity(0.6),
                               ),
                             ),

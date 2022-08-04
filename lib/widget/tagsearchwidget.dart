@@ -25,7 +25,7 @@ class TagSearchWidget extends StatelessWidget {
             children: [
               Text(
                 '선택한 태그',
-                style: kSubTitle2Style,
+                style: ktempFont,
               ),
               SizedBox(
                 width: 4,
@@ -33,7 +33,7 @@ class TagSearchWidget extends StatelessWidget {
               Obx(
                 () => Text(
                   '(${tagController.selectedtaglist.length} / 3)',
-                  style: kSubTitle2Style.copyWith(
+                  style: ktempFont.copyWith(
                       color: tagController.selectedtaglist.length < 3
                           ? rankred
                           : mainblack),
@@ -70,7 +70,7 @@ class TagSearchWidget extends StatelessWidget {
             autofocus: true,
             focusNode: tagController.tagsearchfocusNode,
             controller: tagController.tagsearchContoller,
-            style: kBody2Style,
+            style: ktempFont,
             cursorColor: Colors.grey,
             cursorWidth: 1.2,
             cursorRadius: Radius.circular(5.0),
@@ -90,14 +90,14 @@ class TagSearchWidget extends StatelessWidget {
               // focusColor: Colors.black,
               // border: OutlineInputBorder(borderSide: BorderSide.none),
               contentPadding: EdgeInsets.only(right: 16),
-              hintStyle: kBody2Style.copyWith(
+              hintStyle: ktempFont.copyWith(
                   color: mainblack.withOpacity(0.38), height: 1.5),
               isDense: true,
               hintText: "예) 봉사, 기계공학과, 서포터즈",
               prefixIcon: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
                 child: SvgPicture.asset(
-                  "assets/icons/Search_Inactive.svg",
+                  "assets/icons/search_inactive.svg",
                   width: 16,
                   height: 16,
                   color: mainblack.withOpacity(0.6),

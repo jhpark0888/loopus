@@ -57,7 +57,7 @@ class SelectedTagWidget extends StatelessWidget {
               width: 7,
             ),
             SvgPicture.asset(
-              "assets/icons/Exit.svg",
+              "assets/icons/appbar_exit.svg",
               width: 8,
               height: 8,
             ),

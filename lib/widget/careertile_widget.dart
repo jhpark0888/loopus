@@ -33,7 +33,7 @@ class CareerTile extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 title.value,
-                style: k15normal.copyWith(
+                style: kmainbold.copyWith(
                     fontWeight: currentPage.value.toInt() == index
                         ? FontWeight.w600
                         : FontWeight.w400),
@@ -41,7 +41,7 @@ class CareerTile extends StatelessWidget {
               const Spacer(),
               Text(
                 DateFormat('yyyy.MM').format(time),
-                style: k15normal.copyWith(color: mainblack.withOpacity(0.5)),
+                style: kmain.copyWith(color: maingray),
               )
             ],
           ),

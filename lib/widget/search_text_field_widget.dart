@@ -32,7 +32,7 @@ class SearchTextFieldWidget extends StatelessWidget {
         readOnly: readonly,
         onTap: ontap,
         onChanged: onchanged,
-        style: k16Normal,
+        style: kmain,
         cursorColor: mainblack,
         cursorWidth: 1.2,
         cursorRadius: Radius.circular(5.0),
@@ -52,11 +52,11 @@ class SearchTextFieldWidget extends StatelessWidget {
           contentPadding: const EdgeInsets.only(right: 24),
           isDense: true,
           hintText: hinttext,
-          hintStyle: k16Normal.copyWith(color: maingray),
+          hintStyle: kmain.copyWith(color: maingray),
           prefixIcon: Padding(
             padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
             child: SvgPicture.asset(
-              "assets/icons/Search_Inactive.svg",
+              "assets/icons/search_inactive.svg",
               width: 20,
               height: 20,
               color: maingray,

@@ -62,7 +62,7 @@ class TagDetailScreen extends StatelessWidget {
                     Get.back();
                   },
                   child: SvgPicture.asset(
-                    'assets/icons/Back_icon.svg',
+                    'assets/icons/appbar_back.svg',
                   ),
                 ),
                 automaticallyImplyLeading: false,
@@ -355,7 +355,7 @@ class TagDetailScreen extends StatelessWidget {
 //                                     '얼마나 많은 학생들이 관심을 가지고 있는지 알 수 있어요', 1400);
 //                               },
 //                               child: SvgPicture.asset(
-//                                 'assets/icons/Question.svg',
+//                                 'assets/icons/information.svg',
 //                                 width: 20,
 //                                 height: 20,
 //                                 color: mainblack.withOpacity(0.6),

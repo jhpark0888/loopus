@@ -25,7 +25,7 @@ class QuestionDetailWidget extends StatelessWidget {
             children: [
               Text(
                 "${question.content}",
-                style: kSubTitle1Style,
+                style: ktempFont,
               ),
               const SizedBox(
                 height: 24,
@@ -65,19 +65,19 @@ class QuestionDetailWidget extends StatelessWidget {
                             ),
                             Text(
                               "${question.user.realName} · ",
-                              style: kButtonStyle,
+                              style: ktempFont,
                             ),
                           ],
                         ),
                       ),
-                      Text("${question.user.department}", style: kBody2Style),
+                      Text("${question.user.department}", style: ktempFont),
                     ],
                   ),
                   Text(
                     messagedurationCaculate(
                         startDate: question.date!, endDate: DateTime.now()),
                     style:
-                        kBody2Style.copyWith(color: mainblack.withOpacity(0.6)),
+                        ktempFont.copyWith(color: mainblack.withOpacity(0.6)),
                   )
                 ],
               ),

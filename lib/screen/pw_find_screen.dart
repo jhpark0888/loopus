@@ -46,7 +46,7 @@ class PwFindScreen extends StatelessWidget {
               child: Obx(
                 () => Text(
                   '다음',
-                  style: kSubTitle2Style.copyWith(
+                  style: ktempFont.copyWith(
                       color: pwChangeController.pwcertification.value ==
                               Emailcertification.success
                           ? mainblue
@@ -74,7 +74,7 @@ class PwFindScreen extends StatelessWidget {
                   children: [
                     const Text(
                       '이메일 주소',
-                      style: kSubTitle2Style,
+                      style: ktempFont,
                     ),
                     const SizedBox(
                       height: 16,
@@ -142,7 +142,7 @@ class PwFindScreen extends StatelessWidget {
                         child: Center(
                           child: Text(
                             "로그인 화면으로",
-                            style: kButtonStyle.copyWith(
+                            style: ktempFont.copyWith(
                               color: mainblack.withOpacity(0.6),
                             ),
                           ),

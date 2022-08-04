@@ -40,7 +40,7 @@ class BlueTextButton extends StatelessWidget {
         child: Obx(
           () => Text(
             text,
-            style: kButtonStyle.copyWith(
+            style: ktempFont.copyWith(
               color: _hoverController.isHover.value
                   ? mainWhite.withOpacity(0.6)
                   : mainWhite,

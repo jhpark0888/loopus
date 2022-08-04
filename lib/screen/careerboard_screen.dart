@@ -52,7 +52,7 @@ class CareerBoardScreen extends StatelessWidget {
                 style: ktitle,
               ),
               const SizedBox(width: 7),
-              SvgPicture.asset('assets/icons/information_icon.svg')
+              SvgPicture.asset('assets/icons/information.svg')
             ],
           ),
         ),
@@ -173,7 +173,7 @@ class CareerBoardScreen extends StatelessWidget {
                                         left: 20.0, top: 24),
                                     child: Text(
                                       '${currentField.value} 분야 실시간 순위',
-                                      style: k18semiBold,
+                                      style: kmainbold,
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
@@ -210,7 +210,7 @@ class CareerBoardScreen extends StatelessWidget {
                                     padding: const EdgeInsets.only(left: 20),
                                     child: Text(
                                       '${currentField.value} 분야 최근 인기 기업',
-                                      style: k18semiBold,
+                                      style: kmainbold,
                                     ),
                                   ),
                                   const SizedBox(height: 14),
@@ -253,7 +253,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   const Padding(
                                     padding: EdgeInsets.only(left: 20),
                                     child:
-                                        Text('실시간 인기 포스트', style: k18semiBold),
+                                        Text('실시간 인기 포스트', style: kmainbold),
                                   ),
                                   const SizedBox(height: 14),
                                   SizedBox(
@@ -297,7 +297,7 @@ class CareerBoardScreen extends StatelessWidget {
                                       padding: EdgeInsets.only(
                                           left: 20.0, right: 20),
                                       child:
-                                          Text('해시태그 분석', style: k18semiBold)),
+                                          Text('해시태그 분석', style: kmainbold)),
                                   const SizedBox(height: 14),
                                   Padding(
                                     padding: const EdgeInsets.only(
@@ -342,7 +342,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   const Padding(
                                     padding:
                                         EdgeInsets.only(left: 20, right: 20),
-                                    child: Text('포스트 분석', style: k18semiBold),
+                                    child: Text('포스트 분석', style: kmainbold),
                                   ),
                                   const SizedBox(height: 12),
                                   Padding(
@@ -357,7 +357,7 @@ class CareerBoardScreen extends StatelessWidget {
                                                 color: myPostColor)),
                                         const SizedBox(width: 4),
                                         Text('내 포스트 수',
-                                            style: k13midum.copyWith(
+                                            style: ktempFont.copyWith(
                                                 color: myPostColor)),
                                       ],
                                     ),
@@ -436,7 +436,7 @@ class CareerBoardScreen extends StatelessWidget {
                                                             Text(
                                                               '${e.key}월',
                                                               style:
-                                                                  kButtonStyle,
+                                                                  ktempFont,
                                                             )
                                                           ],
                                                         ))

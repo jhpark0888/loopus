@@ -82,39 +82,36 @@ class App extends StatelessWidget {
                 items: [
                   BottomNavigationBarItem(
                       tooltip: '',
-                      icon: SvgPicture.asset("assets/icons/Home_Inactive.svg"),
+                      icon: SvgPicture.asset("assets/icons/home_inactive.svg"),
                       activeIcon:
-                          SvgPicture.asset("assets/icons/Home_Active.svg"),
+                          SvgPicture.asset("assets/icons/home_active.svg"),
                       label: "홈"),
                   BottomNavigationBarItem(
                       tooltip: '',
                       icon:
-                          SvgPicture.asset("assets/icons/Search_Inactive.svg"),
+                          SvgPicture.asset("assets/icons/search_inactive.svg"),
                       activeIcon:
-                          SvgPicture.asset("assets/icons/Search_Active.svg"),
+                          SvgPicture.asset("assets/icons/search_active.svg"),
                       label: "검색"),
                   BottomNavigationBarItem(
                       tooltip: '',
                       icon: SvgPicture.asset(
-                        "assets/icons/Plus_Inactive.svg",
-                      ),
-                      activeIcon: SvgPicture.asset(
-                        "assets/icons/Plus_Inactive.svg",
+                        "assets/icons/home_add.svg",
                       ),
                       label: "추가"),
                   BottomNavigationBarItem(
                       tooltip: '',
                       icon: SvgPicture.asset(
-                        "assets/icons/Scout_Inactive.svg",
+                        "assets/icons/scout_inactive.svg",
                       ),
                       activeIcon:
-                          SvgPicture.asset("assets/icons/Scout_Active.svg"),
+                          SvgPicture.asset("assets/icons/scout_active.svg"),
                       label: "스카우트 리포트"),
                   BottomNavigationBarItem(
                     tooltip: '',
-                    icon: SvgPicture.asset("assets/icons/Career_Inactive.svg"),
+                    icon: SvgPicture.asset("assets/icons/career_inactive.svg"),
                     activeIcon:
-                        SvgPicture.asset("assets/icons/Career_Active.svg"),
+                        SvgPicture.asset("assets/icons/career_active.svg"),
                     label: "커리어 보드",
                   ),
                 ],

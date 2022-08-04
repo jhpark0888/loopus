@@ -41,7 +41,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                             : () {},
                     child: Text(
                       '다음',
-                      style: kSubTitle2Style.copyWith(
+                      style: ktempFont.copyWith(
                         color: projectaddcontroller.isDateValidated.value
                             ? mainblue
                             : mainblack.withOpacity(0.38),
@@ -83,7 +83,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                           },
                           child: Text(
                             '저장',
-                            style: kSubTitle2Style.copyWith(
+                            style: ktempFont.copyWith(
                               color:
                                   (projectaddcontroller.isDateValidated.value ==
                                           true)
@@ -113,13 +113,13 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: '언제부터 언제까지 ',
-                        style: kSubTitle1Style.copyWith(
+                        style: ktempFont.copyWith(
                           color: mainblue,
                         ),
                       ),
                       TextSpan(
                         text: '진행하셨나요?',
-                        style: kSubTitle1Style,
+                        style: ktempFont,
                       ),
                     ],
                   ),
@@ -129,7 +129,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                 ),
                 Text(
                   '아직 종료되지 않은 커리어여도 괜찮아요',
-                  style: kBody2Style,
+                  style: ktempFont,
                 ),
                 SizedBox(
                   height: 32,
@@ -139,7 +139,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                   children: [
                     Text(
                       '시작한 날짜',
-                      style: kSubTitle3Style,
+                      style: ktempFont,
                     ),
                     SizedBox(
                       width: 4,
@@ -154,7 +154,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                                   '')
                               ? '선택'
                               : '${DateFormat('yyyy년 MM월 dd일').format(DateTime.parse(projectaddcontroller.selectedStartDateTime.value))}',
-                          style: kSubTitle2Style.copyWith(color: mainblue),
+                          style: ktempFont.copyWith(color: mainblue),
                         ),
                       ),
                     ),
@@ -168,8 +168,8 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                         '종료한 날짜',
                         style:
                             (projectaddcontroller.isEndedProject.value == true)
-                                ? kSubTitle3Style
-                                : kSubTitle3Style.copyWith(
+                                ? ktempFont
+                                : ktempFont.copyWith(
                                     color: mainblack.withOpacity(0.38),
                                   ),
                       ),
@@ -192,7 +192,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                                   ? '선택'
                                   : '${DateFormat('yyyy년 MM월 dd일').format(DateTime.parse(projectaddcontroller.selectedEndDateTime.value))}'
                               : '진행 중',
-                          style: kSubTitle2Style.copyWith(
+                          style: ktempFont.copyWith(
                             color: (projectaddcontroller.isEndedProject.value ==
                                     true)
                                 ? mainblue
@@ -226,7 +226,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                         ),
                         Text(
                           '아직 종료되지 않았어요',
-                          style: kBody2Style,
+                          style: ktempFont,
                         ),
                       ],
                     ),
@@ -239,7 +239,7 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     true)
                   Text(
                     '시작한 날짜는 종료한 날짜보다 클 수 없어요',
-                    style: kButtonStyle.copyWith(color: rankred),
+                    style: ktempFont.copyWith(color: rankred),
                   ),
               ],
             ),

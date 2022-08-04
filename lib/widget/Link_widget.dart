@@ -218,7 +218,7 @@ class LinkWidget extends StatelessWidget {
                                 children: [
                                   Text(
                                     linkController.info.value.domain,
-                                    style: k16Normal,
+                                    style: kmain,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),
@@ -227,7 +227,7 @@ class LinkWidget extends StatelessWidget {
                                   ),
                                   Text(
                                     linkController.info.value.title,
-                                    style: k16Normal,
+                                    style: kmain,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),

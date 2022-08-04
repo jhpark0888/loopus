@@ -70,12 +70,12 @@ class MessageWidget extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(12.0, 0, 8.0, 0.0),
                         child: Text(
                           messagedurationCaculate(startDate: message.date, endDate: DateTime.now()),
-                          style: kCaptionStyle.copyWith(
+                          style: kcaption.copyWith(
                             color: mainblack,
                           ),
                         ),
                       ),
-                      hasTextOverflow(message.content, kBody2Style)
+                      hasTextOverflow(message.content, kmainheight)
                           ? Container(
                               constraints:
                                   BoxConstraints(maxWidth: Get.width * (3 / 5)),
@@ -87,8 +87,8 @@ class MessageWidget extends StatelessWidget {
                                       const EdgeInsets.fromLTRB(14, 7, 14, 7),
                                   child: Text(
                                     message.content,
-                                    style: kSubTitle3Style.copyWith(
-                                        height: 1.5, color: mainWhite),
+                                    style: kmainheight.copyWith(
+                                       color: mainWhite),
                                     textHeightBehavior: const TextHeightBehavior(
                                       applyHeightToFirstAscent: true,
                                       applyHeightToLastDescent: true,
@@ -105,8 +105,7 @@ class MessageWidget extends StatelessWidget {
                                       const EdgeInsets.fromLTRB(14, 7, 14, 7),
                                   child: Text(
                                     message.content,
-                                    style: kSubTitle3Style.copyWith(
-                                      height: 1.5,
+                                    style: kmainheight.copyWith(
                                       color: mainWhite,
                                     ),
                                     textHeightBehavior: const TextHeightBehavior(
@@ -125,7 +124,7 @@ class MessageWidget extends StatelessWidget {
                               ? const Text(
                                   '읽음',
                                   textAlign: TextAlign.end,
-                                  style: kCaptionStyle,
+                                  style: kcaption,
                                 )
                               : const SizedBox.shrink()
                         ])
@@ -159,7 +158,7 @@ class MessageWidget extends StatelessWidget {
                         children: [
                           Text(
                             partner.realName,
-                            style: k16semiBold,
+                            style: kmainbold,
                           ),
                           const SizedBox(
                             height: 7,
@@ -167,7 +166,7 @@ class MessageWidget extends StatelessWidget {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              hasTextOverflow(message.content, kBody2Style)
+                              hasTextOverflow(message.content, kmainheight)
                                   ? Container(
                                       constraints: BoxConstraints(
                                           maxWidth: Get.width * (3 / 5)),
@@ -183,7 +182,7 @@ class MessageWidget extends StatelessWidget {
                                               14, 7, 14, 7),
                                           child: Text(
                                             message.content,
-                                            style: kBody2Style,
+                                            style: kmainheight,
                                             textHeightBehavior: const TextHeightBehavior(
                                       applyHeightToFirstAscent: true,
                                       applyHeightToLastDescent: true,
@@ -204,7 +203,7 @@ class MessageWidget extends StatelessWidget {
                                               14, 7, 14, 7),
                                           child: Text(
                                             message.content,
-                                            style: kBody2Style,
+                                            style: kmainheight,
                                             softWrap: true,
                                             textHeightBehavior: const TextHeightBehavior(
                                       applyHeightToFirstAscent: true,
@@ -218,7 +217,7 @@ class MessageWidget extends StatelessWidget {
                                     8.0, 18.0, 12.0, 0.0),
                                 child: Text(
                                   messagedurationCaculate(startDate: message.date, endDate: DateTime.now()),
-                                  style: kCaptionStyle.copyWith(color: mainblack),
+                                  style: kcaption.copyWith(color: mainblack),
                                   textAlign: TextAlign.end,
                                 ),
                               )
@@ -258,7 +257,7 @@ class MessageWidget extends StatelessWidget {
                 const SizedBox(width: 14),
                 Text(
                   '${message.date.year}.${message.date.month}.${message.date.day}',
-                  style: k16Normal.copyWith(color: maingray),
+                  style: kmain.copyWith(color: maingray),
                 ),
                 const SizedBox(width: 14),
                 Expanded(

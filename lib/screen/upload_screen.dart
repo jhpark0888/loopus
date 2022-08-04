@@ -34,7 +34,7 @@ class UploadScreen extends StatelessWidget {
               Get.back();
             },
             child: SvgPicture.asset(
-              'assets/icons/Back_icon.svg',
+              'assets/icons/appbar_back.svg',
             )),
         title: Obx(
           () => Text(
@@ -95,11 +95,11 @@ class UploadScreen extends StatelessWidget {
                                       children: controller.cropWidgetList.value,
                                     ),
                                   )
-                                : Center(
+                                : const Center(
                                     child: Text(
                                     '이미지를 선택해주세요 \n 최대 10장까지 가능해요',
                                     style:
-                                        kSubTitle3Style.copyWith(height: 1.5),
+                                        kmainheight,
                                   ))),
                         if (controller.isSelect.value)
                           Positioned(
@@ -114,7 +114,7 @@ class UploadScreen extends StatelessWidget {
                                     // }
                                   },
                                   child: SvgPicture.asset(
-                                      'assets/icons/PhotoEdit.svg')),
+                                      'assets/icons/photo_edit.svg')),
                               top: 16,
                               right: 16)
                       ]),
@@ -238,13 +238,13 @@ class UploadScreen extends StatelessWidget {
                                                                           index]
                                                                       .name,
                                                                   style:
-                                                                      k16semiBold,
+                                                                      kmainbold,
                                                                 ),
                                                                 const Spacer(),
                                                                 Text(
                                                                   '${controller.albums[index].assetCount.toString()}개',
                                                                   style:
-                                                                      kSubTitle3Style,
+                                                                      kmain,
                                                                 ),
                                                               ],
                                                             ),
@@ -267,7 +267,8 @@ class UploadScreen extends StatelessWidget {
                                     style: kmainbold,
                                   ),
                                 ),
-                                Icon(Icons.arrow_drop_down)
+                                const SizedBox(width: 7),
+                                SvgPicture.asset('assets/icons/drop_icon.svg')
                               ],
                             ),
                           ),
@@ -385,22 +386,9 @@ class UploadScreen extends StatelessWidget {
                                           ? Positioned(
                                               top: 5,
                                               right: 5,
-                                              child: Container(
-                                                width: 22,
-                                                height: 22,
-                                                decoration: BoxDecoration(
-                                                    color: mainblue,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            32)),
-                                                child: Center(
-                                                  child: Text(
-                                                    '${controller.selectedImages.indexOf(controller.imageList[index]) + 1}',
-                                                    style: kmain.copyWith(
-                                                        color: mainWhite),
-                                                  ),
-                                                ),
-                                              ))
+                                              child: 
+                                              SvgPicture.asset('assets/icons/num_index${controller.selectedImages.indexOf(controller.imageList[index]) + 1}.svg')
+                                              )
                                           : const SizedBox.shrink()
                                       : const SizedBox.shrink()
                                 ]),

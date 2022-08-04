@@ -43,7 +43,7 @@ class PwChangeScreen extends StatelessWidget {
                         children: [
                           Text(
                             '현재 비밀번호',
-                            style: kSubTitle2Style,
+                            style: ktempFont,
                           ),
                           SizedBox(
                             height: 12,
@@ -67,7 +67,7 @@ class PwChangeScreen extends StatelessWidget {
                     : Container(),
                 Text(
                   '새로운 비밀번호',
-                  style: kSubTitle2Style,
+                  style: ktempFont,
                 ),
                 SizedBox(
                   height: 12,
@@ -87,7 +87,7 @@ class PwChangeScreen extends StatelessWidget {
                 ),
                 Text(
                   '새로운 비밀번호 확인',
-                  style: kSubTitle2Style,
+                  style: ktempFont,
                 ),
                 SizedBox(
                   height: 12,
@@ -147,7 +147,7 @@ class PwChangeScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         '변경하기',
-                        style: kButtonStyle.copyWith(color: mainWhite),
+                        style: ktempFont.copyWith(color: mainWhite),
                       ),
                     ),
                   ),

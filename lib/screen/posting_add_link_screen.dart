@@ -84,7 +84,7 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
           //         width: 10,
           //         height: 16,
           //         child: SvgPicture.asset(
-          //           'assets/icons/Back_icon.svg',
+          //           'assets/icons/appbar_back.svg',
           //         ))),
         ),
         body: ScrollNoneffectWidget(
@@ -94,7 +94,7 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Text('링크', style: k16Normal),
+                    const Text('링크', style: kmain),
                     const SizedBox(height: 14),
                     Obx(
                       () => Row(

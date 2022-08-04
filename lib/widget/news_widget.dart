@@ -107,7 +107,7 @@ class _NewsWidgetState extends State<NewsWidget>
               ),
               Text(
                 title,
-                style: k16Normal.copyWith(height: 1.5),
+                style: kmain.copyWith(height: 1.5),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

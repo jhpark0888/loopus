@@ -77,7 +77,7 @@ class WebViewScreen extends StatelessWidget {
           onPressed: () {
             Get.back();
           },
-          icon: SvgPicture.asset('assets/icons/Arrow.svg'),
+          icon: SvgPicture.asset('assets/icons/appbar_back.svg'),
         ),
         actions: [],
       ),
@@ -139,7 +139,7 @@ class WebViewScreen extends StatelessWidget {
                     child: Text(
                       '이 버튼만 클릭해서 잘못된 링크인 걸 알려주세요',
                       textAlign: TextAlign.center,
-                      style: kButtonStyle.copyWith(
+                      style: ktempFont.copyWith(
                         color: mainblue,
                       ),
                     ),
@@ -147,7 +147,7 @@ class WebViewScreen extends StatelessWidget {
                   Text(
                     '상대방은 누가 버튼을 클릭했는지 알 수 없어요',
                     textAlign: TextAlign.center,
-                    style: kCaptionStyle.copyWith(
+                    style: ktempFont.copyWith(
                       color: mainblack.withOpacity(0.6),
                     ),
                   ),

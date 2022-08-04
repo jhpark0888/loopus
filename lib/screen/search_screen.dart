@@ -93,7 +93,7 @@ class SearchScreen extends StatelessWidget {
                       //       prefixIcon: Padding(
                       //         padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
                       //         child: SvgPicture.asset(
-                      //           "assets/icons/Search_Inactive.svg",
+                      //           "assets/icons/search_inactive.svg",
                       //           width: 20,
                       //           height: 20,
                       //           color: maingray,
@@ -203,7 +203,7 @@ Widget weekendStudent() {
           children: [
             Text(
               "이 주의 학생",
-              style: kSubTitle2Style,
+              style: ktempFont,
             ),
             GestureDetector(
               onTap: () {
@@ -214,7 +214,7 @@ Widget weekendStudent() {
               },
               child: Text(
                 "선정 기준이 뭔가요?",
-                style: kButtonStyle.copyWith(color: mainblue),
+                style: ktempFont.copyWith(color: mainblue),
               ),
             ),
           ],

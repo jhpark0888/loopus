@@ -73,14 +73,14 @@ class NotificationWidget extends StatelessWidget {
                           text: notification.user.realName, style: kmainbold),
                       TextSpan(
                         text: "님이 회원님을 팔로우합니다.",
-                        style: kSubTitle1Style.copyWith(
+                        style: kmainheight.copyWith(
                             fontWeight: FontWeight.w400),
                       ),
                       TextSpan(
                         text:
                             ' · ${alarmDurationCaculate(startDate: notification.date)}',
-                        style: kSubTitle1Style.copyWith(
-                          color: mainblack.withOpacity(0.38),
+                        style: kmainheight.copyWith(
+                          color: maingray,
                           fontWeight: FontWeight.w400,
                         ),
                       )
@@ -134,10 +134,10 @@ class NotificationWidget extends StatelessWidget {
                               clickprofile(notification.type);
                             },
                           text: notification.user.realName,
-                          style: kSubTitle1Style),
+                          style: kmainbold),
                       TextSpan(
                         text: "님이 ",
-                        style: kSubTitle1Style.copyWith(
+                        style: kmainheight.copyWith(
                             fontWeight: FontWeight.w400),
                       ),
                       // TextSpan(
@@ -158,15 +158,15 @@ class NotificationWidget extends StatelessWidget {
                                                 NotificationType.comment
                                             ? "회원님의 포스트에 댓글을 남겼습니다."
                                             : "회원님의 댓글에 답변을 남겼습니다.",
-                        style: kSubTitle1Style.copyWith(
+                        style: kmainheight.copyWith(
                             fontWeight: FontWeight.w400),
                       ),
                       TextSpan(
                           text: ' · ${alarmDurationCaculate(
                             startDate: notification.date,
                           )}',
-                          style: kSubTitle3Style.copyWith(
-                              color: mainblack.withOpacity(0.38)))
+                          style: kmainheight.copyWith(
+                              color: maingray))
                     ])),
                   ),
                 ],

@@ -30,7 +30,7 @@ class ContactContentScreen extends StatelessWidget {
             },
             child: Text(
               '보내기',
-              style: kSubTitle2Style.copyWith(color: mainblue),
+              style: kmainbold.copyWith(color: mainblue),
             ),
           ),
         ],
@@ -43,7 +43,7 @@ class ContactContentScreen extends StatelessWidget {
           children: [
             Text(
               '답변 받으실 이메일 주소',
-              style: kSubTitle1Style,
+              style: kmainbold.copyWith(height: 1.5),
             ),
             SizedBox(
               height: 16,
@@ -62,7 +62,7 @@ class ContactContentScreen extends StatelessWidget {
             ),
             Text(
               '문의 내용',
-              style: kSubTitle1Style,
+              style: kmainbold.copyWith(height: 1.5),
             ),
             SizedBox(
               height: 16,

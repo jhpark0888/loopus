@@ -68,7 +68,7 @@ class PersonTileWidget extends StatelessWidget {
                 Obx(
                   () => Text(
                     user.realName,
-                    style: kSubTitle2Style.copyWith(
+                    style: ktempFont.copyWith(
                         color: _hoverController.isHover.value
                             ? mainblack.withOpacity(0.6)
                             : mainblack),
@@ -80,7 +80,7 @@ class PersonTileWidget extends StatelessWidget {
                 Obx(
                   () => Text(
                     user.department,
-                    style: kSubTitle3Style.copyWith(
+                    style: ktempFont.copyWith(
                       color: _hoverController.isHover.value
                           ? mainblack.withOpacity(0.38)
                           : mainblack.withOpacity(0.6),

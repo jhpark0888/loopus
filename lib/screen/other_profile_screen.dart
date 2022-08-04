@@ -15,6 +15,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
@@ -48,14 +49,15 @@ import '../controller/hover_controller.dart';
 
 class OtherProfileScreen extends StatelessWidget {
   OtherProfileScreen(
-      {Key? key, this.user, required this.userid, required this.realname})
+      {Key? key, this.user, required this.userid, required this.realname, this.careerName})
       : super(key: key);
+  String? careerName;
   late final OtherProfileController _controller = Get.put(
       OtherProfileController(
           userid: userid,
-          otherUser: user != null ? user!.obs : User.defaultuser().obs),
+          otherUser: user != null ? user!.obs : User.defaultuser().obs,careerName: careerName),
       tag: userid.toString());
-
+  
   // late final FollowController followController = Get.put(
   //     FollowController(
   //         islooped: _controller.otherUser.value.looped.value ==
@@ -122,7 +124,7 @@ class OtherProfileScreen extends StatelessWidget {
           onPressed: () {
             Get.back();
           },
-          icon: SvgPicture.asset('assets/icons/Arrow.svg'),
+          icon: SvgPicture.asset('assets/icons/appbar_back.svg'),
         ),
         title: '$realname님의 프로필',
         actions: [
@@ -136,7 +138,7 @@ class OtherProfileScreen extends StatelessWidget {
                           Get.to(() => SettingScreen());
                         },
                         icon: SvgPicture.asset(
-                          'assets/icons/Setting.svg',
+                          'assets/icons/setting.svg',
                         ),
                       )
                     : IconButton(
@@ -192,7 +194,7 @@ class OtherProfileScreen extends StatelessWidget {
                           );
                         },
                         icon: SvgPicture.asset(
-                          'assets/icons/More.svg',
+                          'assets/icons/more_option.svg',
                         ),
                       ),
           ),
@@ -326,9 +328,9 @@ class OtherProfileScreen extends StatelessWidget {
                                                                 color:
                                                                     mainWhite),
                                                         child: SvgPicture.asset(
-                                                          "assets/icons/Image.svg",
-                                                          width: 24,
-                                                          height: 24,
+                                                          "assets/icons/profile_image.svg",
+                                                          width: 28,
+                                                          height: 28,
                                                         ),
                                                       ),
                                                     ),
@@ -474,31 +476,28 @@ class OtherProfileScreen extends StatelessWidget {
                                                               .value.userid) {
                                                         Get.back();
                                                       } else {
-                                                        
-                                                            Get.to(() =>
-                                                                MessageDetatilScreen(
-                                                                  partner: _controller
+                                                        Get.to(() =>
+                                                            MessageDetatilScreen(
+                                                              partner:
+                                                                  _controller
                                                                       .otherUser
                                                                       .value,
-                                                                  myProfile:
-                                                                      HomeController
-                                                                          .to
-                                                                          .myProfile
-                                                                          .value,
-                                                                  enterRoute:
-                                                                      EnterRoute
-                                                                          .otherProfile,
-                                                                ));
-                                                            HomeController
-                                                                    .to
-                                                                    .enterMessageRoom
-                                                                    .value =
-                                                                _controller
-                                                                    .otherUser
-                                                                    .value
-                                                                    .userid;
-                                                          
-                                                    
+                                                              myProfile:
+                                                                  HomeController
+                                                                      .to
+                                                                      .myProfile
+                                                                      .value,
+                                                              enterRoute: EnterRoute
+                                                                  .otherProfile,
+                                                            ));
+                                                        HomeController
+                                                                .to
+                                                                .enterMessageRoom
+                                                                .value =
+                                                            _controller
+                                                                .otherUser
+                                                                .value
+                                                                .userid;
                                                       }
                                                       // MessageDetailScreen(
                                                       //   realname:
@@ -604,10 +603,9 @@ class OtherProfileScreen extends StatelessWidget {
                                               style: kNavigationTitle),
                                           const SizedBox(width: 7),
                                           SvgPicture.asset(
-                                            'assets/icons/Question.svg',
-                                            width: 20,
-                                            height: 20,
-                                            color: mainblack.withOpacity(0.6),
+                                            'assets/icons/information.svg',
+                                            width: 16,
+                                            height: 16,
                                           ),
                                           const Spacer(),
                                           InkWell(
@@ -617,7 +615,7 @@ class OtherProfileScreen extends StatelessWidget {
                                               },
                                               child: Text(
                                                 '전체 보기(000개)',
-                                                style: kBody1Style.copyWith(
+                                                style: kmain.copyWith(
                                                     color: mainblue),
                                               ))
                                         ],
@@ -702,7 +700,7 @@ class OtherProfileScreen extends StatelessWidget {
                                           //     const Text('커리어 분석', style: k18Semibold),
                                           //     const SizedBox(width: 7),
                                           //     SvgPicture.asset(
-                                          //       'assets/icons/Question.svg',
+                                          //       'assets/icons/information.svg',
                                           //       width: 20,
                                           //       height: 20,
                                           //       color: mainblack.withOpacity(0.6),
@@ -721,11 +719,9 @@ class OtherProfileScreen extends StatelessWidget {
                                                   style: kNavigationTitle),
                                               const SizedBox(width: 7),
                                               SvgPicture.asset(
-                                                'assets/icons/Question.svg',
-                                                width: 20,
-                                                height: 20,
-                                                color:
-                                                    mainblack.withOpacity(0.6),
+                                                'assets/icons/information.svg',
+                                                width: 16,
+                                                height: 16,
                                               ),
                                               const Spacer(),
                                               if (_controller
@@ -741,7 +737,7 @@ class OtherProfileScreen extends StatelessWidget {
                                                   },
                                                   child: Text(
                                                     '추가하기',
-                                                    style: k15normal.copyWith(
+                                                    style: kmain.copyWith(
                                                         color: mainblue),
                                                   ),
                                                   splashColor: kSplashColor,
@@ -790,8 +786,10 @@ class OtherProfileScreen extends StatelessWidget {
                                                   }).toList()),
                                           ),
                                           const SizedBox(height: 24),
-                                          const Divider(
-                                              thickness: 1, color: cardGray),
+                                          Divider(
+                                              thickness: 1,
+                                              color: cardGray,
+                                              key: _controller.keycontroller.viewKey),
                                           const SizedBox(height: 24),
                                           Row(
                                             children: [
@@ -1009,7 +1007,7 @@ class OtherProfileScreen extends StatelessWidget {
                                                             .centerLeft,
                                                         child: Text(
                                                           '함께한 친구',
-                                                          style: k15normal
+                                                          style: ktempFont
                                                               .copyWith(
                                                                   fontWeight:
                                                                       FontWeight
@@ -1065,7 +1063,7 @@ class OtherProfileScreen extends StatelessWidget {
                                                                           Text(
                                                                             project.members[index].realName,
                                                                             style:
-                                                                                k15normal.copyWith(fontWeight: FontWeight.w400),
+                                                                                ktempFont.copyWith(fontWeight: FontWeight.w400),
                                                                           )
                                                                         ],
                                                                       );

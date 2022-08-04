@@ -35,7 +35,7 @@ class SignupTypeScreen extends StatelessWidget {
             },
             child: Text(
               '다음',
-              style: kSubTitle2Style.copyWith(color: mainblue),
+              style: ktempFont.copyWith(color: mainblue),
             ),
           ),
         ],
@@ -55,7 +55,7 @@ class SignupTypeScreen extends StatelessWidget {
             children: [
               const Text(
                 '가입 유형을 선택해주세요',
-                style: kSubTitle1Style,
+                style: ktempFont,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(

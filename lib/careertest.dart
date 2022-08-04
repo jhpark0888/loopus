@@ -97,9 +97,9 @@
 //     if (variance == 0) {
 //       return const SizedBox.shrink();
 //     } else if (variance >= 1) {
-//       return SvgPicture.asset('assets/icons/upper_arrow.svg');
+//       return SvgPicture.asset('assets/icons/rate_upper_arrow.svg');
 //     } else {
-//       return SvgPicture.asset('assets/icons/down_arrow.svg');
+//       return SvgPicture.asset('assets/icons/rate_down_arrow.svg');
 //     }
 //   }
 // }
@@ -125,7 +125,7 @@
 //                     const Text('커리어 분석', style: k18Semibold),
 //                     const SizedBox(width: 7),
 //                     SvgPicture.asset(
-//                       'assets/icons/Question.svg',
+//                       'assets/icons/information.svg',
 //                       width: 20,
 //                       height: 20,
 //                       color: mainblack.withOpacity(0.6),
@@ -141,7 +141,7 @@
 //                     const Text('커리어', style: k18Semibold),
 //                     const SizedBox(width: 7),
 //                     SvgPicture.asset(
-//                       'assets/icons/Question.svg',
+//                       'assets/icons/information.svg',
 //                       width: 20,
 //                       height: 20,
 //                       color: mainblack.withOpacity(0.6),

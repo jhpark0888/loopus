@@ -48,7 +48,7 @@ class _AlertScreenState extends State<AlertScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('프로모션 알림 설정', style: kSubTitle3Style),
+                const Text('프로모션 알림 설정', style: kmain),
                 if (Platform.isAndroid)
                   Switch(
                       activeColor: mainblue,
@@ -100,13 +100,13 @@ class _AlertScreenState extends State<AlertScreen> {
                   children: [
                     Text(
                       '\u2219 ',
-                      style: kCaptionStyle.copyWith(
+                      style: kcaption.copyWith(
                           color: mainblack.withOpacity(0.6)),
                     ),
                     Expanded(
                       child: Text(
                         '알림이 제대로 오지 않는다면, 로그아웃 후 다시 로그인을 시도해주세요.',
-                        style: kCaptionStyle.copyWith(
+                        style: kcaption.copyWith(
                             color: mainblack.withOpacity(0.6)),
                       ),
                     ),
@@ -120,13 +120,13 @@ class _AlertScreenState extends State<AlertScreen> {
                   children: [
                     Text(
                       '\u2219 ',
-                      style: kCaptionStyle.copyWith(
+                      style: kcaption.copyWith(
                           color: mainblack.withOpacity(0.6)),
                     ),
                     Expanded(
                       child: Text(
                         '프로모션 알림을 설정해도 알림이 오지 않는다면, 시스템 알림 설정을 확인해보세요.',
-                        style: kCaptionStyle.copyWith(
+                        style: kcaption.copyWith(
                             color: mainblack.withOpacity(0.6)),
                       ),
                     ),

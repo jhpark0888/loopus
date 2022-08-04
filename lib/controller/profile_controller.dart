@@ -181,14 +181,14 @@ class ProfileController extends GetxController
             RichText(
                 text: TextSpan(children: [
               TextSpan(
-                  text: title, style: kBody2Style.copyWith(color: mainblue)),
-              const TextSpan(text: ' 분야', style: kBody2Style)
+                  text: title, style: kmain.copyWith(color: mainblue)),
+              const TextSpan(text: ' 분야', style: kmain)
             ])),
             const SizedBox(width: 37),
-            Text('전국 $countrywide%', style: kBody2Style),
+            Text('전국 $countrywide%', style: kmain),
             rate(countryVariance),
             const SizedBox(width: 11),
-            Text('교내 $campus%', style: kBody2Style),
+            Text('교내 $campus%', style: kmain),
             rate(campusVariance)
           ],
         )
@@ -204,7 +204,7 @@ class ProfileController extends GetxController
       if (variance != 0)
         Text('${variance.abs()}%',
             style:
-                k9normal.copyWith(color: variance >= 1 ? rankred : mainblue)),
+                kcaption.copyWith(color: variance >= 1 ? rankred : mainblue)),
     ]);
   }
 
@@ -212,9 +212,9 @@ class ProfileController extends GetxController
     if (variance == 0) {
       return const SizedBox.shrink();
     } else if (variance >= 1) {
-      return SvgPicture.asset('assets/icons/upper_arrow.svg');
+      return SvgPicture.asset('assets/icons/rate_upper_arrow.svg');
     } else {
-      return SvgPicture.asset('assets/icons/down_arrow.svg');
+      return SvgPicture.asset('assets/icons/rate_down_arrow.svg');
     }
   }
 

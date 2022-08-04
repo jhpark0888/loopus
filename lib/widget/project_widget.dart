@@ -29,8 +29,8 @@ class ProjectWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // controller.project = project;
     return Padding(
-      padding: const EdgeInsets.only(
-        bottom: 16,
+      padding: const EdgeInsets.symmetric(
+        vertical: 14,
       ),
       child: GestureDetector(
         onTapDown: (details) => _hoverController.isHoverState(),
@@ -71,7 +71,7 @@ class ProjectWidget extends StatelessWidget {
                         Obx(
                           () => Text(
                             '${DateFormat("yyyy.MM").format(project.value.startDate!)}',
-                            style: kSubTitle3Style,
+                            style: kmain,
                           ),
                           //  ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''
                           // }
@@ -85,15 +85,15 @@ class ProjectWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text('포스트',
-                          style: kSubTitle3Style.copyWith(
-                              color: maingray.withOpacity(0.5))),
+                          style: kmain.copyWith(
+                              color: maingray)),
                       SizedBox(
                         width: 4,
                       ),
                       Obx(
                         () => Text(
                           '${project.value.post_count!.value}개',
-                          style: kSubTitle3Style,
+                          style: kmain,
                         ),
                       ),
                     ],
@@ -119,15 +119,15 @@ class ProjectWidget extends StatelessWidget {
         RichText(
             text: TextSpan(children: [
           TextSpan(
-              text: title, style: kSubTitle3Style.copyWith(color: mainblue)),
-          const TextSpan(text: '분야', style: kSubTitle3Style)
+              text: title, style: kmain.copyWith(color: mainblue)),
+          const TextSpan(text: '분야', style: kmain)
         ])),
         Spacer(),
         const SizedBox(width: 37),
-        Text('전국 $countrywide%', style: kSubTitle3Style),
+        Text('전국 $countrywide%', style: kmain),
         rate(countryVariance),
         const SizedBox(width: 11),
-        Text('교내 $campus%', style: kSubTitle3Style),
+        Text('교내 $campus%', style: kmain),
         rate(campusVariance)
       ],
     );
@@ -149,9 +149,9 @@ class ProjectWidget extends StatelessWidget {
     if (variance == 0) {
       return const SizedBox.shrink();
     } else if (variance >= 1) {
-      return SvgPicture.asset('assets/icons/upper_arrow.svg');
+      return SvgPicture.asset('assets/icons/rate_upper_arrow.svg');
     } else {
-      return SvgPicture.asset('assets/icons/down_arrow.svg');
+      return SvgPicture.asset('assets/icons/rate_down_arrow.svg');
     }
   }
 }

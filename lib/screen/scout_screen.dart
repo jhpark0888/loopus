@@ -81,7 +81,7 @@ class ScoutScreen extends StatelessWidget {
   //             GestureDetector(
   //               onTap: () {},
   //               child: SvgPicture.asset(
-  //                 "assets/icons/Search_Inactive.svg",
+  //                 "assets/icons/search_inactive.svg",
   //                 width: 20,
   //                 height: 20,
   //                 color: mainblack,
@@ -133,7 +133,7 @@ class ScoutScreen extends StatelessWidget {
                       style: ktitle,
                     ),
                     const SizedBox(width: 7),
-                    SvgPicture.asset('assets/icons/information_icon.svg')
+                    SvgPicture.asset('assets/icons/information.svg')
                   ],
                 ),
               ),
@@ -390,7 +390,7 @@ class ScoutScreen extends StatelessWidget {
                                                       currentField.key]!(true);
                                                 },
                                                 child: SvgPicture.asset(
-                                                  "assets/icons/Search_Inactive.svg",
+                                                  "assets/icons/search_inactive.svg",
                                                   width: 20,
                                                   height: 20,
                                                   color: mainblack,

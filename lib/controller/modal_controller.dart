@@ -110,11 +110,11 @@ void showContentModal(BuildContext context) {
                               isCheckTwo.value == true &&
                               isCheckThree.value == true &&
                               isCheckFour.value == true)
-                          ? kSubTitle2Style.copyWith(
+                          ? ktempFont.copyWith(
                               fontWeight: FontWeight.w400,
                               color: mainblue,
                             )
-                          : kSubTitle2Style.copyWith(
+                          : ktempFont.copyWith(
                               fontWeight: FontWeight.w400,
                               color: mainblack.withOpacity(0.6),
                             ),
@@ -150,7 +150,7 @@ void showContentModal(BuildContext context) {
                       ),
                       Text(
                         '(필수)',
-                        style: kButtonStyle.copyWith(
+                        style: ktempFont.copyWith(
                           color: isCheckOne.value == true
                               ? mainblue
                               : mainblack.withOpacity(0.6),
@@ -161,7 +161,7 @@ void showContentModal(BuildContext context) {
                       ),
                       Text(
                         '서비스 이용약관',
-                        style: kBody2Style.copyWith(
+                        style: ktempFont.copyWith(
                           color: isCheckOne.value == true
                               ? mainblue
                               : mainblack.withOpacity(0.6),
@@ -174,7 +174,8 @@ void showContentModal(BuildContext context) {
                   onTap: () {
                     Get.to(() => WebViewScreen(url: kTermsOfService));
                   },
-                  child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
+                  // child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
+                  child: SizedBox.shrink()
                 ),
               ],
             ),
@@ -206,7 +207,7 @@ void showContentModal(BuildContext context) {
                       ),
                       Text(
                         '(필수)',
-                        style: kButtonStyle.copyWith(
+                        style: ktempFont.copyWith(
                           color: isCheckTwo.value == true
                               ? mainblue
                               : mainblack.withOpacity(0.6),
@@ -217,7 +218,7 @@ void showContentModal(BuildContext context) {
                       ),
                       Text(
                         '개인정보 처리방침',
-                        style: kBody2Style.copyWith(
+                        style: ktempFont.copyWith(
                           color: isCheckTwo.value == true
                               ? mainblue
                               : mainblack.withOpacity(0.6),
@@ -262,7 +263,7 @@ void showContentModal(BuildContext context) {
                       ),
                       Text(
                         '(필수)',
-                        style: kButtonStyle.copyWith(
+                        style: ktempFont.copyWith(
                           color: isCheckFour.value == true
                               ? mainblue
                               : mainblack.withOpacity(0.6),
@@ -273,7 +274,7 @@ void showContentModal(BuildContext context) {
                       ),
                       Text(
                         '개인정보 수집동의',
-                        style: kBody2Style.copyWith(
+                        style: ktempFont.copyWith(
                           color: isCheckFour.value == true
                               ? mainblue
                               : mainblack.withOpacity(0.6),
@@ -315,7 +316,7 @@ void showContentModal(BuildContext context) {
                   ),
                   Text(
                     '(선택)',
-                    style: kBody2Style.copyWith(
+                    style: ktempFont.copyWith(
                       color: isCheckThree.value == true
                           ? mainblue
                           : mainblack.withOpacity(0.6),
@@ -326,7 +327,7 @@ void showContentModal(BuildContext context) {
                   ),
                   Text(
                     '루프어스 프로모션 알림 수신 동의',
-                    style: kBody2Style.copyWith(
+                    style: ktempFont.copyWith(
                       color: isCheckThree.value == true
                           ? mainblue
                           : mainblack.withOpacity(0.6),
@@ -375,7 +376,7 @@ void showContentModal(BuildContext context) {
                 child: Center(
                   child: Text(
                     '다음',
-                    style: kButtonStyle.copyWith(
+                    style: ktempFont.copyWith(
                       color: (isCheckOne.value == true &&
                               isCheckTwo.value == true &&
                               isCheckFour.value == true)
@@ -419,7 +420,7 @@ void showModalIOS(
       cancelButton: CupertinoActionSheetAction(
         child: const Text(
           '닫기',
-          style: kBody2Style,
+          style: kmain,
         ),
         isDefaultAction: true,
         onPressed: () {
@@ -430,7 +431,7 @@ void showModalIOS(
         CupertinoActionSheetAction(
           child: Text(
             value1,
-            style: kButtonStyle.copyWith(
+            style: kmain.copyWith(
               color: isValue1Red ? rankred : mainblack,
             ),
           ),
@@ -440,7 +441,7 @@ void showModalIOS(
           CupertinoActionSheetAction(
               child: Text(
                 value2,
-                style: kButtonStyle.copyWith(
+                style: kmain.copyWith(
                   color: isValue2Red ? rankred : mainblack,
                 ),
               ),
@@ -485,7 +486,7 @@ void showButtonDialog({
                   child: Center(
                     child: Text(
                       leftText,
-                      style: kButtonStyle.copyWith(
+                      style: kmain.copyWith(
                         color: rankred,
                       ),
                     ),
@@ -509,7 +510,7 @@ void showButtonDialog({
                   child: Center(
                     child: Text(
                       rightText,
-                      style: kBody2Style,
+                      style: kmain,
                     ),
                   ),
                 ),
@@ -529,12 +530,12 @@ void showButtonDialog({
       backgroundColor: Colors.white,
       title: Text(
         title,
-        style: kSubTitle4Style,
+        style: kmainheight,
         textAlign: TextAlign.center,
       ),
       content: Text(
         content,
-        style: kBody1Style,
+        style: kmainheight,
         textAlign: TextAlign.center,
       ),
     ),
@@ -582,7 +583,7 @@ void showoneButtonDialog({
                     child: Center(
                       child: Text(
                         oneText,
-                        style: kButtonStyle.copyWith(
+                        style: kmainheight.copyWith(
                           color: rankred,
                         ),
                       ),
@@ -604,12 +605,12 @@ void showoneButtonDialog({
         backgroundColor: Colors.white,
         title: Text(
           title,
-          style: kSubTitle4Style,
+          style: kmainheight,
           textAlign: TextAlign.center,
         ),
         content: Text(
           content,
-          style: kBody1Style,
+          style: kmainheight,
           textAlign: TextAlign.center,
         ),
       ),
@@ -734,7 +735,7 @@ void showWithDrawalDialog({
                   ),
                   height: 48,
                   child: const Center(
-                    child: Text('취소', style: kBody2Style),
+                    child: Text('취소', style: kmain),
                   ),
                 ),
               ),
@@ -755,7 +756,7 @@ void showWithDrawalDialog({
                   child: Center(
                     child: Text(
                       isWithdrawal ? '탈퇴' : '확인',
-                      style: kButtonStyle.copyWith(
+                      style: kmain.copyWith(
                         color: isWithdrawal ? rankred : mainblue,
                       ),
                     ),
@@ -777,7 +778,7 @@ void showWithDrawalDialog({
       backgroundColor: Colors.white,
       title: Text(
         title,
-        style: kSubTitle4Style,
+        style: kmainheight,
         textAlign: TextAlign.center,
       ),
       content: Padding(
@@ -824,7 +825,7 @@ void showCustomBottomSheet() {
               ),
               IconButton(
                 onPressed: () => Get.back(),
-                icon: SvgPicture.asset('assets/icons/Close.svg'),
+                icon: SvgPicture.asset('assets/icons/appbar_exit.svg'),
               ),
             ],
           ),
@@ -859,7 +860,7 @@ void showCustomBottomSheet() {
                 ),
                 const Expanded(
                   child: Text(
-                    '포스팅 작성하기',
+                    '포스트 작성하기',
                     style: kmain,
                   ),
                 ),
@@ -899,7 +900,7 @@ void showCustomBottomSheet() {
                 ),
                 const Expanded(
                   child: Text(
-                    '새로운 활동 추가하기',
+                    '새로운 커리어 추가하기',
                     style: kmain,
                   ),
                 ),
@@ -922,11 +923,11 @@ void showCustomSnackbar(
     body!,
     titleText: Text(
       title,
-      style: kButtonStyle,
+      style: kmainbold,
     ),
     messageText: Text(
       body,
-      style: kBody2Style,
+      style: kmain,
     ),
     onTap: ontap,
     snackPosition: SnackPosition.TOP,
@@ -1006,7 +1007,7 @@ void showErrorDialog({
                   ),
                   height: 48,
                   child: Center(
-                    child: Text('닫기', style: kButtonStyle),
+                    child: Text('닫기', style: kmain),
                   ),
                 ),
               ),
@@ -1025,12 +1026,12 @@ void showErrorDialog({
       backgroundColor: Colors.white,
       title: Text(
         title,
-        style: kSubTitle4Style,
+        style: kmainbold,
         textAlign: TextAlign.center,
       ),
       content: Text(
         content,
-        style: kBody1Style,
+        style: kmain,
         textAlign: TextAlign.center,
       ),
     ),
@@ -1062,7 +1063,7 @@ void showCustomDialog(String title, int duration) {
       backgroundColor: Colors.white,
       content: Text(
         title,
-        style: kSubTitle4Style,
+        style: kmainheight,
         textAlign: TextAlign.center,
       ),
     ),
@@ -1086,11 +1087,11 @@ void showCustomDatePicker(BuildContext context, SelectDateType selectDateType) {
     theme: DatePickerTheme(
       headerColor: mainWhite,
       backgroundColor: mainWhite,
-      cancelStyle: kSubTitle3Style.copyWith(
+      cancelStyle: kmain.copyWith(
         color: mainblack.withOpacity(0.6),
       ),
-      itemStyle: kSubTitle3Style,
-      doneStyle: kSubTitle3Style.copyWith(
+      itemStyle: kmain,
+      doneStyle: kmain.copyWith(
         color: mainblue,
         fontWeight: FontWeight.w500,
       ),

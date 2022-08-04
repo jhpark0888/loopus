@@ -167,7 +167,7 @@ class PostUpdateScreen extends StatelessWidget {
                                   TextSpan span = TextSpan(
                                       text: postingUpdateController
                                           .textcontroller.text,
-                                      style: kSubTitle3Style);
+                                      style: kmain);
                                   TextPainter tp = TextPainter(
                                       text: span,
                                       textDirection: ui.TextDirection.ltr);
@@ -194,11 +194,11 @@ class PostUpdateScreen extends StatelessWidget {
                             //     thickness: 0.5)),
                             Divider(key: keyController.viewKey, thickness: 0.5),
                             SizedBox(height: 14),
-                            Text('태그', style: kSubTitle3Style),
+                            Text('태그', style: kmain),
                             SizedBox(height: 14),
                             Obx(() => tagController.selectedtaglist.isEmpty
                                 ? Text('입력시 기업이 컨택할 가능성이 높아져요',
-                                    style: kSubTitle3Style.copyWith(
+                                    style: kmain.copyWith(
                                         color: maingray.withOpacity(0.5)))
                                 : Container(
                                     width: Get.width,
@@ -348,7 +348,7 @@ class PostUpdateScreen extends StatelessWidget {
         child: Text(
           '적용하기',
           textAlign: ui.TextAlign.center,
-          style: k16Normal.copyWith(color: mainWhite),
+          style: kmain.copyWith(color: mainWhite),
         ),
       ),
     );

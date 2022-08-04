@@ -23,14 +23,15 @@ class MessageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBarWidget(
-          leading: IconButton(
-            onPressed: () {
+          leading: GestureDetector(
+            onTap: () {
               Get.back();
             },
-            icon: SvgPicture.asset('assets/icons/Arrow.svg'),
+            child: SvgPicture.asset('assets/icons/appbar_back.svg'),
           ),
           bottomBorder: false,
           title: '메시지',
+          actions: [SvgPicture.asset('assets/icons/appbar_more_option.svg')],
         ),
         // body: Obx(
         //   () => messageController.chatroomscreenstate.value ==
@@ -134,7 +135,7 @@ class MessageScreen extends StatelessWidget {
                         },
                         child: Text(
                           '메시지 목록이 비어있어요',
-                          style: kSubTitle3Style.copyWith(
+                          style: kmain.copyWith(
                             color: mainblack.withOpacity(0.38),
                           ),
                         ),

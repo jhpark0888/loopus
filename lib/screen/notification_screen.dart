@@ -28,7 +28,7 @@ class NotificationScreen extends StatelessWidget {
           actions: [
             Center(
                 child: Row(
-                    children: [SvgPicture.asset('assets/icons/More.svg'), const SizedBox(width: 20)]))
+                    children: [SvgPicture.asset('assets/icons/appbar_more_option.svg')]))
           ],
         ),
         body: Obx(() => SmartRefresher(
@@ -148,7 +148,7 @@ class NotificationScreen extends StatelessWidget {
                                                     left: 20),
                                                 child: Text(
                                                   '새로운 알림',
-                                                  style: k16Normal.copyWith(
+                                                  style: kmain.copyWith(
                                                       color: maingray),
                                                   textAlign: TextAlign.start,
                                                 ),
@@ -222,7 +222,7 @@ class NotificationScreen extends StatelessWidget {
                                                     left: 20),
                                                 child: Text(
                                                   '이번 주',
-                                                  style: k16Normal.copyWith(
+                                                  style: kmain.copyWith(
                                                       color: maingray),
                                                   textAlign: TextAlign.start,
                                                 ),
@@ -296,7 +296,7 @@ class NotificationScreen extends StatelessWidget {
                                                     left: 20),
                                                 child: Text(
                                                   '이번 달',
-                                                  style: k16Normal.copyWith(
+                                                  style: kmain.copyWith(
                                                       color: maingray),
                                                   textAlign: TextAlign.start,
                                                 ),
@@ -370,7 +370,7 @@ class NotificationScreen extends StatelessWidget {
                                                     left: 20),
                                                 child: Text(
                                                   '지난 알림',
-                                                  style: k16Normal.copyWith(
+                                                  style: kmain.copyWith(
                                                       color: maingray),
                                                   textAlign: TextAlign.start,
                                                 ),

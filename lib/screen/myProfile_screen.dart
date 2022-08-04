@@ -76,7 +76,7 @@ class MyProfileScreen extends StatelessWidget {
                           Get.to(() => BookmarkScreen());
                         },
                         icon: SvgPicture.asset(
-                          'assets/icons/Mark_Default.svg',
+                          'assets/icons/bookmark_inactive.svg',
                           width: 28,
                         )),
                     IconButton(
@@ -84,7 +84,7 @@ class MyProfileScreen extends StatelessWidget {
                         Get.to(() => SettingScreen());
                       },
                       icon: SvgPicture.asset(
-                        'assets/icons/Setting.svg',
+                        'assets/icons/setting.svg',
                         width: 28,
                       ),
                     ),
@@ -192,9 +192,9 @@ class MyProfileScreen extends StatelessWidget {
                                                               BoxShape.circle,
                                                           color: mainWhite),
                                                   child: SvgPicture.asset(
-                                                    "assets/icons/Image.svg",
-                                                    width: 24,
-                                                    height: 24,
+                                                    "assets/icons/profile_image.svg",
+                                                    width: 28,
+                                                    height: 28,
                                                   ),
                                                 ),
                                               ),
@@ -349,10 +349,9 @@ class MyProfileScreen extends StatelessWidget {
                                           style: kNavigationTitle),
                                       const SizedBox(width: 7),
                                       SvgPicture.asset(
-                                        'assets/icons/Question.svg',
-                                        width: 20,
-                                        height: 20,
-                                        color: mainblack.withOpacity(0.6),
+                                        'assets/icons/information.svg',
+                                        width: 16,
+                                        height: 16,
                                       ),
                                       const Spacer(),
                                       InkWell(
@@ -361,7 +360,7 @@ class MyProfileScreen extends StatelessWidget {
                                           },
                                           child: Text(
                                             '전체 보기(000개)',
-                                            style: kBody1Style.copyWith(
+                                            style: kmain.copyWith(
                                                 color: mainblue),
                                           ))
                                     ],
@@ -443,7 +442,7 @@ class MyProfileScreen extends StatelessWidget {
                                       //     const Text('커리어 분석', style: k18Semibold),
                                       //     const SizedBox(width: 7),
                                       //     SvgPicture.asset(
-                                      //       'assets/icons/Question.svg',
+                                      //       'assets/icons/information.svg',
                                       //       width: 20,
                                       //       height: 20,
                                       //       color: mainblack.withOpacity(0.6),
@@ -462,10 +461,9 @@ class MyProfileScreen extends StatelessWidget {
                                               style: kNavigationTitle),
                                           const SizedBox(width: 7),
                                           SvgPicture.asset(
-                                            'assets/icons/Question.svg',
-                                            width: 20,
-                                            height: 20,
-                                            color: mainblack.withOpacity(0.6),
+                                            'assets/icons/information.svg',
+                                            width: 16,
+                                            height: 16,
                                           ),
                                           const Spacer(),
                                           InkWell(
@@ -475,7 +473,7 @@ class MyProfileScreen extends StatelessWidget {
                                             },
                                             child: Text(
                                               '추가하기',
-                                              style: k15normal.copyWith(
+                                              style: kmain.copyWith(
                                                   color: mainblue),
                                             ),
                                             splashColor: kSplashColor,
@@ -733,7 +731,7 @@ class MyProfileScreen extends StatelessWidget {
                                                         Alignment.centerLeft,
                                                     child: Text(
                                                       '함께한 친구',
-                                                      style: k15normal.copyWith(
+                                                      style: ktempFont.copyWith(
                                                           fontWeight:
                                                               FontWeight.w500),
                                                     ),
@@ -791,7 +789,7 @@ class MyProfileScreen extends StatelessWidget {
                                                                         .members[
                                                                             index]
                                                                         .realName,
-                                                                    style: k15normal.copyWith(
+                                                                    style: ktempFont.copyWith(
                                                                         fontWeight:
                                                                             FontWeight.w400),
                                                                   )

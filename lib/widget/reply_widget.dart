@@ -67,7 +67,7 @@ class ReplyWidget extends StatelessWidget {
                     const Spacer(),
                     Text(
                       calculateDate(reply.date),
-                      style: k16Normal.copyWith(color: maingray),
+                      style: kmain.copyWith(color: maingray),
                     ),
                     const SizedBox(
                       width: 7,
@@ -140,7 +140,7 @@ class ReplyWidget extends StatelessWidget {
                                 isOne: true,
                               );
                             },
-                      child: SvgPicture.asset('assets/icons/More.svg'),
+                      child: SvgPicture.asset('assets/icons/more_option.svg'),
                     ),
                   ],
                 ),
@@ -188,24 +188,22 @@ class ReplyWidget extends StatelessWidget {
                         },
                         child: Text(
                           '좋아요 ${reply.likecount.value}개',
-                          style: k16Normal.copyWith(
+                          style: kmain.copyWith(
                             color: maingray,
                           ),
                         ),
                       ),
                       const SizedBox(
-                        width: 7,
+                        width: 14,
                       ),
                       InkWell(
                         onTap: tapLike,
                         child: reply.isLiked.value == 0
-                            ? SvgPicture.asset(
-                                "assets/icons/Favorite_Inactive.svg")
-                            : SvgPicture.asset(
-                                "assets/icons/Favorite_Active.svg"),
+                            ? SvgPicture.asset("assets/icons/unlike.svg", width: 16, height: 16)
+                            : SvgPicture.asset("assets/icons/like.svg", width: 16, height: 16),
                       ),
                       const SizedBox(
-                        width: 7,
+                        width: 14,
                       ),
                       InkWell(
                         onTap: () async {
@@ -225,7 +223,7 @@ class ReplyWidget extends StatelessWidget {
                               duration: const Duration(milliseconds: 400),
                               curve: Curves.ease);
                         },
-                        child: SvgPicture.asset("assets/icons/Reply_Arrow.svg"),
+                        child: SvgPicture.asset("assets/icons/reply.svg", height: 16, width: 16),
                       ),
                     ],
                   ),

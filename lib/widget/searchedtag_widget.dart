@@ -110,13 +110,13 @@ class SearchTagWidget extends StatelessWidget {
                             border: Border.all(
                                 color: maingray.withOpacity(0.5), width: 0.3)),
                         padding: const EdgeInsets.fromLTRB(14, 5, 14, 5),
-                        child: Text(tag, style: k15normal),
+                        child: Text(tag, style: kmain),
                       ),
                       const Spacer(),
                       (count != null)
                           ? Text('${numberFormat.format(count)}회',
-                              style: k15normal)
-                          : const Text('0 회', style: k15normal),
+                              style: kmain)
+                          : const Text('0 회', style: kmain),
                     ],
                   ),
                 ),
@@ -159,7 +159,7 @@ class SearchTagWidget extends StatelessWidget {
                             Obx(
                               () => Text(
                                 tag,
-                                style: kButtonStyle.copyWith(
+                                style: ktempFont.copyWith(
                                   color: _hoverController.isHover.value
                                       ? mainblack.withOpacity(0.6)
                                       : mainblack,
@@ -173,7 +173,7 @@ class SearchTagWidget extends StatelessWidget {
                                 ? Obx(
                                     () => Text(
                                       '관심도 ${numberFormat.format(count)}',
-                                      style: kBody1Style.copyWith(
+                                      style: ktempFont.copyWith(
                                         color: _hoverController.isHover.value
                                             ? mainblack.withOpacity(0.6)
                                             : mainblack,
@@ -183,7 +183,7 @@ class SearchTagWidget extends StatelessWidget {
                                 : Obx(
                                     () => Text(
                                       '관심도 0',
-                                      style: kBody1Style.copyWith(
+                                      style: ktempFont.copyWith(
                                         color: _hoverController.isHover.value
                                             ? mainblack.withOpacity(0.6)
                                             : mainblack,
@@ -201,7 +201,7 @@ class SearchTagWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 tag,
-                style: kSubTitle2Style,
+                style: kmain,
               ),
             ),
           );

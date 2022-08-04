@@ -37,7 +37,7 @@ class ProjectModifyScreen extends StatelessWidget {
             onPressed: () {
               Get.back();
             },
-            icon: SvgPicture.asset('assets/icons/Arrow.svg'),
+            icon: SvgPicture.asset('assets/icons/appbar_back.svg'),
           ),
         ),
         body: ListView(
@@ -175,7 +175,7 @@ class UpdateProjectTileWidget extends StatelessWidget {
                   Obx(
                     () => Text(
                       title,
-                      style: kSubTitle2Style.copyWith(
+                      style: ktempFont.copyWith(
                           color: _hoverController.isHover.value
                               ? mainblack.withOpacity(0.6)
                               : mainblack),
@@ -189,7 +189,7 @@ class UpdateProjectTileWidget extends StatelessWidget {
                     Obx(
                       () => Text(
                         subtitle,
-                        style: kSubTitle3Style.copyWith(
+                        style: ktempFont.copyWith(
                             color: _hoverController.isHover.value
                                 ? mainblack.withOpacity(0.6)
                                 : mainblack),

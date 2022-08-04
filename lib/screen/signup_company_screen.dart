@@ -19,7 +19,7 @@ class SignupCompanyScreen extends StatelessWidget {
             },
             child: Text(
               '다음',
-              style: kSubTitle2Style.copyWith(color: mainblue),
+              style: ktempFont.copyWith(color: mainblue),
             ),
           ),
         ],

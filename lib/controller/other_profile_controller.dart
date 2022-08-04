@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 
 import 'package:loopus/api/profile_api.dart';
@@ -19,11 +21,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class OtherProfileController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  OtherProfileController({required this.userid, required this.otherUser});
+  OtherProfileController(
+      {required this.userid, required this.otherUser, this.careerName});
   static OtherProfileController get to => Get.find();
 
   int userid;
 
+  String? careerName;
   RxBool profileenablepullup = true.obs;
 
   final careertitleController = PageController(
@@ -31,7 +35,6 @@ class OtherProfileController extends GetxController
   );
   final careerPageController = PageController();
   RxDouble careerCurrentPage = 0.0.obs;
-
   // RefreshController profilerefreshController =
   //     RefreshController(initialRefresh: false);
 
@@ -65,6 +68,8 @@ class OtherProfileController extends GetxController
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
 
   late int lastisFollowed;
+
+  KeyController keycontroller = Get.put(KeyController(isTextField: false.obs));
 
   Future loadotherProfile(int userid) async {
     // isProfileLoading.value = true;
@@ -150,8 +155,9 @@ class OtherProfileController extends GetxController
           }
         }
       },
-      // time: const Duration(milliseconds: 300),
     );
+
+    enterByClickCareer();
     super.onInit();
   }
 
@@ -173,5 +179,24 @@ class OtherProfileController extends GetxController
             color: const Color(0xffffffff)),
       );
     }).toList();
+  }
+
+  Future<void> enterByClickCareer() async {
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async {
+      if (careerName != null) {
+        double index = otherProjectList
+            .indexWhere((element) => element.careerName == careerName)
+            .toDouble();
+        careerCurrentPage.value = index;
+        // careertitleController.animateToPage(index.toInt(),
+        //     duration: const Duration(milliseconds: 100), curve: Curves.ease);
+        careertitleController.jumpToPage(index.toInt());
+        careerPageController.jumpToPage(index.toInt());
+        await Future.delayed(const Duration(milliseconds: 400));
+
+        Scrollable.ensureVisible(keycontroller.viewKey.currentContext!,
+            curve: Curves.easeOut, duration: const Duration(milliseconds: 250));
+      }
+    });
   }
 }

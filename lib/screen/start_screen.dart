@@ -67,7 +67,7 @@ class StartScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                'assets/icons/Home_Logo.svg',
+                'assets/icons/home_logo_picture.svg',
                 width: 200,
                 height: 105,
               ),

@@ -116,7 +116,7 @@ class PostingScreen extends StatelessWidget {
                   height: 44,
                   child: Text(
                     '${controller.tagUser.value.realName}님에게 답글을 남기는 중',
-                    style: k16Normal.copyWith(color: maingray),
+                    style: kmain.copyWith(color: maingray),
                   ))
               : Container(),
         ),
@@ -161,7 +161,7 @@ class PostingScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8)),
                             child: Text(
                               '@${controller.tagUser.value.realName}',
-                              style: k16Normal,
+                              style: kmain,
                             ),
                           ),
                     contentPadding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
@@ -174,7 +174,7 @@ class PostingScreen extends StatelessWidget {
                       ),
                     ),
                     hintText: "댓글 입력",
-                    hintStyle: k16Normal.copyWith(color: maingray),
+                    hintStyle: kmain.copyWith(color: maingray),
                     fillColor: lightcardgray,
                     filled: true,
                   ),
@@ -187,7 +187,7 @@ class PostingScreen extends StatelessWidget {
                 onTap: () =>
                     _commentSubmitted(controller.commentController.text),
                 child: SvgPicture.asset(
-                  "assets/icons/Enter_Icon.svg",
+                  "assets/icons/enter.svg",
                 ),
               )
             ],
@@ -212,17 +212,17 @@ class PostingScreen extends StatelessWidget {
                           child: Scaffold(
                               // resizeToAvoidBottomInset: false,
                               appBar: AppBarWidget(
-                                leading: IconButton(
-                                  onPressed: () {
+                                leading: GestureDetector(
+                                  onTap: () {
                                     Get.back();
                                   },
-                                  icon: SvgPicture.asset(
-                                      'assets/icons/Close.svg'),
+                                  child: SvgPicture.asset(
+                                      'assets/icons/appbar_exit.svg'),
                                 ),
                                 title: '게시물',
                                 actions: [
-                                  IconButton(
-                                    onPressed: controller.post.value!.isuser ==
+                                  GestureDetector(
+                                    onTap: controller.post.value!.isuser ==
                                             1
                                         ? () {
                                             showModalIOS(
@@ -331,8 +331,8 @@ class PostingScreen extends StatelessWidget {
                                               isOne: true,
                                             );
                                           },
-                                    icon: SvgPicture.asset(
-                                        'assets/icons/More.svg'),
+                                    child: SvgPicture.asset(
+                                        'assets/icons/appbar_more_option.svg', width: 44, height: 44,),
                                   ),
                                 ],
                               ),
@@ -404,7 +404,7 @@ class PostingScreen extends StatelessWidget {
                                                                             .user
                                                                             .realName,
                                                                         style:
-                                                                            k16semiBold),
+                                                                            kmainbold),
                                                                     Text(
                                                                         controller
                                                                             .post
@@ -412,26 +412,41 @@ class PostingScreen extends StatelessWidget {
                                                                             .user
                                                                             .department,
                                                                         style:
-                                                                            kSubTitle3Style)
+                                                                            kmain)
                                                                   ])
                                                             ],
                                                           ),
                                                         ),
                                                         const SizedBox(
                                                             height: 14),
-                                                        Container(
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          child: Text(
-                                                            controller
-                                                                .post
-                                                                .value!
-                                                                .project!
-                                                                .careerName,
-                                                            style: k16semiBold
-                                                                .copyWith(
-                                                                    color:
-                                                                        maingray),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Get.to(() => OtherProfileScreen(
+                                                                userid:
+                                                                    controller
+                                                                        .post
+                                                                        .value!
+                                                                        .userid,
+                                                                realname: controller
+                                                                    .post
+                                                                    .value!
+                                                                    .user
+                                                                    .realName,careerName: controller.post.value!.project!.careerName,));
+                                                          },
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .centerLeft,
+                                                            child: Text(
+                                                              controller
+                                                                  .post
+                                                                  .value!
+                                                                  .project!
+                                                                  .careerName,
+                                                              style: kmainbold
+                                                                  .copyWith(
+                                                                      color:
+                                                                          maingray),
+                                                            ),
                                                           ),
                                                         ),
                                                         const SizedBox(
@@ -497,27 +512,34 @@ class PostingScreen extends StatelessWidget {
                                                                     .value!
                                                                     .content
                                                                     .value,
-                                                                style: kSubTitle3Style
+                                                                style: kmain
                                                                     .copyWith(
                                                                         height:
                                                                             1.5)),
-                                                            const SizedBox(
-                                                              height: 14,
-                                                            ),
-                                                            Wrap(
-                                                              spacing: 7,
-                                                              runSpacing: 7,
-                                                              children: controller
-                                                                  .post
-                                                                  .value!
-                                                                  .tags
-                                                                  .map((tag) =>
-                                                                      Tagwidget(
-                                                                        tag:
-                                                                            tag,
-                                                                      ))
-                                                                  .toList(),
-                                                            ),
+                                                            if (controller
+                                                                .post
+                                                                .value!
+                                                                .tags
+                                                                .isNotEmpty)
+                                                              Column(children: [
+                                                                const SizedBox(
+                                                                  height: 14,
+                                                                ),
+                                                                Wrap(
+                                                                  spacing: 7,
+                                                                  runSpacing: 7,
+                                                                  children: controller
+                                                                      .post
+                                                                      .value!
+                                                                      .tags
+                                                                      .map((tag) =>
+                                                                          Tagwidget(
+                                                                            tag:
+                                                                                tag,
+                                                                          ))
+                                                                      .toList(),
+                                                                ),
+                                                              ]),
                                                             const SizedBox(
                                                                 height: 14),
                                                             Obx(
@@ -529,9 +551,9 @@ class PostingScreen extends StatelessWidget {
                                                                     child: controller.post.value!.isLiked.value ==
                                                                             0
                                                                         ? SvgPicture.asset(
-                                                                            "assets/icons/Favorite_Inactive.svg")
+                                                                            "assets/icons/unlike.svg",)
                                                                         : SvgPicture.asset(
-                                                                            "assets/icons/Favorite_Active.svg"),
+                                                                            "assets/icons/like.svg"),
                                                                   ),
                                                                   const SizedBox(
                                                                     width: 15,
@@ -549,7 +571,7 @@ class PostingScreen extends StatelessWidget {
                                                                   //   ),
                                                                   // ),
                                                                   SvgPicture.asset(
-                                                                      "assets/icons/Comment.svg"),
+                                                                      "assets/icons/comment.svg"),
                                                                   const Spacer(),
                                                                   InkWell(
                                                                     onTap:
@@ -558,12 +580,12 @@ class PostingScreen extends StatelessWidget {
                                                                             0)
                                                                         ? SvgPicture
                                                                             .asset(
-                                                                            "assets/icons/Mark_Default.svg",
+                                                                            "assets/icons/bookmark_inactive.svg",
                                                                             color:
                                                                                 mainblack,
                                                                           )
                                                                         : SvgPicture.asset(
-                                                                            "assets/icons/Mark_Saved.svg"),
+                                                                            "assets/icons/bookmark_active.svg"),
                                                                   ),
                                                                 ],
                                                               ),
@@ -594,7 +616,7 @@ class PostingScreen extends StatelessWidget {
                                                                     () => Text(
                                                                       '좋아요 ${controller.post.value!.likeCount}개',
                                                                       style:
-                                                                          kSubTitle3Style,
+                                                                          kmain,
                                                                     ),
                                                                   )),
                                                               const Spacer(),
@@ -605,7 +627,7 @@ class PostingScreen extends StatelessWidget {
                                                                           .value!
                                                                           .date),
                                                                   style:
-                                                                      kSubTitle3Style),
+                                                                      kmain),
                                                             ]),
                                                             const SizedBox(
                                                                 height: 13),

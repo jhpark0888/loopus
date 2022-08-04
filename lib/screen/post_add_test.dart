@@ -57,6 +57,12 @@ class PostingAddNameScreen extends StatelessWidget {
         appBar: AppBarWidget(
           bottomBorder: false,
           title: '포스트 작성',
+          actions: [
+            Obx( () => Center(child: uploadButton())),
+            const SizedBox(
+              width: 16,
+            )
+          ],
         ),
         body: Obx(
           () => ScrollNoneffectWidget(
@@ -70,15 +76,6 @@ class PostingAddNameScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Divider(
-                      key: Get.put(
-                              KeyController(
-                                  tag: Tagtype.Posting, isTextField: false.obs),
-                              tag: 'second')
-                          .viewKey,
-                      thickness: 0,
-                      color: mainWhite,
-                    ),
                     postingAddController.isAddLink.value == false
                         ? postingAddController.isAddImage.value == true
                             ? postingAddController.images.length == 1
@@ -102,7 +99,7 @@ class PostingAddNameScreen extends StatelessWidget {
                                               Get.to(() => UploadScreen());
                                             },
                                             child: Text('사진 수정하기',
-                                                style: k16Normal.copyWith(
+                                                style: kmain.copyWith(
                                                     color: mainblue),
                                                 textAlign: ui.TextAlign.right)),
                                       )
@@ -124,7 +121,7 @@ class PostingAddNameScreen extends StatelessWidget {
                                                   curve: Curves.ease);
                                             },
                                             child: Text('사진 수정하기',
-                                                style: k16Normal.copyWith(
+                                                style: kmain.copyWith(
                                                     color: mainblue))),
                                         right: 20,
                                         bottom: 5)
@@ -183,7 +180,7 @@ class PostingAddNameScreen extends StatelessWidget {
                                   TextSpan span = TextSpan(
                                       text: postingAddController
                                           .textcontroller.text,
-                                      style: kSubTitle3Style);
+                                      style: kmain);
                                   TextPainter tp = TextPainter(
                                       text: span,
                                       textDirection: ui.TextDirection.ltr);
@@ -208,11 +205,11 @@ class PostingAddNameScreen extends StatelessWidget {
                             //     thickness: 0.5)),
                             Divider(key: keyController.viewKey, thickness: 0.5),
                             SizedBox(height: 14),
-                            Text('태그', style: kSubTitle3Style),
+                            Text('태그', style: kmain),
                             SizedBox(height: 14),
                             Obx(() => tagController.selectedtaglist.isEmpty
                                 ? Text('입력시 기업이 컨택할 가능성이 높아져요',
-                                    style: kSubTitle3Style.copyWith(
+                                    style: kmain.copyWith(
                                         color: maingray.withOpacity(0.5)))
                                 : Container(
                                     width: Get.width,
@@ -245,7 +242,7 @@ class PostingAddNameScreen extends StatelessWidget {
                                 //       duration: const Duration(milliseconds: 300),
                                 //       curve: Curves.easeOut);
                                 await Future.delayed(
-                                    Duration(milliseconds: 300));
+                                    Duration(milliseconds: 400));
                                 Scrollable.ensureVisible(
                                     keyController.viewKey.currentContext!,
                                     curve: Curves.easeOut,
@@ -307,19 +304,9 @@ class PostingAddNameScreen extends StatelessWidget {
                               height: 20,
                             ),
                             Obx(() => SizedBox(
-                                // height: postingAddController.isTagClick.value
-                                //       ? postingAddController.lines.value < 7
-                                //           ? tagController.offsetDy.value + 80
-                                //           : tagController.offsetDy.value +
-                                //               ((postingAddController.lines.value - 7) *
-                                //                   tagController.textfieldOffset.value) +
-                                //               100
-                                //       : 0,
                                 child: Column(
                                     children:
-                                        tagController.searchtaglist.value))),
-                            const SizedBox(height: 100),
-                            uploadButton()
+                                        tagController.searchtaglist.value)))
                           ]),
                     )
                   ],
@@ -345,11 +332,11 @@ class PostingAddNameScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset('assets/icons/Add_$titleEng.svg'),
+            SvgPicture.asset('assets/icons/add_$titleEng.svg'),
             SizedBox(width: 7),
             Text(
               '$title 첨부하기',
-              style: kSubTitle3Style.copyWith(color: mainWhite),
+              style: kmain.copyWith(color: mainWhite),
             )
           ],
         ),
@@ -359,52 +346,43 @@ class PostingAddNameScreen extends StatelessWidget {
 
   Widget uploadButton() {
     return GestureDetector(
-      onTap: () async {
-        if (checkContent()) {
-          loading();
-          await addposting(
-                  project_id, postingAddController.cropAspectRatio.value)
-              .then((value) {
-            Get.back();
-            if (value.isError == false) {
-              Post post = Post.fromJson(value.data);
+        onTap: () async {
+          if (checkContent()) {
+            loading();
+            await addposting(
+                    project_id, postingAddController.cropAspectRatio.value)
+                .then((value) {
+              Get.back();
+              if (value.isError == false) {
+                Post post = Post.fromJson(value.data);
 
-              if (Get.isRegistered<ProfileController>()) {
-                Project? career =
-                    ProfileController.to.myProjectList.firstWhereOrNull(
-                  (career) => career.id == project_id,
-                );
+                if (Get.isRegistered<ProfileController>()) {
+                  Project? career =
+                      ProfileController.to.myProjectList.firstWhereOrNull(
+                    (career) => career.id == project_id,
+                  );
 
-                if (career != null) {
-                  career.posts.insert(0, post);
+                  if (career != null) {
+                    career.posts.insert(0, post);
+                  }
+
+                  getbacks(3);
+                  dialogBack();
+                  AppController.to.changeBottomNav(0);
+                  HomeController.to.scrollToTop();
+
+                  showCustomDialog('포스팅을 업로드했어요', 1000);
                 }
-
-                getbacks(3);
-                dialogBack();
-                AppController.to.changeBottomNav(0);
-                HomeController.to.scrollToTop();
-
-                showCustomDialog('포스팅을 업로드했어요', 1000);
+                HomeController.to.onPostingRefresh();
+              } else {
+                errorSituation(value);
               }
-              HomeController.to.onPostingRefresh();
-            } else {
-              errorSituation(value);
-            }
-          });
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(0, 13, 0, 13),
-        decoration: BoxDecoration(
-            color: checkContent() ? mainblue : maingray.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(8)),
-        child: Text(
-          '업로드',
-          textAlign: ui.TextAlign.center,
-          style: k16Normal.copyWith(color: mainWhite),
-        ),
-      ),
-    );
+            });
+          }
+        },
+        child: Text('게시',
+            style: kNavigationTitle.copyWith(
+                color: checkContent() ? mainblue : maingray)));
   }
 
   bool checkContent() {

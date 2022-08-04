@@ -31,7 +31,7 @@ class SettingScreen extends StatelessWidget {
                       _userDeviceInfo.appInfoData.keys.first +
                           ' ' +
                           _userDeviceInfo.appInfoData.values.first,
-                      style: kCaptionStyle.copyWith(
+                      style: ktempFont.copyWith(
                         color: mainblack.withOpacity(0.6),
                       ),
                     )
@@ -121,7 +121,7 @@ class CustomListTile extends StatelessWidget {
             Obx(
               () => Text(
                 title,
-                style: kSubTitle3Style.copyWith(
+                style: ktempFont.copyWith(
                     color: _hoverController.isHover.value
                         ? mainblack.withOpacity(0.6)
                         : mainblack),
