@@ -79,6 +79,7 @@ class PostingWidget extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(item.user.realName, style: kmainbold),
+                                const SizedBox(height: 7),
                                 Text(item.user.department, style: kmain)
                               ])
                         ],
