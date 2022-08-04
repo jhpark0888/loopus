@@ -337,36 +337,36 @@ class SwiperWidget extends StatelessWidget {
   }
 }
 
-class ImageSizeController {
-  ImageSizeController({
-    required this.item,
-    required this.aspectRatio,
-  });
-  dynamic item;
-  RxDouble aspectRatio;
+// class ImageSizeController {
+//   ImageSizeController({
+//     required this.item,
+//     required this.aspectRatio,
+//   });
+//   dynamic item;
+//   RxDouble aspectRatio;
 
-  getSizeAndPosition() async {
-    print("getSizeAndPosition");
-    Image? image;
-    if (item.runtimeType == String) {
-      image = Image(image: NetworkImage(item));
-    } else if (item.runtimeType == File) {
-      image = Image(image: FileImage(item));
-    }
-    print(image);
+//   getSizeAndPosition() async {
+//     print("getSizeAndPosition");
+//     Image? image;
+//     if (item.runtimeType == String) {
+//       image = Image(image: NetworkImage(item));
+//     } else if (item.runtimeType == File) {
+//       image = Image(image: FileImage(item));
+//     }
+//     print(image);
 
-    if (image != null) {
-      Completer<ui.Image> completer = Completer<ui.Image>();
-      image.image
-          .resolve(ImageConfiguration())
-          .addListener(ImageStreamListener((ImageInfo image, bool _) {
-        completer.complete(image.image);
-      }));
+//     if (image != null) {
+//       Completer<ui.Image> completer = Completer<ui.Image>();
+//       image.image
+//           .resolve(ImageConfiguration())
+//           .addListener(ImageStreamListener((ImageInfo image, bool _) {
+//         completer.complete(image.image);
+//       }));
 
-      ui.Image info = await completer.future;
-      int width = info.width;
-      int height = info.height;
-      aspectRatio.value = width / height;
-    }
-  }
-}
+//       ui.Image info = await completer.future;
+//       int width = info.width;
+//       int height = info.height;
+//       aspectRatio.value = width / height;
+//     }
+//   }
+// }

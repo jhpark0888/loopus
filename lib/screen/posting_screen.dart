@@ -359,301 +359,294 @@ class PostingScreen extends StatelessWidget {
                                         footer: const MyCustomFooter(),
                                         onLoading: controller.commentListLoad,
                                         child: SingleChildScrollView(
-                                          child: Obx(
-                                            () => Column(children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  Column(children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .fromLTRB(
-                                                          20, 14, 20, 0),
-                                                      child: Column(
-                                                        children: [
-                                                          GestureDetector(
-                                                            onTap: () =>
-                                                                tapProfile(),
-                                                            child: Row(
-                                                              children: [
-                                                                UserImageWidget(
-                                                                  imageUrl: controller
-                                                                          .post
-                                                                          .value!
-                                                                          .user
-                                                                          .profileImage ??
-                                                                      '',
-                                                                  width: 35,
-                                                                  height: 35,
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 14,
-                                                                ),
-                                                                Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      Text(
-                                                                          controller
-                                                                              .post
-                                                                              .value!
-                                                                              .user
-                                                                              .realName,
-                                                                          style:
-                                                                              k16semiBold),
-                                                                      Text(
-                                                                          controller
-                                                                              .post
-                                                                              .value!
-                                                                              .user
-                                                                              .department,
-                                                                          style:
-                                                                              kSubTitle3Style)
-                                                                    ])
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              height: 14),
-                                                          Container(
-                                                            alignment: Alignment
-                                                                .centerLeft,
-                                                            child: Text(
-                                                              controller
-                                                                  .post
-                                                                  .value!
-                                                                  .project!
-                                                                  .careerName,
-                                                              style: k16semiBold
-                                                                  .copyWith(
-                                                                      color:
-                                                                          maingray),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              height: 14),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ]),
-                                                  if (controller.post.value!
-                                                          .images.isNotEmpty ||
-                                                      controller.post.value!
-                                                          .links.isNotEmpty)
-                                                    SwiperWidget(
-                                                      items: controller
-                                                              .post
-                                                              .value!
-                                                              .images
-                                                              .isNotEmpty
-                                                          ? controller.post
-                                                              .value!.images
-                                                          : controller.post
-                                                              .value!.links,
-                                                      swiperType: controller
-                                                              .post
-                                                              .value!
-                                                              .images
-                                                              .isNotEmpty
-                                                          ? SwiperType.image
-                                                          : SwiperType.link,
-                                                      aspectRatio: controller
-                                                              .post
-                                                              .value!
-                                                              .images
-                                                              .isNotEmpty
-                                                          ? getAspectRatioinUrl(
-                                                              controller
-                                                                  .post
-                                                                  .value!
-                                                                  .images[0])
-                                                          : null,
-                                                    ),
-                                                  Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                          left: 20,
-                                                          right: 20,
-                                                        ),
-                                                        child: Obx(
-                                                          () => Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
+                                          child: Column(children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                Column(children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .fromLTRB(
+                                                        20, 14, 20, 0),
+                                                    child: Column(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () =>
+                                                              tapProfile(),
+                                                          child: Row(
                                                             children: [
-                                                              Text(
-                                                                  controller
-                                                                      .post
-                                                                      .value!
-                                                                      .content
-                                                                      .value,
-                                                                  style: kSubTitle3Style
-                                                                      .copyWith(
-                                                                          height:
-                                                                              1.5)),
-                                                              const SizedBox(
-                                                                height: 14,
-                                                              ),
-                                                              Wrap(
-                                                                spacing: 7,
-                                                                runSpacing: 7,
-                                                                children: controller
-                                                                    .post
-                                                                    .value!
-                                                                    .tags
-                                                                    .map((tag) =>
-                                                                        Tagwidget(
-                                                                          tag:
-                                                                              tag,
-                                                                        ))
-                                                                    .toList(),
+                                                              UserImageWidget(
+                                                                imageUrl: controller
+                                                                        .post
+                                                                        .value!
+                                                                        .user
+                                                                        .profileImage ??
+                                                                    '',
+                                                                width: 35,
+                                                                height: 35,
                                                               ),
                                                               const SizedBox(
-                                                                  height: 14),
-                                                              Obx(
-                                                                () => Row(
+                                                                width: 14,
+                                                              ),
+                                                              Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
                                                                   children: [
-                                                                    InkWell(
-                                                                      onTap:
-                                                                          tapLike,
-                                                                      child: controller.post.value!.isLiked.value ==
-                                                                              0
-                                                                          ? SvgPicture.asset(
-                                                                              "assets/icons/Favorite_Inactive.svg")
-                                                                          : SvgPicture.asset(
-                                                                              "assets/icons/Favorite_Active.svg"),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      width: 15,
-                                                                    ),
-                                                                    // Obx(
-                                                                    //   () => SizedBox(
-                                                                    //     width: controller
-                                                                    //                 .post
-                                                                    //                 .value!
-                                                                    //                 .likeCount
-                                                                    //                 .value !=
-                                                                    //             0
-                                                                    //         ? 0
-                                                                    //         : 8,
-                                                                    //   ),
-                                                                    // ),
-                                                                    SvgPicture
-                                                                        .asset(
-                                                                            "assets/icons/Comment.svg"),
-                                                                    const Spacer(),
-                                                                    InkWell(
-                                                                      onTap:
-                                                                          tapBookmark,
-                                                                      child: (controller.post.value!.isMarked.value ==
-                                                                              0)
-                                                                          ? SvgPicture
-                                                                              .asset(
-                                                                              "assets/icons/Mark_Default.svg",
-                                                                              color: mainblack,
-                                                                            )
-                                                                          : SvgPicture.asset(
-                                                                              "assets/icons/Mark_Saved.svg"),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              // postingTag(),
-                                                              const SizedBox(
-                                                                height: 13,
-                                                              ),
-                                                              Row(children: [
-                                                                GestureDetector(
-                                                                    behavior:
-                                                                        HitTestBehavior
-                                                                            .translucent,
-                                                                    onTap: () {
-                                                                      Get.to(
-                                                                        () =>
-                                                                            LikePeopleScreen(
-                                                                          id: controller
-                                                                              .post
-                                                                              .value!
-                                                                              .id,
-                                                                          likeType:
-                                                                              LikeType.post,
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                    child: Obx(
-                                                                      () =>
-                                                                          Text(
-                                                                        '좋아요 ${controller.post.value!.likeCount}개',
-                                                                        style:
-                                                                            kSubTitle3Style,
-                                                                      ),
-                                                                    )),
-                                                                const Spacer(),
-                                                                Text(
-                                                                    calculateDate(
+                                                                    Text(
                                                                         controller
                                                                             .post
                                                                             .value!
-                                                                            .date),
-                                                                    style:
-                                                                        kSubTitle3Style),
-                                                              ]),
-                                                              const SizedBox(
-                                                                  height: 13),
+                                                                            .user
+                                                                            .realName,
+                                                                        style:
+                                                                            k16semiBold),
+                                                                    Text(
+                                                                        controller
+                                                                            .post
+                                                                            .value!
+                                                                            .user
+                                                                            .department,
+                                                                        style:
+                                                                            kSubTitle3Style)
+                                                                  ])
                                                             ],
                                                           ),
                                                         ),
-                                                      ),
-                                                      // if (view != 'detail') const DivideWidget()
-                                                    ],
+                                                        const SizedBox(
+                                                            height: 14),
+                                                        Container(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Text(
+                                                            controller
+                                                                .post
+                                                                .value!
+                                                                .project!
+                                                                .careerName,
+                                                            style: k16semiBold
+                                                                .copyWith(
+                                                                    color:
+                                                                        maingray),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 14),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ],
-                                              ),
-                                              // PostingWidget(
-                                              //   controller.post.value!: controller.post.value!,
-                                              //   view: 'detail',
-                                              // ),
-                                              Obx(
-                                                () => ListView.separated(
-                                                  primary: false,
-                                                  shrinkWrap: true,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return PostCommentWidget(
-                                                      comment: controller
-                                                          .post
-                                                          .value!
-                                                          .comments[index],
-                                                      postid: postid,
-                                                    );
-                                                  },
-                                                  separatorBuilder:
-                                                      (context, index) {
-                                                    return const SizedBox(
-                                                      height: 14,
-                                                    );
-                                                  },
-                                                  itemCount: controller.post
-                                                      .value!.comments.length,
+                                                ]),
+                                                if (controller.post.value!
+                                                        .images.isNotEmpty ||
+                                                    controller.post.value!.links
+                                                        .isNotEmpty)
+                                                  SwiperWidget(
+                                                    items: controller
+                                                            .post
+                                                            .value!
+                                                            .images
+                                                            .isNotEmpty
+                                                        ? controller
+                                                            .post.value!.images
+                                                        : controller
+                                                            .post.value!.links,
+                                                    swiperType: controller
+                                                            .post
+                                                            .value!
+                                                            .images
+                                                            .isNotEmpty
+                                                        ? SwiperType.image
+                                                        : SwiperType.link,
+                                                    aspectRatio: controller
+                                                            .post
+                                                            .value!
+                                                            .images
+                                                            .isNotEmpty
+                                                        ? getAspectRatioinUrl(
+                                                            controller
+                                                                .post
+                                                                .value!
+                                                                .images[0])
+                                                        : null,
+                                                  ),
+                                                Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                        left: 20,
+                                                        right: 20,
+                                                      ),
+                                                      child: Obx(
+                                                        () => Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                                controller
+                                                                    .post
+                                                                    .value!
+                                                                    .content
+                                                                    .value,
+                                                                style: kSubTitle3Style
+                                                                    .copyWith(
+                                                                        height:
+                                                                            1.5)),
+                                                            const SizedBox(
+                                                              height: 14,
+                                                            ),
+                                                            Wrap(
+                                                              spacing: 7,
+                                                              runSpacing: 7,
+                                                              children: controller
+                                                                  .post
+                                                                  .value!
+                                                                  .tags
+                                                                  .map((tag) =>
+                                                                      Tagwidget(
+                                                                        tag:
+                                                                            tag,
+                                                                      ))
+                                                                  .toList(),
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 14),
+                                                            Obx(
+                                                              () => Row(
+                                                                children: [
+                                                                  InkWell(
+                                                                    onTap:
+                                                                        tapLike,
+                                                                    child: controller.post.value!.isLiked.value ==
+                                                                            0
+                                                                        ? SvgPicture.asset(
+                                                                            "assets/icons/Favorite_Inactive.svg")
+                                                                        : SvgPicture.asset(
+                                                                            "assets/icons/Favorite_Active.svg"),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    width: 15,
+                                                                  ),
+                                                                  // Obx(
+                                                                  //   () => SizedBox(
+                                                                  //     width: controller
+                                                                  //                 .post
+                                                                  //                 .value!
+                                                                  //                 .likeCount
+                                                                  //                 .value !=
+                                                                  //             0
+                                                                  //         ? 0
+                                                                  //         : 8,
+                                                                  //   ),
+                                                                  // ),
+                                                                  SvgPicture.asset(
+                                                                      "assets/icons/Comment.svg"),
+                                                                  const Spacer(),
+                                                                  InkWell(
+                                                                    onTap:
+                                                                        tapBookmark,
+                                                                    child: (controller.post.value!.isMarked.value ==
+                                                                            0)
+                                                                        ? SvgPicture
+                                                                            .asset(
+                                                                            "assets/icons/Mark_Default.svg",
+                                                                            color:
+                                                                                mainblack,
+                                                                          )
+                                                                        : SvgPicture.asset(
+                                                                            "assets/icons/Mark_Saved.svg"),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            // postingTag(),
+                                                            const SizedBox(
+                                                              height: 13,
+                                                            ),
+                                                            Row(children: [
+                                                              GestureDetector(
+                                                                  behavior:
+                                                                      HitTestBehavior
+                                                                          .translucent,
+                                                                  onTap: () {
+                                                                    Get.to(
+                                                                      () =>
+                                                                          LikePeopleScreen(
+                                                                        id: controller
+                                                                            .post
+                                                                            .value!
+                                                                            .id,
+                                                                        likeType:
+                                                                            LikeType.post,
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  child: Obx(
+                                                                    () => Text(
+                                                                      '좋아요 ${controller.post.value!.likeCount}개',
+                                                                      style:
+                                                                          kSubTitle3Style,
+                                                                    ),
+                                                                  )),
+                                                              const Spacer(),
+                                                              Text(
+                                                                  calculateDate(
+                                                                      controller
+                                                                          .post
+                                                                          .value!
+                                                                          .date),
+                                                                  style:
+                                                                      kSubTitle3Style),
+                                                            ]),
+                                                            const SizedBox(
+                                                                height: 13),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    // if (view != 'detail') const DivideWidget()
+                                                  ],
                                                 ),
+                                              ],
+                                            ),
+                                            // PostingWidget(
+                                            //   controller.post.value!: controller.post.value!,
+                                            //   view: 'detail',
+                                            // ),
+                                            Obx(
+                                              () => ListView.separated(
+                                                primary: false,
+                                                shrinkWrap: true,
+                                                itemBuilder: (context, index) {
+                                                  return PostCommentWidget(
+                                                    comment: controller.post
+                                                        .value!.comments[index],
+                                                    postid: postid,
+                                                  );
+                                                },
+                                                separatorBuilder:
+                                                    (context, index) {
+                                                  return const SizedBox(
+                                                    height: 14,
+                                                  );
+                                                },
+                                                itemCount: controller.post
+                                                    .value!.comments.length,
                                               ),
-                                              const SizedBox(
-                                                height: 10,
-                                              )
-                                            ]),
-                                          ),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            )
+                                          ]),
                                         ),
                                       ),
                                     ),

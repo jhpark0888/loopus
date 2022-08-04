@@ -68,6 +68,9 @@ class PostingDetailController extends GetxController {
 
         lastIsLiked = post.value!.isLiked.value;
         lastIsMarked = post.value!.isMarked.value;
+        if (post.value!.comments.isEmpty) {
+          refreshController.loadNoData();
+        }
         postscreenstate(ScreenState.success);
       } else {
         errorSituation(value, screenState: postscreenstate);
