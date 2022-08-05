@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
@@ -90,6 +91,7 @@ class PersonRankWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(user.schoolRank);
     return GestureDetector(
       onTap: () {
         Get.to(
@@ -153,7 +155,7 @@ class PersonRankWidget extends StatelessWidget {
         ),
         // 나 일때는 팔로우 버튼 없어야 함
         //지금은 is_user를 안 주는 듯
-        if (isFollow && user.isuser != 1)
+        if (isFollow && user.userid != HomeController.to.myProfile.value.userid)
           Obx(
             () => Row(children: [
               const SizedBox(
