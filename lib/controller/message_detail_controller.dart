@@ -88,7 +88,6 @@ class MessageDetailController extends GetxController
     listener = InternetConnectionChecker().onStatusChange.listen((event) {
       connection.value =
           event == InternetConnectionStatus.connected ? true : false;
-      
     });
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
@@ -107,19 +106,21 @@ class MessageDetailController extends GetxController
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    switch (state) {
-      case AppLifecycleState.resumed:
-      print(state);
-        connection.value = true;
-      print('연결되었습니다.');
-      break;
-      case AppLifecycleState.inactive:
-      case AppLifecycleState.detached:
-      case AppLifecycleState.paused:
-        connection.value =false;
-        listener.cancel();
-        print(state);
-        break;
+    if (Get.isRegistered<MessageDetailController>()) {
+      switch (state) {
+        case AppLifecycleState.resumed:
+          print(state);
+          connection.value = true;
+          print('연결되었습니다.');
+          break;
+        case AppLifecycleState.inactive:
+        case AppLifecycleState.detached:
+        case AppLifecycleState.paused:
+          connection.value = false;
+          listener.cancel();
+          print(state);
+          break;
+      }
     }
   }
 
