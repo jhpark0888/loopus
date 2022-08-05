@@ -202,7 +202,7 @@ class PostingWidget extends StatelessWidget {
                                   Get.to(
                                     () => LikePeopleScreen(
                                       id: item.id,
-                                      likeType: LikeType.post,
+                                      likeType: contentType.post,
                                     ),
                                   );
                                 },
@@ -328,7 +328,7 @@ class PostingWidget extends StatelessWidget {
 
     _debouncer.run(() {
       if (lastIsLiked != item.isLiked.value) {
-        likepost(item.id, LikeType.post);
+        likepost(item.id, contentType.post);
         lastIsLiked = item.isLiked.value;
         likenum = 0;
       }

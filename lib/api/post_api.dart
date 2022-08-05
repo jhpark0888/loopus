@@ -278,45 +278,6 @@ Future<HTTPResponse> mainload(int lastindex) async {
   }
 }
 
-// Future<HTTPResponse> recommandpost(int pagenum) async {
-//   String? token;
-//   // print('메인페이지 번호 : $pageNumber');
-//   await const FlutterSecureStorage().read(key: 'token').then((value) {
-//     token = value;
-//   });
-
-//   final recommandloadUri =
-//       Uri.parse("$serverUri/post_api/recommend_load?page=$pagenum");
-
-//   try {
-//     final response = await http
-//         .get(recommandloadUri, headers: {"Authorization": "Token $token"});
-
-//     // if (kDebugMode) {
-//     //   print('posting list : $list');
-//     // }
-//     print("추천 포스팅 리스트 :${response.statusCode}");
-//     if (response.statusCode != 200) {
-//       // Future.error(response.statusCode);
-//       return HTTPResponse.apiError('', response.statusCode);
-//     } else {
-//       var responseBody = utf8.decode(response.bodyBytes);
-//       List<dynamic> list = jsonDecode(responseBody);
-//       HomeController.to.recommandpagenum += 1;
-//       return HTTPResponse.success(PostingModel.fromJson(list));
-//     }
-//   } on SocketException {
-//     print("서버에러 발생");
-
-//     ErrorController.to.isServerClosed(true);
-//     return HTTPResponse.serverError();
-//   } catch (e) {
-//     print(e);
-//     return HTTPResponse.unexpectedError(e);
-//     // ErrorController.to.isServerClosed(true);
-//   }
-// }
-
 Future<HTTPResponse> bookmarklist(int pageNumber) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
@@ -350,27 +311,6 @@ Future<HTTPResponse> bookmarklist(int pageNumber) async {
   }
 }
 
-// Future<dynamic> bookmarkpost(int postingId) async {
-//   String? token;
-//   await const FlutterSecureStorage().read(key: 'token').then((value) {
-//     token = value;
-//   });
-
-//   final bookmarkUri = Uri.parse("$serverUri/post_api/bookmark/$postingId");
-//   try {
-//     final response = await http
-//         .post(bookmarkUri, headers: {"Authorization": "Token $token"});
-
-//     var responseBody = utf8.decode(response.bodyBytes);
-//     String result = jsonDecode(responseBody);
-//   } on SocketException {
-//     ErrorController.to.isServerClosed(true);
-//   } catch (e) {
-//     print(e);
-//     // ErrorController.to.isServerClosed(true);
-//   }
-// }
-
 Future<HTTPResponse> bookmarkpost(int postId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
@@ -402,9 +342,9 @@ Future<HTTPResponse> bookmarkpost(int postId) async {
   }
 }
 
-enum LikeType { post, comment, cocomment }
+enum contentType { post, comment, cocomment }
 
-Future<HTTPResponse> likepost(int id, LikeType type) async {
+Future<HTTPResponse> likepost(int id, contentType type) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
@@ -436,7 +376,7 @@ Future<HTTPResponse> likepost(int id, LikeType type) async {
   }
 }
 
-Future<HTTPResponse> getlikepeoele(int postid, LikeType type) async {
+Future<HTTPResponse> getlikepeoele(int postid, contentType type) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
@@ -467,19 +407,19 @@ Future<HTTPResponse> getlikepeoele(int postid, LikeType type) async {
   }
 }
 
-Future postingreport(int postingId) async {
+Future<HTTPResponse> contentreport(int id, contentType type) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     String? token;
     await const FlutterSecureStorage().read(key: 'token').then((value) {
       token = value;
     });
 
-    final Uri uri = Uri.parse("$serverUri/post_api/report");
+    final Uri uri = Uri.parse("$serverUri/post_api/report?type=${type.name}");
 
-    var body = {"id": postingId, "reason": ""};
+    var body = {"id": id, "reason": ""};
 
     try {
       final response = await http.post(uri,
@@ -491,27 +431,26 @@ Future postingreport(int postingId) async {
 
       print('포스팅 신고 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
-        getbacks(2);
-        showCustomDialog("신고가 접수되었습니다", 1000);
-        return;
+        return HTTPResponse.success("success");
       } else {
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }
 
 //type : comment, cocomment
 Future<HTTPResponse> commentPost(
-    int id, String type, String text, int? tagUserId) async {
+    int id, contentType type, String text, int? tagUserId) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
 
-  final CommentUri = Uri.parse("$serverUri/post_api/comment?id=$id&type=$type");
+  final CommentUri =
+      Uri.parse("$serverUri/post_api/comment?id=$id&type=${type.name}");
 
   final content = {"content": text.trim(), "tagged_user": tagUserId};
 
@@ -544,10 +483,11 @@ Future<HTTPResponse> commentPost(
 }
 
 //type : comment, cocomment
-Future<HTTPResponse> commentDelete(int id, String type) async {
+Future<HTTPResponse> commentDelete(int id, contentType type) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
 
-  final CommentUri = Uri.parse("$serverUri/post_api/comment?id=$id&type=$type");
+  final CommentUri =
+      Uri.parse("$serverUri/post_api/comment?id=$id&type=${type.name}");
 
   try {
     final response = await http.delete(
@@ -575,11 +515,11 @@ Future<HTTPResponse> commentDelete(int id, String type) async {
 }
 
 //type : comment, cocomment
-Future<HTTPResponse> commentListGet(int id, String type, int last) async {
+Future<HTTPResponse> commentListGet(int id, contentType type, int last) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
 
-  final CommentUri =
-      Uri.parse("$serverUri/post_api/comment?id=$id&type=$type&last=$last");
+  final CommentUri = Uri.parse(
+      "$serverUri/post_api/comment?id=$id&type=${type.name}&last=$last");
 
   try {
     final response = await http.get(

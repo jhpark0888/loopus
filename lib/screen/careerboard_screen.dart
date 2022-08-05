@@ -58,27 +58,29 @@ class CareerBoardScreen extends StatelessWidget {
         ),
         excludeHeaderSemantics: false,
         actions: [
-           Center(
-             child: Stack(
-                    children: [GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {Get.to(() => MyProfileScreen());},
-                        child: Padding(
-                          padding: const EdgeInsets.only(right : 20.0),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Obx(
-                              () => UserImageWidget(
-                                  imageUrl:
-                                      HomeController.to.myProfile.value.profileImage ??
-                                          "",
-                                  height: 36,
-                                  width: 36),
-                            ),
-                          ),
-                        ))]
-                  ),
-           ),
+          Center(
+            child: Stack(children: [
+              GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    Get.to(() => MyProfileScreen());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Obx(
+                        () => UserImageWidget(
+                            imageUrl: HomeController
+                                    .to.myProfile.value.profileImage ??
+                                "",
+                            height: 36,
+                            width: 36),
+                      ),
+                    ),
+                  ))
+            ]),
+          ),
         ],
         bottom: TabBar(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -192,10 +194,8 @@ class CareerBoardScreen extends StatelessWidget {
                                               ranker: index == 0
                                                   ? _controller.campusRankerMap[
                                                       currentField.key]!
-                                                  : _controller
-                                                      .koreaRankerMap[
-                                                          currentField.key]!
-                                                      .value,
+                                                  : _controller.koreaRankerMap[
+                                                      currentField.key]!,
                                               currentField: currentField,
                                             );
                                           },
@@ -252,8 +252,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   const SizedBox(height: 24),
                                   const Padding(
                                     padding: EdgeInsets.only(left: 20),
-                                    child:
-                                        Text('실시간 인기 포스트', style: kmainbold),
+                                    child: Text('실시간 인기 포스트', style: kmainbold),
                                   ),
                                   const SizedBox(height: 14),
                                   SizedBox(
@@ -296,8 +295,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   const Padding(
                                       padding: EdgeInsets.only(
                                           left: 20.0, right: 20),
-                                      child:
-                                          Text('해시태그 분석', style: kmainbold)),
+                                      child: Text('해시태그 분석', style: kmainbold)),
                                   const SizedBox(height: 14),
                                   Padding(
                                     padding: const EdgeInsets.only(
@@ -435,8 +433,7 @@ class CareerBoardScreen extends StatelessWidget {
                                                                 height: 12),
                                                             Text(
                                                               '${e.key}월',
-                                                              style:
-                                                                  ktempFont,
+                                                              style: ktempFont,
                                                             )
                                                           ],
                                                         ))

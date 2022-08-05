@@ -26,7 +26,7 @@ class LikePeopleScreen extends StatelessWidget {
       LikePeopleController(id: id, likeType: likeType)..likePeopleLoad();
 
   int id;
-  LikeType likeType;
+  contentType likeType;
 
   @override
   Widget build(BuildContext context) {
