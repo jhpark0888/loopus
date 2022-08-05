@@ -49,15 +49,20 @@ import '../controller/hover_controller.dart';
 
 class OtherProfileScreen extends StatelessWidget {
   OtherProfileScreen(
-      {Key? key, this.user, required this.userid, required this.realname, this.careerName})
+      {Key? key,
+      this.user,
+      required this.userid,
+      required this.realname,
+      this.careerName})
       : super(key: key);
   String? careerName;
   late final OtherProfileController _controller = Get.put(
       OtherProfileController(
           userid: userid,
-          otherUser: user != null ? user!.obs : User.defaultuser().obs,careerName: careerName),
+          otherUser: user != null ? user!.obs : User.defaultuser().obs,
+          careerName: careerName),
       tag: userid.toString());
-  
+
   // late final FollowController followController = Get.put(
   //     FollowController(
   //         islooped: _controller.otherUser.value.looped.value ==
@@ -385,10 +390,39 @@ class OtherProfileScreen extends StatelessWidget {
                                         height: 14,
                                       ),
                                       Obx(
-                                        () => Text(
-                                          _controller
-                                              .otherUser.value.department,
-                                          style: kmainbold,
+                                        () => IntrinsicHeight(
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              UserImageWidget(
+                                                  imageUrl: _controller
+                                                      .otherUser.value.univlogo,
+                                                  width: 28,
+                                                  height: 28),
+                                              const SizedBox(width: 14),
+                                              Text(
+                                                _controller
+                                                    .otherUser.value.univName,
+                                                style: kmainbold,
+                                              ),
+                                              const SizedBox(
+                                                height: 14,
+                                                child: VerticalDivider(
+                                                  thickness: 1,
+                                                  width: 28,
+                                                  color: mainblack,
+                                                ),
+                                              ),
+                                              Text(
+                                                _controller
+                                                    .otherUser.value.department,
+                                                style: kmainbold,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(
@@ -789,7 +823,8 @@ class OtherProfileScreen extends StatelessWidget {
                                           Divider(
                                               thickness: 1,
                                               color: cardGray,
-                                              key: _controller.keycontroller.viewKey),
+                                              key: _controller
+                                                  .keycontroller.viewKey),
                                           const SizedBox(height: 24),
                                           Row(
                                             children: [

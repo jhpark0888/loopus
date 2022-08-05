@@ -250,27 +250,37 @@ class MyProfileScreen extends StatelessWidget {
                                     height: 14,
                                   ),
                                   Obx(
-                                    () => Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        UserImageWidget(
-                                            imageUrl: profileController
-                                                .myUserInfo.value.univlogo,
-                                            width: 28,
-                                            height: 28),
-                                        const SizedBox(width: 14),
-                                        Text(
-                                          profileController
-                                              .myUserInfo.value.univName,
-                                          style: kmainbold,
-                                        ),
-                                        const SizedBox(width: 14),
-                                        Text(
-                                          profileController
-                                              .myUserInfo.value.department,
-                                          style: kmainbold,
-                                        ),
-                                      ],
+                                    () => IntrinsicHeight(
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          UserImageWidget(
+                                              imageUrl: profileController
+                                                  .myUserInfo.value.univlogo,
+                                              width: 28,
+                                              height: 28),
+                                          const SizedBox(width: 14),
+                                          Text(
+                                            profileController
+                                                .myUserInfo.value.univName,
+                                            style: kmainbold,
+                                          ),
+                                          const SizedBox(
+                                            height: 14,
+                                            child: VerticalDivider(
+                                              thickness: 1,
+                                              width: 28,
+                                              color: mainblack,
+                                            ),
+                                          ),
+                                          Text(
+                                            profileController
+                                                .myUserInfo.value.department,
+                                            style: kmainbold,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(
