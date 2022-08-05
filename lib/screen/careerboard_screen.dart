@@ -179,7 +179,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 14),
                                   SizedBox(
-                                    height: 360,
+                                    height: 340,
                                     child: ScrollNoneffectWidget(
                                       child: ListView.separated(
                                           padding: const EdgeInsets.symmetric(

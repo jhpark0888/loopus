@@ -23,7 +23,7 @@ class CareerRankWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 300,
-      height: 340,
+      // height: 340,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16), color: lightcardgray),
@@ -47,7 +47,7 @@ class CareerRankWidget extends StatelessWidget {
                   child: Text('전체보기', style: kmain.copyWith(color: mainblue)))
             ],
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 18.33),
           if (ranker.isNotEmpty)
             ListView.separated(
                 primary: false,
@@ -58,7 +58,7 @@ class CareerRankWidget extends StatelessWidget {
                       isFollow: false,
                     ),
                 separatorBuilder: (context, index) => const SizedBox(
-                      height: 18,
+                      height: 18.33,
                     ),
                 itemCount: ranker.length > 3 ? 3 : ranker.length)
           else
