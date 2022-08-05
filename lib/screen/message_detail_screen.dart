@@ -62,175 +62,173 @@ class MessageDetatilScreen extends StatelessWidget {
         FocusScope.of(context).unfocus();
       },
       behavior: HitTestBehavior.translucent,
-      child: SafeArea(
-        child: Scaffold(
-            resizeToAvoidBottomInset: true,
-            appBar: AppBarWidget(
-              title: partner.realName,
-              bottomBorder: false,
-              leading: GestureDetector(
-                  onTap: () {
-                    if (enterRoute == EnterRoute.popUp) {
-                      if (Get.isRegistered<MessageController>()) {
-                        Get.back();
-                      } else {
-                        Get.off(() => MessageScreen());
-                      }
+      child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBarWidget(
+            title: partner.realName,
+            bottomBorder: false,
+            leading: GestureDetector(
+                onTap: () {
+                  if (enterRoute == EnterRoute.popUp) {
+                    if (Get.isRegistered<MessageController>()) {
+                      Get.back();
+                    } else {
+                      Get.off(() => MessageScreen());
+                    }
+                  } else {
+                    Get.back();
+                  }
+                },
+                child: Center(
+                    child: SvgPicture.asset('assets/icons/appbar_back.svg'))),
+            actions: [
+              GestureDetector(
+                onTap: () async {
+                  // // deleteDatabase(
+                  // //                 join(await getDatabasesPath(), 'MY_database.db'));
+                  showModalIOS(context, func1: () {
+                    int roomId = controller.roomid;
+                    if (controller.messageList.isNotEmpty) {
+                      deleteChatRoom(controller.roomid, myProfile.userid)
+                          .then((value) {
+                        if (value.isError == false) {
+                          SQLController.to.deleteMessage(roomId);
+                          SQLController.to.deleteMessageRoom(roomId);
+                          SQLController.to.deleteUser(partner.userid);
+                          if (Get.isRegistered<MessageController>()) {
+                            MessageController.to.searchRoomList.removeAt(
+                                MessageController.to.searchRoomList
+                                    .indexWhere((messageRoom) =>
+                                        messageRoom.chatRoom.value.roomId ==
+                                        roomId));
+                            MessageController.to.chattingRoomList.removeAt(
+                                MessageController.to.chattingRoomList
+                                    .indexWhere((messageRoom) =>
+                                        messageRoom.chatRoom.value.roomId ==
+                                        roomId));
+                          }
+                          Get.back();
+                          if (enterRoute == EnterRoute.popUp) {
+                            Get.off(() => MessageScreen());
+                          } else {
+                            Get.back();
+                          }
+                        }
+                      });
                     } else {
                       Get.back();
-                    }
-                  },
-                  child: Center(
-                      child: SvgPicture.asset('assets/icons/appbar_back.svg'))),
-              actions: [
-                GestureDetector(
-                  onTap: () async {
-                    // // deleteDatabase(
-                    // //                 join(await getDatabasesPath(), 'MY_database.db'));
-                    showModalIOS(context, func1: () {
-                      int roomId = controller.roomid;
-                      if (controller.messageList.isNotEmpty) {
-                        deleteChatRoom(controller.roomid, myProfile.userid)
-                            .then((value) {
-                          if (value.isError == false) {
-                            SQLController.to.deleteMessage(roomId);
-                            SQLController.to.deleteMessageRoom(roomId);
-                            SQLController.to.deleteUser(partner.userid);
-                            if (Get.isRegistered<MessageController>()) {
-                              MessageController.to.searchRoomList.removeAt(
-                                  MessageController.to.searchRoomList
-                                      .indexWhere((messageRoom) =>
-                                          messageRoom.chatRoom.value.roomId ==
-                                          roomId));
-                              MessageController.to.chattingRoomList.removeAt(
-                                  MessageController.to.chattingRoomList
-                                      .indexWhere((messageRoom) =>
-                                          messageRoom.chatRoom.value.roomId ==
-                                          roomId));
-                            }
-                            Get.back();
-                            if (enterRoute == EnterRoute.popUp) {
-                              Get.off(() => MessageScreen());
-                            } else {
-                              Get.back();
-                            }
-                          }
-                        });
+                      if (enterRoute == EnterRoute.popUp) {
+                        Get.off(() => MessageScreen());
                       } else {
                         Get.back();
-                        if (enterRoute == EnterRoute.popUp) {
-                          Get.off(() => MessageScreen());
-                        } else {
-                          Get.back();
-                        }
                       }
-                    }, func2: () {
-                      Get.to(() => DatabaseList());
-                    },
-                        value1: '채팅방 나가기',
-                        value2: '',
-                        isValue1Red: true,
-                        isValue2Red: false,
-                        isOne: true);
+                    }
+                  }, func2: () {
+                    Get.to(() => DatabaseList());
                   },
-                  child: SizedBox(
-                      height: 44,
-                      width: 44,
-                      child: Center(
-                          child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))),
-                )
-              ],
-            ),
-            bottomNavigationBar: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: sendField()),
-            body: Obx(
-              () => controller.screenState.value == ScreenState.loading
-                  ? const Center(child: LoadingWidget())
-                  : controller.screenState.value == ScreenState.success
-                      ? Scrollbar(
-                          child: FlutterListView(
-                              reverse: true,
-                              controller: controller.listViewController,
-                              delegate: FlutterListViewDelegate(
-                                (context, index) {
-                                  if (controller.messageList.length == 1) {
-                                    return MessageWidget(
-                                        message: controller.messageList[index],
-                                        isFirst: true.obs,
-                                        isLast: true.obs,
-                                        partner: partner,
-                                        myId: controller.myId!);
-                                  } else if (controller.messageList[index] ==
-                                      controller.messageList.first) {
-                                    return MessageWidget(
-                                        message: controller.messageList[index],
-                                        isFirst: true.obs,
+                      value1: '채팅방 나가기',
+                      value2: '',
+                      isValue1Red: true,
+                      isValue2Red: false,
+                      isOne: true);
+                },
+                child: SizedBox(
+                    height: 44,
+                    width: 44,
+                    child: Center(
+                        child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))),
+              )
+            ],
+          ),
+          bottomNavigationBar: Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: sendField()),
+          body: Obx(
+            () => controller.screenState.value == ScreenState.loading
+                ? const Center(child: LoadingWidget())
+                : controller.screenState.value == ScreenState.success
+                    ? Scrollbar(
+                        child: FlutterListView(
+                            reverse: true,
+                            controller: controller.listViewController,
+                            delegate: FlutterListViewDelegate(
+                              (context, index) {
+                                if (controller.messageList.length == 1) {
+                                  return MessageWidget(
+                                      message: controller.messageList[index],
+                                      isFirst: true.obs,
+                                      isLast: true.obs,
+                                      partner: partner,
+                                      myId: controller.myId!);
+                                } else if (controller.messageList[index] ==
+                                    controller.messageList.first) {
+                                  return MessageWidget(
+                                      message: controller.messageList[index],
+                                      isFirst: true.obs,
+                                      isLast: false.obs,
+                                      partner: partner,
+                                      myId: controller.myId!);
+                                } else if (controller.messageList[index] ==
+                                    controller.messageList.last) {
+                                  return MessageWidget(
+                                      message: controller.messageList[index],
+                                      isFirst: false.obs,
+                                      isLast: true.obs,
+                                      partner: partner,
+                                      myId: controller.myId!);
+                                } else if (controller.messageList[index] !=
+                                        controller.messageList.last &&
+                                    DateFormat('yyyy-MM-dd').parse(controller
+                                            .messageList[index].date
+                                            .toString()) !=
+                                        DateFormat('yyyy-MM-dd').parse(
+                                            controller
+                                                .messageList[index + 1].date
+                                                .toString())) {
+                                  return MessageWidget(
+                                      message: controller.messageList[index],
+                                      isFirst: false.obs,
+                                      isLast: true.obs,
+                                      partner: partner,
+                                      myId: controller.myId!);
+                                } else {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      print(controller.messageList[index] ==
+                                              controller.messageList.last ||
+                                          DateFormat('yyyy-MM-dd').parse(
+                                                  controller
+                                                      .messageList[index].date
+                                                      .toString()) !=
+                                              DateFormat('yyyy-MM-dd').parse(
+                                                  controller
+                                                      .messageList[index].date
+                                                      .toString()));
+                                    },
+                                    child: MessageWidget(
+                                        message:
+                                            controller.messageList[index],
+                                        isFirst: false.obs,
                                         isLast: false.obs,
                                         partner: partner,
-                                        myId: controller.myId!);
-                                  } else if (controller.messageList[index] ==
-                                      controller.messageList.last) {
-                                    return MessageWidget(
-                                        message: controller.messageList[index],
-                                        isFirst: false.obs,
-                                        isLast: true.obs,
-                                        partner: partner,
-                                        myId: controller.myId!);
-                                  } else if (controller.messageList[index] !=
-                                          controller.messageList.last &&
-                                      DateFormat('yyyy-MM-dd').parse(controller
-                                              .messageList[index].date
-                                              .toString()) !=
-                                          DateFormat('yyyy-MM-dd').parse(
-                                              controller
-                                                  .messageList[index + 1].date
-                                                  .toString())) {
-                                    return MessageWidget(
-                                        message: controller.messageList[index],
-                                        isFirst: false.obs,
-                                        isLast: true.obs,
-                                        partner: partner,
-                                        myId: controller.myId!);
-                                  } else {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        print(controller.messageList[index] ==
-                                                controller.messageList.last ||
-                                            DateFormat('yyyy-MM-dd').parse(
-                                                    controller
-                                                        .messageList[index].date
-                                                        .toString()) !=
-                                                DateFormat('yyyy-MM-dd').parse(
-                                                    controller
-                                                        .messageList[index].date
-                                                        .toString()));
-                                      },
-                                      child: MessageWidget(
-                                          message:
-                                              controller.messageList[index],
-                                          isFirst: false.obs,
-                                          isLast: false.obs,
-                                          partner: partner,
-                                          myId: controller.myId!),
-                                    );
-                                  }
-                                },
-                                childCount: controller.messageList.length,
-                                onItemKey: (index) => controller
-                                    .messageList[index].messageId
-                                    .toString(),
-                                initOffsetBasedOnBottom: true,
-                                firstItemAlign: FirstItemAlign.end,
-                                keepPosition: true,
-                              )),
-                        )
-                      : controller.screenState.value == ScreenState.normal
-                          ? Container()
-                          : Container(),
-            )),
-      ),
+                                        myId: controller.myId!),
+                                  );
+                                }
+                              },
+                              childCount: controller.messageList.length,
+                              onItemKey: (index) => controller
+                                  .messageList[index].messageId
+                                  .toString(),
+                              initOffsetBasedOnBottom: true,
+                              firstItemAlign: FirstItemAlign.end,
+                              keepPosition: true,
+                            )),
+                      )
+                    : controller.screenState.value == ScreenState.normal
+                        ? Container()
+                        : Container(),
+          )),
     );
   }
 
