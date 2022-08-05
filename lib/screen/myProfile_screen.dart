@@ -250,10 +250,27 @@ class MyProfileScreen extends StatelessWidget {
                                     height: 14,
                                   ),
                                   Obx(
-                                    () => Text(
-                                      profileController
-                                          .myUserInfo.value.department,
-                                      style: kmainbold,
+                                    () => Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        UserImageWidget(
+                                            imageUrl: profileController
+                                                .myUserInfo.value.univlogo,
+                                            width: 28,
+                                            height: 28),
+                                        const SizedBox(width: 14),
+                                        Text(
+                                          profileController
+                                              .myUserInfo.value.univName,
+                                          style: kmainbold,
+                                        ),
+                                        const SizedBox(width: 14),
+                                        Text(
+                                          profileController
+                                              .myUserInfo.value.department,
+                                          style: kmainbold,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(
@@ -360,8 +377,8 @@ class MyProfileScreen extends StatelessWidget {
                                           },
                                           child: Text(
                                             '전체 보기(000개)',
-                                            style: kmain.copyWith(
-                                                color: mainblue),
+                                            style:
+                                                kmain.copyWith(color: mainblue),
                                           ))
                                     ],
                                   ),
