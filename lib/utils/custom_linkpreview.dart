@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/home_controller.dart';
 import 'package:universal_html/parsing.dart';
 import 'package:link_preview_generator/src/models/types.dart';
 import 'package:link_preview_generator/src/rules/amazon.scrapper.dart';
@@ -28,7 +29,9 @@ class CustomLinkPreview {
       );
 
       final mimeType = response.headers['content-type'] ?? '';
-      final data = utf8.decode(response.bodyBytes);
+      final data = utf8.decode(
+        response.bodyBytes,
+      );
       final doc = parseHtmlDocument(data);
 
       if (LinkPreviewScrapper.isMimeVideo(mimeType)) {
@@ -55,6 +58,7 @@ class CustomLinkPreview {
         return DefaultScrapper.scrape(doc, url);
       }
     } catch (e) {
+      HomeController.to.newslist.removeWhere((element) => element == url);
       print('Default scrapper failure Error: $e');
       return WebInfo(
         description: '',

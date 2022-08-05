@@ -23,12 +23,11 @@ import 'package:loopus/model/httpresponse_model.dart';
 import '../app.dart';
 import '../constant.dart';
 
-Future<HTTPResponse> emailRequest() async {
+Future<HTTPResponse> emailRequest(
+    String email, Rx<Emailcertification> emailcertification) async {
   ConnectivityResult result = await initConnectivity();
-  SignupController signupController = Get.put(SignupController());
-  // NotificationController notifiController = Get.put(NotificationController());
   if (result == ConnectivityResult.none) {
-    signupController.signupcertification(Emailcertification.fail);
+    emailcertification(Emailcertification.fail);
     return HTTPResponse.networkError();
   } else {
     Uri uri = Uri.parse('$serverUri/user_api/check_email');
@@ -37,25 +36,13 @@ Future<HTTPResponse> emailRequest() async {
 
     var checkemail = {
       //TODO: 학교 도메인 확인
-      "email": signupController.emailidcontroller.text +
-          "@" +
-          // "naver.com",
-          signupController.selectUniv.value.email,
+      "email": email,
       "token": fcmToken
     };
 
     try {
-      // signupController.sec(180);
-      // signupController.timer =
-      //     Timer.periodic(const Duration(seconds: 1), (timer) {
-      //   if (signupController.sec.value != 0) {
-      //     signupController.sec.value -= 1;
-      //   }
-      // });
-
-      signupController.signupcertification(Emailcertification.waiting);
-      showBottomSnackbar(
-          "${signupController.emailidcontroller.text}@${signupController.selectUniv.value.email}로\n인증 메일을 보냈어요\n메일을 확인하고 인증을 완료해주세요");
+      emailcertification(Emailcertification.waiting);
+      // showBottomSnackbar("$email로\n인증 메일을 보냈어요\n메일을 확인하고 인증을 완료해주세요");
 
       http.Response response = await http.post(
         uri,

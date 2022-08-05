@@ -474,31 +474,28 @@ class OtherProfileScreen extends StatelessWidget {
                                                               .value.userid) {
                                                         Get.back();
                                                       } else {
-                                                        
-                                                            Get.to(() =>
-                                                                MessageDetatilScreen(
-                                                                  partner: _controller
+                                                        Get.to(() =>
+                                                            MessageDetatilScreen(
+                                                              partner:
+                                                                  _controller
                                                                       .otherUser
                                                                       .value,
-                                                                  myProfile:
-                                                                      HomeController
-                                                                          .to
-                                                                          .myProfile
-                                                                          .value,
-                                                                  enterRoute:
-                                                                      EnterRoute
-                                                                          .otherProfile,
-                                                                ));
-                                                            HomeController
-                                                                    .to
-                                                                    .enterMessageRoom
-                                                                    .value =
-                                                                _controller
-                                                                    .otherUser
-                                                                    .value
-                                                                    .userid;
-                                                          
-                                                    
+                                                              myProfile:
+                                                                  HomeController
+                                                                      .to
+                                                                      .myProfile
+                                                                      .value,
+                                                              enterRoute: EnterRoute
+                                                                  .otherProfile,
+                                                            ));
+                                                        HomeController
+                                                                .to
+                                                                .enterMessageRoom
+                                                                .value =
+                                                            _controller
+                                                                .otherUser
+                                                                .value
+                                                                .userid;
                                                       }
                                                       // MessageDetailScreen(
                                                       //   realname:

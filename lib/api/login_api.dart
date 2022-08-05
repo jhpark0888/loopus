@@ -68,31 +68,29 @@ Future<HTTPResponse> loginRequest(String email, String pw) async {
   }
 }
 
-Future<HTTPResponse> postpwfindemailcheck(String inputEmail) async {
+Future<HTTPResponse> postpwfindemailcheck(
+    String email, Rx<Emailcertification> emailcertification) async {
   ConnectivityResult result = await initConnectivity();
-  PwChangeController pwChangeController = Get.find();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
-    showCustomDialog(
-      '입력하신 이메일로 들어가서 링크를 클릭해 본인 인증을 해주세요',
-      1400,
-    );
-    pwChangeController.pwcertification(Emailcertification.waiting);
     Uri uri = Uri.parse('$serverUri/user_api/password');
 
+    String? fcmToken = await NotificationController.getToken();
+
     //이메일 줘야 됨
-    final email = {
-      'email': inputEmail.trim(),
-    };
+    final checkemail = {'email': email.trim(), "token": fcmToken};
 
     try {
+      emailcertification(Emailcertification.waiting);
+      showBottomSnackbar("$email로\n인증 메일을 보냈어요\n메일을 확인하고 인증을 완료해주세요");
+
       http.Response response = await http.post(uri,
           headers: <String, String>{
             'Content-Type': 'application/json',
           },
-          body: json.encode(email));
+          body: json.encode(checkemail));
 
       print("비밀번호 찾기 이메일 체크 : ${response.statusCode}");
       if (response.statusCode == 200) {

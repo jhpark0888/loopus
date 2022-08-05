@@ -8,7 +8,7 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_emailcheck_screen.dart';
-import 'package:loopus/screen/signup_pw_screen.dart';
+import 'package:loopus/screen/signup_email_pw_screen.dart';
 import 'package:loopus/screen/univ_dept_search_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
@@ -25,32 +25,55 @@ class SignupUserInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Scaffold(
-          extendBody: true,
-          bottomNavigationBar: BottomAppBar(
-            color: mainWhite,
-            elevation: 0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Obx(
-                () => CustomExpandedButton(
-                    onTap: () {
-                      if (_signupController.isUserInfoFill.value) {
-                        Get.to(() => SignupEmailcheckScreen());
-                      }
-                    },
-                    isBlue: _signupController.isUserInfoFill.value,
-                    title: "다음",
-                    isBig: true),
-              ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        extendBody: true,
+        bottomNavigationBar: BottomAppBar(
+          color: mainWhite,
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomExpandedButton(
+                          onTap: () {
+                            Get.back();
+                          },
+                          isBlue: false,
+                          title: "이전",
+                          isBig: true),
+                    ),
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Expanded(
+                      child: Obx(
+                        () => CustomExpandedButton(
+                            onTap: () {
+                              if (_signupController.isUserInfoFill.value) {
+                                Get.to(() => SignupEmailPwScreen());
+                              }
+                            },
+                            isBlue: _signupController.isUserInfoFill.value,
+                            title: "다음",
+                            isBig: true),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          body: SingleChildScrollView(
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SignUpTextWidget(

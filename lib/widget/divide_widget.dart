@@ -10,7 +10,7 @@ class DivideWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Divider(
       height: height ?? 20,
-      thickness: 1,
+      thickness: 0.5,
       indent: 20,
       endIndent: 20,
       color: dividegray,
