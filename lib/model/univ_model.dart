@@ -1,5 +1,9 @@
 class Univ {
-  Univ({required this.id, required this.univname, required this.email,required this.univlogo});
+  Univ(
+      {required this.id,
+      required this.univname,
+      required this.email,
+      required this.univlogo});
 
   int id;
   String univname;
@@ -8,11 +12,11 @@ class Univ {
 
   factory Univ.fromJson(Map<String, dynamic> json) => Univ(
       id: json["id"] ?? 0,
-      univname: json["school_name"] ?? "",
+      univname: json["school"] ?? "",
       email: json["email"] ?? "",
       univlogo: json["logo"] ?? "");
 
-  factory Univ.defalut() => Univ(id: 0, univname: "", email: "",univlogo: '');
+  factory Univ.defalut() => Univ(id: 0, univname: "", email: "", univlogo: '');
 }
 
 class Dept {
