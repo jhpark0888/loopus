@@ -80,7 +80,7 @@ class PostingWidget extends StatelessWidget {
                               children: [
                                 Text(item.user.realName, style: kmainbold),
                                 const SizedBox(height: 7),
-                                Text(item.user.department, style: kmain)
+                                Text('${item.user.univName} · ${item.user.department}', style: kmain)
                               ])
                         ],
                       ),

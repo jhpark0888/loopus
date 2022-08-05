@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/ban_api.dart';
+import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/realtime_rank_screen.dart';
+import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/widget/person_image_widget.dart';
 import 'package:loopus/widget/persontile_widget.dart';
 
@@ -84,14 +87,16 @@ class PersonRankWidget extends StatelessWidget {
       required this.user,
       required this.isFollow})
       : super(key: key);
-
+  final Debouncer _debouncer = Debouncer();
   User user;
   bool isUniversity;
   bool isFollow;
 
+  late int lastisFollowed;
+  int num = 0;
+
   @override
   Widget build(BuildContext context) {
-    print(user.schoolRank);
     return GestureDetector(
       onTap: () {
         Get.to(
@@ -128,7 +133,7 @@ class PersonRankWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                user.univ != "" ? user.univ : '땡땡대',
+                user.univName != "" ? user.univName : '땡땡대',
                 style: kmain,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -223,4 +228,53 @@ class PersonRankWidget extends StatelessWidget {
       return SvgPicture.asset('assets/icons/rate_down_arrow.svg');
     }
   }
+
+  void followMotion() {
+    if(num == 0) {
+      lastisFollowed = user.looped.value.index;
+    }
+      if (user.banned.value == BanState.ban) {
+        userbancancel(user.userid);
+      } else {
+        if (user.looped.value == FollowState.normal) {
+          // followController.islooped(1);
+          user.looped(FollowState.following);
+        } else if (user.looped.value ==
+            FollowState.follower) {
+          // followController.islooped(1);
+
+          user.looped(FollowState.wefollow);
+        } else if (user.looped.value ==
+            FollowState.following) {
+          // followController.islooped(0);
+
+          user.looped(FollowState.normal);
+        } else if (user.looped.value ==
+            FollowState.wefollow) {
+          // followController.islooped(0);
+
+          user.looped(FollowState.follower);
+        }
+        num += 1;
+
+        _debouncer.run(() {
+          if (user.looped.value.index !=
+              lastisFollowed) {
+            if (<int>[2, 3]
+                .contains(user.looped.value.index)) {
+              postfollowRequest(user.userid);
+              print("팔로우");
+            } else {
+              deletefollow(user.userid);
+              print("팔로우 해제");
+            }
+            lastisFollowed =
+                user.looped.value.index;
+          } else {
+            print("아무일도 안 일어남");
+          }
+        });
+      }
+    }
+  
 }

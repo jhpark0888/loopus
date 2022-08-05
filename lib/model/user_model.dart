@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/tag_model.dart';
+import 'package:loopus/model/univ_model.dart';
 
 class User {
   User({
     required this.userid,
     required this.realName,
     required this.type,
-    required this.univ,
+    required this.univName,
+    required this.univlogo,
     required this.department,
     required this.loopcount,
     required this.totalposting,
@@ -29,7 +33,8 @@ class User {
   int userid;
   String realName;
   int type;
-  String univ;
+  String univName;
+  String univlogo;
   String department;
   int? isuser;
   RxInt loopcount;
@@ -51,7 +56,8 @@ class User {
     int? userid,
     String? realName,
     int? type,
-    String? univ,
+    String? univName,
+    String? univlogo,
     String? department,
     int? isuser,
     RxInt? loopcount,
@@ -73,7 +79,8 @@ class User {
           userid: userid ?? 0,
           realName: realName ?? "",
           type: type ?? 0,
-          univ: univ ?? "",
+          univName: univName ?? '',
+          univlogo: univlogo ?? '',
           department: department ?? "",
           loopcount: loopcount ?? 0.obs,
           totalposting: totalposting ?? 0,
@@ -114,7 +121,10 @@ class User {
             ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
             : [],
         fieldId: json["group"] != null ? json["group"].toString() : "10",
-        univ: json["school"] ?? '',
+        univName: json["school"] != null
+            ? json['school']['school_name']
+            : json["school_name"] ?? '',
+        univlogo: json["school"] != null ? json['school']['logo'] : '',
         department: json["department"] ?? '',
         isuser: json["is_user"] ?? 0,
         looped: json["looped"] != null
@@ -151,7 +161,10 @@ class User {
         ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
         : profileTag;
     fieldId = json["group"] != null ? json["group"].toString() : fieldId;
-    univ = json["univ"] ?? univ;
+    univName = json["school"] != null
+        ? json["school"]['school_name']
+        : json["school_name"] ?? univName;
+    univlogo = json["school"] != null ? json['school']['logo'] : univlogo;
     department = json["department"] ?? department;
     isuser = json["is_user"] ?? isuser;
     looped = json["looped"] != null

@@ -36,7 +36,7 @@ class SearchUserWidget extends StatelessWidget {
               children: [
                 Text(user.realName, style: kmainbold),
                 const SizedBox(height: 7),
-                Text('땡땡대 · ${user.department}', style: kmain),
+                Text('${user.univName} · ${user.department}', style: kmain),
               ],
             ),
             const SizedBox(width: 20),
