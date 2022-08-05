@@ -95,7 +95,7 @@ class _NewsWidgetState extends State<NewsWidget>
                       imageUrl: image,
                       height: 150,
                       width: 252,
-                      fit: BoxFit.contain,
+                      fit: BoxFit.cover,
                     )
                   : Container(
                       height: 150,
@@ -151,10 +151,10 @@ class NewsListWidget extends StatelessWidget {
           const SizedBox(
             height: 14,
           ),
-          Obx(
-            () => SizedBox(
-              height: 220,
-              child: ListView.separated(
+          SizedBox(
+            height: 220,
+            child: Obx(
+              () => ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
@@ -168,7 +168,7 @@ class NewsListWidget extends StatelessWidget {
                 itemCount: newslist.length,
               ),
             ),
-          )
+          ),
         ],
       ),
     );

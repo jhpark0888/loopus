@@ -94,7 +94,7 @@ class CommentWidget extends StatelessWidget {
                                                 comment.id, "comment")
                                             .then((value) {
                                           if (value.isError == false) {
-                                            postController.post.value!.comments
+                                            postController.post!.value.comments
                                                 .removeWhere((element) =>
                                                     element.id == comment.id);
                                           } else {

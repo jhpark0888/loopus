@@ -7,8 +7,10 @@ import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/before_message_detail_controller.dart';
@@ -16,6 +18,7 @@ import 'package:loopus/controller/message_detail_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
@@ -29,7 +32,10 @@ import 'package:loopus/screen/notification_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
-import 'package:loopus/screen/signup_pw_screen.dart';
+import 'package:loopus/screen/pwchange_screen.dart';
+import 'package:loopus/screen/signup_complete_screen.dart';
+import 'package:loopus/screen/signup_email_pw_screen.dart';
+import 'package:loopus/screen/signup_fail_screen.dart';
 import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
@@ -306,9 +312,49 @@ class NotificationController extends GetxController {
         }
       } else if (event.data["type"] == "certification") {
         if (Get.isRegistered<SignupController>()) {
-          SignupController.to.signupcertification(Emailcertification.success);
-          SignupController.to.timerClose();
-          Get.to(() => SignupPwScreen());
+          SignupController _signupController = Get.find();
+          _signupController.signupcertification(Emailcertification.success);
+          _signupController.timer
+              .timerClose(dialogOn: false, stateChange: false);
+          await signupRequest().then((value) async {
+            final GAController _gaController = GAController();
+
+            if (value.isError == false) {
+              // String token = jsonDecode(response.body)['token'];
+              // String userid = jsonDecode(response.body)['user_id'];
+
+              // await storage.write(key: 'token', value: token);
+              // await storage.write(key: 'id', value: userid);
+              //!GA
+              await _gaController.logSignup();
+              await _gaController.setUserProperties(value.data['user_id'],
+                  _signupController.selectDept.value.deptname);
+
+              // Get.offAll(() => App());
+
+              // SchedulerBinding.instance!.addPostFrameCallback((_) {
+              //   showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
+              // });
+
+              await _gaController.logScreenView('signup_6');
+              Get.offAll(() => SignupCompleteScreen(
+                    emailId: _signupController.emailidcontroller.text +
+                        "@" +
+                        _signupController.selectUniv.value.email,
+                    password: _signupController.passwordcontroller.text,
+                  ));
+            } else {
+              await _gaController.logScreenView('signup_6');
+              // errorSituation(value);
+              Get.offAll(
+                  () => SignupFailScreen(signupController: _signupController));
+            }
+          });
+        } else if (Get.isRegistered<PwChangeController>()) {
+          PwChangeController.to.pwcertification(Emailcertification.success);
+          PwChangeController.to.timer
+              .timerClose(dialogOn: false, stateChange: false);
+          Get.to(() => PwChangeScreen(pwType: PwType.pwfind));
         }
       } else {
         HomeController.to.isNewAlarm(true);

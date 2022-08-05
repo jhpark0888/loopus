@@ -1,21 +1,7 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:loopus/api/login_api.dart';
-import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/ga_controller.dart';
-import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/project_add_controller.dart';
-import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/login_screen.dart';
-import 'package:loopus/screen/signup_emailcheck_screen.dart';
-import 'package:loopus/screen/univ_dept_search_screen.dart';
-import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/custom_textfield.dart';
-import 'package:loopus/widget/label_textfield_widget.dart';
 import 'package:loopus/widget/signup_text_widget.dart';
-import '../utils/check_form_validate.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 
 // ignore: must_be_immutable
@@ -29,28 +15,28 @@ class SignupCompleteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Scaffold(
-          extendBody: true,
-          bottomNavigationBar: BottomAppBar(
-            color: mainWhite,
-            elevation: 0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: CustomExpandedButton(
-                  onTap: () async {
-                    login(context, emailId: emailId, password: password);
-                  },
-                  isBlue: true,
-                  title: "시작하기",
-                  isBig: true),
-            ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        extendBody: true,
+        bottomNavigationBar: BottomAppBar(
+          color: mainWhite,
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: CustomExpandedButton(
+                onTap: () async {
+                  login(context, emailId: emailId, password: password);
+                },
+                isBlue: true,
+                title: "시작하기",
+                isBig: true),
           ),
-          body: SingleChildScrollView(
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SignUpTextWidget(

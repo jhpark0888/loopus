@@ -7,12 +7,13 @@ import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/univ_model.dart';
+import 'package:loopus/utils/certificate_timer.dart';
 import 'package:loopus/utils/error_control.dart';
 
 enum UserType {
   student,
   company,
-  professer,
+  school,
 }
 
 class SignupController extends GetxController {
@@ -38,15 +39,16 @@ class SignupController extends GetxController {
   RxList<Dept> searchDeptList = <Dept>[].obs;
 
   RxBool isUserInfoFill = false.obs;
-  RxBool isPassWordCheck = false.obs;
+  RxBool isEmailPassWordCheck = false.obs;
 
-  Timer? displaytimer;
-  RxInt sec = 180.obs;
+  late CertificateTimer timer;
 
   static final FlutterSecureStorage storage = FlutterSecureStorage();
 
   @override
   void onInit() {
+    timer = CertificateTimer(emailcertification: signupcertification);
+
     namecontroller.addListener(() {
       userInfoFillCheck();
     });
@@ -59,11 +61,14 @@ class SignupController extends GetxController {
     admissioncontroller.addListener(() {
       userInfoFillCheck();
     });
+    emailidcontroller.addListener(() {
+      emailpasswordCheck();
+    });
     passwordcontroller.addListener(() {
-      passwordCheck();
+      emailpasswordCheck();
     });
     passwordcheckcontroller.addListener(() {
-      passwordCheck();
+      emailpasswordCheck();
     });
 
     super.onInit();
@@ -124,53 +129,15 @@ class SignupController extends GetxController {
     }
   }
 
-  void passwordCheck() {
+  void emailpasswordCheck() {
     String pwText = passwordcontroller.text;
     String pwCheckText = passwordcheckcontroller.text;
-    if (pwText.trim().length > 6 && pwText == pwCheckText) {
-      isPassWordCheck(true);
+    if (pwText.trim().length > 6 &&
+        pwText == pwCheckText &&
+        emailidcontroller.text.trim() != "") {
+      isEmailPassWordCheck(true);
     } else {
-      isPassWordCheck(false);
-    }
-  }
-
-  void timerOn() async {
-    displaytimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (sec.value != 0) {
-        sec.value -= 1;
-      } else {
-        timerClose();
-      }
-    });
-    // validChecktimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-    //   if (sec.value != 0) {
-    //     await emailvalidRequest().then((value) {
-    //       if (value.isError == false) {
-    //         print("성공");
-    //         timerClose(dialogOn: false);
-    //         _signupController.signupcertification(Emailcertification.success);
-    //         Get.to(() => SignupPwScreen());
-    //       } else {}
-    //     });
-    //   }
-    // });
-  }
-
-  void timerClose({bool dialogOn = true}) {
-    if (displaytimer != null) {
-      if (displaytimer!.isActive) {
-        displaytimer!.cancel();
-      }
-    }
-    // if (validChecktimer != null) {
-    //   if (validChecktimer!.isActive) {
-    //     validChecktimer!.cancel();
-    //   }
-    // }
-    if (dialogOn) {
-      signupcertification(Emailcertification.fail);
-      Get.closeCurrentSnackbar();
-      showCustomDialog("인증이 취소되었습니다", 1000);
+      isEmailPassWordCheck(false);
     }
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loopus/api/login_api.dart';
+import 'package:loopus/api/signup_api.dart';
 
 import 'package:loopus/constant.dart';
 
@@ -19,7 +21,7 @@ import '../utils/check_form_validate.dart';
 
 class PwFindScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final PwChangeController pwChangeController = Get.put(PwChangeController());
+  final PwChangeController _pwChangeController = Get.put(PwChangeController());
   final LogInController _loginController = Get.put(LogInController());
   static FlutterSecureStorage? storage = const FlutterSecureStorage();
 
@@ -36,7 +38,7 @@ class PwFindScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                if (pwChangeController.pwcertification.value ==
+                if (_pwChangeController.pwcertification.value ==
                     Emailcertification.success) {
                   Get.to(() => PwChangeScreen(
                         pwType: PwType.pwfind,
@@ -47,7 +49,7 @@ class PwFindScreen extends StatelessWidget {
                 () => Text(
                   '다음',
                   style: ktempFont.copyWith(
-                      color: pwChangeController.pwcertification.value ==
+                      color: _pwChangeController.pwcertification.value ==
                               Emailcertification.success
                           ? mainblue
                           : mainblack.withOpacity(0.38)),
@@ -96,28 +98,32 @@ class PwFindScreen extends StatelessWidget {
                       () => CustomExpandedButton(
                           onTap: () {
                             if (_formKey.currentState!.validate()) {
-                              if (pwChangeController.pwcertification.value ==
-                                  Emailcertification.fail) {
+                              if (_pwChangeController.pwcertification.value ==
+                                      Emailcertification.fail ||
+                                  _pwChangeController.pwcertification.value ==
+                                      Emailcertification.normal) {
                                 postpwfindemailcheck(
-                                        _loginController.idcontroller.text)
+                                        _loginController.idcontroller.text,
+                                        _pwChangeController.pwcertification)
                                     .then((value) {
                                   if (value.isError == false) {
-                                    pwChangeController.pwcertification(
-                                        Emailcertification.success);
-                                    Get.to(() => PwChangeScreen(
-                                          pwType: PwType.pwfind,
-                                        ));
+                                    _pwChangeController.timer.timerOn(180);
+
                                     // _modalController.showCustomDialog('입력하신 이메일로 새로운 비밀번호를 알려드렸어요', 1400);
                                   } else {
-                                    pwChangeController.pwcertification(
+                                    _pwChangeController.pwcertification(
                                         Emailcertification.fail);
                                     if (value.errorData!["statusCode"] == 401) {
-                                      dialogBack();
+                                      Get.closeCurrentSnackbar();
+
                                       showCustomDialog(
                                           '아직 가입 되지 않은 이메일입니다', 1400);
                                     } else {
+                                      Get.closeCurrentSnackbar();
                                       errorSituation(value);
                                     }
+                                    _pwChangeController.timer
+                                        .timerClose(dialogOn: false);
                                   }
                                 });
                               }
@@ -125,8 +131,10 @@ class PwFindScreen extends StatelessWidget {
                               showCustomDialog('이메일 형식을 다시 확인해주세요', 1400);
                             }
                           },
-                          isBlue: pwChangeController.pwcertification.value ==
-                                  Emailcertification.fail
+                          isBlue: _pwChangeController.pwcertification.value ==
+                                      Emailcertification.fail ||
+                                  _pwChangeController.pwcertification.value ==
+                                      Emailcertification.normal
                               ? true
                               : false,
                           isBig: true,

@@ -2,161 +2,143 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/ga_controller.dart';
-import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_user_info_screen.dart';
-import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/custom_expanded_button.dart';
+import 'package:loopus/widget/signup_text_widget.dart';
 
 class SignupTypeScreen extends StatelessWidget {
+  SignupTypeScreen({Key? key}) : super(key: key);
+
   final SignupController _signupController = Get.put(SignupController());
   final GAController _gaController = Get.put(GAController());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        bottomBorder: false,
-        actions: [
-          TextButton(
-            onPressed: () async {
-              //TODO: 학교 선택 시 활성화되어야 함
-              if (_signupController.selectedType.value == UserType.student) {
-                Get.to(() => SignupUserInfoScreen());
-              } else if (_signupController.selectedType.value ==
-                  UserType.professer) {
-                // Get.to(() => SignupCompanyScreen());
-                showCustomDialog('추후 업데이트 될 예정입니다', 1000);
-              } else {
-                // Get.to(() => SignupCompanyScreen());
-                showCustomDialog('추후 업데이트 될 예정입니다', 1000);
-              }
-              await _gaController.logScreenView('signup_1');
-            },
-            child: Text(
-              '다음',
-              style: ktempFont.copyWith(color: mainblue),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        extendBody: true,
+        bottomNavigationBar: BottomAppBar(
+          color: mainWhite,
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomExpandedButton(
+                          onTap: () {
+                            Get.back();
+                          },
+                          isBlue: false,
+                          title: "이전",
+                          isBig: true),
+                    ),
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Expanded(
+                      child: Obx(
+                        () => CustomExpandedButton(
+                            onTap: () async {
+                              //TODO: 학교 선택 시 활성화되어야 함
+                              if (_signupController.selectedType.value ==
+                                  UserType.student) {
+                                Get.to(() => SignupUserInfoScreen());
+                              } else if (_signupController.selectedType.value ==
+                                  UserType.company) {
+                                // Get.to(() => SignupCompanyScreen());
+                                showCustomDialog('추후 업데이트 될 예정입니다', 1000);
+                              } else {
+                                // Get.to(() => SignupCompanyScreen());
+                                showCustomDialog('추후 업데이트 될 예정입니다', 1000);
+                              }
+                              await _gaController.logScreenView('signup_1');
+                            },
+                            isBlue: true,
+                            title: "다음",
+                            isBig: true),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ),
-        ],
-        title: '회원 가입',
-      ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            32,
-            24,
-            32,
-            40,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                '가입 유형을 선택해주세요',
-                style: ktempFont,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  UserTypeWidget(
-                    title: '대학생',
-                    userType: UserType.student,
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  UserTypeWidget(
-                    title: '기업',
-                    userType: UserType.company,
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  UserTypeWidget(
-                    title: '교직원',
-                    userType: UserType.professer,
-                  ),
-                ],
-              )
-            ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class UserTypeWidget extends StatelessWidget {
-  UserTypeWidget({
-    Key? key,
-    required this.userType,
-    required this.title,
-  }) : super(key: key);
-
-  final SignupController signupController = Get.find();
-  final UserType userType;
-  final String title;
-
-  late final HoverController _hoverController = HoverController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTapDown: (details) => _hoverController.isHover(true),
-        onTapCancel: () => _hoverController.isHover(false),
-        onTapUp: (details) => _hoverController.isHover(false),
-        onTap: () {
-          signupController.selectedType.value = userType;
-        },
-        child: Obx(
-          () => Container(
-            decoration: kCardStyle.copyWith(
-              color: (signupController.selectedType.value == userType)
-                  ? mainblue
-                  : mainWhite,
-              boxShadow: _hoverController.isHover.value
-                  ? [
-                      BoxShadow(
-                        blurRadius: 1,
-                        offset: const Offset(0.0, 0.5),
-                        color: Colors.black.withOpacity(0.1),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SignUpTextWidget(
+                    oneLinetext: "회원님의 루프어스", twoLinetext: "가입 유형을 선택해주세요"),
+                const SizedBox(
+                  height: 24,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Obx(
+                        () => CustomExpandedButton(
+                            onTap: () {
+                              _signupController.selectedType(UserType.student);
+                              Get.to(() => SignupUserInfoScreen());
+                            },
+                            isBlue: _signupController.selectedType.value ==
+                                    UserType.student
+                                ? true
+                                : false,
+                            title: "대학생 및 일반 회원",
+                            isBig: true),
                       ),
-                      BoxShadow(
-                        blurRadius: 1,
-                        offset: const Offset(0.0, 0.5),
-                        color: Colors.black.withOpacity(0.06),
+                      const SizedBox(
+                        height: 14,
                       ),
-                    ]
-                  : [
-                      BoxShadow(
-                        blurRadius: 3,
-                        offset: const Offset(0.0, 1.0),
-                        color: Colors.black.withOpacity(0.1),
+                      Obx(
+                        () => CustomExpandedButton(
+                            onTap: () {
+                              _signupController.selectedType(UserType.company);
+                              showCustomDialog('추후 업데이트 될 예정입니다', 1000);
+                            },
+                            isBlue: _signupController.selectedType.value ==
+                                    UserType.company
+                                ? true
+                                : false,
+                            title: "기업 회원",
+                            isBig: true),
                       ),
-                      BoxShadow(
-                        blurRadius: 2,
-                        offset: const Offset(0.0, 1.0),
-                        color: Colors.black.withOpacity(0.06),
+                      const SizedBox(
+                        height: 14,
+                      ),
+                      Obx(
+                        () => CustomExpandedButton(
+                            onTap: () {
+                              _signupController.selectedType(UserType.school);
+                              showCustomDialog('추후 업데이트 될 예정입니다', 1000);
+                            },
+                            isBlue: _signupController.selectedType.value ==
+                                    UserType.school
+                                ? true
+                                : false,
+                            title: "대학 공식 계정",
+                            isBig: true),
                       ),
                     ],
-            ),
-            padding: const EdgeInsets.all(24),
-            child: Text(
-              title,
-              style: kmain.copyWith(
-                  color: (signupController.selectedType.value == userType)
-                      ? mainWhite
-                      : _hoverController.isHover.value
-                          ? mainblack.withOpacity(0.6)
-                          : mainblack),
-              textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+              ],
             ),
           ),
         ),

@@ -13,6 +13,7 @@ class LabelTextFieldWidget extends StatelessWidget {
     this.maxLength,
     this.ontap,
     this.validator,
+    this.suffix,
   }) : super(key: key);
 
   String label;
@@ -23,6 +24,7 @@ class LabelTextFieldWidget extends StatelessWidget {
   int? maxLength;
   Function()? ontap;
   String? Function(String?)? validator;
+  Widget? suffix;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,7 @@ class LabelTextFieldWidget extends StatelessWidget {
             maxLength: null,
             textController: textController,
             hintText: hintText,
+            suffix: suffix,
             validator: null,
             obscureText: obscureText ?? false,
             readOnly: readOnly,

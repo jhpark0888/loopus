@@ -29,7 +29,7 @@ import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
-enum PostingWidgetType { normal, search, profile }
+enum PostingWidgetType { normal, search, profile, detail }
 
 class PostingWidget extends StatelessWidget {
   // final int index;
@@ -50,9 +50,9 @@ class PostingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => tapPosting(),
+      onTap: type != PostingWidgetType.detail ? () => tapPosting() : null,
       // behavior: HitTestBehavior.translucent,
-      splashColor: kSplashColor,
+      splashColor: type != PostingWidgetType.detail ? kSplashColor : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -172,9 +172,9 @@ class PostingWidget extends StatelessWidget {
                                 //   ),
                                 // ),
                                 InkWell(
-                                    onTap: () {
-                                      tapPosting(autoFocus: true);
-                                    },
+                                    onTap: type != PostingWidgetType.detail
+                                        ? () => tapPosting(autoFocus: true)
+                                        : null,
                                     child: SvgPicture.asset(
                                         "assets/icons/comment.svg")),
                                 const Spacer(),
@@ -216,7 +216,8 @@ class PostingWidget extends StatelessWidget {
                             Text(calculateDate(item.date), style: kmain),
                           ]),
                           const SizedBox(height: 14),
-                          if (item.comments.isNotEmpty)
+                          if (item.comments.isNotEmpty &&
+                              type != PostingWidgetType.detail)
                             Column(
                               children: [
                                 Obx(
@@ -260,7 +261,8 @@ class PostingWidget extends StatelessWidget {
               postid: item.id,
               autofocus: autoFocus,
             ),
-        opaque: false);
+        opaque: false,
+        preventDuplicates: false);
   }
 
   void tapProjectname() {

@@ -5,11 +5,13 @@ class SignUpTextWidget extends StatelessWidget {
   SignUpTextWidget({
     Key? key,
     this.highlightText,
+    this.twohighlightText,
     required this.oneLinetext,
     required this.twoLinetext,
   }) : super(key: key);
 
   String? highlightText;
+  String? twohighlightText;
   String oneLinetext;
   String twoLinetext;
 
@@ -34,10 +36,17 @@ class SignUpTextWidget extends StatelessWidget {
           const SizedBox(
             height: 14,
           ),
-          Text(
-            twoLinetext,
-            style: ktitle,
-          ),
+          RichText(
+              text: TextSpan(children: [
+            TextSpan(
+              text: twohighlightText ?? "",
+              style: ktitle.copyWith(color: mainblue),
+            ),
+            TextSpan(
+              text: twoLinetext,
+              style: ktitle,
+            ),
+          ])),
         ],
       ),
     );

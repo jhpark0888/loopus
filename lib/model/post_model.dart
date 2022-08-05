@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/comment_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/tag_model.dart';
@@ -38,43 +39,93 @@ class Post {
   int isuser;
   User user;
 
-  factory Post.fromJson(Map<String, dynamic> json) => Post(
-        id: json["id"],
-        userid: json["user_id"],
-        content: RxString(json["contents"]),
-        images: json["contents_image"] != null
-            ? List<Map<String, dynamic>>.from(json["contents_image"])
-                .map((map) => map['image'].toString())
-                .toList()
-            : [],
-        links: json["contents_link"] != null
-            ? List<Map<String, dynamic>>.from(json["contents_link"])
-                .map((map) => map['link'].toString())
-                .toList()
-            : [],
-        tags: json['post_tag'] != null
-            ? List<Map<String, dynamic>>.from(json['post_tag'])
-                .map((tag) => Tag.fromJson(tag))
-                .toList()
-                .obs
-            : <Tag>[].obs,
-        date: DateTime.parse(json["date"]),
-        comments: json["comments"].runtimeType != List
-            ? <Comment>[Comment.fromJson(json["comments"])].obs
-            : List<Map<String, dynamic>>.from(json["comments"])
-                .map((comment) => Comment.fromJson(comment))
-                .toList()
-                .obs,
-        project:
-            json["project"] != null ? Project.fromJson(json["project"]) : null,
-        likeCount:
-            json["like_count"] != null ? RxInt(json["like_count"]) : RxInt(0),
-        isLiked: json["is_liked"] != null ? RxInt(json["is_liked"]) : RxInt(0),
-        isMarked:
-            json["is_marked"] != null ? RxInt(json["is_marked"]) : RxInt(0),
-        isuser: json["is_user"] ?? 0,
-        user: User.fromJson(json["profile"]),
-      );
+  factory Post.fromJson(Map<String, dynamic> json) =>
+      Get.isRegistered<PostingDetailController>(tag: json["id"].toString())
+          ? Get.find<PostingDetailController>(tag: json["id"].toString())
+              .post != null ? Get.find<PostingDetailController>(tag: json["id"].toString())
+              .post!
+              .value : Post(
+              id: json["id"],
+              userid: json["user_id"],
+              content: RxString(json["contents"]),
+              images: json["contents_image"] != null
+                  ? List<Map<String, dynamic>>.from(json["contents_image"])
+                      .map((map) => map['image'].toString())
+                      .toList()
+                  : [],
+              links: json["contents_link"] != null
+                  ? List<Map<String, dynamic>>.from(json["contents_link"])
+                      .map((map) => map['link'].toString())
+                      .toList()
+                  : [],
+              tags: json['post_tag'] != null
+                  ? List<Map<String, dynamic>>.from(json['post_tag'])
+                      .map((tag) => Tag.fromJson(tag))
+                      .toList()
+                      .obs
+                  : <Tag>[].obs,
+              date: DateTime.parse(json["date"]),
+              comments: json["comments"].runtimeType != List
+                  ? <Comment>[Comment.fromJson(json["comments"])].obs
+                  : List<Map<String, dynamic>>.from(json["comments"])
+                      .map((comment) => Comment.fromJson(comment))
+                      .toList()
+                      .obs,
+              project: json["project"] != null
+                  ? Project.fromJson(json["project"])
+                  : null,
+              likeCount: json["like_count"] != null
+                  ? RxInt(json["like_count"])
+                  : RxInt(0),
+              isLiked:
+                  json["is_liked"] != null ? RxInt(json["is_liked"]) : RxInt(0),
+              isMarked: json["is_marked"] != null
+                  ? RxInt(json["is_marked"])
+                  : RxInt(0),
+              isuser: json["is_user"] ?? 0,
+              user: User.fromJson(json["profile"]),
+            ) 
+          : Post(
+              id: json["id"],
+              userid: json["user_id"],
+              content: RxString(json["contents"]),
+              images: json["contents_image"] != null
+                  ? List<Map<String, dynamic>>.from(json["contents_image"])
+                      .map((map) => map['image'].toString())
+                      .toList()
+                  : [],
+              links: json["contents_link"] != null
+                  ? List<Map<String, dynamic>>.from(json["contents_link"])
+                      .map((map) => map['link'].toString())
+                      .toList()
+                  : [],
+              tags: json['post_tag'] != null
+                  ? List<Map<String, dynamic>>.from(json['post_tag'])
+                      .map((tag) => Tag.fromJson(tag))
+                      .toList()
+                      .obs
+                  : <Tag>[].obs,
+              date: DateTime.parse(json["date"]),
+              comments: json["comments"].runtimeType != List
+                  ? <Comment>[Comment.fromJson(json["comments"])].obs
+                  : List<Map<String, dynamic>>.from(json["comments"])
+                      .map((comment) => Comment.fromJson(comment))
+                      .toList()
+                      .obs,
+              project: json["project"] != null
+                  ? Project.fromJson(json["project"])
+                  : null,
+              likeCount: json["like_count"] != null
+                  ? RxInt(json["like_count"])
+                  : RxInt(0),
+              isLiked:
+                  json["is_liked"] != null ? RxInt(json["is_liked"]) : RxInt(0),
+              isMarked: json["is_marked"] != null
+                  ? RxInt(json["is_marked"])
+                  : RxInt(0),
+              isuser: json["is_user"] ?? 0,
+              user: User.fromJson(json["profile"]),
+            );
 
   void copywith(Map<String, dynamic> json) {
     id = json["id"] ?? id;
@@ -105,10 +156,10 @@ class Post {
 
     project =
         json["project"] != null ? Project.fromJson(json["project"]) : project;
-    likeCount =
-        json["like_count"] != null ? RxInt(json["like_count"]) : likeCount;
-    isLiked = json["is_liked"] != null ? RxInt(json["is_liked"]) : isLiked;
-    isMarked = json["is_marked"] != null ? RxInt(json["is_marked"]) : isMarked;
+    // likeCount =
+    //     json["like_count"] != null ? RxInt(json["like_count"]) : likeCount;
+    // isLiked = json["is_liked"] != null ? RxInt(json["is_liked"]) : isLiked;
+    // isMarked = json["is_marked"] != null ? RxInt(json["is_marked"]) : isMarked;
     isuser = json["is_user"] ?? isuser;
     user = json["profile"] != null ? User.fromJson(json["profile"]) : user;
   }
