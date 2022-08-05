@@ -155,7 +155,7 @@ class NotificationScreen extends StatelessWidget {
                                               ),
                                               ListView.separated(
                                                 padding: const EdgeInsets.only(
-                                                    bottom: 28, top: 14),
+                                                    bottom: 28, top: 24),
                                                 shrinkWrap: true,
                                                 primary: false,
                                                 itemBuilder: (context, index) {
@@ -208,7 +208,7 @@ class NotificationScreen extends StatelessWidget {
                                                 separatorBuilder:
                                                     (context, index) {
                                                   return const SizedBox(
-                                                      height: 14);
+                                                      height: 24);
                                                 },
                                               ),
                                             ]),
@@ -229,7 +229,7 @@ class NotificationScreen extends StatelessWidget {
                                               ),
                                               ListView.separated(
                                                 padding: const EdgeInsets.only(
-                                                    bottom: 28, top: 14),
+                                                    bottom: 28, top: 24),
                                                 shrinkWrap: true,
                                                 primary: false,
                                                 itemBuilder: (context, index) {
@@ -282,7 +282,7 @@ class NotificationScreen extends StatelessWidget {
                                                 separatorBuilder:
                                                     (context, index) {
                                                   return const SizedBox(
-                                                      height: 14);
+                                                      height: 24);
                                                 },
                                               )
                                             ]),
@@ -303,7 +303,7 @@ class NotificationScreen extends StatelessWidget {
                                               ),
                                               ListView.separated(
                                                 padding: const EdgeInsets.only(
-                                                    bottom: 28, top: 14),
+                                                    bottom: 28, top: 24),
                                                 shrinkWrap: true,
                                                 primary: false,
                                                 itemBuilder: (context, index) {
@@ -356,7 +356,7 @@ class NotificationScreen extends StatelessWidget {
                                                 separatorBuilder:
                                                     (context, index) {
                                                   return const SizedBox(
-                                                      height: 14);
+                                                      height: 24);
                                                 },
                                               )
                                             ]),
@@ -377,7 +377,7 @@ class NotificationScreen extends StatelessWidget {
                                               ),
                                               ListView.separated(
                                                 padding: const EdgeInsets.only(
-                                                    bottom: 28, top: 14),
+                                                    bottom: 28, top: 24),
                                                 shrinkWrap: true,
                                                 primary: false,
                                                 itemBuilder: (context, index) {
@@ -430,7 +430,7 @@ class NotificationScreen extends StatelessWidget {
                                                 separatorBuilder:
                                                     (context, index) {
                                                   return const SizedBox(
-                                                      height: 14);
+                                                      height: 24);
                                                 },
                                               )
                                             ]),

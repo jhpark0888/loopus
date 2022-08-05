@@ -125,7 +125,7 @@ class ScoutScreen extends StatelessWidget {
               centerTitle: false,
               titleSpacing: 20,
               title: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
+                padding: const EdgeInsets.fromLTRB(0, 24, 0, 14),
                 child: Row(
                   children: [
                     const Text(

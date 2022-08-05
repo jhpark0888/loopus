@@ -222,8 +222,7 @@ class PostingScreen extends StatelessWidget {
                                 title: '게시물',
                                 actions: [
                                   GestureDetector(
-                                    onTap: controller.post.value!.isuser ==
-                                            1
+                                    onTap: controller.post.value!.isuser == 1
                                         ? () {
                                             showModalIOS(
                                               context,
@@ -332,7 +331,10 @@ class PostingScreen extends StatelessWidget {
                                             );
                                           },
                                     child: SvgPicture.asset(
-                                        'assets/icons/appbar_more_option.svg', width: 44, height: 44,),
+                                      'assets/icons/appbar_more_option.svg',
+                                      width: 44,
+                                      height: 44,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -383,8 +385,8 @@ class PostingScreen extends StatelessWidget {
                                                                         .user
                                                                         .profileImage ??
                                                                     '',
-                                                                width: 35,
-                                                                height: 35,
+                                                                width: 36,
+                                                                height: 36,
                                                               ),
                                                               const SizedBox(
                                                                 width: 14,
@@ -405,6 +407,9 @@ class PostingScreen extends StatelessWidget {
                                                                             .realName,
                                                                         style:
                                                                             kmainbold),
+                                                                    const SizedBox(
+                                                                        height:
+                                                                            7),
                                                                     Text(
                                                                         controller
                                                                             .post
@@ -421,17 +426,25 @@ class PostingScreen extends StatelessWidget {
                                                             height: 14),
                                                         GestureDetector(
                                                           onTap: () {
-                                                            Get.to(() => OtherProfileScreen(
-                                                                userid:
-                                                                    controller
-                                                                        .post
-                                                                        .value!
-                                                                        .userid,
-                                                                realname: controller
-                                                                    .post
-                                                                    .value!
-                                                                    .user
-                                                                    .realName,careerName: controller.post.value!.project!.careerName,));
+                                                            Get.to(() =>
+                                                                OtherProfileScreen(
+                                                                  userid:
+                                                                      controller
+                                                                          .post
+                                                                          .value!
+                                                                          .userid,
+                                                                  realname:
+                                                                      controller
+                                                                          .post
+                                                                          .value!
+                                                                          .user
+                                                                          .realName,
+                                                                  careerName: controller
+                                                                      .post
+                                                                      .value!
+                                                                      .project!
+                                                                      .careerName,
+                                                                ));
                                                           },
                                                           child: Container(
                                                             alignment: Alignment
@@ -550,8 +563,10 @@ class PostingScreen extends StatelessWidget {
                                                                         tapLike,
                                                                     child: controller.post.value!.isLiked.value ==
                                                                             0
-                                                                        ? SvgPicture.asset(
-                                                                            "assets/icons/unlike.svg",)
+                                                                        ? SvgPicture
+                                                                            .asset(
+                                                                            "assets/icons/unlike.svg",
+                                                                          )
                                                                         : SvgPicture.asset(
                                                                             "assets/icons/like.svg"),
                                                                   ),
@@ -626,8 +641,7 @@ class PostingScreen extends StatelessWidget {
                                                                           .post
                                                                           .value!
                                                                           .date),
-                                                                  style:
-                                                                      kmain),
+                                                                  style: kmain),
                                                             ]),
                                                             const SizedBox(
                                                                 height: 13),

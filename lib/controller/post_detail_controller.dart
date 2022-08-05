@@ -76,7 +76,6 @@ class PostingDetailController extends GetxController {
         errorSituation(value, screenState: postscreenstate);
       }
     });
-
     commentController.addListener(() {
       if (tagUser.value.userid != 0 && commentController.text == '') {
         tagdelete();

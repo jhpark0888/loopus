@@ -79,11 +79,11 @@ class RealTimeRankScreen extends StatelessWidget {
                                           alignment: Alignment.centerRight,
                                           child: Text(
                                               isUniversity == true
-                                                  ? "교내 TOP 50개"
-                                                  : "국내 TOP 50개",
+                                                  ? "교내 TOP 50"
+                                                  : "국내 TOP 50",
                                               style: kmain)),
                                       const SizedBox(
-                                        height: 14,
+                                        height: 24,
                                       ),
                                       ListView.separated(
                                           scrollDirection: Axis.vertical,
@@ -110,7 +110,7 @@ class RealTimeRankScreen extends StatelessWidget {
                                             );
                                           },
                                           separatorBuilder: (context, index) =>
-                                              const SizedBox(height: 12),
+                                              const SizedBox(height: 24),
                                           itemCount: isUniversity == true
                                               ? _controller
                                                   .campusRankerMap[

@@ -105,10 +105,10 @@ class Post {
 
     project =
         json["project"] != null ? Project.fromJson(json["project"]) : project;
-    // likeCount =
-    //     json["like_count"] != null ? RxInt(json["like_count"]) : RxInt(0);
-    // isLiked = json["is_liked"] != null ? RxInt(json["is_liked"]) : RxInt(0);
-    // isMarked = json["is_marked"] != null ? RxInt(json["is_marked"]) : RxInt(0);
+    likeCount =
+        json["like_count"] != null ? RxInt(json["like_count"]) : likeCount;
+    isLiked = json["is_liked"] != null ? RxInt(json["is_liked"]) : isLiked;
+    isMarked = json["is_marked"] != null ? RxInt(json["is_marked"]) : isMarked;
     isuser = json["is_user"] ?? isuser;
     user = json["profile"] != null ? User.fromJson(json["profile"]) : user;
   }

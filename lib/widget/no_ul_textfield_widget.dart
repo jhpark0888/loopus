@@ -29,7 +29,7 @@ class NoUlTextField extends StatelessWidget {
       autofocus: false,
       style: kmain.copyWith(height: 1.5),
       cursorColor: mainblue,
-      cursorWidth: 1.2,
+      cursorWidth: 1.5,
       cursorRadius: const Radius.circular(2),
       controller: controller,
       onChanged: onChanged,
