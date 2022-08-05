@@ -45,27 +45,25 @@ class SignupTypeScreen extends StatelessWidget {
                       width: 14,
                     ),
                     Expanded(
-                      child: Obx(
-                        () => CustomExpandedButton(
-                            onTap: () async {
-                              //TODO: 학교 선택 시 활성화되어야 함
-                              if (_signupController.selectedType.value ==
-                                  UserType.student) {
-                                Get.to(() => SignupUserInfoScreen());
-                              } else if (_signupController.selectedType.value ==
-                                  UserType.company) {
-                                // Get.to(() => SignupCompanyScreen());
-                                showCustomDialog('추후 업데이트 될 예정입니다', 1000);
-                              } else {
-                                // Get.to(() => SignupCompanyScreen());
-                                showCustomDialog('추후 업데이트 될 예정입니다', 1000);
-                              }
-                              await _gaController.logScreenView('signup_1');
-                            },
-                            isBlue: true,
-                            title: "다음",
-                            isBig: true),
-                      ),
+                      child: CustomExpandedButton(
+                          onTap: () async {
+                            //TODO: 학교 선택 시 활성화되어야 함
+                            if (_signupController.selectedType.value ==
+                                UserType.student) {
+                              Get.to(() => SignupUserInfoScreen());
+                            } else if (_signupController.selectedType.value ==
+                                UserType.company) {
+                              // Get.to(() => SignupCompanyScreen());
+                              showCustomDialog('추후 업데이트 될 예정입니다', 1000);
+                            } else {
+                              // Get.to(() => SignupCompanyScreen());
+                              showCustomDialog('추후 업데이트 될 예정입니다', 1000);
+                            }
+                            await _gaController.logScreenView('signup_1');
+                          },
+                          isBlue: true,
+                          title: "다음",
+                          isBig: true),
                     ),
                   ],
                 ),
