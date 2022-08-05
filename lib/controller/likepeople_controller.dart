@@ -15,7 +15,7 @@ class LikePeopleController {
   RefreshController refreshController = RefreshController();
 
   RxList<User> likeUserList = <User>[].obs;
-  LikeType likeType;
+  contentType likeType;
 
   int id;
 

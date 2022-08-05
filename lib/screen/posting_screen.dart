@@ -62,7 +62,8 @@ class PostingScreen extends StatelessWidget {
       showCustomDialog('내용을 입력해주세요', 1400);
     } else {
       if (controller.selectedCommentId.value == 0) {
-        commentPost(postid, 'comment', controller.commentController.text, null)
+        commentPost(postid, contentType.comment,
+                controller.commentController.text, null)
             .then((value) {
           if (value.isError == false) {
             controller.commentController.clear();
@@ -76,7 +77,7 @@ class PostingScreen extends StatelessWidget {
       } else {
         commentPost(
                 controller.selectedCommentId.value,
-                'cocomment',
+                contentType.cocomment,
                 controller.commentController.text,
                 controller.tagUser.value.userid)
             .then((value) {
@@ -200,8 +201,8 @@ class PostingScreen extends StatelessWidget {
 
   Future commentListLoad() async {
     if (controller.post!.value.comments.isNotEmpty) {
-      await commentListGet(
-              postid, "comment", controller.post!.value.comments.last.id)
+      await commentListGet(postid, contentType.comment,
+              controller.post!.value.comments.last.id)
           .then((value) {
         if (value.isError == false) {
           List<Comment> commentList = List.from(value.data)
@@ -254,9 +255,7 @@ class PostingScreen extends StatelessWidget {
                                   title: '게시물',
                                   actions: [
                                     GestureDetector(
-                                      onTap: controller
-                                                  .post!.value.isuser ==
-                                              1
+                                      onTap: controller.post!.value.isuser == 1
                                           ? () {
                                               showModalIOS(
                                                 context,
@@ -351,8 +350,23 @@ class PostingScreen extends StatelessWidget {
                                                       leftFunction: () =>
                                                           Get.back(),
                                                       rightFunction: () {
-                                                        postingreport(controller
-                                                            .post!.value.id);
+                                                        contentreport(
+                                                                controller.post!
+                                                                    .value.id,
+                                                                contentType
+                                                                    .post)
+                                                            .then((value) {
+                                                          if (value.isError ==
+                                                              false) {
+                                                            getbacks(2);
+                                                            showCustomDialog(
+                                                                "신고가 접수되었습니다",
+                                                                1000);
+                                                          } else {
+                                                            errorSituation(
+                                                                value);
+                                                          }
+                                                        });
                                                       });
                                                 },
                                                 func2: () {},
@@ -738,7 +752,7 @@ class PostingScreen extends StatelessWidget {
 
     _debouncer.run(() {
       if (controller.lastIsLiked != controller.post!.value.isLiked.value) {
-        likepost(controller.post!.value.id, LikeType.post);
+        likepost(controller.post!.value.id, contentType.post);
         controller.lastIsLiked = controller.post!.value.isLiked.value;
       }
     });

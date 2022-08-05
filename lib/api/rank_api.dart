@@ -19,11 +19,9 @@ Future<HTTPResponse> getCareerBoardRequest(
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    String? userid = await FlutterSecureStorage().read(key: "id");
 
     // print(userid);
     final topPostUrl = Uri.parse("$serverUri/rank/ranking?id=$id&type=$type");

@@ -91,7 +91,7 @@ class CommentWidget extends StatelessWidget {
                                         dialogBack(modalIOS: true);
 
                                         await commentDelete(
-                                                comment.id, "comment")
+                                                comment.id, contentType.comment)
                                             .then((value) {
                                           if (value.isError == false) {
                                             postController.post!.value.comments
@@ -123,8 +123,17 @@ class CommentWidget extends StatelessWidget {
                                       content: '관리자가 검토 절차를 거칩니다',
                                       leftFunction: () => Get.back(),
                                       rightFunction: () {
-                                        // postingreport(
-                                        //     controller.post.value!.id);
+                                        contentreport(
+                                                comment.id, contentType.comment)
+                                            .then((value) {
+                                          if (value.isError == false) {
+                                            getbacks(2);
+                                            showCustomDialog(
+                                                "신고가 접수되었습니다", 1000);
+                                          } else {
+                                            errorSituation(value);
+                                          }
+                                        });
                                       });
                                 },
                                 func2: () {},
@@ -157,7 +166,7 @@ class CommentWidget extends StatelessWidget {
                         onTap: () {
                           Get.to(() => LikePeopleScreen(
                                 id: comment.id,
-                                likeType: LikeType.comment,
+                                likeType: contentType.comment,
                               ));
                         },
                         child: Text(
@@ -173,8 +182,10 @@ class CommentWidget extends StatelessWidget {
                       InkWell(
                         onTap: tapLike,
                         child: comment.isLiked.value == 0
-                            ? SvgPicture.asset("assets/icons/unlike.svg", width: 16,height: 16)
-                            : SvgPicture.asset("assets/icons/like.svg", width: 16, height: 16),
+                            ? SvgPicture.asset("assets/icons/unlike.svg",
+                                width: 16, height: 16)
+                            : SvgPicture.asset("assets/icons/like.svg",
+                                width: 16, height: 16),
                       ),
                       const SizedBox(
                         width: 14,
@@ -197,7 +208,8 @@ class CommentWidget extends StatelessWidget {
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.ease);
                         },
-                        child: SvgPicture.asset("assets/icons/reply.svg" , width: 16, height: 16),
+                        child: SvgPicture.asset("assets/icons/reply.svg",
+                            width: 16, height: 16),
                       ),
                     ],
                   ),
@@ -234,7 +246,7 @@ class CommentWidget extends StatelessWidget {
 
     _debouncer.run(() {
       if (lastIsLiked != comment.isLiked.value) {
-        likepost(comment.id, LikeType.comment);
+        likepost(comment.id, contentType.comment);
         lastIsLiked = comment.isLiked.value;
         num = 0;
       }
@@ -292,7 +304,8 @@ class PostCommentWidget extends StatelessWidget {
   }
 
   Future replyListLoad() async {
-    await commentListGet(comment.id, "cocomment", comment.replyList.last.id)
+    await commentListGet(
+            comment.id, contentType.cocomment, comment.replyList.last.id)
         .then((value) {
       if (value.isError == false) {
         List<Reply> replyList = List.from(value.data)

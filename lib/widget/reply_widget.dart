@@ -13,6 +13,7 @@ import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class ReplyWidget extends StatelessWidget {
@@ -89,7 +90,7 @@ class ReplyWidget extends StatelessWidget {
                                         dialogBack(modalIOS: true);
 
                                         await commentDelete(
-                                                reply.id, "cocomment")
+                                                reply.id, contentType.cocomment)
                                             .then((value) {
                                           if (value.isError == false) {
                                             Comment? comment = postController
@@ -128,8 +129,17 @@ class ReplyWidget extends StatelessWidget {
                                       content: '관리자가 검토 절차를 거칩니다',
                                       leftFunction: () => Get.back(),
                                       rightFunction: () {
-                                        // postingreport(
-                                        //     controller.post.value!.id);
+                                        contentreport(
+                                                reply.id, contentType.cocomment)
+                                            .then((value) {
+                                          if (value.isError == false) {
+                                            getbacks(2);
+                                            showCustomDialog(
+                                                "신고가 접수되었습니다", 1000);
+                                          } else {
+                                            errorSituation(value);
+                                          }
+                                        });
                                       });
                                 },
                                 func2: () {},
@@ -183,7 +193,7 @@ class ReplyWidget extends StatelessWidget {
                         onTap: () {
                           Get.to(() => LikePeopleScreen(
                                 id: reply.id,
-                                likeType: LikeType.cocomment,
+                                likeType: contentType.cocomment,
                               ));
                         },
                         child: Text(
@@ -199,8 +209,10 @@ class ReplyWidget extends StatelessWidget {
                       InkWell(
                         onTap: tapLike,
                         child: reply.isLiked.value == 0
-                            ? SvgPicture.asset("assets/icons/unlike.svg", width: 16, height: 16)
-                            : SvgPicture.asset("assets/icons/like.svg", width: 16, height: 16),
+                            ? SvgPicture.asset("assets/icons/unlike.svg",
+                                width: 16, height: 16)
+                            : SvgPicture.asset("assets/icons/like.svg",
+                                width: 16, height: 16),
                       ),
                       const SizedBox(
                         width: 14,
@@ -223,7 +235,8 @@ class ReplyWidget extends StatelessWidget {
                               duration: const Duration(milliseconds: 400),
                               curve: Curves.ease);
                         },
-                        child: SvgPicture.asset("assets/icons/reply.svg", height: 16, width: 16),
+                        child: SvgPicture.asset("assets/icons/reply.svg",
+                            height: 16, width: 16),
                       ),
                     ],
                   ),
@@ -261,7 +274,7 @@ class ReplyWidget extends StatelessWidget {
 
     _debouncer.run(() {
       if (lastIsLiked != reply.isLiked.value) {
-        likepost(reply.id, LikeType.cocomment);
+        likepost(reply.id, contentType.cocomment);
         lastIsLiked = reply.isLiked.value;
         num = 0;
       }

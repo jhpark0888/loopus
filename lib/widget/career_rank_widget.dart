@@ -35,8 +35,7 @@ class CareerRankWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Text(isUniversity ? '교내' : '전국',
-                  style: kmain),
+              Text(isUniversity ? '교내' : '전국', style: kmain),
               GestureDetector(
                   onTap: () {
                     Get.to(() => RealTimeRankScreen(
