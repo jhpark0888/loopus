@@ -36,7 +36,7 @@ class Project {
   int is_user;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
-      id: json["project_id"] ?? json["id"],
+      id: json['project_id'] != null ? json["project_id"] : json['id'] != null ? json["id"] : 0,
       userid: json["user_id"],
       careerName: json["project_name"],
       startDate: json["start_date"] != null

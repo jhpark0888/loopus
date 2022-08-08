@@ -303,8 +303,8 @@ class PostUpdateScreen extends StatelessWidget {
                                 //       : 0,
                                 child: Column(
                                     children: tagController.searchtaglist))),
-                            const SizedBox(height: 100),
-                            updateButton()
+                            // const SizedBox(height: 100),
+                            // updateButton()
                           ]),
                     )
                   ],
