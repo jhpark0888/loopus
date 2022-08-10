@@ -14,6 +14,11 @@ class CertificateTimer {
   Rx<Emailcertification>? emailcertification;
 
   void timerOn(int time) async {
+    if (timer != null) {
+      if (timer!.isActive) {
+        timer!.cancel();
+      }
+    }
     sec(time);
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (sec.value != 0) {

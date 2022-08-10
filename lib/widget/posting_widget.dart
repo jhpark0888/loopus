@@ -80,7 +80,9 @@ class PostingWidget extends StatelessWidget {
                               children: [
                                 Text(item.user.realName, style: kmainbold),
                                 const SizedBox(height: 7),
-                                Text('${item.user.univName} · ${item.user.department}', style: kmain)
+                                Text(
+                                    '${item.user.univName} · ${item.user.department}',
+                                    style: kmain)
                               ])
                         ],
                       ),
@@ -124,13 +126,15 @@ class PostingWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Obx(
-                      () => ExpandableText(
-                          textSpan: TextSpan(
-                              text: item.content.value, style: kmainheight),
-                          moreSpan: TextSpan(
-                              text: ' ...더보기',
-                              style: kmainheight.copyWith(color: maingray)),
-                          maxLines: 3),
+                      () => type == PostingWidgetType.detail
+                          ? Text(item.content.value, style: kmainheight)
+                          : ExpandableText(
+                              textSpan: TextSpan(
+                                  text: item.content.value, style: kmainheight),
+                              moreSpan: TextSpan(
+                                  text: ' ...더보기',
+                                  style: kmainheight.copyWith(color: maingray)),
+                              maxLines: 3),
                     ),
                     if (item.tags.isNotEmpty)
                       Column(children: [

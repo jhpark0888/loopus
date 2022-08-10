@@ -24,8 +24,7 @@ class ExpandableText extends StatefulWidget {
     required this.textSpan,
     required this.maxLines,
     required this.moreSpan,
-  })
-      : assert(textSpan != null),
+  })  : assert(textSpan != null),
         assert(maxLines != null),
         assert(moreSpan != null),
         super(key: key);
@@ -39,41 +38,48 @@ class _ExpandableTextState extends State<ExpandableText> {
 
   bool _isExpanded = false;
   String get _lineEnding => "$_ellipsis${widget.moreSpan.text}";
-  GestureRecognizer get _tapRecognizer => TapGestureRecognizer()
-    ..onTap = () {
-      print(_isExpanded);
-      setState(() {
-        // _isExpanded = !_isExpanded;
-      });
-    };
+  // GestureRecognizer get _tapRecognizer => TapGestureRecognizer()
+  //   ..onTap = () {
+  //     print(_isExpanded);
+  //     setState(() {
+  //       // _isExpanded = !_isExpanded;
+  //     });
+  //   };
 
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-        builder: (context, constraints) {
-          final maxLines = widget.maxLines;
+  Widget build(BuildContext context) =>
+      LayoutBuilder(builder: (context, constraints) {
+        final maxLines = widget.maxLines;
 
-          final richText = Text.rich(widget.textSpan).build(context) as RichText;
-          final boxes = richText.measure(context, constraints);
+        final richText = Text.rich(widget.textSpan).build(context) as RichText;
+        final boxes = richText.measure(context, constraints);
 
-          if (boxes.length <= maxLines || _isExpanded) {
-            return RichText(text: widget.textSpan);
+        if (boxes.length <= maxLines || _isExpanded) {
+          return RichText(text: widget.textSpan);
+        } else {
+          final croppedText = _ellipsizeText(boxes);
+          final ellipsizedText = _buildEllipsizedText(
+            croppedText,
+          );
+
+          if (ellipsizedText.measure(context, constraints).length <= maxLines) {
+            return ellipsizedText;
           } else {
-            final croppedText = _ellipsizeText(boxes);
-            final ellipsizedText = _buildEllipsizedText(croppedText, _tapRecognizer);
-
-            if (ellipsizedText.measure(context, constraints).length <= maxLines) {
-              return ellipsizedText;
-            } else {
-              final fixedEllipsizedText = croppedText.substring(0, croppedText.length - _lineEnding.length);
-              return _buildEllipsizedText(fixedEllipsizedText, _tapRecognizer);
-            }
-        }}
-      );
-       String _ellipsizeText(List<TextBox> boxes) {
+            final fixedEllipsizedText = croppedText.substring(
+                0, croppedText.length - _lineEnding.length);
+            return _buildEllipsizedText(
+              fixedEllipsizedText,
+            );
+          }
+        }
+      });
+  String _ellipsizeText(List<TextBox> boxes) {
     final text = widget.textSpan.text;
     final maxLines = widget.maxLines;
 
-    double _calculateLinesLength(List<TextBox> boxes) => boxes.map((box) => box.right - box.left).reduce((acc, value) => acc += value);
+    double _calculateLinesLength(List<TextBox> boxes) => boxes
+        .map((box) => box.right - box.left)
+        .reduce((acc, value) => acc += value);
 
     final requiredLength = _calculateLinesLength(boxes.sublist(0, maxLines));
     final totalLength = _calculateLinesLength(boxes);
@@ -82,9 +88,12 @@ class _ExpandableTextState extends State<ExpandableText> {
     return text!.substring(0, (text.length * requiredTextFraction).floor());
   }
 
-  RichText _buildEllipsizedText(String text, GestureRecognizer tapRecognizer) => RichText(
+  RichText _buildEllipsizedText(
+    String text,
+  ) =>
+      RichText(
         text: TextSpan(
-          recognizer: tapRecognizer,
+          // recognizer: tapRecognizer,
           text: text,
           style: widget.textSpan.style,
           children: [widget.moreSpan],

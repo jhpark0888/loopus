@@ -20,14 +20,13 @@ class PostingDetailController extends GetxController {
     this.post,
   });
   RxBool isPostUpdateLoading = false.obs;
-  // RxBool isNetworkConnect = false.obs;
+  RxBool isCommentLoading = false.obs;
   Rx<ScreenState> postscreenstate = ScreenState.loading.obs;
 
   ScrollController scrollController = ScrollController();
 
   TextEditingController commentController = TextEditingController();
   FocusNode commentFocus = FocusNode();
-  // RxList<PostComment> postCommentList = <PostComment>[].obs;
 
   RxInt selectedCommentId = 0.obs;
   Rx<User> tagUser = User.defaultuser().obs;

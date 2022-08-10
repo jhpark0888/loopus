@@ -144,7 +144,11 @@ class CommentWidget extends StatelessWidget {
                                 isOne: true,
                               );
                             },
-                      child: SvgPicture.asset('assets/icons/more_option.svg'),
+                      behavior: HitTestBehavior.translucent,
+                      child: SizedBox(
+                          height: 16,
+                          child:
+                              SvgPicture.asset('assets/icons/more_option.svg')),
                     ),
                   ],
                 ),
@@ -153,7 +157,7 @@ class CommentWidget extends StatelessWidget {
                 ),
                 Text(
                   comment.content,
-                  style: kmain,
+                  style: kmainheight,
                 ),
                 const SizedBox(
                   height: 7,

@@ -4,6 +4,7 @@ import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
+import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/signup_text_widget.dart';
@@ -89,6 +90,7 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                   if (_signupController.emailidcontroller.text
                                           .trim() !=
                                       "") {
+                                    loading();
                                     await emailRequest(
                                             _signupController
                                                     .emailidcontroller.text +
@@ -99,11 +101,12 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                                 .signupcertification)
                                         .then((value) {
                                       if (value.isError == false) {
+                                        Get.back();
                                         _signupController.timer.timerOn(180);
                                       } else {
+                                        Get.back();
                                         if (value.errorData!["statusCode"] ==
                                             400) {
-                                          // Get.back();
                                           Get.closeCurrentSnackbar();
                                           showCustomDialog(
                                               "이미 가입된 회원입니다", 1000);

@@ -1,38 +1,23 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:ui' as ui;
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/key_controller.dart';
-import 'package:loopus/controller/post_detail_controller.dart';
-import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/posting_update_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/post_model.dart';
-import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/tag_model.dart';
-import 'package:loopus/screen/layout_builder.dart';
 import 'package:loopus/screen/loading_screen.dart';
-import 'package:loopus/screen/posting_add_link_screen.dart';
-import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/utils/error_control.dart';
-import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 import 'package:loopus/widget/no_ul_textfield_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/swiper_widget.dart';
-import 'package:loopus/widget/tag_widget.dart';
 
 import '../controller/modal_controller.dart';
 
@@ -87,71 +72,6 @@ class PostUpdateScreen extends StatelessWidget {
                                     postingUpdateController.post.images[0])
                                 : null,
                       ),
-
-                    // Column(
-                    //   children: [
-                    //     Container(
-                    //         color: mainblack,
-                    //         constraints: BoxConstraints(
-                    //             maxWidth: 600,
-                    //             maxHeight: postingUpdateController
-                    //                     .post.images.isNotEmpty
-                    //                 ? Get.width
-                    //                 : 300),
-                    //         child: PageView.builder(
-                    //           controller: pageController,
-                    //           itemBuilder: (BuildContext context, int index) {
-                    //             if (postingUpdateController
-                    //                 .post.images.isNotEmpty) {
-                    //               return CachedNetworkImage(
-                    //                   imageUrl: postingUpdateController
-                    //                       .post.images[index],
-                    //                   fit: BoxFit.contain);
-                    //               // Image.network(item.images[index],
-                    //               //     fit: BoxFit.fill);
-                    //             } else {
-                    //               return KeepAlivePage(
-                    //                 child: LinkWidget(
-                    //                     url: postingUpdateController
-                    //                         .post.links[index],
-                    //                     widgetType: 'post'),
-                    //               );
-                    //             }
-                    //           },
-                    //           itemCount: postingUpdateController
-                    //                   .post.images.isNotEmpty
-                    //               ? postingUpdateController.post.images.length
-                    //               : postingUpdateController.post.links.length,
-                    //         )),
-                    //     const SizedBox(
-                    //       height: 14,
-                    //     ),
-                    //     if (postingUpdateController.post.images.length > 1 ||
-                    //         postingUpdateController.post.links.length > 1)
-                    //       Column(
-                    //         children: [
-                    //           PageIndicator(
-                    //             size: 7,
-                    //             activeSize: 7,
-                    //             space: 7,
-                    //             color: maingray,
-                    //             activeColor: mainblue,
-                    //             count: postingUpdateController
-                    //                     .post.images.isNotEmpty
-                    //                 ? postingUpdateController
-                    //                     .post.images.length
-                    //                 : postingUpdateController
-                    //                     .post.links.length,
-                    //             controller: pageController,
-                    //             layout: PageIndicatorLayout.SLIDE,
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     const SizedBox(
-                    //       height: 14,
-                    //     ),
-                    //   ],
-                    // ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Column(
@@ -302,9 +222,15 @@ class PostUpdateScreen extends StatelessWidget {
                                 //               100
                                 //       : 0,
                                 child: Column(
-                                    children: tagController.searchtaglist))),
-                            // const SizedBox(height: 100),
-                            // updateButton()
+
+                                    
+                  
+
+                                    children:
+                                        tagController.searchtaglist.value))),
+                            const SizedBox(height: 100),
+                            updateButton()
+
                           ]),
                     )
                   ],

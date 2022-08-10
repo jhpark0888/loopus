@@ -98,8 +98,7 @@ class UploadScreen extends StatelessWidget {
                                 : const Center(
                                     child: Text(
                                     '이미지를 선택해주세요 \n 최대 10장까지 가능해요',
-                                    style:
-                                        kmainheight,
+                                    style: kmainheight,
                                   ))),
                         if (controller.isSelect.value)
                           Positioned(
@@ -130,6 +129,7 @@ class UploadScreen extends StatelessWidget {
                       primary: false,
                       automaticallyImplyLeading: false,
                       toolbarHeight: 44,
+                      titleSpacing: 0,
                       pinned: true,
                       stretch: true,
                       title: Row(
@@ -146,9 +146,8 @@ class UploadScreen extends StatelessWidget {
                                           topLeft: Radius.circular(16),
                                           topRight: Radius.circular(16))),
                                   builder: (_) => Container(
-                                        height: Get.height -
-                                            MediaQuery.of(context).padding.top -
-                                            44,
+                                        height:
+                                            Get.height - Get.statusBarHeight,
                                         color: Colors.white,
                                         child: SingleChildScrollView(
                                           child: Padding(
@@ -159,7 +158,7 @@ class UploadScreen extends StatelessWidget {
                                                   CrossAxisAlignment.stretch,
                                               children: List.generate(
                                                   controller.albums.length,
-                                                  (index) => Container(
+                                                  (index) => SizedBox(
                                                       height: 110,
                                                       child: GestureDetector(
                                                         behavior:
@@ -181,19 +180,19 @@ class UploadScreen extends StatelessWidget {
                                                               controller
                                                                   .albums[index]
                                                                   .name;
-                                                          controller
-                                                              .selectedImages
-                                                              .clear();
-                                                          controller
-                                                              .cropWidgetList
-                                                              .clear();
-                                                          controller.cropKeyList
-                                                              .clear();
-                                                          controller
-                                                              .cropAspectRatio(
-                                                                  1);
-                                                          controller
-                                                              .isSelect(false);
+                                                          // controller
+                                                          //     .selectedImages
+                                                          //     .clear();
+                                                          // controller
+                                                          //     .cropWidgetList
+                                                          //     .clear();
+                                                          // controller.cropKeyList
+                                                          //     .clear();
+                                                          // controller
+                                                          //     .cropAspectRatio(
+                                                          //         1);
+                                                          // controller
+                                                          //     .isSelect(false);
                                                           Get.back();
                                                         },
                                                         child: Column(
@@ -243,8 +242,7 @@ class UploadScreen extends StatelessWidget {
                                                                 const Spacer(),
                                                                 Text(
                                                                   '${controller.albums[index].assetCount.toString()}개',
-                                                                  style:
-                                                                      kmain,
+                                                                  style: kmain,
                                                                 ),
                                                               ],
                                                             ),
@@ -259,19 +257,29 @@ class UploadScreen extends StatelessWidget {
                                       )).then(
                                   (value) => controller.isImage(false));
                             },
-                            child: Row(
-                              children: [
-                                Obx(
-                                  () => Text(
-                                    controller.headerTitle.value,
-                                    style: kmainbold,
-                                  ),
+                            behavior: HitTestBehavior.translucent,
+                            child: Container(
+                              width: 93,
+                              height: 44,
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Obx(
+                                      () => Text(
+                                        controller.headerTitle.value,
+                                        style: kmainbold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 7),
+                                    SvgPicture.asset(
+                                        'assets/icons/drop_icon.svg')
+                                  ],
                                 ),
-                                const SizedBox(width: 7),
-                                SvgPicture.asset('assets/icons/drop_icon.svg')
-                              ],
+                              ),
                             ),
                           ),
+                          const Spacer()
                           //
                         ],
                       ),
@@ -386,9 +394,8 @@ class UploadScreen extends StatelessWidget {
                                           ? Positioned(
                                               top: 5,
                                               right: 5,
-                                              child: 
-                                              SvgPicture.asset('assets/icons/num_index${controller.selectedImages.indexOf(controller.imageList[index]) + 1}.svg')
-                                              )
+                                              child: SvgPicture.asset(
+                                                  'assets/icons/num_index${controller.selectedImages.indexOf(controller.imageList[index]) + 1}.svg'))
                                           : const SizedBox.shrink()
                                       : const SizedBox.shrink()
                                 ]),
@@ -453,8 +460,6 @@ class UploadScreen extends StatelessWidget {
 
   void _addImage(int index) async {
     GlobalKey<CustomCropState> cropKey = GlobalKey<CustomCropState>();
-    // File? image = await assetToFile(controller.imageList[index]);
-    // controller.selectedImage ??= controller.imageList[index].obs;
     controller.selectedImages.add(controller.imageList[index]);
     controller.selectedImage.value = controller.imageList[index];
     controller.cropKeyList.add(cropKey);
@@ -473,14 +478,6 @@ class UploadScreen extends StatelessWidget {
       ),
     ));
 
-    // controller.cropWidgetList.add(Obx(
-    //   () => CustomCrop.file(
-    //     image!,
-    //     key: cropKey,
-    //     areaFixed: true,
-    //     aspectRatio: controller.cropAspectRatio.value,
-    //   ),
-    // ));
     controller.selectedIndex(controller.cropKeyList.length - 1);
   }
 

@@ -58,7 +58,7 @@ class PostingAddNameScreen extends StatelessWidget {
           bottomBorder: false,
           title: '포스트 작성',
           actions: [
-            Obx( () => Center(child: uploadButton())),
+            Obx(() => Center(child: uploadButton())),
             const SizedBox(
               width: 16,
             )
@@ -78,97 +78,97 @@ class PostingAddNameScreen extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 14),
-                      child: Column(children:[
-                      postingAddController.isAddLink.value == false
-                          ? postingAddController.isAddImage.value == true
-                              ? postingAddController.images.length == 1
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        Container(
-                                          color: mainblack,
-                                          height: Get.width,
-                                          child: Image.file(
-                                              postingAddController.images.first,
-                                              fit: BoxFit.contain),
+                      child: Column(children: [
+                        postingAddController.isAddLink.value == false
+                            ? postingAddController.isAddImage.value == true
+                                ? postingAddController.images.length == 1
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          Container(
+                                            color: mainblack,
+                                            height: Get.width,
+                                            child: Image.file(
+                                                postingAddController
+                                                    .images.first,
+                                                fit: BoxFit.contain),
+                                          ),
+                                          // const SizedBox(height: 14),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                20, 14, 20, 14),
+                                            child: GestureDetector(
+                                                onTap: () {
+                                                  Get.to(() => UploadScreen());
+                                                },
+                                                child: Text('사진 수정하기',
+                                                    style: kmain.copyWith(
+                                                        color: mainblue),
+                                                    textAlign:
+                                                        ui.TextAlign.right)),
+                                          )
+                                        ],
+                                      )
+                                    : Stack(children: [
+                                        SwiperWidget(
+                                          items: postingAddController.images,
+                                          swiperType: SwiperType.file,
+                                          aspectRatio: postingAddController
+                                              .cropAspectRatio.value,
                                         ),
-                                        // const SizedBox(height: 14),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              20, 14, 20, 14),
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                Get.to(() => UploadScreen());
-                                              },
-                                              child: Text('사진 수정하기',
-                                                  style: kmain.copyWith(
-                                                      color: mainblue),
-                                                  textAlign: ui.TextAlign.right)),
-                                        )
-                                      ],
-                                    )
-                                  : Stack(children: [
-                                      SwiperWidget(
-                                        items: postingAddController.images,
-                                        swiperType: SwiperType.file,
-                                        aspectRatio: postingAddController
-                                            .cropAspectRatio.value,
+                                        Positioned(
+                                            child: GestureDetector(
+                                                onTap: () {
+                                                  Get.to(() => UploadScreen(),
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.ease);
+                                                },
+                                                child: Text('사진 수정하기',
+                                                    style: kmain.copyWith(
+                                                        color: mainblue))),
+                                            right: 20,
+                                            bottom: 5)
+                                      ])
+                                : Column(children: [
+                                    SizedBox(height: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: addButton(
+                                                title: '이미지',
+                                                titleEng: 'image',
+                                                ontap: () {
+                                                  Get.to(() => UploadScreen());
+                                                }),
+                                          ),
+                                          const SizedBox(
+                                            width: 14,
+                                          ),
+                                          Expanded(
+                                            child: addButton(
+                                                title: '링크',
+                                                titleEng: 'link',
+                                                ontap: () {
+                                                  Get.to(() =>
+                                                      PostingAddLinkScreen());
+                                                }),
+                                          )
+                                        ],
                                       ),
-                                      Positioned(
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                Get.to(() => UploadScreen(),
-                                                    duration: const Duration(
-                                                        milliseconds: 300),
-                                                    curve: Curves.ease);
-                                              },
-                                              child: Text('사진 수정하기',
-                                                  style: kmain.copyWith(
-                                                      color: mainblue))),
-                                          right: 20,
-                                          bottom: 5)
-                                    ])
-                              : Column(children: [
-                                  SizedBox(height: 10),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: addButton(
-                                              title: '이미지',
-                                              titleEng: 'image',
-                                              ontap: () {
-                                                Get.to(() => UploadScreen());
-                                              }),
-                                        ),
-                                        const SizedBox(
-                                          width: 14,
-                                        ),
-                                        Expanded(
-                                          child: addButton(
-                                              title: '링크',
-                                              titleEng: 'link',
-                                              ontap: () {
-                                                Get.to(
-                                                    () => PostingAddLinkScreen());
-                                              }),
-                                        )
-                                      ],
                                     ),
-                                  ),
-                                  SizedBox(height: 24),
-                                ])
-                          : postingAddController.scrapList.length >= 2
-                              ? SwiperWidget(
-                                  items: postingAddController.scrapList
-                                      .map((linkwidget) => linkwidget.url)
-                                      .toList(),
-                                  swiperType: SwiperType.link,
-                                )
-                              : postingAddController.scrapList.first,
+                                    SizedBox(height: 24),
+                                  ])
+                            : SwiperWidget(
+                                items: postingAddController.scrapList
+                                    .map((linkwidget) => linkwidget.url)
+                                    .toList(),
+                                swiperType: SwiperType.link,
+                              )
                       ]),
                     ),
                     Padding(
