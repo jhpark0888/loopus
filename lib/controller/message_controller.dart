@@ -32,23 +32,19 @@ class MessageController extends GetxController {
 
     await SQLController.to.getDBMessageRoom().then((value) async {
       List<ChatRoom> temp = value;
-
       await getDBUserInfo(temp);
-      chattingRoomList.addAll(List.generate(
-          temp.length,
-          ((index) => MessageRoomWidget(
-              chatRoom: temp[index].obs, user: member[index].obs))));
-      searchRoomList.value = chattingRoomList.toList();
-      sortList();
+      await addList(temp);
+      await sortList();
+      chatroomscreenstate.value = ScreenState.success;
     });
-    getChatroomlist(int.parse(userId!)).then((chatroom) {
+    getChatroomlist(int.parse(userId!)).then((chatroom) async{
       if (chatroom.isError == false) {
         List<ChatRoom> temp = chatroom.data;
 
         List<int> membersId =
             List.generate(temp.length, (index) => temp[index].user);
         if (membersId.isNotEmpty) {
-          getUserProfile(membersId).then((usersList) {
+          await getUserProfile(membersId).then((usersList) {
             if (usersList.isError == false) {
               List<User> userList = usersList.data;
 
@@ -59,7 +55,6 @@ class MessageController extends GetxController {
                     .where((messageRoom) =>
                         messageRoom.chatRoom.value.roomId == element.roomId)
                     .isEmpty) {
-                  print(element);
                   SQLController.to.insertMessageRoom(element);
                   SQLController.to.insertUser(user);
                   chattingRoomList.add(
@@ -67,6 +62,21 @@ class MessageController extends GetxController {
                   searchRoomList.add(
                       MessageRoomWidget(chatRoom: element.obs, user: user.obs));
                 } else {
+                  SQLController.to.updateLastMessage(
+                      element.message.value.content,
+                      element.message.value.date.toString(),
+                      element.roomId);
+                  if (chattingRoomList
+                          .where((messageRoom) =>
+                              messageRoom.user.value.userid == user.userid)
+                          .first
+                          .user
+                          .value
+                          .profileImage !=
+                      user.profileImage) {
+                    SQLController.to
+                        .updateUser(user.profileImage ?? '', user.userid);
+                  }
                   chattingRoomList
                       .where((messageRoom) =>
                           messageRoom.chatRoom.value.roomId == element.roomId)
@@ -96,7 +106,7 @@ class MessageController extends GetxController {
                 }
               });
 
-              sortList();
+             sortList();
             }
           });
         }
@@ -116,7 +126,16 @@ class MessageController extends GetxController {
             .then((value) => member.add(value)));
   }
 
-  void sortList() {
+  Future<void> addList(temp) async {
+    chattingRoomList.addAll(List.generate(
+        temp.length,
+        ((index) => MessageRoomWidget(
+            chatRoom: Rx<ChatRoom>(temp[index]),
+            user: Rx<User>(member[index])))));
+    searchRoomList.value = chattingRoomList.toList();
+  }
+
+  Future<void> sortList() async {
     MessageController.to.chattingRoomList.sort((a, b) => b
         .chatRoom.value.message.value.date
         .compareTo(a.chatRoom.value.message.value.date));

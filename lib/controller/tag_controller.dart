@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/search_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
@@ -50,8 +51,8 @@ class TagController extends GetxController {
     });
   }
 
-  void tagSearchFunction() {
-    tagsearch(_searchword.value).then((value) {
+  void tagSearchFunction() async{
+    await tagsearch(_searchword.value).then((value) {
       if (value.isError == false) {
         List<Tag> taglist = List.from(value.data["results"])
             .map((map) => Tag.fromJson(map))

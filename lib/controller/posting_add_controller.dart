@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/utils/custom_crop.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -24,9 +25,10 @@ class PostingAddController extends GetxController {
   RxBool isPostingContentEmpty = true.obs;
   RxBool isLinkTextEmpty = true.obs;
   RxBool isTagClick = false.obs;
+  RxBool isFirst = false.obs;
   RxBool keyControllerAtive = false.obs;
   PostaddRoute route;
-
+  KeyController keyController = Get.put(KeyController(isTextField: false.obs));
   void onInit() {
     textcontroller.addListener(() {
       if (textcontroller.text.trim().isEmpty) {
@@ -40,6 +42,17 @@ class PostingAddController extends GetxController {
         isLinkTextEmpty.value = true;
       } else {
         isLinkTextEmpty.value = false;
+      }
+    });
+    isTagClick.listen((p0) async {
+      if (p0 == true) {
+
+          await Future.delayed(const Duration(milliseconds: 200));
+          Scrollable.ensureVisible(keyController.viewKey.currentContext!,
+                  curve: Curves.easeOut,
+                  duration: const Duration(milliseconds: 300))
+              .then((value) => isTagClick.value = false);
+        
       }
     });
     _loadPhotos();
@@ -69,11 +82,6 @@ class PostingAddController extends GetxController {
   RefreshController refreshController = RefreshController();
   TransformationController transformationController =
       TransformationController();
-  // @override
-  // void onInit() {
-  //   _loadPhotos();
-  //   super.onInit();
-  // }
 
   void _loadData() async {
     headerTitle.value = albums.first.name;

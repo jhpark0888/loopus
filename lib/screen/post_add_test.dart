@@ -236,23 +236,13 @@ class PostingAddNameScreen extends StatelessWidget {
                               maxLength: null,
                               textInputAction: TextInputAction.done,
                               ontap: () async {
-                                // await Future.delayed(Duration(milliseconds: 300));
-                                // postingAddController.scrollController.animateTo(
-                                //       postingAddController.lines.value < 7
-                                //           ? tagController.offsetDy.value  - 80
-                                //           : tagController.offsetDy.value +
-                                //               ((postingAddController.lines.value - 7) *
-                                //                   tagController.textfieldOffset.value) -
-                                //               80,
-                                //       duration: const Duration(milliseconds: 300),
-                                //       curve: Curves.easeOut);
-                                await Future.delayed(
-                                    Duration(milliseconds: 400));
-                                Scrollable.ensureVisible(
-                                    keyController.viewKey.currentContext!,
-                                    curve: Curves.easeOut,
-                                    duration:
-                                        const Duration(milliseconds: 300));
+                                // await Future.delayed(
+                                //     Duration(milliseconds: 400));
+                                // Scrollable.ensureVisible(
+                                //     keyController.viewKey.currentContext!,
+                                //     curve: Curves.easeOut,
+                                //     duration:
+                                //         const Duration(milliseconds: 300));
                                 postingAddController.isTagClick(true);
                                 // }
                                 // );

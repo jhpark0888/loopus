@@ -31,7 +31,7 @@ class MessageScreen extends StatelessWidget {
           ),
           bottomBorder: false,
           title: '메시지',
-          actions: [SvgPicture.asset('assets/icons/appbar_more_option.svg')],
+          actions: [GestureDetector(onTap: (){Get.to(()=> DatabaseList());},child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))],
         ),
         // body: Obx(
         //   () => messageController.chatroomscreenstate.value ==
@@ -74,7 +74,7 @@ class MessageScreen extends StatelessWidget {
         //                   : SafeArea(
         // child:
         body: Obx(
-          () => messageController.chattingRoomList.isNotEmpty
+          () => messageController.chatroomscreenstate.value == ScreenState.success
               ? Padding(
                   padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
                   child: Column(

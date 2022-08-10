@@ -185,6 +185,12 @@ class SQLController extends GetxController {
             notread: RxInt(maps[index]['not_read']),
             roomId: maps[index]['room_id']);
       });
+      messageList.sort((a, b) => b
+        .message.value.date
+        .compareTo(a.message.value.date));
+        for(var i in messageList){
+          print(i.message.value.content);
+        }
       return messageList;
     }
   }
@@ -259,5 +265,10 @@ class SQLController extends GetxController {
 
       return user;
     }
+  }
+
+  Future<void> updateUser(String image, int userId)async{
+      final Database db = await database!;
+      await db.rawUpdate('UPDATE user SET profile_image = ? WHERE user_id = ?', [image,userId]);
   }
 }
