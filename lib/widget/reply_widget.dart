@@ -150,7 +150,11 @@ class ReplyWidget extends StatelessWidget {
                                 isOne: true,
                               );
                             },
-                      child: SvgPicture.asset('assets/icons/more_option.svg'),
+                      behavior: HitTestBehavior.translucent,
+                      child: SizedBox(
+                          height: 16,
+                          child:
+                              SvgPicture.asset('assets/icons/more_option.svg')),
                     ),
                   ],
                 ),
@@ -170,16 +174,11 @@ class ReplyWidget extends StatelessWidget {
                             preventDuplicates: false);
                       },
                     text: reply.taggedUser.realName,
-                    style: kmainbold.copyWith(
-                      height: 1.5,
-                    ),
+                    style: kmainheight,
                   ),
                   TextSpan(
                     text: reply.content,
-                    style: kmainbold.copyWith(
-                      height: 1.5,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: kmainheight,
                   )
                 ])),
                 const SizedBox(

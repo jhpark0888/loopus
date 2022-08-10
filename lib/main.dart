@@ -125,6 +125,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "루프어스",
       theme: themeData,
+      // themeMode: ThemeMode.system,
       scrollBehavior: const ScrollBehavior(
           androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
       // initialBinding: InitBinding(),

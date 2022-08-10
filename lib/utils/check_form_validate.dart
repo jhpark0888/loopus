@@ -28,6 +28,21 @@ class CheckValidate {
     }
   }
 
+  static bool validateEmailBool(String value) {
+    if (value.isEmpty) {
+      return false;
+    } else {
+      Pattern pattern =
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      RegExp regExp = RegExp(pattern.toString());
+      if (!regExp.hasMatch(value)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+
   String? validatePassword(String value) {
     if (value.isEmpty) {
       return '비밀번호를 입력해주세요';
@@ -35,10 +50,25 @@ class CheckValidate {
       // Pattern pattern =
       //     r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,15}$';
       // RegExp regExp = new RegExp(pattern.toString());
-      if (value.length < 8) {
-        return '8자 이상이어야해요';
+      if (value.length < 6) {
+        return '6자 이상이어야해요';
       } else {
         return null;
+      }
+    }
+  }
+
+  static bool validatePasswordBool(String value) {
+    if (value.isEmpty) {
+      return false;
+    } else {
+      // Pattern pattern =
+      //     r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,15}$';
+      // RegExp regExp = new RegExp(pattern.toString());
+      if (value.length < 6) {
+        return false;
+      } else {
+        return true;
       }
     }
   }

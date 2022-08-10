@@ -29,6 +29,7 @@ import 'package:loopus/widget/comment_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
+import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/reply_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
@@ -58,45 +59,52 @@ class PostingScreen extends StatelessWidget {
   final Debouncer _debouncer = Debouncer();
 
   void _commentSubmitted(String text) async {
-    if (text.trim() == "") {
-      showCustomDialog('내용을 입력해주세요', 1400);
-    } else {
-      if (controller.selectedCommentId.value == 0) {
-        commentPost(postid, contentType.comment,
-                controller.commentController.text, null)
-            .then((value) {
-          if (value.isError == false) {
-            controller.commentController.clear();
-            Comment comment = Comment.fromJson(value.data);
-            controller.post!.value.comments.insert(0, comment);
-            // controller.commentToList();
-          } else {
-            showCustomDialog('댓글 작성에 실패하였습니다', 1400);
-          }
-        });
+    if (controller.isCommentLoading.value == false) {
+      if (text.trim() == "") {
+        // showCustomDialog('내용을 입력해주세요', 1400);
       } else {
-        commentPost(
-                controller.selectedCommentId.value,
-                contentType.cocomment,
-                controller.commentController.text,
-                controller.tagUser.value.userid)
-            .then((value) {
-          if (value.isError == false) {
-            Reply reply =
-                Reply.fromJson(value.data, controller.selectedCommentId.value);
-            controller.post!.value.comments
-                .where((comment) =>
-                    comment.id == controller.selectedCommentId.value)
-                .first
-                .replyList
-                .add(reply);
-            controller.commentController.clear();
-            // controller.commentToList();
-            controller.tagdelete();
-          } else {
-            showCustomDialog('대댓글 작성에 실패하였습니다', 1400);
-          }
-        });
+        controller.isCommentLoading(true);
+        if (controller.selectedCommentId.value == 0) {
+          commentPost(postid, contentType.comment,
+                  controller.commentController.text, null)
+              .then((value) {
+            if (value.isError == false) {
+              controller.commentController.clear();
+              controller.commentFocus.unfocus();
+              Comment comment = Comment.fromJson(value.data);
+              controller.post!.value.comments.insert(0, comment);
+              // controller.commentToList();
+            } else {
+              showCustomDialog('댓글 작성에 실패하였습니다', 1400);
+            }
+            controller.isCommentLoading(false);
+          });
+        } else {
+          commentPost(
+                  controller.selectedCommentId.value,
+                  contentType.cocomment,
+                  controller.commentController.text,
+                  controller.tagUser.value.userid)
+              .then((value) {
+            if (value.isError == false) {
+              controller.commentController.clear();
+              controller.commentFocus.unfocus();
+              Reply reply = Reply.fromJson(
+                  value.data, controller.selectedCommentId.value);
+              controller.post!.value.comments
+                  .where((comment) =>
+                      comment.id == controller.selectedCommentId.value)
+                  .first
+                  .replyList
+                  .add(reply);
+              // controller.commentToList();
+              controller.tagdelete();
+            } else {
+              showCustomDialog('대댓글 작성에 실패하였습니다', 1400);
+            }
+            controller.isCommentLoading(false);
+          });
+        }
       }
     }
   }
@@ -185,12 +193,16 @@ class PostingScreen extends StatelessWidget {
               const SizedBox(
                 width: 14,
               ),
-              GestureDetector(
-                onTap: () =>
-                    _commentSubmitted(controller.commentController.text),
-                child: SvgPicture.asset(
-                  "assets/icons/enter.svg",
-                ),
+              Obx(
+                () => controller.isCommentLoading.value
+                    ? const LoadingWidget()
+                    : GestureDetector(
+                        onTap: () => _commentSubmitted(
+                            controller.commentController.text),
+                        child: SvgPicture.asset(
+                          "assets/icons/enter.svg",
+                        ),
+                      ),
               )
             ],
           ),

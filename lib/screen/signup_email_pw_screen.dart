@@ -4,6 +4,7 @@ import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
+import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/signup_emailcheck_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/label_textfield_widget.dart';
@@ -47,6 +48,7 @@ class SignupEmailPwScreen extends StatelessWidget {
                   child: Obx(
                     () => CustomExpandedButton(
                         onTap: () async {
+                          loading();
                           if (_signupController.isEmailPassWordCheck.value) {
                             await emailRequest(
                                     _signupController.emailidcontroller.text +
@@ -56,9 +58,11 @@ class SignupEmailPwScreen extends StatelessWidget {
                                     _signupController.signupcertification)
                                 .then((value) {
                               if (value.isError == false) {
+                                Get.back();
                                 Get.to(() => SignupEmailcheckScreen());
                                 _signupController.timer.timerOn(180);
                               } else {
+                                Get.back();
                                 if (value.errorData!["statusCode"] == 400) {
                                   Get.closeCurrentSnackbar();
                                   showCustomDialog("이미 가입된 회원입니다", 1000);

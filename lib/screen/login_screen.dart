@@ -24,120 +24,9 @@ import 'package:loopus/widget/signup_text_widget.dart';
 
 import '../utils/check_form_validate.dart';
 
-// class LogInScreen extends StatelessWidget {
-//   final _formKey = GlobalKey<FormState>();
-//   final LogInController _loginController = Get.put(LogInController());
-//   static FlutterSecureStorage? storage = const FlutterSecureStorage();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       children: [
-//         Scaffold(
-//           appBar: AppBarWidget(
-//             bottomBorder: false,
-//             title: '로그인',
-//           ),
-//           body: GestureDetector(
-//             onTap: () => FocusScope.of(context).unfocus(),
-//             child: SingleChildScrollView(
-//               child: Padding(
-//                 padding: const EdgeInsets.fromLTRB(
-//                   32,
-//                   24,
-//                   32,
-//                   40,
-//                 ),
-//                 child: Form(
-//                   key: _formKey,
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     crossAxisAlignment: CrossAxisAlignment.stretch,
-//                     children: [
-//                       const Text(
-//                         '학교 이메일 주소',
-//                         style: kSubTitle2Style,
-//                       ),
-//                       const SizedBox(
-//                         height: 16,
-//                       ),
-//                       CustomTextField(
-//                         counterText: null,
-//                         maxLength: null,
-//                         textController: _loginController.idcontroller,
-//                         hintText: '',
-//                         obscureText: false,
-//                         validator: (value) =>
-//                             (CheckValidate().validateEmail(value!.trim())),
-//                         maxLines: 1,
-//                       ),
-//                       SizedBox(
-//                         height: 32,
-//                       ),
-//                       const Text(
-//                         '비밀번호',
-//                         style: kSubTitle2Style,
-//                       ),
-//                       const SizedBox(
-//                         height: 16,
-//                       ),
-//                       CustomTextField(
-//                         counterText: null,
-//                         maxLength: null,
-//                         textController: _loginController.passwordcontroller,
-//                         hintText: '',
-//                         obscureText: true,
-//                         validator: (value) =>
-//                             CheckValidate().validatePassword(value!),
-//                         maxLines: 1,
-//                       ),
-//                       const SizedBox(
-//                         height: 32,
-//                       ),
-//                       CustomExpandedButton(
-//                         onTap: () {
-//                           if (_formKey.currentState!.validate()) {}
-//                           login(
-//                             context,
-//                             emailId: _loginController.idcontroller.text,
-//                             password: _loginController.passwordcontroller.text,
-//                           );
-//                         },
-//                         isBlue: true,
-//                         isBig: true,
-//                         title: '로그인하기',
-//                       ),
-//                       const SizedBox(
-//                         height: 8,
-//                       ),
-//                       TextButton(
-//                           onPressed: () {
-//                             Get.to(() => PwFindScreen());
-//                           },
-//                           child: Center(
-//                             child: Text(
-//                               "비밀번호를 잊으셨나요?",
-//                               style: kButtonStyle.copyWith(
-//                                 color: mainblack.withOpacity(0.6),
-//                               ),
-//                             ),
-//                           )),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
 class LogInScreen extends StatelessWidget {
   LogInScreen({Key? key}) : super(key: key);
 
-  final _formKey = GlobalKey<FormState>();
   final LogInController _loginController = Get.put(LogInController());
   static FlutterSecureStorage? storage = const FlutterSecureStorage();
 
@@ -173,19 +62,22 @@ class LogInScreen extends StatelessWidget {
                         width: 14,
                       ),
                       Expanded(
-                        child: CustomExpandedButton(
-                            onTap: () async {
-                              if (_formKey.currentState!.validate()) {}
-                              login(
-                                context,
-                                emailId: _loginController.idcontroller.text,
-                                password:
-                                    _loginController.passwordcontroller.text,
-                              );
-                            },
-                            isBlue: true,
-                            title: "로그인",
-                            isBig: true),
+                        child: Obx(
+                          () => CustomExpandedButton(
+                              onTap: () async {
+                                if (_loginController.loginButtonOn.value) {
+                                  login(
+                                    context,
+                                    emailId: _loginController.idcontroller.text,
+                                    password: _loginController
+                                        .passwordcontroller.text,
+                                  );
+                                }
+                              },
+                              isBlue: _loginController.loginButtonOn.value,
+                              title: "로그인",
+                              isBig: true),
+                        ),
                       ),
                     ],
                   ),
@@ -194,38 +86,39 @@ class LogInScreen extends StatelessWidget {
             ),
           ),
           body: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  SignUpTextWidget(
-                      oneLinetext: "대학 메일 주소 및", twoLinetext: "비밀번호를 입력해주세요"),
-                  LabelTextFieldWidget(
-                      label: "본인 대학 이메일",
-                      hintText: "인증한 본인 대학 이메일 주소",
-                      textController: _loginController.idcontroller),
-                  LabelTextFieldWidget(
-                      label: "비밀번호",
-                      hintText: "루프어스에 가입할 때 입력한 비밀번호",
-                      obscureText: true,
-                      textController: _loginController.passwordcontroller),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  GestureDetector(
-                      onTap: () {
-                        Get.to(() => PwFindScreen());
-                      },
-                      child: Center(
-                        child: Text(
-                          "비밀번호를 잊으셨나요?",
-                          style: kmain.copyWith(
-                            color: maingray,
-                          ),
+            child: Column(
+              children: [
+                SignUpTextWidget(
+                    oneLinetext: "대학 메일 주소 및", twoLinetext: "비밀번호를 입력해주세요"),
+                LabelTextFieldWidget(
+                    label: "본인 대학 이메일",
+                    hintText: "인증한 본인 대학 이메일 주소",
+                    // validator: (value) =>
+                    //     CheckValidate().validateEmail(value!),
+                    textController: _loginController.idcontroller),
+                LabelTextFieldWidget(
+                    label: "비밀번호",
+                    hintText: "루프어스에 가입할 때 입력한 비밀번호",
+                    obscureText: true,
+                    // validator: (value) =>
+                    //     CheckValidate().validatePassword(value!),
+                    textController: _loginController.passwordcontroller),
+                const SizedBox(
+                  height: 24,
+                ),
+                GestureDetector(
+                    onTap: () {
+                      Get.to(() => PwFindScreen());
+                    },
+                    child: Center(
+                      child: Text(
+                        "비밀번호를 잊으셨나요?",
+                        style: kmain.copyWith(
+                          color: maingray,
                         ),
-                      )),
-                ],
-              ),
+                      ),
+                    )),
+              ],
             ),
           ),
         ),
@@ -255,6 +148,7 @@ void login(context, {required String emailId, required String password}) async {
       await FirebaseMessaging.instance.subscribeToTopic(userid);
       Get.offAll(() => App());
     } else {
+      Get.back();
       if (value.errorData!["statusCode"] == 401) {
         showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
       } else {

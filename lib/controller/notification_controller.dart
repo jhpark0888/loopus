@@ -28,6 +28,7 @@ import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/before_message_detail_screen.dart';
+import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
@@ -316,6 +317,7 @@ class NotificationController extends GetxController {
           _signupController.signupcertification(Emailcertification.success);
           _signupController.timer
               .timerClose(dialogOn: false, stateChange: false);
+          loading();
           await signupRequest().then((value) async {
             final GAController _gaController = GAController();
 
@@ -337,6 +339,7 @@ class NotificationController extends GetxController {
               // });
 
               await _gaController.logScreenView('signup_6');
+              Get.back();
               Get.offAll(() => SignupCompleteScreen(
                     emailId: _signupController.emailidcontroller.text +
                         "@" +
@@ -346,6 +349,7 @@ class NotificationController extends GetxController {
             } else {
               await _gaController.logScreenView('signup_6');
               // errorSituation(value);
+              Get.back();
               Get.offAll(
                   () => SignupFailScreen(signupController: _signupController));
             }

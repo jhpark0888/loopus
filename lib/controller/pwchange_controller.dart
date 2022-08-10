@@ -14,11 +14,29 @@ class PwChangeController extends GetxController {
   TextEditingController newpwcontroller = TextEditingController();
   TextEditingController newpwcheckcontroller = TextEditingController();
 
+  RxBool pwChangeButtonOn = false.obs;
+
   late CertificateTimer timer;
 
   @override
   void onInit() {
     timer = CertificateTimer(emailcertification: pwcertification);
+
+    newpwcontroller.addListener(() {
+      pwChangeButtonCheck();
+    });
+    newpwcheckcontroller.addListener(() {
+      pwChangeButtonCheck();
+    });
     super.onInit();
+  }
+
+  void pwChangeButtonCheck() {
+    if (newpwcontroller.text.trim().length >= 6 &&
+        newpwcontroller.text.trim() == newpwcheckcontroller.text.trim()) {
+      pwChangeButtonOn(true);
+    } else {
+      pwChangeButtonOn(false);
+    }
   }
 }

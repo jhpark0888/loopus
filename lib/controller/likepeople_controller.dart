@@ -10,7 +10,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class LikePeopleController {
   LikePeopleController({required this.id, required this.likeType});
-  Rx<ScreenState> likepeoplescreenstate = ScreenState.normal.obs;
+  Rx<ScreenState> likepeoplescreenstate = ScreenState.loading.obs;
 
   RefreshController refreshController = RefreshController();
 

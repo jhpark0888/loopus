@@ -49,7 +49,7 @@ class LabelTextFieldWidget extends StatelessWidget {
             textController: textController,
             hintText: hintText,
             suffix: suffix,
-            validator: null,
+            validator: validator,
             obscureText: obscureText ?? false,
             readOnly: readOnly,
             maxLines: 1,
