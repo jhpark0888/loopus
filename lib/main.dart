@@ -27,7 +27,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
   print(message);
-  showCustomSnackbar('', '', (aa) {});
+  // showCustomSnackbar('', '', (aa) {});
 }
 
 void main() async {

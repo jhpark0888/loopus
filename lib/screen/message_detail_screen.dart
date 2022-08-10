@@ -97,8 +97,8 @@ class MessageDetatilScreen extends StatelessWidget {
                           SQLController.to.deleteUser(partner.userid);
                           if (Get.isRegistered<MessageController>()) {
                             MessageController.to.searchRoomList.removeAt(
-                                MessageController.to.searchRoomList
-                                    .indexWhere((messageRoom) =>
+                                MessageController.to.searchRoomList.indexWhere(
+                                    (messageRoom) =>
                                         messageRoom.chatRoom.value.roomId ==
                                         roomId));
                             MessageController.to.chattingRoomList.removeAt(
@@ -136,7 +136,8 @@ class MessageDetatilScreen extends StatelessWidget {
                     height: 44,
                     width: 44,
                     child: Center(
-                        child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))),
+                        child: SvgPicture.asset(
+                            'assets/icons/appbar_more_option.svg'))),
               )
             ],
           ),
@@ -155,44 +156,58 @@ class MessageDetatilScreen extends StatelessWidget {
                             delegate: FlutterListViewDelegate(
                               (context, index) {
                                 if (controller.messageList.length == 1) {
+                                  //메세지가 한개 있을 경우 isfirst는 읽음, 안읽음 표시를 위함, isdaychange는 날싸 표시를 위함
                                   return MessageWidget(
                                       message: controller.messageList[index],
                                       isFirst: true.obs,
-                                      isLast: true.obs,
+                                      isDayChange: true.obs,
                                       partner: partner,
                                       myId: controller.myId!);
                                 } else if (controller.messageList[index] ==
                                     controller.messageList.first) {
-                                  return MessageWidget(
-                                      message: controller.messageList[index],
-                                      isFirst: true.obs,
-                                      isLast: false.obs,
-                                      partner: partner,
-                                      myId: controller.myId!);
+                                  if (DateFormat('yyyy-MM-dd').parse(controller
+                                          .messageList[index].date
+                                          .toString()) !=
+                                      DateFormat('yyyy-MM-dd').parse(controller
+                                          .messageList[index + 1].date
+                                          .toString())) {
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isFirst: true.obs,
+                                        isDayChange: true.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  } else {
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isFirst: true.obs,
+                                        isDayChange: false.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  }
                                 } else if (controller.messageList[index] ==
                                     controller.messageList.last) {
-                                  return MessageWidget(
-                                      message: controller.messageList[index],
-                                      isFirst: false.obs,
-                                      isLast: true.obs,
-                                      partner: partner,
-                                      myId: controller.myId!);
-                                } else if (controller.messageList[index] !=
-                                        controller.messageList.last &&
-                                    DateFormat('yyyy-MM-dd').parse(controller
-                                            .messageList[index].date
-                                            .toString()) !=
-                                        DateFormat('yyyy-MM-dd').parse(
-                                            controller
-                                                .messageList[index + 1].date
-                                                .toString())) {
-                                  return MessageWidget(
-                                      message: controller.messageList[index],
-                                      isFirst: false.obs,
-                                      isLast: true.obs,
-                                      partner: partner,
-                                      myId: controller.myId!);
-                                } else {
+                                  
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isFirst: false.obs,
+                                        isDayChange: true.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  
+                                }else if (DateFormat('yyyy-MM-dd').parse(controller
+                                          .messageList[index].date
+                                          .toString()) !=
+                                      DateFormat('yyyy-MM-dd').parse(controller
+                                          .messageList[index + 1].date
+                                          .toString())) {
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isFirst: false.obs,
+                                        isDayChange: true.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  } else {
                                   return GestureDetector(
                                     onTap: () {
                                       print(controller.messageList[index] ==
@@ -207,10 +222,9 @@ class MessageDetatilScreen extends StatelessWidget {
                                                       .toString()));
                                     },
                                     child: MessageWidget(
-                                        message:
-                                            controller.messageList[index],
+                                        message: controller.messageList[index],
                                         isFirst: false.obs,
-                                        isLast: false.obs,
+                                        isDayChange: false.obs,
                                         partner: partner,
                                         myId: controller.myId!),
                                   );

@@ -37,7 +37,7 @@ class MessageController extends GetxController {
       await sortList();
       chatroomscreenstate.value = ScreenState.success;
     });
-    getChatroomlist(int.parse(userId!)).then((chatroom) async{
+    getChatroomlist(int.parse(userId!)).then((chatroom) async {
       if (chatroom.isError == false) {
         List<ChatRoom> temp = chatroom.data;
 
@@ -48,19 +48,53 @@ class MessageController extends GetxController {
             if (usersList.isError == false) {
               List<User> userList = usersList.data;
 
-              temp.forEach((element) {
+              temp.forEach((element) async {
                 User user =
                     userList.where((user) => user.userid == element.user).first;
                 if (chattingRoomList
                     .where((messageRoom) =>
-                        messageRoom.chatRoom.value.roomId == element.roomId)
+                        messageRoom.user.value.userid == user.userid)
                     .isEmpty) {
                   SQLController.to.insertMessageRoom(element);
                   SQLController.to.insertUser(user);
-                  chattingRoomList.add(
-                      MessageRoomWidget(chatRoom: element.obs, user: user.obs));
-                  searchRoomList.add(
-                      MessageRoomWidget(chatRoom: element.obs, user: user.obs));
+                  if (chattingRoomList
+                      .where((messageRoom) =>
+                          messageRoom.chatRoom.value.user == user.userid)
+                      .isNotEmpty) {
+                    chattingRoomList
+                        .where((messageRoom) =>
+                            messageRoom.chatRoom.value.user == user.userid)
+                        .first
+                        .user
+                        .value = user;
+                    searchRoomList
+                        .where((messageRoom) =>
+                            messageRoom.chatRoom.value.user == user.userid)
+                        .first
+                        .user
+                        .value = user;
+                    print(chattingRoomList
+                        .where((messageRoom) =>
+                            messageRoom.chatRoom.value.user == user.userid)
+                        .first
+                        .user);
+                    chattingRoomList
+                        .where((messageRoom) =>
+                            messageRoom.chatRoom.value.user == user.userid)
+                        .first
+                        .user
+                        .refresh();
+                    searchRoomList
+                        .where((messageRoom) =>
+                            messageRoom.chatRoom.value.user == user.userid)
+                        .first
+                        .user.refresh();
+                  } else {
+                    chattingRoomList.add(MessageRoomWidget(
+                        chatRoom: element.obs, user: user.obs));
+                    searchRoomList.add(MessageRoomWidget(
+                        chatRoom: element.obs, user: user.obs));
+                  }
                 } else {
                   SQLController.to.updateLastMessage(
                       element.message.value.content,
@@ -106,7 +140,7 @@ class MessageController extends GetxController {
                 }
               });
 
-             sortList();
+              sortList();
             }
           });
         }

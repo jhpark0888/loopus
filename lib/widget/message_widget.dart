@@ -15,7 +15,7 @@ class MessageWidget extends StatelessWidget {
   MessageWidget(
       {Key? key,
       required this.message,
-      required this.isLast,
+      required this.isDayChange,
       required this.isFirst,
       required this.partner,
       required this.myId})
@@ -23,7 +23,7 @@ class MessageWidget extends StatelessWidget {
   // late MessageDetailController controller =
   //     Get.find(tag: user.userid.toString());
   RxBool isFirst;
-  RxBool isLast;
+  RxBool isDayChange;
   Chat message;
   User partner;
   int myId;
@@ -34,8 +34,8 @@ class MessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){print('islast $isFirst');
-            print('isFirst $isLast');},
+      onTap: (){print('isFirst $isFirst');
+            print('isLast $isDayChange');},
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -244,7 +244,7 @@ class MessageWidget extends StatelessWidget {
   }
 
   Widget changeDay() {
-    if (isLast.value) {
+    if (isDayChange.value) {
       return Padding(
           padding: const EdgeInsets.fromLTRB(20, 7, 20, 14),
           child: Row(

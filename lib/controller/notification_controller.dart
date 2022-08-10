@@ -175,15 +175,14 @@ class NotificationController extends GetxController {
                           .toString())) {
                     Get.delete<MessageDetailController>(
                         tag: HomeController.to.enterMessageRoom.value
-                            .toString());
-                    Future.delayed(const Duration(milliseconds: 100));
-                    Get.off(
+                            .toString()).then((value) =>  Get.off(
                         () => MessageDetatilScreen(
                               partner: user.data[0],
                               myProfile: HomeController.to.myProfile.value,
                               enterRoute: EnterRoute.popUp,
                             ),
-                        preventDuplicates: false);
+                        preventDuplicates: false));
+                   
                   } else {
                     Get.to(
                         () => MessageDetatilScreen(
@@ -193,7 +192,6 @@ class NotificationController extends GetxController {
                             ),
                         preventDuplicates: true);
                   }
-
                   HomeController.to.enterMessageRoom.value =
                       user.data.first.userid;
                 }
@@ -229,8 +227,9 @@ class NotificationController extends GetxController {
                     roomid: chat.roomId!, chatRoom: chatRoom.toJson())
                 .then((value) async {
               if (value == false) {
-                await getUserProfile([chatRoom.user]).then((value) {
+                await getUserProfile([chatRoom.user]).then((value) async{
                   if (value.isError == false) {
+                    await SQLController.to.insertUser(value.data[0]);
                     MessageController.to.searchRoomList.add(MessageRoomWidget(
                         chatRoom: chatRoom.obs, user: Rx<User>(value.data[0])));
                     MessageController.to.chattingRoomList.add(MessageRoomWidget(
@@ -283,12 +282,12 @@ class NotificationController extends GetxController {
             json["date"] = DateTime.now().toString();
             json["content"] = event.notification!.body;
             Chat chat = Chat.fromMsg(json, int.parse(json['room_id']));
+            // SQLController.to.findMessageRoom(
+            //     roomid: int.parse(json['room_id']),
+            //     chatRoom: ChatRoom.fromMsg(json).toJson()).then((value) => null);
             SQLController.to.insertmessage(chat);
             SQLController.to.updateLastMessage(
                 chat.content, chat.date.toString(), chat.roomId!);
-            SQLController.to.findMessageRoom(
-                roomid: int.parse(json['room_id']),
-                chatRoom: ChatRoom.fromMsg(json).toJson());
             showCustomSnackbar(
                 event.notification!.title, event.notification!.body,
                 (snackbar) async {
