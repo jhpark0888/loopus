@@ -35,6 +35,7 @@ class SearchTextFieldWidget extends StatelessWidget {
         style: kmain,
         cursorColor: mainblack,
         cursorWidth: 1.2,
+        textAlignVertical: TextAlignVertical.center,
         cursorRadius: Radius.circular(5.0),
         autofocus: autofocus ?? false,
         textInputAction: textInputAction,

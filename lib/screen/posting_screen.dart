@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -42,17 +41,19 @@ class PostingScreen extends StatelessWidget {
   PostingScreen({
     Key? key,
     this.post,
-    this.autofocus,
+    this.autofocus = false,
     required this.postid,
   }) : super(key: key);
   late PostingDetailController controller = Get.put(
       PostingDetailController(
-          postid: postid, post: post != null ? post!.obs : null),
+          postid: postid,
+          post: post != null ? post!.obs : null,
+          autoFocus: autofocus),
       tag: postid.toString());
 
   Post? post;
   int postid;
-  bool? autofocus;
+  bool autofocus;
   PageController pageController = PageController();
   RefreshController refreshController = RefreshController();
 
@@ -60,7 +61,7 @@ class PostingScreen extends StatelessWidget {
 
   void _commentSubmitted(String text) async {
     if (controller.isCommentLoading.value == false) {
-      if (text.trim() == "") {
+      if (text.trim() == "" || text.trim() == "\u200B") {
         // showCustomDialog('내용을 입력해주세요', 1400);
       } else {
         controller.isCommentLoading(true);
@@ -87,16 +88,16 @@ class PostingScreen extends StatelessWidget {
                   controller.tagUser.value.userid)
               .then((value) {
             if (value.isError == false) {
+              int commentId = controller.selectedCommentId.value;
               controller.commentController.clear();
               controller.commentFocus.unfocus();
-              Reply reply = Reply.fromJson(
-                  value.data, controller.selectedCommentId.value);
+              Reply reply = Reply.fromJson(value.data, commentId);
               controller.post!.value.comments
-                  .where((comment) =>
-                      comment.id == controller.selectedCommentId.value)
+                  .where((comment) => comment.id == commentId)
                   .first
                   .replyList
                   .add(reply);
+
               // controller.commentToList();
               controller.tagdelete();
             } else {
@@ -155,7 +156,7 @@ class PostingScreen extends StatelessWidget {
                   cursorColor: mainblack,
                   controller: controller.commentController,
                   focusNode: controller.commentFocus,
-                  autofocus: autofocus ?? false,
+                  autofocus: autofocus,
                   onFieldSubmitted: _commentSubmitted,
                   minLines: 1,
                   maxLines: 5,
@@ -167,11 +168,11 @@ class PostingScreen extends StatelessWidget {
                                 horizontal: 8, vertical: 2),
                             height: 22,
                             decoration: BoxDecoration(
-                                color: mainWhite,
+                                // color: mainWhite,
                                 borderRadius: BorderRadius.circular(8)),
                             child: Text(
                               '@${controller.tagUser.value.realName}',
-                              style: kmain,
+                              style: kmainbold,
                             ),
                           ),
                     contentPadding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
@@ -275,13 +276,11 @@ class PostingScreen extends StatelessWidget {
                                                   leftText: '취소',
                                                   rightText: '삭제',
                                                   title: '포스팅을 삭제하시겠어요?',
-                                                  content:
-                                                      '삭제한 포스팅은 복구할 수 없어요',
+                                                  content: '삭제한 포스팅은 복구할 수 없어요',
                                                   leftFunction: () =>
                                                       Get.back(),
                                                   rightFunction: () async {
-                                                    dialogBack(
-                                                        modalIOS: true);
+                                                    dialogBack(modalIOS: true);
                                                     loading();
                                                     // await Future.delayed(
                                                     //         Duration(milliseconds: 1000))
@@ -290,8 +289,8 @@ class PostingScreen extends StatelessWidget {
                                                     //   showCustomDialog("포스팅이 삭제되었습니다", 1400);
                                                     // });
                                                     deleteposting(
-                                                            controller.post!
-                                                                .value.id,
+                                                            controller
+                                                                .post!.value.id,
                                                             controller
                                                                 .post!
                                                                 .value
@@ -302,30 +301,30 @@ class PostingScreen extends StatelessWidget {
                                                       if (value.isError ==
                                                           false) {
                                                         Get.back();
-                                                        Project project = ProfileController
-                                                            .to
-                                                            .myProjectList
-                                                            .where((career) =>
-                                                                career.id ==
-                                                                controller
-                                                                    .post!
-                                                                    .value
-                                                                    .project!
-                                                                    .id)
-                                                            .first;
-                                                        project.posts.removeWhere(
-                                                            (post) =>
-                                                                post.id ==
-                                                                controller
-                                                                    .post!
-                                                                    .value
-                                                                    .id);
+                                                        Project project =
+                                                            ProfileController.to
+                                                                .myProjectList
+                                                                .where((career) =>
+                                                                    career.id ==
+                                                                    controller
+                                                                        .post!
+                                                                        .value
+                                                                        .project!
+                                                                        .id)
+                                                                .first;
+                                                        project.posts
+                                                            .removeWhere(
+                                                                (post) =>
+                                                                    post.id ==
+                                                                    controller
+                                                                        .post!
+                                                                        .value
+                                                                        .id);
                                                         showCustomDialog(
                                                             "포스팅이 삭제되었습니다",
                                                             1400);
                                                       } else {
-                                                        errorSituation(
-                                                            value);
+                                                        errorSituation(value);
                                                       }
 
                                                       // HomeController.to.recommandpostingResult.value.postingitems
@@ -337,8 +336,8 @@ class PostingScreen extends StatelessWidget {
                                             },
                                             func2: () {
                                               Get.to(() => PostUpdateScreen(
-                                                    post: controller
-                                                        .post!.value,
+                                                    post:
+                                                        controller.post!.value,
                                                   ));
                                             },
                                             value1: '포스팅 삭제하기',
@@ -356,16 +355,14 @@ class PostingScreen extends StatelessWidget {
                                                   leftText: '취소',
                                                   rightText: '신고',
                                                   title: '정말 포스팅을 신고하시겠어요?',
-                                                  content:
-                                                      '관리자가 검토 절차를 거칩니다',
+                                                  content: '관리자가 검토 절차를 거칩니다',
                                                   leftFunction: () =>
                                                       Get.back(),
                                                   rightFunction: () {
                                                     contentreport(
-                                                            controller.post!
-                                                                .value.id,
-                                                            contentType
-                                                                .post)
+                                                            controller
+                                                                .post!.value.id,
+                                                            contentType.post)
                                                         .then((value) {
                                                       if (value.isError ==
                                                           false) {
@@ -374,8 +371,7 @@ class PostingScreen extends StatelessWidget {
                                                             "신고가 접수되었습니다",
                                                             1000);
                                                       } else {
-                                                        errorSituation(
-                                                            value);
+                                                        errorSituation(value);
                                                       }
                                                     });
                                                   });
@@ -417,279 +413,19 @@ class PostingScreen extends StatelessWidget {
                                         onLoading: commentListLoad,
                                         child: SingleChildScrollView(
                                           child: Column(children: [
-                                            // Column(
-                                            //   crossAxisAlignment:
-                                            //       CrossAxisAlignment.stretch,
-                                            //   children: [
-                                            //     Column(children: [
-                                            //       Padding(
-                                            //         padding: const EdgeInsets
-                                            //                 .fromLTRB(
-                                            //             20, 14, 20, 0),
-                                            //         child: Column(
-                                            //           children: [
-                                            //             GestureDetector(
-                                            //               onTap: () =>
-                                            //                   tapProfile(),
-                                            //               child: Row(
-                                            //                 children: [
-                                            //                   UserImageWidget(
-                                            //                     imageUrl: controller
-                                            //                             .post
-                                            //                             .value!
-                                            //                             .user
-                                            //                             .profileImage ??
-                                            //                         '',
-                                            //                     width: 35,
-                                            //                     height: 35,
-                                            //                   ),
-                                            //                   const SizedBox(
-                                            //                     width: 14,
-                                            //                   ),
-                                            //                   Column(
-                                            //                       mainAxisSize:
-                                            //                           MainAxisSize
-                                            //                               .min,
-                                            //                       crossAxisAlignment:
-                                            //                           CrossAxisAlignment
-                                            //                               .start,
-                                            //                       children: [
-                                            //                         Text(
-                                            //                             controller
-                                            //                                 .post
-                                            //                                 .value!
-                                            //                                 .user
-                                            //                                 .realName,
-                                            //                             style:
-                                            //                                 k16semiBold),
-                                            //                         Text(
-                                            //                             controller
-                                            //                                 .post
-                                            //                                 .value!
-                                            //                                 .user
-                                            //                                 .department,
-                                            //                             style:
-                                            //                                 kSubTitle3Style)
-                                            //                       ])
-                                            //                 ],
-                                            //               ),
-                                            //             ),
-                                            //             const SizedBox(
-                                            //                 height: 14),
-                                            //             Container(
-                                            //               alignment: Alignment
-                                            //                   .centerLeft,
-                                            //               child: Text(
-                                            //                 controller
-                                            //                     .post
-                                            //                     .value!
-                                            //                     .project!
-                                            //                     .careerName,
-                                            //                 style: k16semiBold
-                                            //                     .copyWith(
-                                            //                         color:
-                                            //                             maingray),
-                                            //               ),
-                                            //             ),
-                                            //             const SizedBox(
-                                            //                 height: 14),
-                                            //           ],
-                                            //         ),
-                                            //       ),
-                                            //     ]),
-                                            //     if (controller.post!.value
-                                            //             .images.isNotEmpty ||
-                                            //         controller.post!.value.links
-                                            //             .isNotEmpty)
-                                            //       SwiperWidget(
-                                            //         items: controller
-                                            //                 .post
-                                            //                 .value!
-                                            //                 .images
-                                            //                 .isNotEmpty
-                                            //             ? controller
-                                            //                 .post!.value.images
-                                            //             : controller
-                                            //                 .post!.value.links,
-                                            //         swiperType: controller
-                                            //                 .post
-                                            //                 .value!
-                                            //                 .images
-                                            //                 .isNotEmpty
-                                            //             ? SwiperType.image
-                                            //             : SwiperType.link,
-                                            //         aspectRatio: controller
-                                            //                 .post
-                                            //                 .value!
-                                            //                 .images
-                                            //                 .isNotEmpty
-                                            //             ? getAspectRatioinUrl(
-                                            //                 controller
-                                            //                     .post
-                                            //                     .value!
-                                            //                     .images[0])
-                                            //             : null,
-                                            //       ),
-                                            //     Column(
-                                            //       mainAxisSize:
-                                            //           MainAxisSize.min,
-                                            //       mainAxisAlignment:
-                                            //           MainAxisAlignment.start,
-                                            //       children: [
-                                            //         Padding(
-                                            //           padding:
-                                            //               const EdgeInsets.only(
-                                            //             left: 20,
-                                            //             right: 20,
-                                            //           ),
-                                            //           child: Obx(
-                                            //             () => Column(
-                                            //               crossAxisAlignment:
-                                            //                   CrossAxisAlignment
-                                            //                       .start,
-                                            //               children: [
-                                            //                 Text(
-                                            //                     controller
-                                            //                         .post
-                                            //                         .value!
-                                            //                         .content
-                                            //                         .value,
-                                            //                     style: kSubTitle3Style
-                                            //                         .copyWith(
-                                            //                             height:
-                                            //                                 1.5)),
-                                            //                 const SizedBox(
-                                            //                   height: 14,
-                                            //                 ),
-                                            //                 Wrap(
-                                            //                   spacing: 7,
-                                            //                   runSpacing: 7,
-                                            //                   children: controller
-                                            //                       .post
-                                            //                       .value!
-                                            //                       .tags
-                                            //                       .map((tag) =>
-                                            //                           Tagwidget(
-                                            //                             tag:
-                                            //                                 tag,
-                                            //                           ))
-                                            //                       .toList(),
-                                            //                 ),
-                                            //                 const SizedBox(
-                                            //                     height: 14),
-                                            //                 Obx(
-                                            //                   () => Row(
-                                            //                     children: [
-                                            //                       InkWell(
-                                            //                         onTap:
-                                            //                             tapLike,
-                                            //                         child: controller.post!.value.isLiked.value ==
-                                            //                                 0
-                                            //                             ? SvgPicture.asset(
-                                            //                                 "assets/icons/Favorite_Inactive.svg")
-                                            //                             : SvgPicture.asset(
-                                            //                                 "assets/icons/Favorite_Active.svg"),
-                                            //                       ),
-                                            //                       const SizedBox(
-                                            //                         width: 15,
-                                            //                       ),
-                                            //                       // Obx(
-                                            //                       //   () => SizedBox(
-                                            //                       //     width: controller
-                                            //                       //                 .post
-                                            //                       //                 .value!
-                                            //                       //                 .likeCount
-                                            //                       //                 .value !=
-                                            //                       //             0
-                                            //                       //         ? 0
-                                            //                       //         : 8,
-                                            //                       //   ),
-                                            //                       // ),
-                                            //                       SvgPicture.asset(
-                                            //                           "assets/icons/Comment.svg"),
-                                            //                       const Spacer(),
-                                            //                       InkWell(
-                                            //                         onTap:
-                                            //                             tapBookmark,
-                                            //                         child: (controller.post!.value.isMarked.value ==
-                                            //                                 0)
-                                            //                             ? SvgPicture
-                                            //                                 .asset(
-                                            //                                 "assets/icons/Mark_Default.svg",
-                                            //                                 color:
-                                            //                                     mainblack,
-                                            //                               )
-                                            //                             : SvgPicture.asset(
-                                            //                                 "assets/icons/Mark_Saved.svg"),
-                                            //                       ),
-                                            //                     ],
-                                            //                   ),
-                                            //                 ),
-                                            //                 // postingTag(),
-                                            //                 const SizedBox(
-                                            //                   height: 13,
-                                            //                 ),
-                                            //                 Row(children: [
-                                            //                   GestureDetector(
-                                            //                       behavior:
-                                            //                           HitTestBehavior
-                                            //                               .translucent,
-                                            //                       onTap: () {
-                                            //                         Get.to(
-                                            //                           () =>
-                                            //                               LikePeopleScreen(
-                                            //                             id: controller
-                                            //                                 .post
-                                            //                                 .value!
-                                            //                                 .id,
-                                            //                             likeType:
-                                            //                                 LikeType.post,
-                                            //                           ),
-                                            //                         );
-                                            //                       },
-                                            //                       child: Obx(
-                                            //                         () => Text(
-                                            //                           '좋아요 ${controller.post!.value.likeCount}개',
-                                            //                           style:
-                                            //                               kSubTitle3Style,
-                                            //                         ),
-                                            //                       )),
-                                            //                   const Spacer(),
-                                            //                   Text(
-                                            //                       calculateDate(
-                                            //                           controller
-                                            //                               .post
-                                            //                               .value!
-                                            //                               .date),
-                                            //                       style:
-                                            //                           kSubTitle3Style),
-                                            //                 ]),
-                                            //                 const SizedBox(
-                                            //                     height: 13),
-                                            //               ],
-                                            //             ),
-                                            //           ),
-                                            //         ),
-                                            //         // if (view != 'detail') const DivideWidget()
-                                            //       ],
-                                            //     ),
-                                            //   ],
-                                            // ),
                                             PostingWidget(
                                               item: controller.post!.value,
                                               type: PostingWidgetType.detail,
                                             ),
                                             Obx(
                                               () => ListView.separated(
+                                                key: controller.commentListKey,
                                                 primary: false,
                                                 shrinkWrap: true,
-                                                itemBuilder:
-                                                    (context, index) {
+                                                itemBuilder: (context, index) {
                                                   return PostCommentWidget(
-                                                    comment: controller
-                                                        .post!
-                                                        .value
-                                                        .comments[index],
+                                                    comment: controller.post!
+                                                        .value.comments[index],
                                                     postid: postid,
                                                   );
                                                 },

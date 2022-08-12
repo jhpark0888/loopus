@@ -102,6 +102,7 @@ class ReplyWidget extends StatelessWidget {
                                               comment.replyList.removeWhere(
                                                   (element) =>
                                                       element.id == reply.id);
+                                              comment.replycount.value -= 1;
                                             }
                                           } else {
                                             showCustomDialog(
@@ -159,7 +160,7 @@ class ReplyWidget extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 7,
+                  height: 4,
                 ),
                 RichText(
                     text: TextSpan(children: [
@@ -174,7 +175,7 @@ class ReplyWidget extends StatelessWidget {
                             preventDuplicates: false);
                       },
                     text: reply.taggedUser.realName,
-                    style: kmainheight,
+                    style: kmainbold.copyWith(height: 1.5),
                   ),
                   TextSpan(
                     text: reply.content,

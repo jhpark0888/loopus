@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:convert';
 import 'dart:ui' as ui;
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';

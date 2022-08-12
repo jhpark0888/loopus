@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -47,6 +49,7 @@ class App extends StatelessWidget {
         ),
         bottomNavigationBar: Obx(
           () => Container(
+            height: Platform.isAndroid ? 56 : 44,
             decoration: BoxDecoration(
               // borderRadius: const BorderRadius.only(
               //   topRight: Radius.circular(20),
@@ -73,6 +76,8 @@ class App extends StatelessWidget {
               // ),
               child: BottomNavigationBar(
                 backgroundColor: mainWhite,
+                selectedFontSize: 0,
+                unselectedFontSize: 0,
                 type: BottomNavigationBarType.fixed,
                 currentIndex: controller.currentIndex.value,
                 showSelectedLabels: false,

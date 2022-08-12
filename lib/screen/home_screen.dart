@@ -7,6 +7,7 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/post_add_test.dart';
+import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/news_widget.dart';
@@ -68,7 +69,9 @@ class HomeScreen extends StatelessWidget {
                     },
                     child: Obx(
                       () => SvgPicture.asset(
-                        HomeController.to.isNewAlarm.value == true ? "assets/icons/alarm_active.svg" : "assets/icons/alarm_inactive.svg",
+                        HomeController.to.isNewAlarm.value == true
+                            ? "assets/icons/alarm_active.svg"
+                            : "assets/icons/alarm_inactive.svg",
                         width: 24,
                         height: 24,
                       ),
@@ -89,7 +92,9 @@ class HomeScreen extends StatelessWidget {
                     },
                     child: Obx(
                       () => SvgPicture.asset(
-                        HomeController.to.isNewMsg.value == true ? "assets/icons/message_active.svg" :"assets/icons/message_inactive.svg",
+                        HomeController.to.isNewMsg.value == true
+                            ? "assets/icons/message_active.svg"
+                            : "assets/icons/message_inactive.svg",
                         width: 24,
                         height: 24,
                       ),
@@ -193,8 +198,7 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                     Text(
                                       '포스트를 바로 작성해 보세요',
-                                      style:
-                                          kmain.copyWith(color: maingray),
+                                      style: kmain.copyWith(color: maingray),
                                     ),
                                     const SizedBox(
                                       height: 7,
@@ -204,7 +208,41 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ),
                             )
-                          : Container(),
+                          : GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {
+                                Get.to(() => ProjectAddTitleScreen(
+                                      screenType: Screentype.add,
+                                    ));
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 14,
+                                    ),
+                                    const Text(
+                                      '지금 커리어를 만들고 새로운 포스트를 기록해보세요!',
+                                      style: kmainheight,
+                                    ),
+                                    const SizedBox(
+                                      height: 14,
+                                    ),
+                                    Text(
+                                      '커리어를 바로 작성해 보세요',
+                                      style: kmain.copyWith(color: maingray),
+                                    ),
+                                    const SizedBox(
+                                      height: 7,
+                                    ),
+                                    Divider(thickness: 1, color: maingray),
+                                  ],
+                                ),
+                              ),
+                            ),
                       Obx(
                         () => ListView.separated(
                           primary: false,
@@ -217,7 +255,7 @@ class HomeScreen extends StatelessWidget {
                                 type: PostingWidgetType.normal,
                               );
                             } else if (_homeController.contents[index]
-                                is List<String>) {
+                                is RxList<String>) {
                               return NewsListWidget(
                                   newslist: _homeController.contents[index]);
                             } else {

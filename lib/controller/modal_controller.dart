@@ -171,12 +171,11 @@ void showContentModal(BuildContext context) {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    Get.to(() => WebViewScreen(url: kTermsOfService));
-                  },
-                  // child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
-                  child: SizedBox.shrink()
-                ),
+                    onTap: () {
+                      Get.to(() => WebViewScreen(url: kTermsOfService));
+                    },
+                    // child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
+                    child: SizedBox.shrink()),
               ],
             ),
             SizedBox(
@@ -1123,7 +1122,8 @@ void showCustomDatePicker(BuildContext context, SelectDateType selectDateType) {
 void showCustomYearPicker(
     {required int childCount,
     required Widget? Function(BuildContext, int) builder,
-    required Function(int)? onItemTapCallback}) {
+    required Function(int)? onItemTapCallback,
+    required Function(int)? onSelectedItemChanged}) {
   FixedExtentScrollController scrollController = FixedExtentScrollController();
   Get.bottomSheet(
     Container(
@@ -1141,6 +1141,7 @@ void showCustomYearPicker(
             diameterRatio: 3,
             perspective: 0.01,
             magnification: 1.3,
+            onSelectedItemChanged: onSelectedItemChanged,
             overAndUnderCenterOpacity: 0.5,
             physics: const FixedExtentScrollPhysics(),
             childDelegate: ListWheelChildBuilderDelegate(

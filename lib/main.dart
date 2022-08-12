@@ -111,6 +111,7 @@ class MyApp extends StatelessWidget {
         ),
         child: child!,
       ),
+      defaultTransition: Transition.rightToLeft,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
