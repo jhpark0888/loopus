@@ -123,8 +123,8 @@ class MyProfileScreen extends StatelessWidget {
                                         children: [
                                           Obx(
                                             () => Text(
-                                              profileController
-                                                  .myUserInfo.value.loopcount
+                                              profileController.myUserInfo.value
+                                                  .followerCount.value
                                                   .toString(),
                                               style: kmainbold.copyWith(
                                                   color: _hoverController
@@ -211,8 +211,8 @@ class MyProfileScreen extends StatelessWidget {
                                         children: [
                                           Obx(
                                             () => Text(
-                                              profileController
-                                                  .myUserInfo.value.loopcount
+                                              profileController.myUserInfo.value
+                                                  .followingCount.value
                                                   .toString(),
                                               style: kmainbold.copyWith(
                                                   color: _hoverController
@@ -252,8 +252,10 @@ class MyProfileScreen extends StatelessWidget {
                                   Obx(
                                     () => IntrinsicHeight(
                                       child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           UserImageWidget(
                                               imageUrl: profileController

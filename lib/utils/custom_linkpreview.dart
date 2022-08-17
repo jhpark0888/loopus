@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:charset_converter/charset_converter.dart';
 import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/controller/home_controller.dart';

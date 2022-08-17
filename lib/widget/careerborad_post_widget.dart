@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_text/extended_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -7,7 +8,6 @@ import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/widget/Link_widget.dart';
-import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class CareerBoardPostWidget extends StatelessWidget {
@@ -66,7 +66,8 @@ class CareerBoardPostWidget extends StatelessWidget {
                                 "assets/icons/bookmark_inactive.svg",
                                 color: mainblack,
                               )
-                            : SvgPicture.asset("assets/icons/bookmark_active.svg"),
+                            : SvgPicture.asset(
+                                "assets/icons/bookmark_active.svg"),
                       ),
                     ],
                   ),
@@ -92,14 +93,19 @@ class CareerBoardPostWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 14, right: 14),
                       child: Obx(
-                        () => ExpandableText(
-                            textSpan: TextSpan(
-                                text: post.content.value,
-                                style: kmainheight.copyWith(height: 1.5)),
-                            maxLines: 3,
-                            moreSpan: TextSpan(
-                                text: '...',
-                                style: kmainheight.copyWith(height: 1.5))),
+                        () => ExtendedText(
+                          post.content.value,
+                          overflowWidget: TextOverflowWidget(
+                            position: TextOverflowPosition.end,
+                            align: TextOverflowAlign.center,
+                            child: Text(
+                              '...더보기',
+                              style: kmainheight.copyWith(color: maingray),
+                            ),
+                          ),
+                          style: kmainheight,
+                          maxLines: 3,
+                        ),
                       ),
                     ),
                   ],

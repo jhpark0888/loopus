@@ -63,29 +63,6 @@ class OtherProfileScreen extends StatelessWidget {
           careerName: careerName),
       tag: userid.toString());
 
-  // late final FollowController followController = Get.put(
-  //     FollowController(
-  //         islooped: _controller.otherUser.value.looped.value ==
-  //                 FollowState.normal
-  //             ? 0.obs
-  //             : _controller.otherUser.value.looped.value == FollowState.follower
-  //                 ? 0.obs
-  //                 : _controller.otherUser.value.looped.value ==
-  //                         FollowState.following
-  //                     ? 1.obs
-  //                     : 1.obs,
-  //         id: userid,
-  //         lastislooped: _controller.otherUser.value.looped.value ==
-  //                 FollowState.normal
-  //             ? 0
-  //             : _controller.otherUser.value.looped.value == FollowState.follower
-  //                 ? 0
-  //                 : _controller.otherUser.value.looped.value ==
-  //                         FollowState.following
-  //                     ? 1
-  //                     : 1),
-  //     tag: userid.toString());
-
   final ImageController imageController = Get.put(ImageController());
   final HoverController _hoverController = HoverController();
 
@@ -248,8 +225,8 @@ class OtherProfileScreen extends StatelessWidget {
                                             children: [
                                               Obx(
                                                 () => Text(
-                                                  _controller
-                                                      .otherUser.value.loopcount
+                                                  _controller.otherUser.value
+                                                      .followerCount.value
                                                       .toString(),
                                                   style: kmainbold.copyWith(
                                                       color: _hoverController
@@ -352,8 +329,8 @@ class OtherProfileScreen extends StatelessWidget {
                                             children: [
                                               Obx(
                                                 () => Text(
-                                                  _controller
-                                                      .otherUser.value.loopcount
+                                                  _controller.otherUser.value
+                                                      .followingCount.value
                                                       .toString(),
                                                   style: kmainbold.copyWith(
                                                       color: _hoverController
@@ -1170,105 +1147,6 @@ class OtherProfileScreen extends StatelessWidget {
                                           ),
                                         ],
                                       )
-                                // Row(
-                                //   children: [
-                                //     Expanded(
-                                //       child: GestureDetector(
-                                //         onTap: () {},
-                                //         child: Padding(
-                                //           padding: const EdgeInsets.symmetric(
-                                //             vertical: 12.0,
-                                //           ),
-                                //           child: Column(
-                                //             children: [
-                                //               Text(
-                                //                 '포스팅',
-                                //                 style: kBody1Style,
-                                //               ),
-                                //               SizedBox(
-                                //                 height: 8,
-                                //               ),
-                                //               Text(
-                                //                 _controller.otherUser.value
-                                //                     .totalposting
-                                //                     .toString(),
-                                //                 style: kSubTitle2Style,
-                                //               )
-                                //             ],
-                                //           ),
-                                //         ),
-                                //       ),
-                                //     ),
-                                //     Expanded(
-                                //       child: GestureDetector(
-                                //         behavior: HitTestBehavior.translucent,
-                                //         onTapDown: (details) =>
-                                //             _hoverController.isHover(true),
-                                //         onTapCancel: () =>
-                                //             _hoverController.isHover(false),
-                                //         onTapUp: (details) =>
-                                //             _hoverController.isHover(false),
-                                //         onTap: () {
-                                //           // _controller.isLoopPeopleLoading(true);
-                                //           if (_controller
-                                //                   .otherUser.value.banned ==
-                                //               BanState.normal) {
-                                //             Get.to(() => LoopPeopleScreen(
-                                //                   userid: _controller
-                                //                       .otherUser.value.userid,
-                                //                   loopcount: _controller
-                                //                       .otherUser
-                                //                       .value
-                                //                       .loopcount
-                                //                       .value,
-                                //                 ));
-                                //           }
-                                //         },
-                                //         child: Padding(
-                                //           padding: const EdgeInsets.symmetric(
-                                //               vertical: 12.0),
-                                //           child: Column(
-                                //             children: [
-                                //               Obx(
-                                //                 () => Text(
-                                //                   '팔로워',
-                                //                   style: kBody1Style.copyWith(
-                                //                       color: _hoverController
-                                //                               .isHover.value
-                                //                           ? mainblack
-                                //                               .withOpacity(
-                                //                                   0.6)
-                                //                           : mainblack),
-                                //                 ),
-                                //               ),
-                                //               SizedBox(
-                                //                 height: 8,
-                                //               ),
-                                //               Obx(
-                                //                 () => Text(
-                                //                   _controller.otherUser.value
-                                //                               .banned !=
-                                //                           BanState.normal
-                                //                       ? '0'
-                                //                       : _controller.otherUser
-                                //                           .value.loopcount
-                                //                           .toString(),
-                                //                   style: kSubTitle2Style.copyWith(
-                                //                       color: _hoverController
-                                //                               .isHover.value
-                                //                           ? mainblack
-                                //                               .withOpacity(
-                                //                                   0.6)
-                                //                           : mainblack),
-                                //                 ),
-                                //               ),
-                                //             ],
-                                //           ),
-                                //         ),
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
                               ],
                             )),
                           ),
@@ -1318,21 +1196,25 @@ class OtherProfileScreen extends StatelessWidget {
         if (_controller.otherUser.value.looped.value == FollowState.normal) {
           // followController.islooped(1);
           _controller.otherUser.value.looped(FollowState.following);
+          _controller.otherUser.value.followerCount.value += 1;
         } else if (_controller.otherUser.value.looped.value ==
             FollowState.follower) {
           // followController.islooped(1);
 
           _controller.otherUser.value.looped(FollowState.wefollow);
+          _controller.otherUser.value.followerCount.value += 1;
         } else if (_controller.otherUser.value.looped.value ==
             FollowState.following) {
           // followController.islooped(0);
 
           _controller.otherUser.value.looped(FollowState.normal);
+          _controller.otherUser.value.followerCount.value -= 1;
         } else if (_controller.otherUser.value.looped.value ==
             FollowState.wefollow) {
           // followController.islooped(0);
 
           _controller.otherUser.value.looped(FollowState.follower);
+          _controller.otherUser.value.followerCount.value -= 1;
         }
 
         _debouncer.run(() {

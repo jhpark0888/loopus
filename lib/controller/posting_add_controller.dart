@@ -31,6 +31,7 @@ class PostingAddController extends GetxController {
   KeyController keyController = Get.put(KeyController(isTextField: false.obs));
   void onInit() {
     textcontroller.addListener(() {
+      print(textcontroller.text.runes.length);
       if (textcontroller.text.trim().isEmpty) {
         isPostingTitleEmpty.value = true;
       } else {
@@ -46,13 +47,11 @@ class PostingAddController extends GetxController {
     });
     isTagClick.listen((p0) async {
       if (p0 == true) {
-
-          await Future.delayed(const Duration(milliseconds: 200));
-          Scrollable.ensureVisible(keyController.viewKey.currentContext!,
-                  curve: Curves.easeOut,
-                  duration: const Duration(milliseconds: 300))
-              .then((value) => isTagClick.value = false);
-        
+        await Future.delayed(const Duration(milliseconds: 200));
+        Scrollable.ensureVisible(keyController.viewKey.currentContext!,
+                curve: Curves.easeOut,
+                duration: const Duration(milliseconds: 300))
+            .then((value) => isTagClick.value = false);
       }
     });
     _loadPhotos();
