@@ -89,7 +89,8 @@ class MessageDetatilScreen extends StatelessWidget {
                   showModalIOS(context, func1: () {
                     int roomId = controller.roomid;
                     if (controller.messageList.isNotEmpty) {
-                      deleteChatRoom(controller.roomid, myProfile.userid)
+                      deleteChatRoom(controller.roomid, myProfile.userid,
+                              int.parse(controller.messageList.last.messageId!))
                           .then((value) {
                         if (value.isError == false) {
                           SQLController.to.deleteMessage(roomId);
@@ -187,27 +188,25 @@ class MessageDetatilScreen extends StatelessWidget {
                                   }
                                 } else if (controller.messageList[index] ==
                                     controller.messageList.last) {
-                                  
-                                    return MessageWidget(
-                                        message: controller.messageList[index],
-                                        isFirst: false.obs,
-                                        isDayChange: true.obs,
-                                        partner: partner,
-                                        myId: controller.myId!);
-                                  
-                                }else if (DateFormat('yyyy-MM-dd').parse(controller
-                                          .messageList[index].date
-                                          .toString()) !=
-                                      DateFormat('yyyy-MM-dd').parse(controller
-                                          .messageList[index + 1].date
-                                          .toString())) {
-                                    return MessageWidget(
-                                        message: controller.messageList[index],
-                                        isFirst: false.obs,
-                                        isDayChange: true.obs,
-                                        partner: partner,
-                                        myId: controller.myId!);
-                                  } else {
+                                  return MessageWidget(
+                                      message: controller.messageList[index],
+                                      isFirst: false.obs,
+                                      isDayChange: true.obs,
+                                      partner: partner,
+                                      myId: controller.myId!);
+                                } else if (DateFormat('yyyy-MM-dd').parse(
+                                        controller.messageList[index].date
+                                            .toString()) !=
+                                    DateFormat('yyyy-MM-dd').parse(controller
+                                        .messageList[index + 1].date
+                                        .toString())) {
+                                  return MessageWidget(
+                                      message: controller.messageList[index],
+                                      isFirst: false.obs,
+                                      isDayChange: true.obs,
+                                      partner: partner,
+                                      myId: controller.myId!);
+                                } else {
                                   return GestureDetector(
                                     onTap: () {
                                       print(controller.messageList[index] ==

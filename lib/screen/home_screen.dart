@@ -30,6 +30,9 @@ class HomeScreen extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
   final SearchController _searchController = Get.put(SearchController());
   final ProfileController _profileController = Get.put(ProfileController());
+  
+
+
 
   @override
   Widget build(BuildContext context) {
