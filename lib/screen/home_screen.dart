@@ -6,7 +6,7 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
-import 'package:loopus/screen/post_add_test.dart';
+import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
@@ -125,8 +125,7 @@ class HomeScreen extends StatelessWidget {
               child: GestureDetector(
                 onTap: () async {
                   Get.to(() => MyProfileScreen());
-                  // deleteDatabase(
-                  //     join(await getDatabasesPath(), 'MY_database.db'));
+
                 }
                 // Get.to(() => DatabaseList())
 
@@ -154,6 +153,7 @@ class HomeScreen extends StatelessWidget {
         body: Obx(
           () => ScrollNoneffectWidget(
             child: SmartRefresher(
+              primary: false,
               physics: const BouncingScrollPhysics(),
               scrollController: _homeController.scrollController,
               controller: _homeController.postingRefreshController,
@@ -175,7 +175,7 @@ class HomeScreen extends StatelessWidget {
                           ? GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
-                                Get.to(() => PostingAddNameScreen(
+                                Get.to(() => PostingAddScreen(
                                     project_id:
                                         _homeController.recommendCareer!.id,
                                     route: PostaddRoute.project));

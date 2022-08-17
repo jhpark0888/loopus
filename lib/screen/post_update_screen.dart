@@ -83,35 +83,9 @@ class PostUpdateScreen extends StatelessWidget {
                                 controller:
                                     postingUpdateController.textcontroller,
                                 obscureText: false,
-                                onChanged: (string) {
-                                  TextSpan span = TextSpan(
-                                      text: postingUpdateController
-                                          .textcontroller.text,
-                                      style: kmain);
-                                  TextPainter tp = TextPainter(
-                                      text: span,
-                                      textDirection: ui.TextDirection.ltr);
-                                  tp.layout(maxWidth: Get.width - 40);
-                                  int numLines = tp.computeLineMetrics().length;
-                                  postingUpdateController.lines.value =
-                                      numLines;
-                                  if (postingUpdateController.lines.value ==
-                                      7) {
-                                    postingUpdateController
-                                        .keyControllerAtive.value = true;
-                                  }
-                                },
                                 hintText: '내용을 입력해주세요',
                               );
                             }),
-                            // Obx(() => Divider(
-                            //     key: Get.put(
-                            //               KeyController(
-                            //                   tag: Tagtype.Posting, isTextField: true.obs),
-                            //               tag: postingAddController.keyControllerAtive.value
-                            //                   .toString())
-                            //           .viewKey,
-                            //     thickness: 0.5)),
                             Divider(key: keyController.viewKey, thickness: 0.5),
                             SizedBox(height: 14),
                             Text('태그', style: kmain),

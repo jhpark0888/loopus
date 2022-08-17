@@ -31,11 +31,14 @@ class MessageController extends GetxController {
     print('$userId 유저아이디가 이거입니다');
 
     await SQLController.to.getDBMessageRoom().then((value) async {
+      if(value.isNotEmpty){
       List<ChatRoom> temp = value;
       await getDBUserInfo(temp);
       await addList(temp);
       await sortList();
+      }
       chatroomscreenstate.value = ScreenState.success;
+
     });
     getChatroomlist(int.parse(userId!)).then((chatroom) async {
       if (chatroom.isError == false) {

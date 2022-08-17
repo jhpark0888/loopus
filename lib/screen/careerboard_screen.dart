@@ -11,7 +11,7 @@ import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
-import 'package:loopus/screen/post_add_test.dart';
+import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/screen/message_detail_screen.dart';

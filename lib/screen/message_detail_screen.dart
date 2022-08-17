@@ -89,7 +89,7 @@ class MessageDetatilScreen extends StatelessWidget {
                   showModalIOS(context, func1: () {
                     int roomId = controller.roomid;
                     if (controller.messageList.isNotEmpty) {
-                      deleteChatRoom(controller.roomid, myProfile.userid)
+                      deleteChatRoom(controller.roomid, myProfile.userid, int.parse(controller.messageList.last.messageId!))
                           .then((value) {
                         if (value.isError == false) {
                           SQLController.to.deleteMessage(roomId);
@@ -187,27 +187,25 @@ class MessageDetatilScreen extends StatelessWidget {
                                   }
                                 } else if (controller.messageList[index] ==
                                     controller.messageList.last) {
-                                  
-                                    return MessageWidget(
-                                        message: controller.messageList[index],
-                                        isFirst: false.obs,
-                                        isDayChange: true.obs,
-                                        partner: partner,
-                                        myId: controller.myId!);
-                                  
-                                }else if (DateFormat('yyyy-MM-dd').parse(controller
-                                          .messageList[index].date
-                                          .toString()) !=
-                                      DateFormat('yyyy-MM-dd').parse(controller
-                                          .messageList[index + 1].date
-                                          .toString())) {
-                                    return MessageWidget(
-                                        message: controller.messageList[index],
-                                        isFirst: false.obs,
-                                        isDayChange: true.obs,
-                                        partner: partner,
-                                        myId: controller.myId!);
-                                  } else {
+                                  return MessageWidget(
+                                      message: controller.messageList[index],
+                                      isFirst: false.obs,
+                                      isDayChange: true.obs,
+                                      partner: partner,
+                                      myId: controller.myId!);
+                                } else if (DateFormat('yyyy-MM-dd').parse(
+                                        controller.messageList[index].date
+                                            .toString()) !=
+                                    DateFormat('yyyy-MM-dd').parse(controller
+                                        .messageList[index + 1].date
+                                        .toString())) {
+                                  return MessageWidget(
+                                      message: controller.messageList[index],
+                                      isFirst: false.obs,
+                                      isDayChange: true.obs,
+                                      partner: partner,
+                                      myId: controller.myId!);
+                                } else {
                                   return GestureDetector(
                                     onTap: () {
                                       print(controller.messageList[index] ==
@@ -255,6 +253,7 @@ class MessageDetatilScreen extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              dragStartBehavior: DragStartBehavior.start,
                 focusNode: controller.focusNode,
                 keyboardType: TextInputType.multiline,
                 controller: controller.sendText,
@@ -286,13 +285,7 @@ class MessageDetatilScreen extends StatelessWidget {
           GestureDetector(
               onTap: () async {
                 if (controller.sendText.text.isNotEmpty) {
-                  if (controller.hasInternet.value == true) {
-                    controller.channel.sink.add(jsonEncode({
-                      'content': controller.sendText.text,
-                      'type': 'msg',
-                      'name': myProfile.realName
-                    }));
-                  }
+                  await sendMessage();
                   controller.messageList.insert(
                       0,
                       Chat(
@@ -313,5 +306,15 @@ class MessageDetatilScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future sendMessage() async {
+    if (controller.hasInternet.value == true) {
+      controller.channel.sink.add(jsonEncode({
+        'content': controller.sendText.text,
+        'type': 'msg',
+        'name': myProfile.realName
+      }));
+    }
   }
 }

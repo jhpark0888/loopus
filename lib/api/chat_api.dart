@@ -202,7 +202,7 @@ Future<HTTPResponse> getPartnerToken(int memberId) async {
   }
 }
 
-Future<HTTPResponse> deleteChatRoom(int roomId,int myId) async {
+Future<HTTPResponse> deleteChatRoom(int roomId,int myId, int msgId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
@@ -214,7 +214,7 @@ Future<HTTPResponse> deleteChatRoom(int roomId,int myId) async {
     try {
       http.Response response = await http.delete(
         url,
-        body: jsonEncode({'room_id' : roomId}),
+        body: jsonEncode({'room_id' : roomId, 'msg_id' : msgId}),
         headers: {'Content-Type': 'application/json'},
       );
 

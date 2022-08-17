@@ -18,6 +18,8 @@ import 'package:loopus/screen/pwchange_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/screen/withdrawal_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class UserInfoScreen extends StatelessWidget {
   final LogInController _logInController = Get.put(LogInController());
@@ -104,7 +106,30 @@ class UserInfoScreen extends StatelessWidget {
               '회원탈퇴',
               style: ktempFont.copyWith(color: rankred),
             ),
-          )
+          ),
+          ListTile(
+            onTap: () {
+              showButtonDialog(
+                  title: '데이터베이스를 초기화 하시겠어요?',
+                  content: '채팅 정보가 날라가게 돼요',
+                  leftFunction: () => Get.back(),
+                  rightFunction: () async {
+                    deleteDatabase(
+                            join(await getDatabasesPath(), 'MY_database.db'))
+                        .then((value) {
+                      showBottomSnackbar('삭제되었어요');
+                    });
+                    Future.delayed(const Duration(milliseconds: 300));
+                    Get.back();
+                  },
+                  rightText: '초기화',
+                  leftText: '취소');
+            },
+            title: Text(
+              '채팅 데이터베이스 초기화',
+              style: ktempFont,
+            ),
+          ),
         ],
       ),
     );
