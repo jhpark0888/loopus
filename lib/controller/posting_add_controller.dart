@@ -35,6 +35,7 @@ class PostingAddController extends GetxController {
   KeyController keyController = Get.put(KeyController(isTextField: false.obs));
   void onInit() {
     textcontroller.addListener(() {
+      print(textcontroller.text.runes.length);
       if (textcontroller.text.trim().isEmpty) {
         isPostingTitleEmpty.value = true;
       } else {
@@ -54,8 +55,6 @@ class PostingAddController extends GetxController {
     }));
 
     isTagClick.listen((p0) async {
-      print(getTagList.value);
-      print(keyboardActive.value);
       if (p0 == true) {
         if (getTagList.value) {
           await Future.delayed(const Duration(milliseconds: 300));

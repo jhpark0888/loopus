@@ -13,7 +13,8 @@ class User {
     required this.univName,
     required this.univlogo,
     required this.department,
-    required this.loopcount,
+    required this.followerCount,
+    required this.followingCount,
     required this.totalposting,
     required this.resentPostCount,
     required this.isuser,
@@ -37,7 +38,8 @@ class User {
   String univlogo;
   String department;
   int? isuser;
-  RxInt loopcount;
+  RxInt followerCount;
+  RxInt followingCount;
   int totalposting;
   int resentPostCount;
   String fieldId;
@@ -60,7 +62,8 @@ class User {
     String? univlogo,
     String? department,
     int? isuser,
-    RxInt? loopcount,
+    RxInt? followerCount,
+    RxInt? followingCount,
     String? fieldId,
     int? totalposting,
     int? resentPostCount,
@@ -82,7 +85,8 @@ class User {
           univName: univName ?? '',
           univlogo: univlogo ?? '',
           department: department ?? "",
-          loopcount: loopcount ?? 0.obs,
+          followerCount: followerCount ?? 0.obs,
+          followingCount: followingCount ?? 0.obs,
           totalposting: totalposting ?? 0,
           fieldId: fieldId ?? "10",
           isuser: isuser ?? 0,
@@ -102,8 +106,12 @@ class User {
         realName: json["real_name"],
         type: json["type"] ?? 0,
         profileImage: json["profile_image"],
-        loopcount:
-            json["loop_count"] != null ? RxInt(json["loop_count"]) : 0.obs,
+        followerCount: json["follower_count"] != null
+            ? RxInt(json["follower_count"])
+            : 0.obs,
+        followingCount: json["following_count"] != null
+            ? RxInt(json["following_count"])
+            : 0.obs,
         totalposting: json["total_post_count"] ?? 0,
         resentPostCount: json["recent_post_count"] ?? 0,
         rank: json["rank"] != null ? json["rank"] as int : 0,
@@ -140,8 +148,12 @@ class User {
     realName = json["real_name"] ?? realName;
     type = json["type"] ?? type;
     profileImage = json["profile_image"] ?? profileImage;
-    loopcount =
-        json["loop_count"] != null ? RxInt(json["loop_count"]) : loopcount;
+    followerCount = json["follower_count"] != null
+        ? RxInt(json["follower_count"])
+        : followerCount;
+    followingCount = json["following_count"] != null
+        ? RxInt(json["following_count"])
+        : followingCount;
     totalposting = json["total_post_count"] ?? totalposting;
     resentPostCount = json["recent_post_count"] ?? resentPostCount;
     rank = json["rank"] != null ? json["rank"] as int : rank;
