@@ -162,8 +162,8 @@ class NotificationWidget extends StatelessWidget {
                             kmainheight.copyWith(fontWeight: FontWeight.w400),
                       ),
                       TextSpan(
-                          text: ' · ${alarmDurationCaculate(
-                            startDate: notification.date,
+                          text: ' · ${commentCalculateDate(
+                            notification.date,
                           )}',
                           style: kmainheight.copyWith(color: maingray))
                     ])),

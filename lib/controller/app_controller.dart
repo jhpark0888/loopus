@@ -11,6 +11,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
+import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/select_project_screen.dart';
@@ -52,6 +53,12 @@ class AppController extends GetxService {
         _changePage(value, hasGesture: hasGesture);
         break;
       case RouteName.search:
+        if(currentIndex.value == 1){
+          SearchController.to.scrollcontroller.animateTo(0,
+        duration: const Duration(milliseconds: 500), curve: Curves.linear);
+        }
+        _changePage(value, hasGesture: hasGesture);
+        break;
       case RouteName.scout:
       case RouteName.careerboard:
         _changePage(value, hasGesture: hasGesture);

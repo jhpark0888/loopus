@@ -39,7 +39,7 @@ class HomeController extends GetxController
   RxList<User> joinSenior1 = <User>[].obs;
   RxList<User> joinSenior2 = <User>[].obs;
 
-  ScrollController scrollController = ScrollController();
+  late Rx<ScrollController> scrollController;
 
   RxList contents = [].obs;
 
@@ -153,7 +153,7 @@ class HomeController extends GetxController
   }
 
   void scrollToTop() {
-    scrollController.animateTo(0,
+    scrollController.value.animateTo(0,
         duration: const Duration(milliseconds: 500), curve: Curves.linear);
   }
 

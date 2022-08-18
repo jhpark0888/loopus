@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/search_api.dart';
+import 'package:loopus/app.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
@@ -28,9 +29,12 @@ import '../widget/error_reload_widget.dart';
 class SearchScreen extends StatelessWidget {
   final SearchController _searchController = Get.put(SearchController());
   final HomeController homeController = Get.find();
-
+  
   @override
   Widget build(BuildContext context) {
+    final ctx = Get.find<AppController>().searcnPageNaviationKey.currentContext;
+  final result = ctx?.dependOnInheritedWidgetOfExactType<PrimaryScrollController>();
+    _searchController.scrollcontroller = result!.controller!;
     return GestureDetector(
       onTap: () {
         _searchController.focusNode.unfocus();
@@ -108,6 +112,7 @@ class SearchScreen extends StatelessWidget {
             body: ScrollNoneffectWidget(
               child: SmartRefresher(
                 // physics: const BouncingScrollPhysics(),
+                scrollController: _searchController.scrollcontroller,
                 controller: _searchController.refreshController,
                 enablePullUp: true,
                 header: const MyCustomHeader(),

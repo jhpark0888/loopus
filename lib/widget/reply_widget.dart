@@ -67,7 +67,7 @@ class ReplyWidget extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      calculateDate(reply.date),
+                      commentCalculateDate(reply.date),
                       style: kmain.copyWith(color: maingray),
                     ),
                     const SizedBox(

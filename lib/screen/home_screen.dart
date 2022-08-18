@@ -32,19 +32,21 @@ class HomeScreen extends StatelessWidget {
   final SearchController _searchController = Get.put(SearchController());
   final ProfileController _profileController = Get.put(ProfileController());
   
+  
 
 
 
   @override
   Widget build(BuildContext context) {
+    _homeController.scrollController = PrimaryScrollController.of(context)!.obs;
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 58,
           elevation: 0,
           titleSpacing: 20,
           title: GestureDetector(
-            onTap: () {
-              _homeController.scrollController.animateTo(0,
+            onTap: () async{
+             _homeController.scrollController.value.animateTo(0,
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.linear);
             },
@@ -159,7 +161,7 @@ class HomeScreen extends StatelessWidget {
             child: SmartRefresher(
               primary: false,
               physics: const BouncingScrollPhysics(),
-              scrollController: _homeController.scrollController,
+              scrollController: _homeController.scrollController.value,
               controller: _homeController.postingRefreshController,
               enablePullDown: (_homeController.isPostingLoading.value == true)
                   ? false
