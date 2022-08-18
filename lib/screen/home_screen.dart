@@ -45,7 +45,8 @@ class HomeScreen extends StatelessWidget {
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.linear);
             },
-            child: SvgPicture.asset(
+            child: 
+            SvgPicture.asset(
               'assets/icons/home_logo_letter.svg',
             ),
           ),

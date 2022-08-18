@@ -240,19 +240,10 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
         ),
       ),
       backgroundColor: mainWhite,
-      body: Container(
-        width: Get.width,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/illustrations/splash_image.png",
-              fit: BoxFit.contain,
-              width: Get.width / 2,
-            ),
-          ],
+      body: Center(
+        child: Container(
+          width: Get.width / 2,
+          child: Image.asset('assets/illustrations/splash_image.png'),
         ),
       ),
     );
