@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:loopus/model/user_model.dart';
 
-// abstract class PostComment {}
+abstract class PostComment {}
 
-class Comment {
+class Comment implements PostComment {
   Comment({
     required this.id,
     required this.content,
@@ -44,7 +44,7 @@ class Comment {
           : RxInt(0));
 }
 
-class Reply {
+class Reply implements PostComment {
   Reply({
     required this.id,
     required this.commentId,

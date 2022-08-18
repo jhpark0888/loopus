@@ -1,48 +1,40 @@
-// ignore_for_file: prefer_const_constructors
 import 'dart:ui' as ui;
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
-import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
-import 'package:loopus/model/tag_model.dart';
-import 'package:loopus/screen/layout_builder.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/posting_add_link_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_textfield.dart';
+import 'package:loopus/widget/keyboard_visibility_text_widget.dart';
 import 'package:loopus/widget/no_ul_textfield_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/swiper_widget.dart';
-import 'package:loopus/widget/tag_widget.dart';
-
 import '../controller/modal_controller.dart';
 
-class PostingAddNameScreen extends StatelessWidget {
-  PostingAddNameScreen(
+class PostingAddScreen extends StatelessWidget {
+  PostingAddScreen(
       {Key? key, this.postid, required this.project_id, required this.route})
       : super(key: key);
   late PostingAddController postingAddController =
       Get.put(PostingAddController(route: route));
   TagController tagController = Get.put(TagController(tagtype: Tagtype.Posting),
       tag: Tagtype.Posting.toString());
-  KeyController keyController = Get.put(KeyController(isTextField: false.obs));
+  KeyController keyController =
+      Get.put(KeyController(isTextField: false.obs, tag: Tagtype.Posting));
   int project_id;
   int? postid;
   PostaddRoute route;
@@ -71,7 +63,6 @@ class PostingAddNameScreen extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(
                     bottom:
-                        // postingAddController.isTagClick.value ? 0 : 34,
                         34),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -181,33 +172,9 @@ class PostingAddNameScreen extends StatelessWidget {
                               return NoUlTextField(
                                 controller: postingAddController.textcontroller,
                                 obscureText: false,
-                                onChanged: (string) {
-                                  TextSpan span = TextSpan(
-                                      text: postingAddController
-                                          .textcontroller.text,
-                                      style: kmain);
-                                  TextPainter tp = TextPainter(
-                                      text: span,
-                                      textDirection: ui.TextDirection.ltr);
-                                  tp.layout(maxWidth: Get.width - 40);
-                                  int numLines = tp.computeLineMetrics().length;
-                                  postingAddController.lines.value = numLines;
-                                  if (postingAddController.lines.value == 7) {
-                                    postingAddController
-                                        .keyControllerAtive.value = true;
-                                  }
-                                },
                                 hintText: '내용을 입력해주세요',
                               );
                             }),
-                            // Obx(() => Divider(
-                            //     key: Get.put(
-                            //               KeyController(
-                            //                   tag: Tagtype.Posting, isTextField: true.obs),
-                            //               tag: postingAddController.keyControllerAtive.value
-                            //                   .toString())
-                            //           .viewKey,
-                            //     thickness: 0.5)),
                             Divider(key: keyController.viewKey, thickness: 0.5),
                             SizedBox(height: 14),
                             Text('태그', style: kmain),
@@ -225,40 +192,54 @@ class PostingAddNameScreen extends StatelessWidget {
                                         children:
                                             tagController.selectedtaglist))),
                             SizedBox(height: 28),
-                            CustomTextField(
-                              textController: tagController.tagsearchContoller,
-                              autofocus: false,
-                              hintText: '태그를 입력해주세요',
-                              validator: (_) {},
-                              obscureText: false,
-                              maxLines: 2,
-                              counterText: '',
-                              maxLength: null,
-                              textInputAction: TextInputAction.done,
-                              ontap: () async {
-                                // await Future.delayed(
-                                //     Duration(milliseconds: 400));
-                                // Scrollable.ensureVisible(
-                                //     keyController.viewKey.currentContext!,
-                                //     curve: Curves.easeOut,
-                                //     duration:
-                                //         const Duration(milliseconds: 300));
-                                postingAddController.isTagClick(true);
-                                // }
-                                // );
-                              },
-                              onfieldSubmitted: (string) {
-                                TagController controller =
-                                    Get.find<TagController>(
-                                        tag: Tagtype.Posting.toString());
-                                print(controller.searchtaglist
-                                    .where((element) => element.tag == string));
-                                // if (controller.selectedtaglist.length < 3) {
-                                if (controller.searchtaglist
-                                    .where((element) => element.tag == string)
-                                    .isNotEmpty) {
-                                  controller.selectedtaglist
-                                      .add(
+
+                            
+                              KeyboardVisibilityTextWidget(
+                                boolea: postingAddController.isTagClick,
+                                controller: postingAddController
+                                    .keyboardVisibilityController,
+                                textfield: CustomTextField(
+                                  textController:
+                                      tagController.tagsearchContoller,
+                                  autofocus: false,
+                                  hintText: '태그를 입력해주세요',
+                                  validator: (_) {},
+                                  obscureText: false,
+                                  maxLines: 2,
+                                  counterText: '',
+                                  maxLength: null,
+                                  textInputAction: TextInputAction.done,
+                                  ontap: () async {
+                                    // await Future.delayed(
+                                    //     Duration(milliseconds: 400));
+                                    // Scrollable.ensureVisible(
+                                    //     keyController.viewKey.currentContext!,
+                                    //     curve: Curves.easeOut,
+                                    //     duration:
+                                    //         const Duration(milliseconds: 300));
+
+                                    postingAddController.isTagClick(true);
+                                    if (postingAddController.getTagList.value ==
+                                        true) {
+                                      postingAddController.getTagList.value =
+                                          true;
+                                    }
+                                    // }
+                                    // );
+                                  },
+                                  onfieldSubmitted: (string) {
+                                    if(string.trim() != ''){
+                                    TagController controller =
+                                        Get.find<TagController>(
+                                            tag: Tagtype.Posting.toString());
+                                    print(controller.searchtaglist.where(
+                                        (element) => element.tag == string));
+                                    // if (controller.selectedtaglist.length < 3) {
+                                    if (controller.searchtaglist
+                                        .where(
+                                            (element) => element.tag == string)
+                                        .isNotEmpty) {
+                                      controller.selectedtaglist.add(
                                           SelectedTagWidget(
                                               id: controller.searchtaglist
                                                   .where((element) =>
@@ -269,39 +250,47 @@ class PostingAddNameScreen extends StatelessWidget {
                                               selecttagtype:
                                                   SelectTagtype.interesting,
                                               tagtype: Tagtype.Posting));
-                                  controller.tagsearchContoller.clear();
-                                  controller.searchtaglist.removeWhere(
-                                      (element) =>
-                                          element.id ==
-                                          controller.searchtaglist
-                                              .where((element) =>
-                                                  element.tag == string)
-                                              .first
-                                              .id);
-                                } else {
-                                  controller.selectedtaglist.add(
-                                      SelectedTagWidget(
-                                          id: 0,
-                                          text: string,
-                                          selecttagtype:
-                                              SelectTagtype.interesting,
-                                          tagtype: Tagtype.Posting));
-                                  controller.tagsearchContoller.clear();
-                                }
-
-                                // }
-                                //  else {
-                                //   showCustomDialog('최대 3개까지 선택할 수 있어요', 1000);
-                                // }
-                              },
+                                      controller.tagsearchContoller.clear();
+                                      controller.searchtaglist.removeWhere(
+                                          (element) =>
+                                              element.id ==
+                                              controller.searchtaglist
+                                                  .where((element) =>
+                                                      element.tag == string)
+                                                  .first
+                                                  .id);
+                                    } else {
+                                      controller.selectedtaglist.add(
+                                          SelectedTagWidget(
+                                              id: 0,
+                                              text: string,
+                                              selecttagtype:
+                                                  SelectTagtype.interesting,
+                                              tagtype: Tagtype.Posting));
+                                      controller.tagsearchContoller.clear();
+                                    }
+                                    }
+                                  },
+                                ),
+                            
                             ),
+
                             SizedBox(
                               height: 20,
                             ),
-                            Obx(() => SizedBox(
-                                child: Column(
-                                    children:
-                                        tagController.searchtaglist.value)))
+                            Obx(() => ListView.builder(
+                                padding:
+                                    EdgeInsets.only(bottom: Get.height - 44 - 129 - 400),
+                                primary: false,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) =>
+                                    tagController.searchtaglist[index],
+                                itemCount: tagController.searchtaglist.length)),
+                            if (postingAddController.getTagList.value &&
+                                tagController.searchtaglist.length != 10)
+                              SizedBox(
+                                  height: 400 -
+                                      (tagController.searchtaglist.length * 40))
                           ]),
                     )
                   ],

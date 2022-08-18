@@ -57,13 +57,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  card_swiper:
-    dependency: "direct main"
-    description:
-      name: card_swiper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.3"
   characters:
     dependency: transitive
     description:
@@ -253,6 +246,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.13"
+  extended_text:
+    dependency: "direct main"
+    description:
+      name: extended_text
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.0.0"
+  extended_text_library:
+    dependency: transitive
+    description:
+      name: extended_text_library
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -260,13 +267,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  favorite_button:
-    dependency: "direct main"
-    description:
-      name: favorite_button
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4"
   ffi:
     dependency: transitive
     description:
@@ -875,13 +875,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.3"
-  scrolls_to_top:
-    dependency: "direct main"
-    description:
-      name: scrolls_to_top
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.1"
   shared_preferences:
     dependency: transitive
     description:
@@ -1183,4 +1176,4 @@ packages:
     version: "5.3.1"
 sdks:
   dart: ">=2.16.0 <3.0.0"
-  flutter: ">=2.8.0"
+  flutter: ">=2.10.0"

@@ -33,8 +33,6 @@ class KeyController extends GetxController {
     if (isfollow == true) {
       WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
         viewBox = viewKey.currentContext!.findRenderObject() as RenderBox;
-        print(viewBox.size.height);
-        print(Get.height);
         isComplete.value = true;
       });
     }
@@ -78,10 +76,10 @@ class KeyController extends GetxController {
                     .value;
         print(offset.dy -
             Get.find<TagController>(tag: tag.toString()).textfieldOffset.value);
-        print('ㅇㄴㅇㄴ');
       }
       print(Get.find<TagController>(tag: tag.toString()).textfieldOffset.value);
       Get.find<TagController>(tag: tag.toString()).keyController.value = true;
-    } else {}
+    } else {
+    }
   }
 }

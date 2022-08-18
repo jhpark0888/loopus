@@ -153,7 +153,7 @@ class CommentWidget extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 7,
+                  height: 4,
                 ),
                 Text(
                   comment.content,

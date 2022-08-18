@@ -15,10 +15,8 @@ import 'package:loopus/utils/error_control.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PostingDetailController extends GetxController {
-  PostingDetailController({
-    required this.postid,
-    this.post,
-  });
+  PostingDetailController(
+      {required this.postid, this.post, this.autoFocus = false});
   RxBool isPostUpdateLoading = false.obs;
   RxBool isCommentLoading = false.obs;
   Rx<ScreenState> postscreenstate = ScreenState.loading.obs;
@@ -37,6 +35,9 @@ class PostingDetailController extends GetxController {
 
   late int lastIsLiked;
   late int lastIsMarked;
+
+  GlobalKey commentListKey = GlobalKey();
+  bool autoFocus;
 
   @override
   void onInit() async {
@@ -83,6 +84,17 @@ class PostingDetailController extends GetxController {
     });
 
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    if (autoFocus) {
+      Scrollable.ensureVisible(commentListKey.currentContext!,
+          curve: Curves.ease, duration: const Duration(milliseconds: 500));
+    }
+
+    super.onReady();
   }
 
   void tagdelete() {

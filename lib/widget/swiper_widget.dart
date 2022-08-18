@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'dart:ui' as ui;
+
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 enum SwiperType { image, link, file }
 
@@ -317,15 +318,16 @@ class SwiperWidget extends StatelessWidget {
         if (items.length > 1)
           Column(
             children: [
-              PageIndicator(
-                size: 7,
-                activeSize: 7,
-                space: 7,
-                color: maingray,
-                activeColor: mainblue,
-                count: items.length,
+              SmoothPageIndicator(
                 controller: _pageController,
-                layout: PageIndicatorLayout.SLIDE,
+                count: items.length,
+                effect: ScrollingDotsEffect(
+                  dotColor: maingray,
+                  activeDotColor: mainblue,
+                  spacing: 7,
+                  dotWidth: 7,
+                  dotHeight: 7,
+                ),
               ),
               const SizedBox(
                 height: 14,

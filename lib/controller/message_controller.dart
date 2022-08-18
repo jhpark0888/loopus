@@ -31,10 +31,12 @@ class MessageController extends GetxController {
     print('$userId 유저아이디가 이거입니다');
 
     await SQLController.to.getDBMessageRoom().then((value) async {
-      List<ChatRoom> temp = value;
-      await getDBUserInfo(temp);
-      await addList(temp);
-      await sortList();
+      if (value.isNotEmpty) {
+        List<ChatRoom> temp = value;
+        await getDBUserInfo(temp);
+        await addList(temp);
+        await sortList();
+      }
       chatroomscreenstate.value = ScreenState.success;
     });
     getChatroomlist(int.parse(userId!)).then((chatroom) async {
@@ -88,7 +90,8 @@ class MessageController extends GetxController {
                         .where((messageRoom) =>
                             messageRoom.chatRoom.value.user == user.userid)
                         .first
-                        .user.refresh();
+                        .user
+                        .refresh();
                   } else {
                     chattingRoomList.add(MessageRoomWidget(
                         chatRoom: element.obs, user: user.obs));

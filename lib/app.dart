@@ -1,4 +1,5 @@
-import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -47,80 +48,63 @@ class App extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: Obx(
-          () => SafeArea(
-            child: Container(
-              height: IosDeviceInfo == true ? 56 : 48,
-              decoration: BoxDecoration(
-                // borderRadius: const BorderRadius.only(
-                //   topRight: Radius.circular(20),
-                //   topLeft: Radius.circular(20),
-                // ),
-                boxShadow: [
-                  BoxShadow(
-                    color: mainblack.withOpacity(0.1),
-                    blurRadius: 1,
-                    offset: const Offset(
-                      0.0,
-                      -1.0,
-                    ),
+          () => Container(
+            height: Platform.isAndroid ? 56 : 48,
+            decoration: BoxDecoration(
+              // borderRadius: const BorderRadius.only(
+              //   topRight: Radius.circular(20),
+              //   topLeft: Radius.circular(20),
+              // ),
+              boxShadow: [
+                BoxShadow(
+                  color: mainblack.withOpacity(0.1),
+                  blurRadius: 1,
+                  offset: const Offset(
+                    0.0,
+                    -1.0,
+                  ),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              clipBehavior: Clip.hardEdge,
+              // borderRadius: const BorderRadius.only(
+              //   topLeft: Radius.circular(20),
+              //   topRight: Radius.circular(20),
+              //   bottomLeft: Radius.circular(0),
+              //   bottomRight: Radius.circular(0),
+              // ),
+              child: Wrap(
+                children: [
+                  BottomNavigationBar(
+                    backgroundColor: mainWhite,
+                    selectedFontSize: 0,
+                    unselectedFontSize: 0,
+                    type: BottomNavigationBarType.fixed,
+                    currentIndex: controller.currentIndex.value,
+                    showSelectedLabels: false,
+                    showUnselectedLabels: false,
+                    enableFeedback: false,
+                    onTap: controller.changeBottomNav,
+                    items: [
+                      BottomNavigationBarItem(
+                          tooltip: '',
+                          icon: SvgPicture.asset(
+                              "assets/icons/home_inactive.svg"),
+                          activeIcon:
+                              SvgPicture.asset("assets/icons/home_active.svg"),
+                          label: "홈"),
+                      BottomNavigationBarItem(
+                        tooltip: '',
+                        icon: SvgPicture.asset(
+                            "assets/icons/career_inactive.svg"),
+                        activeIcon:
+                            SvgPicture.asset("assets/icons/career_active.svg"),
+                        label: "커리어 보드",
+                      ),
+                    ],
                   ),
                 ],
-              ),
-              child: ClipRRect(
-                clipBehavior: Clip.hardEdge,
-                // borderRadius: const BorderRadius.only(
-                //   topLeft: Radius.circular(20),
-                //   topRight: Radius.circular(20),
-                //   bottomLeft: Radius.circular(0),
-                //   bottomRight: Radius.circular(0),
-                // ),
-                child: BottomNavigationBar(
-                  backgroundColor: mainWhite,
-                  type: BottomNavigationBarType.fixed,
-                  currentIndex: controller.currentIndex.value,
-                  showSelectedLabels: false,
-                  showUnselectedLabels: false,
-                  enableFeedback: false,
-                  onTap: controller.changeBottomNav,
-                  items: [
-                    BottomNavigationBarItem(
-                        tooltip: '',
-                        icon:
-                            SvgPicture.asset("assets/icons/home_inactive.svg"),
-                        activeIcon:
-                            SvgPicture.asset("assets/icons/home_active.svg"),
-                        label: "홈"),
-                    BottomNavigationBarItem(
-                        tooltip: '',
-                        icon: SvgPicture.asset(
-                            "assets/icons/search_inactive.svg"),
-                        activeIcon:
-                            SvgPicture.asset("assets/icons/search_active.svg"),
-                        label: "검색"),
-                    BottomNavigationBarItem(
-                        tooltip: '',
-                        icon: SvgPicture.asset(
-                          "assets/icons/home_add.svg",
-                        ),
-                        label: "추가"),
-                    BottomNavigationBarItem(
-                        tooltip: '',
-                        icon: SvgPicture.asset(
-                          "assets/icons/scout_inactive.svg",
-                        ),
-                        activeIcon:
-                            SvgPicture.asset("assets/icons/scout_active.svg"),
-                        label: "스카우트 리포트"),
-                    BottomNavigationBarItem(
-                      tooltip: '',
-                      icon:
-                          SvgPicture.asset("assets/icons/career_inactive.svg"),
-                      activeIcon:
-                          SvgPicture.asset("assets/icons/career_active.svg"),
-                      label: "커리어 보드",
-                    ),
-                  ],
-                ),
               ),
             ),
           ),

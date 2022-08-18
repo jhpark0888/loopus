@@ -27,8 +27,9 @@ class NotificationScreen extends StatelessWidget {
           title: '알림',
           actions: [
             Center(
-                child: Row(
-                    children: [SvgPicture.asset('assets/icons/appbar_more_option.svg')]))
+                child: Row(children: [
+              SvgPicture.asset('assets/icons/appbar_more_option.svg')
+            ]))
           ],
         ),
         body: Obx(() => SmartRefresher(
@@ -126,7 +127,7 @@ class NotificationScreen extends StatelessWidget {
                         controller.followreqRefresh();
                       })
                     : controller.notificationscreenstate.value ==
-                            ScreenState.disconnect
+                            ScreenState.error
                         ? ErrorReloadWidget(reload: () {
                             controller.followreqRefresh();
                           })

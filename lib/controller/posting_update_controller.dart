@@ -21,7 +21,7 @@ class PostingUpdateController extends GetxController {
   RxBool isPostingTitleEmpty = true.obs;
   RxBool isPostingContentEmpty = true.obs;
   RxBool isTagClick = false.obs;
-  RxBool keyControllerAtive = false.obs;
+
   Post post;
 
   @override

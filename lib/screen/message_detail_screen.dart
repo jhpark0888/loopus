@@ -254,6 +254,7 @@ class MessageDetatilScreen extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+                dragStartBehavior: DragStartBehavior.start,
                 focusNode: controller.focusNode,
                 keyboardType: TextInputType.multiline,
                 controller: controller.sendText,
@@ -285,13 +286,7 @@ class MessageDetatilScreen extends StatelessWidget {
           GestureDetector(
               onTap: () async {
                 if (controller.sendText.text.isNotEmpty) {
-                  if (controller.hasInternet.value == true) {
-                    controller.channel.sink.add(jsonEncode({
-                      'content': controller.sendText.text,
-                      'type': 'msg',
-                      'name': myProfile.realName
-                    }));
-                  }
+                  await sendMessage();
                   controller.messageList.insert(
                       0,
                       Chat(
@@ -312,5 +307,15 @@ class MessageDetatilScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future sendMessage() async {
+    if (controller.hasInternet.value == true) {
+      controller.channel.sink.add(jsonEncode({
+        'content': controller.sendText.text,
+        'type': 'msg',
+        'name': myProfile.realName
+      }));
+    }
   }
 }

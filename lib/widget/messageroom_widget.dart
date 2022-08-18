@@ -15,7 +15,6 @@ import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/screen/before_message_detail_screen.dart';
-import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class MessageRoomWidget extends StatelessWidget {

@@ -52,7 +52,8 @@ Future<HTTPResponse> addposting(int projectId, double aspectRatio) async {
       print(multipartFile.filename);
       print(request.files);
     }
-    request.fields['contents'] = postingAddController.textcontroller.text;
+    request.fields['contents'] =
+        postingAddController.textcontroller.text.trim();
     for (var tag in tagController.selectedtaglist) {
       var multipartFile = await http.MultipartFile.fromString('tag', tag.text);
       request.files.add(multipartFile);
@@ -61,6 +62,8 @@ Future<HTTPResponse> addposting(int projectId, double aspectRatio) async {
       var multipartFile = await http.MultipartFile.fromString('link', link.url);
       request.files.add(multipartFile);
     }
+    // print("emoji: ${request.fields['contents']}");
+    // return HTTPResponse.networkError();
 
     try {
       http.StreamedResponse response = await request.send();

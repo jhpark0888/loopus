@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/utils/custom_crop.dart';
@@ -15,6 +17,8 @@ class PostingAddController extends GetxController {
   TextEditingController textcontroller = TextEditingController();
   TextEditingController tagcontroller = TextEditingController();
   TextEditingController linkcontroller = TextEditingController();
+  KeyboardVisibilityController keyboardVisibilityController =
+      KeyboardVisibilityController();
   RxBool isPostingUploading = false.obs;
   RxBool isAddLink = false.obs;
   RxBool isAddImage = false.obs;
@@ -25,12 +29,13 @@ class PostingAddController extends GetxController {
   RxBool isPostingContentEmpty = true.obs;
   RxBool isLinkTextEmpty = true.obs;
   RxBool isTagClick = false.obs;
-  RxBool isFirst = false.obs;
-  RxBool keyControllerAtive = false.obs;
+  RxBool keyboardActive = false.obs;
+  RxBool getTagList = false.obs;
   PostaddRoute route;
   KeyController keyController = Get.put(KeyController(isTextField: false.obs));
   void onInit() {
     textcontroller.addListener(() {
+      print(textcontroller.text.runes.length);
       if (textcontroller.text.trim().isEmpty) {
         isPostingTitleEmpty.value = true;
       } else {
@@ -44,17 +49,37 @@ class PostingAddController extends GetxController {
         isLinkTextEmpty.value = false;
       }
     });
+
+    keyboardVisibilityController.onChange.listen(((event) async {
+      keyboardActive.value = event;
+    }));
+
     isTagClick.listen((p0) async {
       if (p0 == true) {
+        if (getTagList.value) {
+          await Future.delayed(const Duration(milliseconds: 300));
+          if (keyboardActive.value) {
+            Scrollable.ensureVisible(keyController.viewKey.currentContext!,
+                    curve: Curves.easeOut,
+                    duration: const Duration(milliseconds: 200))
+                .then((value)async{Future.delayed(const Duration(milliseconds: 100)); isTagClick.value = false;});
+          }
+        }
+      }
 
-          await Future.delayed(const Duration(milliseconds: 200));
+    });
+
+    getTagList.listen(((p0) async {
+      if (p0) {
+        if (isTagClick.value && keyboardActive.value) {
+          await Future.delayed(const Duration(microseconds: 100));
           Scrollable.ensureVisible(keyController.viewKey.currentContext!,
                   curve: Curves.easeOut,
-                  duration: const Duration(milliseconds: 300))
+                  duration: const Duration(milliseconds: 200))
               .then((value) => isTagClick.value = false);
-        
+        }
       }
-    });
+    }));
     _loadPhotos();
     super.onInit();
   }

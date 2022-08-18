@@ -125,6 +125,10 @@ class SignupUserInfoScreen extends StatelessWidget {
                             _signupController.admissioncontroller.text =
                                 (year - (50 - (index + 1))).toString();
                             Get.back();
+                          },
+                          onSelectedItemChanged: (index) {
+                            _signupController.admissioncontroller.text =
+                                (year - (50 - (index + 1))).toString();
                           });
                     },
                     label: "입학 연도",

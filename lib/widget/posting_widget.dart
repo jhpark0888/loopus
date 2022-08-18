@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:card_swiper/card_swiper.dart';
+import 'package:extended_text/extended_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
@@ -16,7 +17,7 @@ import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/divide_widget.dart';
-import 'package:loopus/widget/overflow_text_widget.dart';
+import 'package:loopus/trash_bin/overflow_text_widget.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/widget/Link_widget.dart';
@@ -125,17 +126,30 @@ class PostingWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Obx(
-                      () => type == PostingWidgetType.detail
-                          ? Text(item.content.value, style: kmainheight)
-                          : ExpandableText(
-                              textSpan: TextSpan(
-                                  text: item.content.value, style: kmainheight),
-                              moreSpan: TextSpan(
-                                  text: ' ...더보기',
-                                  style: kmainheight.copyWith(color: maingray)),
-                              maxLines: 3),
-                    ),
+                    Obx(() => type == PostingWidgetType.detail
+                            ? Text(item.content.value, style: kmainheight)
+                            : ExtendedText(
+                                item.content.value,
+                                overflowWidget: TextOverflowWidget(
+                                  position: TextOverflowPosition.end,
+                                  align: TextOverflowAlign.center,
+                                  child: Text(
+                                    '...더보기',
+                                    style:
+                                        kmainheight.copyWith(color: maingray),
+                                  ),
+                                ),
+                                style: kmainheight,
+                                maxLines: 3,
+                              )
+                        // ExpandableText(
+                        //     textSpan: TextSpan(
+                        //         text: item.content.value, style: kmainheight),
+                        //     moreSpan: TextSpan(
+                        //         text: ' ...더보기',
+                        //         style: kmainheight.copyWith(color: maingray)),
+                        //     maxLines: 3),
+                        ),
                     if (item.tags.isNotEmpty)
                       Column(children: [
                         const SizedBox(
@@ -258,7 +272,7 @@ class PostingWidget extends StatelessWidget {
     );
   }
 
-  void tapPosting({bool? autoFocus}) {
+  void tapPosting({bool autoFocus = false}) {
     Get.to(
         () => PostingScreen(
               post: item,

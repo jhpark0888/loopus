@@ -73,8 +73,8 @@ class NotificationWidget extends StatelessWidget {
                           text: notification.user.realName, style: kmainbold),
                       TextSpan(
                         text: "님이 회원님을 팔로우합니다.",
-                        style: kmainheight.copyWith(
-                            fontWeight: FontWeight.w400),
+                        style:
+                            kmainheight.copyWith(fontWeight: FontWeight.w400),
                       ),
                       TextSpan(
                         text:
@@ -137,8 +137,8 @@ class NotificationWidget extends StatelessWidget {
                           style: kmainbold),
                       TextSpan(
                         text: "님이 ",
-                        style: kmainheight.copyWith(
-                            fontWeight: FontWeight.w400),
+                        style:
+                            kmainheight.copyWith(fontWeight: FontWeight.w400),
                       ),
                       // TextSpan(
                       //     text: notification.content,
@@ -158,15 +158,14 @@ class NotificationWidget extends StatelessWidget {
                                                 NotificationType.comment
                                             ? "회원님의 포스트에 댓글을 남겼습니다."
                                             : "회원님의 댓글에 답변을 남겼습니다.",
-                        style: kmainheight.copyWith(
-                            fontWeight: FontWeight.w400),
+                        style:
+                            kmainheight.copyWith(fontWeight: FontWeight.w400),
                       ),
                       TextSpan(
                           text: ' · ${alarmDurationCaculate(
                             startDate: notification.date,
                           )}',
-                          style: kmainheight.copyWith(
-                              color: maingray))
+                          style: kmainheight.copyWith(color: maingray))
                     ])),
                   ),
                 ],
@@ -227,6 +226,8 @@ class NotificationWidget extends StatelessWidget {
           userid: notification.targetId, realname: notification.user.realName));
     } else if (notification.type.name.contains('comment') ||
         notification.type.name.contains('reply')) {
+      //다른 화면으로 이동함
+      //서버에서 잘못 주는 듯
       Get.to(() => PostingScreen(
             postid: notification.contents!.postId,
             post: null,
