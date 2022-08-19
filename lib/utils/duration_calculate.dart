@@ -116,8 +116,9 @@ String notiDurationCaculate({
 // }
 
 String calculateDate(DateTime date) {
+  final currentDateTime = DateTime.now();
   LocalDateTime compareDate = LocalDateTime.dateTime(date);
-  LocalDateTime currentDate = LocalDateTime.now();
+  LocalDateTime currentDate = LocalDateTime.dateTime(currentDateTime);
   Period diff = currentDate.periodSince(compareDate);
 
   if (diff.years >= 1) {
@@ -148,10 +149,13 @@ String calculateDate(DateTime date) {
 }
 
 String commentCalculateDate(DateTime date) {
+  final currentDateTime = DateTime.now();
   LocalDateTime compareDate = LocalDateTime.dateTime(date);
-  LocalDateTime currentDate = LocalDateTime.now();
+  LocalDateTime currentDate = LocalDateTime.dateTime(currentDateTime);
   Period diff = currentDate.periodSince(compareDate);
-
+  print('현재시각${currentDate}');
+  print('비교시간${LocalDateTime.dateTime(date)}');
+  print("years: ${diff.years}; months: ${diff.months}; days: ${diff.days}; hours: ${diff.hours}; minutes: ${diff.minutes}; seconds: ${diff.seconds}, weeks: ${diff.weeks}");
   if (diff.years >= 1) {
     return DateFormat('YYYY.MM.dd').format(date);
   } else {
