@@ -48,7 +48,6 @@ class MessageDetailController extends GetxController
       if (refreshEnablePullUp.value == true) {
         if (listViewController.position.pixels ==
             listViewController.position.maxScrollExtent) {
-          print('실행되었습니다.');
           onLoading();
         }
       }
@@ -60,6 +59,7 @@ class MessageDetailController extends GetxController
 
     print('${myId}자기아이디입니다.');
     connection.listen((p0) {
+      //인터넷 연결 상태 확인
       if (p0 == false) {
         channel.sink.close();
         print('웹소켓 연결이 해제되었습니다.');
@@ -72,6 +72,7 @@ class MessageDetailController extends GetxController
               'id': '$myId'
             },
             pingInterval: const Duration(seconds: 1));
+        print(myId);
         channel.stream.listen((event) {
           print(event);
           messageTypeCheck(jsonDecode(event));
@@ -185,10 +186,6 @@ class MessageDetailController extends GetxController
               ? messageList.last.messageId ?? lastid.value
               : lastid.value;
           screenState.value = ScreenState.success;
-          // await Future.delayed(const Duration(milliseconds: 10));
-          // scrollController.jumpTo(scrollController.position.maxScrollExtent);
-          // scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 100), curve: Curves.easeIn);
-          // itemcontroller.jumpTo(index: messageList.length - 1);
         } else {
           print('상대가 접속함');
           changeReadMessage(roomid, null);
@@ -240,11 +237,13 @@ class MessageDetailController extends GetxController
             element.chatRoom.value.message.refresh();
             element.chatRoom.refresh();
           });
-          await Future.delayed(const Duration(milliseconds: 100));
+          await Future.delayed(const Duration(milliseconds: 300));
           MessageController.to.searchRoomList.refresh();
-          if (listViewController.position.pixels <= 200) {
-            listViewController
-                .jumpTo(listViewController.position.minScrollExtent);
+          if (json['sender'] != myId) {
+            if (listViewController.position.pixels <= 300) {
+              listViewController
+                  .jumpTo(listViewController.position.minScrollExtent);
+            }
           }
         }
         break;
@@ -255,6 +254,9 @@ class MessageDetailController extends GetxController
             SQLController.to.insertmessage(Chat.fromJson(element));
             messageList.insert(0, Chat.fromJson(element));
           });
+          await Future.delayed(const Duration(milliseconds: 300));
+          listViewController
+              .jumpTo(listViewController.position.minScrollExtent);
           print('저장완료');
         }
         break;

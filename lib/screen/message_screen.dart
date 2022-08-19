@@ -10,6 +10,7 @@ import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
+import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/no_ul_textfield_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_text_field_widget.dart';
@@ -31,7 +32,13 @@ class MessageScreen extends StatelessWidget {
           ),
           bottomBorder: false,
           title: '메시지',
-          actions: [GestureDetector(onTap: (){Get.to(()=> DatabaseList());},child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))],
+          actions: [
+            GestureDetector(
+                onTap: () {
+                  Get.to(() => DatabaseList());
+                },
+                child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))
+          ],
         ),
         // body: Obx(
         //   () => messageController.chatroomscreenstate.value ==
@@ -73,79 +80,69 @@ class MessageScreen extends StatelessWidget {
         //                           children: messageController.chattingroomlist))
         //                   : SafeArea(
         // child:
-        body: Obx(
-          () => messageController.chatroomscreenstate.value == ScreenState.success
-              ? Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                          height: 36,
-                          child: SearchTextFieldWidget(
-                            ontap: () {},
-                            hinttext: '검색',
-                            readonly: false,
-                            controller: messageController.searchName,
-                            onchanged: (name) {
-                              if (name.trim() != '') {
-                                messageController.searchRoomList.value =
-                                    messageController.chattingRoomList
-                                        .where((chattingRoom) => chattingRoom
-                                            .user.value.realName
-                                            .contains(name))
-                                        .toList();
-                              } else {
-                                messageController.searchRoomList.value =
-                                    messageController.chattingRoomList;
-                              }
+        body: Obx(() => messageController.chatroomscreenstate.value ==
+                ScreenState.success
+            ? messageController.searchRoomList.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                            height: 36,
+                            child: SearchTextFieldWidget(
+                              ontap: () {},
+                              hinttext: '검색',
+                              readonly: false,
+                              controller: messageController.searchName,
+                              onchanged: (name) {
+                                if (name.trim() != '') {
+                                  messageController.searchRoomList.value =
+                                      messageController.chattingRoomList
+                                          .where((chattingRoom) => chattingRoom
+                                              .user.value.realName
+                                              .contains(name))
+                                          .toList();
+                                } else {
+                                  messageController.searchRoomList.value =
+                                      messageController.chattingRoomList;
+                                }
+                              },
+                            )),
+                        const SizedBox(height: 24),
+                        Expanded(
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            primary: true,
+                            physics: const ClampingScrollPhysics(),
+                            padding: const EdgeInsets.only(bottom: 24),
+                            separatorBuilder: (context, index) {
+                              return const SizedBox(height: 30);
                             },
-                          )),
-                      const SizedBox(height: 24),
-                      Expanded(
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          primary: true,
-                          physics: const ClampingScrollPhysics(),
-                          padding: const EdgeInsets.only(bottom: 24),
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(height: 30);
-                          },
-                          itemBuilder: (context, index) {
-                            return messageController.searchRoomList[index];
-                          },
-                          itemCount: messageController.searchRoomList.length,
-                          // children: messageController.cacac.map((element) => Text(element)).toList(),
+                            itemBuilder: (context, index) {
+                              return messageController.searchRoomList[index];
+                            },
+                            itemCount: messageController.searchRoomList.length,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              : Container(
-                  width: Get.width,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          // Get.to(() => WebsoketScreen(
-                          //       partnerId: 2,
-                          //       roomid: 27,
-                          //     ));
-                        },
-                        child: Text(
+                      ],
+                    ),
+                  )
+                : Container(
+                    width: Get.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
                           '메시지 목록이 비어있어요',
                           style: kmain.copyWith(
                             color: mainblack.withOpacity(0.38),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-        )
-        // ),
+                      ],
+                    ),
+                  )
+            : const Center(child: LoadingWidget()))
         );
-    // ));
   }
 }

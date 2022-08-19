@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:loopus/constant.dart';
@@ -11,21 +12,22 @@ import 'package:sqflite/sqflite.dart';
 class SQLController extends GetxController {
   static SQLController get to => Get.find();
   Database? database;
-
+  String? myId;
   @override
   void onInit() async {
     // TODO: implement onInit
-    database = await opendb();
+    myId = await const FlutterSecureStorage().read(key: "id");
+    database = await opendb(myId!);
 
     super.onInit();
   }
 
-  Future<Database> opendb() async {
+  Future<Database> opendb(String myId) async {
     if (database != null) return database!;
     return openDatabase(
       // 데이터베이스 경로를 지정합니다. 참고: `path` 패키지의 `join` 함수를 사용하는 것이
       // 각 플랫폼 별로 경로가 제대로 생성됐는지 보장할 수 있는 가장 좋은 방법입니다.
-      join(await getDatabasesPath(), 'MY_database.db'),
+      join(await getDatabasesPath(), 'MY_database$myId.db'),
       onCreate: (db, version) {
         db.execute(
           "CREATE TABLE user(user_id INTEGER PRIMARY KEY, real_name TEXT, profile_image TEXT)",
