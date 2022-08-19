@@ -1,14 +1,13 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/share_intent_controller.dart';
 import 'package:loopus/model/project_model.dart';
 
 class SelectProjectController extends GetxController {
   // SelectProjectController(this.projectid);
   static SelectProjectController get to => Get.find();
   RxBool isSelectProjectLoading = false.obs;
-
-  List<Project> projectlist = <Project>[].obs;
 
   RxList<Project> selectprojectlist = <Project>[].obs;
 
@@ -33,5 +32,14 @@ class SelectProjectController extends GetxController {
   void onInit() {
     loadProjectList();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    if (Get.isRegistered<ShareIntentController>()) {
+      Get.delete<ShareIntentController>();
+    }
+    // TODO: implement onClose
+    super.onClose();
   }
 }

@@ -10,6 +10,7 @@ import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
+import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/news_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/Link_widget.dart';
@@ -31,9 +32,6 @@ class HomeScreen extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
   final SearchController _searchController = Get.put(SearchController());
   final ProfileController _profileController = Get.put(ProfileController());
-  
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +46,7 @@ class HomeScreen extends StatelessWidget {
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.linear);
             },
-            child: 
-            SvgPicture.asset(
+            child: SvgPicture.asset(
               'assets/icons/home_logo_letter.svg',
             ),
           ),
@@ -129,7 +126,6 @@ class HomeScreen extends StatelessWidget {
               child: GestureDetector(
                 onTap: () async {
                   Get.to(() => MyProfileScreen());
-
                 }
                 // Get.to(() => DatabaseList())
 
@@ -155,130 +151,140 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         body: Obx(
-          () => ScrollNoneffectWidget(
-            child: SmartRefresher(
-              primary: false,
-              physics: const BouncingScrollPhysics(),
-              scrollController: _homeController.scrollController,
-              controller: _homeController.postingRefreshController,
-              enablePullDown: (_homeController.isPostingLoading.value == true)
-                  ? false
-                  : true,
-              enablePullUp: (_homeController.isPostingLoading.value == true)
-                  ? false
-                  : _homeController.enablePostingPullup.value,
-              header: const MyCustomHeader(),
-              footer: const MyCustomFooter(),
-              onRefresh: _homeController.onPostingRefresh,
-              onLoading: _homeController.onPostingLoading,
-              child: SingleChildScrollView(
-                  primary: false,
-                  child: Column(
-                    children: [
-                      _homeController.recommendCareer != null
-                          ? GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                Get.to(() => PostingAddScreen(
-                                    project_id:
-                                        _homeController.recommendCareer!.id,
-                                    route: PostaddRoute.project));
-                              },
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                      height: 14,
+          () => _homeController.isHomeLoading.value
+              ? const Center(child: LoadingWidget())
+              : ScrollNoneffectWidget(
+                  child: SmartRefresher(
+                    primary: false,
+                    physics: const BouncingScrollPhysics(),
+                    scrollController: _homeController.scrollController,
+                    controller: _homeController.postingRefreshController,
+                    enablePullDown:
+                        (_homeController.isHomeLoading.value == true)
+                            ? false
+                            : true,
+                    enablePullUp: (_homeController.isHomeLoading.value == true)
+                        ? false
+                        : _homeController.enablePostingPullup.value,
+                    header: const MyCustomHeader(),
+                    footer: const MyCustomFooter(),
+                    onRefresh: _homeController.onPostingRefresh,
+                    onLoading: _homeController.onPostingLoading,
+                    child: SingleChildScrollView(
+                        primary: false,
+                        child: Column(
+                          children: [
+                            _homeController.recommendCareer != null
+                                ? GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () {
+                                      Get.to(() => PostingAddScreen(
+                                          project_id: _homeController
+                                              .recommendCareer!.id,
+                                          route: PostaddRoute.project));
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(
+                                            height: 14,
+                                          ),
+                                          Text(
+                                            '\'${_homeController.recommendCareer!.careerName}\'\n커리어엔 최근 어떤 일이 있었나요?',
+                                            style: kmainheight,
+                                          ),
+                                          const SizedBox(
+                                            height: 14,
+                                          ),
+                                          Text(
+                                            '포스트를 바로 작성해 보세요',
+                                            style:
+                                                kmain.copyWith(color: maingray),
+                                          ),
+                                          const SizedBox(
+                                            height: 7,
+                                          ),
+                                          Divider(
+                                              thickness: 1, color: maingray),
+                                        ],
+                                      ),
                                     ),
-                                    Text(
-                                      '\'${_homeController.recommendCareer!.careerName}\'\n커리어엔 최근 어떤 일이 있었나요?',
-                                      style: kmainheight,
+                                  )
+                                : GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () {
+                                      Get.to(() => ProjectAddTitleScreen(
+                                            screenType: Screentype.add,
+                                          ));
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(
+                                            height: 14,
+                                          ),
+                                          const Text(
+                                            '지금 커리어를 만들고 새로운 포스트를 기록해보세요!',
+                                            style: kmainheight,
+                                          ),
+                                          const SizedBox(
+                                            height: 14,
+                                          ),
+                                          Text(
+                                            '커리어를 바로 작성해 보세요',
+                                            style:
+                                                kmain.copyWith(color: maingray),
+                                          ),
+                                          const SizedBox(
+                                            height: 7,
+                                          ),
+                                          Divider(
+                                              thickness: 1, color: maingray),
+                                        ],
+                                      ),
                                     ),
-                                    const SizedBox(
-                                      height: 14,
-                                    ),
-                                    Text(
-                                      '포스트를 바로 작성해 보세요',
-                                      style: kmain.copyWith(color: maingray),
-                                    ),
-                                    const SizedBox(
-                                      height: 7,
-                                    ),
-                                    Divider(thickness: 1, color: maingray),
-                                  ],
-                                ),
-                              ),
-                            )
-                          : GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                Get.to(() => ProjectAddTitleScreen(
-                                      screenType: Screentype.add,
-                                    ));
-                              },
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                      height: 14,
-                                    ),
-                                    const Text(
-                                      '지금 커리어를 만들고 새로운 포스트를 기록해보세요!',
-                                      style: kmainheight,
-                                    ),
-                                    const SizedBox(
-                                      height: 14,
-                                    ),
-                                    Text(
-                                      '커리어를 바로 작성해 보세요',
-                                      style: kmain.copyWith(color: maingray),
-                                    ),
-                                    const SizedBox(
-                                      height: 7,
-                                    ),
-                                    Divider(thickness: 1, color: maingray),
-                                  ],
-                                ),
+                                  ),
+                            Obx(
+                              () => ListView.separated(
+                                primary: false,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                itemBuilder: (context, index) {
+                                  if (_homeController.contents[index] is Post) {
+                                    return PostingWidget(
+                                      item: _homeController.contents[index],
+                                      type: PostingWidgetType.normal,
+                                    );
+                                  } else if (_homeController.contents[index]
+                                      is RxList<String>) {
+                                    return NewsListWidget(
+                                        newslist:
+                                            _homeController.contents[index]);
+                                  } else {
+                                    return const Text(
+                                      '에러',
+                                      style: kmainbold,
+                                    );
+                                  }
+                                },
+                                separatorBuilder: (context, index) {
+                                  return DivideWidget();
+                                },
+                                itemCount: _homeController.contents.length,
                               ),
                             ),
-                      Obx(
-                        () => ListView.separated(
-                          primary: false,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            if (_homeController.contents[index] is Post) {
-                              return PostingWidget(
-                                item: _homeController.contents[index],
-                                type: PostingWidgetType.normal,
-                              );
-                            } else if (_homeController.contents[index]
-                                is RxList<String>) {
-                              return NewsListWidget(
-                                  newslist: _homeController.contents[index]);
-                            } else {
-                              return const Text(
-                                '에러',
-                                style: kmainbold,
-                              );
-                            }
-                          },
-                          separatorBuilder: (context, index) {
-                            return DivideWidget();
-                          },
-                          itemCount: _homeController.contents.length,
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
-          ),
+                          ],
+                        )),
+                  ),
+                ),
         ));
   }
 
