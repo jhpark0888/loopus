@@ -146,14 +146,14 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
       ),
     );
   }
+}
 
-  String changeUrl(String url) {
-    if (url.contains('https')) {
-      return url;
-    } else if (url.contains('http')) {
-      return url.replaceAll('http', 'https');
-    } else {
-      return 'https://' + url;
-    }
+String changeUrl(String url) {
+  if (url.contains('https')) {
+    return url;
+  } else if (url.contains('http')) {
+    return url.replaceAll('http', 'https');
+  } else {
+    return 'https://' + url;
   }
 }

@@ -18,13 +18,10 @@ import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/firebase_options.dart';
-import 'package:loopus/screen/select_project_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // await Firebase.initializeApp(
@@ -124,7 +121,9 @@ class MyApp extends StatelessWidget {
         Locale('ko'),
       ],
       navigatorObservers: [_gaController.getAnalyticsObserver()],
-      home: WelcomeScreen(token: token),
+      home:
+          // token == null ? StartScreen() : App()
+          WelcomeScreen(token: token),
       locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
       title: "루프어스",
@@ -161,56 +160,22 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
   String? token;
   _WelcomeScreenStete({this.token});
 
-  StreamSubscription? _dataStreamSubscription;
-
-  String _sharedUrl = "";
-
   @override
   void initState() {
     super.initState();
-    _dataStreamSubscription =
-        ReceiveSharingIntent.getTextStream().listen((String text) {
-      _sharedUrl = text;
-      Get.to(SelectProjectScreen());
-    });
-
-    //Receive text data when app is closed
-    ReceiveSharingIntent.getInitialText().then((String? text) {
-      if (text != null) {
-        _sharedUrl = text;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder:
-                token == null ? (context) => StartScreen() : (context) => App(),
-            //     (context) => ProjectAddTitleScreen(
-            //   screenType: Screentype.add,
-            // ),
-          ),
-        );
-        if (token != null) {
-          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-            Get.to(SelectProjectScreen());
-          });
-        }
-      }
-    });
-
-    if (_sharedUrl == "") {
-      Future.delayed(
-        const Duration(seconds: 1),
-        () => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder:
-                token == null ? (context) => StartScreen() : (context) => App(),
-            //     (context) => ProjectAddTitleScreen(
-            //   screenType: Screentype.add,
-            // ),
-          ),
+    Future.delayed(
+      const Duration(seconds: 1),
+      () => Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder:
+              token == null ? (context) => StartScreen() : (context) => App(),
+          //     (context) => ProjectAddTitleScreen(
+          //   screenType: Screentype.add,
+          // ),
         ),
-      );
-    }
+      ),
+    );
   }
 
   // Future logAppOpen() async {

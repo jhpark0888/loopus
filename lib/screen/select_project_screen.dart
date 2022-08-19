@@ -27,58 +27,55 @@ class SelectProjectScreen extends StatelessWidget {
         title: '커리어 선택',
         bottomBorder: false,
       ),
-      body: ScrollNoneffectWidget(
-        child: SingleChildScrollView(
-          child: Obx(
-            () => Padding(
-                padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (controller.selectprojectlist.value.isNotEmpty)
-                      Text(
-                        '포스트를 작성할 커리어를 선택해주세요',
-                        style: kmain.copyWith(color: maingray),
-                        textAlign: TextAlign.center,
-                      ),
-                    if (controller.selectprojectlist.isNotEmpty)
-                      SizedBox(
-                        height: 24,
-                      ),
-                    if (controller.selectprojectlist.value.isNotEmpty)
-                      ListView.separated(
-                        primary: false,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return ProjectWidget(
-                              project: controller.selectprojectlist[index].obs,
-                              type: ProjectWidgetType.addposting);
-                        },
-                        itemCount: controller.selectprojectlist.length,
-                        separatorBuilder: (context, index) {
-                          return Divider(thickness: 0.5, color: dividegray);
-                        },
-                      ),
-                    Divider(thickness: 0.5, color: dividegray),
-                    const SizedBox(height: 24),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(() =>
-                            ProjectAddTitleScreen(screenType: Screentype.add));
+      body: SingleChildScrollView(
+        child: Obx(
+          () => Padding(
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (controller.selectprojectlist.value.isNotEmpty)
+                    Text(
+                      '포스트를 작성할 커리어를 선택해주세요',
+                      style: kmain.copyWith(color: maingray),
+                      textAlign: TextAlign.center,
+                    ),
+                  if (controller.selectprojectlist.isNotEmpty)
+                    SizedBox(
+                      height: 24,
+                    ),
+                  if (controller.selectprojectlist.value.isNotEmpty)
+                    ListView.separated(
+                      primary: false,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return ProjectWidget(
+                            project: controller.selectprojectlist[index].obs,
+                            type: ProjectWidgetType.addposting);
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset('assets/icons/career_add.svg'),
-                          const SizedBox(width: 14),
-                          Text('커리어 추가하기',
-                              style: kmain.copyWith(color: mainblue))
-                        ],
-                      ),
-                    )
-                  ],
-                )),
-          ),
+                      itemCount: controller.selectprojectlist.length,
+                      separatorBuilder: (context, index) {
+                        return Divider(thickness: 0.5, color: dividegray);
+                      },
+                    ),
+                  Divider(thickness: 0.5, color: dividegray),
+                  const SizedBox(height: 24),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() =>
+                          ProjectAddTitleScreen(screenType: Screentype.add));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset('assets/icons/career_add.svg'),
+                        const SizedBox(width: 14),
+                        Text('커리어 추가하기', style: kmain.copyWith(color: mainblue))
+                      ],
+                    ),
+                  )
+                ],
+              )),
         ),
       ),
     );

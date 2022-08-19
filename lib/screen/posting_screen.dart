@@ -301,25 +301,31 @@ class PostingScreen extends StatelessWidget {
                                                       if (value.isError ==
                                                           false) {
                                                         Get.back();
-                                                        Project project =
-                                                            ProfileController.to
-                                                                .myProjectList
-                                                                .where((career) =>
-                                                                    career.id ==
-                                                                    controller
-                                                                        .post!
-                                                                        .value
-                                                                        .project!
-                                                                        .id)
-                                                                .first;
-                                                        project.posts
-                                                            .removeWhere(
-                                                                (post) =>
-                                                                    post.id ==
-                                                                    controller
-                                                                        .post!
-                                                                        .value
-                                                                        .id);
+                                                        if (Get.isRegistered<
+                                                            ProfileController>()) {
+                                                          Project project =
+                                                              ProfileController
+                                                                  .to
+                                                                  .myProjectList
+                                                                  .where((career) =>
+                                                                      career
+                                                                          .id ==
+                                                                      controller
+                                                                          .post!
+                                                                          .value
+                                                                          .project!
+                                                                          .id)
+                                                                  .first;
+                                                          project.posts
+                                                              .removeWhere(
+                                                                  (post) =>
+                                                                      post.id ==
+                                                                      controller
+                                                                          .post!
+                                                                          .value
+                                                                          .id);
+                                                        }
+
                                                         showCustomDialog(
                                                             "포스팅이 삭제되었습니다",
                                                             1400);

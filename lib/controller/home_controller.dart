@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,6 +16,7 @@ import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/controller/share_intent_controller.dart';
 import 'package:loopus/model/contact_model.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
@@ -21,9 +24,11 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/select_project_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -46,7 +51,7 @@ class HomeController extends GetxController
   RxBool bookmark = false.obs;
   RxBool isPostingEmpty = false.obs;
 
-  RxBool isPostingLoading = true.obs;
+  RxBool isHomeLoading = true.obs;
 
   RxBool enablePostingPullup = true.obs;
 
@@ -62,6 +67,8 @@ class HomeController extends GetxController
   Rx<User> myProfile = User.defaultuser().obs;
 
   RxInt enterMessageRoom = 0.obs;
+
+  StreamSubscription? _dataStreamSubscription;
 
   late String? myId;
   @override
@@ -85,6 +92,20 @@ class HomeController extends GetxController
             print(value.data);
           }
         });
+      }
+    });
+
+    _dataStreamSubscription =
+        ReceiveSharingIntent.getTextStream().listen((String text) {
+      Get.put(ShareIntentController()).shareText = text;
+      Get.to(() => SelectProjectScreen());
+    });
+
+    //Receive text data when app is closed
+    ReceiveSharingIntent.getInitialText().then((String? text) {
+      if (text != null) {
+        Get.put(ShareIntentController()).shareText = text;
+        Get.to(() => SelectProjectScreen());
       }
     });
 
@@ -132,7 +153,7 @@ class HomeController extends GetxController
         contentsArrange();
       } else {}
 
-      isPostingLoading(false);
+      isHomeLoading(false);
     });
   }
 

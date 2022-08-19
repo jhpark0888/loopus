@@ -35,7 +35,7 @@ class MessageScreen extends StatelessWidget {
           actions: [
             GestureDetector(
                 onTap: () {
-                  Get.to(() => DatabaseList());
+                  // Get.to(() => DatabaseList());
                 },
                 child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))
           ],
