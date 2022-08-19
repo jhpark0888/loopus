@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
@@ -118,10 +119,10 @@ class UserInfoScreen extends StatelessWidget {
                     deleteDatabase(join(await getDatabasesPath(),
                         'MY_database${HomeController.to.myProfile.value.userid}.db'));
                     deleteDatabase(join(await getDatabasesPath(),
-                        'MY_database.db'));    
+                        'MY_database.db')).then((value) => showBottomSnackbar('삭제되었어요'));    
                     Future.delayed(const Duration(milliseconds: 300));
-                    showBottomSnackbar('삭제되었어요');
                     Get.back();
+                    
                   },
                   rightText: '초기화',
                   leftText: '취소');
