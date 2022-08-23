@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -76,56 +75,54 @@ class App extends StatelessWidget {
                 //   bottomLeft: Radius.circular(0),
                 //   bottomRight: Radius.circular(0),
                 // ),
-                child: Wrap(
-                  children: [BottomNavigationBar(
-                    backgroundColor: mainWhite,
-                    type: BottomNavigationBarType.fixed,
-                    currentIndex: controller.currentIndex.value,
-                    showSelectedLabels: false,
-                    showUnselectedLabels: false,
-                    enableFeedback: false,
-                    onTap: controller.changeBottomNav,
-                    items: [
-                      BottomNavigationBarItem(
-                          tooltip: '',
-                          icon:
-                              SvgPicture.asset("assets/icons/home_inactive.svg"),
-                          activeIcon:
-                              SvgPicture.asset("assets/icons/home_active.svg"),
-                          label: "홈"),
-                      BottomNavigationBarItem(
-                          tooltip: '',
-                          icon: SvgPicture.asset(
-                              "assets/icons/search_inactive.svg"),
-                          activeIcon:
-                              SvgPicture.asset("assets/icons/search_active.svg"),
-                          label: "검색"),
-                      BottomNavigationBarItem(
-                          tooltip: '',
-                          icon: Center(
-                            child: SvgPicture.asset(
-                              "assets/icons/home_add.svg",
-                            ),
-                          ),
-                          label: "추가"),
-                      BottomNavigationBarItem(
-                          tooltip: '',
-                          icon: SvgPicture.asset(
-                            "assets/icons/scout_inactive.svg",
-                          ),
-                          activeIcon:
-                              SvgPicture.asset("assets/icons/scout_active.svg"),
-                          label: "스카우트 리포트"),
-                      BottomNavigationBarItem(
+                child: BottomNavigationBar(
+                  backgroundColor: mainWhite,
+                  selectedFontSize: 0,
+                  unselectedFontSize: 0,
+                  type: BottomNavigationBarType.fixed,
+                  currentIndex: controller.currentIndex.value,
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
+                  enableFeedback: false,
+                  onTap: controller.changeBottomNav,
+                  items: [
+                    BottomNavigationBarItem(
                         tooltip: '',
                         icon:
-                            SvgPicture.asset("assets/icons/career_inactive.svg"),
+                            SvgPicture.asset("assets/icons/home_inactive.svg"),
                         activeIcon:
-                            SvgPicture.asset("assets/icons/career_active.svg"),
-                        label: "커리어 보드",
-                      ),
-                    ],
-                  )]
+                            SvgPicture.asset("assets/icons/home_active.svg"),
+                        label: "홈"),
+                    BottomNavigationBarItem(
+                        tooltip: '',
+                        icon: SvgPicture.asset(
+                            "assets/icons/search_inactive.svg"),
+                        activeIcon:
+                            SvgPicture.asset("assets/icons/search_active.svg"),
+                        label: "검색"),
+                    BottomNavigationBarItem(
+                        tooltip: '',
+                        icon: SvgPicture.asset(
+                          "assets/icons/home_add.svg",
+                        ),
+                        label: "추가"),
+                    BottomNavigationBarItem(
+                        tooltip: '',
+                        icon: SvgPicture.asset(
+                          "assets/icons/scout_inactive.svg",
+                        ),
+                        activeIcon:
+                            SvgPicture.asset("assets/icons/scout_active.svg"),
+                        label: "스카우트 리포트"),
+                    BottomNavigationBarItem(
+                      tooltip: '',
+                      icon:
+                          SvgPicture.asset("assets/icons/career_inactive.svg"),
+                      activeIcon:
+                          SvgPicture.asset("assets/icons/career_active.svg"),
+                      label: "커리어 보드",
+                    ),
+                  ],
                 ),
               ),
             ),

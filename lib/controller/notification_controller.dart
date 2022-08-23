@@ -417,7 +417,8 @@ class NotificationController extends GetxController {
       sound: true,
       badge: true,
       alert: true,
-      provisional: false,
+      criticalAlert: true,
+      provisional: true,
       announcement: true,
     );
 

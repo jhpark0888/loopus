@@ -29,11 +29,12 @@ import '../widget/error_reload_widget.dart';
 class SearchScreen extends StatelessWidget {
   final SearchController _searchController = Get.put(SearchController());
   final HomeController homeController = Get.find();
-  
+
   @override
   Widget build(BuildContext context) {
     final ctx = Get.find<AppController>().searcnPageNaviationKey.currentContext;
-  final result = ctx?.dependOnInheritedWidgetOfExactType<PrimaryScrollController>();
+    final result =
+        ctx?.dependOnInheritedWidgetOfExactType<PrimaryScrollController>();
     _searchController.scrollcontroller = result!.controller!;
     return GestureDetector(
       onTap: () {
@@ -67,43 +68,6 @@ class SearchScreen extends StatelessWidget {
                         readonly: true,
                         controller: null,
                       ),
-                      // TextField(
-                      //     autocorrect: false,
-                      //     readOnly: true,
-                      //     onTap: () {
-                      //       Navigator.push(
-                      //           context,
-                      //           MaterialPageRoute(
-                      //               builder: (context) => SearchFocusScreen()));
-                      //     },
-                      //     style: k16Normal,
-                      //     cursorColor: mainblack,
-                      //     cursorWidth: 1.2,
-                      //     cursorRadius: Radius.circular(5.0),
-                      //     autofocus: false,
-                      //     decoration: InputDecoration(
-                      //       filled: true,
-                      //       fillColor: cardGray,
-                      //       enabledBorder: OutlineInputBorder(
-                      //           borderSide: BorderSide.none,
-                      //           borderRadius: BorderRadius.circular(8)),
-                      //       focusedBorder: OutlineInputBorder(
-                      //           borderSide: BorderSide.none,
-                      //           borderRadius: BorderRadius.circular(8)),
-                      //       contentPadding: const EdgeInsets.only(right: 24),
-                      //       isDense: true,
-                      //       hintText: "무엇을 찾으시나요?",
-                      //       hintStyle: k16Normal.copyWith(color: maingray),
-                      //       prefixIcon: Padding(
-                      //         padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
-                      //         child: SvgPicture.asset(
-                      //           "assets/icons/search_inactive.svg",
-                      //           width: 20,
-                      //           height: 20,
-                      //           color: maingray,
-                      //         ),
-                      //       ),
-                      //     )),
                     ),
                   ],
                 ),

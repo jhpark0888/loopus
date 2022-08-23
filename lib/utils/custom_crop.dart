@@ -96,7 +96,13 @@ class CustomCropState extends State<CustomCrop>
   ui.Image? _image;
   ImageStreamListener? _imageListener;
 
-  double get scale => _area.shortestSide / _scale;
+  // double get scale => _area.shortestSide / _scale;
+  double get scale => _scale;
+
+  set scale(double scale) {
+    _scale = scale;
+    _handleScaleEnd(ScaleEndDetails());
+  }
 
   Rect? get area => _view.isEmpty
       ? null
@@ -106,6 +112,13 @@ class CustomCropState extends State<CustomCrop>
           _area.width * _view.width / _scale,
           _area.height * _view.height / _scale,
         );
+
+  Rect get view => _view;
+
+  set view(Rect view) {
+    _view = view;
+    _handleScaleEnd(ScaleEndDetails());
+  }
 
   bool get _isEnabled => _view.isEmpty == false && _image != null;
 

@@ -33,7 +33,6 @@ class HomeScreen extends StatelessWidget {
   final SearchController _searchController = Get.put(SearchController());
   final ProfileController _profileController = Get.put(ProfileController());
 
-
   @override
   Widget build(BuildContext context) {
     _homeController.scrollController = PrimaryScrollController.of(context)!.obs;
@@ -43,8 +42,8 @@ class HomeScreen extends StatelessWidget {
           elevation: 0,
           titleSpacing: 20,
           title: GestureDetector(
-            onTap: () async{
-             _homeController.scrollController.value.animateTo(0,
+            onTap: () async {
+              _homeController.scrollController.value.animateTo(0,
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.linear);
             },
@@ -267,9 +266,11 @@ class HomeScreen extends StatelessWidget {
                                     );
                                   } else if (_homeController.contents[index]
                                       is RxList<String>) {
-                                    return NewsListWidget(
-                                        newslist:
-                                            _homeController.contents[index]);
+                                    return Obx(
+                                      () => NewsListWidget(
+                                          newslist:
+                                              _homeController.contents[index]),
+                                    );
                                   } else {
                                     return const Text(
                                       '에러',

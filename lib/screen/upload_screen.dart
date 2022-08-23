@@ -20,7 +20,6 @@ class UploadScreen extends StatelessWidget {
 
   // UploadController controller = Get.put(UploadController());
   PostingAddController controller = Get.find();
-  ImageController imageController = Get.put(ImageController());
 
   ScrollController nestedScrollController = ScrollController();
   ScrollController scrollController = ScrollController();
@@ -259,7 +258,7 @@ class UploadScreen extends StatelessWidget {
                             },
                             behavior: HitTestBehavior.translucent,
                             child: Container(
-                              width: 93,
+                              padding: const EdgeInsets.only(left: 17),
                               height: 44,
                               child: Center(
                                 child: Row(
