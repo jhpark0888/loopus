@@ -39,7 +39,7 @@ class HomeController extends GetxController
   RxList<User> joinSenior1 = <User>[].obs;
   RxList<User> joinSenior2 = <User>[].obs;
 
-  ScrollController scrollController = ScrollController();
+  late ScrollController scrollController;
 
   RxList contents = [].obs;
 

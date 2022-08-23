@@ -46,8 +46,8 @@ class CommentWidget extends StatelessWidget {
             onTap: tapProfile,
             child: UserImageWidget(
               imageUrl: comment.user.profileImage ?? '',
-              width: 36,
-              height: 36,
+              width: 34,
+              height: 34,
             ),
           ),
           const SizedBox(
@@ -66,14 +66,25 @@ class CommentWidget extends StatelessWidget {
                         style: kmainbold,
                       ),
                     ),
+                    // const SizedBox(
+                    //   width: 4,
+                    // ),
+                    // Text(
+                    //   comment.content,
+                    //   style: kmainheight,
+                    // ),
                     const Spacer(),
                     Text(
                       calculateDate(comment.date),
-                      style: kmain.copyWith(color: maingray),
+                      style: kmain.copyWith(color: maingray, fontSize: 14),
                     ),
-                    const SizedBox(
-                      width: 7,
+                    // const SizedBox(
+                    //   width: 7,
+                    // ),
+                    SizedBox(
+                      width: 5,
                     ),
+                    // Spacer(),
                     GestureDetector(
                       onTap: comment.user.userid ==
                               HomeController.to.myProfile.value.userid
@@ -176,6 +187,7 @@ class CommentWidget extends StatelessWidget {
                         child: Text(
                           '좋아요 ${comment.likecount.value}개',
                           style: kmain.copyWith(
+                            fontSize: 12,
                             color: maingray,
                           ),
                         ),
@@ -187,9 +199,9 @@ class CommentWidget extends StatelessWidget {
                         onTap: tapLike,
                         child: comment.isLiked.value == 0
                             ? SvgPicture.asset("assets/icons/unlike.svg",
-                                width: 16, height: 16)
+                                width: 11, height: 11)
                             : SvgPicture.asset("assets/icons/like.svg",
-                                width: 16, height: 16),
+                                width: 11, height: 11),
                       ),
                       const SizedBox(
                         width: 14,
@@ -213,7 +225,7 @@ class CommentWidget extends StatelessWidget {
                               curve: Curves.ease);
                         },
                         child: SvgPicture.asset("assets/icons/reply.svg",
-                            width: 16, height: 16),
+                            width: 11, height: 11),
                       ),
                     ],
                   ),
@@ -289,15 +301,15 @@ class PostCommentWidget extends StatelessWidget {
                       itemCount: comment.replyList.length),
                   if (comment.replycount.value - comment.replyList.length > 0)
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(64, 14, 20, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 14, 94, 0),
                       child: GestureDetector(
                         onTap: () async {
                           await replyListLoad();
                         },
                         child: Text(
-                          "${comment.replycount.value - comment.replyList.length}개 답글 더 보기",
-                          style: kmainbold,
-                        ),
+                            " - 이후 ${comment.replycount.value - comment.replyList.length}개 답글 보기",
+                            style:
+                                kmain.copyWith(color: maingray, fontSize: 14)),
                       ),
                     )
                 ],

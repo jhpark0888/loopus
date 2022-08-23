@@ -31,6 +31,10 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ctx = Get.find<AppController>().searcnPageNaviationKey.currentContext;
+    final result =
+        ctx?.dependOnInheritedWidgetOfExactType<PrimaryScrollController>();
+    _searchController.scrollcontroller = result?.controller;
     return GestureDetector(
       onTap: () {
         _searchController.focusNode.unfocus();
@@ -107,6 +111,8 @@ class SearchScreen extends StatelessWidget {
             ),
             body: ScrollNoneffectWidget(
               child: SmartRefresher(
+                scrollController: _searchController.scrollcontroller,
+                primary: false,
                 // physics: const BouncingScrollPhysics(),
                 controller: _searchController.refreshController,
                 enablePullUp: true,
@@ -115,6 +121,7 @@ class SearchScreen extends StatelessWidget {
                 onRefresh: _searchController.onRefresh,
                 onLoading: _searchController.onLoading,
                 child: SingleChildScrollView(
+                  primary: false,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -135,7 +142,7 @@ class SearchScreen extends StatelessWidget {
                           height: 105,
                           child: Center(
                             child: Text(
-                              "준비중입니다",
+                              "준비 중입니다",
                               style: kmain.copyWith(color: maingray),
                             ),
                           )

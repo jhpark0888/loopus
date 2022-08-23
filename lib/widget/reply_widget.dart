@@ -37,7 +37,7 @@ class ReplyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 64, right: 20),
+      padding: const EdgeInsets.only(left: 58, right: 20),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,8 +45,8 @@ class ReplyWidget extends StatelessWidget {
             onTap: tapProfile,
             child: UserImageWidget(
               imageUrl: reply.user.profileImage ?? '',
-              width: 35,
-              height: 35,
+              width: 29,
+              height: 29,
             ),
           ),
           const SizedBox(
@@ -65,13 +65,38 @@ class ReplyWidget extends StatelessWidget {
                         style: kmainbold,
                       ),
                     ),
+                    // const Spacer(),
+                    // RichText(
+                    //     text: TextSpan(children: [
+                    //   TextSpan(
+                    //     recognizer: TapGestureRecognizer()
+                    //       ..onTap = () {
+                    //         Get.to(
+                    //             () => OtherProfileScreen(
+                    //                 user: reply.taggedUser,
+                    //                 userid: reply.taggedUser.userid,
+                    //                 realname: reply.taggedUser.realName),
+                    //             preventDuplicates: false);
+                    //       },
+                    //     text: ' @${reply.taggedUser.realName}',
+                    //     style: kmainbold.copyWith(
+                    //         height: 1.5,
+                    //         color: mainblue,
+                    //         fontSize: 14,
+                    //         fontWeight: FontWeight.w400),
+                    //   ),
+                    //   TextSpan(
+                    //     text: reply.content,
+                    //     style: kmainheight,
+                    //   )
+                    // ])),
                     const Spacer(),
                     Text(
                       calculateDate(reply.date),
-                      style: kmain.copyWith(color: maingray),
+                      style: kmain.copyWith(color: maingray, fontSize: 14),
                     ),
                     const SizedBox(
-                      width: 7,
+                      width: 4,
                     ),
                     GestureDetector(
                       onTap: reply.user.userid ==
@@ -174,8 +199,12 @@ class ReplyWidget extends StatelessWidget {
                                 realname: reply.taggedUser.realName),
                             preventDuplicates: false);
                       },
-                    text: reply.taggedUser.realName,
-                    style: kmainbold.copyWith(height: 1.5),
+                    text: '@${reply.taggedUser.realName}',
+                    style: kmainbold.copyWith(
+                        height: 1.5,
+                        color: Color.fromARGB(255, 71, 155, 224),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400),
                   ),
                   TextSpan(
                     text: reply.content,
@@ -200,6 +229,7 @@ class ReplyWidget extends StatelessWidget {
                           '좋아요 ${reply.likecount.value}개',
                           style: kmain.copyWith(
                             color: maingray,
+                            fontSize: 12,
                           ),
                         ),
                       ),
@@ -210,9 +240,9 @@ class ReplyWidget extends StatelessWidget {
                         onTap: tapLike,
                         child: reply.isLiked.value == 0
                             ? SvgPicture.asset("assets/icons/unlike.svg",
-                                width: 16, height: 16)
+                                width: 11, height: 11)
                             : SvgPicture.asset("assets/icons/like.svg",
-                                width: 16, height: 16),
+                                width: 11, height: 11),
                       ),
                       const SizedBox(
                         width: 14,
@@ -236,7 +266,7 @@ class ReplyWidget extends StatelessWidget {
                               curve: Curves.ease);
                         },
                         child: SvgPicture.asset("assets/icons/reply.svg",
-                            height: 16, width: 16),
+                            height: 11, width: 11),
                       ),
                     ],
                   ),

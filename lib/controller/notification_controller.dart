@@ -175,15 +175,15 @@ class NotificationController extends GetxController {
                       tag: HomeController.to.enterMessageRoom.value
                           .toString())) {
                     Get.delete<MessageDetailController>(
-                        tag: HomeController.to.enterMessageRoom.value
-                            .toString()).then((value) =>  Get.off(
-                        () => MessageDetatilScreen(
-                              partner: user.data[0],
-                              myProfile: HomeController.to.myProfile.value,
-                              enterRoute: EnterRoute.popUp,
-                            ),
-                        preventDuplicates: false));
-                   
+                            tag: HomeController.to.enterMessageRoom.value
+                                .toString())
+                        .then((value) => Get.off(
+                            () => MessageDetatilScreen(
+                                  partner: user.data[0],
+                                  myProfile: HomeController.to.myProfile.value,
+                                  enterRoute: EnterRoute.popUp,
+                                ),
+                            preventDuplicates: false));
                   } else {
                     Get.to(
                         () => MessageDetatilScreen(
@@ -228,7 +228,7 @@ class NotificationController extends GetxController {
                     roomid: chat.roomId!, chatRoom: chatRoom.toJson())
                 .then((value) async {
               if (value == false) {
-                await getUserProfile([chatRoom.user]).then((value) async{
+                await getUserProfile([chatRoom.user]).then((value) async {
                   if (value.isError == false) {
                     await SQLController.to.insertUser(value.data[0]);
                     MessageController.to.searchRoomList.add(MessageRoomWidget(
@@ -425,7 +425,7 @@ class NotificationController extends GetxController {
       try {
         if (Platform.isIOS) {
           await messaging.setForegroundNotificationPresentationOptions(
-            alert: false, // Required to display a heads up notification
+            alert: true, // Required to display a heads up notification
             badge: false,
             sound: false,
           );

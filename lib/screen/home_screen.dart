@@ -7,7 +7,7 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
-import 'package:loopus/screen/project_add_title_screen.dart';
+// import 'package:loopus/screen/post_add_test.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/news_widget.dart';
@@ -31,12 +31,10 @@ class HomeScreen extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
   final SearchController _searchController = Get.put(SearchController());
   final ProfileController _profileController = Get.put(ProfileController());
-  
-
-
 
   @override
   Widget build(BuildContext context) {
+    _homeController.scrollController = PrimaryScrollController.of(context)!;
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 58,
@@ -44,12 +42,11 @@ class HomeScreen extends StatelessWidget {
           titleSpacing: 20,
           title: GestureDetector(
             onTap: () {
-              _homeController.scrollController.animateTo(0,
+              PrimaryScrollController.of(context)!.animateTo(0,
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.linear);
             },
-            child: 
-            SvgPicture.asset(
+            child: SvgPicture.asset(
               'assets/icons/home_logo_letter.svg',
             ),
           ),
@@ -129,7 +126,8 @@ class HomeScreen extends StatelessWidget {
               child: GestureDetector(
                 onTap: () async {
                   Get.to(() => MyProfileScreen());
-
+                  // deleteDatabase(
+                  //     join(await getDatabasesPath(), 'MY_database.db'));
                 }
                 // Get.to(() => DatabaseList())
 
@@ -157,9 +155,8 @@ class HomeScreen extends StatelessWidget {
         body: Obx(
           () => ScrollNoneffectWidget(
             child: SmartRefresher(
-              primary: false,
               physics: const BouncingScrollPhysics(),
-              scrollController: _homeController.scrollController,
+              scrollController: PrimaryScrollController.of(context),
               controller: _homeController.postingRefreshController,
               enablePullDown: (_homeController.isPostingLoading.value == true)
                   ? false
@@ -212,41 +209,7 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ),
                             )
-                          : GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                Get.to(() => ProjectAddTitleScreen(
-                                      screenType: Screentype.add,
-                                    ));
-                              },
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                      height: 14,
-                                    ),
-                                    const Text(
-                                      '지금 커리어를 만들고 새로운 포스트를 기록해보세요!',
-                                      style: kmainheight,
-                                    ),
-                                    const SizedBox(
-                                      height: 14,
-                                    ),
-                                    Text(
-                                      '커리어를 바로 작성해 보세요',
-                                      style: kmain.copyWith(color: maingray),
-                                    ),
-                                    const SizedBox(
-                                      height: 7,
-                                    ),
-                                    Divider(thickness: 1, color: maingray),
-                                  ],
-                                ),
-                              ),
-                            ),
+                          : Container(),
                       Obx(
                         () => ListView.separated(
                           primary: false,
@@ -259,7 +222,7 @@ class HomeScreen extends StatelessWidget {
                                 type: PostingWidgetType.normal,
                               );
                             } else if (_homeController.contents[index]
-                                is RxList<String>) {
+                                is List<String>) {
                               return NewsListWidget(
                                   newslist: _homeController.contents[index]);
                             } else {
