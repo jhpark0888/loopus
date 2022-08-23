@@ -117,10 +117,10 @@ class UserInfoScreen extends StatelessWidget {
                   rightFunction: () async {
                     deleteDatabase(join(await getDatabasesPath(),
                         'MY_database${HomeController.to.myProfile.value.userid}.db'));
-                    deleteDatabase(join(await getDatabasesPath(),
-                        'MY_database.db'));    
+                    deleteDatabase(
+                            join(await getDatabasesPath(), 'MY_database.db'))
+                        .then((value) => showBottomSnackbar('삭제되었어요'));
                     Future.delayed(const Duration(milliseconds: 300));
-                    showBottomSnackbar('삭제되었어요');
                     Get.back();
                   },
                   rightText: '초기화',

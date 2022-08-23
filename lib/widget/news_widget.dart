@@ -8,124 +8,286 @@ import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/screen/webview_screen.dart';
 import 'package:loopus/utils/custom_linkpreview.dart';
+import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 
-class NewsWidget extends StatefulWidget {
-  NewsWidget({
-    Key? key,
-    required this.url,
-  }) : super(key: key);
-  WebInfo? info;
+// class NewsWidget extends StatefulWidget {
+//   NewsWidget({
+//     Key? key,
+//     required this.url,
+//   }) : super(key: key);
+//   WebInfo? info;
+//   String url;
+
+//   @override
+//   State<NewsWidget> createState() => _NewsWidgetState();
+// }
+
+// class _NewsWidgetState extends State<NewsWidget>
+//     with AutomaticKeepAliveClientMixin<NewsWidget> {
+//   /// Description of the page.
+//   late String description;
+
+//   /// Domain name of the link.
+//   late String domain;
+
+//   /// Favicon of the page.
+//   late String icon;
+
+//   /// Image URL, if present any in the link.
+//   late String image;
+
+//   /// Title of the page.
+//   late String title;
+
+//   /// Link preview type of the rule used for scrapping the link.
+//   /// Returns [LinkPreviewType.error] if the scrapping is failed.
+//   late LinkPreviewType type;
+
+//   /// Video URL, if present any in the link.
+//   late String video;
+
+//   bool loading = true;
+
+//   @override
+//   void initState() {
+//     geturlinfo();
+//     super.initState();
+//   }
+
+//   @override
+//   // TODO: implement wantKeepAlive
+//   bool get wantKeepAlive => true;
+
+//   Future geturlinfo() async {
+//     final WebInfo info = await CustomLinkPreview.scrapeFromURL(widget.url);
+//     description = info.description;
+//     domain = info.domain;
+//     icon = info.icon;
+//     image = info.image;
+//     title = info.title;
+//     type = info.type;
+//     video = info.video;
+//     if (mounted) {
+//       setState(() {
+//         loading = false;
+//       });
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     if (loading) {
+//       return const SizedBox(width: 252, child: LoadingWidget());
+//     } else {
+//       // if (type != LinkPreviewType.error) {
+//       return InkWell(
+//         onTap: () {
+//           Get.to(() => WebViewScreen(url: widget.url));
+//         },
+//         splashColor: kSplashColor,
+//         child: SizedBox(
+//           width: 252,
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               image != ''
+//                   ? CachedNetworkImage(
+//                       imageUrl: image,
+//                       height: 150,
+//                       width: 252,
+//                       fit: BoxFit.cover,
+//                     )
+//                   : Container(
+//                       height: 150,
+//                       width: 252,
+//                       color: cardGray,
+//                     ),
+//               const SizedBox(
+//                 height: 14,
+//               ),
+//               Text(
+//                 title,
+//                 style: kmain.copyWith(height: 1.5),
+//                 maxLines: 2,
+//                 overflow: TextOverflow.ellipsis,
+//               ),
+//             ],
+//           ),
+//         ),
+//       );
+//       // } else {
+//       //   return SizedBox(
+//       //     width: 252,
+//       //     child: Center(
+//       //         child: Text(
+//       //       '존재하지 않는 URL입니다',
+//       //       style: k16Normal.copyWith(height: 1.5),
+//       //     )),
+//       //   );
+//       // }
+//     }
+//   }
+// }
+
+// class NewsWidget extends StatefulWidget {
+//   NewsWidget({
+//     Key? key,
+//     required this.url,
+//   }) : super(key: key);
+//   String url;
+
+//   @override
+//   State<NewsWidget> createState() => _NewsWidgetState();
+// }
+
+// class _NewsWidgetState extends State<NewsWidget>
+//     with AutomaticKeepAliveClientMixin<NewsWidget> {
+//   /// Description of the page.
+//   late String description;
+
+//   /// Domain name of the link.
+//   late String favicon;
+
+//   /// Favicon of the page.
+//   late String icon;
+
+//   /// Image URL, if present any in the link.
+//   late String image;
+
+//   /// Title of the page.
+//   late String title;
+
+//   bool loading = true;
+
+//   @override
+//   void initState() {
+//     geturlinfo();
+//     super.initState();
+//   }
+
+//   @override
+//   // TODO: implement wantKeepAlive
+//   bool get wantKeepAlive => true;
+
+//   Future geturlinfo() async {
+//     final Map<String, String>? info =
+//         await NewsFetchPreview().fetch(widget.url);
+//     description = info != null ? info["description"] ?? "" : "";
+//     icon = info != null ? info["appleIcon"] ?? "" : "";
+//     image = info != null ? info["image"] ?? "" : "";
+//     title = info != null ? info["title"] ?? "" : "";
+//     favicon = info != null ? info["favIcon"] ?? "" : "";
+//     if (mounted) {
+//       setState(() {
+//         loading = false;
+//       });
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     if (loading) {
+//       return const SizedBox(width: 252, child: LoadingWidget());
+//     } else {
+//       // if (type != LinkPreviewType.error) {
+//       return InkWell(
+//         onTap: () {
+//           Get.to(() => WebViewScreen(url: widget.url));
+//         },
+//         splashColor: kSplashColor,
+//         child: SizedBox(
+//           width: 252,
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               image != ''
+//                   ? CachedNetworkImage(
+//                       imageUrl: image,
+//                       height: 150,
+//                       width: 252,
+//                       fit: BoxFit.cover,
+//                     )
+//                   : Container(
+//                       height: 150,
+//                       width: 252,
+//                       color: cardGray,
+//                     ),
+//               const SizedBox(
+//                 height: 14,
+//               ),
+//               Text(
+//                 title,
+//                 style: kmain.copyWith(height: 1.5),
+//                 maxLines: 2,
+//                 overflow: TextOverflow.ellipsis,
+//               ),
+//             ],
+//           ),
+//         ),
+//       );
+//       // } else {
+//       //   return SizedBox(
+//       //     width: 252,
+//       //     child: Center(
+//       //         child: Text(
+//       //       '존재하지 않는 URL입니다',
+//       //       style: k16Normal.copyWith(height: 1.5),
+//       //     )),
+//       //   );
+//       // }
+//     }
+//   }
+// }
+
+class NewsWidget extends StatelessWidget {
+  NewsWidget({Key? key, required this.url}) : super(key: key);
   String url;
 
-  @override
-  State<NewsWidget> createState() => _NewsWidgetState();
-}
-
-class _NewsWidgetState extends State<NewsWidget>
-    with AutomaticKeepAliveClientMixin<NewsWidget> {
-  /// Description of the page.
-  late String description;
-
-  /// Domain name of the link.
-  late String domain;
-
-  /// Favicon of the page.
-  late String icon;
-
-  /// Image URL, if present any in the link.
-  late String image;
-
-  /// Title of the page.
-  late String title;
-
-  /// Link preview type of the rule used for scrapping the link.
-  /// Returns [LinkPreviewType.error] if the scrapping is failed.
-  late LinkPreviewType type;
-
-  /// Video URL, if present any in the link.
-  late String video;
-
-  bool loading = true;
-
-  @override
-  void initState() {
-    geturlinfo();
-    super.initState();
-  }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
-
-  Future geturlinfo() async {
-    final WebInfo info = await CustomLinkPreview.scrapeFromURL(widget.url);
-    description = info.description;
-    domain = info.domain;
-    icon = info.icon;
-    image = info.image;
-    title = info.title;
-    type = info.type;
-    video = info.video;
-    if (mounted) {
-      setState(() {
-        loading = false;
-      });
-    }
-  }
+  late final NewsController _newsController = NewsController(url: url)
+    ..geturlinfo();
 
   @override
   Widget build(BuildContext context) {
-    if (loading) {
-      return const SizedBox(width: 252, child: LoadingWidget());
-    } else {
-      // if (type != LinkPreviewType.error) {
-      return InkWell(
-        onTap: () {
-          Get.to(() => WebViewScreen(url: widget.url));
-        },
-        splashColor: kSplashColor,
-        child: SizedBox(
-          width: 252,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              image != ''
-                  ? CachedNetworkImage(
-                      imageUrl: image,
-                      height: 150,
-                      width: 252,
-                      fit: BoxFit.cover,
-                    )
-                  : Container(
-                      height: 150,
-                      width: 252,
-                      color: cardGray,
+    return Obx(
+      () => _newsController.loading.value
+          ? const SizedBox(width: 252, child: LoadingWidget())
+          : InkWell(
+              onTap: () {
+                Get.to(() => WebViewScreen(url: url));
+              },
+              splashColor: kSplashColor,
+              child: SizedBox(
+                width: 252,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _newsController.image != ''
+                        ? CachedNetworkImage(
+                            imageUrl: _newsController.image,
+                            height: 150,
+                            width: 252,
+                            fit: BoxFit.cover,
+                          )
+                        : Container(
+                            height: 150,
+                            width: 252,
+                            color: cardGray,
+                          ),
+                    const SizedBox(
+                      height: 14,
                     ),
-              const SizedBox(
-                height: 14,
+                    Text(
+                      _newsController.title,
+                      style: kmain.copyWith(height: 1.5),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                title,
-                style: kmain.copyWith(height: 1.5),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        ),
-      );
-      // } else {
-      //   return SizedBox(
-      //     width: 252,
-      //     child: Center(
-      //         child: Text(
-      //       '존재하지 않는 URL입니다',
-      //       style: k16Normal.copyWith(height: 1.5),
-      //     )),
-      //   );
-      // }
-    }
+            ),
+    );
   }
 }
 
@@ -158,7 +320,8 @@ class NewsListWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return NewsWidget(url: newslist[index]);
+                  return Obx(() =>
+                      KeepAlivePage(child: NewsWidget(url: newslist[index])));
                 },
                 separatorBuilder: (context, index) {
                   return const SizedBox(
@@ -172,5 +335,26 @@ class NewsListWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class NewsController {
+  NewsController({required this.url});
+  late String description;
+  late String favicon;
+  late String icon;
+  late String image;
+  late String title;
+  String url;
+  RxBool loading = true.obs;
+
+  Future geturlinfo() async {
+    final Map<String, String>? info = await NewsFetchPreview().fetch(url);
+    description = info != null ? info["description"] ?? "" : "";
+    icon = info != null ? info["appleIcon"] ?? "" : "";
+    image = info != null ? info["image"] ?? "" : "";
+    title = info != null ? info["title"] ?? "" : "";
+    favicon = info != null ? info["favIcon"] ?? "" : "";
+    loading(false);
   }
 }
