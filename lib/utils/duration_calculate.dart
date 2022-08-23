@@ -28,7 +28,12 @@ String durationCaculate({
   return durationResult.value;
 }
 
-String messagedurationCaculate({
+String messageDurationCalculate(DateTime time){
+    DateFormat dateFormat = DateFormat('aa h:mm','ko');
+    return dateFormat.format(time);
+}
+
+String messageRoomDurationCalculate({
   required DateTime startDate,
   required DateTime endDate,
 }) {
@@ -153,9 +158,6 @@ String commentCalculateDate(DateTime date) {
   LocalDateTime compareDate = LocalDateTime.dateTime(date);
   LocalDateTime currentDate = LocalDateTime.dateTime(currentDateTime);
   Period diff = currentDate.periodSince(compareDate);
-  print('현재시각${currentDate}');
-  print('비교시간${LocalDateTime.dateTime(date)}');
-  print("years: ${diff.years}; months: ${diff.months}; days: ${diff.days}; hours: ${diff.hours}; minutes: ${diff.minutes}; seconds: ${diff.seconds}, weeks: ${diff.weeks}");
   if (diff.years >= 1) {
     return DateFormat('YYYY.MM.dd').format(date);
   } else {

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
@@ -108,20 +109,25 @@ class MessageScreen extends StatelessWidget {
                                 }
                               },
                             )),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 12),
                         Expanded(
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            primary: true,
-                            physics: const ClampingScrollPhysics(),
-                            padding: const EdgeInsets.only(bottom: 24),
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(height: 30);
-                            },
-                            itemBuilder: (context, index) {
-                              return messageController.searchRoomList[index];
-                            },
-                            itemCount: messageController.searchRoomList.length,
+                          child: SlidableAutoCloseBehavior(
+                            closeWhenOpened: true,
+                            closeWhenTapped: true,
+                            child: ListView.builder(
+                              shrinkWrap: false,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.only(bottom: 24),
+                              // separatorBuilder: (context, index) {
+                              //   return const SizedBox(height: 24);
+                              // },
+                              itemBuilder: (context, index) {
+                                return 
+                                     messageController
+                                        .searchRoomList[index];
+                              },
+                              itemCount: messageController.searchRoomList.length,
+                            ),
                           ),
                         ),
                       ],
@@ -142,7 +148,6 @@ class MessageScreen extends StatelessWidget {
                       ],
                     ),
                   )
-            : const Center(child: LoadingWidget()))
-        );
+            : const Center(child: LoadingWidget())));
   }
 }

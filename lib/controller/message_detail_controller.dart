@@ -106,23 +106,22 @@ class MessageDetailController extends GetxController
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (Get.isRegistered<MessageDetailController>()) {
-      switch (state) {
-        case AppLifecycleState.resumed:
-          print(state);
-          connection.value = true;
-          print('연결되었습니다.');
-          break;
-        case AppLifecycleState.inactive:
-        case AppLifecycleState.detached:
-        case AppLifecycleState.paused:
-          connection.value = false;
-          listener.cancel();
-          print(state);
-          break;
-      }
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print(state);
+        connection.value = true;
+        print('연결되었습니다.');
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.paused:
+        connection.value = false;
+        // listener.cancel();
+        print('작동완료');
+        print(state);
+        break;
     }
+    super.didChangeAppLifecycleState(state);
   }
 
   @override
@@ -132,6 +131,7 @@ class MessageDetailController extends GetxController
     print('웹소켓 연결 해제');
     messageList.clear();
     HomeController.to.enterMessageRoom.value = 0;
+    WidgetsBinding.instance!.removeObserver(this);
     super.onClose();
   }
 

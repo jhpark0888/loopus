@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/constant.dart';
@@ -48,32 +49,63 @@ class MessageRoomWidget extends StatelessWidget {
 
         HomeController.to.enterMessageRoom.value = user.value.userid;
       },
-      child: Container(
-        width: Get.width,
-        color: mainWhite,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            UserImageWidget(
-                imageUrl: user.value.profileImage ?? '', width: 36, height: 36),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(user.value.realName, style: kmainbold),
-                  const SizedBox(height: 7),
-                  Obx(
-                    () => Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        hasTextOverflow(
-                                chatRoom.value.message.value.content, kmain,
-                                maxWidth: Get.width - 190)
-                            ? SizedBox(
-                                width: Get.width - 190,
-                                child: Text(
+      child: Slidable(
+        key: ValueKey(chatRoom.value.roomId.toString()),
+        closeOnScroll: true,
+        groupTag: '1',
+        endActionPane: ActionPane(motion: const ScrollMotion(), children: [
+          SlidableAction(
+            // An action can be bigger than the others.
+            onPressed: (context) {},
+            backgroundColor: maingray,
+            foregroundColor: Colors.white,
+            label: '알림 끄기',
+          ),
+          SlidableAction(
+            onPressed: (context) {},
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            label: '나가기',
+          ),
+        ]),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          width: Get.width,
+          color: mainWhite,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              UserImageWidget(
+                  imageUrl: user.value.profileImage ?? '',
+                  width: 36,
+                  height: 36),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(user.value.realName, style: kmainbold),
+                    const SizedBox(height: 7),
+                    Obx(
+                      () => Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          hasTextOverflow(
+                                  chatRoom.value.message.value.content, kmain,
+                                  maxWidth: Get.width - 190)
+                              ? SizedBox(
+                                  width: Get.width - 190,
+                                  child: Text(
+                                    chatRoom.value.message.value.content,
+                                    style: chatRoom.value.notread.value == 0
+                                        ? kmain.copyWith(color: maingray)
+                                        : kmain.copyWith(
+                                            fontWeight: FontWeight.w500),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ))
+                              : Text(
                                   chatRoom.value.message.value.content,
                                   style: chatRoom.value.notread.value == 0
                                       ? kmain.copyWith(color: maingray)
@@ -81,38 +113,31 @@ class MessageRoomWidget extends StatelessWidget {
                                           fontWeight: FontWeight.w500),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
-                                ))
-                            : Text(
-                                chatRoom.value.message.value.content,
-                                style: chatRoom.value.notread.value == 0
-                                    ? kmain.copyWith(color: maingray)
-                                    : kmain.copyWith(
-                                        fontWeight: FontWeight.w500),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                        Text(
-                            '· ${messagedurationCaculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
-                            style: kmain.copyWith(color: maingray)),
-                      ],
+                                ),
+                          Text(
+                              '· ${messageRoomDurationCalculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
+                              style: kmain.copyWith(color: maingray)),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Obx(() {
-              if (chatRoom.value.notread.value == 0) {
-                return const SizedBox.shrink();
-              } else {
-                return Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(36), color: mainblue),
-                  width: 7,
-                  height: 7,
-                );
-              }
-            })
-          ],
+              Obx(() {
+                if (chatRoom.value.notread.value == 0) {
+                  return const SizedBox.shrink();
+                } else {
+                  return Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(36),
+                        color: mainblue),
+                    width: 7,
+                    height: 7,
+                  );
+                }
+              })
+            ],
+          ),
         ),
       ),
     );

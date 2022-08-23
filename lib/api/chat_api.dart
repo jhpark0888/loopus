@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
