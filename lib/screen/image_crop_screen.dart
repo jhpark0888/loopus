@@ -74,6 +74,7 @@ class ImageCropScreen extends StatelessWidget {
   Future<void> _cropImage(BuildContext context) async {
     final scale = cropKey.currentState!.scale;
     final area = cropKey.currentState!.area;
+    final view = cropKey.currentState!.view;
     if (area == null) {
       // cannot crop, widget is not setup
       return;
@@ -91,6 +92,11 @@ class ImageCropScreen extends StatelessWidget {
     double aspectRatio = imageOptions.width / imageOptions.height;
     print("aspectRatio : $aspectRatio");
     controller.cropAspectRatio(aspectRatio);
+    controller.cropKeyList[controller.selectedIndex.value].currentState!.scale =
+        scale;
+    controller.cropKeyList[controller.selectedIndex.value].currentState!.view =
+        view;
+
     Get.back();
   }
 }

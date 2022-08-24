@@ -464,21 +464,6 @@ class OtherProfileScreen extends StatelessWidget {
                                                           ProfileTagChangeScreen());
                                                     }
                                                   : () async {
-                                                      // MessageDetailController
-                                                      //     messagecontroller =
-                                                      //     Get.put(
-                                                      //         MessageDetailController(
-                                                      //             userid:
-                                                      //                 userid,
-                                                      //             user: _controller
-                                                      //                 .otherUser),
-                                                      //         tag: _controller
-                                                      //             .otherUser
-                                                      //             .value
-                                                      //             .userid
-                                                      //             .toString());
-                                                      // messagecontroller
-                                                      //     .firstmessagesload();
                                                       if (HomeController
                                                               .to
                                                               .enterMessageRoom

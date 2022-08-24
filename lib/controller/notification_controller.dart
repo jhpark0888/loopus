@@ -412,11 +412,13 @@ class NotificationController extends GetxController {
 
   //알림 권한 요청
   void _initNotification() async {
+    print('settings가 실행되었는지');
     NotificationSettings settings = await messaging.requestPermission(
       sound: true,
       badge: true,
       alert: true,
-      provisional: false,
+      criticalAlert: true,
+      provisional: true,
       announcement: true,
     );
 

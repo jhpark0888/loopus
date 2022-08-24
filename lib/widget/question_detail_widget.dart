@@ -74,8 +74,7 @@ class QuestionDetailWidget extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    messagedurationCaculate(
-                        startDate: question.date!, endDate: DateTime.now()),
+                    " · ${messageDurationCalculate(question.date!)}",
                     style:
                         ktempFont.copyWith(color: mainblack.withOpacity(0.6)),
                   )

@@ -92,8 +92,8 @@ class ReplyWidget extends StatelessWidget {
                     // ])),
                     const Spacer(),
                     Text(
-                      calculateDate(reply.date),
-                      style: kmain.copyWith(color: maingray, fontSize: 14),
+                      commentCalculateDate(reply.date),
+                      style: kmain.copyWith(color: maingray),
                     ),
                     const SizedBox(
                       width: 4,

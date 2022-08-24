@@ -86,8 +86,6 @@ class MessageDetatilScreen extends StatelessWidget {
             actions: [
               GestureDetector(
                 onTap: () async {
-                  // // deleteDatabase(
-                  // //                 join(await getDatabasesPath(), 'MY_database.db'));
                   showModalIOS(context, func1: () {
                     int roomId = controller.roomid;
                     if (controller.messageList.isNotEmpty) {
@@ -127,7 +125,7 @@ class MessageDetatilScreen extends StatelessWidget {
                       }
                     }
                   }, func2: () {
-                    Get.to(() => DatabaseList());
+                    Get.to(() => const DatabaseList());
                   },
                       value1: '채팅방 나가기',
                       value2: '',
@@ -168,6 +166,7 @@ class MessageDetatilScreen extends StatelessWidget {
                                       myId: controller.myId!);
                                 } else if (controller.messageList[index] ==
                                     controller.messageList.first) {
+                                      //첫번째 메세지의 경우 
                                   if (DateFormat('yyyy-MM-dd').parse(controller
                                           .messageList[index].date
                                           .toString()) !=
@@ -190,6 +189,7 @@ class MessageDetatilScreen extends StatelessWidget {
                                   }
                                 } else if (controller.messageList[index] ==
                                     controller.messageList.last) {
+                                      //마지막 메세지의 경우
                                   return MessageWidget(
                                       message: controller.messageList[index],
                                       isFirst: false.obs,
@@ -202,6 +202,7 @@ class MessageDetatilScreen extends StatelessWidget {
                                     DateFormat('yyyy-MM-dd').parse(controller
                                         .messageList[index + 1].date
                                         .toString())) {
+                                          //중간 메세지에서 날짜가 변하는 시점이 있을 경우
                                   return MessageWidget(
                                       message: controller.messageList[index],
                                       isFirst: false.obs,
@@ -209,26 +210,13 @@ class MessageDetatilScreen extends StatelessWidget {
                                       partner: partner,
                                       myId: controller.myId!);
                                 } else {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      print(controller.messageList[index] ==
-                                              controller.messageList.last ||
-                                          DateFormat('yyyy-MM-dd').parse(
-                                                  controller
-                                                      .messageList[index].date
-                                                      .toString()) !=
-                                              DateFormat('yyyy-MM-dd').parse(
-                                                  controller
-                                                      .messageList[index].date
-                                                      .toString()));
-                                    },
-                                    child: MessageWidget(
-                                        message: controller.messageList[index],
-                                        isFirst: false.obs,
-                                        isDayChange: false.obs,
-                                        partner: partner,
-                                        myId: controller.myId!),
-                                  );
+                                  //중간 메세지에서 날짜가 변하는 시점이 없는 경우
+                                  return MessageWidget(
+                                      message: controller.messageList[index],
+                                      isFirst: false.obs,
+                                      isDayChange: false.obs,
+                                      partner: partner,
+                                      myId: controller.myId!);
                                 }
                               },
                               childCount: controller.messageList.length,
@@ -301,6 +289,7 @@ class MessageDetatilScreen extends StatelessWidget {
                           roomId: controller.roomid,
                           sendsuccess: false.obs));
                   controller.sendText.clear();
+                  await Future.delayed(const Duration(milliseconds: 300));
                   controller.listViewController.jumpTo(
                       controller.listViewController.position.minScrollExtent);
                 }

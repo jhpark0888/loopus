@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/key_controller.dart';
+import 'package:loopus/controller/share_intent_controller.dart';
+import 'package:loopus/screen/posting_add_link_screen.dart';
 import 'package:loopus/utils/custom_crop.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -34,6 +36,13 @@ class PostingAddController extends GetxController {
   PostaddRoute route;
   KeyController keyController = Get.put(KeyController(isTextField: false.obs));
   void onInit() {
+    if (Get.isRegistered<ShareIntentController>()) {
+      scrapList.add(LinkWidget(
+          url: changeUrl(ShareIntentController.to.shareText),
+          widgetType: "add"));
+      isAddLink(true);
+    }
+
     textcontroller.addListener(() {
       print(textcontroller.text.runes.length);
       if (textcontroller.text.trim().isEmpty) {
@@ -62,11 +71,13 @@ class PostingAddController extends GetxController {
             Scrollable.ensureVisible(keyController.viewKey.currentContext!,
                     curve: Curves.easeOut,
                     duration: const Duration(milliseconds: 200))
-                .then((value)async{Future.delayed(const Duration(milliseconds: 100)); isTagClick.value = false;});
+                .then((value) async {
+              Future.delayed(const Duration(milliseconds: 100));
+              isTagClick.value = false;
+            });
           }
         }
       }
-
     });
 
     getTagList.listen(((p0) async {

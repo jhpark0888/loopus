@@ -17,9 +17,10 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   static SearchController get to => Get.find();
   TextEditingController searchtextcontroller = TextEditingController();
   RxString _searchword = "".obs;
-
+  ScrollController searchScrollController = ScrollController();
+  late ScrollController scrollcontroller;
   RefreshController refreshController = RefreshController();
-  late ScrollController? scrollcontroller;
+  late ScrollController? scrollController;
   int popPagenum = 1;
 
   RxList<User> recommandUsers = <User>[].obs;

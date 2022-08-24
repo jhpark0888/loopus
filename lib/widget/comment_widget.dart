@@ -75,8 +75,8 @@ class CommentWidget extends StatelessWidget {
                     // ),
                     const Spacer(),
                     Text(
-                      calculateDate(comment.date),
-                      style: kmain.copyWith(color: maingray, fontSize: 14),
+                      commentCalculateDate(comment.date),
+                      style: kmain.copyWith(color: maingray),
                     ),
                     // const SizedBox(
                     //   width: 7,

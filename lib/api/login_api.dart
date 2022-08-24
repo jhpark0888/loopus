@@ -22,7 +22,6 @@ import '../controller/ga_controller.dart';
 Future<HTTPResponse> loginRequest(String email, String pw) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     final LogInController logInController = Get.put(LogInController());

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:time_machine/time_machine.dart';
 
 String durationCaculate({
   required DateTime startDate,
@@ -27,16 +28,22 @@ String durationCaculate({
   return durationResult.value;
 }
 
-String messagedurationCaculate({
+String messageDurationCalculate(DateTime time) {
+  DateFormat dateFormat = DateFormat('aa h:mm', 'ko');
+  return dateFormat.format(time);
+}
+
+String messageRoomDurationCalculate({
   required DateTime startDate,
   required DateTime endDate,
 }) {
   RxString durationResult = ''.obs;
-  DateFormat dateFormat = DateFormat('aa h:mm','ko');
+  DateFormat dateFormat = DateFormat('aa h:mm', 'ko');
   DateFormat dateonlyFormat = DateFormat('yyyy-MM-dd');
   DateTime startDateOnlyDay = DateTime.parse(dateonlyFormat.format(startDate));
   DateTime endDateOnlyDay = DateTime.parse(dateonlyFormat.format(endDate));
-  int _dateOnlyDiffence = (endDateOnlyDay.difference(startDateOnlyDay).inDays).toInt();
+  int _dateOnlyDiffence =
+      (endDateOnlyDay.difference(startDateOnlyDay).inDays).toInt();
   int _dateDiffence = (endDate.difference(startDate).inDays).toInt();
   int _dateDiffenceHours = (endDate.difference(startDate).inHours).toInt();
   int _dateDiffenceMinutes = (endDate.difference(startDate).inMinutes).toInt();
@@ -52,7 +59,7 @@ String messagedurationCaculate({
     durationResult.value = DateFormat('MM.dd').format(startDate);
   } else if ((_dateDiffence / 30).floor() == 0) {
     durationResult.value = DateFormat('MM.dd').format(startDate);
-    if(_dateOnlyDiffence == 1){
+    if (_dateOnlyDiffence == 1) {
       durationResult.value = '어제';
     }
     // if (_dateDiffence <= 6) {
@@ -78,38 +85,102 @@ String notiDurationCaculate({
   required DateTime endDate,
 }) {
   RxString durationResult = ''.obs;
-  DateFormat dateFormat = DateFormat('aa h:mm','ko');
+  DateFormat dateFormat = DateFormat('aa h:mm', 'ko');
   DateFormat dateonlyFormat = DateFormat('yyyy-MM-dd');
   DateTime startDateOnlyDay = DateTime.parse(dateonlyFormat.format(startDate));
   DateTime endDateOnlyDay = DateTime.parse(dateonlyFormat.format(endDate));
-  int _dateOnlyDiffence = (endDateOnlyDay.difference(startDateOnlyDay).inDays).toInt();
+  int _dateOnlyDiffence =
+      (endDateOnlyDay.difference(startDateOnlyDay).inDays).toInt();
   int _dateDiffence = (endDate.difference(startDate).inDays).toInt();
 
-   if ((_dateOnlyDiffence / 30).floor() < 1) {
+  if ((_dateOnlyDiffence / 30).floor() < 1) {
     durationResult.value = '이번 달';
-    if(_dateOnlyDiffence <= 7){
+    if (_dateOnlyDiffence <= 7) {
       durationResult.value = '이번 주';
     }
-  }else if((_dateOnlyDiffence / 30).floor() >= 1){
+  } else if ((_dateOnlyDiffence / 30).floor() >= 1) {
     durationResult.value = '지난 알림';
   }
 
   return durationResult.value;
 }
 
-
+// String calculateDate(DateTime date) {
+//   if (DateTime.now().difference(date).inMinutes <= 1) {
+//     return '방금 전';
+//   } else if (DateTime.now().difference(date).inMinutes < 60) {
+//     return '${DateTime.now().difference(date).inMinutes}분 전';
+//   } else if (DateTime.now().difference(date).inHours <= 24) {
+//     return '${DateTime.now().difference(date).inHours}시간 전';
+//   } else if (DateTime.now().difference(date).inDays <= 31) {
+//     return '${DateTime.now().difference(date).inDays}일 전';
+//   } else if (DateTime.now().difference(date).inDays <= 365) {
+//     return '일 년 이내';
+//   }
+//   return '일 년 전';
+// }
 
 String calculateDate(DateTime date) {
-  if (DateTime.now().difference(date).inMilliseconds < 1000) {
-    return '방금 전';
-  } else if (DateTime.now().difference(date).inMinutes < 60) {
-    return '${DateTime.now().difference(date).inMinutes}분 전';
-  } else if (DateTime.now().difference(date).inHours <= 24) {
-    return '${DateTime.now().difference(date).inHours}시간 전';
-  } else if (DateTime.now().difference(date).inDays <= 31) {
-    return '${DateTime.now().difference(date).inDays}일 전';
-  } else if (DateTime.now().difference(date).inDays <= 365) {
-    return '일 년 이내';
+  final currentDateTime = DateTime.now();
+  LocalDateTime compareDate = LocalDateTime.dateTime(date);
+  LocalDateTime currentDate = LocalDateTime.dateTime(currentDateTime);
+  Period diff = currentDate.periodSince(compareDate);
+
+  if (diff.years >= 1) {
+    return DateFormat('YYYY.MM.dd').format(date);
+  } else {
+    if (diff.months >= 1) {
+      // return DateFormat('MM.dd').format(date);
+      return '${date.month}월 ${date.day}일';
+    } else {
+      if (diff.days > 7) {
+        // return DateFormat('MM.dd').format(date);
+        return '${date.month}월 ${date.day}일';
+      } else if (diff.days <= 7 && diff.days >= 1) {
+        return '${diff.days}일 전';
+      } else {
+        if (diff.hours >= 1) {
+          return '${diff.hours}시간 전';
+        } else {
+          if (diff.minutes > 0) {
+            return '${diff.minutes}분 전';
+          } else {
+            return '방금 전';
+          }
+        }
+      }
+    }
   }
-  return '일 년 전';
+}
+
+String commentCalculateDate(DateTime date) {
+  final currentDateTime = DateTime.now();
+  LocalDateTime compareDate = LocalDateTime.dateTime(date);
+  LocalDateTime currentDate = LocalDateTime.dateTime(currentDateTime);
+  Period diff = currentDate.periodSince(compareDate);
+  if (diff.years >= 1) {
+    return DateFormat('YYYY.MM.dd').format(date);
+  } else {
+    if (diff.months >= 1) {
+      // return DateFormat('MM.dd').format(date);
+      return '${date.day ~/ 7}주';
+    } else {
+      if (diff.days > 7) {
+        // return DateFormat('MM.dd').format(date);
+        return '${date.day ~/ 7}주';
+      } else if (diff.days <= 7 && diff.days >= 1) {
+        return '${diff.days}일';
+      } else {
+        if (diff.hours >= 1) {
+          return '${diff.hours}시간';
+        } else {
+          if (diff.minutes > 0) {
+            return '${diff.minutes}분';
+          } else {
+            return '방금';
+          }
+        }
+      }
+    }
+  }
 }

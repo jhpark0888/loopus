@@ -18,7 +18,7 @@ dependencies:
   get: ^4.6.1
   cached_network_image: ^3.1.0
   flutter_secure_storage: ^5.0.2
-  flutter_svg: ^1.0.3
+  flutter_svg: ^1.0.1
   image_picker: ^0.8.4+4
   smooth_page_indicator: ^1.0.0+2
   http: ^0.13.4
@@ -60,8 +60,10 @@ dependencies:
   flutter_list_view: ^1.1.18
   extended_text: ^9.0.0
   scrolls_to_top: ^1.1.1
-  receive_sharing_intent: ^1.4.4
-  flutter_slidable: ^1.3.2
+  receive_sharing_intent: ^1.4.2
+  time_machine: ^0.9.11
+  flutter_slidable: ^1.3.0
+  cp949_dart: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +75,17 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+
+  flutter_native_splash: ^2.1.6
+
+  flutter_launcher_icons: ^0.10.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/illustrations/logo_icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  min_sdk_android: 21 # android min sdk min:16, default 21
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

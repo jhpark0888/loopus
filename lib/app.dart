@@ -77,10 +77,10 @@ class App extends StatelessWidget {
                 // ),
                 child: BottomNavigationBar(
                   backgroundColor: mainWhite,
-                  type: BottomNavigationBarType.fixed,
-                  currentIndex: controller.currentIndex.value,
                   selectedFontSize: 0,
                   unselectedFontSize: 0,
+                  type: BottomNavigationBarType.fixed,
+                  currentIndex: controller.currentIndex.value,
                   showSelectedLabels: false,
                   showUnselectedLabels: false,
                   enableFeedback: false,
@@ -104,8 +104,6 @@ class App extends StatelessWidget {
                         tooltip: '',
                         icon: SvgPicture.asset(
                           "assets/icons/home_add.svg",
-                          width: 34,
-                          height: 34,
                         ),
                         label: "추가"),
                     BottomNavigationBarItem(

@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
@@ -12,6 +13,7 @@ import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/screen/banpeople_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
@@ -114,11 +116,12 @@ class UserInfoScreen extends StatelessWidget {
                   content: '채팅 정보가 날라가게 돼요',
                   leftFunction: () => Get.back(),
                   rightFunction: () async {
+                    deleteDatabase(join(await getDatabasesPath(),
+                        'MY_database${HomeController.to.myProfile.value.userid}.db'));
+
                     deleteDatabase(
                             join(await getDatabasesPath(), 'MY_database.db'))
-                        .then((value) {
-                      showBottomSnackbar('삭제되었어요');
-                    });
+                        .then((value) => showBottomSnackbar('삭제되었어요'));
                     Future.delayed(const Duration(milliseconds: 300));
                     Get.back();
                   },
@@ -148,6 +151,7 @@ class UserInfoScreen extends StatelessWidget {
     Get.delete<HomeController>();
     Get.delete<SearchController>();
     Get.delete<ProfileController>();
+    Get.delete<SQLController>();
     Get.offAll(() => StartScreen());
   }
 }

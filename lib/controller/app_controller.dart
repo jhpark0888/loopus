@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -12,9 +13,11 @@ import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/scroll_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/controller/share_intent_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/select_project_screen.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 enum RouteName {
   home,
@@ -36,15 +39,23 @@ class AppController extends GetxService {
   List<int> bottomHistory = [0];
   SQLController sqlcontroller = Get.put(SQLController());
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+
+    super.onInit();
+  }
+
   void changeBottomNav(int value, {bool hasGesture = true}) {
     var page = RouteName.values[value];
     switch (page) {
       case RouteName.upload:
-        Navigator.of(Get.context!).push(
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => SelectProjectScreen(),
-          ),
-        );
+        Get.to(() => SelectProjectScreen());
+        // Navigator.of(Get.context!).push(
+        //   MaterialPageRoute<void>(
+        //     builder: (BuildContext context) => SelectProjectScreen(),
+        //   ),
+        // );
         break;
       case RouteName.home:
         if (currentIndex.value == 0) {
@@ -54,7 +65,7 @@ class AppController extends GetxService {
         break;
       case RouteName.search:
         if (currentIndex.value == 1) {
-          SearchController.to.scrollcontroller!.animateTo(0,
+          SearchController.to.scrollcontroller.animateTo(0,
               duration: const Duration(milliseconds: 500),
               curve: Curves.linear);
         }

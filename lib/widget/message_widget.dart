@@ -69,7 +69,7 @@ class MessageWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(12.0, 0, 8.0, 0.0),
                         child: Text(
-                          messagedurationCaculate(startDate: message.date, endDate: DateTime.now()),
+                          messageDurationCalculate(message.date),
                           style: kcaption.copyWith(
                             color: mainblack,
                           ),
@@ -216,7 +216,7 @@ class MessageWidget extends StatelessWidget {
                                 padding: const EdgeInsets.fromLTRB(
                                     8.0, 18.0, 12.0, 0.0),
                                 child: Text(
-                                  messagedurationCaculate(startDate: message.date, endDate: DateTime.now()),
+                                  messageDurationCalculate(message.date),
                                   style: kcaption.copyWith(color: mainblack),
                                   textAlign: TextAlign.end,
                                 ),
