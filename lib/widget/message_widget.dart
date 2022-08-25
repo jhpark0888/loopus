@@ -35,7 +35,8 @@ class MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){print('isFirst $isFirst');
-            print('isLast $isDayChange');},
+            print('isLast $isDayChange');
+            print('isread ${message.isRead}');},
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -51,7 +52,7 @@ class MessageWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Obx(() => (message.sendsuccess != null)
-                          ? message.sendsuccess!.value
+                          ? message.sendsuccess!.value == 'true'
                               ? Container()
                               : const SizedBox(
                                   width: 20,

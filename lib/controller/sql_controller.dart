@@ -36,7 +36,10 @@ class SQLController extends GetxController {
           "CREATE TABLE chatroom(room_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, message Text, date Text, not_read INTEGER)",
         );
         db.execute(
-          "CREATE TABLE chatting(msg_id INTEGER PRIMARY KEY AUTOINCREMENT,type Text,sender INTEGER, date TEXT, is_read TEXT, message TEXT, room_id INTEGER)",
+          "CREATE TABLE chatting(id INTEGER PRIMARY KEY AUTOINCREMENT,msg_id INTEGER,sender INTEGER, date TEXT, is_read TEXT, message TEXT, room_id INTEGER, send_success Text)",
+        );
+        db.execute(
+          "CREATE TABLE background_chatting(id INTEGER PRIMARY KEY AUTOINCREMENT,msg_id INTEGER,sender INTEGER, date TEXT, is_read TEXT, message TEXT, room_id INTEGER, send_success Text)",
         );
       },
 
@@ -152,14 +155,14 @@ class SQLController extends GetxController {
     } else {
       List<Chat> messageList = List.generate(maps.length, (index) {
         return Chat(
+            id: maps[index]['id'],
             content: maps[index]['message'],
             date: DateTime.parse(maps[index]['date']),
             sender: maps[index]['sender'].toString(),
             isRead: maps[index]['is_read'] == 'true' ? true.obs : false.obs,
             messageId: maps[index]['msg_id'].toString(),
-            type: maps[index]['type'],
             roomId: maps[index]['room_id'],
-            sendsuccess: true.obs);
+            sendsuccess: RxString(maps[index]['send_success']));
       });
       return messageList;
     }
@@ -187,12 +190,11 @@ class SQLController extends GetxController {
             notread: RxInt(maps[index]['not_read']),
             roomId: maps[index]['room_id']);
       });
-      messageList.sort((a, b) => b
-        .message.value.date
-        .compareTo(a.message.value.date));
-        for(var i in messageList){
-          print(i.message.value.content);
-        }
+      messageList
+          .sort((a, b) => b.message.value.date.compareTo(a.message.value.date));
+      for (var i in messageList) {
+        print(i.message.value.content);
+      }
       return messageList;
     }
   }
@@ -269,8 +271,27 @@ class SQLController extends GetxController {
     }
   }
 
-  Future<void> updateUser(String image, int userId)async{
-      final Database db = await database!;
-      await db.rawUpdate('UPDATE user SET profile_image = ? WHERE user_id = ?', [image,userId]);
+  Future<void> updateUser(String image, int userId) async {
+    final Database db = await database!;
+    await db.rawUpdate(
+        'UPDATE user SET profile_image = ? WHERE user_id = ?', [image, userId]);
+  }
+
+  Future<void> updateMessage(String sendSuccess, int newMsgId, String isRead,String date,
+      int userId,int roomId, int oldMsgId) async {
+    final Database db = await database!;
+    print('$oldMsgId에서 $newMsgId로 바뀜');
+    await db.rawQuery(
+        'UPDATE chatting SET send_success = ?, msg_id = ?, is_read = ?, date = ? WHERE sender = ? and room_id = ? and msg_id = ?',
+        [sendSuccess, newMsgId, isRead,date, userId,roomId, oldMsgId]);
+  }
+
+  Future<void> insertBackmessage(Chat chat) async {
+    final Database db = await database!;
+    await db.insert(
+      'chatting',
+      chat.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 }

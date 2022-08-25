@@ -18,16 +18,19 @@ import 'package:loopus/app.dart';
 import 'package:loopus/binding/init_binding.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:loopus/utils/local_notification.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sqflite/sqflite.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-  print(message);
+  localNotificaition.sampleNotification(message.notification!.title!, message.notification!.body!);
+  SQLController controller = Get.put(SQLController());
+  print('알림 데이터 : ${message.data}');
 }
 
 void main() async {
@@ -37,7 +40,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+   await localNotificaition.initLocalNotificationPlugin();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -163,6 +166,7 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
+    localNotificaition.requestPermission();
     Future.delayed(
       const Duration(seconds: 1),
       () => Navigator.pushReplacement(

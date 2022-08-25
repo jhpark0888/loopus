@@ -30,6 +30,7 @@ class MessageDetailController extends GetxController
   RefreshController refreshController = RefreshController();
   ItemScrollController itemcontroller = ItemScrollController();
   FlutterListViewController listViewController = FlutterListViewController();
+  RxList<Chat> tempMessageList = <Chat>[].obs;
   RxList<Chat> messageList = <Chat>[].obs;
   RxList<Chat> refreshList = <Chat>[].obs;
   Rx<ScreenState> screenState = ScreenState.normal.obs;
@@ -162,26 +163,20 @@ class MessageDetailController extends GetxController
           if (messageList.isEmpty) {
             messageList.addAll(await SQLController.to
                 .getDBMessage(roomid, int.parse(lastid.value)));
-          } else {
-            for (Chat chat in messageList
-                .where((chat) => chat.sendsuccess!.value == false)
-                .toList()
-                .reversed) {
-              channel.sink.add(jsonEncode({
-                'content': chat.content,
-                'type': 'msg',
-                'name': HomeController.to.myProfile.value.realName
-              }));
-            }
           }
-          checkRoomId(roomid).then((value) {
+
+          await checkRoomId(roomid).then((value) async {
             if (value.isNotEmpty) {
-              sendLastView(int.parse(messageList.first.messageId!));
+              Chat firstMessage = messageList
+                  .firstWhere((p0) => p0.sendsuccess!.value != 'false');
+              await sendLastView(int.parse(firstMessage.messageId!));
               updateNotreadMsg();
+              mustSendMessages();
             } else {
               sendLastView(0);
             }
           });
+
           lastid.value = messageList.isNotEmpty
               ? messageList.last.messageId ?? lastid.value
               : lastid.value;
@@ -193,67 +188,43 @@ class MessageDetailController extends GetxController
         break;
       case ('msg'):
         if (json['sender'] == myId) {
-          messageList
-              .where((p0) =>
-                  p0.sendsuccess != null && p0.sendsuccess!.value == false)
-              .last
-              .isRead!
-              .value = json['is_read'];
-          messageList
-              .where((p0) =>
-                  p0.sendsuccess != null && p0.sendsuccess!.value == false)
-              .last
-              .sendsuccess!
-              .value = true;
+          Chat chat = messageList.where((p0) => p0.sendsuccess != null && p0.sendsuccess!.value == 'false').last;
+              messageList.where((p0) => p0 == chat).last.sendsuccess!.value = 'true';
+          await SQLController.to.updateMessage(
+              'true',
+              json['id'],
+              json['is_read'].toString(),
+              json['date'].toString(),
+              myId!,
+              roomid,
+              int.parse(chat
+                  .messageId!));
+          afterMustSendMessages(json, chat);
         } else {
           messageList.insert(0, Chat.fromJson(json));
+          SQLController.to.insertmessage(Chat.fromMsg(json, roomid));
         }
-        SQLController.to.insertmessage(Chat.fromMsg(json, roomid));
-
         await Future.delayed(const Duration(milliseconds: 100));
         SQLController.to
             .updateLastMessage(json['content'], json['date'], roomid);
-        if (Get.isRegistered<MessageController>()) {
-          MessageController.to.searchRoomList
-              .where((p0) => p0.chatRoom.value.roomId == roomid)
-              .first
-              .chatRoom
-              .value
-              .message
-              .value
-              .content = json['content'];
-          MessageController.to.searchRoomList
-              .where((p0) => p0.chatRoom.value.roomId == roomid)
-              .first
-              .chatRoom
-              .value
-              .message
-              .value
-              .date = DateTime.parse(json['date']);
-          MessageController.to.searchRoomList.sort((a, b) => b
-              .chatRoom.value.message.value.date
-              .compareTo(a.chatRoom.value.message.value.date));
-          MessageController.to.searchRoomList.forEach((element) {
-            element.chatRoom.value.message.refresh();
-            element.chatRoom.refresh();
-          });
-          await Future.delayed(const Duration(milliseconds: 300));
-          MessageController.to.searchRoomList.refresh();
-          if (json['sender'] != myId) {
+        await changeMessageRoomState(json['content'],DateTime.parse(json['date']));
+        if (json['sender'] != myId) {
             if (listViewController.position.pixels <= 300) {
               listViewController
                   .jumpTo(listViewController.position.minScrollExtent);
             }
           }
-        }
         break;
       case 'chat_log':
-        List<dynamic> content = json['content'];
+        List<Chat> content = List<dynamic>.from(json['content']).map((e) => Chat.fromJson(e)).toList();
         if (content.isNotEmpty) {
           content.forEach((element) {
-            SQLController.to.insertmessage(Chat.fromJson(element));
-            messageList.insert(0, Chat.fromJson(element));
+            SQLController.to.insertmessage(element);
+            messageList.insert(0,element);
           });
+          SQLController.to.updateLastMessage(content.last.content, content.last.date.toString(), roomid);
+          SQLController.to.updateNotReadCount(roomid, 0);
+          await changeMessageRoomState(content.last.content,content.last.date);
           await Future.delayed(const Duration(milliseconds: 300));
           listViewController
               .jumpTo(listViewController.position.minScrollExtent);
@@ -261,7 +232,7 @@ class MessageDetailController extends GetxController
         }
         break;
       case 'other_view':
-        if (json['content'] != null) {
+        if (json['content'] != 0) {
           changeReadMessage(roomid, json['content']);
         }
         break;
@@ -285,6 +256,8 @@ class MessageDetailController extends GetxController
       SQLController.to.database!.rawUpdate(
           'UPDATE chatting SET is_read = ? WHERE is_read = ? and room_id = ? and msg_id <= ?',
           ['true', 'false', roomid, msgid]);
+          if(messageList.where((p0) => p0.messageId == msgid.toString()).isNotEmpty){
+          messageList.where((p0) => p0.messageId == msgid.toString()).first.isRead!.value = true;}
     } else {
       SQLController.to.database!.rawUpdate(
           'UPDATE chatting SET is_read = ? WHERE is_read = ? and room_id = ?',
@@ -293,14 +266,10 @@ class MessageDetailController extends GetxController
           .where((p0) => p0.isRead!.value == false)
           .toList()
           .isNotEmpty) {
-        if (checkFirstScreenPosition().value == true) {
           messageList.first.isRead!.value = true;
-        } else {
-          messageList.last.isRead!.value = true;
-        }
       }
-      messageList.refresh();
     }
+    messageList.refresh();
     print('업데이트 성공!');
   }
 
@@ -321,5 +290,68 @@ class MessageDetailController extends GetxController
         HomeController.to.isNewMsg.value = true;
       }
     });
+  }
+
+  Future<void> mustSendMessages() async {
+    for (Chat chat in messageList
+        .where((chat) => chat.sendsuccess!.value == 'false')
+        .toList()
+        .reversed) {
+      channel.sink.add(jsonEncode({
+        'content': chat.content,
+        'type': 'msg',
+        'name': HomeController.to.myProfile.value.realName
+      }));
+    }
+  }
+
+  void afterMustSendMessages(Map<String, dynamic> json, Chat chat) {
+    messageList
+        .where(
+            (p0) => p0 == chat)
+        .last
+        .messageId = json['id'].toString();
+    messageList
+        .where(
+            (p0) => p0 == chat)
+        .last
+        .isRead!
+        .value = json['is_read'];
+    messageList
+        .where(
+            (p0) => p0 == chat)
+        .last
+        .date = DateTime.parse(json['date']);
+    messageList.sort((a, b) => b.date.compareTo(a.date));
+  }
+
+  Future<void> changeMessageRoomState(String content, DateTime date)async{
+    if (Get.isRegistered<MessageController>()) {
+          MessageController.to.searchRoomList
+              .where((p0) => p0.chatRoom.value.roomId == roomid)
+              .first
+              .chatRoom
+              .value
+              .message
+              .value
+              .content = content;
+          MessageController.to.searchRoomList
+              .where((p0) => p0.chatRoom.value.roomId == roomid)
+              .first
+              .chatRoom
+              .value
+              .message
+              .value
+              .date = date;
+          MessageController.to.searchRoomList.sort((a, b) => b
+              .chatRoom.value.message.value.date
+              .compareTo(a.chatRoom.value.message.value.date));
+          MessageController.to.searchRoomList.forEach((element) {
+            element.chatRoom.value.message.refresh();
+            element.chatRoom.refresh();
+          });
+          await Future.delayed(const Duration(milliseconds: 300));
+          MessageController.to.searchRoomList.refresh();
+        }
   }
 }

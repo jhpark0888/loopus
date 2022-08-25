@@ -41,6 +41,7 @@ import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
+import 'package:loopus/utils/local_notification.dart';
 import 'package:loopus/widget/message_widget.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
 import 'package:loopus/widget/notification_widget.dart';
@@ -114,201 +115,70 @@ class NotificationController extends GetxController {
       print(event.data["type"]);
       print('알림 데이터 : ${event.data}');
       if (event.data["type"] == "msg") {
-        if (Get.isRegistered<MessageDetailController>(
-            tag: event.data['sender'].toString())) {
+        HomeController.to.isNewMsg(true);
+        localNotificaition.sampleNotification(event.notification!.title!, event.notification!.body!);
+        if (Get.isRegistered<MessageController>()) {
           String? myid = await const FlutterSecureStorage().read(key: 'id');
-          // Get.find<MessageDetailController>(tag: event.data["id"].toString())
-          //     .messagelist
-          //     .add(
-          //       MessageWidget(
-          //         message: Message(
-          //             id: 0,
-          //             roomId: 0,
-          //             receiverId: int.parse(myid!),
-          //             date: DateTime.now(),
-          //             message: event.notification!.body!,
-          //             isRead: true,
-          //             issender: 0,
-          //             issending: true.obs),
-          //         user: Get.find<MessageDetailController>(
-          //                 tag: event.data["id"].toString())
-          //             .user!
-          //             .value)
-          //             );
-          // 새로 추가
-          // putonmessagescreen(event.data["id"].toString());
+          SQLController.to
+              .updateNotReadCount(int.parse(event.data['room_id']), 1);
 
-          if (Get.isRegistered<MessageController>()) {
-            // MessageRoomWidget messageroomwidget = MessageController
-            //     .to.chattingroomlist
-            //     .where((messageroomwidget) =>
-            //         messageroomwidget.messageRoom.value.user.userid ==
-            //         int.parse(event.data["id"]))
-            //     .first;
-            // messageroomwidget.messageRoom.value.message.value = Message(
-            //     id: 0,
-            //     roomId: 0,
-            //     receiverId: int.parse(myid),
-            //     date: DateTime.now(),
-            //     message: event.notification!.body!,
-            //     isRead: false,
-            //     issender: 0,
-            //     issending: true.obs);
-            // MessageController.to.chattingroomlist.remove(messageroomwidget);
-            // MessageController.to.chattingroomlist.insert(0, messageroomwidget);
-
-          }
-        } else {
-          if (Get.isRegistered<MessageController>()) {
-            String? myid = await const FlutterSecureStorage().read(key: 'id');
-            HomeController.to.isNewMsg(true);
-            SQLController.to
-                .updateNotReadCount(int.parse(event.data['room_id']), 1);
-            showCustomSnackbar(
-                event.notification!.title, event.notification!.body,
-                (snackbar) async {
-              Get.back();
-              int partnerId = int.parse(event.data['sender']);
-              getUserProfile([partnerId]).then((user) async {
-                if (user.isError == false) {
-                  if (Get.isRegistered<MessageDetailController>(
-                      tag: HomeController.to.enterMessageRoom.value
-                          .toString())) {
-                    Get.delete<MessageDetailController>(
-                        tag: HomeController.to.enterMessageRoom.value
-                            .toString()).then((value) =>  Get.off(
-                        () => MessageDetatilScreen(
-                              partner: user.data[0],
-                              myProfile: HomeController.to.myProfile.value,
-                              enterRoute: EnterRoute.popUp,
-                            ),
-                        preventDuplicates: false));
-                   
-                  } else {
-                    Get.to(
-                        () => MessageDetatilScreen(
-                              partner: user.data[0],
-                              myProfile: HomeController.to.myProfile.value,
-                              enterRoute: EnterRoute.popUp,
-                            ),
-                        preventDuplicates: true);
-                  }
-                  HomeController.to.enterMessageRoom.value =
-                      user.data.first.userid;
+          Map<String, dynamic> json = event.data;
+          json["date"] = DateTime.now().toString();
+          json["content"] = event.notification!.body;
+          json["not_read"] = 1;
+          Chat chat = Chat.fromMsg(json, int.parse(json['room_id']));
+          ChatRoom chatRoom = ChatRoom.fromMsg(json);
+          SQLController.to
+              .findMessageRoom(
+                  roomid: chat.roomId!, chatRoom: chatRoom.toJson())
+              .then((value) async {
+            if (value == false) {
+              await getUserProfile([chatRoom.user]).then((value) async {
+                if (value.isError == false) {
+                  await SQLController.to.insertUser(value.data[0]);
+                  MessageController.to.searchRoomList.add(MessageRoomWidget(
+                      chatRoom: chatRoom.obs, user: Rx<User>(value.data[0])));
+                  MessageController.to.chattingRoomList.add(MessageRoomWidget(
+                      chatRoom: chatRoom.obs, user: Rx<User>(value.data[0])));
                 }
               });
-            });
-
-            // MessageRoomWidget messageroomwidget = MessageController
-            //     .to.chattingroomlist
-            //     .where((messageroomwidget) =>
-            //         messageroomwidget.messageRoom.value.user.userid ==
-            //         int.parse(event.data["id"]))
-            //     .first;
-            // messageroomwidget.messageRoom.value.notread.value += 1;
-            // messageroomwidget.messageRoom.value.message.value = Message(
-            //     id: 0,
-            //     roomId: 0,
-            //     receiverId: int.parse(myid!),
-            //     date: DateTime.now(),
-            //     message: event.notification!.body!,
-            //     isRead: false,
-            //     issender: 0,
-            //     issending: true.obs);
-            // MessageController.to.chattingroomlist.remove(messageroomwidget);
-            // MessageController.to.chattingroomlist.insert(0, messageroomwidget);
-            Map<String, dynamic> json = event.data;
-            json["date"] = DateTime.now().toString();
-            json["content"] = event.notification!.body;
-            json["not_read"] = 1;
-            Chat chat = Chat.fromMsg(json, int.parse(json['room_id']));
-            ChatRoom chatRoom = ChatRoom.fromMsg(json);
-            SQLController.to
-                .findMessageRoom(
-                    roomid: chat.roomId!, chatRoom: chatRoom.toJson())
-                .then((value) async {
-              if (value == false) {
-                await getUserProfile([chatRoom.user]).then((value) async{
-                  if (value.isError == false) {
-                    await SQLController.to.insertUser(value.data[0]);
-                    MessageController.to.searchRoomList.add(MessageRoomWidget(
-                        chatRoom: chatRoom.obs, user: Rx<User>(value.data[0])));
-                    MessageController.to.chattingRoomList.add(MessageRoomWidget(
-                        chatRoom: chatRoom.obs, user: Rx<User>(value.data[0])));
-                  }
-                });
-              } else {
-                SQLController.to.updateLastMessage(
-                    chat.content, chat.date.toString(), chat.roomId!);
-                MessageController.to.searchRoomList
-                    .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
-                    .first
-                    .chatRoom
-                    .value
-                    .message
-                    .value
-                    .content = json['content'];
-                MessageController.to.searchRoomList
-                    .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
-                    .first
-                    .chatRoom
-                    .value
-                    .message
-                    .value
-                    .date = DateTime.parse(json['date']);
-                MessageController.to.searchRoomList
-                    .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
-                    .first
-                    .chatRoom
-                    .value
-                    .notread
-                    .value += 1;
-                MessageController.to.searchRoomList.refresh();
-                MessageController.to.searchRoomList
-                    .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
-                    .first
-                    .chatRoom
-                    .refresh();
-              }
-              MessageController.to.searchRoomList.sort((a, b) => b
-                  .chatRoom.value.message.value.date
-                  .compareTo(a.chatRoom.value.message.value.date));
-            });
-          } else {
-            HomeController.to.isNewMsg(true);
-            SQLController.to
-                .updateNotReadCount(int.parse(event.data['room_id']), 1);
-            Map<String, dynamic> json = event.data;
-            json["not_read"] = 1;
-            json["date"] = DateTime.now().toString();
-            json["content"] = event.notification!.body;
-            Chat chat = Chat.fromMsg(json, int.parse(json['room_id']));
-            // SQLController.to.findMessageRoom(
-            //     roomid: int.parse(json['room_id']),
-            //     chatRoom: ChatRoom.fromMsg(json).toJson()).then((value) => null);
-            SQLController.to.insertmessage(chat);
-            SQLController.to.updateLastMessage(
-                chat.content, chat.date.toString(), chat.roomId!);
-            showCustomSnackbar(
-                event.notification!.title, event.notification!.body,
-                (snackbar) async {
-              Get.back();
-              int partnerId = int.parse(event.data['sender']);
-              getUserProfile([partnerId]).then((user) async {
-                if (user.isError == false) {
-                  Get.to(() => MessageDetatilScreen(
-                        partner: user.data[0],
-                        myProfile: HomeController.to.myProfile.value,
-                        enterRoute: EnterRoute.popUp,
-                      ));
-                  HomeController.to.enterMessageRoom.value =
-                      user.data.first.userid;
-
-                  // Get.put(MessageController());
-                }
-              });
-            });
-          }
+            } else {
+              SQLController.to.updateLastMessage(
+                  chat.content, chat.date.toString(), chat.roomId!);
+              MessageController.to.searchRoomList
+                  .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
+                  .first
+                  .chatRoom
+                  .value
+                  .message
+                  .value
+                  .content = json['content'];
+              MessageController.to.searchRoomList
+                  .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
+                  .first
+                  .chatRoom
+                  .value
+                  .message
+                  .value
+                  .date = DateTime.parse(json['date']);
+              MessageController.to.searchRoomList
+                  .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
+                  .first
+                  .chatRoom
+                  .value
+                  .notread
+                  .value += 1;
+              MessageController.to.searchRoomList.refresh();
+              MessageController.to.searchRoomList
+                  .where((p0) => p0.chatRoom.value.roomId == chat.roomId)
+                  .first
+                  .chatRoom
+                  .refresh();
+            }
+            MessageController.to.searchRoomList.sort((a, b) => b
+                .chatRoom.value.message.value.date
+                .compareTo(a.chatRoom.value.message.value.date));
+          });
         }
       } else if (event.data["type"] == "certification") {
         if (Get.isRegistered<SignupController>()) {
@@ -321,22 +191,9 @@ class NotificationController extends GetxController {
             final GAController _gaController = GAController();
 
             if (value.isError == false) {
-              // String token = jsonDecode(response.body)['token'];
-              // String userid = jsonDecode(response.body)['user_id'];
-
-              // await storage.write(key: 'token', value: token);
-              // await storage.write(key: 'id', value: userid);
-              //!GA
               await _gaController.logSignup();
               await _gaController.setUserProperties(value.data['user_id'],
                   _signupController.selectDept.value.deptname);
-
-              // Get.offAll(() => App());
-
-              // SchedulerBinding.instance!.addPostFrameCallback((_) {
-              //   showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
-              // });
-
               await _gaController.logScreenView('signup_6');
               Get.back();
               Get.offAll(() => SignupCompleteScreen(
@@ -390,7 +247,9 @@ class NotificationController extends GetxController {
     setupInteractedMessage();
 
     // Background, Killed 상태에서 알림을 받았을 때
-
+    FirebaseMessaging.instance.onTokenRefresh.listen((event) {
+      print(event);
+    });
     super.onInit();
   }
 
@@ -428,8 +287,8 @@ class NotificationController extends GetxController {
         if (Platform.isIOS) {
           await messaging.setForegroundNotificationPresentationOptions(
             alert: true, // Required to display a heads up notification
-            badge: false,
-            sound: false,
+            badge: true,
+            sound: true,
           );
         }
       } catch (e) {

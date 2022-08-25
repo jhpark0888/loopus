@@ -275,19 +275,21 @@ class MessageDetatilScreen extends StatelessWidget {
           const SizedBox(width: 14),
           GestureDetector(
               onTap: () async {
-                if (controller.sendText.text.isNotEmpty) {
-                  await sendMessage();
-                  controller.messageList.insert(
-                      0,
-                      Chat(
+                print(controller.messageList.where((p0) => p0.sendsuccess!.value == 'false').length.toString());
+                Chat temp = Chat(
+                  messageId: controller.messageList.where((p0) => p0.sendsuccess!.value == 'false').length.toString(),
                           content: controller.sendText.text,
                           date: DateTime.now(),
                           sender: controller.myId.toString(),
                           isRead: false.obs,
-                          messageId: '0',
-                          type: 'msg',
                           roomId: controller.roomid,
-                          sendsuccess: false.obs));
+                          sendsuccess: 'false'.obs);
+                if (controller.sendText.text.isNotEmpty) {
+                  await SQLController.to.insertmessage(temp);
+                  await sendMessage();
+                  controller.messageList.insert(
+                      0,temp
+                      );
                   controller.sendText.clear();
                   await Future.delayed(const Duration(milliseconds: 300));
                   controller.listViewController.jumpTo(
