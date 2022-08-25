@@ -38,9 +38,6 @@ class SQLController extends GetxController {
         db.execute(
           "CREATE TABLE chatting(id INTEGER PRIMARY KEY AUTOINCREMENT,msg_id INTEGER,sender INTEGER, date TEXT, is_read TEXT, message TEXT, room_id INTEGER, send_success Text)",
         );
-        db.execute(
-          "CREATE TABLE background_chatting(id INTEGER PRIMARY KEY AUTOINCREMENT,msg_id INTEGER,sender INTEGER, date TEXT, is_read TEXT, message TEXT, room_id INTEGER, send_success Text)",
-        );
       },
 
       version: 1,
@@ -284,14 +281,5 @@ class SQLController extends GetxController {
     await db.rawQuery(
         'UPDATE chatting SET send_success = ?, msg_id = ?, is_read = ?, date = ? WHERE sender = ? and room_id = ? and msg_id = ?',
         [sendSuccess, newMsgId, isRead,date, userId,roomId, oldMsgId]);
-  }
-
-  Future<void> insertBackmessage(Chat chat) async {
-    final Database db = await database!;
-    await db.insert(
-      'chatting',
-      chat.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
   }
 }
