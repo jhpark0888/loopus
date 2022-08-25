@@ -412,13 +412,11 @@ class NotificationController extends GetxController {
 
   //알림 권한 요청
   void _initNotification() async {
-    print('settings가 실행되었는지');
     NotificationSettings settings = await messaging.requestPermission(
       sound: true,
       badge: true,
       alert: true,
-      criticalAlert: true,
-      provisional: true,
+      provisional: false,
       announcement: true,
     );
 
@@ -428,8 +426,8 @@ class NotificationController extends GetxController {
         if (Platform.isIOS) {
           await messaging.setForegroundNotificationPresentationOptions(
             alert: true, // Required to display a heads up notification
-            badge: false,
-            sound: false,
+            badge: true,
+            sound: true,
           );
         }
       } catch (e) {

@@ -250,7 +250,7 @@ class SwiperWidget extends StatelessWidget {
       {Key? key,
       required this.items,
       required this.swiperType,
-      this.aspectRatio})
+      this.aspectRatio, child})
       : super(key: key);
   List items;
   SwiperType swiperType;
