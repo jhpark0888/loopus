@@ -64,9 +64,10 @@ class AppController extends GetxService {
         _changePage(value, hasGesture: hasGesture);
         break;
       case RouteName.search:
-        if(currentIndex.value == 1){
+        if (currentIndex.value == 1) {
           SearchController.to.scrollcontroller.animateTo(0,
-        duration: const Duration(milliseconds: 500), curve: Curves.linear);
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.linear);
         }
         _changePage(value, hasGesture: hasGesture);
         break;

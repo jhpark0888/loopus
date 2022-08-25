@@ -75,8 +75,10 @@ class SearchScreen extends StatelessWidget {
             ),
             body: ScrollNoneffectWidget(
               child: SmartRefresher(
-                // physics: const BouncingScrollPhysics(),
                 scrollController: _searchController.scrollcontroller,
+                primary: false,
+                // physics: const BouncingScrollPhysics(),
+                // scrollController: _searchController.scrollcontroller,
                 controller: _searchController.refreshController,
                 enablePullUp: true,
                 header: const MyCustomHeader(),
@@ -84,6 +86,7 @@ class SearchScreen extends StatelessWidget {
                 onRefresh: _searchController.onRefresh,
                 onLoading: _searchController.onLoading,
                 child: SingleChildScrollView(
+                  primary: false,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -104,7 +107,7 @@ class SearchScreen extends StatelessWidget {
                           height: 105,
                           child: Center(
                             child: Text(
-                              "준비중입니다",
+                              "준비 중입니다",
                               style: kmain.copyWith(color: maingray),
                             ),
                           )

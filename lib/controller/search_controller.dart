@@ -20,6 +20,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   ScrollController searchScrollController = ScrollController();
   late ScrollController scrollcontroller;
   RefreshController refreshController = RefreshController();
+  late ScrollController? scrollController;
   int popPagenum = 1;
 
   RxList<User> recommandUsers = <User>[].obs;

@@ -42,10 +42,10 @@ class ProjectAddPeriodScreen extends StatelessWidget {
                     child: Text(
                       '다음',
                       style: ktempFont.copyWith(
-                        color: projectaddcontroller.isDateValidated.value
-                            ? mainblue
-                            : mainblack.withOpacity(0.38),
-                      ),
+                          color: projectaddcontroller.isDateValidated.value
+                              ? mainblue
+                              : mainblack.withOpacity(0.38),
+                        ),
                     ),
                   ),
                 )

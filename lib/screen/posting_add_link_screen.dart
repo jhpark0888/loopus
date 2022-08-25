@@ -69,7 +69,8 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
                             color:
                                 postingAddController.scrapList.value.isNotEmpty
                                     ? mainblue
-                                    : mainblack.withOpacity(0.5))),
+                                    : mainblack.withOpacity(0.5)
+                          )),
                   ),
                 ))
           ],

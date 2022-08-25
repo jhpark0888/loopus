@@ -28,9 +28,9 @@ String durationCaculate({
   return durationResult.value;
 }
 
-String messageDurationCalculate(DateTime time){
-    DateFormat dateFormat = DateFormat('aa h:mm','ko');
-    return dateFormat.format(time);
+String messageDurationCalculate(DateTime time) {
+  DateFormat dateFormat = DateFormat('aa h:mm', 'ko');
+  return dateFormat.format(time);
 }
 
 String messageRoomDurationCalculate({
@@ -132,19 +132,19 @@ String calculateDate(DateTime date) {
     if (diff.months >= 1) {
       // return DateFormat('MM.dd').format(date);
       return '${date.month}월 ${date.day}일';
-    }else{
+    } else {
       if (diff.days > 7) {
         // return DateFormat('MM.dd').format(date);
         return '${date.month}월 ${date.day}일';
       } else if (diff.days <= 7 && diff.days >= 1) {
         return '${diff.days}일 전';
-      } else{
-        if(diff.hours >= 1){
+      } else {
+        if (diff.hours >= 1) {
           return '${diff.hours}시간 전';
-        }else{
-          if(diff.minutes > 0){
+        } else {
+          if (diff.minutes > 0) {
             return '${diff.minutes}분 전';
-          }else{
+          } else {
             return '방금 전';
           }
         }
@@ -164,19 +164,19 @@ String commentCalculateDate(DateTime date) {
     if (diff.months >= 1) {
       // return DateFormat('MM.dd').format(date);
       return '${date.day ~/ 7}주';
-    }else{
+    } else {
       if (diff.days > 7) {
         // return DateFormat('MM.dd').format(date);
         return '${date.day ~/ 7}주';
       } else if (diff.days <= 7 && diff.days >= 1) {
         return '${diff.days}일';
-      } else{
-        if(diff.hours >= 1){
+      } else {
+        if (diff.hours >= 1) {
           return '${diff.hours}시간';
-        }else{
-          if(diff.minutes > 0){
+        } else {
+          if (diff.minutes > 0) {
             return '${diff.minutes}분';
-          }else{
+          } else {
             return '방금';
           }
         }
@@ -184,4 +184,3 @@ String commentCalculateDate(DateTime date) {
     }
   }
 }
-

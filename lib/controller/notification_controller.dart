@@ -121,7 +121,6 @@ class NotificationController extends GetxController {
           String? myid = await const FlutterSecureStorage().read(key: 'id');
           SQLController.to
               .updateNotReadCount(int.parse(event.data['room_id']), 1);
-
           Map<String, dynamic> json = event.data;
           json["date"] = DateTime.now().toString();
           json["content"] = event.notification!.body;
@@ -271,13 +270,11 @@ class NotificationController extends GetxController {
 
   //알림 권한 요청
   void _initNotification() async {
-    print('settings가 실행되었는지');
     NotificationSettings settings = await messaging.requestPermission(
       sound: true,
       badge: true,
       alert: true,
-      criticalAlert: true,
-      provisional: true,
+      provisional: false,
       announcement: true,
     );
 

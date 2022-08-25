@@ -201,9 +201,7 @@ Future<HTTPResponse> getPartnerToken(int memberId) async {
   }
 }
 
-
 Future<HTTPResponse> deleteChatRoom(int roomId, int myId, int msgId) async {
-
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
@@ -212,11 +210,10 @@ Future<HTTPResponse> deleteChatRoom(int roomId, int myId, int msgId) async {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
     final url = Uri.parse("http://$chatServerUri/chat/chat_list?id=$myId");
-
     try {
       http.Response response = await http.delete(
         url,
-        body: jsonEncode({'room_id' : roomId, 'msg_id' : msgId}),
+        body: jsonEncode({'room_id': roomId, 'msg_id': msgId}),
         headers: {'Content-Type': 'application/json'},
       );
 

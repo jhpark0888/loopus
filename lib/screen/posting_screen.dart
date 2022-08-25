@@ -125,9 +125,14 @@ class PostingScreen extends StatelessWidget {
                   ))),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   height: 44,
-                  child: Text(
-                    '${controller.tagUser.value.realName}님에게 답글을 남기는 중',
-                    style: kmain.copyWith(color: maingray),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '     ${controller.tagUser.value.realName}님에게 답글을 남기는 중',
+                        style: kmain.copyWith(color: maingray),
+                      ),
+                    ],
                   ))
               : Container(),
         ),
