@@ -28,6 +28,7 @@ class CustomCrop extends StatefulWidget {
   final double maximumScale;
   final bool alwaysShowGrid;
   final bool areaFixed;
+  final bool circleShape;
   final ImageErrorListener? onImageError;
 
   const CustomCrop({
@@ -37,6 +38,7 @@ class CustomCrop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.areaFixed = false,
+    this.circleShape = false,
     this.onImageError,
   }) : super(key: key);
 
@@ -48,6 +50,7 @@ class CustomCrop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.areaFixed = false,
+    this.circleShape = false,
     this.onImageError,
   })  : image = FileImage(file, scale: scale),
         super(key: key);
@@ -61,6 +64,7 @@ class CustomCrop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.areaFixed = false,
+    this.circleShape = false,
     this.onImageError,
   })  : image = AssetImage(assetName, bundle: bundle, package: package),
         super(key: key);
@@ -232,13 +236,15 @@ class CustomCropState extends State<CustomCrop>
           },
           child: CustomPaint(
             painter: _CropPainter(
-                image: _image,
-                ratio: _ratio,
-                view: _view,
-                area: _area,
-                scale: _scale,
-                active: _activeController.value,
-                areaFixed: widget.areaFixed),
+              image: _image,
+              ratio: _ratio,
+              view: _view,
+              area: _area,
+              scale: _scale,
+              active: _activeController.value,
+              areaFixed: widget.areaFixed,
+              circleShape: widget.circleShape,
+            ),
           ),
         ),
       ),
@@ -669,6 +675,33 @@ class CustomCropState extends State<CustomCrop>
   }
 }
 
+class _CircleCropPainter extends CustomPainter {
+  final double active;
+
+  _CircleCropPainter({
+    required this.active,
+  });
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    // TODO: implement shouldRepaint
+    throw UnimplementedError();
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..isAntiAlias = false;
+
+    paint.color = Color.fromRGBO(
+        0x0,
+        0x0,
+        0x0,
+        _kCropOverlayActiveOpacity * active +
+            _kCropOverlayInactiveOpacity * (1.0 - active));
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
+    // TODO: implement paint
+  }
+}
+
 class _CropPainter extends CustomPainter {
   final ui.Image? image;
   final Rect view;
@@ -677,6 +710,7 @@ class _CropPainter extends CustomPainter {
   final double scale;
   final double active;
   final bool areaFixed;
+  final bool circleShape;
 
   _CropPainter({
     required this.image,
@@ -686,6 +720,7 @@ class _CropPainter extends CustomPainter {
     required this.scale,
     required this.active,
     required this.areaFixed,
+    required this.circleShape,
   });
 
   @override
@@ -763,6 +798,26 @@ class _CropPainter extends CustomPainter {
       }
     }
 
+    if (circleShape) {
+      double radius = rect.width / 2;
+
+      final path = Path()
+        ..moveTo(0, 0)
+        ..lineTo(0, rect.height)
+        ..lineTo(rect.width, rect.height)
+        ..lineTo(rect.width, 0)
+        ..lineTo(0, 0)
+        ..moveTo(0, rect.height / 2)
+        ..arcToPoint(Offset(rect.width / 2, 0), radius: Radius.circular(radius))
+        ..arcToPoint(Offset(rect.width, rect.height / 2),
+            radius: Radius.circular(radius))
+        ..arcToPoint(Offset(rect.width / 2, rect.height),
+            radius: Radius.circular(radius))
+        ..arcToPoint(Offset(0, rect.height / 2),
+            radius: Radius.circular(radius));
+
+      canvas.drawPath(path, paint);
+    }
     canvas.restore();
   }
 

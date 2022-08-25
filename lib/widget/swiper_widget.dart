@@ -312,12 +312,12 @@ class SwiperWidget extends StatelessWidget {
                   itemCount: items.length,
                 )),
           ),
-        const SizedBox(
-          height: 14,
-        ),
         if (items.length > 1)
           Column(
             children: [
+              const SizedBox(
+                height: 14,
+              ),
               SmoothPageIndicator(
                 controller: _pageController,
                 count: items.length,
@@ -329,11 +329,11 @@ class SwiperWidget extends StatelessWidget {
                   dotHeight: 7,
                 ),
               ),
-              const SizedBox(
-                height: 14,
-              ),
             ],
           ),
+        const SizedBox(
+          height: 14,
+        ),
       ],
     );
   }

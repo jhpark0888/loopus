@@ -1,33 +1,21 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:extended_text/extended_text.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
-import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
+import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/utils/error_control.dart';
-import 'package:loopus/widget/divide_widget.dart';
-import 'package:loopus/trash_bin/overflow_text_widget.dart';
 import 'package:loopus/model/post_model.dart';
-import 'package:loopus/model/tag_model.dart';
-import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/swiper_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
-
 import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/controller/hover_controller.dart';
-import 'package:loopus/controller/like_controller.dart';
-import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 enum PostingWidgetType { normal, search, profile, detail }
@@ -126,35 +114,28 @@ class PostingWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Obx(() => type == PostingWidgetType.detail
-                            ? Text(item.content.value, style: kmainheight)
-                            : ExtendedText(
-                                item.content.value,
-                                overflowWidget: TextOverflowWidget(
-                                  position: TextOverflowPosition.end,
-                                  align: TextOverflowAlign.center,
-                                  child: Text(
-                                    '...더보기',
-                                    style:
-                                        kmainheight.copyWith(color: maingray),
-                                  ),
-                                ),
-                                style: kmainheight,
-                                maxLines: 3,
-                              )
-                        // ExpandableText(
-                        //     textSpan: TextSpan(
-                        //         text: item.content.value, style: kmainheight),
-                        //     moreSpan: TextSpan(
-                        //         text: ' ...더보기',
-                        //         style: kmainheight.copyWith(color: maingray)),
-                        //     maxLines: 3),
-                        ),
+                    if (item.content.value.isNotEmpty)
+                      Column(
+                        children: [
+                          Obx(() => type == PostingWidgetType.detail
+                              ? Text(item.content.value, style: kmainheight)
+                              : ExpandableText(
+                                  textSpan: TextSpan(
+                                      text: item.content.value,
+                                      style: kmainheight),
+                                  moreSpan: TextSpan(
+                                      text: "...더보기",
+                                      style: kmainheight.copyWith(
+                                          color: maingray)),
+                                  maxLines: 3,
+                                )),
+                          const SizedBox(
+                            height: 14,
+                          ),
+                        ],
+                      ),
                     if (item.tags.isNotEmpty)
                       Column(children: [
-                        const SizedBox(
-                          height: 14,
-                        ),
                         Obx(
                           () => Wrap(
                               spacing: 7,
@@ -165,8 +146,10 @@ class PostingWidget extends StatelessWidget {
                                       ))
                                   .toList()),
                         ),
+                        const SizedBox(
+                          height: 14,
+                        ),
                       ]),
-                    const SizedBox(height: 14),
                     if (type != PostingWidgetType.search)
                       Column(
                         children: [

@@ -142,14 +142,13 @@ enum ProfileUpdateType {
   tag,
 }
 
-Future<User?> updateProfile(
+Future<HTTPResponse> updateProfile(
     User user, File? image, List? taglist, ProfileUpdateType updateType) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    print(taglist);
     final uri =
         Uri.parse("$serverUri/user_api/profile?type=${updateType.name}");
 
@@ -187,7 +186,6 @@ Future<User?> updateProfile(
       if (response.statusCode == 200) {
         String responsebody = await response.stream.bytesToString();
         var responsemap = jsonDecode(responsebody);
-        User edituser = User.fromJson(responsemap);
 
         if (updateType == ProfileUpdateType.tag) {
           Get.back();
@@ -197,21 +195,23 @@ Future<User?> updateProfile(
           print("profile status code : ${response.statusCode}");
         }
 
-        return edituser;
+        return HTTPResponse.success(responsemap);
       } else if (response.statusCode == 400) {
         if (kDebugMode) {
           print("profile status code : ${response.statusCode}");
         }
+        return HTTPResponse.apiError("fail", response.statusCode);
       } else {
         if (kDebugMode) {
           print("profile status code : ${response.statusCode}");
         }
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }
