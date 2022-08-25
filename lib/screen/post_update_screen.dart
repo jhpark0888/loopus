@@ -58,19 +58,24 @@ class PostUpdateScreen extends StatelessWidget {
                   children: [
                     if (postingUpdateController.post.images.isNotEmpty ||
                         postingUpdateController.post.links.isNotEmpty)
-                      SwiperWidget(
-                        items: postingUpdateController.post.images.isNotEmpty
-                            ? postingUpdateController.post.images
-                            : postingUpdateController.post.links,
-                        swiperType:
-                            postingUpdateController.post.images.isNotEmpty
-                                ? SwiperType.image
-                                : SwiperType.link,
-                        aspectRatio:
-                            postingUpdateController.post.images.isNotEmpty
-                                ? getAspectRatioinUrl(
-                                    postingUpdateController.post.images[0])
-                                : null,
+                      Column(
+                        children: [
+                          SwiperWidget(
+                            items:
+                                postingUpdateController.post.images.isNotEmpty
+                                    ? postingUpdateController.post.images
+                                    : postingUpdateController.post.links,
+                            swiperType:
+                                postingUpdateController.post.images.isNotEmpty
+                                    ? SwiperType.image
+                                    : SwiperType.link,
+                            aspectRatio:
+                                postingUpdateController.post.images.isNotEmpty
+                                    ? getAspectRatioinUrl(
+                                        postingUpdateController.post.images[0])
+                                    : null,
+                          ),
+                        ],
                       ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -196,15 +201,10 @@ class PostUpdateScreen extends StatelessWidget {
                                 //               100
                                 //       : 0,
                                 child: Column(
-
-                                    
-                  
-
                                     children:
                                         tagController.searchtaglist.value))),
                             const SizedBox(height: 100),
                             updateButton()
-
                           ]),
                     )
                   ],

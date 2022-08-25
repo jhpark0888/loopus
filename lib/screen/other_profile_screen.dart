@@ -12,7 +12,8 @@ import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/follow_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/controller/image_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/profile_image_controller.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/key_controller.dart';
@@ -63,7 +64,7 @@ class OtherProfileScreen extends StatelessWidget {
           careerName: careerName),
       tag: userid.toString());
 
-  final ImageController imageController = Get.put(ImageController());
+  // final ImageController imageController = Get.put(ImageController());
   final HoverController _hoverController = HoverController();
 
   User? user;
@@ -1142,23 +1143,29 @@ class OtherProfileScreen extends StatelessWidget {
   }
 
   void changeProfileImage() async {
-    File? image = await imageController.getcropImage(ImageType.profile);
-    if (image != null) {
-      User? user = await updateProfile(
-          _controller.otherUser.value, image, null, ProfileUpdateType.image);
-      if (user != null) {
-        _controller.otherUser(user);
-      }
-    }
+    // File? image = await imageController.getcropImage(ImageType.profile);
+    // if (image != null) {
+    //   User? user = await updateProfile(
+    //       _controller.otherUser.value, image, null, ProfileUpdateType.image);
+    //   if (user != null) {
+    //     _controller.otherUser(user);
+    //   }
+    // }
   }
 
   void changeDefaultImage() async {
-    User? user = await updateProfile(
+    await updateProfile(
             _controller.otherUser.value, null, null, ProfileUpdateType.image)
-        .then((user) {
-      imageController.isProfileImagePickerLoading.value = false;
-      if (user != null) {
+        .then((value) {
+      if (value.isError == false) {
+        User user = User.fromJson(value.data);
         _controller.otherUser(user);
+        HomeController.to.myProfile(user);
+        if (Get.isRegistered<ProfileController>()) {
+          ProfileController.to.myUserInfo(user);
+        }
+      } else {
+        errorSituation(value);
       }
     });
   }

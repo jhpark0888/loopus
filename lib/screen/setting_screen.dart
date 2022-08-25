@@ -121,7 +121,7 @@ class CustomListTile extends StatelessWidget {
             Obx(
               () => Text(
                 title,
-                style: ktempFont.copyWith(
+                style: kmain.copyWith(
                     color: _hoverController.isHover.value
                         ? mainblack.withOpacity(0.6)
                         : mainblack),

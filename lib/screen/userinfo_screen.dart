@@ -39,21 +39,21 @@ class UserInfoScreen extends StatelessWidget {
           ListTile(
             title: Text(
               '나의 학교',
-              style: ktempFont,
+              style: kmain,
             ),
             trailing: Text(
               '인천대학교 송도캠퍼스',
-              style: ktempFont,
+              style: kmain,
             ),
           ),
           ListTile(
             title: Text(
               '전공 학과',
-              style: ktempFont,
+              style: kmain,
             ),
             trailing: Text(
               profileController.myUserInfo.value.department,
-              style: ktempFont,
+              style: kmain,
             ),
           ),
           ListTile(
@@ -62,7 +62,7 @@ class UserInfoScreen extends StatelessWidget {
             },
             title: Text(
               '차단 목록',
-              style: ktempFont,
+              style: kmain,
             ),
           ),
           ListTile(
@@ -73,7 +73,7 @@ class UserInfoScreen extends StatelessWidget {
             },
             title: Text(
               '비밀번호 변경',
-              style: ktempFont,
+              style: kmain,
             ),
           ),
           ListTile(
@@ -97,7 +97,7 @@ class UserInfoScreen extends StatelessWidget {
             },
             title: Text(
               '로그아웃',
-              style: ktempFont,
+              style: kmain,
             ),
           ),
           ListTile(
@@ -106,7 +106,7 @@ class UserInfoScreen extends StatelessWidget {
             },
             title: Text(
               '회원탈퇴',
-              style: ktempFont.copyWith(color: rankred),
+              style: kmain.copyWith(color: rankred),
             ),
           ),
           ListTile(
@@ -130,7 +130,7 @@ class UserInfoScreen extends StatelessWidget {
             },
             title: Text(
               '채팅 데이터베이스 초기화',
-              style: ktempFont,
+              style: kmain,
             ),
           ),
         ],

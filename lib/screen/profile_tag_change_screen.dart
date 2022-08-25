@@ -115,15 +115,15 @@ class ProfileTagChangeScreen extends StatelessWidget {
   }
 
   Future<void> changeMyTag() async {
-    if (tagController.selectedtaglist.length == 3) {
-      user = await updateProfile(
-          profileController.myUserInfo.value,
-          null,
-          tagController.selectedtaglist.map((tag) => tag.text).toList(),
-          ProfileUpdateType.tag);
-    }
-    if (user != null) {
-      profileController.myUserInfo(user);
-    }
+    // if (tagController.selectedtaglist.length == 3) {
+    //   user = await updateProfile(
+    //       profileController.myUserInfo.value,
+    //       null,
+    //       tagController.selectedtaglist.map((tag) => tag.text).toList(),
+    //       ProfileUpdateType.tag);
+    // }
+    // if (user != null) {
+    //   profileController.myUserInfo(user);
+    // }
   }
 }

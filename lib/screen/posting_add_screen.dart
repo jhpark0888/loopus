@@ -61,9 +61,7 @@ class PostingAddScreen extends StatelessWidget {
             child: SingleChildScrollView(
               controller: postingAddController.scrollController,
               child: Padding(
-                padding: EdgeInsets.only(
-                    bottom:
-                        34),
+                padding: EdgeInsets.only(bottom: 34),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -192,43 +190,41 @@ class PostingAddScreen extends StatelessWidget {
                                         children:
                                             tagController.selectedtaglist))),
                             SizedBox(height: 28),
+                            KeyboardVisibilityTextWidget(
+                              boolea: postingAddController.isTagClick,
+                              controller: postingAddController
+                                  .keyboardVisibilityController,
+                              textfield: CustomTextField(
+                                textController:
+                                    tagController.tagsearchContoller,
+                                autofocus: false,
+                                hintText: '태그를 입력해주세요',
+                                validator: (_) {},
+                                obscureText: false,
+                                maxLines: 2,
+                                counterText: '',
+                                maxLength: null,
+                                textInputAction: TextInputAction.done,
+                                ontap: () async {
+                                  // await Future.delayed(
+                                  //     Duration(milliseconds: 400));
+                                  // Scrollable.ensureVisible(
+                                  //     keyController.viewKey.currentContext!,
+                                  //     curve: Curves.easeOut,
+                                  //     duration:
+                                  //         const Duration(milliseconds: 300));
 
-                            
-                              KeyboardVisibilityTextWidget(
-                                boolea: postingAddController.isTagClick,
-                                controller: postingAddController
-                                    .keyboardVisibilityController,
-                                textfield: CustomTextField(
-                                  textController:
-                                      tagController.tagsearchContoller,
-                                  autofocus: false,
-                                  hintText: '태그를 입력해주세요',
-                                  validator: (_) {},
-                                  obscureText: false,
-                                  maxLines: 2,
-                                  counterText: '',
-                                  maxLength: null,
-                                  textInputAction: TextInputAction.done,
-                                  ontap: () async {
-                                    // await Future.delayed(
-                                    //     Duration(milliseconds: 400));
-                                    // Scrollable.ensureVisible(
-                                    //     keyController.viewKey.currentContext!,
-                                    //     curve: Curves.easeOut,
-                                    //     duration:
-                                    //         const Duration(milliseconds: 300));
-
-                                    postingAddController.isTagClick(true);
-                                    if (postingAddController.getTagList.value ==
-                                        true) {
-                                      postingAddController.getTagList.value =
-                                          true;
-                                    }
-                                    // }
-                                    // );
-                                  },
-                                  onfieldSubmitted: (string) {
-                                    if(string.trim() != ''){
+                                  postingAddController.isTagClick(true);
+                                  if (postingAddController.getTagList.value ==
+                                      true) {
+                                    postingAddController.getTagList.value =
+                                        true;
+                                  }
+                                  // }
+                                  // );
+                                },
+                                onfieldSubmitted: (string) {
+                                  if (string.trim() != '') {
                                     TagController controller =
                                         Get.find<TagController>(
                                             tag: Tagtype.Posting.toString());
@@ -269,18 +265,16 @@ class PostingAddScreen extends StatelessWidget {
                                               tagtype: Tagtype.Posting));
                                       controller.tagsearchContoller.clear();
                                     }
-                                    }
-                                  },
-                                ),
-                            
+                                  }
+                                },
+                              ),
                             ),
-
                             SizedBox(
                               height: 20,
                             ),
                             Obx(() => ListView.builder(
-                                padding:
-                                    EdgeInsets.only(bottom: Get.height - 44 - 129 - 400),
+                                padding: EdgeInsets.only(
+                                    bottom: Get.height - 44 - 129 - 400),
                                 primary: false,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) =>

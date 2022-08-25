@@ -44,7 +44,6 @@ class PostingAddController extends GetxController {
     }
 
     textcontroller.addListener(() {
-      print(textcontroller.text.runes.length);
       if (textcontroller.text.trim().isEmpty) {
         isPostingTitleEmpty.value = true;
       } else {
