@@ -59,30 +59,25 @@ class MessageDetailController extends GetxController
         (await const FlutterSecureStorage().read(key: "id")).toString());
 
     print('${myId}자기아이디입니다.');
-    connection.listen((p0) {
+    connection.listen((p0) async{
       //인터넷 연결 상태 확인
       if (p0 == false) {
         channel.sink.close();
         print('웹소켓 연결이 해제되었습니다.');
       } else {
         // if (isFirst.value == false) {
-        channel = IOWebSocketChannel.connect(
-            Uri.parse('ws://$chatServerUri/ws/chat/${partnerId.toString()}/'),
-            headers: <String, String>{
-              'Content-Type': 'application/json',
-              'id': '$myId'
-            },
-            pingInterval: const Duration(seconds: 1));
+       await connectWebSocket(); 
         print(myId);
         channel.stream.listen((event) {
           print(event);
           messageTypeCheck(jsonDecode(event));
-        }, onError: (error) {
-          print(error);
-        }, onDone: () {
-          print('끊김');
-          channel.sink.close();
+        }, onError: (error) async{
+          await connectWebSocket();
+        }, onDone: () async{
           hasInternet.value = false;
+          print('끊겼습니다.');
+          await connectWebSocket();
+          print('재연결 되었습니다.');
         });
         // }
       }
@@ -353,5 +348,15 @@ class MessageDetailController extends GetxController
           await Future.delayed(const Duration(milliseconds: 300));
           MessageController.to.searchRoomList.refresh();
         }
+  }
+  Future<void> connectWebSocket()async{
+    await Future.delayed(const Duration(milliseconds: 300));
+    channel = IOWebSocketChannel.connect(
+            Uri.parse('ws://$chatServerUri/ws/chat/${partnerId.toString()}/'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'id': '$myId'
+            },
+            pingInterval: const Duration(seconds: 1));
   }
 }
