@@ -133,10 +133,8 @@ class HomeController extends GetxController
         List postlist = List.from(value.data['posting']);
 
         if (posts.isEmpty) {
-          if (value.data['news'] != null) {
-            newslist.value = List.from(value.data['news'])
-                .map((news) => news['urls'].toString())
-                .toList();
+          if (value.data['issue'] != null) {
+            newslist.value = List.from(value.data['issue']);
           }
 
           if (value.data['project'] != null) {
@@ -176,6 +174,17 @@ class HomeController extends GetxController
   void scrollToTop() {
     scrollController.value.animateTo(0,
         duration: const Duration(milliseconds: 500), curve: Curves.linear);
+  }
+
+  void postingRemove(int postId) {
+    posts.removeWhere((post) => post.id == postId);
+    contents.removeWhere((content) {
+      if (content is Post) {
+        return content.id == postId;
+      } else {
+        return false;
+      }
+    });
   }
 
   void tapBookmark(int postid) {

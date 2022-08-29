@@ -330,6 +330,10 @@ class PostingScreen extends StatelessWidget {
                                                                           .value
                                                                           .id);
                                                         }
+                                                        HomeController.to
+                                                            .postingRemove(
+                                                                controller.post!
+                                                                    .value.id);
 
                                                         showCustomDialog(
                                                             "포스팅이 삭제되었습니다",

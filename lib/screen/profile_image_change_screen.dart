@@ -12,6 +12,7 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/profile_image_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
+import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/image_crop_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
@@ -24,7 +25,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class ProfileImageChangeScreen extends StatelessWidget {
   ProfileImageChangeScreen({Key? key}) : super(key: key);
 
-  final ProfileImageController _controller = Get.put(ProfileImageController());
+  final ImageController _controller = Get.put(ImageController());
   ScrollController nestedScrollController = ScrollController();
   ScrollController scrollController = ScrollController();
   @override
@@ -41,7 +42,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
             )),
         title: Obx(
           () => Text(
-            _controller.isImage.value ? '사진첩 선택' : '이미지 선택',
+            _controller.isAlbum.value ? '사진첩 선택' : '이미지 선택',
             style: kNavigationTitle,
           ),
         ),
@@ -53,7 +54,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
               onTap: () async {
                 if (_controller.isSelect.value == true) {
                   loading();
-                  File? image = await cropImage();
+                  File? image = await _controller.cropImage();
                   if (image != null) {
                     await updateProfile(ProfileController.to.myUserInfo.value,
                             image, null, ProfileUpdateType.image)
@@ -146,7 +147,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              _controller.isImage(true);
+                              _controller.isAlbum(true);
                               showModalBottomSheet(
                                   barrierColor: Colors.transparent,
                                   context: context,
@@ -183,7 +184,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
                                                               index;
                                                           _controller.imageList
                                                               .value = _controller
-                                                                  .titleImageList1[
+                                                                  .titleImageList[
                                                               index];
                                                           _controller
                                                                   .headerTitle
@@ -204,11 +205,11 @@ class ProfileImageChangeScreen extends StatelessWidget {
                                                                   color:
                                                                       dividegray,
                                                                   child: _controller
-                                                                          .titleImageList1[
+                                                                          .titleImageList[
                                                                               index]
                                                                           .isNotEmpty
                                                                       ? _photoWidget(
-                                                                          _controller.titleImageList1[index]
+                                                                          _controller.titleImageList[index]
                                                                               [
                                                                               0],
                                                                           500,
@@ -254,7 +255,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
                                           ),
                                         ),
                                       )).then(
-                                  (value) => _controller.isImage(false));
+                                  (value) => _controller.isAlbum(false));
                             },
                             behavior: HitTestBehavior.translucent,
                             child: Container(
@@ -414,28 +415,12 @@ class ProfileImageChangeScreen extends StatelessWidget {
             ));
   }
 
-  Future<List<File>> assetsToFiles(List<AssetEntity> assetEntity) async {
-    List<File> images = <File>[];
-    for (AssetEntity assetentity in assetEntity) {
-      File? image = await assetentity.file;
-      images.add(image!);
-    }
-    return images;
-  }
-
-  Future<File?> cropImage() async {
-    final area = _controller.cropKey.currentState!.area;
-    if (area == null) {
-      // cannot crop, widget is not setup
-      return null;
-    }
-
-    File? teptfile = await _controller.selectedImage.value.originFile;
-    final file = await ImageCrop.cropImage(
-      file: teptfile!,
-      area: area,
-    );
-
-    return file;
-  }
+  // Future<List<File>> assetsToFiles(List<AssetEntity> assetEntity) async {
+  //   List<File> images = <File>[];
+  //   for (AssetEntity assetentity in assetEntity) {
+  //     File? image = await assetentity.file;
+  //     images.add(image!);
+  //   }
+  //   return images;
+  // }
 }
