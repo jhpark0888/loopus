@@ -40,8 +40,15 @@ class LocalNotificaition {
             channelDescription: 'channel description',
             importance: Importance.max,
             priority: Priority.max,
+            playSound: true,
+            //sound:
             showWhen: false);
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidNotificationDetails, iOS: IOSNotificationDetails());
-    await flutterLocalNotificationsPlugin.show(0, title, body, platformChannelSpecifics, payload: 'item x');
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidNotificationDetails,
+        iOS: IOSNotificationDetails(
+// sound:
+            ));
+    await flutterLocalNotificationsPlugin
+        .show(0, title, body, platformChannelSpecifics, payload: 'item x');
   }
 }

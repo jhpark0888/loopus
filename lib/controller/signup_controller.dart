@@ -39,7 +39,7 @@ class SignupController extends GetxController {
   RxList<Dept> searchDeptList = <Dept>[].obs;
 
   RxBool isUserInfoFill = false.obs;
-  RxBool isEmailPassWordCheck = false.obs;
+  RxBool isEmailPassWordCheck = true.obs;
 
   late CertificateTimer timer;
 

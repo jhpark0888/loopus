@@ -7,9 +7,11 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/widget/Link_widget.dart';
+
 import 'dart:ui' as ui;
 
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:zoom_pinch_overlay/zoom_pinch_overlay.dart';
 
 enum SwiperType { image, link, file }
 
@@ -250,7 +252,8 @@ class SwiperWidget extends StatelessWidget {
       {Key? key,
       required this.items,
       required this.swiperType,
-      this.aspectRatio, child})
+      this.aspectRatio,
+      child})
       : super(key: key);
   List items;
   SwiperType swiperType;
@@ -301,9 +304,15 @@ class SwiperWidget extends StatelessWidget {
                   controller: _pageController,
                   itemBuilder: (BuildContext context, int index) {
                     if (swiperType == SwiperType.image) {
-                      return CachedNetworkImage(
-                        imageUrl: items[index],
-                        fit: BoxFit.contain,
+                      return ZoomOverlay(
+                        minScale: 0.5, // optional
+                        maxScale: 3.0, // optional
+                        twoTouchOnly: true,
+                        animationDuration: Duration(milliseconds: 300),
+                        child: CachedNetworkImage(
+                          imageUrl: items[index],
+                          fit: BoxFit.contain,
+                        ),
                       );
                     } else {
                       return Image.file(items[index], fit: BoxFit.contain);

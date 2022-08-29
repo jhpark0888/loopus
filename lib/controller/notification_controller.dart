@@ -115,8 +115,11 @@ class NotificationController extends GetxController {
       print(event.data["type"]);
       print('알림 데이터 : ${event.data}');
       if (event.data["type"] == "msg") {
+        if (Platform.isAndroid) {
+          localNotificaition.sampleNotification(
+              event.notification!.title!, event.notification!.body!);
+        }
         HomeController.to.isNewMsg(true);
-        localNotificaition.sampleNotification(event.notification!.title!, event.notification!.body!);
         if (Get.isRegistered<MessageController>()) {
           String? myid = await const FlutterSecureStorage().read(key: 'id');
           SQLController.to
@@ -274,8 +277,9 @@ class NotificationController extends GetxController {
       sound: true,
       badge: true,
       alert: true,
-      provisional: false,
+      provisional: true,
       announcement: true,
+      criticalAlert: true,
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {

@@ -28,7 +28,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sqflite/sqflite.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  localNotificaition.sampleNotification(message.notification!.title!, message.notification!.body!);
+  localNotificaition.sampleNotification(
+      message.notification!.title!, message.notification!.body!);
   SQLController controller = Get.put(SQLController());
   print('알림 데이터 : ${message.data}');
 }
@@ -40,7 +41,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-   await localNotificaition.initLocalNotificationPlugin();
+  await localNotificaition.initLocalNotificationPlugin();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
