@@ -10,6 +10,7 @@ import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
@@ -31,6 +32,8 @@ class PostingAddScreen extends StatelessWidget {
       : super(key: key);
   late PostingAddController postingAddController =
       Get.put(PostingAddController(route: route));
+  final MultiImageController _imageController =
+      Get.put((MultiImageController()));
   TagController tagController = Get.put(TagController(tagtype: Tagtype.Posting),
       tag: Tagtype.Posting.toString());
   KeyController keyController =
@@ -103,7 +106,7 @@ class PostingAddScreen extends StatelessWidget {
                                         SwiperWidget(
                                           items: postingAddController.images,
                                           swiperType: SwiperType.file,
-                                          aspectRatio: postingAddController
+                                          aspectRatio: _imageController
                                               .cropAspectRatio.value,
                                         ),
                                         Positioned(
@@ -327,8 +330,7 @@ class PostingAddScreen extends StatelessWidget {
         onTap: () async {
           if (checkContent()) {
             loading();
-            await addposting(
-                    project_id, postingAddController.cropAspectRatio.value)
+            await addposting(project_id, _imageController.cropAspectRatio.value)
                 .then((value) {
               Get.back();
               if (value.isError == false) {
@@ -343,15 +345,14 @@ class PostingAddScreen extends StatelessWidget {
                   if (career != null) {
                     career.posts.insert(0, post);
                   }
-
-                  getbacks(3);
-                  dialogBack();
-                  AppController.to.changeBottomNav(0);
-                  HomeController.to.scrollToTop();
-
-                  showCustomDialog('포스팅을 업로드했어요', 1000);
                 }
                 HomeController.to.onPostingRefresh();
+                getbacks(3);
+                dialogBack();
+                AppController.to.changeBottomNav(0);
+                HomeController.to.scrollToTop();
+
+                showCustomDialog('포스팅을 업로드했어요', 1000);
               } else {
                 errorSituation(value);
               }
