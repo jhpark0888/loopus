@@ -128,7 +128,7 @@ class CustomListTile extends StatelessWidget {
               ),
             ),
             Obx(
-              () => SvgPicture.asset('assets/icons/Arrow_right.svg',
+              () => SvgPicture.asset('assets/icons/arrow_right.svg',
                   color: _hoverController.isHover.value
                       ? mainblack.withOpacity(0.6)
                       : mainblack),

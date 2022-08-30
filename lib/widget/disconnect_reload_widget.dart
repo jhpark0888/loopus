@@ -17,7 +17,7 @@ class DisconnectReloadWidget extends StatelessWidget {
         ),
         IconButton(
           onPressed: reload,
-          icon: SvgPicture.asset('assets/icons/Refresh.svg'),
+          icon: SvgPicture.asset('assets/icons/refresh.svg'),
         ),
         const SizedBox(
           height: 60,

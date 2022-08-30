@@ -6,12 +6,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
-import 'package:loopus/controller/ga_controller.dart'; 
+import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/app.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/sql_controller.dart';
@@ -20,13 +21,18 @@ import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loopus/utils/local_notification.dart';
 
+import 'controller/notification_controller.dart';
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-   await Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  localNotificaition.sampleNotification(message.notification!.title!, message.notification!.body!);
+  // localNotificaition.sampleNotification(
+  //     message.notification!.title!, message.notification!.body!, message.data);
   print('알림 데이터 : ${message.data}');
 }
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +41,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-   await localNotificaition.initLocalNotificationPlugin();
+  await localNotificaition.initLocalNotificationPlugin();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(

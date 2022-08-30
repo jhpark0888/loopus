@@ -189,7 +189,7 @@ class NavigationControls extends StatelessWidget {
         return Row(
           children: <Widget>[
             IconButton(
-              icon: SvgPicture.asset('assets/icons/Arrow_left.svg'),
+              icon: SvgPicture.asset('assets/icons/arrow_left.svg'),
               onPressed: !webViewReady
                   ? null
                   : () async {
@@ -206,7 +206,7 @@ class NavigationControls extends StatelessWidget {
               width: 12,
             ),
             IconButton(
-              icon: SvgPicture.asset('assets/icons/Arrow_right.svg'),
+              icon: SvgPicture.asset('assets/icons/arrow_right.svg'),
               onPressed: !webViewReady
                   ? null
                   : () async {
@@ -223,7 +223,7 @@ class NavigationControls extends StatelessWidget {
               width: 12,
             ),
             IconButton(
-              icon: SvgPicture.asset('assets/icons/Refresh.svg'),
+              icon: SvgPicture.asset('assets/icons/refresh.svg'),
               onPressed: !webViewReady
                   ? null
                   : () {

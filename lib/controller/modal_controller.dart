@@ -230,7 +230,7 @@ void showContentModal(BuildContext context) {
                   onTap: () {
                     Get.to(() => WebViewScreen(url: kPrivacyPolicy));
                   },
-                  child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
+                  child: SvgPicture.asset('assets/icons/arrow_right.svg'),
                 ),
               ],
             ),
@@ -287,7 +287,7 @@ void showContentModal(BuildContext context) {
                     Get.to(() =>
                         WebViewScreen(url: kPersonalInfoCollectionAgreement));
                   },
-                  child: SvgPicture.asset('assets/icons/Arrow_right.svg'),
+                  child: SvgPicture.asset('assets/icons/arrow_right.svg'),
                 ),
               ],
             ),
