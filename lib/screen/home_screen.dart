@@ -2,12 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
+import 'package:loopus/utils/custom_linkpreview.dart';
 // import 'package:loopus/screen/post_add_test.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
@@ -176,7 +178,7 @@ class HomeScreen extends StatelessWidget {
                         primary: false,
                         child: Column(
                           children: [
-                            _homeController.recommendCareer != null
+                            _homeController.recommendCareer!.careerName != ""
                                 ? GestureDetector(
                                     behavior: HitTestBehavior.translucent,
                                     onTap: () {

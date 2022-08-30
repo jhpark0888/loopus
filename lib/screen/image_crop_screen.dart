@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
+import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/utils/custom_crop.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class ImageCropScreen extends StatelessWidget {
   ImageCropScreen({Key? key, required this.assetEntity}) : super(key: key);
-  PostingAddController controller = Get.find();
+  MultiImageController controller = Get.find();
 
   // File image;
   GlobalKey<CustomCropState> cropKey = GlobalKey();

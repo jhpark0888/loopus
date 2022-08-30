@@ -110,6 +110,8 @@ class LocalNotificaition {
             'high_importance_channel', 'High Importance Notifications',
             importance: Importance.high,
             priority: Priority.max,
+            playSound: true,
+            //sound:
             showWhen: false);
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: androidNotificationDetails,
