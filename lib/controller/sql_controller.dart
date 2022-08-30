@@ -33,7 +33,7 @@ class SQLController extends GetxController {
           "CREATE TABLE user(user_id INTEGER PRIMARY KEY, real_name TEXT, profile_image TEXT)",
         );
         db.execute(
-          "CREATE TABLE chatroom(room_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, message Text, date Text, not_read INTEGER)",
+          "CREATE TABLE chatroom(room_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, message Text, date Text, not_read INTEGER , alarm_active INTEGER)",
         );
         db.execute(
           "CREATE TABLE chatting(id INTEGER PRIMARY KEY AUTOINCREMENT,msg_id INTEGER,sender INTEGER, date TEXT, is_read TEXT, message TEXT, room_id INTEGER, send_success Text)",
@@ -165,6 +165,19 @@ class SQLController extends GetxController {
     }
   }
 
+  Future<int> getLastmessageId(int roomid) async {
+    final Database db = await database!;
+    final List<Map<String, dynamic>> maps;
+    maps = await db.rawQuery(
+        'SELECT * FROM chatting WHERE room_id = $roomid ORDER BY msg_id DESC LIMIT 1');
+    if (maps.isEmpty) {
+      return 0;
+    } else {
+      int? id = maps.first['msg_id'];
+      return id!;
+    }
+  }
+
   Future<List<ChatRoom>> getDBMessageRoom({ChatRoom? chatRoom}) async {
     final Database db = await database!;
     final List<Map<String, dynamic>> maps;
@@ -185,6 +198,7 @@ class SQLController extends GetxController {
             }).obs,
             user: maps[index]['user_id'],
             notread: RxInt(maps[index]['not_read']),
+            type: RxInt(maps[index]['alarm_active']),
             roomId: maps[index]['room_id']);
       });
       messageList
@@ -209,9 +223,18 @@ class SQLController extends GetxController {
       return false;
     } else {
       print('존재합니다');
-      print(maps);
       return true;
     }
+  }
+
+  Future<int> updateRoomAlarmActive(int type, int roomId) async {
+    final Database db = await database!;
+    int alarm_active = type == 0 ? 1 : 0;
+    await db.rawUpdate('UPDATE chatroom SET alarm_active = ? WHERE room_id = ?',
+        [alarm_active, roomId]).then((value) {
+      print(alarm_active);   
+    });
+    return alarm_active;
   }
 
   Future<bool> findUser({required int userId, required User user}) async {
@@ -274,12 +297,12 @@ class SQLController extends GetxController {
         'UPDATE user SET profile_image = ? WHERE user_id = ?', [image, userId]);
   }
 
-  Future<void> updateMessage(String sendSuccess, int newMsgId, String isRead,String date,
-      int userId,int roomId, int oldMsgId) async {
+  Future<void> updateMessage(String sendSuccess, int newMsgId, String isRead,
+      String date, int userId, int roomId, int oldMsgId) async {
     final Database db = await database!;
     print('$oldMsgId에서 $newMsgId로 바뀜');
     await db.rawQuery(
         'UPDATE chatting SET send_success = ?, msg_id = ?, is_read = ?, date = ? WHERE sender = ? and room_id = ? and msg_id = ?',
-        [sendSuccess, newMsgId, isRead,date, userId,roomId, oldMsgId]);
+        [sendSuccess, newMsgId, isRead, date, userId, roomId, oldMsgId]);
   }
 }

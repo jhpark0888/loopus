@@ -146,91 +146,93 @@ class MessageDetatilScreen extends StatelessWidget {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: sendField()),
-          body: Obx(
-            () => controller.screenState.value == ScreenState.loading
-                ? const Center(child: LoadingWidget())
-                : controller.screenState.value == ScreenState.success
-                    ? Scrollbar(
-                        child: FlutterListView(
-                            reverse: true,
-                            controller: controller.listViewController,
-                            delegate: FlutterListViewDelegate(
-                              (context, index) {
-                                if (controller.messageList.length == 1) {
-                                  //메세지가 한개 있을 경우 isfirst는 읽음, 안읽음 표시를 위함, isdaychange는 날싸 표시를 위함
-                                  return MessageWidget(
-                                      message: controller.messageList[index],
-                                      isFirst: true.obs,
-                                      isDayChange: true.obs,
-                                      partner: partner,
-                                      myId: controller.myId!);
-                                } else if (controller.messageList[index] ==
-                                    controller.messageList.first) {
-                                      //첫번째 메세지의 경우 
-                                  if (DateFormat('yyyy-MM-dd').parse(controller
-                                          .messageList[index].date
-                                          .toString()) !=
-                                      DateFormat('yyyy-MM-dd').parse(controller
-                                          .messageList[index + 1].date
-                                          .toString())) {
+          body: SafeArea(
+            child: Obx(
+              () => controller.screenState.value == ScreenState.loading
+                  ? const Center(child: LoadingWidget())
+                  : controller.screenState.value == ScreenState.success
+                      ? Scrollbar(
+                          child: FlutterListView(
+                              reverse: true,
+                              controller: controller.listViewController,
+                              delegate: FlutterListViewDelegate(
+                                (context, index) {
+                                  if (controller.messageList.length == 1) {
+                                    //메세지가 한개 있을 경우 isfirst는 읽음, 안읽음 표시를 위함, isdaychange는 날싸 표시를 위함
                                     return MessageWidget(
                                         message: controller.messageList[index],
                                         isFirst: true.obs,
                                         isDayChange: true.obs,
                                         partner: partner,
                                         myId: controller.myId!);
-                                  } else {
+                                  } else if (controller.messageList[index] ==
+                                      controller.messageList.first) {
+                                        //첫번째 메세지의 경우 
+                                    if (DateFormat('yyyy-MM-dd').parse(controller
+                                            .messageList[index].date
+                                            .toString()) !=
+                                        DateFormat('yyyy-MM-dd').parse(controller
+                                            .messageList[index + 1].date
+                                            .toString())) {
+                                      return MessageWidget(
+                                          message: controller.messageList[index],
+                                          isFirst: true.obs,
+                                          isDayChange: true.obs,
+                                          partner: partner,
+                                          myId: controller.myId!);
+                                    } else {
+                                      return MessageWidget(
+                                          message: controller.messageList[index],
+                                          isFirst: true.obs,
+                                          isDayChange: false.obs,
+                                          partner: partner,
+                                          myId: controller.myId!);
+                                    }
+                                  } else if (controller.messageList[index] ==
+                                      controller.messageList.last) {
+                                        //마지막 메세지의 경우
                                     return MessageWidget(
                                         message: controller.messageList[index],
-                                        isFirst: true.obs,
+                                        isFirst: false.obs,
+                                        isDayChange: true.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  } else if (DateFormat('yyyy-MM-dd').parse(
+                                          controller.messageList[index].date
+                                              .toString()) !=
+                                      DateFormat('yyyy-MM-dd').parse(controller
+                                          .messageList[index + 1].date
+                                          .toString())) {
+                                            //중간 메세지에서 날짜가 변하는 시점이 있을 경우
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isFirst: false.obs,
+                                        isDayChange: true.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  } else {
+                                    //중간 메세지에서 날짜가 변하는 시점이 없는 경우
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isFirst: false.obs,
                                         isDayChange: false.obs,
                                         partner: partner,
                                         myId: controller.myId!);
                                   }
-                                } else if (controller.messageList[index] ==
-                                    controller.messageList.last) {
-                                      //마지막 메세지의 경우
-                                  return MessageWidget(
-                                      message: controller.messageList[index],
-                                      isFirst: false.obs,
-                                      isDayChange: true.obs,
-                                      partner: partner,
-                                      myId: controller.myId!);
-                                } else if (DateFormat('yyyy-MM-dd').parse(
-                                        controller.messageList[index].date
-                                            .toString()) !=
-                                    DateFormat('yyyy-MM-dd').parse(controller
-                                        .messageList[index + 1].date
-                                        .toString())) {
-                                          //중간 메세지에서 날짜가 변하는 시점이 있을 경우
-                                  return MessageWidget(
-                                      message: controller.messageList[index],
-                                      isFirst: false.obs,
-                                      isDayChange: true.obs,
-                                      partner: partner,
-                                      myId: controller.myId!);
-                                } else {
-                                  //중간 메세지에서 날짜가 변하는 시점이 없는 경우
-                                  return MessageWidget(
-                                      message: controller.messageList[index],
-                                      isFirst: false.obs,
-                                      isDayChange: false.obs,
-                                      partner: partner,
-                                      myId: controller.myId!);
-                                }
-                              },
-                              childCount: controller.messageList.length,
-                              onItemKey: (index) => controller
-                                  .messageList[index].messageId
-                                  .toString(),
-                              initOffsetBasedOnBottom: true,
-                              firstItemAlign: FirstItemAlign.end,
-                              keepPosition: true,
-                            )),
-                      )
-                    : controller.screenState.value == ScreenState.normal
-                        ? Container()
-                        : Container(),
+                                },
+                                childCount: controller.messageList.length,
+                                onItemKey: (index) => controller
+                                    .messageList[index].messageId
+                                    .toString(),
+                                initOffsetBasedOnBottom: true,
+                                firstItemAlign: FirstItemAlign.end,
+                                keepPosition: true,
+                              )),
+                        )
+                      : controller.screenState.value == ScreenState.normal
+                          ? Container()
+                          : Container(),
+            ),
           )),
     );
   }

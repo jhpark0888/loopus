@@ -307,127 +307,33 @@ Future<HTTPResponse> updateNotreadMsg(int userId) async {
   }
 }
 
-// Future<HTTPResponse> getmessagelist(int userid, int lastindex) async {
-//   String? token = await const FlutterSecureStorage().read(key: 'token');
-//   String? myid = await const FlutterSecureStorage().read(key: 'id');
-//   MessageDetailController messageDetailController =
-//       Get.find<MessageDetailController>(tag: userid.toString());
-
-//   final url = Uri.parse("$serverUri/chat/chatting?id=$userid&last=$lastindex");
-
-//   try {
-//     final response =
-//         await http.get(url, headers: {"Authorization": "Token $token"});
-
-//     print('채팅 리스트 statuscode: ${response.statusCode}');
-//     if (response.statusCode == 200) {
-//       Map responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-//       if (lastindex == 0) {
-//         messageDetailController.user =
-//             User.fromJson(responseBody["profile"]).obs;
-//       }
-//       List<MessageWidget> modelmessagelist = List.from(responseBody["message"])
-//           .map((message) => Message.fromJson(message, myid))
-//           .toList()
-//           .map((message) => MessageWidget(
-//               message: message, user: messageDetailController.user!.value))
-//           .toList();
-//       // print(responseBody);
-
-//       // MessageController.to.chattingroomlist(responseBody
-//       //     .map((messageroom) => MessageRoom.fromJson(messageroom))
-//       //     .toList());
-//       return HTTPResponse.success(modelmessagelist);
-//     } else if (response.statusCode == 404) {
-//       messageDetailController.messagelist([]);
-//       return HTTPResponse.success(<MessageWidget>[]);
-//     } else {
-//       return HTTPResponse.apiError('', response.statusCode);
-//     }
-//   } on SocketException {
-//     // ErrorController.to.isServerClosed(true);
-//     return HTTPResponse.serverError();
-//   } catch (e) {
-//     print(e);
-//     return HTTPResponse.unexpectedError(e);
-//     // ErrorController.to.isServerClosed(true);
-//   }
-
-// print(map);
-// String username = map["real_name"];
-// userid = map["user_id"];
-// if (map["messages"].length != 0) {
-//   map["messages"].forEach((element) {
-//     if (element["sender_id"] == map["user_id"]) {
-//       MessageController.to.messagelist.add(MessageWidget(
-//         content: element["message"],
-//         image: map["profile_image"],
-//         isSender: 1,
-//       ));
-//     } else {
-//       MessageController.to.messagelist.add(MessageWidget(
-//         content: element["message"],
-//         image: map["profile_image"],
-//         isSender: 0,
-//       ));
-//     }
-//   });
-// } else {
-//   return;
-// }
-// }
-
-Future<void> postmessage(String content, int userid) async {
-  String? token = await const FlutterSecureStorage().read(key: 'token');
-  String? myid = await const FlutterSecureStorage().read(key: 'id');
-
-  final url = Uri.parse("$serverUri/chat/chatting?id=$userid");
-
-  var message = {
-    "message": content,
-  };
-
-  http.Response response = await http.post(url,
-      headers: {
-        'Authorization': 'Token $token',
-        'Content-Type': 'application/json'
-      },
-      body: jsonEncode(message));
-
-  print('메세지 보내기 statuscode: ${response.statusCode}');
-  if (response.statusCode == 200) {
-    // var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-    // print(responseBody);
-
-    // Message messagelist = Message.fromJson(responseBody, myid);
-    return;
+Future<HTTPResponse> roomAlarmStatus(int userId, int roomId, int type) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
-    return Future.error(response.statusCode);
-  }
-}
+    String? token = await const FlutterSecureStorage().read(key: "token");
 
-Future<void> putonmessagescreen(String userid) async {
-  String? token = await const FlutterSecureStorage().read(key: 'token');
-  String? myid = await const FlutterSecureStorage().read(key: 'id');
+    final uri = Uri.parse("http://$chatServerUri/chat/chat_list?id=${userId.toString()}");
+    Map<String, dynamic> body = {'room_id': roomId.toString(), 'type': type.toString()};
+    try {
+      http.Response response = await http.put(uri, body: body);
 
-  final url = Uri.parse("$serverUri/chat/chatting?id=$userid");
-
-  http.Response response = await http.put(
-    url,
-    headers: {
-      'Authorization': 'Token $token',
-      'Content-Type': 'application/json'
-    },
-  );
-
-  print('on 메세지 스크린 statuscode: ${response.statusCode}');
-  if (response.statusCode == 200) {
-    // var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-    // print(responseBody);
-
-    // Message messagelist = Message.fromJson(responseBody, myid);
-    return;
-  } else {
-    return Future.error(response.statusCode);
+      print("방 알람 활성화 여부 status: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        return HTTPResponse.success(response.statusCode.toString());
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print('에러 뜸');
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+      // ErrorController.to.isServerClosed(true);
+    }
   }
 }

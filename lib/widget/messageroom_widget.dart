@@ -9,6 +9,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/user_model.dart';
@@ -24,7 +25,7 @@ class MessageRoomWidget extends StatelessWidget {
 
   Rx<ChatRoom> chatRoom;
   Rx<User> user;
-
+  MessageController messageController = Get.find<MessageController>();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -56,13 +57,75 @@ class MessageRoomWidget extends StatelessWidget {
         endActionPane: ActionPane(motion: const ScrollMotion(), children: [
           SlidableAction(
             // An action can be bigger than the others.
-            onPressed: (context) {},
+            onPressed: (context) {
+              showButtonDialog(
+                  title: chatRoom.value.type.value == 1 ? '알림해제' : '알림켜기',
+                  content: chatRoom.value.type.value == 1
+                      ? '해제를 하면 해당 유저로부터 알림을 받을 수 없습니다.'
+                      : '켜기를 하면 해당 유저로부터 알림을 받을 수 있습니다.',
+                  leftFunction: () {
+                    Get.back();
+                  },
+                  rightFunction: () async{
+                    await roomAlarmStatus(HomeController.to.myProfile.value.userid,
+                            chatRoom.value.roomId, chatRoom.value.type.value)
+                        .then((value) {
+                      if (value.isError == false) {
+                        SQLController.to
+                            .updateRoomAlarmActive(chatRoom.value.type.value,
+                                chatRoom.value.roomId)
+                            .then((type) => chatRoom.value.type.value = type);
+                      }
+                    });
+                    Get.back();
+                  },
+                  rightText: chatRoom.value.type.value == 1 ? '해제' : "켜기",
+                  leftText: '취소');
+            },
             backgroundColor: maingray,
             foregroundColor: Colors.white,
-            label: '알림 끄기',
+            label: chatRoom.value.type.value == 1 ? '알림끄기' : '알림켜기',
           ),
           SlidableAction(
-            onPressed: (context) {},
+            onPressed: (context) {
+              showButtonDialog(
+                  title: '채팅방 나가기',
+                  content: '나가기를 하면 메세지가 모두 삭제되고\n 메세지 목록에서도 삭제됩니다.',
+                  leftText: '취소',
+                  leftFunction: () {
+                    Get.back();
+                  },
+                  rightText: '나가기',
+                  rightFunction: () async {
+                    await SQLController.to
+                        .getLastmessageId(chatRoom.value.roomId)
+                        .then((msgId) => deleteChatRoom(
+                                    chatRoom.value.roomId,
+                                    HomeController.to.myProfile.value.userid,
+                                    msgId)
+                                .then((value) {
+                              if (value.isError == false) {
+                                SQLController.to
+                                    .deleteMessage(chatRoom.value.roomId);
+                                SQLController.to
+                                    .deleteMessageRoom(chatRoom.value.roomId);
+                                SQLController.to.deleteUser(user.value.userid);
+
+                                messageController.searchRoomList.removeAt(
+                                    messageController.searchRoomList.indexWhere(
+                                        (messageRoom) =>
+                                            messageRoom.chatRoom.value.roomId ==
+                                            chatRoom.value.roomId));
+                                messageController.chattingRoomList.removeAt(
+                                    messageController.chattingRoomList
+                                        .indexWhere((messageRoom) =>
+                                            messageRoom.chatRoom.value.roomId ==
+                                            chatRoom.value.roomId));
+                              }
+                            }));
+                    Get.back();
+                  });
+            },
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
             label: '나가기',
@@ -117,6 +180,8 @@ class MessageRoomWidget extends StatelessWidget {
                           Text(
                               '· ${messageRoomDurationCalculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
                               style: kmain.copyWith(color: maingray)),
+                              const SizedBox(width: 7),
+                              chatRoom.value.type.value == 0 ? const Icon(Icons.alarm_off_rounded, size:16,) : const SizedBox.shrink()
                         ],
                       ),
                     ),

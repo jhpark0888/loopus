@@ -36,56 +36,56 @@ class LogInScreen extends StatelessWidget {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: SafeArea(
-        child: Scaffold(
-          extendBody: true,
-          bottomNavigationBar: BottomAppBar(
-            color: mainWhite,
-            elevation: 0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomExpandedButton(
-                            onTap: () {
-                              Get.back();
+      child: Scaffold(
+        extendBody: true,
+        bottomNavigationBar: BottomAppBar(
+          color: mainWhite,
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomExpandedButton(
+                          onTap: () {
+                            Get.back();
+                          },
+                          isBlue: false,
+                          title: "이전",
+                          isBig: true),
+                    ),
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Expanded(
+                      child: Obx(
+                        () => CustomExpandedButton(
+                            onTap: () async {
+                              if (_loginController.loginButtonOn.value) {
+                                login(
+                                  context,
+                                  emailId: _loginController.idcontroller.text,
+                                  password: _loginController
+                                      .passwordcontroller.text,
+                                );
+                              }
                             },
-                            isBlue: false,
-                            title: "이전",
+                            isBlue: _loginController.loginButtonOn.value,
+                            title: "로그인",
                             isBig: true),
                       ),
-                      const SizedBox(
-                        width: 14,
-                      ),
-                      Expanded(
-                        child: Obx(
-                          () => CustomExpandedButton(
-                              onTap: () async {
-                                if (_loginController.loginButtonOn.value) {
-                                  login(
-                                    context,
-                                    emailId: _loginController.idcontroller.text,
-                                    password: _loginController
-                                        .passwordcontroller.text,
-                                  );
-                                }
-                              },
-                              isBlue: _loginController.loginButtonOn.value,
-                              title: "로그인",
-                              isBig: true),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          body: SingleChildScrollView(
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SignUpTextWidget(
