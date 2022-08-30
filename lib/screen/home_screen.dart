@@ -178,7 +178,7 @@ class HomeScreen extends StatelessWidget {
                         primary: false,
                         child: Column(
                           children: [
-                            _homeController.recommendCareer != null
+                            _homeController.recommendCareer!.careerName != ""
                                 ? GestureDetector(
                                     behavior: HitTestBehavior.translucent,
                                     onTap: () {

@@ -34,6 +34,14 @@ class PostingAddController extends GetxController {
   RxBool keyboardActive = false.obs;
   RxBool getTagList = false.obs;
   PostaddRoute route;
+
+  RxDouble cropAspectRatio = 1.0.obs;
+  List<double> selectedScaleList = [];
+  List<Rect> selectedViewList = [];
+  List<AssetEntity> selectedImageList = [];
+  List<GlobalKey<CustomCropState>> selectedCropKeyList = [];
+  List<Widget> selectedCropWidgetList = [];
+
   KeyController keyController = Get.put(KeyController(isTextField: false.obs));
   void onInit() {
     if (Get.isRegistered<ShareIntentController>()) {

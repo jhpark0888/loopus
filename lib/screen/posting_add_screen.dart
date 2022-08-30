@@ -73,56 +73,24 @@ class PostingAddScreen extends StatelessWidget {
                       child: Column(children: [
                         postingAddController.isAddLink.value == false
                             ? postingAddController.isAddImage.value == true
-                                ? postingAddController.images.length == 1
-                                    ? Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          Container(
-                                            color: mainblack,
-                                            height: Get.width,
-                                            child: Image.file(
-                                                postingAddController
-                                                    .images.first,
-                                                fit: BoxFit.contain),
-                                          ),
-                                          // const SizedBox(height: 14),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                20, 14, 20, 14),
-                                            child: GestureDetector(
-                                                onTap: () {
-                                                  Get.to(() => UploadScreen());
-                                                },
-                                                child: Text('사진 수정하기',
-                                                    style: kmain.copyWith(
-                                                        color: mainblue),
-                                                    textAlign:
-                                                        ui.TextAlign.right)),
-                                          )
-                                        ],
-                                      )
-                                    : Stack(children: [
-                                        SwiperWidget(
-                                          items: postingAddController.images,
-                                          swiperType: SwiperType.file,
-                                          aspectRatio: _imageController
-                                              .cropAspectRatio.value,
-                                        ),
-                                        Positioned(
-                                            child: GestureDetector(
-                                                onTap: () {
-                                                  Get.to(() => UploadScreen(),
-                                                      duration: const Duration(
-                                                          milliseconds: 300),
-                                                      curve: Curves.ease);
-                                                },
-                                                child: Text('사진 수정하기',
-                                                    style: kmain.copyWith(
-                                                        color: mainblue))),
-                                            right: 20,
-                                            bottom: 5)
-                                      ])
+                                ? Stack(children: [
+                                    SwiperWidget(
+                                      items: postingAddController.images,
+                                      swiperType: SwiperType.file,
+                                      aspectRatio: postingAddController
+                                          .cropAspectRatio.value,
+                                    ),
+                                    Positioned(
+                                        child: GestureDetector(
+                                            onTap: () {
+                                              imageChange();
+                                            },
+                                            child: Text('사진 수정하기',
+                                                style: kmain.copyWith(
+                                                    color: mainblue))),
+                                        right: 20,
+                                        bottom: 5)
+                                  ])
                                 : Column(children: [
                                     SizedBox(height: 10),
                                     Padding(
@@ -168,7 +136,7 @@ class PostingAddScreen extends StatelessWidget {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Divider(thickness: 0.5),
+                            const Divider(thickness: 0.5),
                             LayoutBuilder(builder: (context, constraints) {
                               return NoUlTextField(
                                 controller: postingAddController.textcontroller,
@@ -177,9 +145,9 @@ class PostingAddScreen extends StatelessWidget {
                               );
                             }),
                             Divider(key: keyController.viewKey, thickness: 0.5),
-                            SizedBox(height: 14),
-                            Text('태그', style: kmain),
-                            SizedBox(height: 14),
+                            const SizedBox(height: 14),
+                            const Text('태그', style: kmain),
+                            const SizedBox(height: 14),
                             Obx(() => tagController.selectedtaglist.isEmpty
                                 ? Text('입력시 기업이 컨택할 가능성이 높아져요',
                                     style: kmain.copyWith(
@@ -372,5 +340,20 @@ class PostingAddScreen extends StatelessWidget {
     } else {
       return false;
     }
+  }
+
+  void imageChange() {
+    // _imageController
+    //     .cropAspectRatio(postingAddController.cropAspectRatio.value);
+    // _imageController.cropKeyList = postingAddController.selectedCropKeyList;
+    // _imageController
+    //     .cropWidgetList(postingAddController.selectedCropWidgetList);
+    // _imageController.selectedImages(postingAddController.selectedImageList);
+    // _imageController.selectedImage(postingAddController.selectedImageList[0]);
+    // _imageController.selectedIndex(0);
+    // print(postingAddController.selectedImageList[0].hashCode);
+    // print(_imageController.selectedImages[0].hashCode);
+    Get.to(() => UploadScreen(),
+        duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 }
