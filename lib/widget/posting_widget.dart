@@ -128,19 +128,19 @@ class PostingWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Obx(
-                        () => type == PostingWidgetType.detail
-                            ? Text(item.content.value, style: kmainheight)
-                            : ExpandableText(
-                                textSpan: TextSpan(
-                                    text: item.content.value,
-                                    style: kmainheight),
-                                moreSpan: TextSpan(
-                                    text: ' ...더보기',
-                                    style:
-                                        kmainheight.copyWith(color: maingray)),
-                                maxLines: 3),
-                      ),
+                      // Obx(
+                      //   () => type == PostingWidgetType.detail
+                      //       ? Text(item.content.value, style: kmainheight)
+                      //       : ExpandableText(
+                      //           textSpan: TextSpan(
+                      //               text: item.content.value,
+                      //               style: kmainheight),
+                      //           moreSpan: TextSpan(
+                      //               text: ' ...더보기',
+                      //               style:
+                      //                   kmainheight.copyWith(color: maingray)),
+                      //           maxLines: 3),
+                      // ),
                       if (item.tags.isNotEmpty)
                         Column(children: [
                           const SizedBox(
