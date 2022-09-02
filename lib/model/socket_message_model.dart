@@ -1,9 +1,3 @@
-// class SocketMessage{
-//   String type;
-//   List<Chat> message;
-
-// }
-
 import 'package:get/get.dart';
 import 'package:loopus/model/user_model.dart';
 
@@ -77,7 +71,7 @@ class ChatRoom {
         user: json['profile'],
         notread: RxInt(json["not_read"]),
         roomId: json['room_id'],
-        type : json['alarm_active'] ? RxInt(1) : RxInt(0)
+        type : RxInt(json['alarm_active'] )
       );
 
   factory ChatRoom.fromMsg(Map<String, dynamic> json) => ChatRoom(

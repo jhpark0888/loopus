@@ -50,116 +50,126 @@ class MessageRoomWidget extends StatelessWidget {
 
         HomeController.to.enterMessageRoom.value = user.value.userid;
       },
-      child: Slidable(
-        key: ValueKey(chatRoom.value.roomId.toString()),
-        closeOnScroll: true,
-        groupTag: '1',
-        endActionPane: ActionPane(motion: const ScrollMotion(), children: [
-          SlidableAction(
-            // An action can be bigger than the others.
-            onPressed: (context) {
-              showButtonDialog(
-                  title: chatRoom.value.type.value == 1 ? '알림해제' : '알림켜기',
-                  content: chatRoom.value.type.value == 1
-                      ? '해제를 하면 해당 유저로부터 알림을 받을 수 없습니다.'
-                      : '켜기를 하면 해당 유저로부터 알림을 받을 수 있습니다.',
-                  leftFunction: () {
-                    Get.back();
-                  },
-                  rightFunction: () async{
-                    await roomAlarmStatus(HomeController.to.myProfile.value.userid,
-                            chatRoom.value.roomId, chatRoom.value.type.value)
-                        .then((value) {
-                      if (value.isError == false) {
-                        SQLController.to
-                            .updateRoomAlarmActive(chatRoom.value.type.value,
-                                chatRoom.value.roomId)
-                            .then((type) => chatRoom.value.type.value = type);
-                      }
+      child: Obx(
+        () => Slidable(
+          key: ValueKey(chatRoom.value.roomId.toString()),
+          closeOnScroll: true,
+          groupTag: '1',
+          endActionPane: ActionPane(motion: const ScrollMotion(), children: [
+            SlidableAction(
+              // An action can be bigger than the others.
+              onPressed: (context) {
+                showButtonDialog(
+                    title: chatRoom.value.type.value == 1 ? '알림해제' : '알림켜기',
+                    content: chatRoom.value.type.value == 1
+                        ? '해제를 하면 해당 유저로부터 알림을 받을 수 없습니다.'
+                        : '켜기를 하면 해당 유저로부터 알림을 받을 수 있습니다.',
+                    leftFunction: () {
+                      Get.back();
+                    },
+                    rightFunction: () async{
+                      await roomAlarmStatus(HomeController.to.myProfile.value.userid,
+                              chatRoom.value.roomId, chatRoom.value.type.value)
+                          .then((value) {
+                        if (value.isError == false) {
+                          SQLController.to
+                              .updateRoomAlarmActive(chatRoom.value.type.value,
+                                  chatRoom.value.roomId)
+                              .then((type) => chatRoom.value.type.value = type);
+                        }
+                      });
+                      Get.back();
+                    },
+                    rightText: chatRoom.value.type.value == 1 ? '해제' : "켜기",
+                    leftText: '취소');
+              },
+              backgroundColor: maingray,
+              foregroundColor: Colors.white,
+              label: chatRoom.value.type.value == 1 ? '알림끄기' : '알림켜기',
+            ),
+            SlidableAction(
+              onPressed: (context) {
+                showButtonDialog(
+                    title: '채팅방 나가기',
+                    content: '나가기를 하면 메세지가 모두 삭제되고\n 메세지 목록에서도 삭제됩니다.',
+                    leftText: '취소',
+                    leftFunction: () {
+                      Get.back();
+                    },
+                    rightText: '나가기',
+                    rightFunction: () async {
+                      await SQLController.to
+                          .getLastmessageId(chatRoom.value.roomId)
+                          .then((msgId) => deleteChatRoom(
+                                      chatRoom.value.roomId,
+                                      HomeController.to.myProfile.value.userid,
+                                      msgId)
+                                  .then((value) {
+                                if (value.isError == false) {
+                                  SQLController.to
+                                      .deleteMessage(chatRoom.value.roomId);
+                                  SQLController.to
+                                      .deleteMessageRoom(chatRoom.value.roomId);
+                                  SQLController.to.deleteUser(user.value.userid);
+      
+                                  messageController.searchRoomList.removeAt(
+                                      messageController.searchRoomList.indexWhere(
+                                          (messageRoom) =>
+                                              messageRoom.chatRoom.value.roomId ==
+                                              chatRoom.value.roomId));
+                                  messageController.chattingRoomList.removeAt(
+                                      messageController.chattingRoomList
+                                          .indexWhere((messageRoom) =>
+                                              messageRoom.chatRoom.value.roomId ==
+                                              chatRoom.value.roomId));
+                                }
+                              }));
+                      Get.back();
                     });
-                    Get.back();
-                  },
-                  rightText: chatRoom.value.type.value == 1 ? '해제' : "켜기",
-                  leftText: '취소');
-            },
-            backgroundColor: maingray,
-            foregroundColor: Colors.white,
-            label: chatRoom.value.type.value == 1 ? '알림끄기' : '알림켜기',
-          ),
-          SlidableAction(
-            onPressed: (context) {
-              showButtonDialog(
-                  title: '채팅방 나가기',
-                  content: '나가기를 하면 메세지가 모두 삭제되고\n 메세지 목록에서도 삭제됩니다.',
-                  leftText: '취소',
-                  leftFunction: () {
-                    Get.back();
-                  },
-                  rightText: '나가기',
-                  rightFunction: () async {
-                    await SQLController.to
-                        .getLastmessageId(chatRoom.value.roomId)
-                        .then((msgId) => deleteChatRoom(
-                                    chatRoom.value.roomId,
-                                    HomeController.to.myProfile.value.userid,
-                                    msgId)
-                                .then((value) {
-                              if (value.isError == false) {
-                                SQLController.to
-                                    .deleteMessage(chatRoom.value.roomId);
-                                SQLController.to
-                                    .deleteMessageRoom(chatRoom.value.roomId);
-                                SQLController.to.deleteUser(user.value.userid);
-
-                                messageController.searchRoomList.removeAt(
-                                    messageController.searchRoomList.indexWhere(
-                                        (messageRoom) =>
-                                            messageRoom.chatRoom.value.roomId ==
-                                            chatRoom.value.roomId));
-                                messageController.chattingRoomList.removeAt(
-                                    messageController.chattingRoomList
-                                        .indexWhere((messageRoom) =>
-                                            messageRoom.chatRoom.value.roomId ==
-                                            chatRoom.value.roomId));
-                              }
-                            }));
-                    Get.back();
-                  });
-            },
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            label: '나가기',
-          ),
-        ]),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          width: Get.width,
-          color: mainWhite,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              UserImageWidget(
-                  imageUrl: user.value.profileImage ?? '',
-                  width: 36,
-                  height: 36),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(user.value.realName, style: kmainbold),
-                    const SizedBox(height: 7),
-                    Obx(
-                      () => Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          hasTextOverflow(
-                                  chatRoom.value.message.value.content, kmain,
-                                  maxWidth: Get.width - 190)
-                              ? SizedBox(
-                                  width: Get.width - 190,
-                                  child: Text(
+              },
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              label: '나가기',
+            ),
+          ]),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            width: Get.width,
+            color: mainWhite,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                UserImageWidget(
+                    imageUrl: user.value.profileImage ?? '',
+                    width: 36,
+                    height: 36),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Text(user.value.realName, style: kmainbold),
+                      const SizedBox(height: 7),
+                      Obx(
+                        () => Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            hasTextOverflow(
+                                    chatRoom.value.message.value.content, kmain,
+                                    maxWidth: Get.width - 190)
+                                ? SizedBox(
+                                    width: Get.width - 190,
+                                    child: Text(
+                                      chatRoom.value.message.value.content,
+                                      style: chatRoom.value.notread.value == 0
+                                          ? kmain.copyWith(color: maingray)
+                                          : kmain.copyWith(
+                                              fontWeight: FontWeight.w500),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ))
+                                : Text(
                                     chatRoom.value.message.value.content,
                                     style: chatRoom.value.notread.value == 0
                                         ? kmain.copyWith(color: maingray)
@@ -167,41 +177,33 @@ class MessageRoomWidget extends StatelessWidget {
                                             fontWeight: FontWeight.w500),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
-                                  ))
-                              : Text(
-                                  chatRoom.value.message.value.content,
-                                  style: chatRoom.value.notread.value == 0
-                                      ? kmain.copyWith(color: maingray)
-                                      : kmain.copyWith(
-                                          fontWeight: FontWeight.w500),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                          Text(
-                              '· ${messageRoomDurationCalculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
-                              style: kmain.copyWith(color: maingray)),
-                              const SizedBox(width: 7),
-                              chatRoom.value.type.value == 0 ? const Icon(Icons.alarm_off_rounded, size:16,) : const SizedBox.shrink()
-                        ],
+                                  ),
+                            Text(
+                                '· ${messageRoomDurationCalculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
+                                style: kmain.copyWith(color: maingray)),
+                                const SizedBox(width: 7),
+                                chatRoom.value.type.value == 0 ? const Icon(Icons.alarm_off_rounded, size:16,) : const SizedBox.shrink()
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Obx(() {
-                if (chatRoom.value.notread.value == 0) {
-                  return const SizedBox.shrink();
-                } else {
-                  return Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(36),
-                        color: mainblue),
-                    width: 7,
-                    height: 7,
-                  );
-                }
-              })
-            ],
+                Obx(() {
+                  if (chatRoom.value.notread.value == 0) {
+                    return const SizedBox.shrink();
+                  } else {
+                    return Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(36),
+                          color: mainblue),
+                      width: 7,
+                      height: 7,
+                    );
+                  }
+                })
+              ],
+            ),
           ),
         ),
       ),

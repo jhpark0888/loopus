@@ -15,6 +15,7 @@ import 'package:intl/intl_standalone.dart';
 import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/app.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/screen/start_screen.dart';
@@ -27,12 +28,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // localNotificaition.sampleNotification(
-  //     message.notification!.title!, message.notification!.body!, message.data);
-  print('알림 데이터 : ${message.data}');
+
+  if (message.data['type'] == 'msg') {
+    String? newMsg = await FlutterSecureStorage().read(key: 'newMsg') ?? '';
+    print(newMsg);
+    if (newMsg == '') {
+      const FlutterSecureStorage().write(key: 'newMsg', value: 'true');
+    }
+  }
+  print('백그라운드 알림 데이터 : ${message.data}');
 }
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

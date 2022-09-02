@@ -15,7 +15,7 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class MessageController extends GetxController {
+class MessageController extends GetxController with WidgetsBindingObserver {
   static MessageController get to => Get.find();
   RefreshController refreshController = RefreshController();
   TextEditingController searchName = TextEditingController();
@@ -27,8 +27,7 @@ class MessageController extends GetxController {
   RxList<User> member = <User>[].obs;
   @override
   void onInit() async {
-    String? userId = await const FlutterSecureStorage().read(key: "id");
-    print('$userId 유저아이디가 이거입니다');
+    WidgetsBinding.instance!.addObserver(this);
 
     await SQLController.to.getDBMessageRoom().then((value) async {
       if (value.isNotEmpty) {
@@ -39,6 +38,75 @@ class MessageController extends GetxController {
       }
       chatroomscreenstate.value = ScreenState.success;
     });
+    refresh();
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    const FlutterSecureStorage().delete(key: 'newMsg');
+    super.onClose();
+  }
+
+  Future<void> getDBUserInfo(List<ChatRoom> temp) async {
+    List<int> int_member =
+        List.generate(temp.length, (index) => temp[index].user);
+
+    await Future.forEach(
+        int_member,
+        (element) => SQLController.to
+            .getDBUser(element as int)
+            .then((value) => member.add(value)));
+  }
+
+  Future<void> addList(temp) async {
+    chattingRoomList.addAll(List.generate(
+        temp.length,
+        ((index) => MessageRoomWidget(
+            chatRoom: Rx<ChatRoom>(temp[index]),
+            user: Rx<User>(member[index])))));
+    searchRoomList.value = chattingRoomList.toList();
+  }
+
+  Future<void> sortList() async {
+    MessageController.to.chattingRoomList.sort((a, b) => b
+        .chatRoom.value.message.value.date
+        .compareTo(a.chatRoom.value.message.value.date));
+    MessageController.to.searchRoomList.sort((a, b) => b
+        .chatRoom.value.message.value.date
+        .compareTo(a.chatRoom.value.message.value.date));
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print(state);
+        String update = await FlutterSecureStorage().read(key: 'newMsg') ?? '';
+        print(update);
+        if (update != '') {
+          if (Get.isRegistered<MessageController>()) {
+            MessageController.to.refresh();
+          }
+          const FlutterSecureStorage().delete(key: 'newMsg');
+        }
+        print('연결되었습니다.');
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.paused:
+        // listener.cancel();
+        print('작동완료');
+        print(state);
+        break;
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  Future<void> refresh() async {
+    String? userId = await const FlutterSecureStorage().read(key: "id");
+    print('$userId 유저아이디가 이거입니다');
     getChatroomlist(int.parse(userId!)).then((chatroom) async {
       if (chatroom.isError == false) {
         List<ChatRoom> temp = chatroom.data;
@@ -149,35 +217,5 @@ class MessageController extends GetxController {
         }
       }
     });
-    super.onInit();
-  }
-
-  Future<void> getDBUserInfo(List<ChatRoom> temp) async {
-    List<int> int_member =
-        List.generate(temp.length, (index) => temp[index].user);
-
-    await Future.forEach(
-        int_member,
-        (element) => SQLController.to
-            .getDBUser(element as int)
-            .then((value) => member.add(value)));
-  }
-
-  Future<void> addList(temp) async {
-    chattingRoomList.addAll(List.generate(
-        temp.length,
-        ((index) => MessageRoomWidget(
-            chatRoom: Rx<ChatRoom>(temp[index]),
-            user: Rx<User>(member[index])))));
-    searchRoomList.value = chattingRoomList.toList();
-  }
-
-  Future<void> sortList() async {
-    MessageController.to.chattingRoomList.sort((a, b) => b
-        .chatRoom.value.message.value.date
-        .compareTo(a.chatRoom.value.message.value.date));
-    MessageController.to.searchRoomList.sort((a, b) => b
-        .chatRoom.value.message.value.date
-        .compareTo(a.chatRoom.value.message.value.date));
   }
 }

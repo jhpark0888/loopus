@@ -74,6 +74,9 @@ class SignupEmailPwScreen extends StatelessWidget {
                                     .timerClose(dialogOn: false);
                               }
                             });
+                          }else{
+                            Get.back();
+                            showCustomDialog("입력 정보를 확인해주세요", 1000);
                           }
                         },
                         isBlue: _signupController.isEmailPassWordCheck.value,
