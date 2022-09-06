@@ -52,16 +52,27 @@ class UploadScreen extends StatelessWidget {
                 loading();
                 if (_imageController.isSelect.value == true) {
                   if (controller.images != []) {
-                    controller.images.value =
-                        (await _imageController.cropImages());
+                    controller.images(await _imageController.cropImages());
                     controller.cropAspectRatio(
                         _imageController.cropAspectRatio.value);
-                    // controller.selectedCropKeyList =
-                    //     _imageController.cropKeyList;
-                    // controller.selectedCropWidgetList =
-                    //     _imageController.cropWidgetList;
-                    // controller.selectedImageList =
-                    //     _imageController.selectedImages;
+                    controller.selectedCropKeyList
+                        .assignAll(_imageController.cropKeyList);
+                    controller.selectedCropWidgetList
+                        .assignAll(_imageController.cropWidgetList);
+                    controller.selectedImageList
+                        .assignAll(_imageController.selectedImages);
+                    List<double> scaleList = [];
+                    List<Rect> viewList = [];
+                    for (GlobalKey<CustomCropState> cropKey
+                        in _imageController.cropKeyList) {
+                      final scale = cropKey.currentState!.scale;
+                      final view = cropKey.currentState!.view;
+
+                      scaleList.add(scale);
+                      viewList.add(view);
+                    }
+                    controller.selectedScaleList = scaleList;
+                    controller.selectedViewList = viewList;
 
                     controller.isAddImage(true);
                   } else {
