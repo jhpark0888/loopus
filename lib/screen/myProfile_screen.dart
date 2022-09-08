@@ -19,6 +19,7 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
+import 'package:loopus/screen/career_detail_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
@@ -493,6 +494,7 @@ class MyProfileScreen extends StatelessWidget {
                                               .map((entry) {
                                           return GestureDetector(
                                             onTap: () {
+                                              Get.to(() =>CareerDetailScreen(careerList: profileController.myProjectList,career: entry.value,));
                                               profileController
                                                   .careerCurrentPage
                                                   .value = entry.key.toDouble();

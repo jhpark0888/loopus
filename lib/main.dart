@@ -168,7 +168,8 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenStete extends State<WelcomeScreen> {
   String? token;
   _WelcomeScreenStete({this.token});
-
+  NotificationController notificationController =
+      Get.put(NotificationController());
   @override
   void initState() {
     super.initState();

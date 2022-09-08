@@ -89,7 +89,6 @@ class MessageController extends GetxController with WidgetsBindingObserver {
           if (Get.isRegistered<MessageController>()) {
             MessageController.to.refresh();
           }
-          const FlutterSecureStorage().delete(key: 'newMsg');
         }
         print('연결되었습니다.');
         break;
@@ -117,7 +116,7 @@ class MessageController extends GetxController with WidgetsBindingObserver {
           await getUserProfile(membersId).then((usersList) {
             if (usersList.isError == false) {
               List<User> userList = usersList.data;
-
+              const FlutterSecureStorage().delete(key: 'newMsg');
               temp.forEach((element) async {
                 User user =
                     userList.where((user) => user.userid == element.user).first;

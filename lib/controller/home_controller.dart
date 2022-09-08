@@ -33,8 +33,6 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static HomeController get to => Get.find();
-  NotificationController notificationController =
-      Get.put(NotificationController());
 
   Project? recommendCareer;
   RxList<Post> posts = <Post>[].obs;

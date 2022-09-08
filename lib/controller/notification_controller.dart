@@ -121,11 +121,14 @@ class NotificationController extends GetxController {
       print(event.data["type"]);
       print('알림 데이터 : ${event.data}');
       if (event.data["type"] == "certification") {
-        if (Get.isRegistered<SignupController>()) {
+        if (Get.isRegistered<SignupController>()){
+          String? email = await FlutterSecureStorage().read(key: 'temp_email');
+          FirebaseMessaging.instance.unsubscribeFromTopic(email!);
           SignupController _signupController = Get.find();
           _signupController.signupcertification(Emailcertification.success);
           _signupController.timer
               .timerClose(dialogOn: false, stateChange: false);
+          FlutterSecureStorage().delete(key: 'temp_email');
           loading();
           await signupRequest().then((value) async {
             final GAController _gaController = GAController();

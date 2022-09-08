@@ -98,7 +98,6 @@ class ProfileController extends GetxController
           List<Project> projectlist = List.from(value.data)
               .map((project) => Project.fromJson(project))
               .toList();
-
           myProjectList(projectlist);
           careerPagenums = List.generate(projectlist.length, (index) => 1);
         } else {

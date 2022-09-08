@@ -19,7 +19,8 @@ class Project {
       this.post_count,
       required this.is_user,
       this.isTop,
-      required this.user});
+      required this.user,
+      this.updateTime});
 
   int id;
   int? userid;
@@ -28,6 +29,7 @@ class Project {
   List<String> fieldIds;
   DateTime? startDate;
   DateTime? endDate;
+  DateTime? updateTime;
   RxList<Post> posts;
   List<User> members;
   RxInt? post_count;
@@ -36,7 +38,11 @@ class Project {
   int is_user;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
-      id: json['project_id'] != null ? json["project_id"] : json['id'] != null ? json["id"] : 0,
+      id: json['project_id'] != null
+          ? json["project_id"]
+          : json['id'] != null
+              ? json["id"]
+              : 0,
       userid: json["user_id"],
       careerName: json["project_name"],
       startDate: json["start_date"] != null
@@ -69,7 +75,8 @@ class Project {
       post_count:
           json["post_count"] != null ? RxInt(json["post_count"]) : RxInt(0),
       is_user: json['is_user'] ?? 0,
-      user: json["profile"] != null ? User.fromJson(json["profile"]) : null);
+      user: json["profile"] != null ? User.fromJson(json["profile"]) : null,
+      updateTime: json['post_update_date'] != null ? DateTime.parse(json['post_update_date']) : null);
 
   Map<String, dynamic> toJson() => {
         "id": id,

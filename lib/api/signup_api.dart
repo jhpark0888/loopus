@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -31,13 +32,15 @@ Future<HTTPResponse> emailRequest(
     return HTTPResponse.networkError();
   } else {
     Uri uri = Uri.parse('$serverUri/user_api/check_email');
-
-    String? fcmToken = await NotificationController.getToken();
-
+    String temp_email = email.replaceAll('@','');
+    print(temp_email);
+    FlutterSecureStorage().write(key: 'temp_email', value: temp_email);
+    // String? fcmToken = await NotificationController.getToken();
+    await FirebaseMessaging.instance.subscribeToTopic(temp_email);
     var checkemail = {
       //TODO: 학교 도메인 확인
       "email": email,
-      "token": fcmToken
+      // "token": fcmToken
     };
 
     try {
@@ -55,9 +58,9 @@ Future<HTTPResponse> emailRequest(
       // response.
       print("이메일 체크 : ${response.statusCode}");
       if (response.statusCode == 200) {
-        return HTTPResponse.success("success");
+        return HTTPResponse.success(temp_email);
       } else {
-        return HTTPResponse.apiError("fail", response.statusCode);
+        return HTTPResponse.apiError(temp_email, response.statusCode);
       }
     } on SocketException {
       return HTTPResponse.serverError();
