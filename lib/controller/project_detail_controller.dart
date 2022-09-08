@@ -19,6 +19,8 @@ class ProjectDetailController extends GetxController {
           id: 0,
           userid: 0,
           careerName: '',
+          updateDate: DateTime.now(),
+          thumbnail: "",
           posts: <Post>[].obs,
           fieldIds: [],
           members: [],

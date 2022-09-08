@@ -70,7 +70,7 @@ class ProjectWidget extends StatelessWidget {
                         Spacer(),
                         Obx(
                           () => Text(
-                            '${DateFormat("yyyy.MM").format(project.value.startDate!)}',
+                            '${DateFormat("yyyy.MM").format(project.value.updateDate!)}',
                             style: kmain,
                           ),
                           //  ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''
@@ -84,9 +84,7 @@ class ProjectWidget extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text('포스트',
-                          style: kmain.copyWith(
-                              color: maingray)),
+                      Text('포스트', style: kmain.copyWith(color: maingray)),
                       SizedBox(
                         width: 4,
                       ),
@@ -118,8 +116,7 @@ class ProjectWidget extends StatelessWidget {
       children: [
         RichText(
             text: TextSpan(children: [
-          TextSpan(
-              text: title, style: kmain.copyWith(color: mainblue)),
+          TextSpan(text: title, style: kmain.copyWith(color: mainblue)),
           const TextSpan(text: '분야', style: kmain)
         ])),
         Spacer(),

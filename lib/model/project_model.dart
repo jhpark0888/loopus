@@ -12,8 +12,8 @@ class Project {
       required this.fieldIds,
       this.postRatio,
       required this.careerName,
-      this.startDate,
-      this.endDate,
+      required this.thumbnail,
+      required this.updateDate,
       required this.posts,
       required this.members,
       this.post_count,
@@ -25,9 +25,9 @@ class Project {
   int? userid;
   double? postRatio;
   String careerName;
+  String thumbnail;
   List<String> fieldIds;
-  DateTime? startDate;
-  DateTime? endDate;
+  DateTime? updateDate;
   RxList<Post> posts;
   List<User> members;
   RxInt? post_count;
@@ -36,14 +36,17 @@ class Project {
   int is_user;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
-      id: json['project_id'] != null ? json["project_id"] : json['id'] != null ? json["id"] : 0,
+      id: json['project_id'] != null
+          ? json["project_id"]
+          : json['id'] != null
+              ? json["id"]
+              : 0,
       userid: json["user_id"],
       careerName: json["project_name"],
-      startDate: json["start_date"] != null
-          ? DateTime.parse(json["start_date"])
-          : null,
-      endDate:
-          json["end_date"] != null ? DateTime.parse(json["end_date"]) : null,
+      thumbnail: json["thumbnail"] ?? "",
+      updateDate: json["post_update_date"] != null
+          ? DateTime.parse(json["post_update_date"])
+          : DateTime.now(),
       posts: json["post"] != null
           ? RxList<Post>.from(json["post"].map((x) => Post.fromJson(x)))
           : <Post>[].obs,
@@ -75,8 +78,6 @@ class Project {
         "id": id,
         "user_id": userid,
         "careerName": careerName,
-        "start_date": startDate,
-        "end_date": endDate,
         "posts": posts != null
             ? List<dynamic>.from(posts.map((x) => x.toJson()))
             : [],

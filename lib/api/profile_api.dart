@@ -105,7 +105,8 @@ Future<HTTPResponse> getProjectlist(int userId) async {
 Future<HTTPResponse> getCareerPosting(int careerId, int page) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  var uri = Uri.parse("$serverUri/user_api/posting?id=$careerId&page=$page");
+  var uri = Uri.parse(
+      "$serverUri/user_api/posting?id=$careerId&page=$page&type=career");
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
@@ -115,6 +116,41 @@ Future<HTTPResponse> getCareerPosting(int careerId, int page) async {
         await http.get(uri, headers: {"Authorization": "Token $token"});
 
     print("커리어 안 포스팅 리스트 get: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      List responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+      List<Post> postlist = responseBody.map((post) {
+        return Post.fromJson(post);
+      }).toList();
+      return HTTPResponse.success(postlist);
+    } else {
+      return HTTPResponse.apiError('', response.statusCode);
+    }
+    // } on SocketException {
+    //   ErrorController.to.isServerClosed(true);
+    //   return HTTPResponse.serverError();
+    // } catch (e) {
+    //   print(e);
+    //   // ErrorController.to.isServerClosed(true);
+    //   return HTTPResponse.unexpectedError(e);
+    // }
+  }
+}
+
+Future<HTTPResponse> getAllPosting(int userId, int page) async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  var uri =
+      Uri.parse("$serverUri/user_api/posting?id=$userId&page=$page&type=all");
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    // try {
+    http.Response response =
+        await http.get(uri, headers: {"Authorization": "Token $token"});
+
+    print("프로필 모든 포스팅 리스트 get: ${response.statusCode}");
     if (response.statusCode == 200) {
       List responseBody = json.decode(utf8.decode(response.bodyBytes));
 

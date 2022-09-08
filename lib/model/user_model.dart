@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/univ_model.dart';
+import 'package:path/path.dart';
 
 class User {
   User({
@@ -29,6 +30,8 @@ class User {
     required this.schoolLastRank,
     required this.groupRatio,
     required this.schoolRatio,
+    required this.admissionYear,
+    required this.urls,
   });
 
   int userid;
@@ -51,6 +54,8 @@ class User {
   int schoolLastRank;
   double groupRatio;
   double schoolRatio;
+  String admissionYear;
+  List<String> urls;
   Rx<FollowState> looped;
   Rx<BanState> banned;
 
@@ -75,6 +80,8 @@ class User {
     double? schoolRatio,
     String? profileImage,
     List<Tag>? profileTag,
+    String? admissionYear,
+    List<String>? urls,
     Rx<FollowState>? looped,
     Rx<BanState>? banned,
   }) =>
@@ -98,6 +105,8 @@ class User {
           groupRatio: groupRatio ?? 0,
           schoolRatio: schoolRatio ?? 0,
           profileTag: profileTag ?? [],
+          admissionYear: admissionYear ?? "2000",
+          urls: urls ?? [],
           looped: looped ?? FollowState.normal.obs,
           banned: banned ?? BanState.normal.obs);
 
@@ -135,6 +144,11 @@ class User {
         univlogo: json["school"] != null ? json['school']['logo'] : '',
         department: json["department"] ?? '',
         isuser: json["is_user"] ?? 0,
+        admissionYear: json["admission"] ?? "2000",
+        urls: json["urls"] != null
+            ? List<String>.from(
+                List.from(json["urls"]).map((x) => x.toString()))
+            : [],
         looped: json["looped"] != null
             ? FollowState.values[json["looped"]].obs
             : FollowState.normal.obs,
@@ -178,6 +192,10 @@ class User {
         : json["school_name"] ?? univName;
     univlogo = json["school"] != null ? json['school']['logo'] : univlogo;
     department = json["department"] ?? department;
+    admissionYear = json["admission"] ?? admissionYear;
+    urls = json["urls"] != null
+        ? List<String>.from(List.from(json["urls"]).map((x) => x.toString()))
+        : urls;
     isuser = json["is_user"] ?? isuser;
     looped = json["looped"] != null
         ? FollowState.values[json["looped"]].obs
@@ -195,3 +213,23 @@ class User {
         "project_tag": List<dynamic>.from(profileTag.map((x) => x.toJson())),
       };
 }
+
+// class Rank {
+//   String fieldId;
+//   double groupRatio;
+//   double schoolRatio;
+
+//   Rank({
+//     required this.fieldId,
+//     required this.groupRatio,
+//     required this.schoolRatio,
+//   });
+
+//   factory Rank.fromJson(Map<String, dynamic> json) => Rank(
+//         fieldId: json["group"] != null ? json["group"].toString() : "10",
+//         groupRatio:
+//             json["group_ratio"] != null ? json["group_ratio"] as double : 0,
+//         schoolRatio:
+//             json["school_ratio"] != null ? json["school_ratio"] as double : 0,
+//       );
+// }
