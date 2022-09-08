@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
@@ -16,6 +17,7 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/posting_add_link_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
+import 'package:loopus/utils/custom_crop.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
@@ -73,24 +75,25 @@ class PostingAddScreen extends StatelessWidget {
                       child: Column(children: [
                         postingAddController.isAddLink.value == false
                             ? postingAddController.isAddImage.value == true
-                                ? Stack(children: [
-                                    SwiperWidget(
-                                      items: postingAddController.images,
-                                      swiperType: SwiperType.file,
-                                      aspectRatio: postingAddController
-                                          .cropAspectRatio.value,
-                                    ),
-                                    Positioned(
-                                        child: GestureDetector(
-                                            onTap: () {
-                                              imageChange();
-                                            },
-                                            child: Text('사진 수정하기',
-                                                style: kmain.copyWith(
-                                                    color: mainblue))),
-                                        right: 20,
-                                        bottom: 5)
-                                  ])
+                                ? Obx(
+                                    () => Stack(children: [
+                                      SwiperWidget(
+                                        items:
+                                            postingAddController.images.value,
+                                        swiperType: SwiperType.file,
+                                        aspectRatio: postingAddController
+                                            .cropAspectRatio.value,
+                                      ),
+                                      Positioned(
+                                          child: GestureDetector(
+                                              onTap: () => imageChange(),
+                                              child: Text('사진 수정하기',
+                                                  style: kmain.copyWith(
+                                                      color: mainblue))),
+                                          right: 20,
+                                          bottom: 5)
+                                    ]),
+                                  )
                                 : Column(children: [
                                     SizedBox(height: 10),
                                     Padding(
@@ -342,18 +345,42 @@ class PostingAddScreen extends StatelessWidget {
     }
   }
 
-  void imageChange() {
-    // _imageController
-    //     .cropAspectRatio(postingAddController.cropAspectRatio.value);
-    // _imageController.cropKeyList = postingAddController.selectedCropKeyList;
-    // _imageController
-    //     .cropWidgetList(postingAddController.selectedCropWidgetList);
-    // _imageController.selectedImages(postingAddController.selectedImageList);
-    // _imageController.selectedImage(postingAddController.selectedImageList[0]);
-    // _imageController.selectedIndex(0);
-    // print(postingAddController.selectedImageList[0].hashCode);
-    // print(_imageController.selectedImages[0].hashCode);
+  void imageChange() async {
+    // print(postingAddController.selectedImageList);
+    // print(postingAddController.selectedCropWidgetList);
+    // print(postingAddController.selectedCropKeyList);
+    // print("-----------");
+    // print(_imageController.selectedImages);
+    // print(_imageController.cropWidgetList);
+    // print(_imageController.cropKeyList);
+    _imageController
+        .cropAspectRatio(postingAddController.cropAspectRatio.value);
+    _imageController.cropKeyList
+        .assignAll(postingAddController.selectedCropKeyList);
+    _imageController.cropWidgetList
+        .assignAll(postingAddController.selectedCropWidgetList);
+    _imageController.selectedImages
+        .assignAll(postingAddController.selectedImageList);
+
+    _imageController.selectedImage(postingAddController.selectedImageList[0]);
+    _imageController.selectedIndex(0);
+    _imageController.isSelect(true);
+
     Get.to(() => UploadScreen(),
         duration: const Duration(milliseconds: 300), curve: Curves.ease);
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      await Future.delayed(const Duration(milliseconds: 600)).then((value) {
+        _imageController.cropKeyList.asMap().forEach((key, value) {
+          int index = key;
+          GlobalKey<CustomCropState> cropKey = value;
+
+          cropKey.currentState!.scale =
+              postingAddController.selectedScaleList[index];
+          cropKey.currentState!.view =
+              postingAddController.selectedViewList[index];
+        });
+      });
+    });
   }
 }

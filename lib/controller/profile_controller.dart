@@ -25,39 +25,18 @@ class ProfileController extends GetxController
 
   RxBool profileenablepullup = true.obs;
 
-  final careertitleController = PageController(
-    viewportFraction: 0.4,
-  );
-  final careerPageController = PageController();
-  RxDouble careerCurrentPage = 0.0.obs;
+  late TabController tabController;
+  RxInt currentIndex = 0.obs;
 
   RefreshController profilerefreshController =
       RefreshController(initialRefresh: false);
 
-  void onRefresh() async {
-    careerCurrentPage(0.0);
-    careertitleController.jumpTo(0);
-    careerPageController.jumpTo(0);
-    profileenablepullup.value = true;
-    loadmyProfile();
-    profilerefreshController.refreshCompleted();
-  }
-
-  void onLoading() async {
-    // await Future.delayed(Duration(seconds: 2));
-    if (myProjectList.isNotEmpty) {
-      getProfilePost();
-    }
-    profilerefreshController.loadComplete();
-  }
-
-  RxBool careerLoading = false.obs;
-
   RxList<Project> myProjectList = <Project>[].obs;
-  List<int> careerPagenums = <int>[];
 
   Rx<File> profileimage = File('').obs;
   Rx<User> myUserInfo = User.defaultuser().obs;
+  RxList<Post> allPostList = <Post>[].obs;
+  int postPageNum = 1;
 
   RxList<User> mylooplist = <User>[].obs;
 
@@ -68,10 +47,25 @@ class ProfileController extends GetxController
   Rx<ScreenState> myprofilescreenstate = ScreenState.loading.obs;
 
   // ---
-  late RxList<Widget> careerAnalysis;
-  late RxList<CareerModel> career;
-  late RxList<CareerTile> careerwidget;
+  // late RxList<Widget> careerAnalysis;
+  // late RxList<CareerModel> career;
+  // late RxList<CareerTile> careerwidget;
   // --
+
+  Future onRefresh() async {
+    profileenablepullup.value = true;
+    postPageNum = 1;
+    allPostList.clear();
+    loadmyProfile();
+    profilerefreshController.refreshCompleted();
+  }
+
+  void onLoading() async {
+    // await Future.delayed(Duration(seconds: 2));
+    if (tabController.index == 1) {
+      profilerefreshController.loadComplete();
+    }
+  }
 
   Future loadmyProfile() async {
     // isProfileLoading.value = true;
@@ -99,142 +93,42 @@ class ProfileController extends GetxController
               .map((project) => Project.fromJson(project))
               .toList();
           myProjectList(projectlist);
-          careerPagenums = List.generate(projectlist.length, (index) => 1);
         } else {
           errorSituation(value, screenState: myprofilescreenstate);
         }
       });
-      if (myProjectList.isNotEmpty) {
-        getProfilePost();
-      }
+      _getPosting(int.parse(userId));
     }
     // isProfileLoading.value = false;
   }
 
-  void getProfilePost() async {
-    // print('현재 페이지 ${careerCurrentPage.value}');
-    await getCareerPosting(myProjectList[careerCurrentPage.value.toInt()].id,
-            careerPagenums[careerCurrentPage.value.toInt()])
-        .then((value) {
+  void _getPosting(int userId) async {
+    await getAllPosting(userId, postPageNum).then((value) {
       if (value.isError == false) {
         List<Post> postlist = value.data;
 
-        if (postlist.isNotEmpty) {
-          if (myProjectList[careerCurrentPage.value.toInt()]
-              .posts
-              .where((post) => post.id == postlist.last.id)
-              .isEmpty) {
-            myProjectList[careerCurrentPage.value.toInt()]
-                .posts
-                .addAll(postlist);
-            careerPagenums[careerCurrentPage.value.toInt()] += 1;
-          } else {
-            profileenablepullup(false);
-          }
-        } else {
-          profileenablepullup(false);
-        }
+        allPostList.addAll(postlist);
+        postPageNum += 1;
 
         myprofilescreenstate(ScreenState.success);
       } else {
-        errorSituation(value, screenState: myprofilescreenstate);
+        if (value.errorData!["statusCode"] == 204) {
+        } else {
+          errorSituation(value, screenState: myprofilescreenstate);
+        }
       }
     });
   }
 
   @override
   void onInit() async {
+    tabController = TabController(length: 2, vsync: this)
+      ..addListener(() {
+        currentIndex.value = tabController.index;
+      });
+
     await loadmyProfile();
-
-    //-----
-    careerAnalysis = [
-      careerAnalysisWidget('IT', 14, 2, 12, 12),
-      careerAnalysisWidget('인공지능', 14, 2, 14, -12),
-      careerAnalysisWidget('디자인', 14, 2, 30, 12),
-    ].obs;
-
-    ever(
-      careerCurrentPage,
-      (_) async {
-        Project project = myProjectList[careerCurrentPage.toInt()];
-        profileenablepullup(true);
-        if (project.posts.isEmpty) {
-          careerLoading(true);
-          getProfilePost();
-          careerLoading(false);
-        }
-      },
-      // time: const Duration(milliseconds: 300),
-    );
-
     super.onInit();
-  }
-
-  Widget careerAnalysisWidget(String title, int countrywide,
-      int countryVariance, int campus, int campusVariance) {
-    return Column(
-      children: [
-        const SizedBox(height: 14),
-        Row(
-          children: [
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(
-                  text: title, style: kmain.copyWith(color: mainblue)),
-              const TextSpan(text: ' 분야', style: kmain)
-            ])),
-            const SizedBox(width: 37),
-            Text('전국 $countrywide%', style: kmain),
-            rate(countryVariance),
-            const SizedBox(width: 11),
-            Text('교내 $campus%', style: kmain),
-            rate(campusVariance)
-          ],
-        )
-      ],
-    );
-  }
-
-  Widget rate(int variance) {
-    return Row(children: [
-      const SizedBox(width: 32),
-      arrowDirection(variance),
-      const SizedBox(width: 2),
-      if (variance != 0)
-        Text('${variance.abs()}%',
-            style:
-                kcaption.copyWith(color: variance >= 1 ? rankred : mainblue)),
-    ]);
-  }
-
-  Widget arrowDirection(int variance) {
-    if (variance == 0) {
-      return const SizedBox.shrink();
-    } else if (variance >= 1) {
-      return SvgPicture.asset('assets/icons/rate_upper_arrow.svg');
-    } else {
-      return SvgPicture.asset('assets/icons/rate_down_arrow.svg');
-    }
-  }
-
-  List<PieChartSectionData> showingSections() {
-    return myProjectList.map((career) {
-      int index =
-          myProjectList.indexWhere((element) => element.id == career.id);
-      final isSelected = index == careerCurrentPage.value;
-      final fontSize = isSelected ? 15.0 : 10.0;
-      final radius = isSelected ? 40.0 : 25.0;
-      return PieChartSectionData(
-        color: colorgroup[index],
-        value: career.postRatio,
-        title: '',
-        radius: radius,
-        titleStyle: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xffffffff)),
-      );
-    }).toList();
   }
 
   void tapLike(int careerId, int postId, int likeCount) {

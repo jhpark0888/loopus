@@ -188,9 +188,9 @@ class _MyAppSpace extends StatelessWidget {
                         const SizedBox(
                           height: 14,
                         ),
-                        if (career.updateTime != null)
+                        if (career.updateDate!= null)
                           Text(
-                            '최근 포스트 ${calculateDate(career.updateTime!)}',
+                            '최근 포스트 ${calculateDate(career.updateDate!)}',
                             style:
                                 kNavigationTitle.copyWith(color: selectimage),
                           ),

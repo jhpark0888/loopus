@@ -775,7 +775,7 @@ class OtherProfileScreen extends StatelessWidget {
                                                         title: entry.value
                                                             .careerName.obs,
                                                         time: entry
-                                                            .value.startDate!,
+                                                            .value.updateDate!,
                                                         currentPage: _controller
                                                             .careerCurrentPage,
                                                       ),

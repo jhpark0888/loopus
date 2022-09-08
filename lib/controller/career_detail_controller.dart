@@ -13,7 +13,7 @@ class CareerDetailController extends GetxController {
   RefreshController refreshController = RefreshController();
   Rx<ScreenState> careerDetailScreenState = ScreenState.normal.obs;
   Project career;
-  RxInt page = 0.obs;
+  RxInt page = 1.obs;
   RxList<Post> postList = <Post>[].obs;
   RxBool enablePullUp = true.obs;
 

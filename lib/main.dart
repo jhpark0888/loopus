@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -31,7 +32,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   if (message.data['type'] == 'msg') {
     String? newMsg = await FlutterSecureStorage().read(key: 'newMsg') ?? '';
-    print(newMsg);
     if (newMsg == '') {
       const FlutterSecureStorage().write(key: 'newMsg', value: 'true');
     }

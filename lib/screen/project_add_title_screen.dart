@@ -69,7 +69,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                             project.is_user = 1;
 
                             ProfileController.to.myProjectList.add(project);
-                            ProfileController.to.careerPagenums.add(1);
+                            // ProfileController.to.careerPagenums.add(1);
                             Get.back();
 
                             SchedulerBinding.instance!
