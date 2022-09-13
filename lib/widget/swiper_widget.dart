@@ -340,8 +340,8 @@ class SwiperWidget extends StatelessWidget {
               ),
             ],
           ),
-        const SizedBox(
-          height: 14,
+        SizedBox(
+          height: swiperType == SwiperType.file && items.length == 1 ? 30 : 14,
         ),
       ],
     );

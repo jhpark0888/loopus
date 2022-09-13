@@ -56,6 +56,10 @@ class _ExpandableTextState extends State<ExpandableText> {
         final richText = Text.rich(widget.textSpan).build(context) as RichText;
         final boxes = richText.measure(context, constraints);
 
+        if (boxes.isEmpty) {
+          return Container();
+        }
+
         if (_getBoxesMaxLinesIndex(boxes, maxLines) ==
                 boxes.indexOf(boxes.last) ||
             _isExpanded) {

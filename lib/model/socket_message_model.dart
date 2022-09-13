@@ -1,9 +1,3 @@
-// class SocketMessage{
-//   String type;
-//   List<Chat> message;
-
-// }
-
 import 'package:get/get.dart';
 import 'package:loopus/model/user_model.dart';
 
@@ -59,24 +53,24 @@ class Chat {
 }
 
 class ChatRoom {
-  ChatRoom({
-    required this.message,
-    required this.user,
-    required this.notread,
-    required this.roomId,
-  });
+  ChatRoom(
+      {required this.message,
+      required this.user,
+      required this.notread,
+      required this.roomId,
+      required this.type});
 
   Rx<Chat> message;
   int user;
   RxInt notread;
   int roomId;
-
+  RxInt type;
   factory ChatRoom.fromJson(Map<String, dynamic> json) => ChatRoom(
-        message: Chat.fromJson(json["message"]).obs,
-        user: json['profile'],
-        notread: RxInt(json["not_read"]),
-        roomId: json['room_id'],
-      );
+      message: Chat.fromJson(json["message"]).obs,
+      user: json['profile'],
+      notread: RxInt(json["not_read"]),
+      roomId: json['room_id'],
+      type: RxInt(json['alarm_active']));
 
   factory ChatRoom.fromMsg(Map<String, dynamic> json) => ChatRoom(
         message: Chat(
@@ -88,6 +82,7 @@ class ChatRoom {
                 messageId: json['id'],
                 roomId: int.parse(json['room_id']))
             .obs,
+        type: RxInt(1),
         user: int.parse(json['sender']),
         notread: RxInt(1),
         roomId: int.parse(json['room_id']),
@@ -99,6 +94,7 @@ class ChatRoom {
         "message": message.value.content.toString(),
         'date': message.value.date.toString(),
         "not_read": notread.value,
+        "alarm_active": type.value
       };
 }
 // room_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, message Text, date Text, not_read INTEGER, del_id INTEGER

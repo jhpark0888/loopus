@@ -135,6 +135,12 @@ class CustomCropState extends State<CustomCrop>
   @override
   void initState() {
     super.initState();
+    // final scale =
+    //     (widget.key as GlobalKey<CustomCropState>).currentState!.scale;
+    // final view = (widget.key as GlobalKey<CustomCropState>).currentState!.view;
+    // _scale = scale;
+    // _view = view;
+    // print("scale: $scale, view: $view");
 
     _activeController = AnimationController(
       vsync: this,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
@@ -56,7 +57,7 @@ class NotificationController extends GetxController {
     // a terminated state.
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
-
+    print('열게 한 메세지는 ${initialMessage?.data ?? ''}');
     // If the message also contains a data property with a "type" of "chat",
     // navigate to a chat screen
     if (initialMessage != null) {
@@ -69,12 +70,13 @@ class NotificationController extends GetxController {
   }
 
   void _backgroundMessage(RemoteMessage message) {
-    int id = int.parse(message.data["id"]);
+    Map<String, dynamic> json = message.data;
+
     if (message.data["type"] == "msg") {
       // Get.put(MessageDetailController(userid: id)).firstmessagesload();
-      Map<String, dynamic> json = message.data;
       json["date"] = DateTime.now().toString();
       json["content"] = message.notification!.body;
+      json["not_read"] = 1;
       int partnerId = int.parse(message.data['sender']);
       getUserProfile([partnerId]).then((user) async {
         if (user.isError == false) {
@@ -90,16 +92,20 @@ class NotificationController extends GetxController {
               chatRoom: ChatRoom.fromMsg(json).toJson());
         }
       });
-    } else if (message.data["type"] == "like") {
-      Get.to(() => NotificationScreen());
-    } else if (message.data["type"] == "tag") {
-      // Get.to(() => ProjectScreen(projectid: id, isuser: 0));
-    } else if (message.data["type"] == "follow") {
-      Get.to(() =>
-          OtherProfileScreen(userid: id, realname: message.data["real_name"]));
-    } else if (message.data["type"] == "answer") {
-      // Get.to(() => QuestionDetailScreen(
-      //     questionid: id, isuser: 1, realname: message.data["real_name"]));
+    } else {
+      int id = int.parse(json['id']);
+      int type = int.parse(json['type'].toString());
+      int senderId = int.parse(json['sender_id']);
+      if (type == 4 || type == 7) {
+        Get.to(() => PostingScreen(postid: id));
+      } else if (type == 5 || type == 6 || type == 8) {
+        int? postId =
+            json['post_id'] != null ? int.parse(json['post_id']) : null;
+        Get.to(() => PostingScreen(postid: postId!));
+      } else if (type == 2) {
+        Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
+      }
+      isRead(id, convertType(type), senderId);
     }
     print("message: ${message.data["type"]}");
   }
@@ -108,26 +114,28 @@ class NotificationController extends GetxController {
   void onInit() {
     _initNotification();
     getToken();
+    setupInteractedMessage();
     //Foreground 상태에서 알림을 받았을 때
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
       print("message recieved");
       print(event);
       print(event.data["type"]);
       print('알림 데이터 : ${event.data}');
+      Map<String, dynamic> json = event.data;
+      localNotificaition.sampleNotification(
+          event.notification!.title!, event.notification!.body!, json);
+
       if (event.data["type"] == "msg") {
-        if (Platform.isAndroid) {
-          localNotificaition.sampleNotification(
-              event.notification!.title!, event.notification!.body!);
-        }
         HomeController.to.isNewMsg(true);
+
+        json["date"] = DateTime.now().toString();
+        json["content"] = event.notification!.body;
+        json["not_read"] = 1;
         if (Get.isRegistered<MessageController>()) {
           String? myid = await const FlutterSecureStorage().read(key: 'id');
           SQLController.to
               .updateNotReadCount(int.parse(event.data['room_id']), 1);
-          Map<String, dynamic> json = event.data;
-          json["date"] = DateTime.now().toString();
-          json["content"] = event.notification!.body;
-          json["not_read"] = 1;
+
           Chat chat = Chat.fromMsg(json, int.parse(json['room_id']));
           ChatRoom chatRoom = ChatRoom.fromMsg(json);
           SQLController.to
@@ -246,12 +254,16 @@ class NotificationController extends GetxController {
     });
 
     //Background, Killed 상태에서 알림을 받고, 그 알림을 클릭해서 앱에 접근했을 때
-    setupInteractedMessage();
-
-    // Background, Killed 상태에서 알림을 받았을 때
-    FirebaseMessaging.instance.onTokenRefresh.listen((event) {
-      print(event);
+    FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
+      showButtonDialog(
+          title: '',
+          content: 'token: $newtoken',
+          leftFunction: () {},
+          rightFunction: () {},
+          rightText: '',
+          leftText: '');
     });
+    // Background, Killed 상태에서 알림을 받았을 때
     super.onInit();
   }
 
@@ -259,10 +271,20 @@ class NotificationController extends GetxController {
   static Future<String?> getToken() async {
     try {
       String? userMessageToken = await FirebaseMessaging.instance.getToken(
+
           //TODO: WEB KEY 추가
           // vapidKey:
           //     'BCLIUKVcUhNC9-qwvJ01m_YQ3l46lrehYmmBVcXOtMp21iwY6x-EKTOLg8v4wNPNRcjrLMReFfAq0ohfvHjWZOw',
           );
+      showButtonDialog(
+          title: '',
+          content: 'token : $userMessageToken',
+          leftFunction: () {
+            Get.back();
+          },
+          rightFunction: () {},
+          rightText: '',
+          leftText: '닫기');
       // messaging.deleteToken();
       print('token : $userMessageToken');
       return userMessageToken ?? '';
@@ -277,9 +299,8 @@ class NotificationController extends GetxController {
       sound: true,
       badge: true,
       alert: true,
-      provisional: true,
+      provisional: false,
       announcement: true,
-      criticalAlert: true,
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {

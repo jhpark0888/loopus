@@ -54,6 +54,15 @@ class UploadScreen extends StatelessWidget {
                   if (controller.images != []) {
                     controller.images.value =
                         (await _imageController.cropImages());
+                    controller.cropAspectRatio(
+                        _imageController.cropAspectRatio.value);
+                    // controller.selectedCropKeyList =
+                    //     _imageController.cropKeyList;
+                    // controller.selectedCropWidgetList =
+                    //     _imageController.cropWidgetList;
+                    // controller.selectedImageList =
+                    //     _imageController.selectedImages;
+
                     controller.isAddImage(true);
                   } else {
                     controller.isAddImage(false);

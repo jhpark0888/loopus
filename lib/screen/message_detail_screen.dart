@@ -64,174 +64,182 @@ class MessageDetatilScreen extends StatelessWidget {
         FocusScope.of(context).unfocus();
       },
       behavior: HitTestBehavior.translucent,
-      child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          appBar: AppBarWidget(
-            title: partner.realName,
-            bottomBorder: false,
-            leading: GestureDetector(
-                onTap: () {
-                  if (enterRoute == EnterRoute.popUp) {
-                    if (Get.isRegistered<MessageController>()) {
-                      Get.back();
-                    } else {
-                      Get.off(() => MessageScreen());
-                    }
-                  } else {
-                    Get.back();
-                  }
-                },
-                child: Center(
-                    child: SvgPicture.asset('assets/icons/appbar_back.svg'))),
-            actions: [
-              GestureDetector(
-                onTap: () async {
-                  showModalIOS(context, func1: () {
-                    int roomId = controller.roomid;
-                    if (controller.messageList.isNotEmpty) {
-                      deleteChatRoom(controller.roomid, myProfile.userid,
-                              int.parse(controller.messageList.last.messageId!))
-                          .then((value) {
-                        if (value.isError == false) {
-                          SQLController.to.deleteMessage(roomId);
-                          SQLController.to.deleteMessageRoom(roomId);
-                          SQLController.to.deleteUser(partner.userid);
-                          if (Get.isRegistered<MessageController>()) {
-                            MessageController.to.searchRoomList.removeAt(
-                                MessageController.to.searchRoomList.indexWhere(
-                                    (messageRoom) =>
-                                        messageRoom.chatRoom.value.roomId ==
-                                        roomId));
-                            MessageController.to.chattingRoomList.removeAt(
-                                MessageController.to.chattingRoomList
-                                    .indexWhere((messageRoom) =>
-                                        messageRoom.chatRoom.value.roomId ==
-                                        roomId));
-                          }
-                          Get.back();
-                          if (enterRoute == EnterRoute.popUp) {
-                            Get.off(() => MessageScreen());
-                          } else {
-                            Get.back();
-                          }
-                        }
-                      });
-                    } else {
-                      Get.back();
-                      if (enterRoute == EnterRoute.popUp) {
+      child: SafeArea(
+        child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: AppBarWidget(
+              title: partner.realName,
+              bottomBorder: false,
+              leading: GestureDetector(
+                  onTap: () {
+                    if (enterRoute == EnterRoute.popUp) {
+                      if (Get.isRegistered<MessageController>()) {
+                        Get.back();
+                      } else {
                         Get.off(() => MessageScreen());
+                      }
+                    } else {
+                      Get.back();
+                    }
+                  },
+                  child: Center(
+                      child: SvgPicture.asset('assets/icons/appbar_back.svg'))),
+              actions: [
+                GestureDetector(
+                  onTap: () async {
+                    showModalIOS(context, func1: () {
+                      int roomId = controller.roomid;
+                      if (controller.messageList.isNotEmpty) {
+                        deleteChatRoom(
+                                controller.roomid,
+                                myProfile.userid,
+                                int.parse(
+                                    controller.messageList.last.messageId!))
+                            .then((value) {
+                          if (value.isError == false) {
+                            SQLController.to.deleteMessage(roomId);
+                            SQLController.to.deleteMessageRoom(roomId);
+                            SQLController.to.deleteUser(partner.userid);
+                            if (Get.isRegistered<MessageController>()) {
+                              MessageController.to.searchRoomList.removeAt(
+                                  MessageController.to.searchRoomList
+                                      .indexWhere((messageRoom) =>
+                                          messageRoom.chatRoom.value.roomId ==
+                                          roomId));
+                              MessageController.to.chattingRoomList.removeAt(
+                                  MessageController.to.chattingRoomList
+                                      .indexWhere((messageRoom) =>
+                                          messageRoom.chatRoom.value.roomId ==
+                                          roomId));
+                            }
+                            Get.back();
+                            if (enterRoute == EnterRoute.popUp) {
+                              Get.off(() => MessageScreen());
+                            } else {
+                              Get.back();
+                            }
+                          }
+                        });
                       } else {
                         Get.back();
+                        if (enterRoute == EnterRoute.popUp) {
+                          Get.off(() => MessageScreen());
+                        } else {
+                          Get.back();
+                        }
                       }
-                    }
-                  }, func2: () {
-                    Get.to(() => const DatabaseList());
+                    }, func2: () {
+                      Get.to(() => const DatabaseList());
+                    },
+                        value1: '채팅방 나가기',
+                        value2: '',
+                        isValue1Red: true,
+                        isValue2Red: false,
+                        isOne: true);
                   },
-                      value1: '채팅방 나가기',
-                      value2: '',
-                      isValue1Red: true,
-                      isValue2Red: false,
-                      isOne: true);
-                },
-                child: SizedBox(
-                    height: 44,
-                    width: 44,
-                    child: Center(
-                        child: SvgPicture.asset(
-                            'assets/icons/appbar_more_option.svg'))),
-              )
-            ],
-          ),
-          bottomNavigationBar: Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: sendField()),
-          body: Obx(
-            () => controller.screenState.value == ScreenState.loading
-                ? const Center(child: LoadingWidget())
-                : controller.screenState.value == ScreenState.success
-                    ? Scrollbar(
-                        child: FlutterListView(
-                            reverse: true,
-                            controller: controller.listViewController,
-                            delegate: FlutterListViewDelegate(
-                              (context, index) {
-                                if (controller.messageList.length == 1) {
-                                  //메세지가 한개 있을 경우 isfirst는 읽음, 안읽음 표시를 위함, isdaychange는 날싸 표시를 위함
-                                  return MessageWidget(
-                                      message: controller.messageList[index],
-                                      isFirst: true.obs,
-                                      isDayChange: true.obs,
-                                      partner: partner,
-                                      myId: controller.myId!);
-                                } else if (controller.messageList[index] ==
-                                    controller.messageList.first) {
-                                      //첫번째 메세지의 경우 
-                                  if (DateFormat('yyyy-MM-dd').parse(controller
-                                          .messageList[index].date
-                                          .toString()) !=
-                                      DateFormat('yyyy-MM-dd').parse(controller
-                                          .messageList[index + 1].date
-                                          .toString())) {
+                  child: SizedBox(
+                      height: 44,
+                      width: 44,
+                      child: Center(
+                          child: SvgPicture.asset(
+                              'assets/icons/appbar_more_option.svg'))),
+                )
+              ],
+            ),
+            bottomNavigationBar: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: sendField()),
+            body: Obx(
+              () => controller.screenState.value == ScreenState.loading
+                  ? const Center(child: LoadingWidget())
+                  : controller.screenState.value == ScreenState.success
+                      ? Scrollbar(
+                          child: FlutterListView(
+                              reverse: true,
+                              controller: controller.listViewController,
+                              delegate: FlutterListViewDelegate(
+                                (context, index) {
+                                  if (controller.messageList.length == 1) {
+                                    //메세지가 한개 있을 경우 isfirst는 읽음, 안읽음 표시를 위함, isdaychange는 날싸 표시를 위함
                                     return MessageWidget(
                                         message: controller.messageList[index],
                                         isFirst: true.obs,
                                         isDayChange: true.obs,
                                         partner: partner,
                                         myId: controller.myId!);
-                                  } else {
+                                  } else if (controller.messageList[index] ==
+                                      controller.messageList.first) {
+                                    //첫번째 메세지의 경우
+                                    if (DateFormat('yyyy-MM-dd').parse(
+                                            controller.messageList[index].date
+                                                .toString()) !=
+                                        DateFormat('yyyy-MM-dd').parse(
+                                            controller
+                                                .messageList[index + 1].date
+                                                .toString())) {
+                                      return MessageWidget(
+                                          message:
+                                              controller.messageList[index],
+                                          isFirst: true.obs,
+                                          isDayChange: true.obs,
+                                          partner: partner,
+                                          myId: controller.myId!);
+                                    } else {
+                                      return MessageWidget(
+                                          message:
+                                              controller.messageList[index],
+                                          isFirst: true.obs,
+                                          isDayChange: false.obs,
+                                          partner: partner,
+                                          myId: controller.myId!);
+                                    }
+                                  } else if (controller.messageList[index] ==
+                                      controller.messageList.last) {
+                                    //마지막 메세지의 경우
                                     return MessageWidget(
                                         message: controller.messageList[index],
-                                        isFirst: true.obs,
+                                        isFirst: false.obs,
+                                        isDayChange: true.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  } else if (DateFormat('yyyy-MM-dd').parse(
+                                          controller.messageList[index].date
+                                              .toString()) !=
+                                      DateFormat('yyyy-MM-dd').parse(controller
+                                          .messageList[index + 1].date
+                                          .toString())) {
+                                    //중간 메세지에서 날짜가 변하는 시점이 있을 경우
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isFirst: false.obs,
+                                        isDayChange: true.obs,
+                                        partner: partner,
+                                        myId: controller.myId!);
+                                  } else {
+                                    //중간 메세지에서 날짜가 변하는 시점이 없는 경우
+                                    return MessageWidget(
+                                        message: controller.messageList[index],
+                                        isFirst: false.obs,
                                         isDayChange: false.obs,
                                         partner: partner,
                                         myId: controller.myId!);
                                   }
-                                } else if (controller.messageList[index] ==
-                                    controller.messageList.last) {
-                                      //마지막 메세지의 경우
-                                  return MessageWidget(
-                                      message: controller.messageList[index],
-                                      isFirst: false.obs,
-                                      isDayChange: true.obs,
-                                      partner: partner,
-                                      myId: controller.myId!);
-                                } else if (DateFormat('yyyy-MM-dd').parse(
-                                        controller.messageList[index].date
-                                            .toString()) !=
-                                    DateFormat('yyyy-MM-dd').parse(controller
-                                        .messageList[index + 1].date
-                                        .toString())) {
-                                          //중간 메세지에서 날짜가 변하는 시점이 있을 경우
-                                  return MessageWidget(
-                                      message: controller.messageList[index],
-                                      isFirst: false.obs,
-                                      isDayChange: true.obs,
-                                      partner: partner,
-                                      myId: controller.myId!);
-                                } else {
-                                  //중간 메세지에서 날짜가 변하는 시점이 없는 경우
-                                  return MessageWidget(
-                                      message: controller.messageList[index],
-                                      isFirst: false.obs,
-                                      isDayChange: false.obs,
-                                      partner: partner,
-                                      myId: controller.myId!);
-                                }
-                              },
-                              childCount: controller.messageList.length,
-                              onItemKey: (index) => controller
-                                  .messageList[index].messageId
-                                  .toString(),
-                              initOffsetBasedOnBottom: true,
-                              firstItemAlign: FirstItemAlign.end,
-                              keepPosition: true,
-                            )),
-                      )
-                    : controller.screenState.value == ScreenState.normal
-                        ? Container()
-                        : Container(),
-          )),
+                                },
+                                childCount: controller.messageList.length,
+                                onItemKey: (index) => controller
+                                    .messageList[index].messageId
+                                    .toString(),
+                                initOffsetBasedOnBottom: true,
+                                firstItemAlign: FirstItemAlign.end,
+                                keepPosition: true,
+                              )),
+                        )
+                      : controller.screenState.value == ScreenState.normal
+                          ? Container()
+                          : Container(),
+            )),
+      ),
     );
   }
 
@@ -275,21 +283,25 @@ class MessageDetatilScreen extends StatelessWidget {
           const SizedBox(width: 14),
           GestureDetector(
               onTap: () async {
-                print(controller.messageList.where((p0) => p0.sendsuccess!.value == 'false').length.toString());
+                print(controller.messageList
+                    .where((p0) => p0.sendsuccess!.value == 'false')
+                    .length
+                    .toString());
                 Chat temp = Chat(
-                  messageId: controller.messageList.where((p0) => p0.sendsuccess!.value == 'false').length.toString(),
-                          content: controller.sendText.text,
-                          date: DateTime.now(),
-                          sender: controller.myId.toString(),
-                          isRead: false.obs,
-                          roomId: controller.roomid,
-                          sendsuccess: 'false'.obs);
+                    messageId: controller.messageList
+                        .where((p0) => p0.sendsuccess!.value == 'false')
+                        .length
+                        .toString(),
+                    content: controller.sendText.text,
+                    date: DateTime.now(),
+                    sender: controller.myId.toString(),
+                    isRead: false.obs,
+                    roomId: controller.roomid,
+                    sendsuccess: 'false'.obs);
                 if (controller.sendText.text.isNotEmpty) {
                   await SQLController.to.insertmessage(temp);
                   await sendMessage();
-                  controller.messageList.insert(
-                      0,temp
-                      );
+                  controller.messageList.insert(0, temp);
                   controller.sendText.clear();
                   await Future.delayed(const Duration(milliseconds: 300));
                   controller.listViewController.jumpTo(

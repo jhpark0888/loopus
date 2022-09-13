@@ -142,7 +142,8 @@ class UserInfoScreen extends StatelessWidget {
     loading();
     AppController.to.currentIndex.value = 0;
     String? userid = await FlutterSecureStorage().read(key: "id");
-    await FirebaseMessaging.instance.unsubscribeFromTopic(userid!);
+    // await FirebaseMessaging.instance.unsubscribeFromTopic(userid!);
+    await FirebaseMessaging.instance.deleteToken();
 
     FlutterSecureStorage().delete(key: "token");
     FlutterSecureStorage().delete(key: "id");
