@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/constant.dart';
-import 'package:loopus/controller/follow_controller.dart';
+import 'package:loopus/controller/follow_people_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
