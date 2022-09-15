@@ -129,16 +129,16 @@ Future<HTTPResponse> getUserProfile(List<int> membersId) async {
 
       print('유저들 프로필 리스트 statuscode: ${response.statusCode}');
       if (response.statusCode == 200) {
-        List<dynamic> responseBody =
+        Map<String,dynamic> responseBody =
             jsonDecode(utf8.decode(response.bodyBytes));
-        List<User> userList = responseBody.map((e) {
-          return User.fromJson(e);
-        }).toList();
+        // List<User> userList = responseBody.map((e) {
+        //   return User.fromJson(e);
+        // }).toList();
         // MessageController.to.chatroomscreenstate(ScreenState.success);
         print("---------------------------");
         print(responseBody);
         print(response.statusCode);
-        return HTTPResponse.success(userList);
+        return HTTPResponse.success(responseBody);
       } else {
         // MessageController.to.chatroomscreenstate(ScreenState.error);
         return HTTPResponse.apiError('', response.statusCode);

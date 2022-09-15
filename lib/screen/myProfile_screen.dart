@@ -19,7 +19,8 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
-import 'package:loopus/screen/career_detail_screen.dart';
+import 'package:loopus/screen/group_career_detail_screen.dart';
+import 'package:loopus/screen/personal_career_detail_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
@@ -446,9 +447,14 @@ class MyProfileScreen extends StatelessWidget {
                     primary: false,
                     shrinkWrap: true,
                     itemBuilder: (context, index) => GestureDetector(
-                      onTap: (){Get.to(() =>CareerDetailScreen(careerList: profileController.myProjectList,career: profileController.myProjectList[index]));},
+                      onTap: () {
+                        Get.to(() => profileController.myProjectList[index].isPublic ? GroupCareerDetailScreen(): PersonalCareerDetailScreen(
+                            careerList: profileController.myProjectList,
+                            career: profileController.myProjectList[index]));
+                      },
                       child: Hero(
-                        tag: profileController.myProjectList[index].id.toString(),
+                        tag: profileController.myProjectList[index].id
+                            .toString(),
                         child: CareerWidget(
                             career: profileController.myProjectList[index]),
                       ),

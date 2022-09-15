@@ -24,7 +24,9 @@ class CareerDetailController extends GetxController {
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
           scrollController.position.pixels) {
-        getPosting();
+        if (enablePullUp.value == true) {
+          getPosting();
+        }
       }
     });
   }

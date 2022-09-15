@@ -123,7 +123,9 @@ Future<HTTPResponse> getCareerPosting(int careerId, int page) async {
         return Post.fromJson(post);
       }).toList();
       return HTTPResponse.success(postlist);
-    } else {
+    } else if(response.statusCode == 204){
+      return HTTPResponse.success(<Post>[]);
+    }else {
       return HTTPResponse.apiError('', response.statusCode);
     }
     // } on SocketException {
