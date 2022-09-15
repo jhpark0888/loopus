@@ -30,6 +30,8 @@ class User {
     required this.schoolLastRank,
     required this.groupRatio,
     required this.schoolRatio,
+    required this.groupRatioVariance,
+    required this.schoolRatioVariance,
     required this.admissionYear,
     required this.urls,
   });
@@ -54,6 +56,8 @@ class User {
   int schoolLastRank;
   double groupRatio;
   double schoolRatio;
+  double groupRatioVariance;
+  double schoolRatioVariance;
   String admissionYear;
   List<String> urls;
   Rx<FollowState> looped;
@@ -78,6 +82,8 @@ class User {
     int? schoolLastRank,
     double? groupRatio,
     double? schoolRatio,
+    double? groupRatioVariance,
+    double? schoolRatioVariance,
     String? profileImage,
     List<Tag>? profileTag,
     String? admissionYear,
@@ -104,6 +110,8 @@ class User {
           resentPostCount: resentPostCount ?? 0,
           groupRatio: groupRatio ?? 0,
           schoolRatio: schoolRatio ?? 0,
+          groupRatioVariance: groupRatioVariance ?? 0,
+          schoolRatioVariance: schoolRatioVariance ?? 0,
           profileTag: profileTag ?? [],
           admissionYear: admissionYear ?? "2000",
           urls: urls ?? [],
@@ -134,6 +142,12 @@ class User {
             json["group_ratio"] != null ? json["group_ratio"] as double : 0,
         schoolRatio:
             json["school_ratio"] != null ? json["school_ratio"] as double : 0,
+        groupRatioVariance: json["group_rank_variance"] != null
+            ? json["group_rank_variance"] as double
+            : 0,
+        schoolRatioVariance: json["school_rank_variance"] != null
+            ? json["school_rank_variance"] as double
+            : 0,
         profileTag: json["profile_tag"] != null
             ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
             : [],
@@ -183,6 +197,12 @@ class User {
     schoolRatio = json["school_ratio"] != null
         ? json["school_ratio"] as double
         : schoolRatio;
+    groupRatioVariance = json["group_rank_variance"] != null
+        ? json["group_rank_variance"] as double
+        : groupRatioVariance;
+    schoolRatioVariance = json["school_rank_variance"] != null
+        ? json["school_rank_variance"] as double
+        : schoolRatioVariance;
     profileTag = json["profile_tag"] != null
         ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
         : profileTag;

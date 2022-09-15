@@ -35,33 +35,47 @@ class Project {
   bool? isTop;
   int is_user;
 
-  factory Project.fromJson(Map<String, dynamic> json) => Project(
-      id: json['project_id'] != null
-          ? json["project_id"]
-          : json['id'] != null
-              ? json["id"]
-              : 0,
+  factory Project.fromJson(Map<String, dynamic> json) {
+    bool isProject = json["project"] != null;
+    return Project(
+      id: isProject
+          ? json["project"]['project_id'] != null
+              ? json["project"]["project_id"]
+              : json["project"]['id'] != null
+                  ? json["project"]["id"]
+                  : 0
+          : json["id"] ?? 0,
       userid: json["user_id"],
-      careerName: json["project_name"],
-      thumbnail: json["thumbnail"] ?? "",
-      updateDate: json["post_update_date"] != null
-          ? DateTime.parse(json["post_update_date"])
-          : DateTime.now(),
+      careerName: isProject
+          ? json["project"]["project_name"] ?? ""
+          : json["project_name"] ?? "",
+      thumbnail: isProject
+          ? json["project"]["thumbnail"] ?? ""
+          : json["thumbnail"] ?? "",
+      updateDate: isProject
+          ? json["project"]["post_update_date"] != null
+              ? DateTime.parse(json["project"]["post_update_date"])
+              : DateTime.now()
+          : json["post_update_date"] != null
+              ? DateTime.parse(json["post_update_date"])
+              : DateTime.now(),
       posts: json["post"] != null
           ? RxList<Post>.from(json["post"].map((x) => Post.fromJson(x)))
           : <Post>[].obs,
-      fieldIds: json["group"] != null
-          ? [json["group"].toString()]
-          // SplayTreeMap<String, int>.from(
-          //             (json["group"] as Map<String, dynamic>),
-          //             (keys1, keys2) => keys1.compareTo(keys2))
-          //         .keys
-          //         .toList()
-          //         .isNotEmpty
-          //     ? SplayTreeMap<String, int>.from(
-          //         (json["group"] as Map<String, dynamic>),
-          //         (keys1, keys2) => keys1.compareTo(keys2)).keys.toList()
-          //     : ["10"]
+      fieldIds: isProject
+          ? json["project"]["group"] != null
+              ? [json["project"]["group"].toString()]
+              // SplayTreeMap<String, int>.from(
+              //             (json["group"] as Map<String, dynamic>),
+              //             (keys1, keys2) => keys1.compareTo(keys2))
+              //         .keys
+              //         .toList()
+              //         .isNotEmpty
+              //     ? SplayTreeMap<String, int>.from(
+              //         (json["group"] as Map<String, dynamic>),
+              //         (keys1, keys2) => keys1.compareTo(keys2)).keys.toList()
+              //     : ["10"]
+              : ["10"]
           : ["10"],
       members: json["looper"] != null
           ? List<User>.from(
@@ -73,7 +87,8 @@ class Project {
           json["post_count"] != null ? RxInt(json["post_count"]) : RxInt(0),
       is_user: json['is_user'] ?? 0,
       user: json["profile"] != null ? User.fromJson(json["profile"]) : null,
-      );
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,

@@ -10,6 +10,7 @@ import 'package:loopus/controller/error_controller.dart';
 import 'package:loopus/controller/looppeople_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/checkboxperson_widget.dart';
 
@@ -17,16 +18,10 @@ import '../constant.dart';
 
 enum followlist { follower, following }
 
-Future<void> getfollowlist(int userid, followlist followtype) async {
+Future<HTTPResponse> getfollowlist(int userid, followlist followtype) async {
   ConnectivityResult result = await initConnectivity();
-  LoopPeopleController controller = Get.find(tag: userid.toString());
   if (result == ConnectivityResult.none) {
-    if (followtype == followlist.follower) {
-      controller.followerscreenstate(ScreenState.disconnect);
-    } else {
-      controller.followingscreenstate(ScreenState.disconnect);
-    }
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
@@ -40,34 +35,19 @@ Future<void> getfollowlist(int userid, followlist followtype) async {
       print('루프 리스트 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
-        List<User> looplist = List.from(responseBody["follow"])
-            .map((friend) => User.fromJson(friend))
-            .toList();
+        // List<User> looplist = List.from(responseBody["follow"])
+        //     .map((friend) => User.fromJson(friend))
+        //     .toList();
 
-        if (followtype == followlist.follower) {
-          controller.followerlist(looplist);
-        } else {
-          controller.followinglist(looplist);
-        }
-        if (followtype == followlist.follower) {
-          controller.followerscreenstate(ScreenState.success);
-        } else {
-          controller.followingscreenstate(ScreenState.success);
-        }
-        return;
+        return HTTPResponse.success(responseBody);
       } else {
-        if (followtype == followlist.follower) {
-          controller.followerscreenstate(ScreenState.error);
-        } else {
-          controller.followingscreenstate(ScreenState.error);
-        }
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }

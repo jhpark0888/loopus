@@ -277,7 +277,8 @@ class PostingWidget extends StatelessWidget {
               autofocus: autoFocus,
             ),
         opaque: false,
-        preventDuplicates: false);
+        preventDuplicates: false,
+        transition: Transition.noTransition);
   }
 
   void tapProjectname() {

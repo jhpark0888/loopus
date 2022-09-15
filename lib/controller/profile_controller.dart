@@ -30,6 +30,8 @@ class ProfileController extends GetxController
 
   RefreshController profilerefreshController =
       RefreshController(initialRefresh: false);
+  RefreshController postLoadingController =
+      RefreshController(initialRefresh: false);
 
   RxList<Project> myProjectList = <Project>[].obs;
 
@@ -60,11 +62,9 @@ class ProfileController extends GetxController
     profilerefreshController.refreshCompleted();
   }
 
-  void onLoading() async {
+  void onPostLoading() async {
     // await Future.delayed(Duration(seconds: 2));
-    if (tabController.index == 1) {
-      profilerefreshController.loadComplete();
-    }
+    _getPosting(myUserInfo.value.userid);
   }
 
   Future loadmyProfile() async {
@@ -111,10 +111,13 @@ class ProfileController extends GetxController
         postPageNum += 1;
 
         myprofilescreenstate(ScreenState.success);
+        postLoadingController.loadComplete();
       } else {
         if (value.errorData!["statusCode"] == 204) {
+          postLoadingController.loadNoData();
         } else {
           errorSituation(value, screenState: myprofilescreenstate);
+          postLoadingController.loadComplete();
         }
       }
     });
