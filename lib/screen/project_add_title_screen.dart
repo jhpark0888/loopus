@@ -155,12 +155,12 @@ class ProjectAddTitleScreen extends StatelessWidget {
                             ),
                           ))
           ],
-          leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: SvgPicture.asset('assets/icons/appbar_exit.svg'),
-          ),
+          // leading: IconButton(
+          //   onPressed: () {
+          //     Get.back();
+          //   },
+          //   icon: SvgPicture.asset('assets/icons/appbar_exit.svg'),
+          // ),
           title: '커리어 추가',
         ),
         body: Column(
@@ -177,6 +177,71 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 hintText: "커리어 이름을 입력하세요",
                 maxLength: 15,
                 textController: _controller.projectnamecontroller),
+            const SizedBox(
+              height: 14,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Obx(
+                () => ToggleButtons(
+                  children: const [
+                    Text(
+                      "개인",
+                    ),
+                    Text(
+                      "그룹",
+                    )
+                  ],
+                  isSelected: [
+                    !_controller.isPublic.value,
+                    _controller.isPublic.value
+                  ],
+                  textStyle: kmainbold,
+                  onPressed: (index) {
+                    if (index == 0) {
+                      _controller.isPublic(false);
+                    } else {
+                      _controller.isPublic(true);
+                    }
+                  },
+                  selectedColor: mainblue,
+                  selectedBorderColor: mainblue,
+                  color: dividegray,
+                  splashColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 20),
+            //   child: Obx(
+            //     () => Row(
+            //       children: [
+            //         RichText(
+            //             text: TextSpan(children: [
+            //           TextSpan(
+            //               text: "개인",
+            //               style: _controller.isRepublic.value
+            //                   ? kmain.copyWith(color: dividegray)
+            //                   : kmainbold),
+            //           const TextSpan(text: " / ", style: kmainbold),
+            //           TextSpan(
+            //               text: "그룹",
+            //               style: _controller.isRepublic.value
+            //                   ? kmainbold
+            //                   : kmain.copyWith(color: dividegray))
+            //         ])),
+            //         const Spacer(),
+            //         Switch(
+            //             value: _controller.isRepublic.value,
+            //             onChanged: (value) {
+            //               _controller.isRepublic(value);
+            //             }),
+            //             activer
+            //       ],
+            //     ),
+            //   ),
+            // ),
             const SizedBox(
               height: 48,
             ),

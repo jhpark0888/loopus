@@ -49,36 +49,28 @@ class OtherProfileController extends GetxController
   KeyController keycontroller = Get.put(KeyController(isTextField: false.obs));
 
   Future loadotherProfile(int userid) async {
-    // isProfileLoading.value = true;
+    await getProfile(userid).then((value) {
+      if (value.isError == false) {
+        otherUser.value.copywith(value.data);
 
-    ConnectivityResult result = await initConnectivity();
-    if (result == ConnectivityResult.none) {
-      otherprofilescreenstate(ScreenState.disconnect);
-      showdisconnectdialog();
-    } else {
-      await getProfile(userid).then((value) {
-        if (value.isError == false) {
-          otherUser.value.copywith(value.data);
+        lastisFollowed = otherUser.value.looped.value.index;
+      } else {
+        errorSituation(value, screenState: otherprofilescreenstate);
+      }
+    });
+    await getProjectlist(userid).then((value) {
+      if (value.isError == false) {
+        List<Project> projectlist = List.from(value.data)
+            .map((project) => Project.fromJson(project))
+            .toList();
 
-          lastisFollowed = otherUser.value.looped.value.index;
-        } else {
-          errorSituation(value, screenState: otherprofilescreenstate);
-        }
-      });
-      await getProjectlist(userid).then((value) {
-        if (value.isError == false) {
-          List<Project> projectlist = List.from(value.data)
-              .map((project) => Project.fromJson(project))
-              .toList();
-
-          otherProjectList(projectlist);
-          otherprofilescreenstate(ScreenState.success);
-        } else {
-          errorSituation(value, screenState: otherprofilescreenstate);
-        }
-      });
-      getOtherPosting(userid);
-    }
+        otherProjectList(projectlist);
+        otherprofilescreenstate(ScreenState.success);
+      } else {
+        errorSituation(value, screenState: otherprofilescreenstate);
+      }
+    });
+    getOtherPosting(userid);
   }
 
   Future<int> getOtherPosting(int userId) async {

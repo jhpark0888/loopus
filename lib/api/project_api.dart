@@ -36,37 +36,49 @@ Future<HTTPResponse> addproject() async {
     String? token = await const FlutterSecureStorage().read(key: "token");
     Uri uri = Uri.parse('$serverUri/project_api/project');
     try {
-      var request = http.MultipartRequest('POST', uri);
+      var body = {
+        'project_name': projectAddController.projectnamecontroller.text,
+        'looper': projectAddController.selectedpersontaglist
+            .map((person) => person.id)
+            .toList(),
+        'is_public': projectAddController.isPublic.value
+      };
 
       final headers = {
         'Authorization': 'Token $token',
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
       };
 
-      request.headers.addAll(headers);
+      http.Response response = await http.post(
+        uri,
+        headers: headers,
+        body: json.encode(body),
+      );
 
-      request.fields['project_name'] =
-          projectAddController.projectnamecontroller.text;
-      request.fields['start_date'] = DateFormat('yyyy-MM-dd').format(
-          DateTime.parse(projectAddController.selectedStartDateTime.value));
-      request.fields['end_date'] = (projectAddController.isEndedProject.value ==
-              true)
-          ? DateFormat('yyyy-MM-dd').format(
-              DateTime.parse(projectAddController.selectedEndDateTime.value))
-          : '';
-      request.fields['looper'] = json.encode(projectAddController
-          .selectedpersontaglist
-          .map((person) => person.id)
-          .toList());
+      // var request = http.MultipartRequest('POST', uri);
 
-      http.StreamedResponse response = await request.send();
+      // request.headers.addAll(headers);
+
+      // request.fields['project_name'] =
+      //     projectAddController.projectnamecontroller.text;
+
+      // request.fields['looper'] = json.encode(projectAddController
+      //     .selectedpersontaglist
+      //     .map((person) => person.id)
+      //     .toList());
+
+      // request.fields['is_public'] =
+      //     projectAddController.isPublic.value.toString();
+
+      // http.StreamedResponse response = await request.send();
 
       print("활동 생성: ${response.statusCode}");
       if (response.statusCode == 201) {
-        String responsebody = await response.stream.bytesToString();
-        var responsemap = json.decode(responsebody);
+        // String responsebody = await response.stream.bytesToString();
+        // var responsemap = json.decode(responsebody);
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-        return HTTPResponse.success(responsemap);
+        return HTTPResponse.success(responseBody);
       } else {
         //!GA
         return HTTPResponse.apiError('fail', response.statusCode);

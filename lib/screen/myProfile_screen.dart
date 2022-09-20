@@ -21,6 +21,7 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
+import 'package:loopus/screen/career_arrange_screen.dart';
 import 'package:loopus/screen/group_career_detail_screen.dart';
 import 'package:loopus/screen/personal_career_detail_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';
@@ -422,17 +423,23 @@ class MyProfileScreen extends StatelessWidget {
               Obx(
                 () => Tab(
                   height: 40,
-                  child: profileController.currentIndex.value == 0
-                      ? SvgPicture.asset('assets/icons/list_active.svg')
-                      : SvgPicture.asset('assets/icons/list_inactive.svg'),
+                  icon: SvgPicture.asset(
+                    'assets/icons/list_active.svg',
+                    color: profileController.currentIndex.value == 0
+                        ? null
+                        : dividegray,
+                  ),
                 ),
               ),
               Obx(
                 () => Tab(
                   height: 40,
-                  child: profileController.currentIndex.value == 1
-                      ? SvgPicture.asset('assets/icons/post_active.svg')
-                      : SvgPicture.asset('assets/icons/post_inactive.svg'),
+                  icon: SvgPicture.asset(
+                    'assets/icons/post_active.svg',
+                    color: profileController.currentIndex.value == 1
+                        ? null
+                        : dividegray,
+                  ),
                 ),
               ),
             ]),
@@ -507,9 +514,11 @@ class MyProfileScreen extends StatelessWidget {
                                 ),
                                 const Spacer(),
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Get.to(() => CareerArrangeScreen());
+                                  },
                                   child: Text(
-                                    "수정하기",
+                                    "정렬 수정",
                                     style: kmain.copyWith(color: mainblue),
                                   ),
                                 )
@@ -521,19 +530,17 @@ class MyProfileScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemBuilder: (context, index) => GestureDetector(
                                 onTap: () {
-                                  Get.to(() => PersonalCareerDetailScreen(
-                                      careerList:
-                                          profileController.myProjectList,
-                                      career: profileController
-                                          .myProjectList[index]));
+                                  Get.to(
+                                    () => PersonalCareerDetailScreen(
+                                        careerList:
+                                            profileController.myProjectList,
+                                        career: profileController
+                                            .myProjectList[index]),
+                                  );
                                 },
-                                child: Hero(
-                                  tag: profileController.myProjectList[index].id
-                                      .toString(),
-                                  child: CareerWidget(
-                                      career: profileController
-                                          .myProjectList[index]),
-                                ),
+                                child: CareerWidget(
+                                    career:
+                                        profileController.myProjectList[index]),
                               ),
                               separatorBuilder: (context, index) =>
                                   const SizedBox(
@@ -641,6 +648,38 @@ class MyProfileScreen extends StatelessWidget {
     );
   }
 }
+
+// class ProfileTab extends AnimatedWidget {
+//   const ProfileTab({
+//     Key? key,
+//     required Animation<double> animation,
+//     required this.selected,
+//     required this.labelColor,
+//     required this.unselectedLabelColor,
+//     required this.child,
+//   }) : super(key: key, listenable: animation);
+
+//   final bool selected;
+//   final Color? labelColor;
+//   final Color? unselectedLabelColor;
+//   final Widget child;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final Animation<double> animation = listenable as Animation<double>;
+//     final Color color = selected
+//         ? Color.lerp(labelColor, unselectedLabelColor, animation.value)!
+//         : Color.lerp(unselectedLabelColor, labelColor, animation.value)!;
+
+//     return IconTheme.merge(
+//       data: IconThemeData(
+//         size: 24.0,
+//         color: color,
+//       ),
+//       child: child,
+//     );
+//   }
+// }
 
 // class _SliverTabBarViewDelegate extends SliverPersistentHeaderDelegate {
 //   _SliverTabBarViewDelegate({

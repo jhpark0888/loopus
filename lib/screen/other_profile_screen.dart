@@ -10,6 +10,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/career_arrange_screen.dart';
 import 'personal_career_detail_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';
 import 'package:loopus/screen/personal_career_detail_screen.dart';
@@ -282,8 +283,7 @@ class OtherProfileScreen extends StatelessWidget {
                 children: [
                   Obx(
                     () => Text(
-                      _controller.otherUser.value.followerCount.value
-                          .toString(),
+                      _controller.otherUser.value.followerCount.toString(),
                       style: kmainbold.copyWith(
                           color: _hoverController.isHover.value
                               ? mainblack.withOpacity(0.6)
@@ -371,8 +371,7 @@ class OtherProfileScreen extends StatelessWidget {
                 children: [
                   Obx(
                     () => Text(
-                      _controller.otherUser.value.followingCount.value
-                          .toString(),
+                      _controller.otherUser.value.followingCount.toString(),
                       style: kmainbold.copyWith(
                           color: _hoverController.isHover.value
                               ? mainblack.withOpacity(0.6)
@@ -532,6 +531,9 @@ class OtherProfileScreen extends StatelessWidget {
               strokeCap: StrokeCap.round,
               borderSide: BorderSide(width: 2, color: mainblack),
             ),
+            onTap: (index) {
+              _controller.currentIndex(index);
+            },
             isScrollable: false,
             tabs: [
               // const Tab(
@@ -547,17 +549,21 @@ class OtherProfileScreen extends StatelessWidget {
               Obx(
                 () => Tab(
                   height: 40,
-                  child: _controller.currentIndex.value == 0
-                      ? SvgPicture.asset('assets/icons/list_active.svg')
-                      : SvgPicture.asset('assets/icons/list_inactive.svg'),
+                  child: SvgPicture.asset(
+                    'assets/icons/list_active.svg',
+                    color:
+                        _controller.currentIndex.value == 0 ? null : dividegray,
+                  ),
                 ),
               ),
               Obx(
                 () => Tab(
                   height: 40,
-                  child: _controller.currentIndex.value == 1
-                      ? SvgPicture.asset('assets/icons/post_active.svg')
-                      : SvgPicture.asset('assets/icons/post_inactive.svg'),
+                  child: SvgPicture.asset(
+                    'assets/icons/post_active.svg',
+                    color:
+                        _controller.currentIndex.value == 1 ? null : dividegray,
+                  ),
                 ),
               ),
             ]),
@@ -631,13 +637,17 @@ class OtherProfileScreen extends StatelessWidget {
                                   color: mainblack.withOpacity(0.6),
                                 ),
                                 const Spacer(),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Text(
-                                    "수정하기",
-                                    style: kmain.copyWith(color: mainblue),
-                                  ),
-                                )
+                                if (_controller.otherUser.value.userid ==
+                                    HomeController.to.myProfile.value.userid)
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => CareerArrangeScreen());
+                                    },
+                                    child: Text(
+                                      "정렬 수정",
+                                      style: kmain.copyWith(color: mainblue),
+                                    ),
+                                  )
                               ],
                             ),
                             const SizedBox(height: 14),
@@ -646,18 +656,17 @@ class OtherProfileScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemBuilder: (context, index) => GestureDetector(
                                 onTap: () {
-                                  Get.to(() => PersonalCareerDetailScreen(
-                                      careerList: _controller.otherProjectList,
-                                      career:
-                                          _controller.otherProjectList[index]));
+                                  Get.to(
+                                    () => PersonalCareerDetailScreen(
+                                        careerList:
+                                            _controller.otherProjectList,
+                                        career: _controller
+                                            .otherProjectList[index]),
+                                  );
                                 },
-                                child: Hero(
-                                  tag: _controller.otherProjectList[index].id
-                                      .toString(),
-                                  child: CareerWidget(
-                                      career:
-                                          _controller.otherProjectList[index]),
-                                ),
+                                child: CareerWidget(
+                                    career:
+                                        _controller.otherProjectList[index]),
                               ),
                               separatorBuilder: (context, index) =>
                                   const SizedBox(

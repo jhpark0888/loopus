@@ -16,7 +16,8 @@ import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 
 class PersonalCareerDetailScreen extends StatelessWidget {
-  PersonalCareerDetailScreen({Key? key, required this.careerList, required this.career})
+  PersonalCareerDetailScreen(
+      {Key? key, required this.careerList, required this.career})
       : super(key: key);
   late CareerDetailController careerDetailController;
   List<Project> careerList;
@@ -166,51 +167,60 @@ class _MyAppSpace extends StatelessWidget {
             ),
             Opacity(
               opacity: opacity1,
-              child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                            image: career.thumbnail == ""? const AssetImage('assets/illustrations/default_image.png')
-                         : NetworkImage(career.thumbnail) as ImageProvider,
-                            fit: BoxFit.cover,
-                            colorFilter: ColorFilter.mode(
-                                const Color(0x00000000).withOpacity(0.4),
-                                BlendMode.srcOver))),
-                width: Get.width,
-                height: Get.width,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 58, 20, 14),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 44),
-                        getExpendTitle(
-                          career.careerName,
-                        ),
-                        const SizedBox(
-                          height: 14,
-                        ),
-                        if (career.updateDate != null)
-                          Text(
-                            '최근 포스트 ${calculateDate(career.updateDate!)}',
-                            style: kNavigationTitle.copyWith(color: selectimage),
+              child: Hero(
+                tag: career.id.toString(),
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: career.thumbnail == ""
+                              ? const AssetImage(
+                                  'assets/illustrations/default_image.png')
+                              : NetworkImage(career.thumbnail) as ImageProvider,
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                              const Color(0x00000000).withOpacity(0.4),
+                              BlendMode.srcOver))),
+                  width: Get.width,
+                  height: Get.width,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 58, 20, 14),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 44),
+                          getExpendTitle(
+                            career.careerName,
                           ),
-                        const SizedBox(
-                          height: 14,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            career.isPublic ? SvgPicture.asset('assets/icons/group.svg') :
-                             SvgPicture.asset('assets/icons/personal_career.svg'),
+                          const SizedBox(
+                            height: 14,
+                          ),
+                          if (career.updateDate != null)
                             Text(
-                              '포스트 ${career.post_count}',
-                              style: kNavigationTitle.copyWith(color: selectimage),
-                            )
-                          ],
-                        )
-                      ],
+                              '최근 포스트 ${calculateDate(career.updateDate!)}',
+                              style:
+                                  kNavigationTitle.copyWith(color: selectimage),
+                            ),
+                          const SizedBox(
+                            height: 14,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              career.isPublic
+                                  ? SvgPicture.asset('assets/icons/group.svg')
+                                  : SvgPicture.asset(
+                                      'assets/icons/personal_career.svg'),
+                              Text(
+                                '포스트 ${career.post_count}',
+                                style: kNavigationTitle.copyWith(
+                                    color: selectimage),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -278,7 +288,7 @@ class _MyAppSpace extends StatelessWidget {
         opacity: thumbnail != '' ? 0.25 : 1,
         child: thumbnail != ''
             ? Hero(
-                tag: "career_screen",
+                tag: career.id.toString(),
                 child: Image.network(
                   thumbnail!,
                   fit: BoxFit.cover,

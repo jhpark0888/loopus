@@ -22,6 +22,7 @@ class ProjectAddController extends GetxController {
   RxBool onTitleButton = false.obs;
   RxBool onRegisterButton = false.obs;
   RxBool isIntroTextEmpty = true.obs;
+  RxBool isPublic = false.obs;
 
   List<Company> searchCompanyList = <Company>[].obs;
   List<User> looplist = <User>[].obs;
