@@ -89,7 +89,7 @@ class Project {
           json["post_count"] != null ? RxInt(json["post_count"]) : RxInt(0),
       is_user: json['is_user'] ?? 0,
       user: json["profile"] != null ? User.fromJson(json["profile"]) : null,
-      isPublic: json['is_public'] ?? false
+      isPublic: json["project"] != null ? json["project"]["is_public"] : false
     );
   }
 

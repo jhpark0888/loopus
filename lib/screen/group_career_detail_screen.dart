@@ -14,11 +14,13 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:underline_indicator/underline_indicator.dart';
 
 class GroupCareerDetailScreen extends StatelessWidget {
   GroupCareerDetailScreen(
-      {Key? key, required this.career, required this.careerList})
+      {Key? key, required this.career, required this.careerList, required this.name})
       : super(key: key);
+  String name;
   Project career;
   List<Project> careerList;
   late CareerDetailController careerDetailController;
@@ -120,7 +122,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                   ),
                 ),
                 SliverAppBar(
-                  title: adapt(careerDetailController.tabController),
+                  title: adapt(careerDetailController.tabController,name),
                   automaticallyImplyLeading: false,
                   pinned: true,
                   elevation: 0,
@@ -130,16 +132,10 @@ class GroupCareerDetailScreen extends StatelessWidget {
             body: TabBarView(
                 controller: careerDetailController.tabController,
                 children: [
-                  TabScreen(
-                    tabController: careerDetailController.tabController,
-                    career: career,
-                    careerList: careerList,
+                  MyCareerScreen(
+                    name: name,
                   ),
-                  TabScreen(
-                    tabController: careerDetailController.tabController,
-                    career: career,
-                    careerList: careerList,
-                  )
+                  GroupCareerScreen()
                 ])));
   }
 
@@ -237,7 +233,7 @@ class _MyAppSpace extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             career.isPublic
-                                ? SvgPicture.asset('assets/icons/group.svg')
+                                ? SvgPicture.asset('assets/icons/group_career.svg')
                                 : SvgPicture.asset(
                                     'assets/icons/personal_career.svg'),
                             Text(
@@ -274,48 +270,54 @@ class _MyAppSpace extends StatelessWidget {
   }
 }
 
-Widget adapt(TabController tabController) {
+Widget adapt(TabController tabController, String name) {
   return Container(
       decoration: BoxDecoration(color: mainWhite),
-      child: TabBar(
-        controller: tabController,
-        tabs: [
-          Tab(
-              height: 48,
-              child: Container(
-                child: Text(
-                  '김원우 님의 포스트',
-                  style: kmainbold,
+      child: Column(
+        children: [
+          TabBar(
+            controller: tabController,
+            tabs: [
+              Tab(
+                  height: 48,
+                  child: Container(
+                    child: Text(
+                      '${name} 님의 포스트',
+                      style: kmainbold,
+                    ),
+                  )),
+              Tab(
+                  height: 48,
+                  child: Container(
+                    child: Text(
+                      '그룹 전체 포스트',
+                      style: kmainbold,
+                    ),
+                  ))
+            ],
+            labelStyle: kmainbold,
+                labelColor: mainblack,
+                unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
+                unselectedLabelColor: dividegray,
+                automaticIndicatorColorAdjustment: false,
+                indicator: const UnderlineIndicator(
+                  strokeCap: StrokeCap.round,
+                  borderSide: BorderSide(width: 2, color: mainblack),
                 ),
-              )),
-          Tab(
-              height: 48,
-              child: Container(
-                child: Text(
-                  '그룹 전체 포스트',
-                  style: kmainbold,
-                ),
-              ))
+          ),
+          Divider(
+          height: 1,
+          thickness: 2,
+          color: dividegray,
+        )
         ],
-        indicatorWeight: 2,
-        padding: const EdgeInsets.symmetric(horizontal: 14.0),
-        unselectedLabelColor: Colors.grey,
-        labelColor: Colors.black,
-        indicatorColor: Colors.black,
-        indicatorSize: TabBarIndicatorSize.label,
       ));
 }
 
-class TabScreen extends StatelessWidget {
-  TabScreen(
-      {Key? key,
-      required this.tabController,
-      required this.career,
-      required this.careerList})
+class GroupCareerScreen extends StatelessWidget {
+  const GroupCareerScreen(
+      {Key? key})
       : super(key: key);
-  TabController tabController;
-  List<Project> careerList;
-  Project career;
   @override
   Widget build(BuildContext context) {
     CareerDetailController controller = Get.find();
@@ -330,8 +332,47 @@ class TabScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return PostingWidget(
                       item: controller.postList[index],
+                      type: PostingWidgetType.normal,
+                    );
+                  },
+                  itemCount: controller.postList.length),
+              // PostingWidget(
+              //       item: controller.postList[index],
+              //       type: PostingWidgetType.profile,
+              //     ),
+            ]))
+          ])
+        : EmptyContentWidget(text: '아직 포스트가 없어요'));
+  }
+}
+
+class MyCareerScreen extends StatelessWidget {
+  MyCareerScreen(
+      {Key? key,
+      required this.name})
+      : super(key: key);
+  String name;
+  @override
+  Widget build(BuildContext context) {
+    CareerDetailController controller = Get.find();
+    print(controller.postList.isNotEmpty);
+    return Obx(() => controller.postList.isNotEmpty
+        ? CustomScrollView(slivers: [
+            SliverList(
+                delegate: SliverChildListDelegate([
+              ListView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  itemBuilder: (context, index) {
+                    if(controller.postList[index].user.realName == name){
+                    return PostingWidget(
+                      item: controller.postList[index],
                       type: PostingWidgetType.profile,
                     );
+                    }
+                    else{
+                      return const SizedBox.shrink();
+                    }
                   },
                   itemCount: controller.postList.length),
               // PostingWidget(
