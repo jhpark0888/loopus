@@ -65,6 +65,8 @@ dependencies:
   cp949_dart: ^1.0.0+1
   flutter_local_notifications: ^9.9.0
   zoom_pinch_overlay: ^1.2.0
+  palette_generator: ^0.3.3
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:
@@ -107,6 +109,7 @@ flutter:
     - assets/icons/
     - assets/illustrations/
     - assets/lotties/
+    - images/pic1.png
 
   fonts:
     - family: Nanum

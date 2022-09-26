@@ -6,28 +6,28 @@ class Company {
     required this.companyImage,
     required this.companyName,
     required this.contactField,
-    required this.contactcount,
+    // required this.contactcount,
   });
 
   int id;
   String companyImage;
   String companyName;
   String contactField;
-  RxInt contactcount;
+  // RxInt contactcount;
 
   factory Company.defaultCompany({
     int? id,
     String? companyImage,
     String? companyName,
     String? contactField,
-    RxInt? contactcount,
+    // RxInt? contactcount,
   }) =>
       Company(
         id: id ?? 0,
         companyImage: companyImage ?? "",
         companyName: companyName ?? "",
         contactField: contactField ?? "",
-        contactcount: contactcount ?? 0.obs,
+        // contactcount: contactcount ?? 0.obs,
       );
 
   factory Company.fromJson(Map<String, dynamic> json) => Company(
@@ -35,6 +35,6 @@ class Company {
         companyImage: json['company_image'] ?? "",
         companyName: json['company_name'],
         contactField: json['contact_field'],
-        contactcount: json['count'] != null ? RxInt(json['count']) : RxInt(0),
+        // contactcount: json['count'] != null ? RxInt(json['count']) : RxInt(0),
       );
 }

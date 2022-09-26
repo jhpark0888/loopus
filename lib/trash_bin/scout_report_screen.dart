@@ -139,24 +139,26 @@
 //               ),
 //               excludeHeaderSemantics: false,
 //               actions: [
-//                 Stack(
-//                   children: [GestureDetector(
+//                 Stack(children: [
+//                   GestureDetector(
 //                       behavior: HitTestBehavior.translucent,
-//                       onTap: () {Get.to(()=> MyProfileScreen());},
+//                       onTap: () {
+//                         Get.to(() => MyProfileScreen());
+//                       },
 //                       child: Padding(
-//                         padding: const EdgeInsets.only(right : 20.0),
+//                         padding: const EdgeInsets.only(right: 20.0),
 //                         child: Center(
 //                           child: Obx(
 //                             () => UserImageWidget(
-//                                 imageUrl:
-//                                     HomeController.to.myProfile.value.profileImage ??
-//                                         "",
+//                                 imageUrl: HomeController
+//                                         .to.myProfile.value.profileImage ??
+//                                     "",
 //                                 height: 36,
 //                                 width: 36),
 //                           ),
 //                         ),
-//                       ))]
-//                 ),
+//                       ))
+//                 ]),
 //               ],
 //               bottom: TabBar(
 //                 padding: const EdgeInsets.symmetric(horizontal: 20),

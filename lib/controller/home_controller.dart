@@ -26,6 +26,7 @@ import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/select_project_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -33,8 +34,6 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static HomeController get to => Get.find();
-  NotificationController notificationController =
-      Get.put(NotificationController());
 
   Project? recommendCareer;
   RxList<Post> posts = <Post>[].obs;
@@ -51,7 +50,7 @@ class HomeController extends GetxController
   RxBool bookmark = false.obs;
   RxBool isPostingEmpty = false.obs;
 
-  RxBool isHomeLoading = true.obs;
+  Rx<ScreenState> homeScreenState = ScreenState.loading.obs;
 
   RxBool enablePostingPullup = true.obs;
 
@@ -114,6 +113,22 @@ class HomeController extends GetxController
   }
 
   void onPostingRefresh() async {
+    myId = await const FlutterSecureStorage().read(key: "id");
+
+    await getProfile(int.parse(myId!)).then((value) async {
+      if (value.isError == false) {
+        myProfile.value = User.fromJson(value.data);
+        print(myProfile.value.userid);
+        isNewAlarm.value = value.data['new_alarm'];
+        await updateNotreadMsg(myProfile.value.userid).then((value) {
+          if (value.isError == false) {
+            isNewMsg.value = value.data;
+            print(value.data);
+          }
+        });
+      }
+    });
+
     enablePostingPullup.value = true;
     posts.clear();
     newslist.clear();
@@ -149,9 +164,10 @@ class HomeController extends GetxController
         }
 
         contentsArrange();
-      } else {}
-
-      isHomeLoading(false);
+        homeScreenState(ScreenState.success);
+      } else {
+        errorSituation(value, screenState: homeScreenState);
+      }
     });
   }
 

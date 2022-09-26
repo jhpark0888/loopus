@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -15,6 +16,7 @@ import 'package:intl/intl_standalone.dart';
 import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/app.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/message_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/screen/start_screen.dart';
@@ -27,12 +29,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // localNotificaition.sampleNotification(
-  //     message.notification!.title!, message.notification!.body!, message.data);
-  print('알림 데이터 : ${message.data}');
+
+  if (message.data['type'] == 'msg') {
+    String? newMsg = await FlutterSecureStorage().read(key: 'newMsg') ?? '';
+    if (newMsg == '') {
+      const FlutterSecureStorage().write(key: 'newMsg', value: 'true');
+    }
+  }
+  print('백그라운드 알림 데이터 : ${message.data}');
 }
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -163,7 +168,8 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenStete extends State<WelcomeScreen> {
   String? token;
   _WelcomeScreenStete({this.token});
-
+  NotificationController notificationController =
+      Get.put(NotificationController());
   @override
   void initState() {
     super.initState();

@@ -43,6 +43,7 @@ class PostingAddController extends GetxController {
   List<Widget> selectedCropWidgetList = [];
 
   KeyController keyController = Get.put(KeyController(isTextField: false.obs));
+  @override
   void onInit() {
     if (Get.isRegistered<ShareIntentController>()) {
       scrapList.add(LinkWidget(

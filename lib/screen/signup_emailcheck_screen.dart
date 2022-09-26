@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/signup_api.dart';
@@ -104,6 +105,7 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                         Get.back();
                                         _signupController.timer.timerOn(180);
                                       } else {
+                                        FirebaseMessaging.instance.unsubscribeFromTopic(value.data);
                                         Get.back();
                                         if (value.errorData!["statusCode"] ==
                                             400) {

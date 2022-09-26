@@ -314,7 +314,7 @@ Future<HTTPResponse> roomAlarmStatus(int userId, int roomId, int type) async {
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-
+    type = type == 1 ? 0 : 1;
     final uri = Uri.parse("http://$chatServerUri/chat/chat_list?id=${userId.toString()}");
     Map<String, dynamic> body = {'room_id': roomId.toString(), 'type': type.toString()};
     try {
