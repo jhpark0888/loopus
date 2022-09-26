@@ -176,12 +176,12 @@ class User {
     realName = json["real_name"] ?? realName;
     type = json["type"] ?? type;
     profileImage = json["profile_image"] ?? profileImage;
-    followerCount = json["follower_count"] != null
-        ? RxInt(json["follower_count"])
-        : followerCount;
-    followingCount = json["following_count"] != null
-        ? RxInt(json["following_count"])
-        : followingCount;
+    followerCount.value = json["follower_count"] != null
+        ? json["follower_count"] as int
+        : followerCount.value;
+    followingCount.value = json["following_count"] != null
+        ? json["following_count"] as int
+        : followingCount.value;
     totalposting = json["total_post_count"] ?? totalposting;
     resentPostCount = json["recent_post_count"] ?? resentPostCount;
     rank = json["rank"] != null ? json["rank"] as int : rank;
@@ -217,12 +217,12 @@ class User {
         ? List<String>.from(List.from(json["urls"]).map((x) => x.toString()))
         : urls;
     isuser = json["is_user"] ?? isuser;
-    looped = json["looped"] != null
-        ? FollowState.values[json["looped"]].obs
-        : looped;
-    banned = json["is_banned"] != null
-        ? BanState.values[json["is_banned"]].obs
-        : banned;
+    looped.value = json["looped"] != null
+        ? FollowState.values[json["looped"]]
+        : looped.value;
+    banned.value = json["is_banned"] != null
+        ? BanState.values[json["is_banned"]]
+        : banned.value;
   }
 
   Map<String, dynamic> toJson() => {

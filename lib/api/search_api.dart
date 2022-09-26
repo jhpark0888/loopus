@@ -15,7 +15,6 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/question_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/widget/question_widget.dart';
 import 'package:loopus/trash_bin/search_tag_project_widget.dart';
 import 'package:loopus/widget/searchedtag_widget.dart';
 

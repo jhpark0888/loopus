@@ -155,12 +155,12 @@ class ProjectAddTitleScreen extends StatelessWidget {
                             ),
                           ))
           ],
-          leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: SvgPicture.asset('assets/icons/appbar_exit.svg'),
-          ),
+          // leading: IconButton(
+          //   onPressed: () {
+          //     Get.back();
+          //   },
+          //   icon: SvgPicture.asset('assets/icons/appbar_exit.svg'),
+          // ),
           title: '커리어 추가',
         ),
         body: Column(
@@ -178,7 +178,77 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 maxLength: 15,
                 textController: _controller.projectnamecontroller),
             const SizedBox(
-              height: 48,
+              height: 14,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Obx(
+                () => GestureDetector(
+                  onTap: () {
+                    _controller.isPublic(!_controller.isPublic.value);
+                  },
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/icons/check_icon.svg",
+                        width: 18,
+                        height: 18,
+                        color: _controller.isPublic.value ? null : maingray,
+                      ),
+                      const SizedBox(
+                        width: 7,
+                      ),
+                      Text(
+                        "그룹 커리어에요",
+                        style: kmain.copyWith(
+                            color:
+                                _controller.isPublic.value ? null : maingray),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 20),
+            //   child: Row(
+            //     children: [
+            //       const Text("커리어 분류", style: kmain),
+            //       const Spacer(),
+            //       Obx(
+            //         () => ToggleButtons(
+            //           children: const [
+            //             Text(
+            //               "개인",
+            //             ),
+            //             Text(
+            //               "그룹",
+            //             )
+            //           ],
+            //           isSelected: [
+            //             !_controller.isPublic.value,
+            //             _controller.isPublic.value
+            //           ],
+            //           textStyle: kmainbold,
+            //           onPressed: (index) {
+            //             if (index == 0) {
+            //               _controller.isPublic(false);
+            //             } else {
+            //               _controller.isPublic(true);
+            //             }
+            //           },
+            //           selectedColor: mainblue,
+            //           selectedBorderColor: mainblue,
+            //           color: dividegray,
+            //           splashColor: Colors.transparent,
+            //           borderRadius: BorderRadius.circular(8),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            const SizedBox(
+              height: 24,
             ),
             Obx(() => _controller.selectCompany.value.companyName == ""
                 ? GestureDetector(

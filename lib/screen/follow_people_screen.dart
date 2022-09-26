@@ -88,7 +88,8 @@ class FollowPeopleScreen extends StatelessWidget {
                                         },
                                         separatorBuilder: (context, index) =>
                                             const SizedBox(height: 24),
-                                        itemCount: _controller.userList.length)
+                                        itemCount: _controller.userList.length),
+                                    const SizedBox(height: 24),
                                   ]))));
   }
 }
@@ -120,20 +121,22 @@ class FollowTileWidget extends StatelessWidget {
           width: 36,
         ),
         const SizedBox(width: 14),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            user.realName,
-            style: kmainbold,
-          ),
-          const SizedBox(height: 7),
-          Text(
-            "${user.univName} · ${user.department}",
-            style: kmain,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ]),
+        Expanded(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              user.realName,
+              style: kmainbold,
+            ),
+            const SizedBox(height: 7),
+            Text(
+              "${user.univName} · ${user.department}",
+              style: kmain,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ]),
+        ),
         const SizedBox(width: 14),
-        const Spacer(),
         if (user.userid != HomeController.to.myProfile.value.userid)
           Obx(
             () => Row(children: [

@@ -450,6 +450,67 @@ void showModalIOS(
   );
 }
 
+void showBottomdialog(
+  BuildContext context, {
+  required VoidCallback func1,
+  required VoidCallback func2,
+  required String value1,
+  required String value2,
+  required bool isOne,
+}) {
+  showModalBottomSheet(
+    barrierColor: mainWhite.withOpacity(
+      0.9,
+    ),
+    context: context,
+    backgroundColor: Colors.transparent,
+    builder: (context) => Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (isOne == false)
+            GestureDetector(
+              onTap: func2,
+              child: Container(
+                height: 42,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8), color: maingray),
+                child: Center(
+                  child: Text(
+                    value2,
+                    style: kmain.copyWith(
+                      color: mainWhite,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          const SizedBox(
+            height: 14,
+          ),
+          GestureDetector(
+            onTap: func1,
+            child: Container(
+              height: 42,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: mainblue),
+              child: Center(
+                child: Text(
+                  value1,
+                  style: kmain.copyWith(
+                    color: mainWhite,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 void showButtonDialog({
   required String title,
   required String content,

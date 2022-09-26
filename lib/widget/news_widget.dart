@@ -321,7 +321,7 @@ class NewsListWidget extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return Obx(() =>
-                      KeepAlivePage(child: NewsWidget(url: newslist[index])));
+                      KeepAliveWidget(child: NewsWidget(url: newslist[index])));
                 },
                 separatorBuilder: (context, index) {
                   return const SizedBox(

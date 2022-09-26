@@ -11,6 +11,7 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/group_career_detail_screen.dart';
+import 'package:loopus/screen/career_arrange_screen.dart';
 import 'personal_career_detail_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';
 import 'package:loopus/screen/personal_career_detail_screen.dart';
@@ -283,8 +284,7 @@ class OtherProfileScreen extends StatelessWidget {
                 children: [
                   Obx(
                     () => Text(
-                      _controller.otherUser.value.followerCount.value
-                          .toString(),
+                      _controller.otherUser.value.followerCount.toString(),
                       style: kmainbold.copyWith(
                           color: _hoverController.isHover.value
                               ? mainblack.withOpacity(0.6)
@@ -312,13 +312,11 @@ class OtherProfileScreen extends StatelessWidget {
                   () => GestureDetector(
                       onTap: () {
                         if (_controller.otherUser.value.isuser == 1) {
-                          showModalIOS(context,
+                          showBottomdialog(context,
                               func1: changeProfileImage,
                               func2: changeDefaultImage,
-                              value1: '라이브러리에서 선택',
+                              value1: '사진첩에서 사진 선택',
                               value2: '기본 이미지로 변경',
-                              isValue1Red: false,
-                              isValue2Red: false,
                               isOne: false);
                         }
                       },
@@ -334,13 +332,11 @@ class OtherProfileScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: GestureDetector(
-                        onTap: () => showModalIOS(context,
+                        onTap: () => showBottomdialog(context,
                             func1: changeProfileImage,
                             func2: changeDefaultImage,
-                            value1: '라이브러리에서 선택',
+                            value1: '사진첩에서 사진 선택',
                             value2: '기본 이미지로 변경',
-                            isValue1Red: false,
-                            isValue2Red: false,
                             isOne: false),
                         child: Container(
                           decoration: const BoxDecoration(
@@ -372,8 +368,7 @@ class OtherProfileScreen extends StatelessWidget {
                 children: [
                   Obx(
                     () => Text(
-                      _controller.otherUser.value.followingCount.value
-                          .toString(),
+                      _controller.otherUser.value.followingCount.toString(),
                       style: kmainbold.copyWith(
                           color: _hoverController.isHover.value
                               ? mainblack.withOpacity(0.6)
@@ -533,6 +528,9 @@ class OtherProfileScreen extends StatelessWidget {
               strokeCap: StrokeCap.round,
               borderSide: BorderSide(width: 2, color: mainblack),
             ),
+            onTap: (index) {
+              _controller.currentIndex(index);
+            },
             isScrollable: false,
             tabs: [
               // const Tab(
@@ -548,17 +546,21 @@ class OtherProfileScreen extends StatelessWidget {
               Obx(
                 () => Tab(
                   height: 40,
-                  child: _controller.currentIndex.value == 0
-                      ? SvgPicture.asset('assets/icons/list_active.svg')
-                      : SvgPicture.asset('assets/icons/list_inactive.svg'),
+                  child: SvgPicture.asset(
+                    'assets/icons/list_active.svg',
+                    color:
+                        _controller.currentIndex.value == 0 ? null : dividegray,
+                  ),
                 ),
               ),
               Obx(
                 () => Tab(
                   height: 40,
-                  child: _controller.currentIndex.value == 1
-                      ? SvgPicture.asset('assets/icons/post_active.svg')
-                      : SvgPicture.asset('assets/icons/post_inactive.svg'),
+                  child: SvgPicture.asset(
+                    'assets/icons/post_active.svg',
+                    color:
+                        _controller.currentIndex.value == 1 ? null : dividegray,
+                  ),
                 ),
               ),
             ]),
@@ -632,13 +634,17 @@ class OtherProfileScreen extends StatelessWidget {
                                   color: mainblack.withOpacity(0.6),
                                 ),
                                 const Spacer(),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Text(
-                                    "수정하기",
-                                    style: kmain.copyWith(color: mainblue),
-                                  ),
-                                )
+                                if (_controller.otherUser.value.userid ==
+                                    HomeController.to.myProfile.value.userid)
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => CareerArrangeScreen());
+                                    },
+                                    child: Text(
+                                      "정렬 수정",
+                                      style: kmain.copyWith(color: mainblue),
+                                    ),
+                                  )
                               ],
                             ),
                             const SizedBox(height: 14),
@@ -647,26 +653,13 @@ class OtherProfileScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemBuilder: (context, index) => GestureDetector(
                                 onTap: () {
-                                  Get.to(() => _controller
-                                          .otherProjectList[index].isPublic
-                                      ? GroupCareerDetailScreen(
-                                          careerList:
-                                              _controller.otherProjectList,
-                                          career: _controller
-                                              .otherProjectList[index])
-                                      : PersonalCareerDetailScreen(
-                                          careerList:
-                                              _controller.otherProjectList,
-                                          career: _controller
-                                              .otherProjectList[index]));
+                                  goCareerScreen(
+                                      _controller.otherProjectList[index],
+                                      _controller.otherProjectList);
                                 },
-                                child: Hero(
-                                  tag: _controller.otherProjectList[index].id
-                                      .toString(),
-                                  child: CareerWidget(
-                                      career:
-                                          _controller.otherProjectList[index]),
-                                ),
+                                child: CareerWidget(
+                                    career:
+                                        _controller.otherProjectList[index]),
                               ),
                               separatorBuilder: (context, index) =>
                                   const SizedBox(
@@ -687,7 +680,7 @@ class OtherProfileScreen extends StatelessWidget {
   }
 
   Widget _postView() {
-    return Obx(() => _controller.otherProjectList.isEmpty
+    return Obx(() => _controller.allPostList.isEmpty
         ? EmptyContentWidget(text: '아직 포스팅이 없어요')
         : sr.SmartRefresher(
             controller: _otherpostLoadingController,

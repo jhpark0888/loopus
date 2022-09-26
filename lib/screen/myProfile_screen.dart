@@ -21,6 +21,7 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
+import 'package:loopus/screen/career_arrange_screen.dart';
 import 'package:loopus/screen/group_career_detail_screen.dart';
 import 'package:loopus/screen/personal_career_detail_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';
@@ -29,6 +30,7 @@ import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/utils/error_control.dart';
+import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/career_analysis_widget.dart';
 import 'package:loopus/widget/career_widget.dart';
 import 'package:loopus/widget/careertile_widget.dart';
@@ -38,6 +40,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
+import 'package:loopus/widget/profile_url_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -251,13 +254,11 @@ class MyProfileScreen extends StatelessWidget {
               children: [
                 Obx(
                   () => GestureDetector(
-                      onTap: () => showModalIOS(context,
+                      onTap: () => showBottomdialog(context,
                           func1: changeProfileImage,
                           func2: changeDefaultImage,
-                          value1: '라이브러리에서 선택',
+                          value1: '사진첩에서 사진 선택',
                           value2: '기본 이미지로 변경',
-                          isValue1Red: false,
-                          isValue2Red: false,
                           isOne: false),
                       child: UserImageWidget(
                         imageUrl:
@@ -271,13 +272,11 @@ class MyProfileScreen extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
-                      onTap: () => showModalIOS(context,
+                      onTap: () => showBottomdialog(context,
                           func1: changeProfileImage,
                           func2: changeDefaultImage,
-                          value1: '라이브러리에서 선택',
+                          value1: '사진첩에서 사진 선택',
                           value2: '기본 이미지로 변경',
-                          isValue1Red: false,
-                          isValue2Red: false,
                           isOne: false),
                       child: Container(
                         decoration: const BoxDecoration(
@@ -389,6 +388,51 @@ class MyProfileScreen extends StatelessWidget {
         const SizedBox(
           height: 14,
         ),
+        Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (profileController.myUserInfo.value.urls.isNotEmpty)
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 24,
+                        child: ListView.separated(
+                            primary: false,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return ProfileUrlWidget(
+                                url: profileController
+                                    .myUserInfo.value.urls[index],
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                                  width: 7,
+                                ),
+                            itemCount:
+                                profileController.myUserInfo.value.urls.length),
+                      ),
+                      const SizedBox(
+                        width: 7,
+                      ),
+                    ],
+                  ),
+                SvgPicture.asset(
+                  "assets/icons/home_add.svg",
+                  width: 24,
+                  height: 24,
+                  color: dividegray,
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 14,
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -422,17 +466,23 @@ class MyProfileScreen extends StatelessWidget {
               Obx(
                 () => Tab(
                   height: 40,
-                  child: profileController.currentIndex.value == 0
-                      ? SvgPicture.asset('assets/icons/list_active.svg')
-                      : SvgPicture.asset('assets/icons/list_inactive.svg'),
+                  icon: SvgPicture.asset(
+                    'assets/icons/list_active.svg',
+                    color: profileController.currentIndex.value == 0
+                        ? null
+                        : dividegray,
+                  ),
                 ),
               ),
               Obx(
                 () => Tab(
                   height: 40,
-                  child: profileController.currentIndex.value == 1
-                      ? SvgPicture.asset('assets/icons/post_active.svg')
-                      : SvgPicture.asset('assets/icons/post_inactive.svg'),
+                  icon: SvgPicture.asset(
+                    'assets/icons/post_active.svg',
+                    color: profileController.currentIndex.value == 1
+                        ? null
+                        : dividegray,
+                  ),
                 ),
               ),
             ]),
@@ -507,9 +557,11 @@ class MyProfileScreen extends StatelessWidget {
                                 ),
                                 const Spacer(),
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Get.to(() => CareerArrangeScreen());
+                                  },
                                   child: Text(
-                                    "수정하기",
+                                    "정렬 수정",
                                     style: kmain.copyWith(color: mainblue),
                                   ),
                                 )
@@ -521,26 +573,13 @@ class MyProfileScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemBuilder: (context, index) => GestureDetector(
                                 onTap: () {
-                                  Get.to(() => profileController
-                                          .myProjectList[index].isPublic
-                                      ? GroupCareerDetailScreen(
-                                          careerList:
-                                              profileController.myProjectList,
-                                          career: profileController
-                                              .myProjectList[index])
-                                      : PersonalCareerDetailScreen(
-                                          careerList:
-                                              profileController.myProjectList,
-                                          career: profileController
-                                              .myProjectList[index]));
+                                  goCareerScreen(
+                                      profileController.myProjectList[index],
+                                      profileController.myProjectList);
                                 },
-                                child: Hero(
-                                  tag: profileController.myProjectList[index].id
-                                      .toString(),
-                                  child: CareerWidget(
-                                      career: profileController
-                                          .myProjectList[index]),
-                                ),
+                                child: CareerWidget(
+                                    career:
+                                        profileController.myProjectList[index]),
                               ),
                               separatorBuilder: (context, index) =>
                                   const SizedBox(
@@ -561,7 +600,7 @@ class MyProfileScreen extends StatelessWidget {
   }
 
   Widget _postView() {
-    return Obx(() => profileController.myProjectList.isEmpty
+    return Obx(() => profileController.allPostList.isEmpty
         ? EmptyContentWidget(text: '아직 포스팅이 없어요')
         : sr.SmartRefresher(
             controller: profileController.postLoadingController,
@@ -648,6 +687,38 @@ class MyProfileScreen extends StatelessWidget {
     );
   }
 }
+
+// class ProfileTab extends AnimatedWidget {
+//   const ProfileTab({
+//     Key? key,
+//     required Animation<double> animation,
+//     required this.selected,
+//     required this.labelColor,
+//     required this.unselectedLabelColor,
+//     required this.child,
+//   }) : super(key: key, listenable: animation);
+
+//   final bool selected;
+//   final Color? labelColor;
+//   final Color? unselectedLabelColor;
+//   final Widget child;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final Animation<double> animation = listenable as Animation<double>;
+//     final Color color = selected
+//         ? Color.lerp(labelColor, unselectedLabelColor, animation.value)!
+//         : Color.lerp(unselectedLabelColor, labelColor, animation.value)!;
+
+//     return IconTheme.merge(
+//       data: IconThemeData(
+//         size: 24.0,
+//         color: color,
+//       ),
+//       child: child,
+//     );
+//   }
+// }
 
 // class _SliverTabBarViewDelegate extends SliverPersistentHeaderDelegate {
 //   _SliverTabBarViewDelegate({
