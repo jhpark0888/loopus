@@ -10,6 +10,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/group_career_detail_screen.dart';
 import 'personal_career_detail_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';
 import 'package:loopus/screen/personal_career_detail_screen.dart';
@@ -646,10 +647,18 @@ class OtherProfileScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemBuilder: (context, index) => GestureDetector(
                                 onTap: () {
-                                  Get.to(() => PersonalCareerDetailScreen(
-                                      careerList: _controller.otherProjectList,
-                                      career:
-                                          _controller.otherProjectList[index]));
+                                  Get.to(() => _controller
+                                          .otherProjectList[index].isPublic
+                                      ? GroupCareerDetailScreen(
+                                          careerList:
+                                              _controller.otherProjectList,
+                                          career: _controller
+                                              .otherProjectList[index])
+                                      : PersonalCareerDetailScreen(
+                                          careerList:
+                                              _controller.otherProjectList,
+                                          career: _controller
+                                              .otherProjectList[index]));
                                 },
                                 child: Hero(
                                   tag: _controller.otherProjectList[index].id

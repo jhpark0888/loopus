@@ -216,54 +216,6 @@ class _MyAppSpace extends StatelessWidget {
                 ),
               ),
             )
-            // Stack(
-            //   alignment: Alignment.centerLeft,
-            //   children: [
-            //     Opacity(
-            //       opacity: opacity1,
-            //       child: getImage(context, career.thumbnail),
-            //     ),
-            //     SingleChildScrollView(
-            //       child: Padding(
-            //         padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
-            //         child: Column(
-            //           mainAxisAlignment: MainAxisAlignment.start,
-            //           crossAxisAlignment: CrossAxisAlignment.start,
-            //           children: [
-            //             const SizedBox(height: 44),
-            //             getExpendTitle(
-            //               career.careerName,
-            //             ),
-            //             const SizedBox(
-            //               height: 14,
-            //             ),
-            //             if (career.updateDate != null)
-            //               Text(
-            //                 '최근 포스트 ${calculateDate(career.updateDate!)}',
-            //                 style:
-            //                     kNavigationTitle.copyWith(color: selectimage),
-            //               ),
-            //             const SizedBox(
-            //               height: 14,
-            //             ),
-            //             Row(
-            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //               children: [
-            //                 SvgPicture.asset(
-            //                     'assets/icons/personal_career.svg'),
-            //                 Text(
-            //                   '포스트 ${career.post_count}',
-            //                   style:
-            //                       kNavigationTitle.copyWith(color: selectimage),
-            //                 )
-            //               ],
-            //             )
-            //           ],
-            //         ),
-            //       ),
-            //     )
-            //   ],
-            // ),
           ],
         );
       },

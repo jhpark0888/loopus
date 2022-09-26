@@ -521,11 +521,18 @@ class MyProfileScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemBuilder: (context, index) => GestureDetector(
                                 onTap: () {
-                                  Get.to(() => PersonalCareerDetailScreen(
-                                      careerList:
-                                          profileController.myProjectList,
-                                      career: profileController
-                                          .myProjectList[index]));
+                                  Get.to(() => profileController
+                                          .myProjectList[index].isPublic
+                                      ? GroupCareerDetailScreen(
+                                          careerList:
+                                              profileController.myProjectList,
+                                          career: profileController
+                                              .myProjectList[index])
+                                      : PersonalCareerDetailScreen(
+                                          careerList:
+                                              profileController.myProjectList,
+                                          career: profileController
+                                              .myProjectList[index]));
                                 },
                                 child: Hero(
                                   tag: profileController.myProjectList[index].id

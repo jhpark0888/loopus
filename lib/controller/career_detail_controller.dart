@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
@@ -7,7 +8,7 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class CareerDetailController extends GetxController {
+class CareerDetailController extends GetxController with GetTickerProviderStateMixin{
   CareerDetailController({required this.career});
   ScrollController scrollController = ScrollController();
   RefreshController refreshController = RefreshController();
@@ -16,9 +17,10 @@ class CareerDetailController extends GetxController {
   RxInt page = 1.obs;
   RxList<Post> postList = <Post>[].obs;
   RxBool enablePullUp = true.obs;
-
+  late TabController tabController; 
   @override
   void onInit() {
+    tabController = TabController(length: 2, vsync: this);
     super.onInit();
     getPosting();
     scrollController.addListener(() {
