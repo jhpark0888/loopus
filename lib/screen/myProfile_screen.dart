@@ -30,6 +30,7 @@ import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/utils/error_control.dart';
+import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/career_analysis_widget.dart';
 import 'package:loopus/widget/career_widget.dart';
 import 'package:loopus/widget/careertile_widget.dart';
@@ -39,6 +40,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
+import 'package:loopus/widget/profile_url_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -252,13 +254,11 @@ class MyProfileScreen extends StatelessWidget {
               children: [
                 Obx(
                   () => GestureDetector(
-                      onTap: () => showModalIOS(context,
+                      onTap: () => showBottomdialog(context,
                           func1: changeProfileImage,
                           func2: changeDefaultImage,
-                          value1: '라이브러리에서 선택',
+                          value1: '사진첩에서 사진 선택',
                           value2: '기본 이미지로 변경',
-                          isValue1Red: false,
-                          isValue2Red: false,
                           isOne: false),
                       child: UserImageWidget(
                         imageUrl:
@@ -272,13 +272,11 @@ class MyProfileScreen extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
-                      onTap: () => showModalIOS(context,
+                      onTap: () => showBottomdialog(context,
                           func1: changeProfileImage,
                           func2: changeDefaultImage,
-                          value1: '라이브러리에서 선택',
+                          value1: '사진첩에서 사진 선택',
                           value2: '기본 이미지로 변경',
-                          isValue1Red: false,
-                          isValue2Red: false,
                           isOne: false),
                       child: Container(
                         decoration: const BoxDecoration(
@@ -389,6 +387,51 @@ class MyProfileScreen extends StatelessWidget {
         ),
         const SizedBox(
           height: 14,
+        ),
+        Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (profileController.myUserInfo.value.urls.isNotEmpty)
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 24,
+                        child: ListView.separated(
+                            primary: false,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return ProfileUrlWidget(
+                                url: profileController
+                                    .myUserInfo.value.urls[index],
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                                  width: 7,
+                                ),
+                            itemCount:
+                                profileController.myUserInfo.value.urls.length),
+                      ),
+                      const SizedBox(
+                        width: 7,
+                      ),
+                    ],
+                  ),
+                SvgPicture.asset(
+                  "assets/icons/home_add.svg",
+                  width: 24,
+                  height: 24,
+                  color: dividegray,
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 14,
+            ),
+          ],
         ),
       ],
     );
@@ -561,7 +604,7 @@ class MyProfileScreen extends StatelessWidget {
   }
 
   Widget _postView() {
-    return Obx(() => profileController.myProjectList.isEmpty
+    return Obx(() => profileController.allPostList.isEmpty
         ? EmptyContentWidget(text: '아직 포스팅이 없어요')
         : sr.SmartRefresher(
             controller: profileController.postLoadingController,

@@ -311,13 +311,11 @@ class OtherProfileScreen extends StatelessWidget {
                   () => GestureDetector(
                       onTap: () {
                         if (_controller.otherUser.value.isuser == 1) {
-                          showModalIOS(context,
+                          showBottomdialog(context,
                               func1: changeProfileImage,
                               func2: changeDefaultImage,
-                              value1: '라이브러리에서 선택',
+                              value1: '사진첩에서 사진 선택',
                               value2: '기본 이미지로 변경',
-                              isValue1Red: false,
-                              isValue2Red: false,
                               isOne: false);
                         }
                       },
@@ -333,13 +331,11 @@ class OtherProfileScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: GestureDetector(
-                        onTap: () => showModalIOS(context,
+                        onTap: () => showBottomdialog(context,
                             func1: changeProfileImage,
                             func2: changeDefaultImage,
-                            value1: '라이브러리에서 선택',
+                            value1: '사진첩에서 사진 선택',
                             value2: '기본 이미지로 변경',
-                            isValue1Red: false,
-                            isValue2Red: false,
                             isOne: false),
                         child: Container(
                           decoration: const BoxDecoration(
@@ -687,7 +683,7 @@ class OtherProfileScreen extends StatelessWidget {
   }
 
   Widget _postView() {
-    return Obx(() => _controller.otherProjectList.isEmpty
+    return Obx(() => _controller.allPostList.isEmpty
         ? EmptyContentWidget(text: '아직 포스팅이 없어요')
         : sr.SmartRefresher(
             controller: _otherpostLoadingController,

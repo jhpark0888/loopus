@@ -183,67 +183,72 @@ class ProjectAddTitleScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Obx(
-                () => ToggleButtons(
-                  children: const [
-                    Text(
-                      "개인",
-                    ),
-                    Text(
-                      "그룹",
-                    )
-                  ],
-                  isSelected: [
-                    !_controller.isPublic.value,
-                    _controller.isPublic.value
-                  ],
-                  textStyle: kmainbold,
-                  onPressed: (index) {
-                    if (index == 0) {
-                      _controller.isPublic(false);
-                    } else {
-                      _controller.isPublic(true);
-                    }
+                () => GestureDetector(
+                  onTap: () {
+                    _controller.isPublic(!_controller.isPublic.value);
                   },
-                  selectedColor: mainblue,
-                  selectedBorderColor: mainblue,
-                  color: dividegray,
-                  splashColor: Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/icons/check_icon.svg",
+                        width: 18,
+                        height: 18,
+                        color: _controller.isPublic.value ? null : maingray,
+                      ),
+                      const SizedBox(
+                        width: 7,
+                      ),
+                      Text(
+                        "그룹 커리어에요",
+                        style: kmain.copyWith(
+                            color:
+                                _controller.isPublic.value ? null : maingray),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
             // Padding(
             //   padding: const EdgeInsets.symmetric(horizontal: 20),
-            //   child: Obx(
-            //     () => Row(
-            //       children: [
-            //         RichText(
-            //             text: TextSpan(children: [
-            //           TextSpan(
-            //               text: "개인",
-            //               style: _controller.isRepublic.value
-            //                   ? kmain.copyWith(color: dividegray)
-            //                   : kmainbold),
-            //           const TextSpan(text: " / ", style: kmainbold),
-            //           TextSpan(
-            //               text: "그룹",
-            //               style: _controller.isRepublic.value
-            //                   ? kmainbold
-            //                   : kmain.copyWith(color: dividegray))
-            //         ])),
-            //         const Spacer(),
-            //         Switch(
-            //             value: _controller.isRepublic.value,
-            //             onChanged: (value) {
-            //               _controller.isRepublic(value);
-            //             }),
-            //             activer
-            //       ],
-            //     ),
+            //   child: Row(
+            //     children: [
+            //       const Text("커리어 분류", style: kmain),
+            //       const Spacer(),
+            //       Obx(
+            //         () => ToggleButtons(
+            //           children: const [
+            //             Text(
+            //               "개인",
+            //             ),
+            //             Text(
+            //               "그룹",
+            //             )
+            //           ],
+            //           isSelected: [
+            //             !_controller.isPublic.value,
+            //             _controller.isPublic.value
+            //           ],
+            //           textStyle: kmainbold,
+            //           onPressed: (index) {
+            //             if (index == 0) {
+            //               _controller.isPublic(false);
+            //             } else {
+            //               _controller.isPublic(true);
+            //             }
+            //           },
+            //           selectedColor: mainblue,
+            //           selectedBorderColor: mainblue,
+            //           color: dividegray,
+            //           splashColor: Colors.transparent,
+            //           borderRadius: BorderRadius.circular(8),
+            //         ),
+            //       ),
+            //     ],
             //   ),
             // ),
             const SizedBox(
-              height: 48,
+              height: 24,
             ),
             Obx(() => _controller.selectCompany.value.companyName == ""
                 ? GestureDetector(
