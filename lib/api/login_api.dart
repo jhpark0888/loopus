@@ -17,18 +17,12 @@ import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
 
 import '../constant.dart';
-import '../controller/ga_controller.dart';
 
 Future<HTTPResponse> loginRequest(String email, String pw) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    final LogInController logInController = Get.put(LogInController());
-    // final NotificationController notificationController =
-    //     Get.put(NotificationController());
-    final GAController _gaController = Get.put(GAController());
-
     Uri uri = Uri.parse('$serverUri/user_api/login');
 
     final user = {

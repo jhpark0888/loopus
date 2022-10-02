@@ -19,6 +19,7 @@ import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
+import 'package:loopus/model/sns_model.dart';
 
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/start_screen.dart';
@@ -207,14 +208,13 @@ Future<HTTPResponse> postProjectArrange(List<Project> careerList) async {
   }
 }
 
-enum ProfileUpdateType {
-  image,
-  department,
-  tag,
-}
+enum ProfileUpdateType { image, school, department, sns }
 
 Future<HTTPResponse> updateProfile(
-    User user, File? image, List? taglist, ProfileUpdateType updateType) async {
+    {User? user,
+    File? image,
+    SNS? sns,
+    required ProfileUpdateType updateType}) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
@@ -242,13 +242,13 @@ Future<HTTPResponse> updateProfile(
       } else {
         print('api error image : $image');
 
-        request.fields['image'] = user.profileImage ?? json.encode(null);
+        request.fields['image'] = user!.profileImage ?? json.encode(null);
       }
     } else if (updateType == ProfileUpdateType.department) {
-      request.fields['department'] = user.department;
-    } else if (updateType == ProfileUpdateType.tag) {
-      request.fields['tag'] = json
-          .encode(taglist ?? user.profileTag.map((tag) => tag.tag).toList());
+      request.fields['department'] = user!.department;
+    } else if (updateType == ProfileUpdateType.sns) {
+      request.fields['type'] = sns!.snsType.index.toString();
+      request.fields['url'] = sns.url;
     }
 
     try {
@@ -258,10 +258,6 @@ Future<HTTPResponse> updateProfile(
         String responsebody = await response.stream.bytesToString();
         var responsemap = jsonDecode(responsebody);
 
-        if (updateType == ProfileUpdateType.tag) {
-          Get.back();
-          showCustomDialog('관심 태그 기반으로 홈 화면을 재구성했어요', 1500);
-        }
         if (kDebugMode) {
           print("profile status code : ${response.statusCode}");
         }
@@ -362,11 +358,10 @@ Future<HTTPResponse> putpwchange() async {
 //   }
 // }
 
-Future<HTTPResponse> deleteuser(String pw) async {
+Future<HTTPResponse> deleteuser(String pw, String reason) async {
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
@@ -374,17 +369,16 @@ Future<HTTPResponse> deleteuser(String pw) async {
 
     var uri = Uri.parse("$serverUri/user_api/resign");
 
-    String reason = "";
-    for (var reasonwidget in WithDrawalController.to.reasonlist) {
-      if (reasonwidget.isSelected.value == true) {
-        reason += reasonwidget.text;
-      }
-    }
+    // for (var reasonwidget in WithDrawalController.to.reasonlist) {
+    //   if (reasonwidget.isSelected.value == true) {
+    //     reason += reasonwidget.text;
+    //   }
+    // }
 
     final password = {
       'password': pw,
       'reason': reason,
-      "department": ProfileController.to.myUserInfo.value.department
+      "department": HomeController.to.myProfile.value.department
     };
 
     try {
@@ -397,16 +391,6 @@ Future<HTTPResponse> deleteuser(String pw) async {
 
       print("회원탈퇴: ${response.statusCode}");
       if (response.statusCode == 200) {
-        Get.offAll(() => StartScreen());
-
-        FlutterSecureStorage().delete(key: "token");
-        FlutterSecureStorage().delete(key: "id");
-        FlutterSecureStorage().delete(key: "login detect");
-        Get.delete<AppController>();
-        Get.delete<HomeController>();
-        Get.delete<SearchController>();
-        Get.delete<ProfileController>();
-
         return HTTPResponse.success('success');
       } else if (response.statusCode == 401) {
         showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
@@ -416,12 +400,10 @@ Future<HTTPResponse> deleteuser(String pw) async {
         ;
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
       print(e);
       return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
     }
   }
 }

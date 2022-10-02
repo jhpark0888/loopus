@@ -56,8 +56,10 @@ class ProfileImageChangeScreen extends StatelessWidget {
                   loading();
                   File? image = await _controller.cropImage();
                   if (image != null) {
-                    await updateProfile(ProfileController.to.myUserInfo.value,
-                            image, null, ProfileUpdateType.image)
+                    await updateProfile(
+                            user: ProfileController.to.myUserInfo.value,
+                            image: image,
+                            updateType: ProfileUpdateType.image)
                         .then((value) {
                       if (value.isError == false) {
                         User user = User.fromJson(value.data);

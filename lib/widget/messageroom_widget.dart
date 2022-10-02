@@ -61,15 +61,17 @@ class MessageRoomWidget extends StatelessWidget {
               onPressed: (context) {
                 showButtonDialog(
                     title: chatRoom.value.type.value == 1 ? '알림해제' : '알림켜기',
-                    content: chatRoom.value.type.value == 1
+                    startContent: chatRoom.value.type.value == 1
                         ? '해제를 하면 해당 유저로부터 알림을 받을 수 없습니다.'
                         : '켜기를 하면 해당 유저로부터 알림을 받을 수 있습니다.',
                     leftFunction: () {
                       Get.back();
                     },
-                    rightFunction: () async{
-                      await roomAlarmStatus(HomeController.to.myProfile.value.userid,
-                              chatRoom.value.roomId, chatRoom.value.type.value)
+                    rightFunction: () async {
+                      await roomAlarmStatus(
+                              HomeController.to.myProfile.value.userid,
+                              chatRoom.value.roomId,
+                              chatRoom.value.type.value)
                           .then((value) {
                         if (value.isError == false) {
                           SQLController.to
@@ -91,7 +93,7 @@ class MessageRoomWidget extends StatelessWidget {
               onPressed: (context) {
                 showButtonDialog(
                     title: '채팅방 나가기',
-                    content: '나가기를 하면 메세지가 모두 삭제되고\n 메세지 목록에서도 삭제됩니다.',
+                    startContent: '나가기를 하면 메세지가 모두 삭제되고\n 메세지 목록에서도 삭제됩니다.',
                     leftText: '취소',
                     leftFunction: () {
                       Get.back();
@@ -110,17 +112,20 @@ class MessageRoomWidget extends StatelessWidget {
                                       .deleteMessage(chatRoom.value.roomId);
                                   SQLController.to
                                       .deleteMessageRoom(chatRoom.value.roomId);
-                                  SQLController.to.deleteUser(user.value.userid);
-      
+                                  SQLController.to
+                                      .deleteUser(user.value.userid);
+
                                   messageController.searchRoomList.removeAt(
-                                      messageController.searchRoomList.indexWhere(
-                                          (messageRoom) =>
-                                              messageRoom.chatRoom.value.roomId ==
+                                      messageController.searchRoomList
+                                          .indexWhere((messageRoom) =>
+                                              messageRoom
+                                                  .chatRoom.value.roomId ==
                                               chatRoom.value.roomId));
                                   messageController.chattingRoomList.removeAt(
                                       messageController.chattingRoomList
                                           .indexWhere((messageRoom) =>
-                                              messageRoom.chatRoom.value.roomId ==
+                                              messageRoom
+                                                  .chatRoom.value.roomId ==
                                               chatRoom.value.roomId));
                                 }
                               }));
@@ -181,8 +186,13 @@ class MessageRoomWidget extends StatelessWidget {
                             Text(
                                 '· ${messageRoomDurationCalculate(endDate: DateTime.now(), startDate: chatRoom.value.message.value.date)}',
                                 style: kmain.copyWith(color: maingray)),
-                                const SizedBox(width: 7),
-                                chatRoom.value.type.value == 0 ? const Icon(Icons.alarm_off_rounded, size:16,) : const SizedBox.shrink()
+                            const SizedBox(width: 7),
+                            chatRoom.value.type.value == 0
+                                ? const Icon(
+                                    Icons.alarm_off_rounded,
+                                    size: 16,
+                                  )
+                                : const SizedBox.shrink()
                           ],
                         ),
                       ),

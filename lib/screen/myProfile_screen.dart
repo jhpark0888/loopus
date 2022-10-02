@@ -26,6 +26,7 @@ import 'package:loopus/screen/group_career_detail_screen.dart';
 import 'package:loopus/screen/personal_career_detail_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
+import 'package:loopus/screen/profile_sns_add_screen.dart';
 import 'package:loopus/screen/profile_tag_change_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
@@ -40,7 +41,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
-import 'package:loopus/widget/profile_url_widget.dart';
+import 'package:loopus/widget/profile_sns_image_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
@@ -86,6 +87,11 @@ class MyProfileScreen extends StatelessWidget {
               '프로필',
               style: ktitle,
             ),
+            leading: GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: SvgPicture.asset('assets/icons/appbar_back.svg')),
             actions: [
               IconButton(
                   onPressed: () {
@@ -187,8 +193,9 @@ class MyProfileScreen extends StatelessWidget {
   }
 
   void changeDefaultImage() async {
-    await updateProfile(profileController.myUserInfo.value, null, null,
-            ProfileUpdateType.image)
+    await updateProfile(
+            user: profileController.myUserInfo.value,
+            updateType: ProfileUpdateType.image)
         .then((value) {
       if (value.isError == false) {
         User user = User.fromJson(value.data);
@@ -255,10 +262,12 @@ class MyProfileScreen extends StatelessWidget {
                 Obx(
                   () => GestureDetector(
                       onTap: () => showBottomdialog(context,
-                          func1: changeProfileImage,
-                          func2: changeDefaultImage,
-                          value1: '사진첩에서 사진 선택',
-                          value2: '기본 이미지로 변경',
+                          func1: changeDefaultImage,
+                          func2: changeProfileImage,
+                          value1: '기본 이미지로 변경',
+                          value2: '사진첩에서 사진 선택',
+                          buttonColor1: maingray,
+                          buttonColor2: mainblue,
                           isOne: false),
                       child: UserImageWidget(
                         imageUrl:
@@ -273,10 +282,12 @@ class MyProfileScreen extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
                       onTap: () => showBottomdialog(context,
-                          func1: changeProfileImage,
-                          func2: changeDefaultImage,
-                          value1: '사진첩에서 사진 선택',
-                          value2: '기본 이미지로 변경',
+                          func1: changeDefaultImage,
+                          func2: changeProfileImage,
+                          value1: '기본 이미지로 변경',
+                          value2: '사진첩에서 사진 선택',
+                          buttonColor1: maingray,
+                          buttonColor2: mainblue,
                           isOne: false),
                       child: Container(
                         decoration: const BoxDecoration(
@@ -393,38 +404,50 @@ class MyProfileScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (profileController.myUserInfo.value.urls.isNotEmpty)
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: 24,
-                        child: ListView.separated(
-                            primary: false,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return ProfileUrlWidget(
-                                url: profileController
-                                    .myUserInfo.value.urls[index],
-                              );
-                            },
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                                  width: 7,
-                                ),
-                            itemCount:
-                                profileController.myUserInfo.value.urls.length),
-                      ),
-                      const SizedBox(
-                        width: 7,
-                      ),
-                    ],
+                if (profileController.myUserInfo.value.snsList.isNotEmpty)
+                  Obx(
+                    () => SizedBox(
+                      height: 24,
+                      child: ListView.separated(
+                          primary: false,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return ProfileSnsImageWidget(
+                              sns: profileController
+                                  .myUserInfo.value.snsList[index],
+                            );
+                          },
+                          separatorBuilder: (context, index) => const SizedBox(
+                                width: 7,
+                              ),
+                          itemCount: profileController
+                              .myUserInfo.value.snsList.length),
+                    ),
+                  )
+                else
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      "SNS를 추가해주세요",
+                      style: kmainbold.copyWith(color: dividegray),
+                    ),
                   ),
-                SvgPicture.asset(
-                  "assets/icons/home_add.svg",
-                  width: 24,
-                  height: 24,
-                  color: dividegray,
+                const SizedBox(
+                  width: 7,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => ProfileSnsAddScreen(
+                          snsList: profileController.myUserInfo.value.snsList,
+                        ));
+                  },
+                  child: SvgPicture.asset(
+                    "assets/icons/home_add.svg",
+                    width: 24,
+                    height: 24,
+                    color: dividegray,
+                  ),
                 )
               ],
             ),

@@ -105,7 +105,8 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                         Get.back();
                                         _signupController.timer.timerOn(180);
                                       } else {
-                                        FirebaseMessaging.instance.unsubscribeFromTopic(value.data);
+                                        FirebaseMessaging.instance
+                                            .unsubscribeFromTopic(value.data);
                                         Get.back();
                                         if (value.errorData!["statusCode"] ==
                                             400) {
@@ -143,11 +144,17 @@ class SignupEmailcheckScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SignUpTextWidget(
-                    oneLinetext: "학교 인증을 위해",
-                    twoLinetext: "",
-                    twohighlightText: "입력한 주소로 메일을 보냈어요",
-                  ),
+                  _signupController.isReCertification == false
+                      ? SignUpTextWidget(
+                          oneLinetext: "학교 인증을 위해",
+                          twoLinetext: "",
+                          twohighlightText: "입력한 주소로 메일을 보냈어요",
+                        )
+                      : SignUpTextWidget(
+                          oneLinetext: "재인증을 위해",
+                          twoLinetext: "",
+                          twohighlightText: "입력한 주소로 메일을 보냈어요",
+                        ),
                   const SizedBox(
                     height: 24,
                   ),
@@ -155,36 +162,6 @@ class SignupEmailcheckScreen extends StatelessWidget {
                     "${_signupController.emailidcontroller.text}@${_signupController.selectUniv.value.email}",
                     style: kmainbold,
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  //   child: Obx(
-                  //     () => TextField(
-                  //       controller: _signupController.emailidcontroller,
-                  //       style: kmain,
-                  //       keyboardType: TextInputType.emailAddress,
-                  //       maxLines: 1,
-                  //       cursorColor: mainblack,
-                  //       textAlign: TextAlign.end,
-                  //       //TODO: 학교 도메인 확인
-                  //       decoration: InputDecoration(
-                  //         hintText: "본인 대학 이메일 아이디",
-                  //         hintStyle: kmain.copyWith(color: maingray),
-                  //         border: const UnderlineInputBorder(
-                  //           borderSide: BorderSide.none,
-                  //         ),
-                  //         suffixIconConstraints:
-                  //             const BoxConstraints(minHeight: 20, minWidth: 20),
-                  //         suffixIcon: SizedBox(
-                  //           width: 150,
-                  //           child: Text(
-                  //             "@${_signupController.selectUniv.value.email}",
-                  //             style: kmain,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   const SizedBox(
                     height: 24,
                   ),
@@ -195,10 +172,20 @@ class SignupEmailcheckScreen extends StatelessWidget {
                   const SizedBox(
                     height: 14,
                   ),
-                  const Text(
-                    "메일 속 링크를 클릭하면 가입이 완료돼요",
+                  Text(
+                    _signupController.isReCertification == false
+                        ? "메일 속 링크를 클릭하면 가입이 완료돼요"
+                        : "메일 속 링크를 클릭하면 재인증이 완료되며,",
                     style: kmain,
                   ),
+                  const SizedBox(
+                    height: 14,
+                  ),
+                  if (_signupController.isReCertification == false)
+                    Text(
+                      "재인증 된 대학 메일로 로그인이 가능해요",
+                      style: kmain.copyWith(color: mainblue),
+                    ),
                 ],
               ),
             ),
