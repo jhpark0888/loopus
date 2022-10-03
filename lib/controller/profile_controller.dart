@@ -99,12 +99,6 @@ class ProfileController extends GetxController
       });
       _getPosting(int.parse(userId));
     }
-    // isProfileLoading.value = false;
-    // myUserInfo.value.urls.add("https://www.instagram.com/jhpark0888/");
-    // myUserInfo.value.urls.add("https://github.com/jhpark0888");
-    // myUserInfo.value.urls.add("https://www.notion.so/ko-kr");
-    // myUserInfo.value.urls.add("https://www.youtube.com/c/TVING_official");
-    // myUserInfo.value.urls.add("https://blog.naver.com/bsj_6505");
   }
 
   void _getPosting(int userId) async {

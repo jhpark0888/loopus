@@ -48,8 +48,7 @@ import 'package:loopus/widget/tag_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 import 'package:path/path.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart' as sr;
-import 'package:loopus/utils/custom_nested_scroll_view/nested_scroll_view.dart'
-    as my;
+
 import 'package:underline_indicator/underline_indicator.dart';
 import 'dart:math' as math;
 
@@ -584,7 +583,7 @@ class MyProfileScreen extends StatelessWidget {
                                     Get.to(() => CareerArrangeScreen());
                                   },
                                   child: Text(
-                                    "정렬 수정",
+                                    "수정하기",
                                     style: kmain.copyWith(color: mainblue),
                                   ),
                                 )

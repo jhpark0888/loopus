@@ -66,9 +66,6 @@ dependencies:
   flutter_local_notifications: ^9.9.0
   zoom_pinch_overlay: ^1.2.0
   extended_nested_scroll_view: ^5.1.2
-  custom_nested_scroll_view:
-    git:
-      url: https://github.com/idootop/custom_nested_scroll_view.git
 
 dev_dependencies:
   flutter_test:
