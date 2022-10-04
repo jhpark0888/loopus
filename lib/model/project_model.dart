@@ -20,7 +20,9 @@ class Project {
       required this.is_user,
       this.isTop,
       required this.user,
-      required this.isPublic});
+      required this.isPublic,
+      this.managerId
+      });
 
   int id;
   int? userid;
@@ -36,7 +38,7 @@ class Project {
   bool? isTop;
   int is_user;
   bool isPublic;
-
+  int? managerId;
   factory Project.fromJson(Map<String, dynamic> json) {
     bool isProject = json["project"] != null;
     return Project(
@@ -79,9 +81,9 @@ class Project {
               //     : ["10"]
               : ["10"]
           : ["10"],
-      members: json["looper"] != null
+      members: json["member"] != null
           ? List<User>.from(
-              json["looper"].map((x) => User.fromJson(x["profile"])))
+              json["member"].map((x) => x['profile'] != null ? User.fromJson(x["profile"]) : User.fromJson(x)))
           : [],
       postRatio:
           json['ratio'] != null ? double.parse(json['ratio'].toString()) : 0.0,
@@ -89,7 +91,8 @@ class Project {
           json["post_count"] != null ? RxInt(json["post_count"]) : RxInt(0),
       is_user: json['is_user'] ?? 0,
       user: json["profile"] != null ? User.fromJson(json["profile"]) : null,
-      isPublic: json["project"] != null ? json["project"]["is_public"] : false
+      isPublic: json["project"] != null ? json["project"]["is_public"] : false,
+      managerId: isProject ? json['manager'] : json['member'] != null ? (List.from(json['member']).where((element) => element['is_manager'] != null)).first['profile']['user_id'] : 0,
     );
   }
 

@@ -17,10 +17,10 @@ import 'package:loopus/widget/posting_widget.dart';
 
 class PersonalCareerDetailScreen extends StatelessWidget {
   PersonalCareerDetailScreen(
-      {Key? key, required this.careerList, required this.career})
+      {Key? key, required this.career, required this.name})
       : super(key: key);
   late CareerDetailController careerDetailController;
-  List<Project> careerList;
+  String name;
   Project career;
   @override
   Widget build(BuildContext context) {
@@ -38,28 +38,12 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                 ),
                 preferredSize: Size.fromHeight(4.0)),
             automaticallyImplyLeading: false,
+            toolbarHeight: 48,
             elevation: 0,
             stretch: true,
             backgroundColor: Colors.white,
-            leading: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: SvgPicture.asset(
-                  'assets/icons/sliver_appbar_back.svg',
-                  color: mainWhite,
-                  width: 10,
-                  height: 16,
-                )),
-            actions: [
-              IconButton(
-                  onPressed: () {},
-                  icon: SvgPicture.asset(
-                      'assets/icons/sliver_appbar_more_option.svg',
-                      color: mainWhite,
-                      width: 15,
-                      height: 3)),
-            ],
+            leading: _leading(leading: true),
+            actions: [_leading(leading: false)],
             pinned: true,
             flexibleSpace: _MyAppSpace(
               career: career,
@@ -76,7 +60,8 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         CustomPieChart(
-                          careerList: careerList,
+                          career: career,
+                          // careerList: careerList,
                           currentId: career.id,
                         ),
                         const SizedBox(width: 32),
@@ -92,10 +77,16 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                               const TextSpan(text: '커리어', style: kmainbold)
                             ])),
                             const SizedBox(height: 14),
-                            Text(
-                              '${ProfileController.to.myUserInfo.value.realName}님의 전체 커리어 중\n${career.postRatio! * 100}%를 차지하는 커리어에요',
-                              style: kmainheight,
-                            ),
+                            RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: '$name님의 전체 커리어 중\n',
+                                  style: kmainheight),
+                              TextSpan(
+                                  text: '${career.postRatio! * 100}%',
+                                  style: kmainbold),
+                             const TextSpan(text: '를 차지하는 커리어에요', style: kmainheight)
+                            ])),
                           ],
                         )
                       ],
@@ -265,6 +256,43 @@ class _MyAppSpace extends StatelessWidget {
         textAlign: TextAlign.center,
         softWrap: false,
         overflow: TextOverflow.ellipsis,
-        style: kmain);
+        style: kNavigationTitle);
+  }
+}
+
+class _leading extends StatelessWidget {
+  _leading({Key? key, required this.leading}) : super(key: key);
+  bool leading;
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        if (leading) {
+          Get.back();
+        }
+      },
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(17.11, 14, 17.11, 14),
+        child: Container(
+          child: LayoutBuilder(
+            builder: (context, c) {
+              final settings = context.dependOnInheritedWidgetOfExactType<
+                  FlexibleSpaceBarSettings>();
+              final deltaExtent = settings!.maxExtent - settings.minExtent;
+              final t = (1.0 -
+                      (settings.currentExtent - settings.minExtent) /
+                          deltaExtent)
+                  .clamp(0.0, 1.0);
+              final opacity1 = (1.0 - Interval(0.0, 0.75).transform(t)).obs;
+              return Obx(() => SvgPicture.asset(
+                  'assets/icons/${leading ? 'sliver_appbar_back' : 'sliver_appbar_more_option'}.svg',
+                  color: opacity1 < 1 ? mainblack : mainWhite));
+            },
+          ),
+        ),
+      ),
+    );
   }
 }

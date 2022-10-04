@@ -6,9 +6,10 @@ import 'package:loopus/model/project_model.dart';
 import 'package:path/path.dart';
 
 class CustomPieChart extends StatefulWidget {
-  CustomPieChart({Key? key, required this.careerList, required this.currentId})
+  CustomPieChart({Key? key,required this.career, required this.currentId})
       : super(key: key);
-  List<Project> careerList;
+  // List<Project> careerList;
+  Project career;
   int currentId;
   @override
   State<CustomPieChart> createState() => _CustomPieChartState();
@@ -18,16 +19,19 @@ class _CustomPieChartState extends State<CustomPieChart>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
-
+  late PieElement element;
   late List<PieElement> elements;
+  // late List<PieElement> elements;
 
   @override
   void initState() {
     // TODO: implement initState
-    elements = widget.careerList
-        .map((career) => PieElement(career.postRatio! * 100, career.careerName,
-            career.id == widget.currentId ? mainblue : dividegray))
-        .toList();
+    element = PieElement(widget.career.postRatio! * 100, widget.career.careerName, mainblue);
+    elements = [element,PieElement(100 - element.value, '여분', dividegray)];
+    // elements = widget.careerList
+    //     .map((career) => PieElement(career.postRatio! * 100, career.careerName,
+    //         career.id == widget.currentId ? mainblue : dividegray))
+    //     .toList();
     super.initState();
 
     _animationController = AnimationController(
@@ -88,12 +92,15 @@ class _CustomPieChartState extends State<CustomPieChart>
 class PieChartPainter extends CustomPainter {
   int selectIndex = 0;
   List<PieElement> elements;
+  // PieElement element;
   double strokeWidth;
   double animationValue;
 
   PieChartPainter(
-      {required this.elements,
+      {
+        required this.elements,
       required this.selectIndex,
+      // required this.element,
       this.strokeWidth = 6,
       required this.animationValue});
 
@@ -104,12 +111,12 @@ class PieChartPainter extends CustomPainter {
     for (PieElement element in elements) {
       Paint paint = Paint() // 화면에 그릴 때 쓸 Paint를 정의합니다.
         ..color = element.color
-        ..strokeWidth =
-            element.color == dividegray ? strokeWidth : 20 // 선의 길이를 정합니다.
+        ..strokeWidth = element.color == dividegray ?
+            6 : 17 // 선의 길이를 정합니다.
         ..style = PaintingStyle
             .stroke // 선의 스타일을 정합니다. stroke면 외곽선만 그리고, fill이면 다 채웁니다.
         ..strokeCap =
-            StrokeCap.butt; // stroke의 스타일을 정합니다. round를 고르면 stroke의 끝이 둥글게 됩니다.
+            StrokeCap.round; // stroke의 스타일을 정합니다. round를 고르면 stroke의 끝이 둥글게 됩니다.
 
       double radius = element.color == dividegray
           ? min(size.width / 2 - paint.strokeWidth / 2,
@@ -123,7 +130,8 @@ class PieChartPainter extends CustomPainter {
           Offset(size.width / 2, size.height / 2); // 원이 위젯의 가운데에 그려지게 좌표를 정함.
 
       // canvas.drawCircle(center, radius, paint); // 원을 그림.
-
+      // paint.color = mainblue;
+      // paint.strokeWidth = element.color == dividegray ? strokeWidth : 17;
       double arcAngle = (animationValue / 180.0) *
           pi *
           (element.value / 100); // 호(arc)의 각도를 정함. 정해진 각도만큼만 그리도록 함.

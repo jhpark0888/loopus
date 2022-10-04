@@ -94,18 +94,15 @@ Future<HTTPResponse> addproject() async {
   }
 }
 
-Future<Project?> getproject(int projectId) async {
+Future<HTTPResponse> getproject(int projectId, int userId) async {
   ConnectivityResult result = await initConnectivity();
-  ProjectDetailController controller =
-      Get.find<ProjectDetailController>(tag: projectId.toString());
   if (result == ConnectivityResult.none) {
-    controller.projectscreenstate(ScreenState.disconnect);
     showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-
-    final uri = Uri.parse("$serverUri/project_api/project?id=$projectId");
     try {
+      final uri = Uri.parse("$serverUri/project_api/project?project_id=$projectId&user_id=$userId");
       http.Response response =
           await http.get(uri, headers: {"Authorization": "Token $token"});
 
@@ -113,24 +110,19 @@ Future<Project?> getproject(int projectId) async {
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         Project project = Project.fromJson(responseBody);
-        controller.project(project);
-        controller.projectscreenstate(ScreenState.success);
 
-        return project;
+        return HTTPResponse.success(project);
       } else if (response.statusCode == 404) {
         Get.back();
         showCustomDialog('이미 삭제된 활동입니다', 1400);
-        return Future.error(response.statusCode);
-      } else {
-        controller.projectscreenstate(ScreenState.error);
-
-        return Future.error(response.statusCode);
+        return HTTPResponse.success('');
       }
+      return HTTPResponse.apiError('', response.statusCode);
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }
@@ -180,15 +172,18 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
       http.StreamedResponse response = await request.send();
       print("활동 수정: ${response.statusCode}");
       if (response.statusCode == 200) {
-        Project? project = await getproject(controller.project.value.id);
-        if (project != null) {
-          if (Get.isRegistered<ProfileController>()) {
-            int projectindex = ProfileController.to.myProjectList
-                .indexWhere((inproject) => inproject.id == project.id);
-            ProfileController.to.myProjectList.removeAt(projectindex);
-            ProfileController.to.myProjectList.insert(projectindex, project);
-          }
-        }
+        // late Project project;
+        // await getproject(controller.project.value.id).then((value) {if(value.isError == false){
+        //   project = value.data;
+        // }});
+        // if (project != null) {
+        //   if (Get.isRegistered<ProfileController>()) {
+        //     int projectindex = ProfileController.to.myProjectList
+        //         .indexWhere((inproject) => inproject.id == project.id);
+        //     ProfileController.to.myProjectList.removeAt(projectindex);
+        //     ProfileController.to.myProjectList.insert(projectindex, project);
+        //   }
+        // }
 
         Get.back();
         showCustomDialog('변경이 완료되었어요', 1000);

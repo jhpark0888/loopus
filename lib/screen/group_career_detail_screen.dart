@@ -1,4 +1,3 @@
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -6,6 +5,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/career_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/project_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'dart:math' as math;
 
@@ -18,11 +18,14 @@ import 'package:underline_indicator/underline_indicator.dart';
 
 class GroupCareerDetailScreen extends StatelessWidget {
   GroupCareerDetailScreen(
-      {Key? key, required this.career, required this.careerList, required this.name})
+      {Key? key,
+      required this.career,
+      // required this.careerList,
+      required this.name})
       : super(key: key);
   String name;
   Project career;
-  List<Project> careerList;
+  // List<Project> careerList;
   late CareerDetailController careerDetailController;
   @override
   Widget build(BuildContext context) {
@@ -36,6 +39,10 @@ class GroupCareerDetailScreen extends StatelessWidget {
                   handle:
                       NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
+                    leading: _leading(
+                      leading: true,
+                    ),
+                    actions: [_leading(leading: false)],
                     expandedHeight: 200,
                     floating: true,
                     forceElevated: innerBoxIsScrolled,
@@ -49,7 +56,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 64.0),
+                    padding: const EdgeInsets.only(top: 70.0),
                     child: Column(
                       children: [
                         Padding(
@@ -58,7 +65,8 @@ class GroupCareerDetailScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               CustomPieChart(
-                                careerList: careerList,
+                                career: career,
+                                // careerList: careerList,
                                 currentId: career.id,
                               ),
                               const SizedBox(width: 32),
@@ -76,10 +84,16 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                         text: '커리어', style: kmainbold)
                                   ])),
                                   const SizedBox(height: 14),
-                                  Text(
-                                    '${ProfileController.to.myUserInfo.value.realName}님의 전체 커리어 중\n${career.postRatio! * 100}%를 차지하는 커리어에요',
-                                    style: kmainheight,
-                                  ),
+                                  RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: '$name님의 전체 커리어 중\n',
+                                  style: kmainheight),
+                              TextSpan(
+                                  text: '${career.postRatio! * 100}%',
+                                  style: kmainbold),
+                             const TextSpan(text: '를 차지하는 커리어에요', style: kmainheight)
+                            ])),
                                 ],
                               )
                             ],
@@ -90,12 +104,15 @@ class GroupCareerDetailScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 24),
                           child: Container(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Padding(
+                                const Padding(
                                   padding: const EdgeInsets.only(left: 20.0),
-                                  child:
-                                      const Text('함께하는 친구들', style: kmainbold),
+                                  child: Text(
+                                    '함께하는 친구들',
+                                    style: kmainbold,
+                                    textAlign: TextAlign.left,
+                                  ),
                                 ),
                                 const SizedBox(height: 12),
                                 SizedBox(
@@ -106,12 +123,13 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                         primary: false,
                                         shrinkWrap: true,
                                         itemBuilder: (context, index) {
-                                          return joinPeople();
+                                          
+                                          return joinPeople(careerDetailController.members[index]);
                                         },
                                         separatorBuilder: (context, index) {
                                           return const SizedBox(width: 14);
                                         },
-                                        itemCount: 10))
+                                        itemCount: careerDetailController.members.length))
                                 // Expanded(child: ListView(primary: false,shrinkWrap: true,children: [joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople()],scrollDirection: Axis.horizontal,))
                               ],
                             ),
@@ -122,7 +140,8 @@ class GroupCareerDetailScreen extends StatelessWidget {
                   ),
                 ),
                 SliverAppBar(
-                  title: adapt(careerDetailController.tabController,name),
+                  titleSpacing: 0,
+                  title: adapt(careerDetailController.tabController, name),
                   automaticallyImplyLeading: false,
                   pinned: true,
                   elevation: 0,
@@ -139,23 +158,38 @@ class GroupCareerDetailScreen extends StatelessWidget {
                 ])));
   }
 
-  Widget joinPeople() {
-    return Column(
-      children: [
-        UserImageWidget(
-            width: 50,
-            height: 50,
-            imageUrl:
-                'https://loopusimage.s3.ap-northeast-2.amazonaws.com/profile_image/image_cropper_32C673FD-B1EF-4BBB-BF73-12460020261A-19058-000003EA26E58D41.jpg'),
-        SizedBox(
-          height: 7,
-        ),
-        Text(
-          '김원우',
-          style: kmain,
-        )
-      ],
-    );
+  Widget joinPeople(User user) {
+    return user.realName != ""
+        ? Column(
+            children: [
+              UserImageWidget(
+                  width: 50, height: 50, imageUrl: user.profileImage ?? ''),
+              SizedBox(
+                height: 7,
+              ),
+              Text(
+                user.realName,
+                style: kmain,
+              )
+            ],
+          )
+        : addPeople();
+  }
+
+  Widget addPeople() {
+    return Column(children: [
+      SvgPicture.asset(
+        'assets/icons/home_add.svg',
+        width: 50,
+        height: 50,
+        color: mainblue,
+      ),
+      const SizedBox(height: 7),
+      Text(
+        '추가',
+        style: kmain.copyWith(color: mainblue),
+      )
+    ]);
   }
 }
 
@@ -233,7 +267,8 @@ class _MyAppSpace extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             career.isPublic
-                                ? SvgPicture.asset('assets/icons/group_career.svg')
+                                ? SvgPicture.asset(
+                                    'assets/icons/group_career.svg')
                                 : SvgPicture.asset(
                                     'assets/icons/personal_career.svg'),
                             Text(
@@ -266,13 +301,14 @@ class _MyAppSpace extends StatelessWidget {
         textAlign: TextAlign.center,
         softWrap: false,
         overflow: TextOverflow.ellipsis,
-        style: kmain);
+        style: kmainbold);
   }
 }
 
 Widget adapt(TabController tabController, String name) {
   return Container(
-      decoration: BoxDecoration(color: mainWhite),
+      width: Get.width,
+      decoration: const BoxDecoration(color: mainWhite),
       child: Column(
         children: [
           TabBar(
@@ -296,28 +332,26 @@ Widget adapt(TabController tabController, String name) {
                   ))
             ],
             labelStyle: kmainbold,
-                labelColor: mainblack,
-                unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
-                unselectedLabelColor: dividegray,
-                automaticIndicatorColorAdjustment: false,
-                indicator: const UnderlineIndicator(
-                  strokeCap: StrokeCap.round,
-                  borderSide: BorderSide(width: 2, color: mainblack),
-                ),
+            labelColor: mainblack,
+            unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
+            unselectedLabelColor: dividegray,
+            automaticIndicatorColorAdjustment: false,
+            indicator: const UnderlineIndicator(
+              strokeCap: StrokeCap.round,
+              borderSide: BorderSide(width: 2, color: mainblack),
+            ),
           ),
           Divider(
-          height: 1,
-          thickness: 2,
-          color: dividegray,
-        )
+            height: 1,
+            thickness: 2,
+            color: dividegray,
+          )
         ],
       ));
 }
 
 class GroupCareerScreen extends StatelessWidget {
-  const GroupCareerScreen(
-      {Key? key})
-      : super(key: key);
+  const GroupCareerScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     CareerDetailController controller = Get.find();
@@ -347,10 +381,7 @@ class GroupCareerScreen extends StatelessWidget {
 }
 
 class MyCareerScreen extends StatelessWidget {
-  MyCareerScreen(
-      {Key? key,
-      required this.name})
-      : super(key: key);
+  MyCareerScreen({Key? key, required this.name}) : super(key: key);
   String name;
   @override
   Widget build(BuildContext context) {
@@ -364,13 +395,12 @@ class MyCareerScreen extends StatelessWidget {
                   shrinkWrap: true,
                   primary: false,
                   itemBuilder: (context, index) {
-                    if(controller.postList[index].user.realName == name){
-                    return PostingWidget(
-                      item: controller.postList[index],
-                      type: PostingWidgetType.profile,
-                    );
-                    }
-                    else{
+                    if (controller.postList[index].user.realName == name) {
+                      return PostingWidget(
+                        item: controller.postList[index],
+                        type: PostingWidgetType.profile,
+                      );
+                    } else {
                       return const SizedBox.shrink();
                     }
                   },
@@ -382,5 +412,37 @@ class MyCareerScreen extends StatelessWidget {
             ]))
           ])
         : EmptyContentWidget(text: '아직 포스트가 없어요'));
+  }
+}
+
+class _leading extends StatelessWidget {
+  _leading({Key? key, required this.leading}) : super(key: key);
+  bool leading;
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
+    return GestureDetector(
+      onTap: (){if(leading){Get.back();}},
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(17.11, 14, 17.11, 14),
+        child: Container(
+          child: LayoutBuilder(
+            builder: (context, c) {
+              final settings = context
+                  .dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
+              final deltaExtent = settings!.maxExtent - settings.minExtent;
+              final t = (1.0 -
+                      (settings.currentExtent - settings.minExtent) / deltaExtent)
+                  .clamp(0.0, 1.0);
+              final opacity1 = (1.0 - Interval(0.0, 0.75).transform(t)).obs;
+              return Obx(() => SvgPicture.asset(
+                  'assets/icons/${leading ? 'sliver_appbar_back' : 'sliver_appbar_more_option'}.svg',
+                  color: opacity1 < 1 ? mainblack : mainWhite));
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
