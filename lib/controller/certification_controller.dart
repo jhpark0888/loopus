@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loopus/utils/check_form_validate.dart';
 
 class CertificationController extends GetxController {
+  static CertificationController get to => Get.find();
   late TextEditingController idcontroller = TextEditingController();
   late TextEditingController passwordcontroller = TextEditingController();
   static const FlutterSecureStorage storage = FlutterSecureStorage();

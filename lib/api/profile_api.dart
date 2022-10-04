@@ -208,12 +208,17 @@ Future<HTTPResponse> postProjectArrange(List<Project> careerList) async {
   }
 }
 
-enum ProfileUpdateType { image, school, department, sns }
+enum ProfileUpdateType { image, sns, profile }
 
 Future<HTTPResponse> updateProfile(
     {User? user,
     File? image,
     SNS? sns,
+    String? email,
+    String? name,
+    int? deptId,
+    int? univId,
+    String? admission,
     required ProfileUpdateType updateType}) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
@@ -244,11 +249,15 @@ Future<HTTPResponse> updateProfile(
 
         request.fields['image'] = user!.profileImage ?? json.encode(null);
       }
-    } else if (updateType == ProfileUpdateType.department) {
-      request.fields['department'] = user!.department;
     } else if (updateType == ProfileUpdateType.sns) {
       request.fields['type'] = sns!.snsType.index.toString();
       request.fields['url'] = sns.url;
+    } else if (updateType == ProfileUpdateType.profile) {
+      request.fields['email'] = email!;
+      request.fields['real_name'] = name!;
+      request.fields['department'] = deptId!.toString();
+      request.fields['school'] = univId!.toString();
+      request.fields['admission'] = admission!;
     }
 
     try {
