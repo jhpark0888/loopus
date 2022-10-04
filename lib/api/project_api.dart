@@ -205,41 +205,34 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
   }
 }
 
-Future<void> deleteproject(int projectId) async {
+Future<HTTPResponse> deleteProject(int projectId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    String? userid = await const FlutterSecureStorage().read(key: "id");
-
-    final uri = Uri.parse("$serverUri/project_api/project?id=$projectId");
-
     try {
+      final uri = Uri.parse("$serverUri/project_api/project?id=$projectId");
       http.Response response =
           await http.delete(uri, headers: {"Authorization": "Token $token"});
 
-      print(response.statusCode);
+      print("프로젝트(커리어) 삭제 : ${response.statusCode}");
       if (response.statusCode == 200) {
-        ProfileController.to.myProjectList
-            .removeWhere((project) => project.id == projectId);
-        try {
-          Get.find<OtherProfileController>(tag: userid)
-              .otherProjectList
-              .removeWhere((project) => project.id == projectId);
-        } catch (e) {
-          print("활동 삭제 : $e");
-        }
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+        return HTTPResponse.success('');
+      } else if (response.statusCode == 404) {
         Get.back();
-        Get.delete<ProjectDetailController>(tag: projectId.toString());
-      } else {
-        return Future.error(response.statusCode);
+        showCustomDialog('이미 삭제된 활동입니다', 1400);
+        return HTTPResponse.success('');
       }
+      return HTTPResponse.apiError('', response.statusCode);
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }
