@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/model/sns_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/univ_model.dart';
+import 'package:loopus/screen/profile_sns_add_screen.dart';
 import 'package:path/path.dart';
 
 class User {
@@ -33,7 +35,7 @@ class User {
     required this.groupRatioVariance,
     required this.schoolRatioVariance,
     required this.admissionYear,
-    required this.urls,
+    required this.snsList,
   });
 
   int userid;
@@ -59,7 +61,7 @@ class User {
   double groupRatioVariance;
   double schoolRatioVariance;
   String admissionYear;
-  List<String> urls;
+  RxList<SNS> snsList;
   Rx<FollowState> looped;
   Rx<BanState> banned;
 
@@ -87,7 +89,7 @@ class User {
     String? profileImage,
     List<Tag>? profileTag,
     String? admissionYear,
-    List<String>? urls,
+    RxList<SNS>? snsList,
     Rx<FollowState>? looped,
     Rx<BanState>? banned,
   }) =>
@@ -114,7 +116,7 @@ class User {
           schoolRatioVariance: schoolRatioVariance ?? 0,
           profileTag: profileTag ?? [],
           admissionYear: admissionYear ?? "2000",
-          urls: urls ?? [],
+          snsList: snsList ?? <SNS>[].obs,
           looped: looped ?? FollowState.normal.obs,
           banned: banned ?? BanState.normal.obs);
 
@@ -159,10 +161,12 @@ class User {
         department: json["department"] ?? '',
         isuser: json["is_user"] ?? 0,
         admissionYear: json["admission"] ?? "2000",
-        urls: json["urls"] != null
-            ? List<String>.from(
-                List.from(json["urls"]).map((x) => x.toString()))
-            : [],
+        snsList: json["user_sns"] != null
+            ? List.from(json["user_sns"])
+                .map((sns) => SNS.fromJson(sns))
+                .toList()
+                .obs
+            : <SNS>[].obs,
         looped: json["looped"] != null
             ? FollowState.values[json["looped"]].obs
             : FollowState.normal.obs,
@@ -213,9 +217,12 @@ class User {
     univlogo = json["school"] != null ? json['school']['logo'] : univlogo;
     department = json["department"] ?? department;
     admissionYear = json["admission"] ?? admissionYear;
-    urls = json["urls"] != null
-        ? List<String>.from(List.from(json["urls"]).map((x) => x.toString()))
-        : urls;
+    snsList = json["user_sns"] != null
+        ? List.from(json["user_sns"])
+            .map((sns) => SNS.fromJson(sns))
+            .toList()
+            .obs
+        : snsList;
     isuser = json["is_user"] ?? isuser;
     looped.value = json["looped"] != null
         ? FollowState.values[json["looped"]]
@@ -253,3 +260,4 @@ class User {
 //             json["school_ratio"] != null ? json["school_ratio"] as double : 0,
 //       );
 // }
+

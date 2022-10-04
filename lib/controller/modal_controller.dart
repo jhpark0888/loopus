@@ -457,28 +457,44 @@ void showBottomdialog(
   required String value1,
   required String value2,
   required bool isOne,
+  Color? buttonColor1,
+  Color? buttonColor2,
+  String? title,
+  String? accentTitle,
 }) {
   showModalBottomSheet(
     barrierColor: mainWhite.withOpacity(
       0.9,
     ),
+    enableDrag: false,
     context: context,
     backgroundColor: Colors.transparent,
-    builder: (context) => Container(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (isOne == false)
+    builder: (context) => GestureDetector(
+      onTap: () => Get.back(),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+                child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(children: [
+                      TextSpan(text: title ?? "", style: kmainheight),
+                      TextSpan(
+                          text: accentTitle ?? "",
+                          style: kmainheight.copyWith(color: mainblue))
+                    ]))),
             GestureDetector(
-              onTap: func2,
+              onTap: func1,
               child: Container(
                 height: 42,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8), color: maingray),
+                    borderRadius: BorderRadius.circular(8),
+                    color: buttonColor1 ?? mainblue),
                 child: Center(
                   child: Text(
-                    value2,
+                    value1,
                     style: kmain.copyWith(
                       color: mainWhite,
                     ),
@@ -486,26 +502,29 @@ void showBottomdialog(
                 ),
               ),
             ),
-          const SizedBox(
-            height: 14,
-          ),
-          GestureDetector(
-            onTap: func1,
-            child: Container(
-              height: 42,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: mainblue),
-              child: Center(
-                child: Text(
-                  value1,
-                  style: kmain.copyWith(
-                    color: mainWhite,
+            const SizedBox(
+              height: 14,
+            ),
+            if (isOne == false)
+              GestureDetector(
+                onTap: func2,
+                child: Container(
+                  height: 42,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: buttonColor2 ?? maingray),
+                  child: Center(
+                    child: Text(
+                      value2,
+                      style: kmain.copyWith(
+                        color: mainWhite,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
   );
@@ -513,94 +532,190 @@ void showBottomdialog(
 
 void showButtonDialog({
   required String title,
-  required String content,
+  required String startContent,
+  String? highlightContent,
+  String? endContent,
   required Function() leftFunction,
   required Function() rightFunction,
   required String rightText,
   required String leftText,
+  Color? highlightColor,
 }) {
   Get.dialog(
-    AlertDialog(
-      buttonPadding: EdgeInsets.zero,
-      actionsAlignment: MainAxisAlignment.spaceBetween,
-      actions: [
-        Row(
+    Material(
+      color: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: leftFunction,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      right: BorderSide(
-                        width: 1,
-                        color: Color(0xffe7e7e7),
-                      ),
-                      top: BorderSide(
-                        width: 1,
-                        color: Color(0xffe7e7e7),
-                      ),
-                    ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: mainWhite),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 20,
                   ),
-                  height: 48,
-                  child: Center(
-                    child: Text(
-                      leftText,
-                      style: kmain.copyWith(
-                        color: rankred,
+                  Text(
+                    title,
+                    style: kmainbold,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: startContent,
+                        style: kmainheight,
                       ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                onTap: rightFunction,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        width: 1,
-                        color: Color(0xffe7e7e7),
+                      TextSpan(
+                        text: highlightContent ?? "",
+                        style: kmainheight.copyWith(
+                            color: highlightColor ?? mainblue),
                       ),
-                    ),
+                      TextSpan(
+                        text: endContent,
+                        style: kmainheight,
+                      )
+                    ]),
+                    textAlign: TextAlign.center,
                   ),
-                  height: 48,
-                  child: Center(
-                    child: Text(
-                      rightText,
-                      style: kmain,
-                    ),
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: CustomExpandedButton(
+                              onTap: leftFunction,
+                              isBlue: true,
+                              title: leftText,
+                              isBig: true)),
+                      const SizedBox(
+                        width: 14,
+                      ),
+                      Expanded(
+                          child: CustomExpandedButton(
+                              onTap: rightFunction,
+                              isBlue: false,
+                              title: rightText,
+                              textColor: highlightColor,
+                              isBig: true)),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
               ),
             ),
           ],
         ),
-      ],
-      elevation: 0,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(8),
-        ),
-      ),
-      contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-      titlePadding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
-      backgroundColor: Colors.white,
-      title: Text(
-        title,
-        style: kmainheight,
-        textAlign: TextAlign.center,
-      ),
-      content: Text(
-        content,
-        style: kmainheight,
-        textAlign: TextAlign.center,
       ),
     ),
+    // AlertDialog(
+    //   insetPadding: const EdgeInsets.all(20),
+    //   buttonPadding: const EdgeInsets.all(20),
+    //   actionsAlignment: MainAxisAlignment.spaceBetween,
+    //   actions: [
+    //     Row(
+    //       children: [
+    //         Expanded(
+    //             child: CustomExpandedButton(
+    //                 onTap: leftFunction,
+    //                 isBlue: true,
+    //                 title: leftText,
+    //                 isBig: true)),
+    //         const SizedBox(
+    //           width: 14,
+    //         ),
+    //         Expanded(
+    //             child: CustomExpandedButton(
+    //                 onTap: rightFunction,
+    //                 isBlue: false,
+    //                 title: rightText,
+    //                 isBig: true)),
+    //         // Expanded(
+    //         //   child: GestureDetector(
+    //         //     onTap: leftFunction,
+    //         //     child: Container(
+    //         //       decoration: const BoxDecoration(
+    //         //         border: Border(
+    //         //           right: BorderSide(
+    //         //             width: 1,
+    //         //             color: Color(0xffe7e7e7),
+    //         //           ),
+    //         //           top: BorderSide(
+    //         //             width: 1,
+    //         //             color: Color(0xffe7e7e7),
+    //         //           ),
+    //         //         ),
+    //         //       ),
+    //         //       height: 48,
+    //         //       child: Center(
+    //         //         child: Text(
+    //         //           leftText,
+    //         //           style: kmain.copyWith(
+    //         //             color: rankred,
+    //         //           ),
+    //         //         ),
+    //         //       ),
+    //         //     ),
+    //         //   ),
+    //         // ),
+    //         // Expanded(
+    //         //   child: GestureDetector(
+    //         //     onTap: rightFunction,
+    //         //     child: Container(
+    //         //       decoration: const BoxDecoration(
+    //         //         border: Border(
+    //         //           top: BorderSide(
+    //         //             width: 1,
+    //         //             color: Color(0xffe7e7e7),
+    //         //           ),
+    //         //         ),
+    //         //       ),
+    //         //       height: 48,
+    //         //       child: Center(
+    //         //         child: Text(
+    //         //           rightText,
+    //         //           style: kmain,
+    //         //         ),
+    //         //       ),
+    //         //     ),
+    //         //   ),
+    //         // ),
+    //       ],
+    //     ),
+    //   ],
+    //   elevation: 0,
+    //   shape: const RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.all(
+    //       Radius.circular(8),
+    //     ),
+    //   ),
+    //   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+    //   titlePadding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+    //   backgroundColor: Colors.white,
+    //   title: Text(
+    //     title,
+    //     style: kmainbold,
+    //     textAlign: TextAlign.center,
+    //   ),
+    //   content: Text(
+    //     content,
+    //     style: kmain,
+    //     textAlign: TextAlign.center,
+    //   ),
+    // ),
     barrierDismissible: false,
-    barrierColor: mainblack.withOpacity(0.3),
+    barrierColor: dividegray,
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
@@ -686,6 +801,7 @@ void showTextFieldDialog({
   required String title,
   required String hintText,
   required String completeText,
+  Color? highlightColor,
   required TextEditingController textEditingController,
   required Function() leftFunction,
   required Function() rightFunction,
@@ -748,6 +864,7 @@ void showTextFieldDialog({
                     onTap: rightFunction,
                     isBlue: true,
                     title: completeText,
+                    textColor: highlightColor,
                     isBig: true)),
           ],
         ),

@@ -35,11 +35,11 @@ class _AlertScreenState extends State<AlertScreen> {
       body: Column(
         children: [
           CustomListTile(
-              onTap: () {
-                AppSettings.openNotificationSettings();
-              },
-              title: '시스템 알림 설정',
-              hoverTag: '시스템 알림 설정'),
+            onTap: () {
+              AppSettings.openNotificationSettings();
+            },
+            title: "시스템 알림 설정",
+          ),
           Padding(
             padding: EdgeInsets.symmetric(
               vertical: 20,
@@ -100,8 +100,8 @@ class _AlertScreenState extends State<AlertScreen> {
                   children: [
                     Text(
                       '\u2219 ',
-                      style: kcaption.copyWith(
-                          color: mainblack.withOpacity(0.6)),
+                      style:
+                          kcaption.copyWith(color: mainblack.withOpacity(0.6)),
                     ),
                     Expanded(
                       child: Text(
@@ -120,8 +120,8 @@ class _AlertScreenState extends State<AlertScreen> {
                   children: [
                     Text(
                       '\u2219 ',
-                      style: kcaption.copyWith(
-                          color: mainblack.withOpacity(0.6)),
+                      style:
+                          kcaption.copyWith(color: mainblack.withOpacity(0.6)),
                     ),
                     Expanded(
                       child: Text(

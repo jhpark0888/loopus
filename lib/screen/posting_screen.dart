@@ -281,7 +281,8 @@ class PostingScreen extends StatelessWidget {
                                                   leftText: '취소',
                                                   rightText: '삭제',
                                                   title: '포스팅을 삭제하시겠어요?',
-                                                  content: '삭제한 포스팅은 복구할 수 없어요',
+                                                  startContent:
+                                                      '삭제한 포스팅은 복구할 수 없어요',
                                                   leftFunction: () =>
                                                       Get.back(),
                                                   rightFunction: () async {
@@ -370,7 +371,8 @@ class PostingScreen extends StatelessWidget {
                                                   leftText: '취소',
                                                   rightText: '신고',
                                                   title: '정말 포스팅을 신고하시겠어요?',
-                                                  content: '관리자가 검토 절차를 거칩니다',
+                                                  startContent:
+                                                      '관리자가 검토 절차를 거칩니다',
                                                   leftFunction: () =>
                                                       Get.back(),
                                                   rightFunction: () {

@@ -130,9 +130,8 @@ class MyApp extends StatelessWidget {
         Locale('ko'),
       ],
       navigatorObservers: [_gaController.getAnalyticsObserver()],
-      home:
-          // token == null ? StartScreen() : App()
-          WelcomeScreen(token: token),
+      home: token == null ? StartScreen() : App(),
+      // WelcomeScreen(token: token),
       locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
       title: "루프어스",

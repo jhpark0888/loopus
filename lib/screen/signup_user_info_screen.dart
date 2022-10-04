@@ -19,9 +19,12 @@ import 'package:loopus/widget/custom_expanded_button.dart';
 
 // ignore: must_be_immutable
 class SignupUserInfoScreen extends StatelessWidget {
-  SignupUserInfoScreen({Key? key}) : super(key: key);
+  SignupUserInfoScreen({Key? key, this.isReCertification = false})
+      : super(key: key);
 
-  final SignupController _signupController = Get.find();
+  late final SignupController _signupController =
+      Get.put(SignupController(isReCertification: isReCertification));
+  final bool isReCertification;
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +79,15 @@ class SignupUserInfoScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SignUpTextWidget(
-                    highlightText: "루프어스",
-                    oneLinetext: "에 오신걸 환영해요!",
-                    twoLinetext: "본인 정보를 입력해주세요"),
+                isReCertification == false
+                    ? SignUpTextWidget(
+                        highlightText: "루프어스",
+                        oneLinetext: "에 오신걸 환영해요!",
+                        twoLinetext: "본인 정보를 입력해주세요")
+                    : SignUpTextWidget(
+                        highlightText: "재인증을 위해",
+                        oneLinetext: "",
+                        twoLinetext: "변경된 정보를 입력해주세요"),
                 LabelTextFieldWidget(
                     label: "이름",
                     hintText: "본인 이름을 입력하세요",

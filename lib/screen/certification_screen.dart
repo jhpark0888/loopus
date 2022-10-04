@@ -6,36 +6,37 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/api/login_api.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/app.dart';
 
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/certification_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 
-import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
-import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/pw_find_screen.dart';
 import 'package:loopus/screen/signup_user_info_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 
-import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
-import 'package:loopus/widget/custom_textfield.dart';
 import 'package:loopus/widget/label_textfield_widget.dart';
 import 'package:loopus/widget/signup_text_widget.dart';
 
-import '../utils/check_form_validate.dart';
+enum CertificateType { userInfoChange, withDrawal }
 
-class LogInScreen extends StatelessWidget {
-  LogInScreen({Key? key}) : super(key: key);
+class CertificationScreen extends StatelessWidget {
+  CertificationScreen({Key? key, required this.certificateType})
+      : super(key: key);
 
-  final LogInController _loginController = Get.put(LogInController());
-  static FlutterSecureStorage? storage = const FlutterSecureStorage();
+  final CertificationController _controller =
+      Get.put(CertificationController());
+  CertificateType certificateType;
 
   @override
   Widget build(BuildContext context) {
@@ -71,17 +72,16 @@ class LogInScreen extends StatelessWidget {
                       child: Obx(
                         () => CustomExpandedButton(
                             onTap: () async {
-                              if (_loginController.loginButtonOn.value) {
-                                login(
+                              if (_controller.nextButtonOn.value) {
+                                _certificate(
                                   context,
-                                  emailId: _loginController.idcontroller.text,
-                                  password:
-                                      _loginController.passwordcontroller.text,
+                                  emailId: _controller.idcontroller.text,
+                                  password: _controller.passwordcontroller.text,
                                 );
                               }
                             },
-                            isBlue: _loginController.loginButtonOn.value,
-                            title: "로그인",
+                            isBlue: _controller.nextButtonOn.value,
+                            title: "다음",
                             isBig: true),
                       ),
                     ),
@@ -96,35 +96,23 @@ class LogInScreen extends StatelessWidget {
             child: Column(
               children: [
                 SignUpTextWidget(
-                    oneLinetext: "대학 메일 주소 및", twoLinetext: "비밀번호를 입력해주세요"),
+                    oneLinetext: "개인 확인을 위해", twoLinetext: "계정 정보를 입력해주세요"),
                 LabelTextFieldWidget(
                     label: "본인 대학 이메일",
                     hintText: "인증한 본인 대학 이메일 주소",
                     // validator: (value) =>
                     //     CheckValidate().validateEmail(value!),
-                    textController: _loginController.idcontroller),
+                    textController: _controller.idcontroller),
                 LabelTextFieldWidget(
                     label: "비밀번호",
                     hintText: "루프어스에 가입할 때 입력한 비밀번호",
                     obscureText: true,
                     // validator: (value) =>
                     //     CheckValidate().validatePassword(value!),
-                    textController: _loginController.passwordcontroller),
+                    textController: _controller.passwordcontroller),
                 const SizedBox(
                   height: 24,
                 ),
-                GestureDetector(
-                    onTap: () {
-                      Get.to(() => PwFindScreen());
-                    },
-                    child: Center(
-                      child: Text(
-                        "비밀번호를 잊으셨나요?",
-                        style: kmain.copyWith(
-                          color: maingray,
-                        ),
-                      ),
-                    )),
               ],
             ),
           ),
@@ -132,52 +120,64 @@ class LogInScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-void login(context, {required String emailId, required String password}) async {
-  FocusScope.of(context).unfocus();
-  loading();
-  // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
-  await loginRequest(
-    emailId,
-    password,
-  ).then((value) async {
-    if (value.isError == false) {
-      const FlutterSecureStorage storage = FlutterSecureStorage();
-      http.Response response = value.data;
-      String token = jsonDecode(response.body)['token'];
-      String userid = jsonDecode(response.body)['user_id'];
-      //! GA
-      // await _gaController.logLogin();
-
-      storage.write(key: 'token', value: token);
-      storage.write(key: 'id', value: userid);
-      await FirebaseMessaging.instance.subscribeToTopic(userid);
-      Get.offAll(() => App());
-    } else {
-      Get.back();
-      if (value.errorData!["statusCode"] == 401) {
-        showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+  void _certificate(context,
+      {required String emailId, required String password}) async {
+    FocusScope.of(context).unfocus();
+    loading();
+    // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
+    await loginRequest(
+      emailId,
+      password,
+    ).then((value) async {
+      if (value.isError == false) {
+        Get.back();
+        if (certificateType == CertificateType.userInfoChange) {
+          Get.to(() => SignupUserInfoScreen(
+                isReCertification: true,
+              ));
+        } else {
+          TextEditingController textController = TextEditingController();
+          showTextFieldDialog(
+            title: "탈퇴 사유를 입력해주세요",
+            completeText: '탈퇴하기',
+            hintText:
+                "루프어스를 탈퇴하는 이유를 알려주세요. 보다 나은 서비스로 보답하겠습니다.\n이후 모든 계정 데이터는 삭제됩니다.",
+            leftFunction: () {
+              dialogBack();
+            },
+            rightFunction: () {
+              withDrawal(textController.text);
+            },
+            textEditingController: textController,
+          );
+        }
       } else {
-        errorSituation(value);
+        Get.back();
+        if (value.errorData!["statusCode"] == 401) {
+          showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+        } else {
+          errorSituation(value);
+        }
       }
-    }
-  });
-}
+    });
+  }
 
-Future<void> logOut() async {
-  loading();
-  AppController.to.currentIndex.value = 0;
-  String? userid = await FlutterSecureStorage().read(key: "id");
-  await FirebaseMessaging.instance.unsubscribeFromTopic(userid!);
-
-  FlutterSecureStorage().delete(key: "token");
-  FlutterSecureStorage().delete(key: "id");
-
-  Get.delete<AppController>();
-  Get.delete<HomeController>();
-  Get.delete<SearchController>();
-  Get.delete<ProfileController>();
-  Get.delete<SQLController>();
-  Get.offAll(() => StartScreen());
+  void withDrawal(String reason) async {
+    loading();
+    await deleteuser(_controller.passwordcontroller.text, reason)
+        .then((value) async {
+      if (value.isError == false) {
+        Get.back();
+        await logOut();
+      } else {
+        Get.back();
+        if (value.errorData!["statusCode"] == 401) {
+          showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
+        } else {
+          errorSituation(value);
+        }
+      }
+    });
+  }
 }

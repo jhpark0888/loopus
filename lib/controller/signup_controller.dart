@@ -18,6 +18,8 @@ enum UserType {
 
 class SignupController extends GetxController {
   static SignupController get to => Get.find();
+  SignupController({this.isReCertification = false});
+
   TextEditingController univcontroller = TextEditingController();
   TextEditingController admissioncontroller = TextEditingController();
   TextEditingController departmentcontroller = TextEditingController();
@@ -40,6 +42,7 @@ class SignupController extends GetxController {
 
   RxBool isUserInfoFill = false.obs;
   RxBool isEmailPassWordCheck = true.obs;
+  final bool isReCertification;
 
   late CertificateTimer timer;
 
@@ -62,7 +65,11 @@ class SignupController extends GetxController {
       userInfoFillCheck();
     });
     emailidcontroller.addListener(() {
-      emailpasswordCheck();
+      if (isReCertification == false) {
+        emailpasswordCheck();
+      } else {
+        emailCheck();
+      }
     });
     passwordcontroller.addListener(() {
       emailpasswordCheck();
@@ -135,6 +142,14 @@ class SignupController extends GetxController {
     if (pwText.trim().length > 6 &&
         pwText == pwCheckText &&
         emailidcontroller.text.trim() != "") {
+      isEmailPassWordCheck(true);
+    } else {
+      isEmailPassWordCheck(false);
+    }
+  }
+
+  void emailCheck() {
+    if (emailidcontroller.text.trim() != "") {
       isEmailPassWordCheck(true);
     } else {
       isEmailPassWordCheck(false);

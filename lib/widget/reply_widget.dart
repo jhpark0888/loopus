@@ -112,7 +112,7 @@ class ReplyWidget extends StatelessWidget {
                                         leftText: '취소',
                                         rightText: '삭제',
                                         title: '답글을 삭제하시겠어요?',
-                                        content: '삭제한 답글은 복구할 수 없어요',
+                                        startContent: '삭제한 답글은 복구할 수 없어요',
                                         leftFunction: () => Get.back(),
                                         rightFunction: () async {
                                           dialogBack(modalIOS: true);
@@ -155,7 +155,7 @@ class ReplyWidget extends StatelessWidget {
                                         leftText: '취소',
                                         rightText: '신고',
                                         title: '정말 답글을 신고하시겠어요?',
-                                        content: '관리자가 검토 절차를 거칩니다',
+                                        startContent: '관리자가 검토 절차를 거칩니다',
                                         leftFunction: () => Get.back(),
                                         rightFunction: () {
                                           contentreport(reply.id,

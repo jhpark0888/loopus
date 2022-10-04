@@ -8,6 +8,7 @@ class LabelTextFieldWidget extends StatelessWidget {
     required this.label,
     required this.hintText,
     required this.textController,
+    this.labelBold = false,
     this.readOnly,
     this.obscureText,
     this.maxLength,
@@ -17,6 +18,7 @@ class LabelTextFieldWidget extends StatelessWidget {
   }) : super(key: key);
 
   String label;
+  bool labelBold;
   String hintText;
   TextEditingController textController;
   bool? readOnly;
@@ -38,7 +40,7 @@ class LabelTextFieldWidget extends StatelessWidget {
           ),
           Text(
             label,
-            style: kmainheight,
+            style: labelBold ? kmainbold : kmainheight,
           ),
           const SizedBox(
             height: 14,
