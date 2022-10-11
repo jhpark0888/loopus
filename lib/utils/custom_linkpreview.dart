@@ -29,7 +29,7 @@ class CustomLinkPreview {
       final response = await http.get(
         Uri.parse(url),
         headers: {
-          'User-Agent': _userAgent,
+          'Person-Agent': _userAgent,
         },
       );
 

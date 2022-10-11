@@ -21,8 +21,7 @@ class Project {
       this.isTop,
       required this.user,
       required this.isPublic,
-      this.managerId
-      });
+      this.managerId});
 
   int id;
   int? userid;
@@ -82,8 +81,9 @@ class Project {
               : ["10"]
           : ["10"],
       members: json["member"] != null
-          ? List<User>.from(
-              json["member"].map((x) => x['profile'] != null ? User.fromJson(x["profile"]) : User.fromJson(x)))
+          ? List<User>.from(json["member"].map((x) => x['profile'] != null
+              ? User.fromJson(x["profile"])
+              : User.fromJson(x)))
           : [],
       postRatio:
           json['ratio'] != null ? double.parse(json['ratio'].toString()) : 0.0,
@@ -92,7 +92,13 @@ class Project {
       is_user: json['is_user'] ?? 0,
       user: json["profile"] != null ? User.fromJson(json["profile"]) : null,
       isPublic: json["project"] != null ? json["project"]["is_public"] : false,
-      managerId: isProject ? json['manager'] : json['member'] != null ? (List.from(json['member']).where((element) => element['is_manager'] != null)).first['profile']['user_id'] : 0,
+      managerId: isProject
+          ? json['manager']
+          : json['member'] != null
+              ? (List.from(json['member'])
+                      .where((element) => element['is_manager'] != null))
+                  .first['profile']['user_id']
+              : 0,
     );
   }
 

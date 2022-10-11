@@ -145,32 +145,33 @@ class FollowTileWidget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  user.looped.value = user.looped.value == FollowState.normal
-                      ? FollowState.following
-                      : user.looped.value == FollowState.follower
-                          ? FollowState.wefollow
-                          : user.looped.value == FollowState.following
-                              ? FollowState.normal
-                              : FollowState.follower;
+                  user.followed.value =
+                      user.followed.value == FollowState.normal
+                          ? FollowState.following
+                          : user.followed.value == FollowState.follower
+                              ? FollowState.wefollow
+                              : user.followed.value == FollowState.following
+                                  ? FollowState.normal
+                                  : FollowState.follower;
                 },
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
                   decoration: BoxDecoration(
-                      color: user.looped.value == FollowState.normal ||
-                              user.looped.value == FollowState.follower
+                      color: user.followed.value == FollowState.normal ||
+                              user.followed.value == FollowState.follower
                           ? mainblue
                           : cardGray,
                       borderRadius: BorderRadius.circular(8)),
                   child: Center(
                     child: Text(
-                      user.looped.value == FollowState.normal ||
-                              user.looped.value == FollowState.follower
+                      user.followed.value == FollowState.normal ||
+                              user.followed.value == FollowState.follower
                           ? "팔로우"
                           : "팔로잉",
                       style: kmain.copyWith(
-                          color: user.looped.value == FollowState.normal ||
-                                  user.looped.value == FollowState.follower
+                          color: user.followed.value == FollowState.normal ||
+                                  user.followed.value == FollowState.follower
                               ? mainWhite
                               : mainblack),
                     ),
@@ -185,39 +186,24 @@ class FollowTileWidget extends StatelessWidget {
 
   void followMotion() {
     if (num == 0) {
-      lastisFollowed = user.looped.value.index;
+      lastisFollowed = user.followed.value.index;
     }
     if (user.banned.value == BanState.ban) {
       userbancancel(user.userid);
     } else {
-      if (user.looped.value == FollowState.normal) {
-        // followController.islooped(1);
-        user.looped(FollowState.following);
-      } else if (user.looped.value == FollowState.follower) {
-        // followController.islooped(1);
-
-        user.looped(FollowState.wefollow);
-      } else if (user.looped.value == FollowState.following) {
-        // followController.islooped(0);
-
-        user.looped(FollowState.normal);
-      } else if (user.looped.value == FollowState.wefollow) {
-        // followController.islooped(0);
-
-        user.looped(FollowState.follower);
-      }
+      user.followClick();
       num += 1;
 
       _debouncer.run(() {
-        if (user.looped.value.index != lastisFollowed) {
-          if (<int>[2, 3].contains(user.looped.value.index)) {
+        if (user.followed.value.index != lastisFollowed) {
+          if (<int>[2, 3].contains(user.followed.value.index)) {
             postfollowRequest(user.userid);
             print("팔로우");
           } else {
             deletefollow(user.userid);
             print("팔로우 해제");
           }
-          lastisFollowed = user.looped.value.index;
+          lastisFollowed = user.followed.value.index;
         } else {
           print("아무일도 안 일어남");
         }

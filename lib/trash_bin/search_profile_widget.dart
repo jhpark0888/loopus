@@ -8,7 +8,7 @@
 // import '../controller/hover_controller.dart';
 
 // class SearchProfileWidget extends StatelessWidget {
-//   User user;
+//   Person user;
 //   SearchProfileWidget({
 //     required this.user,
 //   });

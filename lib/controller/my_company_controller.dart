@@ -70,7 +70,7 @@ class MyCompanyController extends GetxController
   //   } else {
   //     await getProfile(int.parse(userId!)).then((value) {
   //       if (value.isError == false) {
-  //         User user = User.fromJson(value.data);
+  //         Person user = Person.fromJson(value.data);
   //         myUserInfo(user);
   //         isnewalarm(value.data["new_alarm"]);
   //         // isnewmessage(value.data["new_message"]);

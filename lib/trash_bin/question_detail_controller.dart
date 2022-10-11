@@ -36,7 +36,7 @@
 //           adopt: false,
 //           date: DateTime.now(),
 //           questionTag: [],
-//           user: User.defaultuser())
+//           user: Person.defaultuser())
 //       .obs;
 
 //   int questionid;

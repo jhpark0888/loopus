@@ -10,8 +10,8 @@
 //   Rx<ScreenState> followingscreenstate = ScreenState.loading.obs;
 
 //   int userid;
-//   RxList<User> followerlist = <User>[].obs;
-//   RxList<User> followinglist = <User>[].obs;
+//   RxList<Person> followerlist = <Person>[].obs;
+//   RxList<Person> followinglist = <Person>[].obs;
 
 //   @override
 //   void onInit() {

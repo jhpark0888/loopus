@@ -53,7 +53,7 @@ class OtherProfileController extends GetxController
       if (value.isError == false) {
         otherUser.value.copywith(value.data);
 
-        lastisFollowed = otherUser.value.looped.value.index;
+        lastisFollowed = otherUser.value.followed.value.index;
       } else {
         errorSituation(value, screenState: otherprofilescreenstate);
       }

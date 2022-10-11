@@ -24,7 +24,7 @@ class User {
     required this.fieldId,
     this.profileImage,
     required this.profileTag,
-    required this.looped,
+    required this.followed,
     required this.banned,
     required this.rank,
     required this.lastRank,
@@ -62,7 +62,7 @@ class User {
   double schoolRatioVariance;
   String admissionYear;
   RxList<SNS> snsList;
-  Rx<FollowState> looped;
+  Rx<FollowState> followed;
   Rx<BanState> banned;
 
   factory User.defaultuser({
@@ -90,7 +90,7 @@ class User {
     List<Tag>? profileTag,
     String? admissionYear,
     RxList<SNS>? snsList,
-    Rx<FollowState>? looped,
+    Rx<FollowState>? followed,
     Rx<BanState>? banned,
   }) =>
       User(
@@ -117,7 +117,7 @@ class User {
           profileTag: profileTag ?? [],
           admissionYear: admissionYear ?? "2000",
           snsList: snsList ?? <SNS>[].obs,
-          looped: looped ?? FollowState.normal.obs,
+          followed: followed ?? FollowState.normal.obs,
           banned: banned ?? BanState.normal.obs);
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -167,7 +167,7 @@ class User {
                 .toList()
                 .obs
             : <SNS>[].obs,
-        looped: json["looped"] != null
+        followed: json["looped"] != null
             ? FollowState.values[json["looped"]].obs
             : FollowState.normal.obs,
         banned: json["is_banned"] != null
@@ -224,9 +224,9 @@ class User {
             .obs
         : snsList;
     isuser = json["is_user"] ?? isuser;
-    looped.value = json["looped"] != null
+    followed.value = json["looped"] != null
         ? FollowState.values[json["looped"]]
-        : looped.value;
+        : followed.value;
     banned.value = json["is_banned"] != null
         ? BanState.values[json["is_banned"]]
         : banned.value;
@@ -239,6 +239,29 @@ class User {
         "profile_image": profileImage,
         "project_tag": List<dynamic>.from(profileTag.map((x) => x.toJson())),
       };
+
+  void followClick() {
+    if (followed.value == FollowState.normal) {
+      // followController.islooped(1);
+      followed(FollowState.following);
+      followerCount.value += 1;
+    } else if (followed.value == FollowState.follower) {
+      // followController.islooped(1);
+
+      followed(FollowState.wefollow);
+      followerCount.value += 1;
+    } else if (followed.value == FollowState.following) {
+      // followController.islooped(0);
+
+      followed(FollowState.normal);
+      followerCount.value -= 1;
+    } else if (followed.value == FollowState.wefollow) {
+      // followController.islooped(0);
+
+      followed(FollowState.follower);
+      followerCount.value -= 1;
+    }
+  }
 }
 
 // class Rank {

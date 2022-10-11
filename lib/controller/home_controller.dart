@@ -67,6 +67,8 @@ class HomeController extends GetxController
 
   RxInt enterMessageRoom = 0.obs;
 
+  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+
   StreamSubscription? _dataStreamSubscription;
 
   late String? myId;
@@ -78,7 +80,8 @@ class HomeController extends GetxController
     // onPostingRefresh();
     // onQuestionRefresh();
     // onLoopRefresh();
-    myId = await const FlutterSecureStorage().read(key: "id");
+
+    myId = await secureStorage.read(key: "id");
 
     await getProfile(int.parse(myId!)).then((value) async {
       if (value.isError == false) {

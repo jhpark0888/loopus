@@ -30,7 +30,7 @@
 
 //   String username = "";
 //   int userid;
-//   Rx<User>? user = User.defaultuser().obs;
+//   Rx<Person>? user = Person.defaultuser().obs;
 
 //   RxDouble textFormHeight = 0.0.obs;
 //   Rx<GlobalKey> textFieldBoxKey = GlobalKey().obs;

@@ -64,6 +64,39 @@ Future<HTTPResponse> getProfile(int userId) async {
   }
 }
 
+Future<HTTPResponse> getCorpProfile(int userId) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    print('user token: $token');
+
+    var uri = Uri.parse("$serverUri/user_api/corp_profile?id=$userId");
+    try {
+      http.Response response =
+          await http.get(uri, headers: {"Authorization": "Token $token"});
+
+      print("기업 프로필 로드: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+        return HTTPResponse.success(responseBody);
+      } else {
+        // Get.back();
+        // showCustomDialog('이미 삭제된 유저입니다', 1400);
+        return HTTPResponse.apiError("", response.statusCode);
+      }
+    } on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+
 Future<HTTPResponse> getProjectlist(int userId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {

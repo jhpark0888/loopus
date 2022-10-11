@@ -595,10 +595,12 @@ class MyProfileScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemBuilder: (context, index) => GestureDetector(
                                 onTap: () {
-                                  print(profileController.myProjectList[index].isPublic);
+                                  print(profileController
+                                      .myProjectList[index].isPublic);
                                   goCareerScreen(
                                       profileController.myProjectList[index],
-                                      profileController.myUserInfo.value.realName,
+                                      profileController
+                                          .myUserInfo.value.realName,
                                       profileController.myProjectList);
                                 },
                                 child: CareerWidget(

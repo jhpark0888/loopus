@@ -15,6 +15,7 @@ import 'package:loopus/screen/follow_people_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/utils/error_control.dart';
+import 'package:loopus/widget/company_image_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
@@ -54,7 +55,7 @@ class MyCompanyScreen extends StatelessWidget {
             elevation: 0,
             centerTitle: true,
             title: const Text(
-              '프로필',
+              '내 기업 프로필',
               style: ktitle,
             ),
             actions: [
@@ -162,7 +163,7 @@ class MyCompanyScreen extends StatelessWidget {
     //         ProfileUpdateType.image)
     //     .then((value) {
     //   if (value.isError == false) {
-    //     User user = User.fromJson(value.data);
+    //     Person user = Person.fromJson(value.data);
     //     _controller.myCompanyInfo(user);
     //     HomeController.to.myProfile(user);
     //     if (Get.isRegistered<OtherProfileController>(
@@ -197,7 +198,7 @@ class MyCompanyScreen extends StatelessWidget {
                           isValue1Red: false,
                           isValue2Red: false,
                           isOne: false),
-                      child: UserImageWidget(
+                      child: CompanyImageWidget(
                         imageUrl: _controller.myCompanyInfo.value.companyImage,
                         width: 90,
                         height: 90,

@@ -10,7 +10,7 @@
 // class RealTimeRankWidget extends StatelessWidget {
 //   RealTimeRankWidget({Key? key, required this.user}) : super(key: key);
 
-//   User user;
+//   Person user;
 
 //   // RxString text = ''.obs;
 

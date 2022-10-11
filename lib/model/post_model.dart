@@ -128,7 +128,9 @@ class Post {
                   ? RxInt(json["is_marked"])
                   : RxInt(0),
               isuser: json["is_user"] ?? 0,
-              user: json['profile'] != null ? User.fromJson(json["profile"]) : User.defaultuser(),
+              user: json['profile'] != null
+                  ? User.fromJson(json["profile"])
+                  : User.defaultuser(),
             );
 
   void copywith(Map<String, dynamic> json) {

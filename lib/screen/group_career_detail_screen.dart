@@ -85,15 +85,17 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                   ])),
                                   const SizedBox(height: 14),
                                   RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                  text: '$name님의 전체 커리어 중\n',
-                                  style: kmainheight),
-                              TextSpan(
-                                  text: '${career.postRatio! * 100}%',
-                                  style: kmainbold),
-                             const TextSpan(text: '를 차지하는 커리어에요', style: kmainheight)
-                            ])),
+                                      text: TextSpan(children: [
+                                    TextSpan(
+                                        text: '$name님의 전체 커리어 중\n',
+                                        style: kmainheight),
+                                    TextSpan(
+                                        text: '${career.postRatio! * 100}%',
+                                        style: kmainbold),
+                                    const TextSpan(
+                                        text: '를 차지하는 커리어에요',
+                                        style: kmainheight)
+                                  ])),
                                 ],
                               )
                             ],
@@ -123,13 +125,15 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                         primary: false,
                                         shrinkWrap: true,
                                         itemBuilder: (context, index) {
-                                          
-                                          return joinPeople(careerDetailController.members[index]);
+                                          return joinPeople(
+                                              careerDetailController
+                                                  .members[index]);
                                         },
                                         separatorBuilder: (context, index) {
                                           return const SizedBox(width: 14);
                                         },
-                                        itemCount: careerDetailController.members.length))
+                                        itemCount: careerDetailController
+                                            .members.length))
                                 // Expanded(child: ListView(primary: false,shrinkWrap: true,children: [joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople()],scrollDirection: Axis.horizontal,))
                               ],
                             ),
@@ -423,17 +427,22 @@ class _leading extends StatelessWidget {
     BuildContext context,
   ) {
     return GestureDetector(
-      onTap: (){if(leading){Get.back();}},
+      onTap: () {
+        if (leading) {
+          Get.back();
+        }
+      },
       child: Padding(
         padding: EdgeInsets.fromLTRB(17.11, 14, 17.11, 14),
         child: Container(
           child: LayoutBuilder(
             builder: (context, c) {
-              final settings = context
-                  .dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
+              final settings = context.dependOnInheritedWidgetOfExactType<
+                  FlexibleSpaceBarSettings>();
               final deltaExtent = settings!.maxExtent - settings.minExtent;
               final t = (1.0 -
-                      (settings.currentExtent - settings.minExtent) / deltaExtent)
+                      (settings.currentExtent - settings.minExtent) /
+                          deltaExtent)
                   .clamp(0.0, 1.0);
               final opacity1 = (1.0 - Interval(0.0, 0.75).transform(t)).obs;
               return Obx(() => SvgPicture.asset(

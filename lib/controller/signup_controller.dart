@@ -10,12 +10,6 @@ import 'package:loopus/model/univ_model.dart';
 import 'package:loopus/utils/certificate_timer.dart';
 import 'package:loopus/utils/error_control.dart';
 
-enum UserType {
-  student,
-  company,
-  school,
-}
-
 class SignupController extends GetxController {
   static SignupController get to => Get.find();
   SignupController({this.isReCertification = false});

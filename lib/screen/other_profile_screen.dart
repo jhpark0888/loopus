@@ -464,9 +464,9 @@ class OtherProfileScreen extends StatelessWidget {
                     Expanded(
                       child: CustomExpandedBoldButton(
                         onTap: followMotion,
-                        isBlue: _controller.otherUser.value.looped.value ==
+                        isBlue: _controller.otherUser.value.followed.value ==
                                     FollowState.follower ||
-                                _controller.otherUser.value.looped.value ==
+                                _controller.otherUser.value.followed.value ==
                                     FollowState.normal ||
                                 _controller.otherUser.value.banned ==
                                     BanState.ban
@@ -475,14 +475,14 @@ class OtherProfileScreen extends StatelessWidget {
                         title: _controller.otherUser.value.banned ==
                                 BanState.ban
                             ? '차단 해제'
-                            : _controller.otherUser.value.looped.value ==
+                            : _controller.otherUser.value.followed.value ==
                                     FollowState.normal
                                 ? '팔로우'
-                                : _controller.otherUser.value.looped.value ==
+                                : _controller.otherUser.value.followed.value ==
                                         FollowState.follower
                                     ? '나도 팔로우하기'
-                                    : _controller
-                                                .otherUser.value.looped.value ==
+                                    : _controller.otherUser.value.followed
+                                                .value ==
                                             FollowState.following
                                         ? '팔로우 중'
                                         : '팔로우 중',
@@ -662,8 +662,7 @@ class OtherProfileScreen extends StatelessWidget {
                                   goCareerScreen(
                                       _controller.otherProjectList[index],
                                       _controller.otherUser.value.realName,
-                                      _controller.otherProjectList
-                                      );
+                                      _controller.otherProjectList);
                                 },
                                 child: CareerWidget(
                                     career:
@@ -790,35 +789,13 @@ class OtherProfileScreen extends StatelessWidget {
       if (_controller.otherUser.value.banned == BanState.ban) {
         userbancancel(userid);
       } else {
-        if (_controller.otherUser.value.looped.value == FollowState.normal) {
-          // followController.islooped(1);
-          _controller.otherUser.value.looped(FollowState.following);
-          _controller.otherUser.value.followerCount.value += 1;
-        } else if (_controller.otherUser.value.looped.value ==
-            FollowState.follower) {
-          // followController.islooped(1);
-
-          _controller.otherUser.value.looped(FollowState.wefollow);
-          _controller.otherUser.value.followerCount.value += 1;
-        } else if (_controller.otherUser.value.looped.value ==
-            FollowState.following) {
-          // followController.islooped(0);
-
-          _controller.otherUser.value.looped(FollowState.normal);
-          _controller.otherUser.value.followerCount.value -= 1;
-        } else if (_controller.otherUser.value.looped.value ==
-            FollowState.wefollow) {
-          // followController.islooped(0);
-
-          _controller.otherUser.value.looped(FollowState.follower);
-          _controller.otherUser.value.followerCount.value -= 1;
-        }
+        _controller.otherUser.value.followClick();
 
         _debouncer.run(() {
-          if (_controller.otherUser.value.looped.value.index !=
+          if (_controller.otherUser.value.followed.value.index !=
               _controller.lastisFollowed) {
             if (<int>[2, 3]
-                .contains(_controller.otherUser.value.looped.value.index)) {
+                .contains(_controller.otherUser.value.followed.value.index)) {
               postfollowRequest(userid);
               print("팔로우");
             } else {
@@ -826,7 +803,7 @@ class OtherProfileScreen extends StatelessWidget {
               print("팔로우 해제");
             }
             _controller.lastisFollowed =
-                _controller.otherUser.value.looped.value.index;
+                _controller.otherUser.value.followed.value.index;
           } else {
             print("아무일도 안 일어남");
           }

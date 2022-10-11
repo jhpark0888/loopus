@@ -617,7 +617,7 @@
 //   ProjectLooperImage({Key? key, required this.user, required this.index})
 //       : super(key: key);
 
-//   User user;
+//   Person user;
 //   int index;
 
 //   @override

@@ -232,7 +232,7 @@ class SQLController extends GetxController {
     int alarm_active = type == 0 ? 1 : 0;
     await db.rawUpdate('UPDATE chatroom SET alarm_active = ? WHERE room_id = ?',
         [alarm_active, roomId]).then((value) {
-      print(alarm_active);   
+      print(alarm_active);
     });
     return alarm_active;
   }
