@@ -4,10 +4,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/career_detail_controller.dart';
 import 'dart:math' as math;
 
 import 'package:intl/intl.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/project_model.dart';
@@ -21,13 +23,12 @@ import 'package:loopus/widget/posting_widget.dart';
 
 class PersonalCareerDetailScreen extends StatelessWidget {
   PersonalCareerDetailScreen(
-      {Key? key, required this.career, required this.name, this.careerList})
+      {Key? key, required this.career, required this.name})
       : super(key: key);
   late CareerDetailController careerDetailController;
   String name;
   Project career;
-  List<Project>? careerList;
-  // List<Project>? copyList;
+  ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     careerDetailController = Get.put(CareerDetailController(career: career));
@@ -35,7 +36,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         // physics: const BouncingScrollPhysics(),
-        controller: careerDetailController.scrollController,
+        controller: scrollController,
         slivers: [
           SliverAppBar(
             bottom: PreferredSize(
@@ -54,7 +55,6 @@ class PersonalCareerDetailScreen extends StatelessWidget {
               _leading(
                 leading: false,
                 career: career,
-                careerList: careerList,
               )
             ],
             pinned: true,
@@ -69,7 +69,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
                     child: Row(
                       children: [
                         CustomPieChart(
@@ -211,12 +211,14 @@ class _MyAppSpace extends StatelessWidget {
                             height: 14,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              career.isPublic
-                                  ? SvgPicture.asset('assets/icons/group.svg')
-                                  : SvgPicture.asset(
-                                      'assets/icons/personal_career.svg'),
+                              SvgPicture.asset(
+                                  'assets/icons/single_career.svg'),
+                              const SizedBox(width: 7),
+                              Text('개인 커리어',
+                                  style: kNavigationTitle.copyWith(
+                                      color: selectimage)),
+                              const Spacer(),
                               Text(
                                 '포스트 ${career.post_count}',
                                 style: kNavigationTitle.copyWith(
@@ -275,23 +277,20 @@ class _MyAppSpace extends StatelessWidget {
 }
 
 class _leading extends StatelessWidget {
-  _leading({Key? key, required this.leading, this.career, this.careerList})
-      : super(key: key);
+  _leading({Key? key, required this.leading, this.career}) : super(key: key);
   bool leading;
   Project? career;
-  List<Project>? careerList;
   @override
   Widget build(
     BuildContext context,
   ) {
-    // copyList = careerList;
     return IconButton(
       onPressed: () {
         if (leading) {
           Get.back();
         } else {
           if (career!.managerId ==
-              ProfileController.to.myUserInfo.value.userid) {
+              HomeController.to.myProfile.value.userid) {
             showModalIOS(context, func1: () {
               showButtonDialog(
                   title: '커리어를 삭제하시겠어요?',
@@ -305,7 +304,7 @@ class _leading extends StatelessWidget {
                     deleteProject(career!.id).then((value) {
                       if (value.isError == false) {
                         Get.back();
-                        careerList!.remove(career);
+                        deleteCareer(career!);
                         Get.back();
                         showCustomDialog("포스팅이 삭제되었습니다", 1400);
                       } else {
@@ -342,5 +341,13 @@ class _leading extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void deleteCareer(Project career) {
+    if (Get.isRegistered<ProfileController>()) {
+      ProfileController controller = Get.find<ProfileController>();
+      controller.myProjectList.removeWhere((element) => element == career);
+      controller.myProjectList.refresh();
+    }
   }
 }

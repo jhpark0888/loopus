@@ -661,9 +661,7 @@ class OtherProfileScreen extends StatelessWidget {
                                 onTap: () {
                                   goCareerScreen(
                                       _controller.otherProjectList[index],
-                                      _controller.otherUser.value.realName,
-                                      _controller.otherProjectList
-                                      );
+                                      _controller.otherUser.value.realName);
                                 },
                                 child: CareerWidget(
                                     career:

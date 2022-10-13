@@ -284,7 +284,7 @@ class PostingWidget extends StatelessWidget {
 
   void tapProjectname() async{
     await getproject(item.project!.id, item.userid).then((value) {if(value.isError == false){
-      goCareerScreen(value.data,item.user.realName,[]);
+      goCareerScreen(value.data,item.user.realName);
     }},);
   }
 
