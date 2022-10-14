@@ -15,8 +15,9 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 
-class CareerDetailScreen extends StatelessWidget {
-  CareerDetailScreen({Key? key, required this.careerList, required this.career})
+class PersonalCareerDetailScreen extends StatelessWidget {
+  PersonalCareerDetailScreen(
+      {Key? key, required this.careerList, required this.career})
       : super(key: key);
   late CareerDetailController careerDetailController;
   List<Project> careerList;
@@ -60,7 +61,9 @@ class CareerDetailScreen extends StatelessWidget {
                       height: 3)),
             ],
             pinned: true,
-            flexibleSpace: _MyAppSpace(career: career),
+            flexibleSpace: _MyAppSpace(
+              career: career,
+            ),
             expandedHeight: 200,
           ),
           SliverList(
@@ -69,8 +72,7 @@ class CareerDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+                    padding: EdgeInsets.symmetric(vertical: 32, horizontal: 20),
                     child: Row(
                       children: [
                         CustomPieChart(
@@ -106,15 +108,13 @@ class CareerDetailScreen extends StatelessWidget {
                         color: dividegray,
                       )),
                   // const SizedBox(height: 24),
-                  Obx(() =>
-                  careerDetailController.postList.isNotEmpty
+                  Obx(() => careerDetailController.postList.isNotEmpty
                       ? ListView.separated(
                           primary: false,
                           shrinkWrap: true,
                           itemBuilder: (context, postindex) {
                             return PostingWidget(
-                              item:
-                                  careerDetailController.postList[postindex],
+                              item: careerDetailController.postList[postindex],
                               type: PostingWidgetType.profile,
                             );
                           },
@@ -122,8 +122,7 @@ class CareerDetailScreen extends StatelessWidget {
                               DivideWidget(),
                           itemCount: careerDetailController.postList.length,
                         )
-                      : EmptyContentWidget(text: '아직 포스팅이 없어요')
-                  )
+                      : EmptyContentWidget(text: '아직 포스팅이 없어요'))
                 ],
               ),
             ]),
@@ -166,55 +165,67 @@ class _MyAppSpace extends StatelessWidget {
                 ),
               ),
             ),
-            Stack(
-              alignment: Alignment.centerLeft,
-              children: [
-                Opacity(
-                  opacity: opacity1,
-                  child: getImage(context,
-                      "https://cdn.pixabay.com/photo/2022/08/28/18/03/dog-7417233__340.jpg"),
-                ),
-                SingleChildScrollView(
+            Opacity(
+              opacity: opacity1,
+              child: Hero(
+                tag: career.id.toString(),
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: career.thumbnail == ""
+                              ? const AssetImage(
+                                  'assets/illustrations/default_image.png')
+                              : NetworkImage(career.thumbnail) as ImageProvider,
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                              const Color(0x00000000).withOpacity(0.4),
+                              BlendMode.srcOver))),
+                  width: Get.width,
+                  height: Get.width,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 44),
-                        getExpendTitle(
-                          career.careerName,
-                        ),
-                        const SizedBox(
-                          height: 14,
-                        ),
-                        if (career.updateDate!= null)
-                          Text(
-                            '최근 포스트 ${calculateDate(career.updateDate!)}',
-                            style:
-                                kNavigationTitle.copyWith(color: selectimage),
+                    padding: const EdgeInsets.fromLTRB(20, 58, 20, 14),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 44),
+                          getExpendTitle(
+                            career.careerName,
                           ),
-                        const SizedBox(
-                          height: 14,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SvgPicture.asset(
-                                'assets/icons/personal_career.svg'),
+                          const SizedBox(
+                            height: 14,
+                          ),
+                          if (career.updateDate != null)
                             Text(
-                              '포스트 ${career.post_count}',
+                              '최근 포스트 ${calculateDate(career.updateDate!)}',
                               style:
                                   kNavigationTitle.copyWith(color: selectimage),
-                            )
-                          ],
-                        )
-                      ],
+                            ),
+                          const SizedBox(
+                            height: 14,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              career.isPublic
+                                  ? SvgPicture.asset('assets/icons/group.svg')
+                                  : SvgPicture.asset(
+                                      'assets/icons/personal_career.svg'),
+                              Text(
+                                '포스트 ${career.post_count}',
+                                style: kNavigationTitle.copyWith(
+                                    color: selectimage),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                )
-              ],
-            ),
+                ),
+              ),
+            )
           ],
         );
       },
@@ -226,12 +237,12 @@ class _MyAppSpace extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       child: Opacity(
-        opacity: thumbnail != null ? 0.25 : 1,
-        child: thumbnail != null
+        opacity: thumbnail != '' ? 0.25 : 1,
+        child: thumbnail != ''
             ? Hero(
-                tag: "career_screen",
+                tag: career.id.toString(),
                 child: Image.network(
-                  thumbnail,
+                  thumbnail!,
                   fit: BoxFit.cover,
                 ),
               )
@@ -250,13 +261,10 @@ class _MyAppSpace extends StatelessWidget {
   }
 
   Widget getCollapseTitle(String text) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 60),
-      child: Text(text,
-          textAlign: TextAlign.center,
-          softWrap: false,
-          overflow: TextOverflow.ellipsis,
-          style: kmain),
-    );
+    return Text(text,
+        textAlign: TextAlign.center,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+        style: kmain);
   }
 }

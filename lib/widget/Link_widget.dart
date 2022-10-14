@@ -394,8 +394,8 @@ class ScrapCard extends StatelessWidget {
   }
 }
 
-class KeepAlivePage extends StatefulWidget {
-  KeepAlivePage({
+class KeepAliveWidget extends StatefulWidget {
+  KeepAliveWidget({
     Key? key,
     required this.child,
   }) : super(key: key);
@@ -406,7 +406,7 @@ class KeepAlivePage extends StatefulWidget {
   _KeepAlivePageState createState() => _KeepAlivePageState();
 }
 
-class _KeepAlivePageState extends State<KeepAlivePage>
+class _KeepAlivePageState extends State<KeepAliveWidget>
     with AutomaticKeepAliveClientMixin {
   @override
   // TODO: implement wantKeepAlive

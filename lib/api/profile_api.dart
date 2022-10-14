@@ -33,7 +33,6 @@ import '../controller/search_controller.dart';
 Future<HTTPResponse> getProfile(int userId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
@@ -74,31 +73,30 @@ Future<HTTPResponse> getProjectlist(int userId) async {
 
     var uri = Uri.parse("$serverUri/user_api/project?id=$userId");
 
-    // try {
-    http.Response response =
-        await http.get(uri, headers: {"Authorization": "Token $token"});
+    try {
+      http.Response response =
+          await http.get(uri, headers: {"Authorization": "Token $token"});
 
-    print("프로젝트 리스트 get: ${response.statusCode}");
-    if (response.statusCode == 200) {
-      List responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print("프로젝트 리스트 get: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        List responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-      return HTTPResponse.success(responseBody);
-    } else {
-      // if (isuser == 1) {
-      //   ProfileController.to.myprofilescreenstate(ScreenState.error);
-      // } else {
-      //   Get.find<OtherProfileController>(tag: userId.toString())
-      //       .otherprofilescreenstate(ScreenState.error);
-      // }
-      return HTTPResponse.apiError("", response.statusCode);
+        return HTTPResponse.success(responseBody);
+      } else {
+        // if (isuser == 1) {
+        //   ProfileController.to.myprofilescreenstate(ScreenState.error);
+        // } else {
+        //   Get.find<OtherProfileController>(tag: userId.toString())
+        //       .otherprofilescreenstate(ScreenState.error);
+        // }
+        return HTTPResponse.apiError("", response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
     }
-    // } on SocketException {
-    //   // ErrorController.to.isServerClosed(true);
-    //   return HTTPResponse.serverError();
-    // } catch (e) {
-    //   print(e);
-    //   return HTTPResponse.unexpectedError(e);
-    // }
   }
 }
 
@@ -111,29 +109,29 @@ Future<HTTPResponse> getCareerPosting(int careerId, int page) async {
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    // try {
-    http.Response response =
-        await http.get(uri, headers: {"Authorization": "Token $token"});
+    try {
+      http.Response response =
+          await http.get(uri, headers: {"Authorization": "Token $token"});
 
-    print("커리어 안 포스팅 리스트 get: ${response.statusCode}");
-    if (response.statusCode == 200) {
-      List responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print("커리어 안 포스팅 리스트 get: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        List responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-      List<Post> postlist = responseBody.map((post) {
-        return Post.fromJson(post);
-      }).toList();
-      return HTTPResponse.success(postlist);
-    } else {
-      return HTTPResponse.apiError('', response.statusCode);
+        List<Post> postlist = responseBody.map((post) {
+          return Post.fromJson(post);
+        }).toList();
+        return HTTPResponse.success(postlist);
+      } else if (response.statusCode == 204) {
+        return HTTPResponse.success(<Post>[]);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
     }
-    // } on SocketException {
-    //   ErrorController.to.isServerClosed(true);
-    //   return HTTPResponse.serverError();
-    // } catch (e) {
-    //   print(e);
-    //   // ErrorController.to.isServerClosed(true);
-    //   return HTTPResponse.unexpectedError(e);
-    // }
   }
 }
 
@@ -146,29 +144,66 @@ Future<HTTPResponse> getAllPosting(int userId, int page) async {
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    // try {
-    http.Response response =
-        await http.get(uri, headers: {"Authorization": "Token $token"});
+    try {
+      http.Response response =
+          await http.get(uri, headers: {"Authorization": "Token $token"});
 
-    print("프로필 모든 포스팅 리스트 get: ${response.statusCode}");
-    if (response.statusCode == 200) {
-      List responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print("프로필 모든 포스팅 리스트 get: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        List responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-      List<Post> postlist = responseBody.map((post) {
-        return Post.fromJson(post);
-      }).toList();
-      return HTTPResponse.success(postlist);
-    } else {
-      return HTTPResponse.apiError('', response.statusCode);
+        List<Post> postlist = responseBody.map((post) {
+          return Post.fromJson(post);
+        }).toList();
+        return HTTPResponse.success(postlist);
+      } else {
+        return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
     }
-    // } on SocketException {
-    //   ErrorController.to.isServerClosed(true);
-    //   return HTTPResponse.serverError();
-    // } catch (e) {
-    //   print(e);
-    //   // ErrorController.to.isServerClosed(true);
-    //   return HTTPResponse.unexpectedError(e);
-    // }
+  }
+}
+
+Future<HTTPResponse> postProjectArrange(List<Project> careerList) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+    var uri = Uri.parse("$serverUri/user_api/project");
+
+    try {
+      Map<String, int> body = {};
+      careerList.asMap().entries.forEach((entry) {
+        body[entry.value.id.toString()] = entry.key;
+      });
+
+      http.Response response = await http.post(uri,
+          headers: {
+            "Authorization": "Token $token",
+            'Content-Type': 'application/json',
+          },
+          body: json.encode(body));
+
+      print("커리어 정렬: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        // var responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+        return HTTPResponse.success("success");
+      } else {
+        return HTTPResponse.apiError("", response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
   }
 }
 
@@ -452,9 +487,9 @@ Future inquiry() async {
               ' ' +
               controller.userDeviceInfo.appInfoData.values.first
           : "",
-      "real_name": ProfileController.to.myUserInfo.value.realName,
-      "department": ProfileController.to.myUserInfo.value.department,
-      "id": ProfileController.to.myUserInfo.value.userid
+      "real_name": HomeController.to.myProfile.value.realName,
+      "department": HomeController.to.myProfile.value.department,
+      "id": HomeController.to.myProfile.value.userid
     };
 
     try {

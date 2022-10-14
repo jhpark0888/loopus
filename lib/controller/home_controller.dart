@@ -8,7 +8,7 @@ import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/profile_api.dart';
-import 'package:loopus/api/question_api.dart';
+import 'package:loopus/trash_bin/question_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';

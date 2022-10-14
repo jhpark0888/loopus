@@ -109,16 +109,21 @@ class MessageController extends GetxController with WidgetsBindingObserver {
     getChatroomlist(int.parse(userId!)).then((chatroom) async {
       if (chatroom.isError == false) {
         List<ChatRoom> temp = chatroom.data;
-
         List<int> membersId =
             List.generate(temp.length, (index) => temp[index].user);
+        print(membersId); 
         if (membersId.isNotEmpty) {
           await getUserProfile(membersId).then((usersList) {
             if (usersList.isError == false) {
-              List<User> userList = usersList.data;
+              Map<String,List> allUserList = Map<String,List>.from(usersList.data);
+              List<int> none = allUserList['none']!.map((e)=> int.parse(e)).toList();
+              List<User> userList = allUserList['profile']!.map((e)=>User.fromJson(e)).toList();
+              print(userList);
+              none.forEach((userId) => temp.where((element) => element.user == userId));
               const FlutterSecureStorage().delete(key: 'newMsg');
               temp.forEach((element) async {
-                User user =
+                print(element.user);
+                User? user =
                     userList.where((user) => user.userid == element.user).first;
                 if (chattingRoomList
                     .where((messageRoom) =>

@@ -42,7 +42,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
             )),
         title: Obx(
           () => Text(
-            _controller.isAlbum.value ? '사진첩 선택' : '이미지 선택',
+            _controller.isAlbum.value ? '사진첩 선택' : '프로필 사진',
             style: kNavigationTitle,
           ),
         ),

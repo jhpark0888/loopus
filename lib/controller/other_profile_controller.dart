@@ -12,6 +12,7 @@ import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 
 import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -30,41 +31,17 @@ class OtherProfileController extends GetxController
   String? careerName;
   RxBool profileenablepullup = true.obs;
 
-  final careertitleController = PageController(
-    viewportFraction: 0.4,
-  );
-  final careerPageController = PageController();
-  RxDouble careerCurrentPage = 0.0.obs;
-  // RefreshController profilerefreshController =
-  //     RefreshController(initialRefresh: false);
-
-  // void onRefresh() async {
-  //   careerCurrentPage(0.0);
-  //   profileenablepullup.value = true;
-  //   // loadmyProfile();
-  //   profilerefreshController.refreshCompleted();
-  // }
-
-  // void onLoading() async {
-  //   // await Future.delayed(Duration(seconds: 2));
-  //   if (otherProjectList.isNotEmpty) {
-  //     // getposting();
-  //   }
-  //   profilerefreshController.loadComplete();
-  // }
-
-  RxBool careerLoading = false.obs;
+  RxInt currentIndex = 0.obs;
 
   RxList<Project> otherProjectList = <Project>[].obs;
-  List<int> _careerPagenums = <int>[];
 
   Rx<File> profileimage = File('').obs;
-
   Rx<User> otherUser = User.defaultuser().obs;
+  RxList<Post> allPostList = <Post>[].obs;
+  int postPageNum = 1;
 
   RxList<User> otherlooplist = <User>[].obs;
 
-  // RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
 
   late int lastisFollowed;
@@ -72,131 +49,75 @@ class OtherProfileController extends GetxController
   KeyController keycontroller = Get.put(KeyController(isTextField: false.obs));
 
   Future loadotherProfile(int userid) async {
-    // isProfileLoading.value = true;
-
-    ConnectivityResult result = await initConnectivity();
-    if (result == ConnectivityResult.none) {
-      otherprofilescreenstate(ScreenState.disconnect);
-      showdisconnectdialog();
-    } else {
-      await getProfile(userid).then((value) {
-        if (value.isError == false) {
-          otherUser.value.copywith(value.data);
-
-          lastisFollowed = otherUser.value.looped.value.index;
-        } else {
-          errorSituation(value, screenState: otherprofilescreenstate);
-        }
-      });
-      await getProjectlist(userid).then((value) {
-        if (value.isError == false) {
-          List<Project> projectlist = List.from(value.data)
-              .map((project) => Project.fromJson(project))
-              .toList();
-          _careerPagenums = List.generate(projectlist.length, (index) => 1);
-
-          otherProjectList(projectlist);
-          otherprofilescreenstate(ScreenState.success);
-        } else {
-          errorSituation(value, screenState: otherprofilescreenstate);
-        }
-      });
-      if (otherProjectList.isNotEmpty) {
-        getProfilePost();
-      }
-    }
-  }
-
-  void getProfilePost() async {
-    // print('현재 페이지 ${careerCurrentPage.value}');
-    await getCareerPosting(otherProjectList[careerCurrentPage.value.toInt()].id,
-            _careerPagenums[careerCurrentPage.value.toInt()])
-        .then((value) {
+    await getProfile(userid).then((value) {
       if (value.isError == false) {
-        List<Post> postlist = value.data;
+        otherUser.value.copywith(value.data);
 
-        if (postlist.isNotEmpty) {
-          if (otherProjectList[careerCurrentPage.value.toInt()]
-              .posts
-              .where((post) => post.id == postlist.last.id)
-              .isEmpty) {
-            otherProjectList[careerCurrentPage.value.toInt()]
-                .posts
-                .addAll(postlist);
-            _careerPagenums[careerCurrentPage.value.toInt()] += 1;
-          } else {
-            profileenablepullup(false);
-          }
-        } else {
-          profileenablepullup(false);
-        }
+        lastisFollowed = otherUser.value.looped.value.index;
+      } else {
+        errorSituation(value, screenState: otherprofilescreenstate);
+      }
+    });
+    await getProjectlist(userid).then((value) {
+      if (value.isError == false) {
+        List<Project> projectlist = List.from(value.data)
+            .map((project) => Project.fromJson(project))
+            .toList();
 
+        otherProjectList(projectlist);
         otherprofilescreenstate(ScreenState.success);
       } else {
         errorSituation(value, screenState: otherprofilescreenstate);
       }
     });
+    getOtherPosting(userid);
+  }
+
+  Future<int> getOtherPosting(int userId) async {
+    HTTPResponse hrrpResponse = await getAllPosting(userId, postPageNum);
+
+    if (hrrpResponse.isError == false) {
+      List<Post> postlist = hrrpResponse.data;
+
+      allPostList.addAll(postlist);
+      postPageNum += 1;
+
+      otherprofilescreenstate(ScreenState.success);
+    } else {
+      if (hrrpResponse.errorData!["statusCode"] != 204) {
+        errorSituation(hrrpResponse, screenState: otherprofilescreenstate);
+      }
+    }
+    if (hrrpResponse.errorData == null) {
+      return 200;
+    } else {
+      return hrrpResponse.errorData!["statusCode"];
+    }
   }
 
   @override
   void onInit() async {
     await loadotherProfile(userid);
 
-    ever(
-      careerCurrentPage,
-      (_) async {
-        if (otherProjectList.isNotEmpty) {
-          Project project = otherProjectList[careerCurrentPage.toInt()];
-          profileenablepullup(true);
-          if (project.posts.isEmpty) {
-            careerLoading(true);
-            getProfilePost();
-            careerLoading(false);
-          }
-        }
-      },
-    );
-
-    enterByClickCareer();
     super.onInit();
   }
 
-  List<PieChartSectionData> showingSections() {
-    return otherProjectList.map((career) {
-      int index =
-          otherProjectList.indexWhere((element) => element.id == career.id);
-      final isSelected = index == careerCurrentPage.value;
-      final fontSize = isSelected ? 15.0 : 10.0;
-      final radius = isSelected ? 40.0 : 25.0;
-      return PieChartSectionData(
-        color: colorgroup[index],
-        value: career.postRatio,
-        title: '',
-        radius: radius,
-        titleStyle: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xffffffff)),
-      );
-    }).toList();
-  }
+  // Future<void> enterByClickCareer() async {
+  //   SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async {
+  //     if (careerName != null) {
+  //       double index = otherProjectList
+  //           .indexWhere((element) => element.careerName == careerName)
+  //           .toDouble();
+  //       careerCurrentPage.value = index;
+  //       // careertitleController.animateToPage(index.toInt(),
+  //       //     duration: const Duration(milliseconds: 100), curve: Curves.ease);
+  //       careertitleController.jumpToPage(index.toInt());
+  //       careerPageController.jumpToPage(index.toInt());
+  //       await Future.delayed(const Duration(milliseconds: 400));
 
-  Future<void> enterByClickCareer() async {
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async {
-      if (careerName != null) {
-        double index = otherProjectList
-            .indexWhere((element) => element.careerName == careerName)
-            .toDouble();
-        careerCurrentPage.value = index;
-        // careertitleController.animateToPage(index.toInt(),
-        //     duration: const Duration(milliseconds: 100), curve: Curves.ease);
-        careertitleController.jumpToPage(index.toInt());
-        careerPageController.jumpToPage(index.toInt());
-        await Future.delayed(const Duration(milliseconds: 400));
-
-        Scrollable.ensureVisible(keycontroller.viewKey.currentContext!,
-            curve: Curves.easeOut, duration: const Duration(milliseconds: 250));
-      }
-    });
-  }
+  //       Scrollable.ensureVisible(keycontroller.viewKey.currentContext!,
+  //           curve: Curves.easeOut, duration: const Duration(milliseconds: 250));
+  //     }
+  //   });
+  // }
 }

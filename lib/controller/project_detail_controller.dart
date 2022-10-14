@@ -25,7 +25,8 @@ class ProjectDetailController extends GetxController {
           fieldIds: [],
           members: [],
           is_user: 0,
-          user: User.defaultuser())
+          user: User.defaultuser(),
+          isPublic: false)
       .obs;
   int projectid;
   // RxList<ProjectPostingWidget> postinglist = <ProjectPostingWidget>[].obs;

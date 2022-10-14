@@ -105,15 +105,19 @@ class PersonRankWidget extends StatelessWidget {
       },
       behavior: HitTestBehavior.translucent,
       child: Row(children: [
-        Column(
-          children: [
-            PersonImageWidget(user: user, width: 52),
-            const SizedBox(height: 7),
-            Text(
-              user.realName,
-              style: kmain,
-            )
-          ],
+        SizedBox(
+          width: 52,
+          child: Column(
+            children: [
+              PersonImageWidget(user: user, width: 52),
+              const SizedBox(height: 7),
+              Text(
+                user.realName,
+                style: kmain,
+                maxLines: 1,
+              )
+            ],
+          ),
         ),
         const SizedBox(width: 14),
         Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -229,51 +233,44 @@ class PersonRankWidget extends StatelessWidget {
   }
 
   void followMotion() {
-    if(num == 0) {
+    if (num == 0) {
       lastisFollowed = user.looped.value.index;
     }
-      if (user.banned.value == BanState.ban) {
-        userbancancel(user.userid);
-      } else {
-        if (user.looped.value == FollowState.normal) {
-          // followController.islooped(1);
-          user.looped(FollowState.following);
-        } else if (user.looped.value ==
-            FollowState.follower) {
-          // followController.islooped(1);
+    if (user.banned.value == BanState.ban) {
+      userbancancel(user.userid);
+    } else {
+      if (user.looped.value == FollowState.normal) {
+        // followController.islooped(1);
+        user.looped(FollowState.following);
+      } else if (user.looped.value == FollowState.follower) {
+        // followController.islooped(1);
 
-          user.looped(FollowState.wefollow);
-        } else if (user.looped.value ==
-            FollowState.following) {
-          // followController.islooped(0);
+        user.looped(FollowState.wefollow);
+      } else if (user.looped.value == FollowState.following) {
+        // followController.islooped(0);
 
-          user.looped(FollowState.normal);
-        } else if (user.looped.value ==
-            FollowState.wefollow) {
-          // followController.islooped(0);
+        user.looped(FollowState.normal);
+      } else if (user.looped.value == FollowState.wefollow) {
+        // followController.islooped(0);
 
-          user.looped(FollowState.follower);
-        }
-        num += 1;
-
-        _debouncer.run(() {
-          if (user.looped.value.index !=
-              lastisFollowed) {
-            if (<int>[2, 3]
-                .contains(user.looped.value.index)) {
-              postfollowRequest(user.userid);
-              print("팔로우");
-            } else {
-              deletefollow(user.userid);
-              print("팔로우 해제");
-            }
-            lastisFollowed =
-                user.looped.value.index;
-          } else {
-            print("아무일도 안 일어남");
-          }
-        });
+        user.looped(FollowState.follower);
       }
+      num += 1;
+
+      _debouncer.run(() {
+        if (user.looped.value.index != lastisFollowed) {
+          if (<int>[2, 3].contains(user.looped.value.index)) {
+            postfollowRequest(user.userid);
+            print("팔로우");
+          } else {
+            deletefollow(user.userid);
+            print("팔로우 해제");
+          }
+          lastisFollowed = user.looped.value.index;
+        } else {
+          print("아무일도 안 일어남");
+        }
+      });
     }
-  
+  }
 }

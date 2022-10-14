@@ -30,6 +30,8 @@ class User {
     required this.schoolLastRank,
     required this.groupRatio,
     required this.schoolRatio,
+    required this.groupRatioVariance,
+    required this.schoolRatioVariance,
     required this.admissionYear,
     required this.urls,
   });
@@ -54,6 +56,8 @@ class User {
   int schoolLastRank;
   double groupRatio;
   double schoolRatio;
+  double groupRatioVariance;
+  double schoolRatioVariance;
   String admissionYear;
   List<String> urls;
   Rx<FollowState> looped;
@@ -78,6 +82,8 @@ class User {
     int? schoolLastRank,
     double? groupRatio,
     double? schoolRatio,
+    double? groupRatioVariance,
+    double? schoolRatioVariance,
     String? profileImage,
     List<Tag>? profileTag,
     String? admissionYear,
@@ -104,6 +110,8 @@ class User {
           resentPostCount: resentPostCount ?? 0,
           groupRatio: groupRatio ?? 0,
           schoolRatio: schoolRatio ?? 0,
+          groupRatioVariance: groupRatioVariance ?? 0,
+          schoolRatioVariance: schoolRatioVariance ?? 0,
           profileTag: profileTag ?? [],
           admissionYear: admissionYear ?? "2000",
           urls: urls ?? [],
@@ -134,6 +142,12 @@ class User {
             json["group_ratio"] != null ? json["group_ratio"] as double : 0,
         schoolRatio:
             json["school_ratio"] != null ? json["school_ratio"] as double : 0,
+        groupRatioVariance: json["group_rank_variance"] != null
+            ? json["group_rank_variance"] as double
+            : 0,
+        schoolRatioVariance: json["school_rank_variance"] != null
+            ? json["school_rank_variance"] as double
+            : 0,
         profileTag: json["profile_tag"] != null
             ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
             : [],
@@ -162,12 +176,12 @@ class User {
     realName = json["real_name"] ?? realName;
     type = json["type"] ?? type;
     profileImage = json["profile_image"] ?? profileImage;
-    followerCount = json["follower_count"] != null
-        ? RxInt(json["follower_count"])
-        : followerCount;
-    followingCount = json["following_count"] != null
-        ? RxInt(json["following_count"])
-        : followingCount;
+    followerCount.value = json["follower_count"] != null
+        ? json["follower_count"] as int
+        : followerCount.value;
+    followingCount.value = json["following_count"] != null
+        ? json["following_count"] as int
+        : followingCount.value;
     totalposting = json["total_post_count"] ?? totalposting;
     resentPostCount = json["recent_post_count"] ?? resentPostCount;
     rank = json["rank"] != null ? json["rank"] as int : rank;
@@ -183,6 +197,12 @@ class User {
     schoolRatio = json["school_ratio"] != null
         ? json["school_ratio"] as double
         : schoolRatio;
+    groupRatioVariance = json["group_rank_variance"] != null
+        ? json["group_rank_variance"] as double
+        : groupRatioVariance;
+    schoolRatioVariance = json["school_rank_variance"] != null
+        ? json["school_rank_variance"] as double
+        : schoolRatioVariance;
     profileTag = json["profile_tag"] != null
         ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
         : profileTag;
@@ -197,12 +217,12 @@ class User {
         ? List<String>.from(List.from(json["urls"]).map((x) => x.toString()))
         : urls;
     isuser = json["is_user"] ?? isuser;
-    looped = json["looped"] != null
-        ? FollowState.values[json["looped"]].obs
-        : looped;
-    banned = json["is_banned"] != null
-        ? BanState.values[json["is_banned"]].obs
-        : banned;
+    looped.value = json["looped"] != null
+        ? FollowState.values[json["looped"]]
+        : looped.value;
+    banned.value = json["is_banned"] != null
+        ? BanState.values[json["is_banned"]]
+        : banned.value;
   }
 
   Map<String, dynamic> toJson() => {

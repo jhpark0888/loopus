@@ -136,7 +136,7 @@ enum SwiperType { image, link, file }
 //                   if (widget.swiperType == SwiperType.image) {
 //                     return buildImageList(index);
 //                   } else if (widget.swiperType == SwiperType.link) {
-//                     return KeepAlivePage(
+//                     return KeepAliveWidget(
 //                       child: LinkWidget(
 //                           url: widget.items[index], widgetType: 'post'),
 //                     );
@@ -282,7 +282,7 @@ class SwiperWidget extends StatelessWidget {
               child: PageView.builder(
                 controller: _pageController,
                 itemBuilder: (BuildContext context, int index) {
-                  return KeepAlivePage(
+                  return KeepAliveWidget(
                     child: LinkWidget(url: items[index], widgetType: 'post'),
                   );
                 },

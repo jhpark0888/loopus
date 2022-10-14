@@ -30,6 +30,8 @@ class ProfileController extends GetxController
 
   RefreshController profilerefreshController =
       RefreshController(initialRefresh: false);
+  RefreshController postLoadingController =
+      RefreshController(initialRefresh: false);
 
   RxList<Project> myProjectList = <Project>[].obs;
 
@@ -60,11 +62,9 @@ class ProfileController extends GetxController
     profilerefreshController.refreshCompleted();
   }
 
-  void onLoading() async {
+  void onPostLoading() async {
     // await Future.delayed(Duration(seconds: 2));
-    if (tabController.index == 1) {
-      profilerefreshController.loadComplete();
-    }
+    _getPosting(myUserInfo.value.userid);
   }
 
   Future loadmyProfile() async {
@@ -100,6 +100,11 @@ class ProfileController extends GetxController
       _getPosting(int.parse(userId));
     }
     // isProfileLoading.value = false;
+    // myUserInfo.value.urls.add("https://www.instagram.com/jhpark0888/");
+    // myUserInfo.value.urls.add("https://github.com/jhpark0888");
+    // myUserInfo.value.urls.add("https://www.notion.so/ko-kr");
+    // myUserInfo.value.urls.add("https://www.youtube.com/c/TVING_official");
+    // myUserInfo.value.urls.add("https://blog.naver.com/bsj_6505");
   }
 
   void _getPosting(int userId) async {
@@ -111,10 +116,13 @@ class ProfileController extends GetxController
         postPageNum += 1;
 
         myprofilescreenstate(ScreenState.success);
+        postLoadingController.loadComplete();
       } else {
         if (value.errorData!["statusCode"] == 204) {
+          postLoadingController.loadNoData();
         } else {
           errorSituation(value, screenState: myprofilescreenstate);
+          postLoadingController.loadComplete();
         }
       }
     });
@@ -128,6 +136,7 @@ class ProfileController extends GetxController
       });
 
     await loadmyProfile();
+
     super.onInit();
   }
 
@@ -142,6 +151,13 @@ class ProfileController extends GetxController
         post.isLiked(1);
         post.likeCount(likeCount);
       }
+
+      if (allPostList.where((post) => post.id == postId).isNotEmpty) {
+        Post post = allPostList.where((post) => post.id == postId).first;
+
+        post.isLiked(1);
+        post.likeCount(likeCount);
+      }
     }
   }
 
@@ -152,6 +168,13 @@ class ProfileController extends GetxController
 
       if (career.posts.where((post) => post.id == postId).isNotEmpty) {
         Post post = career.posts.where((post) => post.id == postId).first;
+
+        post.isLiked(0);
+        post.likeCount(likeCount);
+      }
+
+      if (allPostList.where((post) => post.id == postId).isNotEmpty) {
+        Post post = allPostList.where((post) => post.id == postId).first;
 
         post.isLiked(0);
         post.likeCount(likeCount);
