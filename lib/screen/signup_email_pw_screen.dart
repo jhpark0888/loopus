@@ -92,9 +92,14 @@ class SignupEmailPwScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SignUpTextWidget(
-                    oneLinetext: "가입 정보를 입력해주세요",
-                    twoLinetext: "이후 대학 인증이 진행돼요"),
+                _signupController.isReCertification == false
+                    ? SignUpTextWidget(
+                        oneLinetext: "가입 정보를 입력해주세요",
+                        twoLinetext: "이후 대학 인증이 진행돼요")
+                    : SignUpTextWidget(
+                        highlightText: "재인증을 위해",
+                        oneLinetext: "",
+                        twoLinetext: "대학 웹메일 주소를 입력하세요"),
                 LabelTextFieldWidget(
                   label: "대학 웹메일 주소",
                   hintText: "본인 대학 이메일 아이디",
@@ -104,23 +109,31 @@ class SignupEmailPwScreen extends StatelessWidget {
                     style: kmain,
                   ),
                 ),
-                LabelTextFieldWidget(
-                  label: "비밀번호",
-                  hintText: "최소 6글자",
-                  textController: _signupController.passwordcontroller,
-                  obscureText: true,
-                ),
-                LabelTextFieldWidget(
-                  label: "비밀번호 확인",
-                  hintText: "입력한 비밀번호를 다시 입력해주세요",
-                  textController: _signupController.passwordcheckcontroller,
-                  obscureText: true,
-                ),
+                if (_signupController.isReCertification == false)
+                  Column(
+                    children: [
+                      LabelTextFieldWidget(
+                        label: "비밀번호",
+                        hintText: "최소 6글자",
+                        textController: _signupController.passwordcontroller,
+                        obscureText: true,
+                      ),
+                      LabelTextFieldWidget(
+                        label: "비밀번호 확인",
+                        hintText: "입력한 비밀번호를 다시 입력해주세요",
+                        textController:
+                            _signupController.passwordcheckcontroller,
+                        obscureText: true,
+                      ),
+                    ],
+                  ),
                 const SizedBox(
                   height: 24,
                 ),
                 Text(
-                  "대학 인증을 위해 정확한 대학 메일을 입력해주세요",
+                  _signupController.isReCertification == false
+                      ? "대학 인증을 위해 정확한 대학 메일을 입력해주세요"
+                      : "대학이 변경된 경우, 변경된 대학 주소를 입력해주세요",
                   style: kmain.copyWith(color: maingray),
                 ),
               ],

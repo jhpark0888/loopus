@@ -3,6 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/project_model.dart';
+import 'package:loopus/model/user_model.dart';
+import 'package:loopus/utils/duration_calculate.dart';
+import 'package:loopus/widget/user_image_widget.dart';
 
 class CareerWidget extends StatelessWidget {
   CareerWidget({Key? key, required this.career}) : super(key: key);
@@ -50,12 +53,32 @@ class CareerWidget extends StatelessWidget {
                   color: career.thumbnail == "" ? mainblack : mainWhite),
             ),
             const SizedBox(
-              height: 7,
+              height: 14,
             ),
             Row(
               children: [
+                //     career.isPublic
+                //         ? SvgPicture.asset('assets/icons/group.svg')
+                //         : SvgPicture.asset('assets/icons/personal_career.svg'),
+                const SizedBox(
+                  height: 12,
+                  width: 12,
+                ),
+                const SizedBox(
+                  width: 7,
+                ),
                 Text(
-                  "최근 포스트 ${DateFormat('yyyy.MM.dd.').format(career.updateDate!)}",
+                  career.isPublic ? "그룹 커리어" : "개인 커리어",
+                  style: kmain.copyWith(
+                      color: career.thumbnail == "" ? mainblack : mainWhite),
+                ),
+                const SizedBox(
+                  width: 7,
+                ),
+                memberList(),
+                const Spacer(),
+                Text(
+                  "${lastPostCalculateDate(career.updateDate!)} 포스트",
                   style: kmain.copyWith(
                       color: career.thumbnail == "" ? mainblack : mainWhite),
                 ),
@@ -81,5 +104,50 @@ class CareerWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget memberImage(User user, int index) {
+    return Container(
+        width: 24,
+        height: 24,
+        margin: EdgeInsets.only(left: (17 * index).toDouble()),
+        decoration: BoxDecoration(
+            border: Border.all(color: dividegray), shape: BoxShape.circle),
+        child: UserImageWidget(
+          imageUrl: user.profileImage ?? "",
+          width: 24,
+          height: 24,
+        ));
+  }
+
+  Widget memberList() {
+    List<User> memberList = career.members.length > 4
+        ? career.members.sublist(0, 4)
+        : career.members;
+
+    return career.members.isNotEmpty
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: memberList
+                    .asMap()
+                    .entries
+                    .map((entry) => memberImage(entry.value, entry.key))
+                    .toList(),
+              ),
+              const SizedBox(
+                width: 7,
+              ),
+              if (career.members.length > 4)
+                Text(
+                  "+${career.members.length - 4}",
+                  style: kmain.copyWith(
+                      color: career.thumbnail == "" ? mainblack : mainWhite),
+                )
+            ],
+          )
+        : Container();
   }
 }

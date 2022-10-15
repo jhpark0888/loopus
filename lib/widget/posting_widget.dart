@@ -6,6 +6,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
@@ -281,11 +282,10 @@ class PostingWidget extends StatelessWidget {
         transition: Transition.noTransition);
   }
 
-  void tapProjectname() {
-    Get.to(() => OtherProfileScreen(
-        userid: item.userid,
-        realname: item.user.realName,
-        careerName: item.project!.careerName));
+  void tapProjectname() async{
+    await getproject(item.project!.id, item.userid).then((value) {if(value.isError == false){
+      goCareerScreen(value.data,item.user.realName);
+    }},);
   }
 
   void tapBookmark() {

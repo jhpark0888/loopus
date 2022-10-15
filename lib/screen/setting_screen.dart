@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/screen/alert_screen.dart';
+import 'package:loopus/screen/banpeople_screen.dart';
 import 'package:loopus/screen/contact_content_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';
 import 'package:loopus/screen/webview_screen.dart';
@@ -48,38 +49,54 @@ class SettingScreen extends StatelessWidget {
         title: '설정',
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child: Text(
+              "개인",
+              style: kmainbold.copyWith(color: maingray),
+            ),
+          ),
           CustomListTile(
-            hoverTag: '계정 정보',
-            title: '계정 정보',
+            title: "개인 정보",
             onTap: () {
               Get.to(() => UserInfoScreen());
             },
           ),
           CustomListTile(
-            hoverTag: '알림 설정',
-            title: '알림 설정',
+            title: "알림 설정",
             onTap: () {
               Get.to(() => AlertScreen());
             },
           ),
           CustomListTile(
-            hoverTag: '서비스 이용약관',
-            title: '서비스 이용약관',
+            title: "차단 관리",
+            onTap: () {
+              Get.to(() => BanPeopleScreen());
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child: Text(
+              "서비스",
+              style: kmainbold.copyWith(color: maingray),
+            ),
+          ),
+          CustomListTile(
+            title: "서비스 이용약관",
             onTap: () {
               Get.to(() => WebViewScreen(url: kTermsOfService));
             },
           ),
           CustomListTile(
-            hoverTag: '개인정보 처리방침',
-            title: '개인정보 처리방침',
+            title: "개인정보 처리방침",
             onTap: () {
               Get.to(() => WebViewScreen(url: kPrivacyPolicy));
             },
           ),
           CustomListTile(
-            hoverTag: '문의하기',
-            title: '문의하기',
+            title: "문의하기",
             onTap: () {
               Get.to(() => ContactContentScreen());
             },
@@ -91,17 +108,18 @@ class SettingScreen extends StatelessWidget {
 }
 
 class CustomListTile extends StatelessWidget {
-  CustomListTile({
-    required this.onTap,
-    required this.title,
-    required this.hoverTag,
-  });
+  CustomListTile(
+      {required this.onTap,
+      required this.title,
+      this.titleColor,
+      this.trailing});
 
   final VoidCallback onTap;
   final String title;
-  final String hoverTag;
-  late final HoverController _hoverController =
-      Get.put(HoverController(), tag: hoverTag);
+  final Color? titleColor;
+  final String? trailing;
+
+  final HoverController _hoverController = HoverController();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -112,22 +130,30 @@ class CustomListTile extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: 20,
-          horizontal: 16,
+          vertical: 12,
+          horizontal: 20,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Obx(
-              () => Text(
-                title,
-                style: kmain.copyWith(
-                    color: _hoverController.isHover.value
-                        ? mainblack.withOpacity(0.6)
-                        : mainblack),
-              ),
+              () => Text(title,
+                  style: kmain.copyWith(
+                      color: _hoverController.isHover.value
+                          ? titleColor != null
+                              ? titleColor!.withOpacity(0.5)
+                              : maingray
+                          : titleColor ?? mainblack)),
             ),
-            SvgPicture.asset('assets/icons/arrow_right.svg'),
+            if (trailing != null)
+              Obx(
+                () => Text(trailing!,
+                    style: kmain.copyWith(
+                        color: _hoverController.isHover.value
+                            ? maingray
+                            : mainblack)),
+              ),
+            // SvgPicture.asset('assets/icons/arrow_right.svg'),
           ],
         ),
       ),

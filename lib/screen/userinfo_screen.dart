@@ -9,14 +9,16 @@ import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/screen/banpeople_screen.dart';
+import 'package:loopus/screen/certification_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/login_screen.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
+import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/screen/withdrawal_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -24,7 +26,6 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class UserInfoScreen extends StatelessWidget {
-  final LogInController _logInController = Get.put(LogInController());
   ProfileController profileController = Get.put(ProfileController());
 
   @override
@@ -32,88 +33,82 @@ class UserInfoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBarWidget(
         bottomBorder: false,
-        title: '계정 정보',
+        title: '개인 정보',
       ),
       body: Column(
         children: [
-          ListTile(
-            title: Text(
-              '나의 학교',
-              style: kmain,
-            ),
-            trailing: Text(
-              '인천대학교 송도캠퍼스',
-              style: kmain,
-            ),
+          CustomListTile(
+            title: "이름",
+            titleColor: maingray,
+            onTap: () => userInfoModify(context),
+            trailing: HomeController.to.myProfile.value.realName,
           ),
-          ListTile(
-            title: Text(
-              '전공 학과',
-              style: kmain,
-            ),
-            trailing: Text(
-              profileController.myUserInfo.value.department,
-              style: kmain,
-            ),
+          CustomListTile(
+            title: "대학",
+            titleColor: maingray,
+            onTap: () => userInfoModify(context),
+            trailing: HomeController.to.myProfile.value.univName,
           ),
-          ListTile(
-            onTap: () {
-              Get.to(() => BanPeopleScreen());
-            },
-            title: Text(
-              '차단 목록',
-              style: kmain,
-            ),
+          CustomListTile(
+            title: "학과",
+            titleColor: maingray,
+            onTap: () => userInfoModify(context),
+            trailing: HomeController.to.myProfile.value.department,
           ),
-          ListTile(
+          CustomListTile(
+            title: "입학 연도",
+            titleColor: maingray,
+            onTap: () => userInfoModify(context),
+            trailing: HomeController.to.myProfile.value.admissionYear,
+          ),
+          CustomListTile(
+            title: "비밀번호 변경",
             onTap: () {
               Get.to(() => PwChangeScreen(
                     pwType: PwType.pwchange,
                   ));
             },
-            title: Text(
-              '비밀번호 변경',
-              style: kmain,
-            ),
           ),
-          ListTile(
+          CustomListTile(
+            title: "로그아웃",
             onTap: () {
-              // FlutterSecureStorage().delete(key: "token");
-              // FlutterSecureStorage().delete(key: "id");
               showButtonDialog(
-                  title: '로그아웃하시겠어요?',
-                  content: '중요한 알림을 받지 못하게 돼요',
+                  title: '로그아웃 하시겠어요?',
+                  startContent: '언제든 다시 로그인 할 수 있어요',
                   leftFunction: () => Get.back(),
                   rightFunction: () {
                     logOut();
                   },
                   rightText: '로그아웃',
                   leftText: '취소');
-              // _logInController.isLogout.value = true;
-              // logOut().then((value) {
-              //   _logInController.isLogout.value = false;
-              //   Get.offAll(() => StartScreen());
-              // });
             },
-            title: Text(
-              '로그아웃',
-              style: kmain,
-            ),
           ),
-          ListTile(
+          CustomListTile(
+            title: "회원탈퇴",
+            titleColor: rankred,
             onTap: () {
-              Get.to(() => WithdrawalScreen());
+              showButtonDialog(
+                  title: '정말 탈퇴하시겠어요?',
+                  startContent: '탈퇴 시 작성된 모든 데이터는 삭제되며,\n이후',
+                  highlightContent: " 복구가 불가능 ",
+                  endContent: "해요\n다시 한 번 신중하게 생각 후 탈퇴를 진행해주세요",
+                  highlightColor: rankred,
+                  leftFunction: () => Get.back(),
+                  rightFunction: () {
+                    Get.to(() => CertificationScreen(
+                          certificateType: CertificateType.withDrawal,
+                        ));
+                  },
+                  rightText: '탈퇴',
+                  leftText: '취소');
             },
-            title: Text(
-              '회원탈퇴',
-              style: kmain.copyWith(color: rankred),
-            ),
           ),
-          ListTile(
+          CustomListTile(
+            title: "채팅 데이터베이스 초기화",
             onTap: () {
               showButtonDialog(
                   title: '데이터베이스를 초기화 하시겠어요?',
-                  content: '채팅 정보가 날라가게 돼요',
+                  startContent: '채팅 정보가 날라가게 돼요',
                   leftFunction: () => Get.back(),
                   rightFunction: () async {
                     deleteDatabase(join(await getDatabasesPath(),
@@ -128,31 +123,26 @@ class UserInfoScreen extends StatelessWidget {
                   rightText: '초기화',
                   leftText: '취소');
             },
-            title: Text(
-              '채팅 데이터베이스 초기화',
-              style: kmain,
-            ),
           ),
         ],
       ),
     );
   }
 
-  Future<void> logOut() async {
-    loading();
-    AppController.to.currentIndex.value = 0;
-    String? userid = await FlutterSecureStorage().read(key: "id");
-    // await FirebaseMessaging.instance.unsubscribeFromTopic(userid!);
-    await FirebaseMessaging.instance.deleteToken();
-
-    FlutterSecureStorage().delete(key: "token");
-    FlutterSecureStorage().delete(key: "id");
-
-    Get.delete<AppController>();
-    Get.delete<HomeController>();
-    Get.delete<SearchController>();
-    Get.delete<ProfileController>();
-    Get.delete<SQLController>();
-    Get.offAll(() => StartScreen());
+  void userInfoModify(BuildContext context) {
+    showBottomdialog(context,
+        func1: () {
+          Get.to(() => CertificationScreen(
+                certificateType: CertificateType.userInfoChange,
+              ));
+        },
+        func2: () => Get.back(),
+        value1: '재인증을 통해 개인 정보 수정하기',
+        value2: '취소',
+        buttonColor1: mainblue,
+        buttonColor2: maingray,
+        title: "개인 정보 수정을 위해선 재인증 절차가 필요합니다\n",
+        accentTitle: "학적이 변경된 경우, 변경된 학적 정보를 입력해주세요",
+        isOne: false);
   }
 }

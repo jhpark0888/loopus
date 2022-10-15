@@ -50,6 +50,7 @@ class _ScoutScreenState extends State<ScoutScreen> {
   late List<PaletteColor> colors;
 
   late int _currentIndex;
+  late Contact contact;
 
   @override
   void initState() {
@@ -75,16 +76,16 @@ class _ScoutScreenState extends State<ScoutScreen> {
     List<String> images = _scontroller.recommandCompList
         .map((company) => company.companyImage)
         .toList();
-    Contact contact;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("당신에게 '집-중'하고 있는 추천 기업",
             style: kmainbold.copyWith(color: mainWhite)),
         SizedBox(height: 14),
-        // Text(contact.slogan,
-        // style: kNavigationTitle.copyWith(color: mainWhite)),
-        // SizedBox(height: 14),
+        Text(contact.slogan,
+            style: kNavigationTitle.copyWith(color: mainWhite)),
+        SizedBox(height: 14),
         // Text(contact.slogan, style: kmain.copyWith(color: mainWhite)),
         // SizedBox(height: 24),
         Container(

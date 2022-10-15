@@ -184,3 +184,34 @@ String commentCalculateDate(DateTime date) {
     }
   }
 }
+
+String lastPostCalculateDate(DateTime date) {
+  final currentDateTime = DateTime.now();
+  LocalDateTime compareDate = LocalDateTime.dateTime(date);
+  LocalDateTime currentDate = LocalDateTime.dateTime(currentDateTime);
+  Period diff = currentDate.periodSince(compareDate);
+
+  if (diff.years >= 1) {
+    return "${diff.years} 년 전";
+  } else {
+    if (diff.months >= 1) {
+      // return DateFormat('MM.dd').format(date);
+      return "${diff.months}개월 전";
+    } else {
+      if (diff.days >= 1) {
+        // return DateFormat('MM.dd').format(date);
+        return "${diff.days}일 전";
+      } else {
+        if (diff.hours >= 1) {
+          return '${diff.hours}시간 전';
+        } else {
+          if (diff.minutes > 0) {
+            return '${diff.minutes}분 전';
+          } else {
+            return '방금 전';
+          }
+        }
+      }
+    }
+  }
+}

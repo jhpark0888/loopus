@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/career_detail_controller.dart';
 import 'dart:math' as math;
 
 import 'package:intl/intl.dart';
+import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/project_model.dart';
+import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/custom_pie_chart.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
@@ -17,18 +23,20 @@ import 'package:loopus/widget/posting_widget.dart';
 
 class PersonalCareerDetailScreen extends StatelessWidget {
   PersonalCareerDetailScreen(
-      {Key? key, required this.careerList, required this.career})
+      {Key? key, required this.career, required this.name})
       : super(key: key);
   late CareerDetailController careerDetailController;
-  List<Project> careerList;
+  String name;
   Project career;
+  ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     careerDetailController = Get.put(CareerDetailController(career: career));
+    // copyList = careerList;
     return Scaffold(
       body: CustomScrollView(
         // physics: const BouncingScrollPhysics(),
-        controller: careerDetailController.scrollController,
+        controller: scrollController,
         slivers: [
           SliverAppBar(
             bottom: PreferredSize(
@@ -38,27 +46,16 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                 ),
                 preferredSize: Size.fromHeight(4.0)),
             automaticallyImplyLeading: false,
+            toolbarHeight: 48,
             elevation: 0,
             stretch: true,
             backgroundColor: Colors.white,
-            leading: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: SvgPicture.asset(
-                  'assets/icons/sliver_appbar_back.svg',
-                  color: mainWhite,
-                  width: 10,
-                  height: 16,
-                )),
+            leading: _leading(leading: true),
             actions: [
-              IconButton(
-                  onPressed: () {},
-                  icon: SvgPicture.asset(
-                      'assets/icons/sliver_appbar_more_option.svg',
-                      color: mainWhite,
-                      width: 15,
-                      height: 3)),
+              _leading(
+                leading: false,
+                career: career,
+              )
             ],
             pinned: true,
             flexibleSpace: _MyAppSpace(
@@ -72,11 +69,12 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
                     child: Row(
                       children: [
                         CustomPieChart(
-                          careerList: careerList,
+                          career: career,
+                          // careerList: careerList,
                           currentId: career.id,
                         ),
                         const SizedBox(width: 32),
@@ -92,10 +90,17 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                               const TextSpan(text: '커리어', style: kmainbold)
                             ])),
                             const SizedBox(height: 14),
-                            Text(
-                              '${ProfileController.to.myUserInfo.value.realName}님의 전체 커리어 중\n${career.postRatio! * 100}%를 차지하는 커리어에요',
-                              style: kmainheight,
-                            ),
+                            RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: '$name님의 전체 커리어 중\n',
+                                  style: kmainheight),
+                              TextSpan(
+                                  text: '${career.postRatio! * 100}%',
+                                  style: kmainbold),
+                              const TextSpan(
+                                  text: '를 차지하는 커리어에요', style: kmainheight)
+                            ])),
                           ],
                         )
                       ],
@@ -206,12 +211,14 @@ class _MyAppSpace extends StatelessWidget {
                             height: 14,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              career.isPublic
-                                  ? SvgPicture.asset('assets/icons/group.svg')
-                                  : SvgPicture.asset(
-                                      'assets/icons/personal_career.svg'),
+                              SvgPicture.asset(
+                                  'assets/icons/single_career.svg'),
+                              const SizedBox(width: 7),
+                              Text('개인 커리어',
+                                  style: kNavigationTitle.copyWith(
+                                      color: selectimage)),
+                              const Spacer(),
                               Text(
                                 '포스트 ${career.post_count}',
                                 style: kNavigationTitle.copyWith(
@@ -265,6 +272,82 @@ class _MyAppSpace extends StatelessWidget {
         textAlign: TextAlign.center,
         softWrap: false,
         overflow: TextOverflow.ellipsis,
-        style: kmain);
+        style: kNavigationTitle);
+  }
+}
+
+class _leading extends StatelessWidget {
+  _leading({Key? key, required this.leading, this.career}) : super(key: key);
+  bool leading;
+  Project? career;
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
+    return IconButton(
+      onPressed: () {
+        if (leading) {
+          Get.back();
+        } else {
+          if (career!.managerId ==
+              HomeController.to.myProfile.value.userid) {
+            showModalIOS(context, func1: () {
+              showButtonDialog(
+                  title: '커리어를 삭제하시겠어요?',
+                  startContent: '삭제한 커리어는 복구할 수 없어요',
+                  leftFunction: () {
+                    Get.back();
+                  },
+                  rightFunction: () {
+                    dialogBack(modalIOS: true);
+                    loading();
+                    deleteProject(career!.id).then((value) {
+                      if (value.isError == false) {
+                        Get.back();
+                        deleteCareer(career!);
+                        Get.back();
+                        showCustomDialog("포스팅이 삭제되었습니다", 1400);
+                      } else {
+                        errorSituation(value);
+                      }
+                    });
+                  },
+                  rightText: '삭제',
+                  leftText: '취소');
+            },
+                func2: () {},
+                value1: '커리어 삭제',
+                value2: '취소',
+                isValue1Red: true,
+                isValue2Red: false,
+                isOne: true);
+          }
+        }
+      },
+      icon: Container(
+        child: LayoutBuilder(
+          builder: (context, c) {
+            final settings = context
+                .dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
+            final deltaExtent = settings!.maxExtent - settings.minExtent;
+            final t = (1.0 -
+                    (settings.currentExtent - settings.minExtent) / deltaExtent)
+                .clamp(0.0, 1.0);
+            final opacity1 = (1.0 - Interval(0.0, 0.75).transform(t)).obs;
+            return Obx(() => SvgPicture.asset(
+                'assets/icons/${leading ? 'sliver_appbar_back' : 'sliver_appbar_more_option'}.svg',
+                color: opacity1 < 1 ? mainblack : mainWhite));
+          },
+        ),
+      ),
+    );
+  }
+
+  void deleteCareer(Project career) {
+    if (Get.isRegistered<ProfileController>()) {
+      ProfileController controller = Get.find<ProfileController>();
+      controller.myProjectList.removeWhere((element) => element == career);
+      controller.myProjectList.refresh();
+    }
   }
 }

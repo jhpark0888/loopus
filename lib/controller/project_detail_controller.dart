@@ -40,7 +40,7 @@ class ProjectDetailController extends GetxController {
   }
 
   void loadProject() {
-    getproject(projectid);
+    // getproject(projectid);
   }
 
   @override

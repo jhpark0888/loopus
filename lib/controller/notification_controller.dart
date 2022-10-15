@@ -10,6 +10,7 @@ import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/certification_controller.dart';
 import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/message_controller.dart';
@@ -41,6 +42,7 @@ import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/start_screen.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/utils/local_notification.dart';
 import 'package:loopus/widget/message_widget.dart';
 import 'package:loopus/widget/messageroom_widget.dart';
@@ -123,37 +125,65 @@ class NotificationController extends GetxController {
       print('알림 데이터 : ${event.data}');
       if (event.data["type"] == "certification") {
         if (Get.isRegistered<SignupController>()) {
-          String? email = await FlutterSecureStorage().read(key: 'temp_email');
-          FirebaseMessaging.instance.unsubscribeFromTopic(email!);
-          SignupController _signupController = Get.find();
-          _signupController.signupcertification(Emailcertification.success);
-          _signupController.timer
-              .timerClose(dialogOn: false, stateChange: false);
-          FlutterSecureStorage().delete(key: 'temp_email');
-          loading();
-          await signupRequest().then((value) async {
-            final GAController _gaController = GAController();
+          if (SignupController.to.isReCertification == false) {
+            String? email =
+                await FlutterSecureStorage().read(key: 'temp_email');
+            FirebaseMessaging.instance.unsubscribeFromTopic(email!);
+            SignupController _signupController = Get.find();
+            _signupController.signupcertification(Emailcertification.success);
+            _signupController.timer
+                .timerClose(dialogOn: false, stateChange: false);
+            FlutterSecureStorage().delete(key: 'temp_email');
+            loading();
+            await signupRequest().then((value) async {
+              final GAController _gaController = GAController();
 
-            if (value.isError == false) {
-              await _gaController.logSignup();
-              await _gaController.setUserProperties(value.data['user_id'],
-                  _signupController.selectDept.value.deptname);
-              await _gaController.logScreenView('signup_6');
-              Get.back();
-              Get.offAll(() => SignupCompleteScreen(
-                    emailId: _signupController.emailidcontroller.text +
-                        "@" +
-                        _signupController.selectUniv.value.email,
-                    password: _signupController.passwordcontroller.text,
-                  ));
-            } else {
-              await _gaController.logScreenView('signup_6');
-              // errorSituation(value);
-              Get.back();
-              Get.offAll(
-                  () => SignupFailScreen(signupController: _signupController));
-            }
-          });
+              if (value.isError == false) {
+                await _gaController.logSignup();
+                await _gaController.setUserProperties(value.data['user_id'],
+                    _signupController.selectDept.value.deptname);
+                await _gaController.logScreenView('signup_6');
+                Get.back();
+                Get.offAll(() => SignupCompleteScreen(
+                      emailId: _signupController.emailidcontroller.text +
+                          "@" +
+                          _signupController.selectUniv.value.email,
+                      password: _signupController.passwordcontroller.text,
+                    ));
+              } else {
+                await _gaController.logScreenView('signup_6');
+                // errorSituation(value);
+                Get.back();
+                Get.offAll(() =>
+                    SignupFailScreen(signupController: _signupController));
+              }
+            });
+          } else {
+            loading();
+            SignupController _signupController = Get.find();
+            await updateProfile(
+                    email: _signupController.emailidcontroller.text,
+                    name: _signupController.namecontroller.text,
+                    univId: _signupController.selectUniv.value.id,
+                    deptId: _signupController.selectDept.value.id,
+                    admission: _signupController.admissioncontroller.text,
+                    updateType: ProfileUpdateType.profile)
+                .then((value) {
+              if (value.isError == false) {
+                Get.back();
+                Get.offAll(() => SignupCompleteScreen(
+                      emailId: _signupController.emailidcontroller.text +
+                          "@" +
+                          _signupController.selectUniv.value.email,
+                      password:
+                          CertificationController.to.passwordcontroller.text,
+                    ));
+              } else {
+                Get.back();
+                errorSituation(value);
+              }
+            });
+          }
         } else if (Get.isRegistered<PwChangeController>()) {
           PwChangeController.to.pwcertification(Emailcertification.success);
           PwChangeController.to.timer

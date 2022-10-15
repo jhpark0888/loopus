@@ -9,11 +9,18 @@ import 'package:loopus/api/login_api.dart';
 import 'package:loopus/app.dart';
 
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
 
 import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/pw_find_screen.dart';
+import 'package:loopus/screen/signup_user_info_screen.dart';
+import 'package:loopus/screen/start_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 
 import 'package:loopus/widget/appbar_widget.dart';
@@ -68,8 +75,8 @@ class LogInScreen extends StatelessWidget {
                                 login(
                                   context,
                                   emailId: _loginController.idcontroller.text,
-                                  password: _loginController
-                                      .passwordcontroller.text,
+                                  password:
+                                      _loginController.passwordcontroller.text,
                                 );
                               }
                             },
@@ -156,4 +163,21 @@ void login(context, {required String emailId, required String password}) async {
       }
     }
   });
+}
+
+Future<void> logOut() async {
+  loading();
+  AppController.to.currentIndex.value = 0;
+  String? userid = await FlutterSecureStorage().read(key: "id");
+  await FirebaseMessaging.instance.unsubscribeFromTopic(userid!);
+
+  FlutterSecureStorage().delete(key: "token");
+  FlutterSecureStorage().delete(key: "id");
+
+  Get.delete<AppController>();
+  Get.delete<HomeController>();
+  Get.delete<SearchController>();
+  Get.delete<ProfileController>();
+  Get.delete<SQLController>();
+  Get.offAll(() => StartScreen());
 }

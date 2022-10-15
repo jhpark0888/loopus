@@ -112,7 +112,7 @@ class OtherProfileScreen extends StatelessWidget {
                                     leftText: '취소',
                                     rightText: '신고',
                                     title: '<$realname> 유저를 신고하시겠어요?',
-                                    content: '관리자가 검토할 예정이에요',
+                                    startContent: '관리자가 검토할 예정이에요',
                                     leftFunction: () => Get.back(),
                                     rightFunction: () {
                                       userreport(_controller.userid)
@@ -131,7 +131,8 @@ class OtherProfileScreen extends StatelessWidget {
                                     leftText: '취소',
                                     rightText: '차단',
                                     title: '<$realname> 유저를 차단하시겠어요?',
-                                    content: '차단하면 <$realname> 유저와의 팔로우도 해제됩니다',
+                                    startContent:
+                                        '차단하면 <$realname> 유저와의 팔로우도 해제됩니다',
                                     leftFunction: () => Get.back(),
                                     rightFunction: () {
                                       userban(_controller.userid).then((value) {
@@ -245,7 +246,8 @@ class OtherProfileScreen extends StatelessWidget {
 
   void changeDefaultImage() async {
     await updateProfile(
-            _controller.otherUser.value, null, null, ProfileUpdateType.image)
+            user: _controller.otherUser.value,
+            updateType: ProfileUpdateType.image)
         .then((value) {
       if (value.isError == false) {
         User user = User.fromJson(value.data);
@@ -313,10 +315,12 @@ class OtherProfileScreen extends StatelessWidget {
                       onTap: () {
                         if (_controller.otherUser.value.isuser == 1) {
                           showBottomdialog(context,
-                              func1: changeProfileImage,
-                              func2: changeDefaultImage,
-                              value1: '사진첩에서 사진 선택',
-                              value2: '기본 이미지로 변경',
+                              func1: changeDefaultImage,
+                              func2: changeProfileImage,
+                              value1: '기본 이미지로 변경',
+                              value2: '사진첩에서 사진 선택',
+                              buttonColor1: maingray,
+                              buttonColor2: mainblue,
                               isOne: false);
                         }
                       },
@@ -333,10 +337,12 @@ class OtherProfileScreen extends StatelessWidget {
                       alignment: Alignment.bottomRight,
                       child: GestureDetector(
                         onTap: () => showBottomdialog(context,
-                            func1: changeProfileImage,
-                            func2: changeDefaultImage,
-                            value1: '사진첩에서 사진 선택',
-                            value2: '기본 이미지로 변경',
+                            func1: changeDefaultImage,
+                            func2: changeProfileImage,
+                            value1: '기본 이미지로 변경',
+                            value2: '사진첩에서 사진 선택',
+                            buttonColor1: maingray,
+                            buttonColor2: mainblue,
                             isOne: false),
                         child: Container(
                           decoration: const BoxDecoration(
@@ -655,7 +661,6 @@ class OtherProfileScreen extends StatelessWidget {
                                 onTap: () {
                                   goCareerScreen(
                                       _controller.otherProjectList[index],
-                                      _controller.otherProjectList,
                                       _controller.otherUser.value.realName);
                                 },
                                 child: CareerWidget(
