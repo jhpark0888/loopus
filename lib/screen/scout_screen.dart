@@ -50,7 +50,7 @@ class _ScoutScreenState extends State<ScoutScreen> {
   late List<PaletteColor> colors;
 
   late int _currentIndex;
-  late Contact contact;
+  Contact? contact;
 
   @override
   void initState() {
@@ -76,18 +76,19 @@ class _ScoutScreenState extends State<ScoutScreen> {
     List<String> images = _scontroller.recommandCompList
         .map((company) => company.companyImage)
         .toList();
-
+    print(images);
+    print(contact!.recommendation);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("당신에게 '집-중'하고 있는 추천 기업",
             style: kmainbold.copyWith(color: mainWhite)),
         SizedBox(height: 14),
-        Text(contact.slogan,
+        Text(contact!.slogan,
             style: kNavigationTitle.copyWith(color: mainWhite)),
         SizedBox(height: 14),
-        // Text(contact.slogan, style: kmain.copyWith(color: mainWhite)),
-        // SizedBox(height: 24),
+        Text(contact!.recommendation, style: kmain.copyWith(color: mainWhite)),
+        SizedBox(height: 24),
         Container(
           width: double.infinity,
           height: 200,
@@ -263,7 +264,7 @@ class _ScoutScreenState extends State<ScoutScreen> {
             //   ListView(
             //     scrollDirection: Axis.vertical,
             //     children: [CompanyFollowWidget(
-            //       contact: _scontroller.)
+            //       contact: _scontroller.getCompanyList)
             //     )],
             //   )
           ]),
