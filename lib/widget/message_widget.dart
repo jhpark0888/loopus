@@ -34,9 +34,11 @@ class MessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){print('isFirst $isFirst');
-            print('isLast $isDayChange');
-            print('isread ${message.isRead}');},
+      onTap: () {
+        print('isFirst $isFirst');
+        print('isLast $isDayChange');
+        print('isread ${message.isRead}');
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -88,13 +90,14 @@ class MessageWidget extends StatelessWidget {
                                       const EdgeInsets.fromLTRB(14, 7, 14, 7),
                                   child: Text(
                                     message.content,
-                                    style: kmainheight.copyWith(
-                                       color: mainWhite),
-                                    textHeightBehavior: const TextHeightBehavior(
-                                      applyHeightToFirstAscent: true,
-                                      applyHeightToLastDescent: true,
-                                      leadingDistribution: TextLeadingDistribution.even
-                                    ),
+                                    style:
+                                        kmainheight.copyWith(color: mainWhite),
+                                    textHeightBehavior:
+                                        const TextHeightBehavior(
+                                            applyHeightToFirstAscent: true,
+                                            applyHeightToLastDescent: true,
+                                            leadingDistribution:
+                                                TextLeadingDistribution.even),
                                   )),
                             )
                           : Container(
@@ -109,11 +112,12 @@ class MessageWidget extends StatelessWidget {
                                     style: kmainheight.copyWith(
                                       color: mainWhite,
                                     ),
-                                    textHeightBehavior: const TextHeightBehavior(
-                                      applyHeightToFirstAscent: true,
-                                      applyHeightToLastDescent: true,
-                                      leadingDistribution: TextLeadingDistribution.even
-                                    ),
+                                    textHeightBehavior:
+                                        const TextHeightBehavior(
+                                            applyHeightToFirstAscent: true,
+                                            applyHeightToLastDescent: true,
+                                            leadingDistribution:
+                                                TextLeadingDistribution.even),
                                   )),
                             ),
                     ],
@@ -142,14 +146,16 @@ class MessageWidget extends StatelessWidget {
                       GestureDetector(
                           onTap: () {
                             Get.to(() => OtherProfileScreen(
-                                  userid: partner.userid,
-                                  realname: partner.realName,
+                                  userid: partner.userId,
+                                  realname: partner.name,
                                 ));
                           },
                           child: UserImageWidget(
-                              imageUrl: partner.profileImage ?? '',
-                              width: 36,
-                              height: 36)),
+                            imageUrl: partner.profileImage,
+                            width: 36,
+                            height: 36,
+                            userType: partner.userType,
+                          )),
                       const SizedBox(
                         width: 10,
                       ),
@@ -158,7 +164,7 @@ class MessageWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            partner.realName,
+                            partner.name,
                             style: kmainbold,
                           ),
                           const SizedBox(
@@ -184,11 +190,15 @@ class MessageWidget extends StatelessWidget {
                                           child: Text(
                                             message.content,
                                             style: kmainheight,
-                                            textHeightBehavior: const TextHeightBehavior(
-                                      applyHeightToFirstAscent: true,
-                                      applyHeightToLastDescent: true,
-                                      leadingDistribution: TextLeadingDistribution.even
-                                    ),
+                                            textHeightBehavior:
+                                                const TextHeightBehavior(
+                                                    applyHeightToFirstAscent:
+                                                        true,
+                                                    applyHeightToLastDescent:
+                                                        true,
+                                                    leadingDistribution:
+                                                        TextLeadingDistribution
+                                                            .even),
                                           )),
                                     )
                                   : Container(
@@ -206,11 +216,15 @@ class MessageWidget extends StatelessWidget {
                                             message.content,
                                             style: kmainheight,
                                             softWrap: true,
-                                            textHeightBehavior: const TextHeightBehavior(
-                                      applyHeightToFirstAscent: true,
-                                      applyHeightToLastDescent: true,
-                                      leadingDistribution: TextLeadingDistribution.even
-                                    ),
+                                            textHeightBehavior:
+                                                const TextHeightBehavior(
+                                                    applyHeightToFirstAscent:
+                                                        true,
+                                                    applyHeightToLastDescent:
+                                                        true,
+                                                    leadingDistribution:
+                                                        TextLeadingDistribution
+                                                            .even),
                                           )),
                                     ),
                               Padding(

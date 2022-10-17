@@ -247,7 +247,7 @@ Future<HTTPResponse> addGroupMember(
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    List<int> member = selectedMember.map((e) => e.userid).toList();
+    List<int> member = selectedMember.map((e) => e.userId).toList();
     Map<String, dynamic> body = {'looper': jsonEncode(member)};
     print(body);
     print(projectId);
@@ -261,7 +261,7 @@ Future<HTTPResponse> addGroupMember(
       });
       for (var member in selectedMember) {
         var multipartFile = await http.MultipartFile.fromString(
-            'looper', member.userid.toString());
+            'looper', member.userId.toString());
         request.files.add(multipartFile);
       }
       http.StreamedResponse response = await request.send();

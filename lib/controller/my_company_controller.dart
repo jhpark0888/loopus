@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/company_model.dart';
@@ -45,11 +46,13 @@ class MyCompanyController extends GetxController
   RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> myprofilescreenstate = ScreenState.loading.obs;
 
+  RxList<User> followerList = <User>[].obs;
+
   Future onRefresh() async {
     profileenablepullup.value = true;
     postPageNum = 1;
     allPostList.clear();
-    // loadmyProfile();
+    loadmyProfile();
     refreshController.refreshCompleted();
   }
 
@@ -58,40 +61,31 @@ class MyCompanyController extends GetxController
     // _getPosting(myCompanyInfo.value.userid);
   }
 
-  // Future loadmyProfile() async {
-  //   // isProfileLoading.value = true;
-  //   myprofilescreenstate(ScreenState.loading);
-  //   String? userId = await const FlutterSecureStorage().read(key: "id");
+  Future loadmyProfile() async {
+    // isProfileLoading.value = true;
+    myprofilescreenstate(ScreenState.loading);
+    String? userId = await const FlutterSecureStorage().read(key: "id");
 
-  //   ConnectivityResult result = await initConnectivity();
-  //   if (result == ConnectivityResult.none) {
-  //     myprofilescreenstate(ScreenState.disconnect);
-  //     showdisconnectdialog();
-  //   } else {
-  //     await getProfile(int.parse(userId!)).then((value) {
-  //       if (value.isError == false) {
-  //         User user = User.fromJson(value.data);
-  //         myUserInfo(user);
-  //         isnewalarm(value.data["new_alarm"]);
-  //         // isnewmessage(value.data["new_message"]);
-  //       } else {
-  //         errorSituation(value, screenState: myprofilescreenstate);
-  //       }
-  //     });
-  //     await getProjectlist(int.parse(userId)).then((value) {
-  //       if (value.isError == false) {
-  //         List<Project> projectlist = List.from(value.data)
-  //             .map((project) => Project.fromJson(project))
-  //             .toList();
-  //         myProjectList(projectlist);
-  //       } else {
-  //         errorSituation(value, screenState: myprofilescreenstate);
-  //       }
-  //     });
-  //     _getPosting(int.parse(userId));
-  //   }
-  //   // isProfileLoading.value = false;
-  // }
+    ConnectivityResult result = await initConnectivity();
+    if (result == ConnectivityResult.none) {
+      myprofilescreenstate(ScreenState.disconnect);
+      showdisconnectdialog();
+    } else {
+      await getCorpProfile(int.parse(userId!)).then((value) async {
+        if (value.isError == false) {
+          myCompanyInfo.value = Company.fromJson(value.data);
+          // isNewAlarm.value = value.data['new_alarm'];
+
+        } else {
+          errorSituation(value, screenState: myprofilescreenstate);
+        }
+      });
+
+      _getPosting(int.parse(userId));
+      getfollowPeople(int.parse(userId));
+    }
+    // isProfileLoading.value = false;
+  }
 
   void _getPosting(int userId) async {
     await getAllPosting(userId, postPageNum).then((value) {
@@ -114,6 +108,20 @@ class MyCompanyController extends GetxController
     });
   }
 
+  void getfollowPeople(int userId) {
+    getfollowlist(userId, FollowListType.follower).then((value) {
+      if (value.isError == false) {
+        List<User> templist = List.from(value.data["follow"])
+            .map((friend) => Person.fromJson(friend))
+            .toList();
+
+        followerList(templist);
+      } else {
+        errorSituation(value);
+      }
+    });
+  }
+
   @override
   void onInit() async {
     tabController = TabController(length: 2, vsync: this)
@@ -121,7 +129,7 @@ class MyCompanyController extends GetxController
         currentIndex.value = tabController.index;
       });
 
-    // await loadmyProfile();
+    await loadmyProfile();
     super.onInit();
   }
 

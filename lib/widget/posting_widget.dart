@@ -38,7 +38,8 @@ class PostingWidget extends StatelessWidget {
   // final int index;
   Post item;
   PostingWidgetType type;
-  PostingWidget({required this.item, Key? key, required this.type})
+  PostingWidget(
+      {required this.item, Key? key, required this.type, this.isDark = false})
       : super(key: key);
 
   PageController pageController = PageController();
@@ -49,6 +50,7 @@ class PostingWidget extends StatelessWidget {
   int likenum = 0;
   late int lastIsMaked;
   int marknum = 0;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +72,10 @@ class PostingWidget extends StatelessWidget {
                       child: Row(
                         children: [
                           UserImageWidget(
-                            imageUrl: item.user.profileImage ?? '',
+                            imageUrl: item.user.profileImage,
                             width: 35,
                             height: 35,
+                            userType: item.user.userType,
                           ),
                           const SizedBox(
                             width: 14,
@@ -81,7 +84,7 @@ class PostingWidget extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(item.user.realName, style: kmainbold),
+                                Text(item.user.name, style: kmainbold),
                                 const SizedBox(height: 7),
                                 Text(
                                     '${item.user.univName} | ${item.user.department}',
@@ -137,7 +140,8 @@ class PostingWidget extends StatelessWidget {
                                 : ExpandableText(
                                     textSpan: TextSpan(
                                         text: item.content.value,
-                                        style: kmainheight),
+                                        style: kmainheight.copyWith(
+                                            color: isDark ? mainWhite : null)),
                                     moreSpan: TextSpan(
                                         text: ' ...더보기',
                                         style: kmainheight.copyWith(
@@ -158,6 +162,7 @@ class PostingWidget extends StatelessWidget {
                               children: item.tags
                                   .map((tag) => Tagwidget(
                                         tag: tag,
+                                        isDark: isDark,
                                       ))
                                   .toList()),
                         ),
@@ -175,7 +180,9 @@ class PostingWidget extends StatelessWidget {
                                   onTap: tapLike,
                                   child: item.isLiked.value == 0
                                       ? SvgPicture.asset(
-                                          "assets/icons/unlike.svg")
+                                          "assets/icons/unlike.svg",
+                                          color: isDark ? mainWhite : null,
+                                        )
                                       : SvgPicture.asset(
                                           "assets/icons/like.svg"),
                                 ),
@@ -192,14 +199,15 @@ class PostingWidget extends StatelessWidget {
                                         ? () => tapPosting(autoFocus: true)
                                         : null,
                                     child: SvgPicture.asset(
-                                        "assets/icons/comment.svg")),
+                                        "assets/icons/comment.svg",
+                                        color: isDark ? mainWhite : null)),
                                 const Spacer(),
                                 InkWell(
                                   onTap: tapBookmark,
                                   child: (item.isMarked.value == 0)
                                       ? SvgPicture.asset(
                                           "assets/icons/bookmark_inactive.svg",
-                                          color: mainblack,
+                                          color: isDark ? mainWhite : null,
                                         )
                                       : SvgPicture.asset(
                                           "assets/icons/bookmark_active.svg"),
@@ -225,11 +233,14 @@ class PostingWidget extends StatelessWidget {
                                 child: Obx(
                                   () => Text(
                                     '좋아요 ${item.likeCount.value}개',
-                                    style: kmain,
+                                    style: kmain.copyWith(
+                                        color: isDark ? mainWhite : null),
                                   ),
                                 )),
                             const Spacer(),
-                            Text(calculateDate(item.date), style: kmain),
+                            Text(calculateDate(item.date),
+                                style: kmain.copyWith(
+                                    color: isDark ? mainWhite : null)),
                           ]),
                           const SizedBox(height: 14),
                           if (item.comments.isNotEmpty &&
@@ -240,14 +251,16 @@ class PostingWidget extends StatelessWidget {
                                   () => Row(
                                     children: [
                                       Text(
-                                        item.comments.first.user.realName,
-                                        style: kmainbold,
+                                        item.comments.first.user.name,
+                                        style: kmainbold.copyWith(
+                                            color: isDark ? mainWhite : null),
                                       ),
                                       const SizedBox(width: 7),
                                       Expanded(
                                         child: Text(
                                           item.comments.first.content,
-                                          style: kmain,
+                                          style: kmain.copyWith(
+                                              color: isDark ? mainWhite : null),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       )
@@ -284,7 +297,7 @@ class PostingWidget extends StatelessWidget {
 
   void tapProjectname() async{
     await getproject(item.project!.id, item.userid).then((value) {if(value.isError == false){
-      goCareerScreen(value.data,item.user.realName);
+      goCareerScreen(value.data,item.user.name);
     }},);
   }
 
@@ -355,8 +368,8 @@ class PostingWidget extends StatelessWidget {
     Get.to(
         () => OtherProfileScreen(
             user: item.user,
-            userid: item.user.userid,
-            realname: item.user.realName),
+            userid: item.user.userId,
+            realname: item.user.name),
         preventDuplicates: false);
   }
 }

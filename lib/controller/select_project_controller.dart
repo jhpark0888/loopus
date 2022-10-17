@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/share_intent_controller.dart';
 import 'package:loopus/model/project_model.dart';
@@ -13,19 +15,16 @@ class SelectProjectController extends GetxController {
 
   void loadProjectList() async {
     // isSelectProjectLoading(true);
-    selectprojectlist(ProfileController.to.myProjectList);
+    // selectprojectlist(HomeController.to.);
 
-    // String? userId = await const FlutterSecureStorage().read(key: "id");
-    // getProjectlist(userId).then((value) {
-    //   projectlist = value;
-    //   selectprojectlist(projectlist
-    //       .map((project) => ProjectWidget(
-    //             project: project.obs,
-    //             type: ProjectWidgetType.addposting,
-    //           ))
-    //       .toList());
-    //   isSelectProjectLoading.value = false;
-    // });
+    String? userId = HomeController.to.myId;
+    getProjectlist(int.parse(userId!)).then((value) {
+      List<Project> projectlist = List.from(value.data)
+          .map((project) => Project.fromJson(project))
+          .toList();
+      selectprojectlist(projectlist);
+      isSelectProjectLoading.value = false;
+    });
   }
 
   @override

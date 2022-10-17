@@ -37,42 +37,17 @@ class CareerBoardController extends GetxController
     for (var key in fieldList.keys)
       if (key != "10") key: <Company>[].obs
   };
-  Map<String, RxList<User>> campusRankerMap = {
+  Map<String, RxList<Person>> campusRankerMap = {
     for (var key in fieldList.keys)
-      if (key != "10") key: <User>[].obs
+      if (key != "10") key: <Person>[].obs
   };
-  Map<String, RxList<User>> koreaRankerMap = {
+  Map<String, RxList<Person>> koreaRankerMap = {
     for (var key in fieldList.keys)
-      if (key != "10") key: <User>[].obs
+      if (key != "10") key: <Person>[].obs
   };
   Map<String, RxList<Post>> popPostMap = {
     for (var key in fieldList.keys)
-      if (key != "10")
-        key: <Post>[
-          // Post(
-          //     id: 1,
-          //     userid: 15,
-          //     content: "asdasdaslkdasncasnlcmlsansdlasndlkasnd",
-          //     images: [],
-          //     links: [],
-          //     tags: [],
-          //     date: DateTime.now(),
-          //     project: Project(
-          //         id: 1,
-          //         userid: 15,
-          //         fieldIds: ["1"],
-          //         careerName: "연습",
-          //         posts: <Post>[].obs,
-          //         members: [],
-          //         is_user: 1,
-          //         user: User.defaultuser()),
-          //     comments: <Comment>[].obs,
-          //     likeCount: 0.obs,
-          //     isLiked: 0.obs,
-          //     isMarked: 0.obs,
-          //     isuser: 1,
-          //     user: User.defaultuser())
-        ].obs
+      if (key != "10") key: <Post>[].obs
   };
   Map<String, RxList<Tag>> topTagMap = {
     for (var key in fieldList.keys)
@@ -156,12 +131,12 @@ class CareerBoardController extends GetxController
 
         campusRankerMap[id.toString()]!.value =
             List.from(value.data["school_ranking"]).map((user) {
-          return User.fromJson(user);
+          return Person.fromJson(user);
         }).toList();
 
         koreaRankerMap[id.toString()]!.value =
             List.from(value.data["group_ranking"]).map((user) {
-          return User.fromJson(user);
+          return Person.fromJson(user);
         }).toList();
 
         topTagMap[id.toString()]!.value =
@@ -169,7 +144,7 @@ class CareerBoardController extends GetxController
           return Tag.fromJson(tag);
         }).toList();
 
-        if (popPostMap[id.toString()] == null) {
+        if (popPostMap[id.toString()]!.isEmpty) {
           popPostMap[id.toString()]!.value = postlist;
         }
 
@@ -185,8 +160,8 @@ class CareerBoardController extends GetxController
     await getCareerBoardRequest(id, isUniversity ? "school" : "group")
         .then((value) {
       if (value.isError == false) {
-        List<User> userlist = List.from(value.data).map((user) {
-          return User.fromJson(user);
+        List<Person> userlist = List.from(value.data).map((user) {
+          return Person.fromJson(user);
         }).toList();
 
         isUniversity

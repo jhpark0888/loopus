@@ -25,7 +25,7 @@ class ProjectAddController extends GetxController {
   RxBool isPublic = false.obs;
 
   List<Company> searchCompanyList = <Company>[].obs;
-  List<User> looplist = <User>[].obs;
+  List<Person> looplist = <Person>[].obs;
   RxList<CheckBoxPersonWidget> looppersonlist = <CheckBoxPersonWidget>[].obs;
   // RxBool isLooppersonLoading = true.obs;
   Rx<ScreenState> looppersonscreenstate = ScreenState.normal.obs;

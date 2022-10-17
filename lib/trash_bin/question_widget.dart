@@ -93,7 +93,7 @@
 //                                               fit: BoxFit.cover,
 //                                             )),
 //                                   Text(
-//                                     "  ${item.user.realName} · ",
+//                                     "  ${item.user.name} · ",
 //                                     style: kButtonStyle,
 //                                   ),
 //                                 ],
@@ -141,7 +141,7 @@
 //     Get.to(() => QuestionDetailScreen(
 //           questionid: item.id,
 //           isuser: item.isuser,
-//           realname: item.user.realName,
+//           realname: item.user.name,
 //         ));
 //   }
 
@@ -149,7 +149,7 @@
 //     Get.to(() => OtherProfileScreen(
 //           userid: item.userid,
 //           isuser: item.isuser,
-//           realname: item.user.realName,
+//           realname: item.user.name,
 //         ));
 //   }
 // }

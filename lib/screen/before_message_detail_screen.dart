@@ -22,11 +22,11 @@
 
 //   int userid;
 //   String realname;
-//   User? user;
+//   Person? user;
 //   late MessageDetailController controller = Get.put(
 //       MessageDetailController(
 //           userid: userid,
-//           user: user != null ? user!.obs : User.defaultuser().obs),
+//           user: user != null ? user!.obs : Person.defaultuser().obs),
 //       tag: userid.toString());
 
 //   void _handleSubmitted(String text) async {

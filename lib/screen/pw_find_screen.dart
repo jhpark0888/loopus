@@ -24,7 +24,7 @@ import '../utils/check_form_validate.dart';
 class PwFindScreen extends StatelessWidget {
   final PwChangeController _pwChangeController = Get.put(PwChangeController());
   final LogInController _loginController = Get.put(LogInController());
-  static FlutterSecureStorage? storage = const FlutterSecureStorage();
+  static FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Map<Emailcertification, String> rightButtonText = {
     Emailcertification.normal: "인증하기",
@@ -33,13 +33,20 @@ class PwFindScreen extends StatelessWidget {
     Emailcertification.fail: "다시 보내기",
   };
 
+  void _timerClose() {
+    _pwChangeController.timer.timerClose(closeFunctuin: () {
+      _pwChangeController.pwcertification(Emailcertification.fail);
+      _pwChangeController.timer.certificateClose(storage);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
         if (_pwChangeController.pwcertification.value ==
             Emailcertification.waiting) {
-          _pwChangeController.timer.timerClose(dialogOn: false);
+          _timerClose();
         }
         return true;
       },
@@ -70,8 +77,7 @@ class PwFindScreen extends StatelessWidget {
                             onTap: () {
                               if (_pwChangeController.pwcertification.value ==
                                   Emailcertification.waiting) {
-                                _pwChangeController.timer
-                                    .timerClose(dialogOn: false);
+                                _timerClose();
                               }
                               Get.back();
                             },
@@ -114,8 +120,7 @@ class PwFindScreen extends StatelessWidget {
                                           Get.closeCurrentSnackbar();
                                           errorSituation(value);
                                         }
-                                        _pwChangeController.timer
-                                            .timerClose(dialogOn: false);
+                                        _timerClose();
                                       }
                                     });
                                   }

@@ -129,10 +129,10 @@ Future<HTTPResponse> getUserProfile(List<int> membersId) async {
 
       print('유저들 프로필 리스트 statuscode: ${response.statusCode}');
       if (response.statusCode == 200) {
-        Map<String,dynamic> responseBody =
+        Map<String, dynamic> responseBody =
             jsonDecode(utf8.decode(response.bodyBytes));
-        // List<User> userList = responseBody.map((e) {
-        //   return User.fromJson(e);
+        // List<Person> userList = responseBody.map((e) {
+        //   return Person.fromJson(e);
         // }).toList();
         // MessageController.to.chatroomscreenstate(ScreenState.success);
         print("---------------------------");
@@ -315,8 +315,12 @@ Future<HTTPResponse> roomAlarmStatus(int userId, int roomId, int type) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     type = type == 1 ? 0 : 1;
-    final uri = Uri.parse("http://$chatServerUri/chat/chat_list?id=${userId.toString()}");
-    Map<String, dynamic> body = {'room_id': roomId.toString(), 'type': type.toString()};
+    final uri = Uri.parse(
+        "http://$chatServerUri/chat/chat_list?id=${userId.toString()}");
+    Map<String, dynamic> body = {
+      'room_id': roomId.toString(),
+      'type': type.toString()
+    };
     try {
       http.Response response = await http.put(uri, body: body);
 

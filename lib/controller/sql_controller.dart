@@ -44,13 +44,13 @@ class SQLController extends GetxController {
     );
   }
 
-  Future<void> insertUser(User user) async {
+  Future<void> insertUser(Person user) async {
     final Database db = await database!;
     await db.insert(
       'user',
       {
-        "real_name": user.realName,
-        "user_id": user.userid,
+        "real_name": user.name,
+        "user_id": user.userId,
         "profile_image": user.profileImage
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -232,12 +232,12 @@ class SQLController extends GetxController {
     int alarm_active = type == 0 ? 1 : 0;
     await db.rawUpdate('UPDATE chatroom SET alarm_active = ? WHERE room_id = ?',
         [alarm_active, roomId]).then((value) {
-      print(alarm_active);   
+      print(alarm_active);
     });
     return alarm_active;
   }
 
-  Future<bool> findUser({required int userId, required User user}) async {
+  Future<bool> findUser({required int userId, required Person user}) async {
     final Database db = await database!;
     final List<Map<String, dynamic>> maps;
     maps = await db.rawQuery('SELECT * FROM user WHERE user_id = ?', [userId]);
@@ -267,7 +267,7 @@ class SQLController extends GetxController {
     }
   }
 
-  Future<User> getDBUser(int sender) async {
+  Future<Person> getDBUser(int sender) async {
     final Database db = await database!;
     late List<Map<String, dynamic>> maps;
 
@@ -282,10 +282,10 @@ class SQLController extends GetxController {
     });
 
     if (maps.isEmpty) {
-      return User.defaultuser();
+      return Person.defaultuser();
     } else {
       print(maps);
-      User user = User.fromJson(maps.first);
+      Person user = Person.fromJson(maps.first);
 
       return user;
     }

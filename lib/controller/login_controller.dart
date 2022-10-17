@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:loopus/constant.dart';
 import 'package:loopus/utils/check_form_validate.dart';
 
 class LogInController extends GetxController {
@@ -12,6 +13,8 @@ class LogInController extends GetxController {
   RxBool loginButtonOn = false.obs;
 
   RxBool pwFindButtonOn = false.obs;
+
+  Rx<UserType> loginType = UserType.student.obs;
 
   @override
   void onInit() {

@@ -30,13 +30,13 @@ Future<HTTPResponse> getbanlist() async {
       print('차단 리스트 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
-        List<User> userlist = List.from(responseBody['banlist'])
-            .map((banuser) => User.fromJson(banuser))
+        List<Person> userlist = List.from(responseBody['banlist'])
+            .map((banuser) => Person.fromJson(banuser))
             .toList();
 
         return HTTPResponse.success(userlist);
       } else if (response.statusCode == 404) {
-        return HTTPResponse.success(<User>[]);
+        return HTTPResponse.success(<Person>[]);
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
@@ -117,7 +117,7 @@ Future userbancancel(int userid) async {
         if (Get.isRegistered<BanPeopleController>()) {
           Get.find<BanPeopleController>()
               .banlist
-              .removeWhere((banuser) => banuser.userid == userid);
+              .removeWhere((banuser) => banuser.userId == userid);
         }
         showCustomDialog("해당 유저가 차단해제 되었습니다", 1000);
         return;

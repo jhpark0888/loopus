@@ -24,7 +24,7 @@ class QuestionItem {
   bool? adopt;
   DateTime? date;
   List<Tag> questionTag;
-  User user;
+  Person user;
 
   factory QuestionItem.fromJson(Map<String, dynamic> json) => QuestionItem(
         id: json["id"],
@@ -39,7 +39,7 @@ class QuestionItem {
         answer: json["answer"] != null
             ? List<Answer>.from(json["answer"].map((x) => Answer.fromJson(x)))
             : [],
-        user: User.fromJson(json["profile"]),
+        user: Person.fromJson(json["profile"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -71,7 +71,7 @@ class Answer {
   String content;
   int questionid;
   DateTime date;
-  User user;
+  Person user;
 
   factory Answer.fromJson(Map<String, dynamic> json) => Answer(
       id: json["id"],
@@ -82,7 +82,7 @@ class Answer {
           : json["question_id"],
       date: DateTime.parse(json["date"]),
       isuser: json["is_user"] ?? 0,
-      user: User.fromJson(json["profile"]));
+      user: Person.fromJson(json["profile"]));
 
   Map<String, dynamic> toJson() => {
         "id": id,

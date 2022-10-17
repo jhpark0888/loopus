@@ -4,7 +4,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/model/contact_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
-import 'package:loopus/widget/company_image_widget.dart';
+import 'package:loopus/trash_bin/company_image_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class ContactWidget extends StatelessWidget {
@@ -27,13 +27,15 @@ class ContactWidget extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: <Widget>[
-                      CompanyImageWidget(
-                          imageUrl: contact.company.companyImage),
+                      UserImageWidget(
+                        imageUrl: contact.company.profileImage,
+                        userType: contact.company.userType,
+                      ),
                       const SizedBox(
                         height: 14,
                       ),
                       Text(
-                        contact.company.companyName,
+                        contact.company.name,
                         style: kmain,
                       ),
                       const SizedBox(
@@ -65,12 +67,14 @@ class ContactWidget extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         UserImageWidget(
-                            imageUrl: contact.user.profileImage ?? ""),
+                          imageUrl: contact.user.profileImage,
+                          userType: contact.user.userType,
+                        ),
                         const SizedBox(
                           height: 14,
                         ),
                         Text(
-                          contact.user.realName,
+                          contact.user.name,
                           style: kmain,
                         ),
                         const SizedBox(
@@ -106,8 +110,8 @@ class ContactWidget extends StatelessWidget {
     Get.to(
         () => OtherProfileScreen(
             user: contact.user,
-            userid: contact.user.userid,
-            realname: contact.user.realName),
+            userid: contact.user.userId,
+            realname: contact.user.name),
         preventDuplicates: false);
   }
 }
@@ -158,7 +162,7 @@ class ContactWidget extends StatelessWidget {
 //                       height: 14,
 //                     ),
 //                     Text(
-//                       contact.user.realName,
+//                       contact.user.name,
 //                       style: kmain,
 //                     ),
 //                     const SizedBox(

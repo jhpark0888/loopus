@@ -72,12 +72,12 @@ class LogInScreen extends StatelessWidget {
                         () => CustomExpandedButton(
                             onTap: () async {
                               if (_loginController.loginButtonOn.value) {
-                                login(
-                                  context,
-                                  emailId: _loginController.idcontroller.text,
-                                  password:
-                                      _loginController.passwordcontroller.text,
-                                );
+                                login(context,
+                                    emailId: _loginController.idcontroller.text,
+                                    password: _loginController
+                                        .passwordcontroller.text,
+                                    loginType:
+                                        _loginController.loginType.value);
                               }
                             },
                             isBlue: _loginController.loginButtonOn.value,
@@ -95,14 +95,53 @@ class LogInScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SignUpTextWidget(
-                    oneLinetext: "대학 메일 주소 및", twoLinetext: "비밀번호를 입력해주세요"),
-                LabelTextFieldWidget(
-                    label: "본인 대학 이메일",
-                    hintText: "인증한 본인 대학 이메일 주소",
-                    // validator: (value) =>
-                    //     CheckValidate().validateEmail(value!),
-                    textController: _loginController.idcontroller),
+                Obx(
+                  () => SignUpTextWidget(
+                      oneLinetext:
+                          "${_loginController.loginType.value == UserType.student ? "대학" : "기업"} 메일 주소 및",
+                      twoLinetext: "비밀번호를 입력해주세요"),
+                ),
+                Obx(
+                  () => Center(
+                    child: ToggleButtons(
+                      children: const [
+                        Text(
+                          "학생",
+                        ),
+                        Text(
+                          "기업",
+                        )
+                      ],
+                      isSelected: [
+                        _loginController.loginType.value == UserType.student,
+                        _loginController.loginType.value == UserType.company
+                      ],
+                      textStyle: kmainbold,
+                      onPressed: (index) {
+                        if (index == 0) {
+                          _loginController.loginType(UserType.student);
+                        } else {
+                          _loginController.loginType(UserType.company);
+                        }
+                      },
+                      selectedColor: mainblue,
+                      selectedBorderColor: mainblue,
+                      color: dividegray,
+                      splashColor: Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                Obx(
+                  () => LabelTextFieldWidget(
+                      label:
+                          "본인 ${_loginController.loginType.value == UserType.student ? "대학" : "기업"} 이메일",
+                      hintText:
+                          "인증한 본인 ${_loginController.loginType.value == UserType.student ? "대학" : "기업"} 이메일 주소",
+                      // validator: (value) =>
+                      //     CheckValidate().validateEmail(value!),
+                      textController: _loginController.idcontroller),
+                ),
                 LabelTextFieldWidget(
                     label: "비밀번호",
                     hintText: "루프어스에 가입할 때 입력한 비밀번호",
@@ -134,14 +173,14 @@ class LogInScreen extends StatelessWidget {
   }
 }
 
-void login(context, {required String emailId, required String password}) async {
+void login(context,
+    {required String emailId,
+    required String password,
+    required UserType loginType}) async {
   FocusScope.of(context).unfocus();
   loading();
   // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
-  await loginRequest(
-    emailId,
-    password,
-  ).then((value) async {
+  await loginRequest(emailId, password, loginType).then((value) async {
     if (value.isError == false) {
       const FlutterSecureStorage storage = FlutterSecureStorage();
       http.Response response = value.data;
@@ -152,6 +191,7 @@ void login(context, {required String emailId, required String password}) async {
 
       storage.write(key: 'token', value: token);
       storage.write(key: 'id', value: userid);
+      storage.write(key: 'type', value: loginType.name);
       await FirebaseMessaging.instance.subscribeToTopic(userid);
       Get.offAll(() => App());
     } else {
@@ -168,16 +208,18 @@ void login(context, {required String emailId, required String password}) async {
 Future<void> logOut() async {
   loading();
   AppController.to.currentIndex.value = 0;
-  String? userid = await FlutterSecureStorage().read(key: "id");
+  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  String? userid = await secureStorage.read(key: "id");
   await FirebaseMessaging.instance.unsubscribeFromTopic(userid!);
 
-  FlutterSecureStorage().delete(key: "token");
-  FlutterSecureStorage().delete(key: "id");
+  secureStorage.delete(key: "token");
+  secureStorage.delete(key: "id");
+  secureStorage.delete(key: "type");
 
   Get.delete<AppController>();
   Get.delete<HomeController>();
   Get.delete<SearchController>();
-  Get.delete<ProfileController>();
+  // Get.delete<ProfileController>();
   Get.delete<SQLController>();
   Get.offAll(() => StartScreen());
 }

@@ -36,11 +36,11 @@ class ProfileController extends GetxController
   RxList<Project> myProjectList = <Project>[].obs;
 
   Rx<File> profileimage = File('').obs;
-  Rx<User> myUserInfo = User.defaultuser().obs;
+  Rx<Person> myUserInfo = Person.defaultuser().obs;
   RxList<Post> allPostList = <Post>[].obs;
   int postPageNum = 1;
 
-  RxList<User> mylooplist = <User>[].obs;
+  RxList<Person> mylooplist = <Person>[].obs;
 
   RxBool isnewalarm = false.obs;
   // RxBool isnewmessage = false.obs;
@@ -64,7 +64,7 @@ class ProfileController extends GetxController
 
   void onPostLoading() async {
     // await Future.delayed(Duration(seconds: 2));
-    _getPosting(myUserInfo.value.userid);
+    _getPosting(myUserInfo.value.userId);
   }
 
   Future loadmyProfile() async {
@@ -79,7 +79,7 @@ class ProfileController extends GetxController
     } else {
       await getProfile(int.parse(userId!)).then((value) {
         if (value.isError == false) {
-          User user = User.fromJson(value.data);
+          Person user = Person.fromJson(value.data);
           myUserInfo(user);
           isnewalarm(value.data["new_alarm"]);
           // isnewmessage(value.data["new_message"]);

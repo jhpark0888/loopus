@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/contact_content_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/screen/contact_finish_screen.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
@@ -24,9 +26,15 @@ class ContactContentScreen extends StatelessWidget {
         bottomBorder: false,
         actions: [
           TextButton(
-            onPressed: () {
-              inquiry();
-              Get.to(ContactFinishScreen());
+            onPressed: () async {
+              await inquiryRequest(InquiryType.normal).then((value) {
+                if (value.isError == false) {
+                  showCustomDialog("문의가 접수되었습니다", 1000);
+                  Get.to(ContactFinishScreen());
+                } else {
+                  errorSituation(value);
+                }
+              });
             },
             child: Text(
               '보내기',
@@ -95,7 +103,7 @@ class ContactContentScreen extends StatelessWidget {
             //         )
             //       : Text(''),
             // ),
-            // Text(_profileController.myUserInfo.value.realName),
+            // Text(_profileController.myUserInfo.value.name),
             // Text(_profileController.myUserInfo.value.department),
             // Text(_profileController.myUserInfo.value.userid.toString()),
           ],

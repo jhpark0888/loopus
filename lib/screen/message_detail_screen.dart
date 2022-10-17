@@ -53,8 +53,8 @@ class MessageDetatilScreen extends StatelessWidget {
   User myProfile;
   EnterRoute enterRoute;
   late MessageDetailController controller = Get.put(
-      MessageDetailController(partnerId: partner.userid),
-      tag: partner.userid.toString());
+      MessageDetailController(partnerId: partner.userId),
+      tag: partner.userId.toString());
   // KeyBoardController keyBoardController = Get.put(KeyBoardController());
   Key centerKey = const ValueKey('QueryList');
   @override
@@ -67,10 +67,10 @@ class MessageDetatilScreen extends StatelessWidget {
       child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBarWidget(
-            title: partner.realName,
+            title: partner.name,
             bottomBorder: false,
-            leading: GestureDetector(
-                onTap: () {
+            leading: IconButton(
+                onPressed: () {
                   if (enterRoute == EnterRoute.popUp) {
                     if (Get.isRegistered<MessageController>()) {
                       Get.back();
@@ -81,21 +81,20 @@ class MessageDetatilScreen extends StatelessWidget {
                     Get.back();
                   }
                 },
-                child: Center(
-                    child: SvgPicture.asset('assets/icons/appbar_back.svg'))),
+                icon: SvgPicture.asset('assets/icons/appbar_back.svg')),
             actions: [
               GestureDetector(
                 onTap: () async {
                   showModalIOS(context, func1: () {
                     int roomId = controller.roomid;
                     if (controller.messageList.isNotEmpty) {
-                      deleteChatRoom(controller.roomid, myProfile.userid,
+                      deleteChatRoom(controller.roomid, myProfile.userId,
                               int.parse(controller.messageList.last.messageId!))
                           .then((value) {
                         if (value.isError == false) {
                           SQLController.to.deleteMessage(roomId);
                           SQLController.to.deleteMessageRoom(roomId);
-                          SQLController.to.deleteUser(partner.userid);
+                          SQLController.to.deleteUser(partner.userId);
                           if (Get.isRegistered<MessageController>()) {
                             MessageController.to.searchRoomList.removeAt(
                                 MessageController.to.searchRoomList.indexWhere(
@@ -167,22 +166,25 @@ class MessageDetatilScreen extends StatelessWidget {
                                         myId: controller.myId!);
                                   } else if (controller.messageList[index] ==
                                       controller.messageList.first) {
-                                        //첫번째 메세지의 경우 
-                                    if (DateFormat('yyyy-MM-dd').parse(controller
-                                            .messageList[index].date
-                                            .toString()) !=
-                                        DateFormat('yyyy-MM-dd').parse(controller
-                                            .messageList[index + 1].date
-                                            .toString())) {
+                                    //첫번째 메세지의 경우
+                                    if (DateFormat('yyyy-MM-dd').parse(
+                                            controller.messageList[index].date
+                                                .toString()) !=
+                                        DateFormat('yyyy-MM-dd').parse(
+                                            controller
+                                                .messageList[index + 1].date
+                                                .toString())) {
                                       return MessageWidget(
-                                          message: controller.messageList[index],
+                                          message:
+                                              controller.messageList[index],
                                           isFirst: true.obs,
                                           isDayChange: true.obs,
                                           partner: partner,
                                           myId: controller.myId!);
                                     } else {
                                       return MessageWidget(
-                                          message: controller.messageList[index],
+                                          message:
+                                              controller.messageList[index],
                                           isFirst: true.obs,
                                           isDayChange: false.obs,
                                           partner: partner,
@@ -190,7 +192,7 @@ class MessageDetatilScreen extends StatelessWidget {
                                     }
                                   } else if (controller.messageList[index] ==
                                       controller.messageList.last) {
-                                        //마지막 메세지의 경우
+                                    //마지막 메세지의 경우
                                     return MessageWidget(
                                         message: controller.messageList[index],
                                         isFirst: false.obs,
@@ -203,7 +205,7 @@ class MessageDetatilScreen extends StatelessWidget {
                                       DateFormat('yyyy-MM-dd').parse(controller
                                           .messageList[index + 1].date
                                           .toString())) {
-                                            //중간 메세지에서 날짜가 변하는 시점이 있을 경우
+                                    //중간 메세지에서 날짜가 변하는 시점이 있을 경우
                                     return MessageWidget(
                                         message: controller.messageList[index],
                                         isFirst: false.obs,
@@ -277,21 +279,25 @@ class MessageDetatilScreen extends StatelessWidget {
           const SizedBox(width: 14),
           GestureDetector(
               onTap: () async {
-                print(controller.messageList.where((p0) => p0.sendsuccess!.value == 'false').length.toString());
+                print(controller.messageList
+                    .where((p0) => p0.sendsuccess!.value == 'false')
+                    .length
+                    .toString());
                 Chat temp = Chat(
-                  messageId: controller.messageList.where((p0) => p0.sendsuccess!.value == 'false').length.toString(),
-                          content: controller.sendText.text,
-                          date: DateTime.now(),
-                          sender: controller.myId.toString(),
-                          isRead: false.obs,
-                          roomId: controller.roomid,
-                          sendsuccess: 'false'.obs);
+                    messageId: controller.messageList
+                        .where((p0) => p0.sendsuccess!.value == 'false')
+                        .length
+                        .toString(),
+                    content: controller.sendText.text,
+                    date: DateTime.now(),
+                    sender: controller.myId.toString(),
+                    isRead: false.obs,
+                    roomId: controller.roomid,
+                    sendsuccess: 'false'.obs);
                 if (controller.sendText.text.isNotEmpty) {
                   await SQLController.to.insertmessage(temp);
                   await sendMessage();
-                  controller.messageList.insert(
-                      0,temp
-                      );
+                  controller.messageList.insert(0, temp);
                   controller.sendText.clear();
                   await Future.delayed(const Duration(milliseconds: 300));
                   controller.listViewController.jumpTo(
@@ -309,7 +315,7 @@ class MessageDetatilScreen extends StatelessWidget {
       controller.channel.sink.add(jsonEncode({
         'content': controller.sendText.text,
         'type': 'msg',
-        'name': myProfile.realName
+        'name': myProfile.name
       }));
     }
   }

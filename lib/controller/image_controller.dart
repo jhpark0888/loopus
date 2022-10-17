@@ -24,9 +24,11 @@ class ImageController extends GetxController {
   int albumIndex = 0;
   RefreshController refreshController = RefreshController();
   GlobalKey<CustomCropState> cropKey = GlobalKey<CustomCropState>();
+  late PermissionState permissionState;
 
   @override
-  void onInit() {
+  void onInit() async {
+    permissionState = await PhotoManager.requestPermissionExtend();
     PhotoManager.addChangeCallback(changeNotify);
     PhotoManager.startChangeNotify();
     _loadPhotos();
@@ -74,8 +76,8 @@ class ImageController extends GetxController {
   }
 
   void _loadPhotos() async {
-    var result = await PhotoManager.requestPermissionExtend();
-    if (result.isAuth) {
+    // permissionState = await PhotoManager.requestPermissionExtend();
+    if (permissionState.isAuth) {
       albums.value = await PhotoManager.getAssetPathList(
           type: RequestType.image,
           filterOption: FilterOptionGroup(
@@ -88,7 +90,9 @@ class ImageController extends GetxController {
           ));
       albumPageNums = List.generate(albums.length, (index) => 0);
       getPhotos();
-      _loadData();
+      if (albums.isNotEmpty) {
+        _loadData();
+      }
     } else {}
   }
 

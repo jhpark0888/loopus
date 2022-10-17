@@ -9,8 +9,8 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/select_career_group_member_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/person_image_widget.dart';
 import 'package:loopus/widget/search_text_field_widget.dart';
+import 'package:loopus/widget/user_image_widget.dart';
 
 class SelectCareerGroupMemberScreen extends StatelessWidget {
   SelectCareerGroupMemberScreen({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                 onPressed: () {
                   if (controller.selectList.isNotEmpty) {
                     controller.selectList
-                        .sort((a, b) => a.realName.compareTo(b.realName));
+                        .sort((a, b) => a.name.compareTo(b.name));
                     addGroupMember(controller.selectList,
                             CareerDetailController.to.career.id)
                         .then((value) {
@@ -39,7 +39,7 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                         showCustomDialog('추가되었습니다.', 1200);
 
                         CareerDetailController.to.members
-                            .addAll(controller.selectList);
+                            .addAll(controller.selectList.value);
                         CareerDetailController.to.members.refresh();
                       }
                     });
@@ -72,7 +72,7 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
     return SearchTextFieldWidget(
         onchanged: (text) {
           controller.searchList.value = controller.followList
-              .where((p0) => p0.realName.contains(text))
+              .where((p0) => p0.name.contains(text))
               .toList();
         },
         ontap: () {},
@@ -94,12 +94,12 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
         )));
   }
 
-  Widget followingTile(User user) {
+  Widget followingTile(Person user) {
     RxBool activeStatus = false.obs;
     return GestureDetector(
       onTap: () {
         if (CareerDetailController.to.members
-            .where((element) => element.userid == user.userid)
+            .where((element) => element.userId == user.userId)
             .isEmpty) {
           activeStatus(!activeStatus.value);
           selectListCheck(user);
@@ -108,9 +108,11 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
       child: SizedBox(
         width: Get.width,
         child: Row(children: [
-          PersonImageWidget(
-            user: user,
+          UserImageWidget(
+            imageUrl: user.profileImage,
             width: 36,
+            height: 36,
+            userType: user.userType,
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -118,12 +120,12 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    user.realName,
+                    user.name,
                     style: kmainbold,
                   ),
                   const SizedBox(height: 7),
                   Text(
-                    "${user.univName} · ${user.department}",
+                    "${(user as Person).univName} · ${user.department}",
                     style: kmain,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -131,7 +133,7 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
           ),
           const SizedBox(width: 14),
           if (CareerDetailController.to.members
-              .where((element) => element.userid == user.userid)
+              .where((element) => element.userId == user.userId)
               .isEmpty)
             Obx(() => SvgPicture.asset(
                 'assets/icons/check_${activeStatus.value ? 'active' : 'inactive'}.svg'))
@@ -140,7 +142,7 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
     );
   }
 
-  void selectListCheck(User user) {
+  void selectListCheck(Person user) {
     if (controller.selectList.where((p0) => p0 == user).toList().isEmpty) {
       controller.selectList.add(user);
     } else {

@@ -59,21 +59,21 @@ class MessageDetailController extends GetxController
         (await const FlutterSecureStorage().read(key: "id")).toString());
 
     print('${myId}자기아이디입니다.');
-    connection.listen((p0) async{
+    connection.listen((p0) async {
       //인터넷 연결 상태 확인
       if (p0 == false) {
         channel.sink.close();
         print('웹소켓 연결이 해제되었습니다.');
       } else {
         // if (isFirst.value == false) {
-       await connectWebSocket(); 
+        await connectWebSocket();
         print(myId);
         channel.stream.listen((event) {
           print(event);
           messageTypeCheck(jsonDecode(event));
-        }, onError: (error) async{
+        }, onError: (error) async {
           await connectWebSocket();
-        }, onDone: () async{
+        }, onDone: () async {
           hasInternet.value = false;
           print('끊겼습니다.');
           await connectWebSocket();
@@ -183,8 +183,12 @@ class MessageDetailController extends GetxController
         break;
       case ('msg'):
         if (json['sender'] == myId) {
-          Chat chat = messageList.where((p0) => p0.sendsuccess != null && p0.sendsuccess!.value == 'false').last;
-              messageList.where((p0) => p0 == chat).last.sendsuccess!.value = 'true';
+          Chat chat = messageList
+              .where((p0) =>
+                  p0.sendsuccess != null && p0.sendsuccess!.value == 'false')
+              .last;
+          messageList.where((p0) => p0 == chat).last.sendsuccess!.value =
+              'true';
           await SQLController.to.updateMessage(
               'true',
               json['id'],
@@ -192,8 +196,7 @@ class MessageDetailController extends GetxController
               json['date'].toString(),
               myId!,
               roomid,
-              int.parse(chat
-                  .messageId!));
+              int.parse(chat.messageId!));
           afterMustSendMessages(json, chat);
         } else {
           messageList.insert(0, Chat.fromJson(json));
@@ -202,24 +205,28 @@ class MessageDetailController extends GetxController
         await Future.delayed(const Duration(milliseconds: 100));
         SQLController.to
             .updateLastMessage(json['content'], json['date'], roomid);
-        await changeMessageRoomState(json['content'],DateTime.parse(json['date']));
+        await changeMessageRoomState(
+            json['content'], DateTime.parse(json['date']));
         if (json['sender'] != myId) {
-            if (listViewController.position.pixels <= 300) {
-              listViewController
-                  .jumpTo(listViewController.position.minScrollExtent);
-            }
+          if (listViewController.position.pixels <= 300) {
+            listViewController
+                .jumpTo(listViewController.position.minScrollExtent);
           }
+        }
         break;
       case 'chat_log':
-        List<Chat> content = List<dynamic>.from(json['content']).map((e) => Chat.fromJson(e)).toList();
+        List<Chat> content = List<dynamic>.from(json['content'])
+            .map((e) => Chat.fromJson(e))
+            .toList();
         if (content.isNotEmpty) {
           content.forEach((element) {
             SQLController.to.insertmessage(element);
-            messageList.insert(0,element);
+            messageList.insert(0, element);
           });
-          SQLController.to.updateLastMessage(content.last.content, content.last.date.toString(), roomid);
+          SQLController.to.updateLastMessage(
+              content.last.content, content.last.date.toString(), roomid);
           SQLController.to.updateNotReadCount(roomid, 0);
-          await changeMessageRoomState(content.last.content,content.last.date);
+          await changeMessageRoomState(content.last.content, content.last.date);
           await Future.delayed(const Duration(milliseconds: 300));
           listViewController
               .jumpTo(listViewController.position.minScrollExtent);
@@ -251,8 +258,15 @@ class MessageDetailController extends GetxController
       SQLController.to.database!.rawUpdate(
           'UPDATE chatting SET is_read = ? WHERE is_read = ? and room_id = ? and msg_id <= ?',
           ['true', 'false', roomid, msgid]);
-          if(messageList.where((p0) => p0.messageId == msgid.toString()).isNotEmpty){
-          messageList.where((p0) => p0.messageId == msgid.toString()).first.isRead!.value = true;}
+      if (messageList
+          .where((p0) => p0.messageId == msgid.toString())
+          .isNotEmpty) {
+        messageList
+            .where((p0) => p0.messageId == msgid.toString())
+            .first
+            .isRead!
+            .value = true;
+      }
     } else {
       SQLController.to.database!.rawUpdate(
           'UPDATE chatting SET is_read = ? WHERE is_read = ? and room_id = ?',
@@ -261,7 +275,7 @@ class MessageDetailController extends GetxController
           .where((p0) => p0.isRead!.value == false)
           .toList()
           .isNotEmpty) {
-          messageList.first.isRead!.value = true;
+        messageList.first.isRead!.value = true;
       }
     }
     messageList.refresh();
@@ -295,68 +309,58 @@ class MessageDetailController extends GetxController
       channel.sink.add(jsonEncode({
         'content': chat.content,
         'type': 'msg',
-        'name': HomeController.to.myProfile.value.realName
+        'name': HomeController.to.myProfile.value.name
       }));
     }
   }
 
   void afterMustSendMessages(Map<String, dynamic> json, Chat chat) {
-    messageList
-        .where(
-            (p0) => p0 == chat)
-        .last
-        .messageId = json['id'].toString();
-    messageList
-        .where(
-            (p0) => p0 == chat)
-        .last
-        .isRead!
-        .value = json['is_read'];
-    messageList
-        .where(
-            (p0) => p0 == chat)
-        .last
-        .date = DateTime.parse(json['date']);
+    messageList.where((p0) => p0 == chat).last.messageId =
+        json['id'].toString();
+    messageList.where((p0) => p0 == chat).last.isRead!.value = json['is_read'];
+    messageList.where((p0) => p0 == chat).last.date =
+        DateTime.parse(json['date']);
     messageList.sort((a, b) => b.date.compareTo(a.date));
   }
 
-  Future<void> changeMessageRoomState(String content, DateTime date)async{
+  Future<void> changeMessageRoomState(String content, DateTime date) async {
     if (Get.isRegistered<MessageController>()) {
-          MessageController.to.searchRoomList
-              .where((p0) => p0.chatRoom.value.roomId == roomid)
-              .first
-              .chatRoom
-              .value
-              .message
-              .value
-              .content = content;
-          MessageController.to.searchRoomList
-              .where((p0) => p0.chatRoom.value.roomId == roomid)
-              .first
-              .chatRoom
-              .value
-              .message
-              .value
-              .date = date;
-          MessageController.to.searchRoomList.sort((a, b) => b
-              .chatRoom.value.message.value.date
-              .compareTo(a.chatRoom.value.message.value.date));
-          MessageController.to.searchRoomList.forEach((element) {
-            element.chatRoom.value.message.refresh();
-            element.chatRoom.refresh();
-          });
-          await Future.delayed(const Duration(milliseconds: 300));
-          MessageController.to.searchRoomList.refresh();
-        }
+      MessageController.to.searchRoomList
+          .where((p0) => p0.chatRoom.value.roomId == roomid)
+          .first
+          .chatRoom
+          .value
+          .message
+          .value
+          .content = content;
+      MessageController.to.searchRoomList
+          .where((p0) => p0.chatRoom.value.roomId == roomid)
+          .first
+          .chatRoom
+          .value
+          .message
+          .value
+          .date = date;
+      MessageController.to.searchRoomList.sort((a, b) => b
+          .chatRoom.value.message.value.date
+          .compareTo(a.chatRoom.value.message.value.date));
+      MessageController.to.searchRoomList.forEach((element) {
+        element.chatRoom.value.message.refresh();
+        element.chatRoom.refresh();
+      });
+      await Future.delayed(const Duration(milliseconds: 300));
+      MessageController.to.searchRoomList.refresh();
+    }
   }
-  Future<void> connectWebSocket()async{
+
+  Future<void> connectWebSocket() async {
     await Future.delayed(const Duration(milliseconds: 300));
     channel = IOWebSocketChannel.connect(
-            Uri.parse('ws://$chatServerUri/ws/chat/${partnerId.toString()}/'),
-            headers: <String, String>{
-              'Content-Type': 'application/json',
-              'id': '$myId'
-            },
-            pingInterval: const Duration(seconds: 1));
+        Uri.parse('ws://$chatServerUri/ws/chat/${partnerId.toString()}/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'id': '$myId'
+        },
+        pingInterval: const Duration(seconds: 1));
   }
 }

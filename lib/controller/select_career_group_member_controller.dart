@@ -7,26 +7,26 @@ import '../model/user_model.dart';
 
 class SelectCareerGroupMemberController extends GetxController {
   RxString searchWord = ''.obs;
-  RxList<User> followList = <User>[].obs;
-  RxList<User> searchList = <User>[].obs;
-  RxList<User> selectList = <User>[].obs;
+  RxList<Person> followList = <Person>[].obs;
+  RxList<Person> searchList = <Person>[].obs;
+  RxList<Person> selectList = <Person>[].obs;
   @override
   void onInit() {
     getfollowlist(
-            HomeController.to.myProfile.value.userid, followlist.following)
+            HomeController.to.myProfile.value.userId, FollowListType.following)
         .then((value) {
       if (value.isError == false) {
-        List<User> tempList = [];
+        List<Person> tempList = [];
         if (value.data['follow'] != []) {
           tempList = List.from(value.data['follow'])
-              .map((e) => User.fromJson(e))
+              .map((e) => Person.fromJson(e))
               .toList();
           // CareerDetailController.to.members.forEach((element) {
           //   print(element.realName);
           //   print(tempList.where((e)=>e == element));
           //   print(tempList);
           // });
-          tempList.sort((a, b) => a.realName.compareTo(b.realName));
+          tempList.sort((a, b) => a.name.compareTo(b.name));
         }
         followList.value = tempList;
       }

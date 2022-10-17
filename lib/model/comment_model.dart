@@ -17,7 +17,7 @@ class Comment implements PostComment {
 
   int id;
   String content;
-  User user;
+  Person user;
   DateTime date;
   RxInt likecount;
   RxInt isLiked;
@@ -27,7 +27,7 @@ class Comment implements PostComment {
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
       id: json['id'] ?? 0,
       content: json['content'],
-      user: User.fromJson(json["profile"]),
+      user: Person.fromJson(json["profile"]),
       date:
           json["date"] != null ? DateTime.parse(json["date"]) : DateTime.now(),
       likecount:
@@ -59,8 +59,8 @@ class Reply implements PostComment {
   int id;
   int commentId;
   String content;
-  User user;
-  User taggedUser;
+  Person user;
+  Person taggedUser;
   DateTime date;
   RxInt likecount;
   RxInt isLiked;
@@ -69,8 +69,8 @@ class Reply implements PostComment {
         id: json['id'] ?? 0,
         commentId: commentId,
         content: json['content'] ?? '',
-        user: User.fromJson(json["profile"]),
-        taggedUser: User.fromJson(json["tagged_user"]),
+        user: Person.fromJson(json["profile"]),
+        taggedUser: Person.fromJson(json["tagged_user"]),
         date: json["date"] != null
             ? DateTime.parse(json["date"])
             : DateTime.now(),

@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
@@ -29,13 +30,20 @@ class SignupEmailcheckScreen extends StatelessWidget {
     Emailcertification.fail: "다시 보내기",
   };
 
+  void _timerClose() {
+    _signupController.timer.timerClose(closeFunctuin: () {
+      _signupController.signupcertification(Emailcertification.fail);
+      _signupController.timer.certificateClose(const FlutterSecureStorage());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
         if (_signupController.signupcertification.value ==
             Emailcertification.waiting) {
-          _signupController.timer.timerClose(dialogOn: false);
+          _timerClose();
         }
         return true;
       },
@@ -66,8 +74,7 @@ class SignupEmailcheckScreen extends StatelessWidget {
                             onTap: () {
                               if (_signupController.signupcertification.value ==
                                   Emailcertification.waiting) {
-                                _signupController.timer
-                                    .timerClose(dialogOn: false);
+                                _timerClose();
                               }
                               Get.back();
                             },
@@ -117,8 +124,7 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                           Get.closeCurrentSnackbar();
                                           errorSituation(value);
                                         }
-                                        _signupController.timer
-                                            .timerClose(dialogOn: false);
+                                        _timerClose();
                                       }
                                     });
                                   } else {

@@ -81,9 +81,9 @@
 //               Get.to(() => OtherProfileScreen(
 //                   userid: controller.project.value.members.first.userid,
 //                   isuser: 0,
-//                   realname: controller.project.value.members.first.realName));
+//                   realname: controller.project.value.members.first.name));
 //             },
-//           text: controller.project.value.members.first.realName,
+//           text: controller.project.value.members.first.name,
 //           style: kButtonStyle,
 //         ),
 //       );
@@ -101,9 +101,9 @@
 //                 Get.to(() => OtherProfileScreen(
 //                     userid: controller.project.value.members[i].userid,
 //                     isuser: 0,
-//                     realname: controller.project.value.members[i].realName));
+//                     realname: controller.project.value.members[i].name));
 //               },
-//             text: controller.project.value.members[i].realName,
+//             text: controller.project.value.members[i].name,
 //             style: kButtonStyle,
 //           ),
 //         );
@@ -134,9 +134,9 @@
 //                 Get.to(() => OtherProfileScreen(
 //                     userid: controller.project.value.members[i].userid,
 //                     isuser: 0,
-//                     realname: controller.project.value.members[i].realName));
+//                     realname: controller.project.value.members[i].name));
 //               },
-//             text: controller.project.value.members[i].realName,
+//             text: controller.project.value.members[i].name,
 //             style: kButtonStyle,
 //           ),
 //         );
@@ -518,7 +518,7 @@
 //                                                             .project
 //                                                             .value
 //                                                             .user!
-//                                                             .realName,
+//                                                             .name,
 //                                                         department: controller
 //                                                             .project
 //                                                             .value
@@ -617,7 +617,7 @@
 //   ProjectLooperImage({Key? key, required this.user, required this.index})
 //       : super(key: key);
 
-//   User user;
+//   Person user;
 //   int index;
 
 //   @override

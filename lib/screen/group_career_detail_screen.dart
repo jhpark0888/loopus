@@ -129,20 +129,40 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                     height: 72,
                                     child: Obx(
                                       () => ListView.separated(
-                                          padding: EdgeInsets.only(left: 20),
+                                          padding: const EdgeInsets.only(left: 20, right: 20),
                                           scrollDirection: Axis.horizontal,
                                           primary: false,
                                           shrinkWrap: true,
                                           itemBuilder: (context, index) {
-                                            return joinPeople(
-                                                careerDetailController
-                                                    .members[index]);
+                                            if (career.managerId ==
+                                                    HomeController.to.myProfile
+                                                        .value.userId &&
+                                                index == 0) {
+                                              return addPeople();
+                                            }
+                                            if (career.managerId ==
+                                                HomeController.to.myProfile
+                                                    .value.userId) {
+                                              return joinPeople(
+                                                  careerDetailController
+                                                      .members[index - 1]);
+                                            } else {
+                                              return joinPeople(
+                                                  careerDetailController
+                                                      .members[index]);
+                                            }
                                           },
                                           separatorBuilder: (context, index) {
                                             return const SizedBox(width: 14);
                                           },
-                                          itemCount: careerDetailController
-                                              .members.length),
+                                          itemCount: career.managerId ==
+                                                  HomeController
+                                                      .to.myProfile.value.userId
+                                              ? careerDetailController
+                                                      .members.length +
+                                                  1
+                                              : careerDetailController
+                                                  .members.length),
                                     ))
                                 // Expanded(child: ListView(primary: false,shrinkWrap: true,children: [joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople()],scrollDirection: Axis.horizontal,))
                               ],
@@ -173,27 +193,29 @@ class GroupCareerDetailScreen extends StatelessWidget {
   }
 
   Widget joinPeople(User user) {
-    return user.realName != ""
-        ? GestureDetector(
+    return GestureDetector(
             onTap: () {
-              Get.to(() => OtherProfileScreen(
-                  userid: user.userid, realname: user.realName));
+              Get.to(() =>
+                  OtherProfileScreen(userid: user.userId, realname: user.name));
             },
             child: Column(
               children: [
                 UserImageWidget(
-                    width: 50, height: 50, imageUrl: user.profileImage ?? ''),
+                  width: 50,
+                  height: 50,
+                  imageUrl: user.profileImage,
+                  userType: UserType.student,
+                ),
                 SizedBox(
                   height: 7,
                 ),
                 Text(
-                  user.realName,
+                  user.name,
                   style: kmain,
                 )
               ],
             ),
-          )
-        : addPeople();
+    );
   }
 
   Widget addPeople() {
@@ -428,7 +450,7 @@ class MyCareerScreen extends StatelessWidget {
                   shrinkWrap: true,
                   primary: false,
                   itemBuilder: (context, index) {
-                    if (controller.postList[index].user.realName == name) {
+                    if (controller.postList[index].user.name == name) {
                       return PostingWidget(
                         item: controller.postList[index],
                         type: PostingWidgetType.profile,
@@ -461,7 +483,7 @@ class _leading extends StatelessWidget {
         if (leading) {
           Get.back();
         } else {
-          if (career!.managerId == HomeController.to.myProfile.value.userid) {
+          if (career!.managerId == HomeController.to.myProfile.value.userId) {
             showModalIOS(context, func1: () {
               showButtonDialog(
                   title: '커리어를 삭제하시겠어요?',

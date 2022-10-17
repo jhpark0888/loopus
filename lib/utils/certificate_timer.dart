@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/constant.dart';
@@ -24,12 +26,18 @@ class CertificateTimer {
       if (sec.value != 0) {
         sec.value -= 1;
       } else {
-        timerClose();
+        timerClose(closeFunctuin: () {
+          emailcertification!(Emailcertification.fail);
+          dialogOn();
+          certificateClose(const FlutterSecureStorage());
+        });
       }
     });
   }
 
-  void timerClose({bool dialogOn = true, bool stateChange = true}) {
+  void timerClose({
+    void Function()? closeFunctuin,
+  }) {
     if (timer != null) {
       if (timer!.isActive) {
         timer!.cancel();
@@ -40,17 +48,20 @@ class CertificateTimer {
     //     validChecktimer!.cancel();
     //   }
     // }
-    if (stateChange) {
-      if (emailcertification != null) {
-        emailcertification!(Emailcertification.fail);
-      }
-    }
 
-    if (dialogOn) {
-      Get.closeCurrentSnackbar();
-      showBottomSnackbar("시간이 만료되어 인증이 취소되었어요\n다시 시도해주세요");
-    }
+    closeFunctuin;
     sec(0);
+  }
+
+  void certificateClose(FlutterSecureStorage secureStorage) async {
+    String? email = await secureStorage.read(key: 'temp_email');
+    FirebaseMessaging.instance.unsubscribeFromTopic(email!);
+    secureStorage.delete(key: 'temp_email');
+  }
+
+  void dialogOn() {
+    Get.closeCurrentSnackbar();
+    showBottomSnackbar("시간이 만료되어 인증이 취소되었어요\n다시 시도해주세요");
   }
 
   Widget timerDisplay() {

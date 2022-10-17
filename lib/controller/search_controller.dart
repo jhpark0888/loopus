@@ -23,10 +23,10 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   late ScrollController? scrollController;
   int popPagenum = 1;
 
-  RxList<User> recommandUsers = <User>[].obs;
+  RxList<Person> recommandUsers = <Person>[].obs;
   RxList<Post> popPostList = <Post>[].obs;
 
-  RxList<User> searchUserList = <User>[].obs;
+  RxList<Person> searchUserList = <Person>[].obs;
   RxList<Post> searchPostList = <Post>[].obs;
   RxList<Tag> searchTagList = <Tag>[].obs;
 
@@ -146,8 +146,8 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
             }
 
             if (tabController.index == 0) {
-              List<User> userList =
-                  teptList.map((user) => User.fromJson(user)).toList();
+              List<Person> userList =
+                  teptList.map((user) => Person.fromJson(user)).toList();
 
               searchUserList.addAll(userList);
             } else if (tabController.index == 1) {

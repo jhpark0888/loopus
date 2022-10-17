@@ -6,6 +6,7 @@ import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/notification_widget.dart';
@@ -43,66 +44,8 @@ class NotificationScreen extends StatelessWidget {
                     ScreenState.loading)
                 ? false
                 : controller.enablealarmPullup.value,
-            header: ClassicHeader(
-              spacing: 0.0,
-              height: 60,
-              completeDuration: Duration(milliseconds: 600),
-              textStyle: TextStyle(color: mainblack),
-              refreshingText: '',
-              releaseText: "",
-              completeText: "",
-              idleText: "",
-              refreshingIcon: Column(
-                children: [
-                  Image.asset(
-                    'assets/icons/loading.gif',
-                    scale: 6,
-                  ),
-                ],
-              ),
-              releaseIcon: Column(
-                children: [
-                  Image.asset(
-                    'assets/icons/loading.gif',
-                    scale: 6,
-                  ),
-                ],
-              ),
-              completeIcon: Column(
-                children: const [
-                  Icon(
-                    Icons.check_rounded,
-                    color: mainblue,
-                  ),
-                ],
-              ),
-              idleIcon: Column(
-                children: [
-                  Image.asset(
-                    'assets/icons/loading.png',
-                    scale: 12,
-                  ),
-                ],
-              ),
-            ),
-            footer: ClassicFooter(
-              completeDuration: Duration.zero,
-              loadingText: "",
-              canLoadingText: "",
-              idleText: "",
-              idleIcon: Container(),
-              noMoreIcon: Container(
-                child: Text('as'),
-              ),
-              loadingIcon: Image.asset(
-                'assets/icons/loading.gif',
-                scale: 6,
-              ),
-              canLoadingIcon: Image.asset(
-                'assets/icons/loading.gif',
-                scale: 6,
-              ),
-            ),
+            header: const MyCustomHeader(),
+            footer: const MyCustomFooter(),
             onRefresh: controller.alarmRefresh,
             onLoading: controller.alarmLoading,
             child: controller.notificationscreenstate.value ==

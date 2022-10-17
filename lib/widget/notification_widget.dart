@@ -16,7 +16,6 @@ import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:loopus/trash_bin/question_detail_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
-import 'package:loopus/widget/person_image_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
 class NotificationWidget extends StatelessWidget {
@@ -59,9 +58,10 @@ class NotificationWidget extends StatelessWidget {
               child: Row(
                 children: [
                   UserImageWidget(
-                    imageUrl: notification.user.profileImage ?? '',
+                    imageUrl: notification.user.profileImage,
                     width: 36,
                     height: 36,
+                    userType: notification.user.userType,
                   ),
                   const SizedBox(
                     width: 12,
@@ -69,8 +69,7 @@ class NotificationWidget extends StatelessWidget {
                   Flexible(
                     child: RichText(
                         text: TextSpan(children: [
-                      TextSpan(
-                          text: notification.user.realName, style: kmainbold),
+                      TextSpan(text: notification.user.name, style: kmainbold),
                       TextSpan(
                         text: "님이 회원님을 팔로우합니다.",
                         style:
@@ -117,9 +116,10 @@ class NotificationWidget extends StatelessWidget {
                       clickprofile(notification.type);
                     },
                     child: UserImageWidget(
-                      imageUrl: notification.user.profileImage ?? '',
+                      imageUrl: notification.user.profileImage,
                       width: 36,
                       height: 36,
+                      userType: notification.user.userType,
                     ),
                   ),
                   const SizedBox(
@@ -133,7 +133,7 @@ class NotificationWidget extends StatelessWidget {
                             ..onTap = () {
                               clickprofile(notification.type);
                             },
-                          text: notification.user.realName,
+                          text: notification.user.name,
                           style: kmainbold),
                       TextSpan(
                         text: "님이 ",
@@ -201,11 +201,10 @@ class NotificationWidget extends StatelessWidget {
   void clickprofile(NotificationType type) async {
     if (type == NotificationType.follow) {
       Get.to(() => OtherProfileScreen(
-          userid: notification.targetId, realname: notification.user.realName));
+          userid: notification.targetId, realname: notification.user.name));
     } else {
       Get.to(() => OtherProfileScreen(
-          userid: notification.user.userid,
-          realname: notification.user.realName));
+          userid: notification.user.userId, realname: notification.user.name));
     }
   }
 
@@ -223,7 +222,7 @@ class NotificationWidget extends StatelessWidget {
           opaque: false);
     } else if (notification.type == NotificationType.follow) {
       Get.to(() => OtherProfileScreen(
-          userid: notification.targetId, realname: notification.user.realName));
+          userid: notification.targetId, realname: notification.user.name));
     } else if (notification.type.name.contains('comment') ||
         notification.type.name.contains('reply')) {
       //다른 화면으로 이동함
@@ -240,7 +239,7 @@ class NotificationWidget extends StatelessWidget {
       isRead(
         notification.targetId,
         notification.type,
-        notification.user.userid,
+        notification.user.userId,
       ).then((value) {
         if (value.isError == false) {
           if (NotificationDetailController.to.newalarmList

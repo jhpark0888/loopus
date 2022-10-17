@@ -16,9 +16,10 @@ import 'package:loopus/widget/checkboxperson_widget.dart';
 
 import '../constant.dart';
 
-enum followlist { follower, following }
+enum FollowListType { follower, following }
 
-Future<HTTPResponse> getfollowlist(int userid, followlist followtype) async {
+Future<HTTPResponse> getfollowlist(
+    int userid, FollowListType followtype) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
@@ -35,8 +36,8 @@ Future<HTTPResponse> getfollowlist(int userid, followlist followtype) async {
       print('루프 리스트 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
-        // List<User> looplist = List.from(responseBody["follow"])
-        //     .map((friend) => User.fromJson(friend))
+        // List<Person> looplist = List.from(responseBody["follow"])
+        //     .map((friend) => Person.fromJson(friend))
         //     .toList();
 
         return HTTPResponse.success(responseBody);
@@ -52,7 +53,7 @@ Future<HTTPResponse> getfollowlist(int userid, followlist followtype) async {
   }
 }
 
-Future<void> getprojectfollowlist(int userid, followlist followtype) async {
+Future<void> getprojectfollowlist(int userid, FollowListType followtype) async {
   ConnectivityResult result = await initConnectivity();
   ProjectAddController controller = Get.find();
   if (result == ConnectivityResult.none) {
@@ -71,8 +72,8 @@ Future<void> getprojectfollowlist(int userid, followlist followtype) async {
       print('루프 리스트 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
-        List<User> looplist = List.from(responseBody["follow"])
-            .map((friend) => User.fromJson(friend))
+        List<Person> looplist = List.from(responseBody["follow"])
+            .map((friend) => Person.fromJson(friend))
             .toList();
 
         controller.looplist = looplist;

@@ -48,9 +48,10 @@ class CommentWidget extends StatelessWidget {
             GestureDetector(
               onTap: tapProfile,
               child: UserImageWidget(
-                imageUrl: comment.user.profileImage ?? '',
+                imageUrl: comment.user.profileImage,
                 width: 34,
                 height: 34,
+                userType: comment.user.userType,
               ),
             ),
             const SizedBox(
@@ -65,7 +66,7 @@ class CommentWidget extends StatelessWidget {
                       GestureDetector(
                         onTap: tapProfile,
                         child: Text(
-                          comment.user.realName,
+                          comment.user.name,
                           style: kmainbold,
                         ),
                       ),
@@ -89,8 +90,8 @@ class CommentWidget extends StatelessWidget {
                       ),
                       // Spacer(),
                       GestureDetector(
-                        onTap: comment.user.userid ==
-                                HomeController.to.myProfile.value.userid
+                        onTap: comment.user.userId ==
+                                HomeController.to.myProfile.value.userId
                             ? () {
                                 showModalIOS(
                                   context,
@@ -262,8 +263,8 @@ class CommentWidget extends StatelessWidget {
     Get.to(
         () => OtherProfileScreen(
             user: comment.user,
-            userid: comment.user.userid,
-            realname: comment.user.realName),
+            userid: comment.user.userId,
+            realname: comment.user.name),
         preventDuplicates: false);
   }
 

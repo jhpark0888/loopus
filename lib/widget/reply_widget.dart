@@ -47,9 +47,10 @@ class ReplyWidget extends StatelessWidget {
             GestureDetector(
               onTap: tapProfile,
               child: UserImageWidget(
-                imageUrl: reply.user.profileImage ?? '',
+                imageUrl: reply.user.profileImage,
                 width: 29,
                 height: 29,
+                userType: reply.user.userType,
               ),
             ),
             const SizedBox(
@@ -64,7 +65,7 @@ class ReplyWidget extends StatelessWidget {
                       GestureDetector(
                         onTap: tapProfile,
                         child: Text(
-                          reply.user.realName,
+                          reply.user.name,
                           style: kmainbold,
                         ),
                       ),
@@ -78,10 +79,10 @@ class ReplyWidget extends StatelessWidget {
                       //             () => OtherProfileScreen(
                       //                 user: reply.taggedUser,
                       //                 userid: reply.taggedUser.userid,
-                      //                 realname: reply.taggedUser.realName),
+                      //                 realname: reply.taggedUser.name),
                       //             preventDuplicates: false);
                       //       },
-                      //     text: ' @${reply.taggedUser.realName}',
+                      //     text: ' @${reply.taggedUser.name}',
                       //     style: kmainbold.copyWith(
                       //         height: 1.5,
                       //         color: mainblue,
@@ -102,8 +103,8 @@ class ReplyWidget extends StatelessWidget {
                         width: 4,
                       ),
                       GestureDetector(
-                        onTap: reply.user.userid ==
-                                HomeController.to.myProfile.value.userid
+                        onTap: reply.user.userId ==
+                                HomeController.to.myProfile.value.userId
                             ? () {
                                 showModalIOS(
                                   context,
@@ -198,11 +199,11 @@ class ReplyWidget extends StatelessWidget {
                           Get.to(
                               () => OtherProfileScreen(
                                   user: reply.taggedUser,
-                                  userid: reply.taggedUser.userid,
-                                  realname: reply.taggedUser.realName),
+                                  userid: reply.taggedUser.userId,
+                                  realname: reply.taggedUser.name),
                               preventDuplicates: false);
                         },
-                      text: '@${reply.taggedUser.realName}',
+                      text: '@${reply.taggedUser.name}',
                       style: kmainbold.copyWith(
                           height: 1.5,
                           color: Color.fromARGB(255, 71, 155, 224),
@@ -286,8 +287,8 @@ class ReplyWidget extends StatelessWidget {
     Get.to(
         () => OtherProfileScreen(
             user: reply.user,
-            userid: reply.user.userid,
-            realname: reply.user.realName),
+            userid: reply.user.userId,
+            realname: reply.user.name),
         preventDuplicates: false);
   }
 

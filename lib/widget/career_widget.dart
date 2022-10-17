@@ -57,13 +57,9 @@ class CareerWidget extends StatelessWidget {
             ),
             Row(
               children: [
-                //     career.isPublic
-                //         ? SvgPicture.asset('assets/icons/group.svg')
-                //         : SvgPicture.asset('assets/icons/personal_career.svg'),
-                const SizedBox(
-                  height: 12,
-                  width: 12,
-                ),
+                career.isPublic
+                      ? SvgPicture.asset('assets/icons/group_career.svg',color: career.thumbnail == "" ? mainblack : mainWhite)
+                      : SvgPicture.asset('assets/icons/single_career.svg',color: career.thumbnail == "" ? mainblack : mainWhite),
                 const SizedBox(
                   width: 7,
                 ),
@@ -106,7 +102,7 @@ class CareerWidget extends StatelessWidget {
     );
   }
 
-  Widget memberImage(User user, int index) {
+  Widget memberImage(Person user, int index) {
     return Container(
         width: 24,
         height: 24,
@@ -114,14 +110,15 @@ class CareerWidget extends StatelessWidget {
         decoration: BoxDecoration(
             border: Border.all(color: dividegray), shape: BoxShape.circle),
         child: UserImageWidget(
-          imageUrl: user.profileImage ?? "",
+          imageUrl: user.profileImage,
           width: 24,
           height: 24,
+          userType: user.userType,
         ));
   }
 
   Widget memberList() {
-    List<User> memberList = career.members.length > 4
+    List<Person> memberList = career.members.length > 4
         ? career.members.sublist(0, 4)
         : career.members;
 
