@@ -12,6 +12,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class CareerDetailController extends GetxController with GetTickerProviderStateMixin{
   CareerDetailController({required this.career});
+  static CareerDetailController get to => Get.find();
   ScrollController scrollController = ScrollController();
   RefreshController refreshController = RefreshController();
   Rx<ScreenState> careerDetailScreenState = ScreenState.normal.obs;

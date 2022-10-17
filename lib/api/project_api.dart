@@ -22,6 +22,7 @@ import 'package:loopus/controller/project_detail_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/project_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/trash_bin/project_screen.dart';
 
 import '../constant.dart';
@@ -102,7 +103,8 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     try {
-      final uri = Uri.parse("$serverUri/project_api/project?project_id=$projectId&user_id=$userId");
+      final uri = Uri.parse(
+          "$serverUri/project_api/project?project_id=$projectId&user_id=$userId");
       http.Response response =
           await http.get(uri, headers: {"Authorization": "Token $token"});
 
@@ -225,6 +227,45 @@ Future<HTTPResponse> deleteProject(int projectId) async {
       } else if (response.statusCode == 404) {
         Get.back();
         showCustomDialog('이미 삭제된 활동입니다', 1400);
+        return HTTPResponse.success('');
+      }
+      return HTTPResponse.apiError('', response.statusCode);
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+
+Future<HTTPResponse> addGroupMember(
+    List<User> selectedMember, int projectId) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    List<int> member = selectedMember.map((e) => e.userid).toList();
+    Map<String, dynamic> body = {'looper': jsonEncode(member)};
+    print(body);
+    print(projectId);
+    try {
+      final uri =
+          Uri.parse("$serverUri/project_api/project?type=looper&id=$projectId");
+      var request = http.MultipartRequest('PUT', uri);
+      request.headers.addAll({
+        "Authorization": "Token $token",
+        'Content-Type': 'multipart/form-data'
+      });
+      for (var member in selectedMember) {
+        var multipartFile = await http.MultipartFile.fromString(
+            'looper', member.userid.toString());
+        request.files.add(multipartFile);
+      }
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
         return HTTPResponse.success('');
       }
       return HTTPResponse.apiError('', response.statusCode);

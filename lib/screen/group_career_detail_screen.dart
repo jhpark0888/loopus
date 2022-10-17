@@ -10,6 +10,7 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/select_career_group_member_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/utils/error_control.dart';
@@ -126,21 +127,23 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                 const SizedBox(height: 12),
                                 SizedBox(
                                     height: 72,
-                                    child: ListView.separated(
-                                        padding: EdgeInsets.only(left: 20),
-                                        scrollDirection: Axis.horizontal,
-                                        primary: false,
-                                        shrinkWrap: true,
-                                        itemBuilder: (context, index) {
-                                          return joinPeople(
-                                              careerDetailController
-                                                  .members[index]);
-                                        },
-                                        separatorBuilder: (context, index) {
-                                          return const SizedBox(width: 14);
-                                        },
-                                        itemCount: careerDetailController
-                                            .members.length))
+                                    child: Obx(
+                                      () => ListView.separated(
+                                          padding: EdgeInsets.only(left: 20),
+                                          scrollDirection: Axis.horizontal,
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, index) {
+                                            return joinPeople(
+                                                careerDetailController
+                                                    .members[index]);
+                                          },
+                                          separatorBuilder: (context, index) {
+                                            return const SizedBox(width: 14);
+                                          },
+                                          itemCount: careerDetailController
+                                              .members.length),
+                                    ))
                                 // Expanded(child: ListView(primary: false,shrinkWrap: true,children: [joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople()],scrollDirection: Axis.horizontal,))
                               ],
                             ),
@@ -171,25 +174,31 @@ class GroupCareerDetailScreen extends StatelessWidget {
 
   Widget joinPeople(User user) {
     return user.realName != ""
-        ? Column(
-            children: [
-              UserImageWidget(
-                  width: 50, height: 50, imageUrl: user.profileImage ?? ''),
-              SizedBox(
-                height: 7,
-              ),
-              Text(
-                user.realName,
-                style: kmain,
-              )
-            ],
+        ? GestureDetector(
+            onTap: () {
+              Get.to(() => OtherProfileScreen(
+                  userid: user.userid, realname: user.realName));
+            },
+            child: Column(
+              children: [
+                UserImageWidget(
+                    width: 50, height: 50, imageUrl: user.profileImage ?? ''),
+                SizedBox(
+                  height: 7,
+                ),
+                Text(
+                  user.realName,
+                  style: kmain,
+                )
+              ],
+            ),
           )
         : addPeople();
   }
 
   Widget addPeople() {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Get.to(() => SelectCareerGroupMemberScreen());
       },
       child: Column(children: [
@@ -324,9 +333,7 @@ class _MyAppSpace extends StatelessWidget {
     return isPublic
         ? Row(children: [])
         : Row(
-            children: [
-              
-            ],
+            children: [],
           );
   }
 }
@@ -453,9 +460,8 @@ class _leading extends StatelessWidget {
       onTap: () {
         if (leading) {
           Get.back();
-        }else{
-           if (career!.managerId ==
-              HomeController.to.myProfile.value.userid) {
+        } else {
+          if (career!.managerId == HomeController.to.myProfile.value.userid) {
             showModalIOS(context, func1: () {
               showButtonDialog(
                   title: '커리어를 삭제하시겠어요?',
@@ -512,6 +518,7 @@ class _leading extends StatelessWidget {
       ),
     );
   }
+
   void deleteCareer(Project career) {
     if (Get.isRegistered<ProfileController>()) {
       ProfileController controller = Get.find<ProfileController>();

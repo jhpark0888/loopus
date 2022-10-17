@@ -85,6 +85,8 @@ class MyApp extends StatelessWidget {
   final String? token;
   MyApp({Key? key, required this.token}) : super(key: key);
   final GAController _gaController = Get.put(GAController());
+  NotificationController notificationController =
+      Get.put(NotificationController());
   final ThemeData themeData = ThemeData(
       fontFamily: 'SUIT',
       appBarTheme: const AppBarTheme(
@@ -167,8 +169,6 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenStete extends State<WelcomeScreen> {
   String? token;
   _WelcomeScreenStete({this.token});
-  NotificationController notificationController =
-      Get.put(NotificationController());
   @override
   void initState() {
     super.initState();
