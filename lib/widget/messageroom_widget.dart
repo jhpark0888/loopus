@@ -24,7 +24,7 @@ class MessageRoomWidget extends StatelessWidget {
       : super(key: key);
 
   Rx<ChatRoom> chatRoom;
-  Rx<User> user;
+  Rx<Person> user;
   MessageController messageController = Get.find<MessageController>();
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class MessageRoomWidget extends StatelessWidget {
 
         SQLController.to.updateNotReadCount(chatRoom.value.roomId, 0);
 
-        HomeController.to.enterMessageRoom.value = user.value.userid;
+        HomeController.to.enterMessageRoom.value = user.value.userId;
       },
       child: Obx(
         () => Slidable(
@@ -69,7 +69,7 @@ class MessageRoomWidget extends StatelessWidget {
                     },
                     rightFunction: () async {
                       await roomAlarmStatus(
-                              HomeController.to.myProfile.value.userid,
+                              HomeController.to.myProfile.value.userId,
                               chatRoom.value.roomId,
                               chatRoom.value.type.value)
                           .then((value) {
@@ -104,7 +104,7 @@ class MessageRoomWidget extends StatelessWidget {
                           .getLastmessageId(chatRoom.value.roomId)
                           .then((msgId) => deleteChatRoom(
                                       chatRoom.value.roomId,
-                                      HomeController.to.myProfile.value.userid,
+                                      HomeController.to.myProfile.value.userId,
                                       msgId)
                                   .then((value) {
                                 if (value.isError == false) {
@@ -113,7 +113,7 @@ class MessageRoomWidget extends StatelessWidget {
                                   SQLController.to
                                       .deleteMessageRoom(chatRoom.value.roomId);
                                   SQLController.to
-                                      .deleteUser(user.value.userid);
+                                      .deleteUser(user.value.userId);
 
                                   messageController.searchRoomList.removeAt(
                                       messageController.searchRoomList
@@ -145,16 +145,18 @@ class MessageRoomWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 UserImageWidget(
-                    imageUrl: user.value.profileImage ?? '',
-                    width: 36,
-                    height: 36),
+                  imageUrl: user.value.profileImage,
+                  width: 36,
+                  height: 36,
+                  userType: user.value.userType,
+                ),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text(user.value.realName, style: kmainbold),
+                      Text(user.value.name, style: kmainbold),
                       const SizedBox(height: 7),
                       Obx(
                         () => Row(

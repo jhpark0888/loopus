@@ -17,7 +17,7 @@ import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
 import 'package:loopus/widget/careerborad_post_widget.dart';
-import 'package:loopus/widget/company_image_widget.dart';
+import 'package:loopus/trash_bin/company_image_widget.dart';
 import 'package:loopus/widget/company_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
@@ -61,20 +61,19 @@ class CareerBoardScreen extends StatelessWidget {
             child: Stack(children: [
               GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    Get.to(() => MyProfileScreen());
-                  },
+                  onTap: () => HomeController.to.goMyProfile(),
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20.0),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Obx(
                         () => UserImageWidget(
-                            imageUrl: HomeController
-                                    .to.myProfile.value.profileImage ??
-                                "",
-                            height: 36,
-                            width: 36),
+                          imageUrl:
+                              HomeController.to.myProfile.value.profileImage,
+                          height: 36,
+                          width: 36,
+                          userType: HomeController.to.myProfile.value.userType,
+                        ),
                       ),
                     ),
                   ))
@@ -254,41 +253,47 @@ class CareerBoardScreen extends StatelessWidget {
                                     child: Text('실시간 인기 포스트', style: kmainbold),
                                   ),
                                   const SizedBox(height: 14),
-                                  SizedBox(
-                                    height: 430,
-                                    child: _controller
-                                            .popPostMap[currentField.key]!
-                                            .isEmpty
-                                        ? const Center(
-                                            child: Text(
-                                            "실시간 포스트가 없습니다",
-                                            style: kmain,
-                                          ))
-                                        : ScrollNoneffectWidget(
-                                            child: ListView.separated(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                              scrollDirection: Axis.horizontal,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return CareerBoardPostWidget(
-                                                  post: _controller.popPostMap[
-                                                      currentField.key]![index],
-                                                );
-                                              },
-                                              itemCount: _controller
-                                                  .popPostMap[currentField.key]!
-                                                  .length,
-                                              separatorBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return const SizedBox(
-                                                    width: 14);
-                                              },
+                                  Obx(
+                                    () => SizedBox(
+                                      height: 430,
+                                      child: _controller
+                                              .popPostMap[currentField.key]!
+                                              .isEmpty
+                                          ? const Center(
+                                              child: Text(
+                                              "실시간 포스트가 없습니다",
+                                              style: kmain,
+                                            ))
+                                          : ScrollNoneffectWidget(
+                                              child: ListView.separated(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20),
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return CareerBoardPostWidget(
+                                                    post:
+                                                        _controller.popPostMap[
+                                                            currentField
+                                                                .key]![index],
+                                                  );
+                                                },
+                                                itemCount: _controller
+                                                    .popPostMap[
+                                                        currentField.key]!
+                                                    .length,
+                                                separatorBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return const SizedBox(
+                                                      width: 14);
+                                                },
+                                              ),
                                             ),
-                                          ),
+                                    ),
                                   ),
                                   const SizedBox(height: 24),
                                   const Padding(
@@ -336,110 +341,6 @@ class CareerBoardScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 24),
-                                  const Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 20, right: 20),
-                                    child: Text('포스트 분석', style: kmainbold),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 46),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                            width: 20,
-                                            height: 1,
-                                            decoration: BoxDecoration(
-                                                color: myPostColor)),
-                                        const SizedBox(width: 4),
-                                        Text('내 포스트 수',
-                                            style: ktempFont.copyWith(
-                                                color: myPostColor)),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 40, right: 40, bottom: 34),
-                                    child: Container(
-                                      height: 172,
-                                      width: 295,
-                                      child: Obx(
-                                        () => Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children:
-                                                _controller
-                                                    .postUsageTrendNum.entries
-                                                    .map((e) => Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .end,
-                                                          children: [
-                                                            Text(_controller.postGraphMap[currentField
-                                                                            .key
-                                                                            .toString()]![
-                                                                        'teptNumMap'] !=
-                                                                    null
-                                                                ? _controller
-                                                                    .postGraphMap[
-                                                                        currentField
-                                                                            .key
-                                                                            .toString()]![
-                                                                        'teptNumMap']![
-                                                                        e.key]!
-                                                                    .toInt()
-                                                                    .toString()
-                                                                : _controller
-                                                                    .teptNumMap[
-                                                                        e.key]!
-                                                                    .toInt()
-                                                                    .toString()),
-                                                            const SizedBox(
-                                                                height: 3),
-                                                            AnimatedSize(
-                                                                duration:
-                                                                    const Duration(
-                                                                        milliseconds:
-                                                                            300),
-                                                                child:
-                                                                    Container(
-                                                                  height: _controller.postGraphMap[currentField.key.toString()]![
-                                                                              'postUsageTrendNum'] !=
-                                                                          null
-                                                                      ? _controller
-                                                                          .postGraphMap[
-                                                                              currentField.key.toString()]![
-                                                                              'postUsageTrendNum']![
-                                                                              e
-                                                                                  .key]!
-                                                                          .toDouble()
-                                                                      : _controller
-                                                                              .postUsageTrendNum[
-                                                                          e.key],
-                                                                  width: 20,
-                                                                  decoration: const BoxDecoration(
-                                                                      color:
-                                                                          mainblue,
-                                                                      borderRadius: BorderRadius.only(
-                                                                          topLeft: Radius.circular(
-                                                                              16),
-                                                                          topRight:
-                                                                              Radius.circular(16))),
-                                                                )),
-                                                            const SizedBox(
-                                                                height: 12),
-                                                            Text(
-                                                              '${e.key}월',
-                                                              style: ktempFont,
-                                                            )
-                                                          ],
-                                                        ))
-                                                    .toList()),
-                                      ),
-                                    ),
-                                  )
                                 ]),
                           ),
                         ),
@@ -449,6 +350,82 @@ class CareerBoardScreen extends StatelessWidget {
   // Widget topPost(Post post) {
 
   // }
+  Widget _postAnalysis(MapEntry<String, String> currentField) {
+    return Column(children: [
+      const Padding(
+        padding: EdgeInsets.only(left: 20, right: 20),
+        child: Text('포스트 분석', style: kmainbold),
+      ),
+      const SizedBox(height: 12),
+      Padding(
+        padding: const EdgeInsets.only(right: 46),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+                width: 20,
+                height: 1,
+                decoration: BoxDecoration(color: myPostColor)),
+            const SizedBox(width: 4),
+            Text('내 포스트 수', style: ktempFont.copyWith(color: myPostColor)),
+          ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 40, right: 40, bottom: 34),
+        child: Container(
+          height: 172,
+          width: 295,
+          child: Obx(
+            () => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: _controller.postUsageTrendNum.entries
+                    .map((e) => Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(_controller.postGraphMap[currentField.key
+                                        .toString()]!['teptNumMap'] !=
+                                    null
+                                ? _controller.postGraphMap[currentField.key
+                                        .toString()]!['teptNumMap']![e.key]!
+                                    .toInt()
+                                    .toString()
+                                : _controller.teptNumMap[e.key]!
+                                    .toInt()
+                                    .toString()),
+                            const SizedBox(height: 3),
+                            AnimatedSize(
+                                duration: const Duration(milliseconds: 300),
+                                child: Container(
+                                  height: _controller.postGraphMap[
+                                                  currentField.key.toString()]![
+                                              'postUsageTrendNum'] !=
+                                          null
+                                      ? _controller.postGraphMap[
+                                              currentField.key.toString()]![
+                                              'postUsageTrendNum']![e.key]!
+                                          .toDouble()
+                                      : _controller.postUsageTrendNum[e.key],
+                                  width: 20,
+                                  decoration: const BoxDecoration(
+                                      color: mainblue,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(16),
+                                          topRight: Radius.circular(16))),
+                                )),
+                            const SizedBox(height: 12),
+                            Text(
+                              '${e.key}월',
+                              style: ktempFont,
+                            )
+                          ],
+                        ))
+                    .toList()),
+          ),
+        ),
+      )
+    ]);
+  }
 
   Widget tagAnalize(Tag tag, int index) {
     return Row(children: [

@@ -219,7 +219,7 @@ Future<void> logOut() async {
   Get.delete<AppController>();
   Get.delete<HomeController>();
   Get.delete<SearchController>();
-  Get.delete<ProfileController>();
+  // Get.delete<ProfileController>();
   Get.delete<SQLController>();
   Get.offAll(() => StartScreen());
 }

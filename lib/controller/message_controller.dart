@@ -24,7 +24,7 @@ class MessageController extends GetxController with WidgetsBindingObserver {
   // RxBool isMessageRoomListLoading = true.obs;
   Rx<ScreenState> chatroomscreenstate = ScreenState.loading.obs;
   RxBool activeTextfield = false.obs;
-  RxList<User> member = <User>[].obs;
+  RxList<Person> member = <Person>[].obs;
   @override
   void onInit() async {
     WidgetsBinding.instance!.addObserver(this);
@@ -65,7 +65,7 @@ class MessageController extends GetxController with WidgetsBindingObserver {
         temp.length,
         ((index) => MessageRoomWidget(
             chatRoom: Rx<ChatRoom>(temp[index]),
-            user: Rx<User>(member[index])))));
+            user: Rx<Person>(member[index])))));
     searchRoomList.value = chattingRoomList.toList();
   }
 
@@ -119,52 +119,53 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                   Map<String, List>.from(usersList.data);
               List<int> none =
                   allUserList['none']!.map((e) => int.parse(e)).toList();
-              List<User> userList =
-                  allUserList['profile']!.map((e) => User.fromJson(e)).toList();
+              List<Person> userList = allUserList['profile']!
+                  .map((e) => Person.fromJson(e))
+                  .toList();
               print(userList);
               none.forEach(
                   (userId) => temp.where((element) => element.user == userId));
               const FlutterSecureStorage().delete(key: 'newMsg');
               temp.forEach((element) async {
                 print(element.user);
-                User? user =
-                    userList.where((user) => user.userid == element.user).first;
+                Person? user =
+                    userList.where((user) => user.userId == element.user).first;
                 if (chattingRoomList
                     .where((messageRoom) =>
-                        messageRoom.user.value.userid == user.userid)
+                        messageRoom.user.value.userId == user.userId)
                     .isEmpty) {
                   SQLController.to.insertMessageRoom(element);
                   SQLController.to.insertUser(user);
                   if (chattingRoomList
                       .where((messageRoom) =>
-                          messageRoom.chatRoom.value.user == user.userid)
+                          messageRoom.chatRoom.value.user == user.userId)
                       .isNotEmpty) {
                     chattingRoomList
                         .where((messageRoom) =>
-                            messageRoom.chatRoom.value.user == user.userid)
+                            messageRoom.chatRoom.value.user == user.userId)
                         .first
                         .user
                         .value = user;
                     searchRoomList
                         .where((messageRoom) =>
-                            messageRoom.chatRoom.value.user == user.userid)
+                            messageRoom.chatRoom.value.user == user.userId)
                         .first
                         .user
                         .value = user;
                     print(chattingRoomList
                         .where((messageRoom) =>
-                            messageRoom.chatRoom.value.user == user.userid)
+                            messageRoom.chatRoom.value.user == user.userId)
                         .first
                         .user);
                     chattingRoomList
                         .where((messageRoom) =>
-                            messageRoom.chatRoom.value.user == user.userid)
+                            messageRoom.chatRoom.value.user == user.userId)
                         .first
                         .user
                         .refresh();
                     searchRoomList
                         .where((messageRoom) =>
-                            messageRoom.chatRoom.value.user == user.userid)
+                            messageRoom.chatRoom.value.user == user.userId)
                         .first
                         .user
                         .refresh();
@@ -181,14 +182,13 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                       element.roomId);
                   if (chattingRoomList
                           .where((messageRoom) =>
-                              messageRoom.user.value.userid == user.userid)
+                              messageRoom.user.value.userId == user.userId)
                           .first
                           .user
                           .value
                           .profileImage !=
                       user.profileImage) {
-                    SQLController.to
-                        .updateUser(user.profileImage ?? '', user.userid);
+                    SQLController.to.updateUser(user.profileImage, user.userId);
                   }
                   chattingRoomList
                       .where((messageRoom) =>
@@ -198,7 +198,7 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                       .value = element;
                   chattingRoomList
                       .where((messageRoom) =>
-                          messageRoom.user.value.userid == user.userid)
+                          messageRoom.user.value.userId == user.userId)
                       .first
                       .user
                       .value
@@ -211,7 +211,7 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                       .value = element;
                   searchRoomList
                       .where((messageRoom) =>
-                          messageRoom.user.value.userid == user.userid)
+                          messageRoom.user.value.userId == user.userId)
                       .first
                       .user
                       .value

@@ -3,19 +3,41 @@ import 'package:flutter/material.dart';
 import 'package:loopus/constant.dart';
 
 class UserImageWidget extends StatelessWidget {
-  UserImageWidget({Key? key, required this.imageUrl, this.width, this.height})
+  UserImageWidget(
+      {Key? key,
+      required this.imageUrl,
+      this.width,
+      this.height,
+      required this.userType})
       : super(key: key);
 
   String imageUrl;
   double? width;
   double? height;
+  UserType userType;
+
+  Widget imageShape(Widget child) {
+    return userType == UserType.student
+        ? ClipOval(
+            child: child,
+          )
+        : Container(
+            decoration: BoxDecoration(
+              color: mainWhite,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: dividegray, width: 1.5),
+            ),
+            child: child);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ClipOval(
-      child: imageUrl == ''
+    return imageShape(
+      imageUrl == ""
           ? Image.asset(
-              "assets/illustrations/default_profile.png",
+              userType == UserType.student
+                  ? "assets/illustrations/default_profile.png"
+                  : "assets/illustrations/default_company.png",
               height: height ?? 50,
               width: width ?? 50,
               fit: BoxFit.cover,
@@ -24,7 +46,7 @@ class UserImageWidget extends StatelessWidget {
               imageUrl: imageUrl,
               height: height ?? 50,
               width: width ?? 50,
-              fit: BoxFit.cover,
+              fit: userType == UserType.student ? BoxFit.cover : BoxFit.contain,
               placeholder: (context, string) {
                 return Container(
                   height: height ?? 50,

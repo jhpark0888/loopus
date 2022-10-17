@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
@@ -70,8 +71,13 @@ class SignupEmailPwScreen extends StatelessWidget {
                                   Get.closeCurrentSnackbar();
                                   errorSituation(value);
                                 }
-                                _signupController.timer
-                                    .timerClose(dialogOn: false);
+                                _signupController.timer.timerClose(
+                                    closeFunctuin: () {
+                                  _signupController.signupcertification(
+                                      Emailcertification.fail);
+                                  _signupController.timer.certificateClose(
+                                      const FlutterSecureStorage());
+                                });
                               }
                             });
                           } else {

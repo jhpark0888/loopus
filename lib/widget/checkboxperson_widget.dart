@@ -15,7 +15,7 @@ class CheckBoxPersonWidget extends StatelessWidget {
     required this.user,
   }) : super(key: key);
 
-  User user;
+  Person user;
   // String name;
   // String department;
   // String? image;
@@ -25,11 +25,11 @@ class CheckBoxPersonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (projectaddController.selectedpersontaglist
-        .where((element) => element.id == user.userid)
+        .where((element) => element.id == user.userId)
         .isNotEmpty) {
       projectaddController.selectedpersontaglist.contains(
         projectaddController.selectedpersontaglist
-            .where((element) => element.id == user.userid)
+            .where((element) => element.id == user.userId)
             .first,
       )
           ? isselected(true)
@@ -58,7 +58,7 @@ class CheckBoxPersonWidget extends StatelessWidget {
                         : CachedNetworkImage(
                             height: 50,
                             width: 50,
-                            imageUrl: user.profileImage!,
+                            imageUrl: user.profileImage,
                             placeholder: (context, url) =>
                                 kProfilePlaceHolder(),
                             fit: BoxFit.cover,
@@ -71,7 +71,7 @@ class CheckBoxPersonWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        user.realName,
+                        user.name,
                         style: ktempFont,
                       ),
                       SizedBox(
@@ -114,13 +114,13 @@ class CheckBoxPersonWidget extends StatelessWidget {
     if (isselected.value) {
       isselected(false);
       projectaddController.selectedpersontaglist
-          .removeWhere((element) => element.id == user.userid);
+          .removeWhere((element) => element.id == user.userId);
     } else {
       isselected(true);
       projectaddController.selectedpersontaglist.add(
         SelectedTagWidget(
-          text: user.realName,
-          id: user.userid,
+          text: user.name,
+          id: user.userId,
           selecttagtype: SelectTagtype.person,
           tagtype: Tagtype.Posting,
         ),

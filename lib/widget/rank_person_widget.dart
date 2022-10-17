@@ -24,7 +24,7 @@
 //             PersonImageWidget(user: user),
 //             const SizedBox(height: 7),
 //             Text(
-//               user.realName,
+//               user.name,
 //               style: k15normal,
 //             )
 //           ],

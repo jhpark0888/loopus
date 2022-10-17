@@ -146,14 +146,16 @@ class MessageWidget extends StatelessWidget {
                       GestureDetector(
                           onTap: () {
                             Get.to(() => OtherProfileScreen(
-                                  userid: partner.userid,
-                                  realname: partner.realName,
+                                  userid: partner.userId,
+                                  realname: partner.name,
                                 ));
                           },
                           child: UserImageWidget(
-                              imageUrl: partner.profileImage ?? '',
-                              width: 36,
-                              height: 36)),
+                            imageUrl: partner.profileImage,
+                            width: 36,
+                            height: 36,
+                            userType: partner.userType,
+                          )),
                       const SizedBox(
                         width: 10,
                       ),
@@ -162,7 +164,7 @@ class MessageWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            partner.realName,
+                            partner.name,
                             style: kmainbold,
                           ),
                           const SizedBox(

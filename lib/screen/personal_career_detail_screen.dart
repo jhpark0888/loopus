@@ -8,6 +8,7 @@ import 'package:loopus/controller/career_detail_controller.dart';
 import 'dart:math' as math;
 
 import 'package:intl/intl.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/project_model.dart';
@@ -290,8 +291,7 @@ class _leading extends StatelessWidget {
         if (leading) {
           Get.back();
         } else {
-          if (career!.managerId ==
-              ProfileController.to.myUserInfo.value.userid) {
+          if (career!.managerId == HomeController.to.myProfile.value.userId) {
             showModalIOS(context, func1: () {
               showButtonDialog(
                   title: '커리어를 삭제하시겠어요?',

@@ -13,6 +13,7 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/banpeople_screen.dart';
 import 'package:loopus/screen/certification_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
@@ -41,25 +42,31 @@ class UserInfoScreen extends StatelessWidget {
             title: "이름",
             titleColor: maingray,
             onTap: () => userInfoModify(context),
-            trailing: HomeController.to.myProfile.value.realName,
+            trailing: HomeController.to.myProfile.value.name,
           ),
           CustomListTile(
             title: "대학",
             titleColor: maingray,
             onTap: () => userInfoModify(context),
-            trailing: HomeController.to.myProfile.value.univName,
+            trailing: HomeController.to.myProfile.value is Person
+                ? (HomeController.to.myProfile.value as Person).univName
+                : "",
           ),
           CustomListTile(
             title: "학과",
             titleColor: maingray,
             onTap: () => userInfoModify(context),
-            trailing: HomeController.to.myProfile.value.department,
+            trailing: HomeController.to.myProfile.value is Person
+                ? (HomeController.to.myProfile.value as Person).department
+                : "",
           ),
           CustomListTile(
             title: "입학 연도",
             titleColor: maingray,
             onTap: () => userInfoModify(context),
-            trailing: HomeController.to.myProfile.value.admissionYear,
+            trailing: HomeController.to.myProfile.value is Person
+                ? (HomeController.to.myProfile.value as Person).admissionYear
+                : "",
           ),
           CustomListTile(
             title: "비밀번호 변경",
@@ -112,7 +119,7 @@ class UserInfoScreen extends StatelessWidget {
                   leftFunction: () => Get.back(),
                   rightFunction: () async {
                     deleteDatabase(join(await getDatabasesPath(),
-                        'MY_database${HomeController.to.myProfile.value.userid}.db'));
+                        'MY_database${HomeController.to.myProfile.value.userId}.db'));
 
                     deleteDatabase(
                             join(await getDatabasesPath(), 'MY_database.db'))

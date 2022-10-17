@@ -36,11 +36,11 @@ class OtherProfileController extends GetxController
   RxList<Project> otherProjectList = <Project>[].obs;
 
   Rx<File> profileimage = File('').obs;
-  Rx<User> otherUser = User.defaultuser().obs;
+  Rx<Person> otherUser = Person.defaultuser().obs;
   RxList<Post> allPostList = <Post>[].obs;
   int postPageNum = 1;
 
-  RxList<User> otherlooplist = <User>[].obs;
+  RxList<Person> otherlooplist = <Person>[].obs;
 
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
 

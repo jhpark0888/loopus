@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/model/univ_model.dart';
 import 'package:loopus/screen/search_focus_screen.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/divide_widget.dart';
@@ -159,8 +161,21 @@ class UnivDeptSearchScreen extends StatelessWidget {
                   leftFunction: () {
                     dialogBack();
                   },
-                  rightFunction: () {
+                  rightFunction: () async {
                     //학교 이름과 학과 문의하기
+                    await inquiryRequest(
+                            searchType == UnivDeptSearchType.univ
+                                ? InquiryType.school
+                                : InquiryType.department,
+                            content: textController.text)
+                        .then((value) {
+                      if (value.isError == false) {
+                        dialogBack();
+                        showCustomDialog("문의가 접수되었습니다", 1000);
+                      } else {
+                        errorSituation(value);
+                      }
+                    });
                   },
                   textEditingController: textController,
                 );

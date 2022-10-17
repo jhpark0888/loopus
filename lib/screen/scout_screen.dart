@@ -12,7 +12,6 @@ import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
-import 'package:loopus/widget/person_image_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_text_field_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
@@ -139,24 +138,26 @@ class ScoutScreen extends StatelessWidget {
               ),
               excludeHeaderSemantics: false,
               actions: [
-                Stack(
-                  children: [GestureDetector(
+                Stack(children: [
+                  GestureDetector(
                       behavior: HitTestBehavior.translucent,
-                      onTap: () {Get.to(()=> MyProfileScreen());},
+                      onTap: () => HomeController.to.goMyProfile(),
                       child: Padding(
-                        padding: const EdgeInsets.only(right : 20.0),
+                        padding: const EdgeInsets.only(right: 20.0),
                         child: Center(
                           child: Obx(
                             () => UserImageWidget(
-                                imageUrl:
-                                    HomeController.to.myProfile.value.profileImage ??
-                                        "",
-                                height: 36,
-                                width: 36),
+                              imageUrl: HomeController
+                                  .to.myProfile.value.profileImage,
+                              height: 36,
+                              width: 36,
+                              userType:
+                                  HomeController.to.myProfile.value.userType,
+                            ),
                           ),
                         ),
-                      ))]
-                ),
+                      ))
+                ]),
               ],
               bottom: TabBar(
                 padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -210,7 +210,7 @@
 //                                     userid: questionController
 //                                         .question.value.userid,
 //                                     realname: questionController
-//                                         .question.value.user.realName,
+//                                         .question.value.user.name,
 //                                     user:
 //                                         questionController.question.value.user,
 //                                   ));
@@ -228,7 +228,7 @@
 //                                   });
 //                             },
 //                             value1:
-//                                 '${questionController.question.value.user.realName}님에게 메시지 보내기',
+//                                 '${questionController.question.value.user.name}님에게 메시지 보내기',
 //                             value2: '이 질문 신고하기',
 //                             isValue1Red: false,
 //                             isValue2Red: true,

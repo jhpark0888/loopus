@@ -25,7 +25,7 @@ class ProjectDetailController extends GetxController {
           fieldIds: [],
           members: [],
           is_user: 0,
-          user: User.defaultuser(),
+          user: Person.defaultuser(),
           isPublic: false)
       .obs;
   int projectid;

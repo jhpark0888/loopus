@@ -14,6 +14,7 @@ import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
+import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/withdrawal_controller.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/notification_model.dart';
@@ -244,7 +245,7 @@ Future<HTTPResponse> postProjectArrange(List<Project> careerList) async {
 enum ProfileUpdateType { image, sns, profile }
 
 Future<HTTPResponse> updateProfile(
-    {User? user,
+    {Person? user,
     File? image,
     SNS? sns,
     String? email,
@@ -280,7 +281,8 @@ Future<HTTPResponse> updateProfile(
       } else {
         print('api error image : $image');
 
-        request.fields['image'] = user!.profileImage ?? json.encode(null);
+        request.fields['image'] =
+            user!.profileImage != "" ? json.encode(null) : user.profileImage;
       }
     } else if (updateType == ProfileUpdateType.sns) {
       request.fields['type'] = sns!.snsType.index.toString();
@@ -420,7 +422,9 @@ Future<HTTPResponse> deleteuser(String pw, String reason) async {
     final password = {
       'password': pw,
       'reason': reason,
-      "department": HomeController.to.myProfile.value.department
+      "department": HomeController.to.myProfile.value is Person
+          ? (HomeController.to.myProfile.value as Person).department
+          : ""
     };
 
     try {
@@ -484,58 +488,66 @@ Future<HTTPResponse> userreport(int userid) async {
   }
 }
 
-Future inquiry() async {
+enum InquiryType { normal, school, department }
+
+Future<HTTPResponse> inquiryRequest(InquiryType type, {String? content}) async {
   ConnectivityResult result = await initConnectivity();
-  ContactContentController controller = Get.find();
+
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
-    String? token;
-    await const FlutterSecureStorage().read(key: 'token').then((value) {
-      token = value;
-    });
+    final Uri uri = Uri.parse("$serverUri/user_api/ask?type=${type.name}");
+    Map body = {};
 
-    final Uri uri = Uri.parse("$serverUri/user_api/ask");
-
-    var body = {
-      "email": controller.emailcontroller.text.trim(),
-      "content": controller.contentcontroller.text,
-      "os": controller.userDeviceInfo.deviceData.isNotEmpty
-          ? "${controller.userDeviceInfo.deviceData.values.first}"
-          : "",
-      "device": controller.userDeviceInfo.deviceData.isNotEmpty
-          ? "${controller.userDeviceInfo.deviceData.values.last}"
-          : "",
-      "app_ver": controller.userDeviceInfo.appInfoData.isNotEmpty
-          ? controller.userDeviceInfo.appInfoData.keys.first +
-              ' ' +
-              controller.userDeviceInfo.appInfoData.values.first
-          : "",
-      "real_name": HomeController.to.myProfile.value.realName,
-      "department": HomeController.to.myProfile.value.department,
-      "id": HomeController.to.myProfile.value.userid
-    };
+    if (type == InquiryType.normal) {
+      ContactContentController controller = Get.find();
+      body = {
+        "email": controller.emailcontroller.text.trim(),
+        "content": controller.contentcontroller.text,
+        "os": controller.userDeviceInfo.deviceData.isNotEmpty
+            ? "${controller.userDeviceInfo.deviceData.values.first}"
+            : "",
+        "device": controller.userDeviceInfo.deviceData.isNotEmpty
+            ? "${controller.userDeviceInfo.deviceData.values.last}"
+            : "",
+        "app_ver": controller.userDeviceInfo.appInfoData.isNotEmpty
+            ? controller.userDeviceInfo.appInfoData.keys.first +
+                ' ' +
+                controller.userDeviceInfo.appInfoData.values.first
+            : "",
+        "real_name": HomeController.to.myProfile.value.name,
+        "department": HomeController.to.myProfile.value is Person
+            ? (HomeController.to.myProfile.value as Person).department
+            : "",
+        "id": HomeController.to.myProfile.value.userId
+      };
+    } else if (type == InquiryType.school) {
+      body = {"content": content};
+    } else if (type == InquiryType.department) {
+      body = {
+        "school": SignupController.to.selectUniv.value.univname,
+        "content": content
+      };
+    }
 
     try {
       final response = await http.post(uri,
           headers: {
             'Content-Type': 'application/json',
-            "Authorization": "Token $token"
           },
           body: json.encode(body));
 
       print('문의하기 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
-        showCustomDialog("문의가 접수되었습니다", 1000);
-        return;
+        return HTTPResponse.success("success");
       } else {
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
       print(e);
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }

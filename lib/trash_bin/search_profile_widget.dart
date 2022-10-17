@@ -27,7 +27,7 @@
 
 //           Get.to(() => OtherProfileScreen(
 //                 userid: user.userid,
-//                 realname: user.realName,
+//                 realname: user.name,
 //               ));
 //         },
 //         child: Padding(
@@ -72,7 +72,7 @@
 //                   children: [
 //                     Obx(
 //                       () => Text(
-//                         user.realName,
+//                         user.name,
 //                         style: kSubTitle2Style.copyWith(
 //                             color: _hoverController.isHover.value
 //                                 ? mainblack.withOpacity(0.6)

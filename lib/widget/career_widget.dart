@@ -106,7 +106,7 @@ class CareerWidget extends StatelessWidget {
     );
   }
 
-  Widget memberImage(User user, int index) {
+  Widget memberImage(Person user, int index) {
     return Container(
         width: 24,
         height: 24,
@@ -114,14 +114,15 @@ class CareerWidget extends StatelessWidget {
         decoration: BoxDecoration(
             border: Border.all(color: dividegray), shape: BoxShape.circle),
         child: UserImageWidget(
-          imageUrl: user.profileImage ?? "",
+          imageUrl: user.profileImage,
           width: 24,
           height: 24,
+          userType: user.userType,
         ));
   }
 
   Widget memberList() {
-    List<User> memberList = career.members.length > 4
+    List<Person> memberList = career.members.length > 4
         ? career.members.sublist(0, 4)
         : career.members;
 

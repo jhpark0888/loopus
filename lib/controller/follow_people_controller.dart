@@ -12,15 +12,15 @@ class FollowPeopleController extends GetxController {
   static FollowPeopleController get to => Get.find();
 
   int userId;
-  followlist listType;
-  RxList<User> userList = <User>[].obs;
+  FollowListType listType;
+  RxList<Person> userList = <Person>[].obs;
   Rx<ScreenState> followPeopleScreenState = ScreenState.loading.obs;
 
   void getfollowPeople() {
     getfollowlist(userId, listType).then((value) {
       if (value.isError == false) {
-        List<User> templist = List.from(value.data["follow"])
-            .map((friend) => User.fromJson(friend))
+        List<Person> templist = List.from(value.data["follow"])
+            .map((friend) => Person.fromJson(friend))
             .toList();
 
         userList.addAll(templist);

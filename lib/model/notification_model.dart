@@ -19,7 +19,7 @@ class NotificationModel {
 
   int id;
   int userId;
-  User user;
+  Person user;
   NotificationType type;
   int targetId;
   String? content;
@@ -32,7 +32,7 @@ class NotificationModel {
       NotificationModel(
           id: json["id"] ?? 0,
           userId: json["user_id"],
-          user: User.fromJson(json["profile"]),
+          user: Person.fromJson(json["profile"]),
           type: json["type"] == 2
               ? NotificationType.follow
               : json["type"] == 3

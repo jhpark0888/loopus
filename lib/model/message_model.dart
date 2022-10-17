@@ -66,7 +66,7 @@ class MessageRoom {
       required this.delId});
 
   Rx<Message> message;
-  User user;
+  Person user;
   RxInt notread;
   int roomId;
   int delId;
@@ -75,9 +75,9 @@ class MessageRoom {
       MessageRoom(
           message: Message.fromJson(json["message"], myid).obs,
           user: json["profile"] != null
-              ? User.fromJson(json["profile"])
-              : User.defaultuser(
-                  realName: "알 수 없음",
+              ? Person.fromJson(json["profile"])
+              : Person.defaultuser(
+                  name: "알 수 없음",
                 ),
           notread: RxInt(json["not_read"]),
           roomId: json['room_id'],

@@ -1,21 +1,16 @@
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
-import 'package:loopus/controller/home_controller.dart';
-import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/my_company_controller.dart';
-import 'package:loopus/controller/other_profile_controller.dart';
-import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/user_model.dart';
-import 'package:loopus/screen/follow_people_screen.dart';
+import 'package:loopus/screen/company_interesting_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
-import 'package:loopus/utils/error_control.dart';
-import 'package:loopus/widget/company_image_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
@@ -28,134 +23,97 @@ import 'dart:math' as math;
 class MyCompanyScreen extends StatelessWidget {
   MyCompanyScreen({Key? key}) : super(key: key);
   final MyCompanyController _controller = Get.put(MyCompanyController());
-  final HoverController _hoverController = HoverController();
-  // TagController tagController = Get.put(TagController(tagtype: Tagtype.profile),
-  //     tag: Tagtype.profile.toString());
-
-  ScrollController mainScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () async {
-          // try {
-          //   if (Platform.isAndroid &&
-          //       (AppController.to.currentIndex.value == 4)) {
-          //     AppController.to.currentIndex(0);
-          //     return false;
-          //   }
-          // } catch (e) {
-          //   print(e);
-          // }
-
-          return true;
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            centerTitle: true,
-            title: const Text(
-              '내 기업 프로필',
-              style: ktitle,
+    return Scaffold(
+      backgroundColor: mainblack,
+      appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: mainblack,
+            statusBarIconBrightness:
+                Brightness.light, // For Android (dark icons)
+            statusBarBrightness: Brightness.light // For iOS (dark icons),
             ),
-            actions: [
-              // IconButton(
-              //     onPressed: () {
-              //       Get.to(() => BookmarkScreen());
-              //     },
-              //     icon: SvgPicture.asset(
-              //       'assets/icons/bookmark_inactive.svg',
-              //       width: 28,
-              //     )),
-              IconButton(
-                onPressed: () {
-                  Get.to(() => SettingScreen());
-                },
-                icon: SvgPicture.asset(
-                  'assets/icons/setting.svg',
-                  width: 28,
-                ),
-              ),
-            ],
+        backgroundColor: mainblack,
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          '내 기업 프로필',
+          style: ktitle.copyWith(color: mainWhite),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: SvgPicture.asset(
+            'assets/icons/appbar_back.svg',
+            color: mainWhite,
           ),
-          body: RefreshIndicator(
-            notificationPredicate: (notification) {
-              return notification.depth == 2;
+        ),
+        actions: [
+          // IconButton(
+          //     onPressed: () {
+          //       Get.to(() => BookmarkScreen());
+          //     },
+          //     icon: SvgPicture.asset(
+          //       'assets/icons/bookmark_inactive.svg',
+          //       width: 28,
+          //     )),
+          IconButton(
+            onPressed: () {
+              Get.to(() => SettingScreen());
             },
-
-            // controller: _controller.profilerefreshController,
-            // enablePullDown: true,
-            // header: const MyCustomHeader(),
-            onRefresh: _controller.onRefresh,
-            child: ExtendedNestedScrollView(
-              // primary: true,
-              // slivers: [
-              //   SliverToBoxAdapter(
-              //     child: _profileView(context),
-              //   ),
-              //   // SliverOverlapAbsorber(
-              //   //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-              //   //       context),
-              //   //   sliver:
-
-              //   SliverPersistentHeader(
-              //     pinned: true,
-              //     delegate: _SliverTabBarViewDelegate(child: _tabView()),
-              //   ),
-              //   // SliverAppBar(
-              //   //   backgroundColor: mainWhite,
-              //   //   toolbarHeight: 44,
-              //   //   pinned: true,
-              //   //   primary: false,
-              //   //   elevation: 0,
-              //   //   automaticallyImplyLeading: false,
-              //   //   flexibleSpace: _tabView(),
-              //   // ),
-              //   // ),
-              //   // NestedScrollView(headerSliverBuilder: headerSliverBuilder, body: body)
-              //   SliverFillRemaining(
-              //     hasScrollBody: true,
-              //     child: TabBarView(
-              //       physics: const NeverScrollableScrollPhysics(),
-              //       controller: _controller.tabController,
-              //       children: [_careerView(context), _postView()],
-              //     ),
-              //   )
-              // ],
-              onlyOneScrollInBody: true,
-              headerSliverBuilder: (context, value) {
-                return [
-                  SliverToBoxAdapter(
-                    child: _profileView(context),
-                  ),
-                  // SliverOverlapAbsorber(
-                  //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                  //       context),
-                  //   sliver:
-                  SliverAppBar(
-                    backgroundColor: mainWhite,
-                    toolbarHeight: 44,
-                    pinned: true,
-                    primary: false,
-                    elevation: 0,
-                    automaticallyImplyLeading: false,
-                    flexibleSpace: _tabView(),
-                  ),
-                  // ),
-                ];
-              },
-              body: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _controller.tabController,
-                children: [_postView(), Container()],
-              ),
+            icon: SvgPicture.asset(
+              'assets/icons/setting.svg',
+              width: 28,
+              color: mainWhite,
             ),
           ),
-        ));
+        ],
+      ),
+      body: RefreshIndicator(
+        notificationPredicate: (notification) {
+          return notification.depth == 2;
+        },
+        onRefresh: _controller.onRefresh,
+        child: ExtendedNestedScrollView(
+          onlyOneScrollInBody: true,
+          headerSliverBuilder: (context, value) {
+            return [
+              SliverToBoxAdapter(
+                child: _profileView(context),
+              ),
+              // SliverOverlapAbsorber(
+              //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+              //       context),
+              //   sliver:
+              SliverAppBar(
+                backgroundColor: mainWhite,
+                toolbarHeight: 44,
+                pinned: true,
+                primary: false,
+                elevation: 0,
+                automaticallyImplyLeading: false,
+                flexibleSpace: _tabView(),
+              ),
+              // ),
+            ];
+          },
+          body: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: _controller.tabController,
+            children: [_introView(), _postView()],
+          ),
+        ),
+      ),
+    );
   }
 
   void changeProfileImage() async {
-    Get.to(() => ProfileImageChangeScreen());
+    Get.to(() => ProfileImageChangeScreen(
+          user: _controller.myCompanyInfo.value,
+        ));
   }
 
   void changeDefaultImage() async {
@@ -186,50 +144,47 @@ class MyCompanyScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Stack(
-              children: [
-                Obx(
-                  () => GestureDetector(
-                      onTap: () => showModalIOS(context,
-                          func1: changeProfileImage,
-                          func2: changeDefaultImage,
-                          value1: '라이브러리에서 선택',
-                          value2: '기본 이미지로 변경',
-                          isValue1Red: false,
-                          isValue2Red: false,
-                          isOne: false),
-                      child: CompanyImageWidget(
-                        imageUrl: _controller.myCompanyInfo.value.companyImage,
-                        width: 90,
-                        height: 90,
-                      )),
-                ),
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: GestureDetector(
-                      onTap: () => showModalIOS(context,
-                          func1: changeProfileImage,
-                          func2: changeDefaultImage,
-                          value1: '라이브러리에서 선택',
-                          value2: '기본 이미지로 변경',
-                          isValue1Red: false,
-                          isValue2Red: false,
-                          isOne: false),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: mainWhite),
-                        child: SvgPicture.asset(
-                          "assets/icons/profile_image.svg",
-                          width: 28,
-                          height: 28,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            Obx(
+              () => GestureDetector(
+                  onTap: () => showModalIOS(context,
+                      func1: changeProfileImage,
+                      func2: changeDefaultImage,
+                      value1: '라이브러리에서 선택',
+                      value2: '기본 이미지로 변경',
+                      isValue1Red: false,
+                      isValue2Red: false,
+                      isOne: false),
+                  child: UserImageWidget(
+                    imageUrl: _controller.myCompanyInfo.value.profileImage,
+                    width: 90,
+                    height: 90,
+                    userType: _controller.myCompanyInfo.value.userType,
+                  )),
             ),
+            // Positioned.fill(
+            //   child: Align(
+            //     alignment: Alignment.bottomRight,
+            //     child: GestureDetector(
+            //       onTap: () => showModalIOS(context,
+            //           func1: changeProfileImage,
+            //           func2: changeDefaultImage,
+            //           value1: '라이브러리에서 선택',
+            //           value2: '기본 이미지로 변경',
+            //           isValue1Red: false,
+            //           isValue2Red: false,
+            //           isOne: false),
+            //       child: Container(
+            //         decoration: const BoxDecoration(
+            //             shape: BoxShape.circle, color: mainWhite),
+            //         child: SvgPicture.asset(
+            //           "assets/icons/profile_image.svg",
+            //           width: 28,
+            //           height: 28,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         const SizedBox(
@@ -237,12 +192,91 @@ class MyCompanyScreen extends StatelessWidget {
         ),
         Obx(
           () => Text(
-            _controller.myCompanyInfo.value.companyName,
-            style: kmainbold,
+            _controller.myCompanyInfo.value.name,
+            style: kmainbold.copyWith(color: mainWhite),
           ),
         ),
         const SizedBox(
           height: 14,
+        ),
+        Obx(
+          () => IntrinsicHeight(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  fieldList[_controller.myCompanyInfo.value.contactField]!,
+                  style: kmain.copyWith(color: mainWhite),
+                ),
+                const SizedBox(
+                  width: 7,
+                ),
+                const VerticalDivider(
+                  thickness: 2,
+                  color: mainWhite,
+                ),
+                const SizedBox(
+                  width: 7,
+                ),
+                Text(
+                  _controller.myCompanyInfo.value.address,
+                  style: kmain.copyWith(color: mainWhite),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 14,
+        ),
+        Obx(
+          () => Text(
+            _controller.myCompanyInfo.value.homepage,
+            style: kmain.copyWith(color: mainblue),
+          ),
+        ),
+        const SizedBox(
+          height: 24,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "이 기업에 관심있는 프로필",
+                style: kmainbold.copyWith(color: mainWhite),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => CompanyInterestingScreen(
+                      userId: _controller.myCompanyInfo.value.userId,
+                      listType: FollowListType.follower));
+                },
+                child: Text(
+                  "전체보기",
+                  style: kmain.copyWith(color: mainblue),
+                ),
+              )
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 14,
+        ),
+        Obx(
+          () => SizedBox(
+            height: 72,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                itemBuilder: (context, index) =>
+                    interestingUser(_controller.followerList[index]),
+                separatorBuilder: (context, index) => const SizedBox(
+                      width: 14,
+                    ),
+                itemCount: math.min(_controller.followerList.length, 10)),
+          ),
         ),
         const SizedBox(
           height: 14,
@@ -254,50 +288,55 @@ class MyCompanyScreen extends StatelessWidget {
   Widget _tabView() {
     return Column(
       children: [
-        TabBar(
-            controller: _controller.tabController,
-            labelStyle: kmainbold,
-            labelColor: mainblack,
-            unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
-            unselectedLabelColor: dividegray,
-            automaticIndicatorColorAdjustment: false,
-            indicator: const UnderlineIndicator(
-              strokeCap: StrokeCap.round,
-              borderSide: BorderSide(width: 2, color: mainblack),
-            ),
-            isScrollable: false,
-            tabs: [
-              // const Tab(
-              //   height: 40,
-              //   icon: Icon(
-              //     Icons.format_list_bulleted_rounded,
-              //   ),
-              // ),
-              // const Tab(
-              //   height: 40,
-              //   icon: Icon(Icons.line_weight_rounded),
-              // ),
-              Obx(
-                () => Tab(
-                  height: 40,
-                  icon: SvgPicture.asset(
-                    'assets/icons/list_active.svg',
-                    color:
-                        _controller.currentIndex.value == 0 ? null : dividegray,
+        Material(
+          color: mainblack,
+          child: TabBar(
+              controller: _controller.tabController,
+              labelStyle: kmainbold,
+              labelColor: mainWhite,
+              unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
+              unselectedLabelColor: dividegray,
+              automaticIndicatorColorAdjustment: false,
+              indicator: const UnderlineIndicator(
+                strokeCap: StrokeCap.round,
+                borderSide: BorderSide(width: 2, color: mainWhite),
+              ),
+              isScrollable: false,
+              tabs: [
+                // const Tab(
+                //   height: 40,
+                //   icon: Icon(
+                //     Icons.format_list_bulleted_rounded,
+                //   ),
+                // ),
+                // const Tab(
+                //   height: 40,
+                //   icon: Icon(Icons.line_weight_rounded),
+                // ),
+                Obx(
+                  () => Tab(
+                    height: 40,
+                    icon: SvgPicture.asset(
+                      'assets/icons/company_intro.svg',
+                      color: _controller.currentIndex.value == 0
+                          ? mainWhite
+                          : dividegray,
+                    ),
                   ),
                 ),
-              ),
-              Obx(
-                () => Tab(
-                  height: 40,
-                  icon: SvgPicture.asset(
-                    'assets/icons/post_active.svg',
-                    color:
-                        _controller.currentIndex.value == 1 ? null : dividegray,
+                Obx(
+                  () => Tab(
+                    height: 40,
+                    icon: SvgPicture.asset(
+                      'assets/icons/post_active.svg',
+                      color: _controller.currentIndex.value == 1
+                          ? mainWhite
+                          : dividegray,
+                    ),
                   ),
                 ),
-              ),
-            ]),
+              ]),
+        ),
         Divider(
           height: 1,
           thickness: 2,
@@ -305,6 +344,25 @@ class MyCompanyScreen extends StatelessWidget {
         )
       ],
     );
+  }
+
+  Widget _introView() {
+    return Obx(() => _controller.myCompanyInfo.value.intro == ""
+        ? EmptyContentWidget(text: '아직 소개글이 없어요')
+        : Column(
+            children: [
+              const SizedBox(
+                height: 14,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  _controller.myCompanyInfo.value.intro,
+                  style: kmain.copyWith(color: mainWhite),
+                ),
+              )
+            ],
+          ));
   }
 
   Widget _postView() {
@@ -319,12 +377,29 @@ class MyCompanyScreen extends StatelessWidget {
             child: ListView.separated(
                 // key: const PageStorageKey("postView"), 이거 넣으면 포스팅들이 마지막 사진이나 링크로 가게됨
                 itemBuilder: (context, index) => PostingWidget(
-                    item: _controller.allPostList[index],
-                    type: PostingWidgetType.profile),
+                      item: _controller.allPostList[index],
+                      type: PostingWidgetType.profile,
+                      isDark: true,
+                    ),
                 separatorBuilder: (context, index) => DivideWidget(
                       height: 10,
                     ),
                 itemCount: _controller.allPostList.length),
           ));
+  }
+
+  Widget interestingUser(User user) {
+    return Column(
+      children: [
+        UserImageWidget(imageUrl: user.profileImage, userType: user.userType),
+        const SizedBox(
+          height: 7,
+        ),
+        Text(
+          user.name,
+          style: kmain.copyWith(color: mainWhite),
+        )
+      ],
+    );
   }
 }

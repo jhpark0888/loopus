@@ -30,11 +30,11 @@ class UploadScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 44,
-        leading: GestureDetector(
-            onTap: () {
+        leading: IconButton(
+            onPressed: () {
               Get.back();
             },
-            child: SvgPicture.asset(
+            icon: SvgPicture.asset(
               'assets/icons/appbar_back.svg',
             )),
         title: Obx(

@@ -16,7 +16,7 @@ class ProfileTagChangeScreen extends StatelessWidget {
   TagController tagController =
       Get.find<TagController>(tag: Tagtype.profile.toString());
 
-  User? user;
+  Person? user;
 
   @override
   Widget build(BuildContext context) {

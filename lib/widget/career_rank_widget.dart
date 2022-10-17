@@ -10,8 +10,8 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/realtime_rank_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
-import 'package:loopus/widget/person_image_widget.dart';
 import 'package:loopus/widget/persontile_widget.dart';
+import 'package:loopus/widget/user_image_widget.dart';
 
 class CareerRankWidget extends StatelessWidget {
   CareerRankWidget(
@@ -21,7 +21,7 @@ class CareerRankWidget extends StatelessWidget {
       required this.currentField})
       : super(key: key);
   bool isUniversity;
-  List<User> ranker;
+  List<Person> ranker;
   MapEntry<String, String> currentField;
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,7 @@ class PersonRankWidget extends StatelessWidget {
       required this.isFollow})
       : super(key: key);
   final Debouncer _debouncer = Debouncer();
-  User user;
+  Person user;
   bool isUniversity;
   bool isFollow;
 
@@ -100,7 +100,7 @@ class PersonRankWidget extends StatelessWidget {
       onTap: () {
         Get.to(
             () => OtherProfileScreen(
-                user: user, userid: user.userid, realname: user.realName),
+                user: user, userid: user.userId, realname: user.name),
             preventDuplicates: false);
       },
       behavior: HitTestBehavior.translucent,
@@ -109,10 +109,15 @@ class PersonRankWidget extends StatelessWidget {
           width: 52,
           child: Column(
             children: [
-              PersonImageWidget(user: user, width: 52),
+              UserImageWidget(
+                imageUrl: user.profileImage,
+                width: 52,
+                height: 52,
+                userType: user.userType,
+              ),
               const SizedBox(height: 7),
               Text(
-                user.realName,
+                user.name,
                 style: kmain,
                 maxLines: 1,
               )
@@ -163,7 +168,7 @@ class PersonRankWidget extends StatelessWidget {
         ),
         // 나 일때는 팔로우 버튼 없어야 함
         //지금은 is_user를 안 주는 듯
-        if (isFollow && user.userid != HomeController.to.myProfile.value.userid)
+        if (isFollow && user.userId != HomeController.to.myProfile.value.userId)
           Obx(
             () => Row(children: [
               const SizedBox(
@@ -238,7 +243,7 @@ class PersonRankWidget extends StatelessWidget {
       lastisFollowed = user.followed.value.index;
     }
     if (user.banned.value == BanState.ban) {
-      userbancancel(user.userid);
+      userbancancel(user.userId);
     } else {
       user.followClick();
       num += 1;
@@ -246,10 +251,10 @@ class PersonRankWidget extends StatelessWidget {
       _debouncer.run(() {
         if (user.followed.value.index != lastisFollowed) {
           if (<int>[2, 3].contains(user.followed.value.index)) {
-            postfollowRequest(user.userid);
+            postfollowRequest(user.userId);
             print("팔로우");
           } else {
-            deletefollow(user.userid);
+            deletefollow(user.userId);
             print("팔로우 해제");
           }
           lastisFollowed = user.followed.value.index;

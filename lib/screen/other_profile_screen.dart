@@ -12,6 +12,8 @@ import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/group_career_detail_screen.dart';
 import 'package:loopus/screen/career_arrange_screen.dart';
+import 'package:loopus/screen/profile_sns_add_screen.dart';
+import 'package:loopus/widget/profile_sns_image_widget.dart';
 import 'personal_career_detail_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';
 import 'package:loopus/screen/personal_career_detail_screen.dart';
@@ -46,14 +48,14 @@ class OtherProfileScreen extends StatelessWidget {
   late final OtherProfileController _controller = Get.put(
       OtherProfileController(
           userid: userid,
-          otherUser: user != null ? user!.obs : User.defaultuser().obs,
+          otherUser: user != null ? user!.obs : Person.defaultuser().obs,
           careerName: careerName),
       tag: userid.toString());
 
   // final ImageController imageController = Get.put(ImageController());
   final HoverController _hoverController = HoverController();
 
-  User? user;
+  Person? user;
   int userid;
   String realname;
 
@@ -168,46 +170,8 @@ class OtherProfileScreen extends StatelessWidget {
           notificationPredicate: (notification) {
             return notification.depth == 2;
           },
-
-          // controller: profileController.profilerefreshController,
-          // enablePullDown: true,
-          // header: const MyCustomHeader(),
           onRefresh: onRefresh,
           child: ExtendedNestedScrollView(
-            // primary: true,
-            // slivers: [
-            //   SliverToBoxAdapter(
-            //     child: _profileView(context),
-            //   ),
-            //   // SliverOverlapAbsorber(
-            //   //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-            //   //       context),
-            //   //   sliver:
-
-            //   SliverPersistentHeader(
-            //     pinned: true,
-            //     delegate: _SliverTabBarViewDelegate(child: _tabView()),
-            //   ),
-            //   // SliverAppBar(
-            //   //   backgroundColor: mainWhite,
-            //   //   toolbarHeight: 44,
-            //   //   pinned: true,
-            //   //   primary: false,
-            //   //   elevation: 0,
-            //   //   automaticallyImplyLeading: false,
-            //   //   flexibleSpace: _tabView(),
-            //   // ),
-            //   // ),
-            //   // NestedScrollView(headerSliverBuilder: headerSliverBuilder, body: body)
-            //   SliverFillRemaining(
-            //     hasScrollBody: true,
-            //     child: TabBarView(
-            //       physics: const NeverScrollableScrollPhysics(),
-            //       controller: profileController.tabController,
-            //       children: [_careerView(context), _postView()],
-            //     ),
-            //   )
-            // ],
             onlyOneScrollInBody: true,
             headerSliverBuilder: (context, value) {
               return [
@@ -241,7 +205,9 @@ class OtherProfileScreen extends StatelessWidget {
   }
 
   void changeProfileImage() async {
-    Get.to(() => ProfileImageChangeScreen());
+    Get.to(() => ProfileImageChangeScreen(
+          user: _controller.otherUser.value,
+        ));
   }
 
   void changeDefaultImage() async {
@@ -250,12 +216,12 @@ class OtherProfileScreen extends StatelessWidget {
             updateType: ProfileUpdateType.image)
         .then((value) {
       if (value.isError == false) {
-        User user = User.fromJson(value.data);
+        Person user = Person.fromJson(value.data);
         _controller.otherUser(user);
         HomeController.to.myProfile(user);
         if (Get.isRegistered<OtherProfileController>(
-            tag: user.userid.toString())) {
-          Get.find<OtherProfileController>(tag: user.userid.toString())
+            tag: user.userId.toString())) {
+          Get.find<OtherProfileController>(tag: user.userId.toString())
               .otherUser(user);
         }
       } else {
@@ -277,7 +243,7 @@ class OtherProfileScreen extends StatelessWidget {
               onTap: () {
                 Get.to(() => FollowPeopleScreen(
                       userId: userid,
-                      listType: followlist.follower,
+                      listType: FollowListType.follower,
                     ));
               },
               behavior: HitTestBehavior.translucent,
@@ -325,10 +291,10 @@ class OtherProfileScreen extends StatelessWidget {
                         }
                       },
                       child: UserImageWidget(
-                        imageUrl:
-                            _controller.otherUser.value.profileImage ?? '',
+                        imageUrl: _controller.otherUser.value.profileImage,
                         width: 90,
                         height: 90,
+                        userType: _controller.otherUser.value.userType,
                       )),
                 ),
                 if (_controller.otherUser.value.isuser == 1)
@@ -365,7 +331,7 @@ class OtherProfileScreen extends StatelessWidget {
               onTap: () {
                 Get.to(() => FollowPeopleScreen(
                       userId: userid,
-                      listType: followlist.following,
+                      listType: FollowListType.following,
                     ));
               },
               behavior: HitTestBehavior.translucent,
@@ -400,7 +366,7 @@ class OtherProfileScreen extends StatelessWidget {
         ),
         Obx(
           () => Text(
-            _controller.otherUser.value.realName,
+            _controller.otherUser.value.name,
             style: kmainbold,
           ),
         ),
@@ -414,9 +380,11 @@ class OtherProfileScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 UserImageWidget(
-                    imageUrl: _controller.otherUser.value.univlogo,
-                    width: 24,
-                    height: 24),
+                  imageUrl: _controller.otherUser.value.univlogo,
+                  width: 24,
+                  height: 24,
+                  userType: _controller.otherUser.value.userType,
+                ),
                 const SizedBox(width: 7),
                 Text(
                   _controller.otherUser.value.univName,
@@ -450,6 +418,7 @@ class OtherProfileScreen extends StatelessWidget {
             ),
           ),
         ),
+        _snsView(),
         const SizedBox(
           height: 14,
         ),
@@ -495,7 +464,7 @@ class OtherProfileScreen extends StatelessWidget {
                       child: CustomExpandedBoldButton(
                         onTap: () async {
                           if (HomeController.to.enterMessageRoom.value ==
-                              _controller.otherUser.value.userid) {
+                              _controller.otherUser.value.userId) {
                             Get.back();
                           } else {
                             Get.to(() => MessageDetatilScreen(
@@ -504,7 +473,7 @@ class OtherProfileScreen extends StatelessWidget {
                                   enterRoute: EnterRoute.otherProfile,
                                 ));
                             HomeController.to.enterMessageRoom.value =
-                                _controller.otherUser.value.userid;
+                                _controller.otherUser.value.userId;
                           }
                         },
                         isBlue: false,
@@ -518,6 +487,70 @@ class OtherProfileScreen extends StatelessWidget {
             ],
           ),
       ],
+    );
+  }
+
+  Widget _snsListWidget() {
+    return SizedBox(
+      height: 24,
+      child: ListView.separated(
+          primary: false,
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return ProfileSnsImageWidget(
+              sns: _controller.otherUser.value.snsList[index],
+            );
+          },
+          separatorBuilder: (context, index) => const SizedBox(
+                width: 7,
+              ),
+          itemCount: _controller.otherUser.value.snsList.length),
+    );
+  }
+
+  Widget _snsView() {
+    return Obx(
+      () => int.parse(HomeController.to.myId!) ==
+              _controller.otherUser.value.userId
+          ? Padding(
+              padding: const EdgeInsets.only(top: 14),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _controller.otherUser.value.snsList.isNotEmpty
+                      ? _snsListWidget()
+                      : GestureDetector(
+                          onTap: () {},
+                          child: Text(
+                            "SNS를 추가해주세요",
+                            style: kmainbold.copyWith(color: dividegray),
+                          ),
+                        ),
+                  const SizedBox(
+                    width: 7,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => ProfileSnsAddScreen(
+                            snsList: _controller.otherUser.value.snsList,
+                          ));
+                    },
+                    child: SvgPicture.asset(
+                      "assets/icons/home_add.svg",
+                      width: 24,
+                      height: 24,
+                      color: dividegray,
+                    ),
+                  )
+                ],
+              ),
+            )
+          : _controller.otherUser.value.snsList.isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 14),
+                  child: _snsListWidget())
+              : Container(),
     );
   }
 
@@ -640,8 +673,8 @@ class OtherProfileScreen extends StatelessWidget {
                                   color: mainblack.withOpacity(0.6),
                                 ),
                                 const Spacer(),
-                                if (_controller.otherUser.value.userid ==
-                                    HomeController.to.myProfile.value.userid)
+                                if (_controller.otherUser.value.userId ==
+                                    HomeController.to.myProfile.value.userId)
                                   GestureDetector(
                                     onTap: () {
                                       Get.to(() => CareerArrangeScreen());
@@ -661,7 +694,7 @@ class OtherProfileScreen extends StatelessWidget {
                                 onTap: () {
                                   goCareerScreen(
                                       _controller.otherProjectList[index],
-                                      _controller.otherUser.value.realName,
+                                      _controller.otherUser.value.name,
                                       _controller.otherProjectList);
                                 },
                                 child: CareerWidget(

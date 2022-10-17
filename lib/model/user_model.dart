@@ -9,22 +9,83 @@ import 'package:loopus/screen/profile_sns_add_screen.dart';
 import 'package:path/path.dart';
 
 class User {
-  User({
-    required this.userid,
-    required this.realName,
+  User(
+      {required this.userId,
+      required this.name,
+      required this.profileImage,
+      required this.followed,
+      required this.followerCount,
+      required this.followingCount,
+      required this.userType});
+
+  int userId;
+  String name;
+  String profileImage;
+  Rx<FollowState> followed;
+  RxInt followerCount;
+  RxInt followingCount;
+  UserType userType;
+
+  factory User.defaultuser({
+    int? userId,
+    String? name,
+    RxInt? followerCount,
+    RxInt? followingCount,
+    String? profileImage,
+    Rx<FollowState>? followed,
+    UserType? userType,
+  }) =>
+      User(
+        userId: userId ?? 0,
+        name: name ?? "",
+        profileImage: profileImage ?? "",
+        followerCount: followerCount ?? 0.obs,
+        followingCount: followingCount ?? 0.obs,
+        followed: followed ?? FollowState.normal.obs,
+        userType: userType ?? UserType.student,
+      );
+
+  void followClick() {
+    if (followed.value == FollowState.normal) {
+      // followController.islooped(1);
+      followed(FollowState.following);
+      followerCount.value += 1;
+    } else if (followed.value == FollowState.follower) {
+      // followController.islooped(1);
+
+      followed(FollowState.wefollow);
+      followerCount.value += 1;
+    } else if (followed.value == FollowState.following) {
+      // followController.islooped(0);
+
+      followed(FollowState.normal);
+      followerCount.value -= 1;
+    } else if (followed.value == FollowState.wefollow) {
+      // followController.islooped(0);
+
+      followed(FollowState.follower);
+      followerCount.value -= 1;
+    }
+  }
+}
+
+class Person extends User {
+  Person({
+    required userId,
+    required name,
     required this.type,
     required this.univName,
     required this.univlogo,
     required this.department,
-    required this.followerCount,
-    required this.followingCount,
+    required followerCount,
+    required followingCount,
     required this.totalposting,
     required this.resentPostCount,
     required this.isuser,
     required this.fieldId,
-    this.profileImage,
+    required profileImage,
     required this.profileTag,
-    required this.followed,
+    required followed,
     required this.banned,
     required this.rank,
     required this.lastRank,
@@ -36,21 +97,23 @@ class User {
     required this.schoolRatioVariance,
     required this.admissionYear,
     required this.snsList,
-  });
+  }) : super(
+            userId: userId,
+            name: name,
+            profileImage: profileImage,
+            followerCount: followerCount,
+            followingCount: followingCount,
+            followed: followed,
+            userType: UserType.student);
 
-  int userid;
-  String realName;
   int type;
   String univName;
   String univlogo;
   String department;
   int? isuser;
-  RxInt followerCount;
-  RxInt followingCount;
   int totalposting;
   int resentPostCount;
   String fieldId;
-  String? profileImage;
   List<Tag> profileTag;
   int rank;
   int lastRank;
@@ -62,12 +125,11 @@ class User {
   double schoolRatioVariance;
   String admissionYear;
   RxList<SNS> snsList;
-  Rx<FollowState> followed;
   Rx<BanState> banned;
 
-  factory User.defaultuser({
-    int? userid,
-    String? realName,
+  factory Person.defaultuser({
+    int? userId,
+    String? name,
     int? type,
     String? univName,
     String? univlogo,
@@ -93,9 +155,10 @@ class User {
     Rx<FollowState>? followed,
     Rx<BanState>? banned,
   }) =>
-      User(
-          userid: userid ?? 0,
-          realName: realName ?? "",
+      Person(
+          userId: userId ?? 0,
+          name: name ?? "",
+          profileImage: profileImage ?? "",
           type: type ?? 0,
           univName: univName ?? '',
           univlogo: univlogo ?? '',
@@ -120,11 +183,11 @@ class User {
           followed: followed ?? FollowState.normal.obs,
           banned: banned ?? BanState.normal.obs);
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        userid: json["user_id"],
-        realName: json["real_name"],
+  factory Person.fromJson(Map<String, dynamic> json) => Person(
+        userId: json["user_id"],
+        name: json["real_name"],
         type: json["type"] ?? 0,
-        profileImage: json["profile_image"],
+        profileImage: json["profile_image"] ?? "",
         followerCount: json["follower_count"] != null
             ? RxInt(json["follower_count"])
             : 0.obs,
@@ -176,8 +239,8 @@ class User {
       );
 
   void copywith(Map<String, dynamic> json) {
-    userid = json["user_id"] ?? userid;
-    realName = json["real_name"] ?? realName;
+    userId = json["user_id"] ?? userId;
+    name = json["real_name"] ?? name;
     type = json["type"] ?? type;
     profileImage = json["profile_image"] ?? profileImage;
     followerCount.value = json["follower_count"] != null
@@ -233,35 +296,12 @@ class User {
   }
 
   Map<String, dynamic> toJson() => {
-        "user": userid,
-        "real_name": realName,
+        "user": userId,
+        "real_name": name,
         "type": type,
         "profile_image": profileImage,
         "project_tag": List<dynamic>.from(profileTag.map((x) => x.toJson())),
       };
-
-  void followClick() {
-    if (followed.value == FollowState.normal) {
-      // followController.islooped(1);
-      followed(FollowState.following);
-      followerCount.value += 1;
-    } else if (followed.value == FollowState.follower) {
-      // followController.islooped(1);
-
-      followed(FollowState.wefollow);
-      followerCount.value += 1;
-    } else if (followed.value == FollowState.following) {
-      // followController.islooped(0);
-
-      followed(FollowState.normal);
-      followerCount.value -= 1;
-    } else if (followed.value == FollowState.wefollow) {
-      // followController.islooped(0);
-
-      followed(FollowState.follower);
-      followerCount.value -= 1;
-    }
-  }
 }
 
 // class Rank {

@@ -162,17 +162,21 @@ class GroupCareerDetailScreen extends StatelessWidget {
                 ])));
   }
 
-  Widget joinPeople(User user) {
-    return user.realName != ""
+  Widget joinPeople(Person user) {
+    return user.name != ""
         ? Column(
             children: [
               UserImageWidget(
-                  width: 50, height: 50, imageUrl: user.profileImage ?? ''),
+                width: 50,
+                height: 50,
+                imageUrl: user.profileImage,
+                userType: user.userType,
+              ),
               SizedBox(
                 height: 7,
               ),
               Text(
-                user.realName,
+                user.name,
                 style: kmain,
               )
             ],
@@ -399,7 +403,7 @@ class MyCareerScreen extends StatelessWidget {
                   shrinkWrap: true,
                   primary: false,
                   itemBuilder: (context, index) {
-                    if (controller.postList[index].user.realName == name) {
+                    if (controller.postList[index].user.name == name) {
                       return PostingWidget(
                         item: controller.postList[index],
                         type: PostingWidgetType.profile,

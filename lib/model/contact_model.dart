@@ -9,7 +9,7 @@ class Contact {
       required this.date});
 
   int id;
-  User user;
+  Person user;
   Company company;
   DateTime date;
 

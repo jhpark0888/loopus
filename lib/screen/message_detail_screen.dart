@@ -53,8 +53,8 @@ class MessageDetatilScreen extends StatelessWidget {
   User myProfile;
   EnterRoute enterRoute;
   late MessageDetailController controller = Get.put(
-      MessageDetailController(partnerId: partner.userid),
-      tag: partner.userid.toString());
+      MessageDetailController(partnerId: partner.userId),
+      tag: partner.userId.toString());
   // KeyBoardController keyBoardController = Get.put(KeyBoardController());
   Key centerKey = const ValueKey('QueryList');
   @override
@@ -67,10 +67,10 @@ class MessageDetatilScreen extends StatelessWidget {
       child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBarWidget(
-            title: partner.realName,
+            title: partner.name,
             bottomBorder: false,
-            leading: GestureDetector(
-                onTap: () {
+            leading: IconButton(
+                onPressed: () {
                   if (enterRoute == EnterRoute.popUp) {
                     if (Get.isRegistered<MessageController>()) {
                       Get.back();
@@ -81,21 +81,20 @@ class MessageDetatilScreen extends StatelessWidget {
                     Get.back();
                   }
                 },
-                child: Center(
-                    child: SvgPicture.asset('assets/icons/appbar_back.svg'))),
+                icon: SvgPicture.asset('assets/icons/appbar_back.svg')),
             actions: [
               GestureDetector(
                 onTap: () async {
                   showModalIOS(context, func1: () {
                     int roomId = controller.roomid;
                     if (controller.messageList.isNotEmpty) {
-                      deleteChatRoom(controller.roomid, myProfile.userid,
+                      deleteChatRoom(controller.roomid, myProfile.userId,
                               int.parse(controller.messageList.last.messageId!))
                           .then((value) {
                         if (value.isError == false) {
                           SQLController.to.deleteMessage(roomId);
                           SQLController.to.deleteMessageRoom(roomId);
-                          SQLController.to.deleteUser(partner.userid);
+                          SQLController.to.deleteUser(partner.userId);
                           if (Get.isRegistered<MessageController>()) {
                             MessageController.to.searchRoomList.removeAt(
                                 MessageController.to.searchRoomList.indexWhere(
@@ -316,7 +315,7 @@ class MessageDetatilScreen extends StatelessWidget {
       controller.channel.sink.add(jsonEncode({
         'content': controller.sendText.text,
         'type': 'msg',
-        'name': myProfile.realName
+        'name': myProfile.name
       }));
     }
   }

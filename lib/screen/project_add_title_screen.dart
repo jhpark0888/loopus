@@ -68,8 +68,10 @@ class ProjectAddTitleScreen extends StatelessWidget {
                             Project project = Project.fromJson(value.data);
                             project.is_user = 1;
 
-                            ProfileController.to.myProjectList.add(project);
-                            // ProfileController.to.careerPagenums.add(1);
+                            if (Get.isRegistered<ProfileController>()) {
+                              ProfileController.to.myProjectList.add(project);
+                              // ProfileController.to.careerPagenums.add(1);
+                            }
                             Get.back();
 
                             SchedulerBinding.instance!
@@ -250,7 +252,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
             const SizedBox(
               height: 24,
             ),
-            Obx(() => _controller.selectCompany.value.companyName == ""
+            Obx(() => _controller.selectCompany.value.name == ""
                 ? GestureDetector(
                     onTap: () {
                       Get.to(() => ProjectAddCompanyScreen());

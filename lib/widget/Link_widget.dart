@@ -272,6 +272,8 @@ class LinkSmallWidget extends StatelessWidget {
   }) : super(key: key);
 
   String url;
+  double width = 280;
+  double height = 195;
   late final LinkController linkController = LinkController(url: url)
     ..infoLoad();
 
@@ -282,24 +284,24 @@ class LinkSmallWidget extends StatelessWidget {
           ? ScrapCard(
               child: const LoadingWidget(),
               isimgae: false,
-              width: 280,
-              height: 195,
+              width: width,
+              height: height,
             )
           : linkController.info.value.domain.endsWith('jpg') ||
                   linkController.info.value.domain.endsWith('png')
               ? ScrapCard(
                   isimgae: true,
                   domain: linkController.info.value.domain,
-                  width: 280,
-                  height: 195,
+                  width: width,
+                  height: height,
                 )
               : GestureDetector(
                   onTap: () {
                     Get.to(() => WebViewScreen(url: url));
                   },
                   child: ScrapCard(
-                    width: 280,
-                    height: 195,
+                    width: width,
+                    height: height,
                     child: Column(
                       children: [
                         CachedNetworkImage(
@@ -307,6 +309,7 @@ class LinkSmallWidget extends StatelessWidget {
                               ? linkController.info.value.image
                               : 'https://cdn.pixabay.com/photo/2022/04/22/14/14/leaves-7149850__340.jpg',
                           height: 150,
+                          width: width,
                           fit: BoxFit.cover,
                           errorWidget: (context, string, widget) {
                             return const Center(

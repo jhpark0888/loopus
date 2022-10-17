@@ -94,7 +94,7 @@ class NewsFetchPreview {
       }
 
       String? description, title, image, appleIcon, favIcon;
-      String? chImage, chTitle;
+      String? authorImage, authorName;
 
       var elements = document.getElementsByTagName('meta');
       final linkElements = document.getElementsByTagName('link');
@@ -153,14 +153,14 @@ class NewsFetchPreview {
                 chUrl = tmp.attributes['href'];
               }
               if (tmp.attributes['itemprop'] == "name") {
-                chTitle = tmp.attributes['content'];
+                authorName = tmp.attributes['content'];
               }
             });
           }
         });
 
         if (chUrl != null) {
-          chImage = await getYoutubeChannelImage(chUrl!);
+          authorImage = await getYoutubeChannelImage(chUrl!);
         }
       }
 
@@ -170,8 +170,8 @@ class NewsFetchPreview {
         'image': image ?? '',
         'appleIcon': appleIcon ?? '',
         'favIcon': favIcon ?? '',
-        'chTitle': chTitle ?? '',
-        'chImage': chImage ?? '',
+        'authorName': authorName ?? '',
+        'authorImage': authorImage ?? '',
       };
     } catch (e) {
       HomeController.to.newslist.remove(url);

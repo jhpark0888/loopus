@@ -19,8 +19,14 @@ class CareerBoardPostWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => PostingScreen(post: post, postid: post.id),
-            preventDuplicates: false);
+        Get.to(
+            () => PostingScreen(
+                  post: post,
+                  postid: post.id,
+                ),
+            opaque: false,
+            preventDuplicates: false,
+            transition: Transition.noTransition);
       },
       child: Container(
         height: 430,
@@ -43,15 +49,16 @@ class CareerBoardPostWidget extends StatelessWidget {
                         child: Row(
                           children: [
                             UserImageWidget(
-                              imageUrl: post.user.profileImage ?? '',
+                              imageUrl: post.user.profileImage,
                               width: 36,
                               height: 36,
+                              userType: post.user.userType,
                             ),
                             const SizedBox(width: 8),
                             RichText(
                                 text: TextSpan(children: [
                               TextSpan(
-                                  text: '${post.user.realName} · ',
+                                  text: '${post.user.name} · ',
                                   style: kmainbold),
                               TextSpan(text: post.user.department, style: kmain)
                             ])),
@@ -143,8 +150,8 @@ class CareerBoardPostWidget extends StatelessWidget {
     Get.to(
         () => OtherProfileScreen(
             user: post.user,
-            userid: post.user.userid,
-            realname: post.user.realName),
+            userid: post.user.userId,
+            realname: post.user.name),
         preventDuplicates: false);
   }
 }

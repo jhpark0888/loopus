@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/company_model.dart';
-import 'package:loopus/widget/company_image_widget.dart';
+import 'package:loopus/trash_bin/company_image_widget.dart';
+import 'package:loopus/widget/user_image_widget.dart';
 
 class CompanyWidget extends StatelessWidget {
   CompanyWidget({Key? key, required this.company}) : super(key: key);
@@ -20,16 +21,17 @@ class CompanyWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CompanyImageWidget(
-            imageUrl: company.companyImage,
+          UserImageWidget(
+            imageUrl: company.profileImage,
             height: 60,
             width: 60,
+            userType: company.userType,
           ),
           const SizedBox(width: 24),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(company.companyName),
+              Text(company.name),
               const SizedBox(height: 7),
               RichText(
                   text: TextSpan(children: [
@@ -59,17 +61,18 @@ class CompanyTileWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
       child: Row(
         children: [
-          CompanyImageWidget(
-            imageUrl: company.companyImage,
+          UserImageWidget(
+            imageUrl: company.profileImage,
             width: 36,
             height: 36,
+            userType: company.userType,
           ),
           const SizedBox(
             width: 14,
           ),
           Expanded(
             child: Text(
-              company.companyName,
+              company.name,
               style: kmainbold,
               overflow: TextOverflow.ellipsis,
             ),

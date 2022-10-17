@@ -10,10 +10,12 @@ class Tagwidget extends StatelessWidget {
     Key? key,
     required this.tag,
     this.isonTap = true,
+    this.isDark = false,
   }) : super(key: key);
 
   Tag tag;
   bool isonTap;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +37,11 @@ class Tagwidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: maingray, width: 0.3)),
+            border:
+                Border.all(color: isDark ? mainWhite : maingray, width: 0.3)),
         child: Text(
           tag.tag,
-          style: kmain,
+          style: kmain.copyWith(color: isDark ? mainWhite : null),
         ),
       ),
     );

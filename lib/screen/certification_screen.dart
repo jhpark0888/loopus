@@ -171,6 +171,8 @@ class CertificationScreen extends StatelessWidget {
         Get.back();
         if (value.errorData!["statusCode"] == 401) {
           showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
+        } else if (value.errorData!["statusCode"] == 403) {
+          showCustomDialog("공유 커리어를 정리 후 탈퇴를 다시 진행해주세요", 1000);
         } else {
           errorSituation(value);
         }

@@ -8,6 +8,7 @@ import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/ga_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
@@ -266,15 +267,15 @@ class ProjectAddPersonScreen extends StatelessWidget {
                         ScreenState.disconnect
                     ? DisconnectReloadWidget(reload: () {
                         getprojectfollowlist(
-                            ProfileController.to.myUserInfo.value.userid,
-                            followlist.following);
+                            HomeController.to.myProfile.value.userId,
+                            FollowListType.following);
                       })
                     : projectaddcontroller.looppersonscreenstate.value ==
                             ScreenState.error
                         ? ErrorReloadWidget(reload: () {
                             getprojectfollowlist(
-                                ProfileController.to.myUserInfo.value.userid,
-                                followlist.following);
+                                HomeController.to.myProfile.value.userId,
+                                FollowListType.following);
                           })
                         : Padding(
                             padding: const EdgeInsets.only(right: 16, left: 16),

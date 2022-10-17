@@ -14,7 +14,7 @@ class LikePeopleController {
 
   RefreshController refreshController = RefreshController();
 
-  RxList<User> likeUserList = <User>[].obs;
+  RxList<Person> likeUserList = <Person>[].obs;
   contentType likeType;
 
   int id;
@@ -27,8 +27,9 @@ class LikePeopleController {
   void likePeopleLoad() async {
     await getlikepeoele(id, likeType).then((value) {
       if (value.isError == false) {
-        likeUserList(
-            List.from(value.data).map((user) => User.fromJson(user)).toList());
+        likeUserList(List.from(value.data)
+            .map((user) => Person.fromJson(user))
+            .toList());
         likepeoplescreenstate(ScreenState.success);
       } else {
         errorSituation(value, screenState: likepeoplescreenstate);

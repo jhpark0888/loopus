@@ -92,7 +92,7 @@
 //                 subtitle: controller.project.value.members.isEmpty
 //                     ? '함께 활동한 사람이 없어요'
 //                     : controller.project.value.members
-//                         .map((user) => user.realName)
+//                         .map((user) => user.name)
 //                         .toList()
 //                         .join(', '),
 //               ),
@@ -125,7 +125,7 @@
 //       for (var user in controller.project.value.members) {
 //         projectaddcontroller.selectedpersontaglist.add(SelectedTagWidget(
 //           id: user.userid,
-//           text: user.realName,
+//           text: user.name,
 //           selecttagtype: SelectTagtype.person,
 //           tagtype: Tagtype.Posting,
 //         ));

@@ -57,11 +57,11 @@ class TagDetailScreen extends StatelessWidget {
                 pinned: true,
                 toolbarHeight: 44,
                 elevation: 0,
-                leading: GestureDetector(
-                  onTap: () {
+                leading: IconButton(
+                  onPressed: () {
                     Get.back();
                   },
-                  child: SvgPicture.asset(
+                  icon: SvgPicture.asset(
                     'assets/icons/appbar_back.svg',
                   ),
                 ),

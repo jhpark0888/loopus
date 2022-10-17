@@ -25,12 +25,6 @@ class MessageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBarWidget(
-          leading: GestureDetector(
-            onTap: () {
-              Get.back();
-            },
-            child: SvgPicture.asset('assets/icons/appbar_back.svg'),
-          ),
           bottomBorder: false,
           title: '메시지',
           actions: [
@@ -100,7 +94,7 @@ class MessageScreen extends StatelessWidget {
                                   messageController.searchRoomList.value =
                                       messageController.chattingRoomList
                                           .where((chattingRoom) => chattingRoom
-                                              .user.value.realName
+                                              .user.value.name
                                               .contains(name))
                                           .toList();
                                 } else {
@@ -122,11 +116,10 @@ class MessageScreen extends StatelessWidget {
                               //   return const SizedBox(height: 24);
                               // },
                               itemBuilder: (context, index) {
-                                return 
-                                     messageController
-                                        .searchRoomList[index];
+                                return messageController.searchRoomList[index];
                               },
-                              itemCount: messageController.searchRoomList.length,
+                              itemCount:
+                                  messageController.searchRoomList.length,
                             ),
                           ),
                         ),

@@ -11,7 +11,7 @@ import 'package:loopus/widget/user_image_widget.dart';
 class SearchUserWidget extends StatelessWidget {
   SearchUserWidget({Key? key, required this.user}) : super(key: key);
 
-  User user;
+  Person user;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class SearchUserWidget extends StatelessWidget {
       onTap: () {
         Get.to(
             () => OtherProfileScreen(
-                user: user, userid: user.userid, realname: user.realName),
+                user: user, userid: user.userId, realname: user.name),
             preventDuplicates: false);
       },
       splashColor: kSplashColor,
@@ -29,12 +29,16 @@ class SearchUserWidget extends StatelessWidget {
           children: [
             const SizedBox(width: 20),
             UserImageWidget(
-                imageUrl: user.profileImage ?? "", width: 36, height: 36),
+              imageUrl: user.profileImage,
+              width: 36,
+              height: 36,
+              userType: user.userType,
+            ),
             const SizedBox(width: 14),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(user.realName, style: kmainbold),
+                Text(user.name, style: kmainbold),
                 const SizedBox(height: 7),
                 Text('${user.univName} · ${user.department}', style: kmain),
               ],
