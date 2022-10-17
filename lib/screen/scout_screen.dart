@@ -264,7 +264,7 @@ class _ScoutScreenState extends State<ScoutScreen> {
             //   ListView(
             //     scrollDirection: Axis.vertical,
             //     children: [CompanyFollowWidget(
-            //       contact: _scontroller.getCompanyList)
+            //       contact: _scontroller.getCompanyList())
             //     )],
             //   )
           ]),
@@ -272,6 +272,11 @@ class _ScoutScreenState extends State<ScoutScreen> {
   }
 }
 
+// TabBarView(
+//                 controller: _controller.tabController,
+//                 children: List.generate(_controller.careerField.length,
+//                     (index) => tabViews(_controller.careerFieldList[index])),
+//               ),
 // Widget tabViews(MapEntry<String, String> currentField) {
 //   return Obx(() => Container(
 //         width: 100,

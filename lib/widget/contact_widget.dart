@@ -4,6 +4,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/scout_report_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/contact_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/widget/company_image_widget.dart';
@@ -12,9 +13,16 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class CompanyFollowWidget extends StatelessWidget {
-  CompanyFollowWidget({Key? key, required this.contact}) : super(key: key);
+  CompanyFollowWidget(
+      {Key? key,
+      required this.contact,
+      required this.user,
+      required this.isFollow})
+      : super(key: key);
 
   Contact contact;
+  User user;
+  bool isFollow;
 
   Widget build(BuildContext context) {
     return Column(
@@ -45,25 +53,49 @@ class CompanyFollowWidget extends StatelessWidget {
                             Text(contact.companyProfile.companyName,
                                 style: kmain),
                             SizedBox(height: 7),
-                            // Text(
-                            //   contact.contactField.split(",").first,
-                            //   style: kmainheight.copyWith(color: maingray),
-                            // )
+                            Text(
+                              contact.category,
+                              style: kmainheight.copyWith(color: maingray),
+                            )
                           ],
                         ),
                       ),
                       Expanded(
                           child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          user.looped.value = user.looped.value ==
+                                  FollowState.normal
+                              ? FollowState.following
+                              : user.looped.value == FollowState.follower
+                                  ? FollowState.wefollow
+                                  : user.looped.value == FollowState.following
+                                      ? FollowState.normal
+                                      : FollowState.follower;
+                        },
                         child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8)),
-                          height: 36,
                           width: 64,
-                          color: mainblue,
-                          child: Text(
-                            "팔로우",
-                            style: kmainheight.copyWith(color: mainWhite),
+                          height: 36,
+                          padding: const EdgeInsets.symmetric(horizontal: 14),
+                          decoration: BoxDecoration(
+                              color: user.looped.value == FollowState.normal ||
+                                      user.looped.value == FollowState.follower
+                                  ? mainblue
+                                  : cardGray,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Center(
+                            child: Text(
+                              user.looped.value == FollowState.normal ||
+                                      user.looped.value == FollowState.follower
+                                  ? "팔로우"
+                                  : "팔로잉",
+                              style: kmain.copyWith(
+                                  color:
+                                      user.looped.value == FollowState.normal ||
+                                              user.looped.value ==
+                                                  FollowState.follower
+                                          ? mainWhite
+                                          : mainblack),
+                            ),
                           ),
                         ),
                       ))

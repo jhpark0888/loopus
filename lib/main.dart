@@ -218,7 +218,7 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
       body: Center(
         child: Container(
           width: Get.width / 2,
-          child: Image.asset('assets/illustrations/splash_image.png'),
+          child: Image.asset('assets/illustrations/splash.png'),
         ),
       ),
     );
