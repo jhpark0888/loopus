@@ -61,14 +61,6 @@ class ScoutScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("당신에게 '집-중'하고 있는 추천 기업",
-            style: kmainbold.copyWith(color: mainWhite)),
-        SizedBox(height: 14),
-        Text(contact.slogan,
-            style: kNavigationTitle.copyWith(color: mainWhite)),
-        SizedBox(height: 14),
-        Text(contact.recommendation, style: kmain.copyWith(color: mainWhite)),
-        SizedBox(height: 24),
         Container(
           width: double.infinity,
           height: 200,
@@ -81,7 +73,7 @@ class ScoutScreen extends StatelessWidget {
                 top: 70,
                 child: Container(
                   width: double.infinity,
-                  height: 120,
+                  height: 250,
                   child: Obx(
                     () => PageView(
                       controller: _pController,
@@ -206,20 +198,21 @@ class ScoutScreen extends StatelessWidget {
           ),
           body:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            const SizedBox(height: 14),
             Text(_scontroller.recommandCompList[_currentIndex.value].slogan),
             Text("당신에게 '집-중'하고 있는 추천 기업",
                 style: kmainbold.copyWith(color: mainWhite)),
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
             Text(_scontroller.recommandCompList[_currentIndex.value].slogan,
                 style: kNavigationTitle.copyWith(color: mainWhite)),
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
             Text(
                 _scontroller
                     .recommandCompList[_currentIndex.value].recommendation,
                 style: kmain.copyWith(color: mainWhite)),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             companyRecImages(_scontroller.recommandCompList.first),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             _searchScreen(context),
             const SizedBox(height: 14.5),
             Container(
@@ -260,8 +253,8 @@ class ScoutScreen extends StatelessWidget {
             //   SizedBox(height: 20),
             //   ListView(
             //     scrollDirection: Axis.vertical,
-            //     children: [CompanyFollowWidget(
-            //       contact: _scontroller.getCompanyList())
+            //     children: [CompanyListWidget(
+            //       contact: _scontroller. , user: , isFollow: true,)
             //     )],
             //   )
           ]),
