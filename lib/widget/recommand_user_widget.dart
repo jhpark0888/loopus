@@ -8,7 +8,7 @@ import 'package:loopus/widget/user_image_widget.dart';
 class RecommandUserWidget extends StatelessWidget {
   RecommandUserWidget({Key? key, required this.user}) : super(key: key);
 
-  User user;
+  Person user;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,10 @@ class RecommandUserWidget extends StatelessWidget {
         children: [
           Column(
             children: [
-              UserImageWidget(imageUrl: user.profileImage ?? ''),
+              UserImageWidget(
+                imageUrl: user.profileImage,
+                userType: user.userType,
+              ),
               const SizedBox(
                 height: 7,
               ),
@@ -39,7 +42,7 @@ class RecommandUserWidget extends StatelessWidget {
   void tapProfile() {
     Get.to(
         () => OtherProfileScreen(
-            user: user, userid: user.userid, realname: user.realName),
+            user: user, userid: user.userId, realname: user.name),
         preventDuplicates: false);
   }
 }

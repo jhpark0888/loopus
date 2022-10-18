@@ -31,9 +31,9 @@ class Project {
   List<String> fieldIds;
   DateTime? updateDate;
   RxList<Post> posts;
-  List<User> members;
+  List<Person> members;
   RxInt? post_count;
-  User? user;
+  Person? user;
   bool? isTop;
   int is_user;
   bool isPublic;
@@ -81,16 +81,16 @@ class Project {
               : ["10"]
           : ["10"],
       members: json["member"] != null
-          ? List<User>.from(json["member"].map((x) => x['profile'] != null
-              ? User.fromJson(x["profile"])
-              : User.fromJson(x)))
+          ? List<Person>.from(json["member"].map((x) => x['profile'] != null
+              ? Person.fromJson(x["profile"])
+              : Person.fromJson(x)))
           : [],
       postRatio:
           json['ratio'] != null ? double.parse(json['ratio'].toString()) : 0.0,
       post_count:
           json["post_count"] != null ? RxInt(json["post_count"]) : RxInt(0),
       is_user: json['is_user'] ?? 0,
-      user: json["profile"] != null ? User.fromJson(json["profile"]) : null,
+      user: json["profile"] != null ? Person.fromJson(json["profile"]) : null,
       isPublic: json["project"] != null ? json["project"]["is_public"] : false,
       managerId: isProject
           ? json['manager']

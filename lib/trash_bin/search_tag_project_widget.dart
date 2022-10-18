@@ -134,7 +134,7 @@
 //                                 SizedBox(
 //                                   width: 8,
 //                                 ),
-//                                 Text("${project.user!.realName} · ",
+//                                 Text("${project.user!.name} · ",
 //                                     style: kButtonStyle),
 //                               ],
 //                             ),
@@ -173,7 +173,7 @@
 //     Get.to(() => OtherProfileScreen(
 //           userid: project.userid!,
 //           isuser: project.is_user,
-//           realname: project.user!.realName,
+//           realname: project.user!.name,
 //         ));
 //   }
 

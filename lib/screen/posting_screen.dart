@@ -85,7 +85,7 @@ class PostingScreen extends StatelessWidget {
                   controller.selectedCommentId.value,
                   contentType.cocomment,
                   controller.commentController.text,
-                  controller.tagUser.value.userid)
+                  controller.tagUser.value.userId)
               .then((value) {
             if (value.isError == false) {
               int commentId = controller.selectedCommentId.value;
@@ -129,7 +129,7 @@ class PostingScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '     ${controller.tagUser.value.realName}님에게 답글을 남기는 중',
+                        '     ${controller.tagUser.value.name}님에게 답글을 남기는 중',
                         style: kmain.copyWith(color: maingray),
                       ),
                     ],
@@ -166,7 +166,7 @@ class PostingScreen extends StatelessWidget {
                   minLines: 1,
                   maxLines: 5,
                   decoration: InputDecoration(
-                    prefix: controller.tagUser.value.userid == 0
+                    prefix: controller.tagUser.value.userId == 0
                         ? null
                         : Container(
                             padding: const EdgeInsets.symmetric(
@@ -176,7 +176,7 @@ class PostingScreen extends StatelessWidget {
                                 // color: mainWhite,
                                 borderRadius: BorderRadius.circular(8)),
                             child: Text(
-                              '@${controller.tagUser.value.realName}',
+                              '@${controller.tagUser.value.name}',
                               style: kmainbold,
                             ),
                           ),
@@ -527,8 +527,8 @@ class PostingScreen extends StatelessWidget {
     Get.to(
         () => OtherProfileScreen(
             user: controller.post!.value.user,
-            userid: controller.post!.value.user.userid,
-            realname: controller.post!.value.user.realName),
+            userid: controller.post!.value.user.userId,
+            realname: controller.post!.value.user.name),
         preventDuplicates: false);
   }
 }

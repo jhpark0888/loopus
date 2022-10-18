@@ -40,7 +40,7 @@
 //                         onTap: () {
 //                           Get.to(() => OtherProfileScreen(
 //                                 userid: question.userid,
-//                                 realname: question.user.realName,
+//                                 realname: question.user.name,
 //                               ));
 //                         },
 //                         child: Row(
@@ -64,7 +64,7 @@
 //                               width: 8,
 //                             ),
 //                             Text(
-//                               "${question.user.realName} · ",
+//                               "${question.user.name} · ",
 //                               style: ktempFont,
 //                             ),
 //                           ],

@@ -102,11 +102,18 @@ class ProfileSnsInputScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // snskorname = snsEngtoKor(snsType);
     // inputType = snsInputType(snsType);
+    if (_controller.snsList.any((element) => element.snsType == snsType)) {
+      _controller.snsController.text = _controller.snsList
+          .where((element) => element.snsType == snsType)
+          .first
+          .url;
+    }
+
     return KeyboardDismissOnTap(
       child: Scaffold(
         appBar: AppBarWidget(
           title:
-              "${snsType.snsEngtoKor} ${snsType == SNSType.naver ? "블로그" : ""} 추가",
+              "${snsType.snsEngtoKor} ${snsType == SNSType.naver ? "블로그" : ""} ${_controller.snsList.any((element) => element.snsType == snsType) ? "수정" : "추가"}",
           bottomBorder: false,
           actions: [
             TextButton(

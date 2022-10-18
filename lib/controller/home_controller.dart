@@ -8,6 +8,9 @@ import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/model/company_model.dart';
+import 'package:loopus/screen/myProfile_screen.dart';
+import 'package:loopus/screen/mycompany_screen.dart';
 import 'package:loopus/trash_bin/question_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
@@ -31,6 +34,17 @@ import 'package:loopus/widget/posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
+// news = [{
+//   "urls": url,
+//   "corp": String name
+// }]
+
+// brunch = [{
+//   "url" : url,
+//   "writer": "name",
+//   "profile_url" : String,
+// }]
+
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static HomeController get to => Get.find();
@@ -38,10 +52,10 @@ class HomeController extends GetxController
   Project? recommendCareer;
   RxList<Post> posts = <Post>[].obs;
   RxList<Contact> contact = <Contact>[].obs;
-  RxList<User> growthUsers = <User>[].obs;
+  RxList<Person> growthUsers = <Person>[].obs;
   RxList<String> newslist = <String>[].obs;
-  RxList<User> joinSenior1 = <User>[].obs;
-  RxList<User> joinSenior2 = <User>[].obs;
+  RxList<Person> joinSenior1 = <Person>[].obs;
+  RxList<Person> joinSenior2 = <Person>[].obs;
 
   late Rx<ScrollController> scrollController;
 
@@ -67,6 +81,8 @@ class HomeController extends GetxController
 
   RxInt enterMessageRoom = 0.obs;
 
+  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+
   StreamSubscription? _dataStreamSubscription;
 
   late String? myId;
@@ -78,21 +94,8 @@ class HomeController extends GetxController
     // onPostingRefresh();
     // onQuestionRefresh();
     // onLoopRefresh();
-    myId = await const FlutterSecureStorage().read(key: "id");
 
-    await getProfile(int.parse(myId!)).then((value) async {
-      if (value.isError == false) {
-        myProfile.value = User.fromJson(value.data);
-        print(myProfile.value.userid);
-        isNewAlarm.value = value.data['new_alarm'];
-        await updateNotreadMsg(myProfile.value.userid).then((value) {
-          if (value.isError == false) {
-            isNewMsg.value = value.data;
-            print(value.data);
-          }
-        });
-      }
-    });
+    getUserProfile();
 
     _dataStreamSubscription =
         ReceiveSharingIntent.getTextStream().listen((String text) {
@@ -112,22 +115,42 @@ class HomeController extends GetxController
     super.onInit();
   }
 
-  void onPostingRefresh() async {
-    myId = await const FlutterSecureStorage().read(key: "id");
+  void getUserProfile() async {
+    myId = await secureStorage.read(key: "id");
+    String? userType = await secureStorage.read(key: "type");
+    print(userType);
+    if (userType == UserType.student.name) {
+      await getProfile(int.parse(myId!)).then((value) async {
+        if (value.isError == false) {
+          myProfile.value = Person.fromJson(value.data);
+          print(myProfile.value.userId);
+          isNewAlarm.value = value.data['new_alarm'];
+          await updateNotreadMsg(myProfile.value.userId).then((value) {
+            if (value.isError == false) {
+              isNewMsg.value = value.data;
+              print(value.data);
+            }
+          });
+        }
+      });
+    } else if (userType == UserType.company.name) {
+      await getCorpProfile(int.parse(myId!)).then((value) async {
+        if (value.isError == false) {
+          myProfile.value = Company.fromJson(value.data);
+          // isNewAlarm.value = value.data['new_alarm'];
+          await updateNotreadMsg(myProfile.value.userId).then((value) {
+            if (value.isError == false) {
+              isNewMsg.value = value.data;
+              print(value.data);
+            }
+          });
+        }
+      });
+    }
+  }
 
-    await getProfile(int.parse(myId!)).then((value) async {
-      if (value.isError == false) {
-        myProfile.value = User.fromJson(value.data);
-        print(myProfile.value.userid);
-        isNewAlarm.value = value.data['new_alarm'];
-        await updateNotreadMsg(myProfile.value.userid).then((value) {
-          if (value.isError == false) {
-            isNewMsg.value = value.data;
-            print(value.data);
-          }
-        });
-      }
-    });
+  void onPostingRefresh() async {
+    getUserProfile();
 
     enablePostingPullup.value = true;
     posts.clear();
@@ -242,6 +265,14 @@ class HomeController extends GetxController
     }
     if (Get.isRegistered<BookmarkController>()) {
       BookmarkController.to.tapunLike(postid, likecount);
+    }
+  }
+
+  void goMyProfile() {
+    if (HomeController.to.myProfile.value.userType == UserType.student) {
+      Get.to(() => MyProfileScreen());
+    } else {
+      Get.to(() => MyCompanyScreen());
     }
   }
 }

@@ -25,16 +25,19 @@ import 'package:loopus/utils/local_notification.dart';
 
 import 'controller/notification_controller.dart';
 
+//백그라운드 메세지 왔을 때
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  if (message.data['type'] == 'msg') {
+  if (message.data["type"] == "msg") {
     String? newMsg = await FlutterSecureStorage().read(key: 'newMsg') ?? '';
     if (newMsg == '') {
       const FlutterSecureStorage().write(key: 'newMsg', value: 'true');
     }
+  } else if (message.data["type"] == "certification") {
+    NotificationController.certificationFunction();
   }
   print('백그라운드 알림 데이터 : ${message.data}');
 }
@@ -51,7 +54,8 @@ void main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: mainblack,
-    systemNavigationBarIconBrightness: Brightness.light,
+    statusBarIconBrightness: Brightness.dark,
+    systemNavigationBarIconBrightness: Brightness.dark,
     statusBarColor: mainWhite, // status bar color
   ));
   try {
@@ -85,6 +89,8 @@ class MyApp extends StatelessWidget {
   final String? token;
   MyApp({Key? key, required this.token}) : super(key: key);
   final GAController _gaController = Get.put(GAController());
+  final NotificationController notificationController =
+      Get.put(NotificationController());
   final ThemeData themeData = ThemeData(
       fontFamily: 'SUIT',
       appBarTheme: const AppBarTheme(
@@ -167,8 +173,6 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenStete extends State<WelcomeScreen> {
   String? token;
   _WelcomeScreenStete({this.token});
-  NotificationController notificationController =
-      Get.put(NotificationController());
   @override
   void initState() {
     super.initState();

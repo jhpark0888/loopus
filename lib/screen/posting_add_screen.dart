@@ -26,6 +26,7 @@ import 'package:loopus/widget/no_ul_textfield_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
 import 'package:loopus/widget/swiper_widget.dart';
+import 'package:photo_manager/photo_manager.dart';
 import '../controller/modal_controller.dart';
 
 class PostingAddScreen extends StatelessWidget {
@@ -105,8 +106,22 @@ class PostingAddScreen extends StatelessWidget {
                                             child: addButton(
                                                 title: '이미지',
                                                 titleEng: 'image',
-                                                ontap: () {
-                                                  Get.to(() => UploadScreen());
+                                                ontap: () async {
+                                                  if (_imageController
+                                                      .permissionState.isAuth) {
+                                                    if (_imageController
+                                                        .albums.isNotEmpty) {
+                                                      Get.to(
+                                                          () => UploadScreen());
+                                                    } else {
+                                                      showCustomDialog(
+                                                          "이미지가 없습니다", 1000);
+                                                    }
+                                                  } else {
+                                                    showCustomDialog(
+                                                        "미디어 및 파일의 권한을 허용해주세요",
+                                                        1000);
+                                                  }
                                                 }),
                                           ),
                                           const SizedBox(

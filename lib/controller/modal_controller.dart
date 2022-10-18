@@ -471,6 +471,7 @@ void showBottomdialog(
     backgroundColor: Colors.transparent,
     builder: (context) => GestureDetector(
       onTap: () => Get.back(),
+      behavior: HitTestBehavior.translucent,
       child: Container(
         padding: const EdgeInsets.all(20),
         child: Column(

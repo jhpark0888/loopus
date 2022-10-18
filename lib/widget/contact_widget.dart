@@ -7,7 +7,6 @@ import 'package:loopus/model/contact_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
-import 'package:loopus/widget/company_image_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -43,10 +42,12 @@ class CompanyFollowWidget extends StatelessWidget {
                       child: Row(
                     children: [
                       SizedBox(width: 20),
-                      CompanyImageWidget(
-                          imageUrl: contact.companyImage,
-                          width: 40,
-                          height: 40),
+                      UserImageWidget(
+                        imageUrl: contact.companyImage,
+                        width: 40,
+                        height: 40,
+                        userType: UserType.company,
+                      ),
                       Expanded(
                         child: Column(
                           children: [
@@ -63,12 +64,12 @@ class CompanyFollowWidget extends StatelessWidget {
                       Expanded(
                           child: GestureDetector(
                         onTap: () {
-                          user.looped.value = user.looped.value ==
+                          user.followed.value = user.followed.value ==
                                   FollowState.normal
                               ? FollowState.following
-                              : user.looped.value == FollowState.follower
+                              : user.followed.value == FollowState.follower
                                   ? FollowState.wefollow
-                                  : user.looped.value == FollowState.following
+                                  : user.followed.value == FollowState.following
                                       ? FollowState.normal
                                       : FollowState.follower;
                         },
@@ -77,24 +78,27 @@ class CompanyFollowWidget extends StatelessWidget {
                           height: 36,
                           padding: const EdgeInsets.symmetric(horizontal: 14),
                           decoration: BoxDecoration(
-                              color: user.looped.value == FollowState.normal ||
-                                      user.looped.value == FollowState.follower
-                                  ? mainblue
-                                  : cardGray,
+                              color:
+                                  user.followed.value == FollowState.normal ||
+                                          user.followed.value ==
+                                              FollowState.follower
+                                      ? mainblue
+                                      : cardGray,
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                             child: Text(
-                              user.looped.value == FollowState.normal ||
-                                      user.looped.value == FollowState.follower
+                              user.followed.value == FollowState.normal ||
+                                      user.followed.value ==
+                                          FollowState.follower
                                   ? "팔로우"
                                   : "팔로잉",
                               style: kmain.copyWith(
-                                  color:
-                                      user.looped.value == FollowState.normal ||
-                                              user.looped.value ==
-                                                  FollowState.follower
-                                          ? mainWhite
-                                          : mainblack),
+                                  color: user.followed.value ==
+                                              FollowState.normal ||
+                                          user.followed.value ==
+                                              FollowState.follower
+                                      ? mainWhite
+                                      : mainblack),
                             ),
                           ),
                         ),

@@ -53,8 +53,8 @@ class MessageDetatilScreen extends StatelessWidget {
   User myProfile;
   EnterRoute enterRoute;
   late MessageDetailController controller = Get.put(
-      MessageDetailController(partnerId: partner.userid),
-      tag: partner.userid.toString());
+      MessageDetailController(partnerId: partner.userId),
+      tag: partner.userId.toString());
   // KeyBoardController keyBoardController = Get.put(KeyBoardController());
   Key centerKey = const ValueKey('QueryList');
   @override
@@ -64,93 +64,89 @@ class MessageDetatilScreen extends StatelessWidget {
         FocusScope.of(context).unfocus();
       },
       behavior: HitTestBehavior.translucent,
-      child: SafeArea(
-        child: Scaffold(
-            resizeToAvoidBottomInset: true,
-            appBar: AppBarWidget(
-              title: partner.realName,
-              bottomBorder: false,
-              leading: GestureDetector(
-                  onTap: () {
-                    if (enterRoute == EnterRoute.popUp) {
-                      if (Get.isRegistered<MessageController>()) {
-                        Get.back();
-                      } else {
-                        Get.off(() => MessageScreen());
-                      }
+      child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBarWidget(
+            title: partner.name,
+            bottomBorder: false,
+            leading: IconButton(
+                onPressed: () {
+                  if (enterRoute == EnterRoute.popUp) {
+                    if (Get.isRegistered<MessageController>()) {
+                      Get.back();
+                    } else {
+                      Get.off(() => MessageScreen());
+                    }
+                  } else {
+                    Get.back();
+                  }
+                },
+                icon: SvgPicture.asset('assets/icons/appbar_back.svg')),
+            actions: [
+              GestureDetector(
+                onTap: () async {
+                  showModalIOS(context, func1: () {
+                    int roomId = controller.roomid;
+                    if (controller.messageList.isNotEmpty) {
+                      deleteChatRoom(controller.roomid, myProfile.userId,
+                              int.parse(controller.messageList.last.messageId!))
+                          .then((value) {
+                        if (value.isError == false) {
+                          SQLController.to.deleteMessage(roomId);
+                          SQLController.to.deleteMessageRoom(roomId);
+                          SQLController.to.deleteUser(partner.userId);
+                          if (Get.isRegistered<MessageController>()) {
+                            MessageController.to.searchRoomList.removeAt(
+                                MessageController.to.searchRoomList.indexWhere(
+                                    (messageRoom) =>
+                                        messageRoom.chatRoom.value.roomId ==
+                                        roomId));
+                            MessageController.to.chattingRoomList.removeAt(
+                                MessageController.to.chattingRoomList
+                                    .indexWhere((messageRoom) =>
+                                        messageRoom.chatRoom.value.roomId ==
+                                        roomId));
+                          }
+                          Get.back();
+                          if (enterRoute == EnterRoute.popUp) {
+                            Get.off(() => MessageScreen());
+                          } else {
+                            Get.back();
+                          }
+                        }
+                      });
                     } else {
                       Get.back();
-                    }
-                  },
-                  child: Center(
-                      child: SvgPicture.asset('assets/icons/appbar_back.svg'))),
-              actions: [
-                GestureDetector(
-                  onTap: () async {
-                    showModalIOS(context, func1: () {
-                      int roomId = controller.roomid;
-                      if (controller.messageList.isNotEmpty) {
-                        deleteChatRoom(
-                                controller.roomid,
-                                myProfile.userid,
-                                int.parse(
-                                    controller.messageList.last.messageId!))
-                            .then((value) {
-                          if (value.isError == false) {
-                            SQLController.to.deleteMessage(roomId);
-                            SQLController.to.deleteMessageRoom(roomId);
-                            SQLController.to.deleteUser(partner.userid);
-                            if (Get.isRegistered<MessageController>()) {
-                              MessageController.to.searchRoomList.removeAt(
-                                  MessageController.to.searchRoomList
-                                      .indexWhere((messageRoom) =>
-                                          messageRoom.chatRoom.value.roomId ==
-                                          roomId));
-                              MessageController.to.chattingRoomList.removeAt(
-                                  MessageController.to.chattingRoomList
-                                      .indexWhere((messageRoom) =>
-                                          messageRoom.chatRoom.value.roomId ==
-                                          roomId));
-                            }
-                            Get.back();
-                            if (enterRoute == EnterRoute.popUp) {
-                              Get.off(() => MessageScreen());
-                            } else {
-                              Get.back();
-                            }
-                          }
-                        });
+                      if (enterRoute == EnterRoute.popUp) {
+                        Get.off(() => MessageScreen());
                       } else {
                         Get.back();
-                        if (enterRoute == EnterRoute.popUp) {
-                          Get.off(() => MessageScreen());
-                        } else {
-                          Get.back();
-                        }
                       }
-                    }, func2: () {
-                      Get.to(() => const DatabaseList());
-                    },
-                        value1: '채팅방 나가기',
-                        value2: '',
-                        isValue1Red: true,
-                        isValue2Red: false,
-                        isOne: true);
+                    }
+                  }, func2: () {
+                    Get.to(() => const DatabaseList());
                   },
-                  child: SizedBox(
-                      height: 44,
-                      width: 44,
-                      child: Center(
-                          child: SvgPicture.asset(
-                              'assets/icons/appbar_more_option.svg'))),
-                )
-              ],
-            ),
-            bottomNavigationBar: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: sendField()),
-            body: Obx(
+                      value1: '채팅방 나가기',
+                      value2: '',
+                      isValue1Red: true,
+                      isValue2Red: false,
+                      isOne: true);
+                },
+                child: SizedBox(
+                    height: 44,
+                    width: 44,
+                    child: Center(
+                        child: SvgPicture.asset(
+                            'assets/icons/appbar_more_option.svg'))),
+              )
+            ],
+          ),
+          bottomNavigationBar: Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: sendField()),
+          body: SafeArea(
+            child: Obx(
               () => controller.screenState.value == ScreenState.loading
                   ? const Center(child: LoadingWidget())
                   : controller.screenState.value == ScreenState.success
@@ -238,8 +234,8 @@ class MessageDetatilScreen extends StatelessWidget {
                       : controller.screenState.value == ScreenState.normal
                           ? Container()
                           : Container(),
-            )),
-      ),
+            ),
+          )),
     );
   }
 
@@ -319,7 +315,7 @@ class MessageDetatilScreen extends StatelessWidget {
       controller.channel.sink.add(jsonEncode({
         'content': controller.sendText.text,
         'type': 'msg',
-        'name': myProfile.realName
+        'name': myProfile.name
       }));
     }
   }

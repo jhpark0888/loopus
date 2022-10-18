@@ -35,7 +35,7 @@ class SelectedTagWidget extends StatelessWidget {
           ProjectAddController.to.selectedpersontaglist
               .removeWhere((element) => element.id == id);
           ProjectAddController.to.looppersonlist
-              .where((element) => element.user.userid == id)
+              .where((element) => element.user.userId == id)
               .first
               .isselected(false);
         }

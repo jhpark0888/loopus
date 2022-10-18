@@ -60,7 +60,7 @@
 //                       behavior: HitTestBehavior.translucent,
 //                       onTap: tapProfile,
 //                       child: Text(
-//                         "${answer.user.realName}",
+//                         "${answer.user.name}",
 //                         style: ktempFont,
 //                       ),
 //                     ),
@@ -149,7 +149,7 @@
 
 //     Get.to(() => OtherProfileScreen(
 //           userid: answer.userid,
-//           realname: answer.user.realName,
+//           realname: answer.user.name,
 //         ));
 //   }
 // }

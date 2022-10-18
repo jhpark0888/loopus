@@ -7,6 +7,7 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
+import 'package:loopus/screen/mycompany_screen.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/utils/custom_linkpreview.dart';
@@ -35,8 +36,8 @@ import 'package:sqlite_viewer/sqlite_viewer.dart';
 
 class HomeScreen extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
-  final SearchController _searchController = Get.put(SearchController());
-  final ProfileController _profileController = Get.put(ProfileController());
+  // final SearchController _searchController = Get.put(SearchController());
+  // final ProfileController _profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -130,9 +131,7 @@ class HomeScreen extends StatelessWidget {
             ),
             Center(
               child: GestureDetector(
-                onTap: () async {
-                  Get.to(() => MyProfileScreen());
-                }
+                onTap: () => _homeController.goMyProfile()
                 // Get.to(() => DatabaseList())
 
                 ,
@@ -140,12 +139,12 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Obx(
                     () => UserImageWidget(
-                      imageUrl: HomeController
-                              .to.myProfile.value.profileImage ??
-                          // ProfileController.to.myUserInfo.value.profileImage ??
-                          '',
+                      imageUrl: HomeController.to.myProfile.value.profileImage
+                      // ProfileController.to.myUserInfo.value.profileImage ??
+                      ,
                       width: 36,
                       height: 36,
+                      userType: HomeController.to.myProfile.value.userType,
                     ),
                   ),
                 ),
@@ -184,9 +183,7 @@ class HomeScreen extends StatelessWidget {
                                 primary: false,
                                 child: Column(
                                   children: [
-                                    _homeController
-                                                .recommendCareer!.careerName !=
-                                            ""
+                                    _homeController.recommendCareer != null
                                         ? GestureDetector(
                                             behavior:
                                                 HitTestBehavior.translucent,

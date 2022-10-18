@@ -9,7 +9,7 @@ class BanPeopleController extends GetxController {
   static BanPeopleController get to => Get.find();
   Rx<ScreenState> banpeoplescreenstate = ScreenState.loading.obs;
 
-  RxList<User> banlist = <User>[].obs;
+  RxList<Person> banlist = <Person>[].obs;
 
   void loadbanlist() async {
     banpeoplescreenstate(ScreenState.loading);

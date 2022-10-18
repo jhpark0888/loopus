@@ -71,6 +71,7 @@ class NotificationController extends GetxController {
     FirebaseMessaging.onMessageOpenedApp.listen(_backgroundMessage);
   }
 
+  //푸쉬알림 클릭했을 때
   void _backgroundMessage(RemoteMessage message) {
     Map<String, dynamic> json = message.data;
 
@@ -124,72 +125,7 @@ class NotificationController extends GetxController {
       print(event.data["type"]);
       print('알림 데이터 : ${event.data}');
       if (event.data["type"] == "certification") {
-        if (Get.isRegistered<SignupController>()) {
-          if (SignupController.to.isReCertification == false) {
-            String? email =
-                await FlutterSecureStorage().read(key: 'temp_email');
-            FirebaseMessaging.instance.unsubscribeFromTopic(email!);
-            SignupController _signupController = Get.find();
-            _signupController.signupcertification(Emailcertification.success);
-            _signupController.timer
-                .timerClose(dialogOn: false, stateChange: false);
-            FlutterSecureStorage().delete(key: 'temp_email');
-            loading();
-            await signupRequest().then((value) async {
-              final GAController _gaController = GAController();
-
-              if (value.isError == false) {
-                await _gaController.logSignup();
-                await _gaController.setUserProperties(value.data['user_id'],
-                    _signupController.selectDept.value.deptname);
-                await _gaController.logScreenView('signup_6');
-                Get.back();
-                Get.offAll(() => SignupCompleteScreen(
-                      emailId: _signupController.emailidcontroller.text +
-                          "@" +
-                          _signupController.selectUniv.value.email,
-                      password: _signupController.passwordcontroller.text,
-                    ));
-              } else {
-                await _gaController.logScreenView('signup_6');
-                // errorSituation(value);
-                Get.back();
-                Get.offAll(() =>
-                    SignupFailScreen(signupController: _signupController));
-              }
-            });
-          } else {
-            loading();
-            SignupController _signupController = Get.find();
-            await updateProfile(
-                    email: _signupController.emailidcontroller.text,
-                    name: _signupController.namecontroller.text,
-                    univId: _signupController.selectUniv.value.id,
-                    deptId: _signupController.selectDept.value.id,
-                    admission: _signupController.admissioncontroller.text,
-                    updateType: ProfileUpdateType.profile)
-                .then((value) {
-              if (value.isError == false) {
-                Get.back();
-                Get.offAll(() => SignupCompleteScreen(
-                      emailId: _signupController.emailidcontroller.text +
-                          "@" +
-                          _signupController.selectUniv.value.email,
-                      password:
-                          CertificationController.to.passwordcontroller.text,
-                    ));
-              } else {
-                Get.back();
-                errorSituation(value);
-              }
-            });
-          }
-        } else if (Get.isRegistered<PwChangeController>()) {
-          PwChangeController.to.pwcertification(Emailcertification.success);
-          PwChangeController.to.timer
-              .timerClose(dialogOn: false, stateChange: false);
-          Get.to(() => PwChangeScreen(pwType: PwType.pwfind));
-        }
+        certificationFunction();
       } else {
         Map<String, dynamic> json = event.data;
         if (event.data['type'] != 'no_msg') {
@@ -218,9 +154,11 @@ class NotificationController extends GetxController {
                   if (value.isError == false) {
                     await SQLController.to.insertUser(value.data[0]);
                     MessageController.to.searchRoomList.add(MessageRoomWidget(
-                        chatRoom: chatRoom.obs, user: Rx<User>(value.data[0])));
+                        chatRoom: chatRoom.obs,
+                        user: Rx<Person>(value.data[0])));
                     MessageController.to.chattingRoomList.add(MessageRoomWidget(
-                        chatRoom: chatRoom.obs, user: Rx<User>(value.data[0])));
+                        chatRoom: chatRoom.obs,
+                        user: Rx<Person>(value.data[0])));
                   }
                 });
               } else {
@@ -334,7 +272,7 @@ class NotificationController extends GetxController {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      print('Person granted permission');
       try {
         if (Platform.isIOS) {
           await messaging.setForegroundNotificationPresentationOptions(
@@ -348,9 +286,9 @@ class NotificationController extends GetxController {
       }
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      print('Person granted provisional permission');
     } else {
-      print('User declined or has not accepted permission');
+      print('Person declined or has not accepted permission');
     }
   }
 
@@ -371,6 +309,76 @@ class NotificationController extends GetxController {
 //특정 질문에 알림을 해제한 사람들 또는 만료된 그룹 해제
 
       await messaging.unsubscribeFromTopic('promotion');
+    }
+  }
+
+  static void certificationFunction() async {
+    Get.find<SignupController>();
+    if (Get.isRegistered<SignupController>()) {
+      if (SignupController.to.isReCertification == false) {
+        SignupController _signupController = Get.find();
+        FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+        _signupController.signupcertification(Emailcertification.success);
+        _signupController.timer.timerClose(closeFunctuin: () async {
+          _signupController.timer.certificateClose(secureStorage);
+        });
+
+        loading();
+        await signupRequest().then((value) async {
+          final GAController _gaController = GAController();
+
+          if (value.isError == false) {
+            await _gaController.logSignup();
+            await _gaController.setUserProperties(value.data['user_id'],
+                _signupController.selectDept.value.deptname);
+            await _gaController.logScreenView('signup_6');
+            Get.back();
+            Get.offAll(() => SignupCompleteScreen(
+                  emailId: _signupController.emailidcontroller.text +
+                      "@" +
+                      _signupController.selectUniv.value.email,
+                  password: _signupController.passwordcontroller.text,
+                ));
+          } else {
+            await _gaController.logScreenView('signup_6');
+            // errorSituation(value);
+            Get.back();
+            Get.offAll(
+                () => SignupFailScreen(signupController: _signupController));
+          }
+        });
+      } else {
+        loading();
+        SignupController _signupController = Get.find();
+        await updateProfile(
+                email: _signupController.emailidcontroller.text,
+                name: _signupController.namecontroller.text,
+                univId: _signupController.selectUniv.value.id,
+                deptId: _signupController.selectDept.value.id,
+                admission: _signupController.admissioncontroller.text,
+                updateType: ProfileUpdateType.profile)
+            .then((value) {
+          if (value.isError == false) {
+            Get.back();
+            Get.offAll(() => SignupCompleteScreen(
+                  emailId: _signupController.emailidcontroller.text +
+                      "@" +
+                      _signupController.selectUniv.value.email,
+                  password: CertificationController.to.passwordcontroller.text,
+                ));
+          } else {
+            Get.back();
+            errorSituation(value);
+          }
+        });
+      }
+    } else if (Get.isRegistered<PwChangeController>()) {
+      FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+      PwChangeController.to.pwcertification(Emailcertification.success);
+      PwChangeController.to.timer.timerClose(closeFunctuin: () async {
+        PwChangeController.to.timer.certificateClose(secureStorage);
+      });
+      Get.to(() => PwChangeScreen(pwType: PwType.pwfind));
     }
   }
 

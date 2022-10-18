@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
@@ -23,6 +24,12 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: preferredSize,
       child: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: mainWhite,
+            statusBarIconBrightness:
+                Brightness.dark, // For Android (dark icons)
+            statusBarBrightness: Brightness.dark // For iOS (dark icons),
+            ),
         title: Text(
           title ?? '',
           style: kNavigationTitle,
@@ -44,11 +51,11 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         elevation: 0,
         backgroundColor: mainWhite,
         leading: leading ??
-            GestureDetector(
-                onTap: () {
+            IconButton(
+                onPressed: () {
                   Get.back();
                 },
-                child: SvgPicture.asset('assets/icons/appbar_back.svg')),
+                icon: SvgPicture.asset('assets/icons/appbar_back.svg')),
         actions: actions,
       ),
     );

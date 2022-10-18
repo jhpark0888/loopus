@@ -10,7 +10,7 @@
 // class RealTimeRankWidget extends StatelessWidget {
 //   RealTimeRankWidget({Key? key, required this.user}) : super(key: key);
 
-//   User user;
+//   Person user;
 
 //   // RxString text = ''.obs;
 
@@ -24,7 +24,7 @@
 //             PersonImageWidget(user: user),
 //             const SizedBox(height: 7),
 //             Text(
-//               user.realName,
+//               user.name,
 //               style: k15normal,
 //             )
 //           ],

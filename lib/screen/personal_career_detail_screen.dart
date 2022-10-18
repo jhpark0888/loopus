@@ -289,8 +289,7 @@ class _leading extends StatelessWidget {
         if (leading) {
           Get.back();
         } else {
-          if (career!.managerId ==
-              HomeController.to.myProfile.value.userid) {
+          if (career!.managerId == HomeController.to.myProfile.value.userId) {
             showModalIOS(context, func1: () {
               showButtonDialog(
                   title: '커리어를 삭제하시겠어요?',

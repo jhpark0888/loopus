@@ -86,11 +86,11 @@ class MyProfileScreen extends StatelessWidget {
               '프로필',
               style: ktitle,
             ),
-            leading: GestureDetector(
-                onTap: () {
+            leading: IconButton(
+                onPressed: () {
                   Get.back();
                 },
-                child: SvgPicture.asset('assets/icons/appbar_back.svg')),
+                icon: SvgPicture.asset('assets/icons/appbar_back.svg')),
             actions: [
               IconButton(
                   onPressed: () {
@@ -188,7 +188,9 @@ class MyProfileScreen extends StatelessWidget {
   }
 
   void changeProfileImage() async {
-    Get.to(() => ProfileImageChangeScreen());
+    Get.to(() => ProfileImageChangeScreen(
+          user: profileController.myUserInfo.value,
+        ));
   }
 
   void changeDefaultImage() async {
@@ -197,12 +199,12 @@ class MyProfileScreen extends StatelessWidget {
             updateType: ProfileUpdateType.image)
         .then((value) {
       if (value.isError == false) {
-        User user = User.fromJson(value.data);
+        Person user = Person.fromJson(value.data);
         profileController.myUserInfo(user);
         HomeController.to.myProfile(user);
         if (Get.isRegistered<OtherProfileController>(
-            tag: user.userid.toString())) {
-          Get.find<OtherProfileController>(tag: user.userid.toString())
+            tag: user.userId.toString())) {
+          Get.find<OtherProfileController>(tag: user.userId.toString())
               .otherUser(user);
         }
       } else {
@@ -223,8 +225,8 @@ class MyProfileScreen extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Get.to(() => FollowPeopleScreen(
-                      userId: profileController.myUserInfo.value.userid,
-                      listType: followlist.follower,
+                      userId: profileController.myUserInfo.value.userId,
+                      listType: FollowListType.follower,
                     ));
               },
               behavior: HitTestBehavior.translucent,
@@ -270,10 +272,10 @@ class MyProfileScreen extends StatelessWidget {
                           isOne: false),
                       child: UserImageWidget(
                         imageUrl:
-                            profileController.myUserInfo.value.profileImage ??
-                                '',
+                            profileController.myUserInfo.value.profileImage,
                         width: 90,
                         height: 90,
+                        userType: profileController.myUserInfo.value.userType,
                       )),
                 ),
                 Positioned.fill(
@@ -308,8 +310,8 @@ class MyProfileScreen extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Get.to(() => FollowPeopleScreen(
-                      userId: profileController.myUserInfo.value.userid,
-                      listType: followlist.following,
+                      userId: profileController.myUserInfo.value.userId,
+                      listType: FollowListType.following,
                     ));
               },
               behavior: HitTestBehavior.translucent,
@@ -345,7 +347,7 @@ class MyProfileScreen extends StatelessWidget {
         ),
         Obx(
           () => Text(
-            profileController.myUserInfo.value.realName,
+            profileController.myUserInfo.value.name,
             style: kmainbold,
           ),
         ),
@@ -359,9 +361,11 @@ class MyProfileScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 UserImageWidget(
-                    imageUrl: profileController.myUserInfo.value.univlogo,
-                    width: 24,
-                    height: 24),
+                  imageUrl: profileController.myUserInfo.value.univlogo,
+                  width: 24,
+                  height: 24,
+                  userType: profileController.myUserInfo.value.userType,
+                ),
                 const SizedBox(width: 7),
                 Text(
                   profileController.myUserInfo.value.univName,
@@ -403,35 +407,33 @@ class MyProfileScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (profileController.myUserInfo.value.snsList.isNotEmpty)
-                  Obx(
-                    () => SizedBox(
-                      height: 24,
-                      child: ListView.separated(
-                          primary: false,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return ProfileSnsImageWidget(
-                              sns: profileController
-                                  .myUserInfo.value.snsList[index],
-                            );
-                          },
-                          separatorBuilder: (context, index) => const SizedBox(
-                                width: 7,
-                              ),
-                          itemCount: profileController
-                              .myUserInfo.value.snsList.length),
-                    ),
-                  )
-                else
-                  GestureDetector(
-                    onTap: () {},
-                    child: Text(
-                      "SNS를 추가해주세요",
-                      style: kmainbold.copyWith(color: dividegray),
-                    ),
-                  ),
+                Obx(() => profileController.myUserInfo.value.snsList.isNotEmpty
+                    ? SizedBox(
+                        height: 24,
+                        child: ListView.separated(
+                            primary: false,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return ProfileSnsImageWidget(
+                                sns: profileController
+                                    .myUserInfo.value.snsList[index],
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                                  width: 7,
+                                ),
+                            itemCount: profileController
+                                .myUserInfo.value.snsList.length),
+                      )
+                    : GestureDetector(
+                        onTap: () {},
+                        child: Text(
+                          "SNS를 추가해주세요",
+                          style: kmainbold.copyWith(color: dividegray),
+                        ),
+                      )),
                 const SizedBox(
                   width: 7,
                 ),
@@ -599,8 +601,7 @@ class MyProfileScreen extends StatelessWidget {
                                       .myProjectList[index].isPublic);
                                   goCareerScreen(
                                       profileController.myProjectList[index],
-                                      profileController
-                                          .myUserInfo.value.realName);
+                                      profileController.myUserInfo.value.name);
                                 },
                                 child: CareerWidget(
                                     career:

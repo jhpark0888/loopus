@@ -98,6 +98,7 @@ class ScoutReportController extends GetxController
   RxList<Contact> recommandCompList = <Contact>[].obs;
 
   RxInt currentField = 1.obs;
+  RxInt currentRecIndex = 0.obs;
 
   @override
   void onInit() async {

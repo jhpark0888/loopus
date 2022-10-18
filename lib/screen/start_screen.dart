@@ -44,9 +44,6 @@ class StartScreen extends StatelessWidget {
               ),
               CustomExpandedButton(
                 onTap: () async {
-                  String? login =
-                      await FlutterSecureStorage().read(key: 'login detect');
-                  print(login);
                   Get.to(
                     () => LogInScreen(),
                   );

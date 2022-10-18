@@ -28,7 +28,10 @@ class SignupCompleteScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: CustomExpandedButton(
                 onTap: () async {
-                  login(context, emailId: emailId, password: password);
+                  login(context,
+                      emailId: emailId,
+                      password: password,
+                      loginType: UserType.student);
                 },
                 isBlue: true,
                 title: "시작하기",

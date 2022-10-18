@@ -27,7 +27,7 @@ class PostingDetailController extends GetxController {
   FocusNode commentFocus = FocusNode();
 
   RxInt selectedCommentId = 0.obs;
-  Rx<User> tagUser = User.defaultuser().obs;
+  Rx<Person> tagUser = Person.defaultuser().obs;
 
   int postid;
 
@@ -56,7 +56,7 @@ class PostingDetailController extends GetxController {
     //           isLiked: 0.obs,
     //           isMarked: 0.obs,
     //           isuser: 0,
-    //           user: User.defaultuser())
+    //           user: Person.defaultuser())
     //       .obs;
     // }
     await getposting(postid).then((value) async {
@@ -78,7 +78,7 @@ class PostingDetailController extends GetxController {
       }
     });
     commentController.addListener(() {
-      if (tagUser.value.userid != 0 && commentController.text == '') {
+      if (tagUser.value.userId != 0 && commentController.text == '') {
         tagdelete();
       }
     });
@@ -98,7 +98,7 @@ class PostingDetailController extends GetxController {
   }
 
   void tagdelete() {
-    tagUser(User.defaultuser());
+    tagUser(Person.defaultuser());
     selectedCommentId(0);
   }
 

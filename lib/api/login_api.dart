@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,21 +19,25 @@ import 'package:loopus/screen/pwchange_screen.dart';
 
 import '../constant.dart';
 
-Future<HTTPResponse> loginRequest(String email, String pw) async {
+Future<HTTPResponse> loginRequest(
+    String email, String pw, UserType loginType) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    Uri uri = Uri.parse('$serverUri/user_api/login');
+    Uri uri = Uri.parse(
+        '$serverUri/user_api/login?is_corp=${loginType == UserType.company ? 1 : 0}');
 
     final user = {
       'username': email.trim(),
       'password': pw,
-      'fcm_token': await NotificationController.getToken(),
+      // 'fcm_token': await NotificationController.getToken(),
     };
 
     try {
-      print('$serverUri/user_api/login');
+      print(uri);
+      print(email.trim());
+      print(pw);
       http.Response response = await http.post(
         uri,
         headers: <String, String>{
@@ -70,10 +75,11 @@ Future<HTTPResponse> postpwfindemailcheck(
   } else {
     Uri uri = Uri.parse('$serverUri/user_api/password');
 
-    String? fcmToken = await NotificationController.getToken();
-
     //이메일 줘야 됨
-    final checkemail = {'email': email.trim(), "token": fcmToken};
+    final checkemail = {
+      'email': email.trim(),
+      // "token": fcmToken
+    };
 
     try {
       emailcertification(Emailcertification.waiting);
@@ -87,6 +93,10 @@ Future<HTTPResponse> postpwfindemailcheck(
 
       print("비밀번호 찾기 이메일 체크 : ${response.statusCode}");
       if (response.statusCode == 200) {
+        String? fcmToken = await NotificationController.getToken();
+        String temp_email = email.replaceAll('@', '');
+        FlutterSecureStorage().write(key: 'temp_email', value: temp_email);
+        await FirebaseMessaging.instance.subscribeToTopic(temp_email);
         return HTTPResponse.success("success");
       } else {
         return HTTPResponse.apiError("fail", response.statusCode);

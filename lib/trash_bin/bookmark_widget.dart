@@ -99,7 +99,7 @@
 //                               Get.to(() => OtherProfileScreen(
 //                                     userid: item.userid,
 //                                     isuser: item.isuser,
-//                                     realname: item.user.realName,
+//                                     realname: item.user.name,
 //                                   ));
 //                             },
 //                             child: Row(
@@ -124,7 +124,7 @@
 //                                   width: 8,
 //                                 ),
 //                                 Text(
-//                                   "${item.user.realName} · ",
+//                                   "${item.user.name} · ",
 //                                   style: kButtonStyle,
 //                                 ),
 //                               ],
@@ -220,7 +220,7 @@
 //     Get.to(() => OtherProfileScreen(
 //           userid: item.userid,
 //           isuser: item.isuser,
-//           realname: item.user.realName,
+//           realname: item.user.name,
 //         ));
 //   }
 

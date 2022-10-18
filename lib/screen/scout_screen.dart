@@ -13,7 +13,6 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/scout_search_focus_screen.dart';
 import 'package:loopus/screen/search_focus_screen.dart';
-import 'package:loopus/widget/company_image_widget.dart';
 import 'package:loopus/widget/company_widget.dart';
 import 'package:loopus/widget/contact_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
@@ -22,7 +21,6 @@ import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
-import 'package:loopus/widget/person_image_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_text_field_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
@@ -33,32 +31,15 @@ import 'package:loopus/model/contact_model.dart';
 
 import '../model/company_model.dart';
 
-class ScoutScreen extends StatefulWidget {
+class ScoutScreen extends StatelessWidget {
   ScoutScreen({Key? key}) : super(key: key);
-
-  @override
-  State<ScoutScreen> createState() => _ScoutScreenState();
-}
-
-class _ScoutScreenState extends State<ScoutScreen> {
   final ScoutReportController _scontroller = Get.put(ScoutReportController());
   PageController _pController =
       PageController(viewportFraction: 0.7, initialPage: 0);
 
-  final List<String> images = [];
-
-  late List<PaletteColor> colors;
-
-  late int _currentIndex;
-  Contact? contact;
-
-  @override
-  void initState() {
-    super.initState();
-    colors = [];
-    _currentIndex = 0;
-    _updatePalettes();
-  }
+  RxList<String> images = <String>[].obs;
+  RxList<PaletteColor> colors = <PaletteColor>[].obs;
+  RxInt _currentIndex = 0.obs;
 
   _updatePalettes() async {
     for (String image in images) {
@@ -69,30 +50,31 @@ class _ScoutScreenState extends State<ScoutScreen> {
       );
       colors.add(generator.lightMutedColor ?? PaletteColor(Colors.blue, 2));
     }
-    setState(() {});
   }
 
-  Widget companyRecImages(BuildContext context) {
+  Widget companyRecImages(Contact contact) {
     List<String> images = _scontroller.recommandCompList
         .map((company) => company.companyImage)
         .toList();
-    print(images);
-    print(contact!.recommendation);
+    // print(images);
+    // print(contact!.recommendation);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("당신에게 '집-중'하고 있는 추천 기업",
             style: kmainbold.copyWith(color: mainWhite)),
         SizedBox(height: 14),
-        Text(contact!.slogan,
+        Text(contact.slogan,
             style: kNavigationTitle.copyWith(color: mainWhite)),
         SizedBox(height: 14),
-        Text(contact!.recommendation, style: kmain.copyWith(color: mainWhite)),
+        Text(contact.recommendation, style: kmain.copyWith(color: mainWhite)),
         SizedBox(height: 24),
         Container(
           width: double.infinity,
           height: 200,
-          color: colors.isNotEmpty ? colors[_currentIndex].color : Colors.white,
+          color: colors.isNotEmpty
+              ? colors[_currentIndex.value].color
+              : Colors.white,
           child: Stack(
             children: [
               Positioned(
@@ -100,28 +82,29 @@ class _ScoutScreenState extends State<ScoutScreen> {
                 child: Container(
                   width: double.infinity,
                   height: 120,
-                  child: PageView(
-                    controller: _pController,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                    },
-                    children: images
-                        .map((image) => Container(
-                              width: 321,
-                              height: 120,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 14),
-                              margin: const EdgeInsets.symmetric(horizontal: 7),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                                image: DecorationImage(
-                                    image: AssetImage(image),
-                                    fit: BoxFit.cover),
-                              ),
-                            ))
-                        .toList(),
+                  child: Obx(
+                    () => PageView(
+                      controller: _pController,
+                      onPageChanged: (index) {
+                        _currentIndex.value = index;
+                      },
+                      children: images
+                          .map((image) => Container(
+                                width: 321,
+                                height: 120,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 14),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 7),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  image: DecorationImage(
+                                      image: AssetImage(image),
+                                      fit: BoxFit.cover),
+                                ),
+                              ))
+                          .toList(),
+                    ),
                   ),
                 ),
               ),
@@ -173,14 +156,14 @@ class _ScoutScreenState extends State<ScoutScreen> {
           appBar: AppBar(
             systemOverlayStyle: SystemUiOverlayStyle(
               statusBarColor: colors.isNotEmpty
-                  ? colors[_currentIndex].color
+                  ? colors[_currentIndex.value].color
                   : Theme.of(context).primaryColor,
             ),
             elevation: 0,
             centerTitle: false,
             titleSpacing: 20,
             backgroundColor: colors.isNotEmpty
-                ? colors[_currentIndex].color
+                ? colors[_currentIndex.value].color
                 : Theme.of(context).primaryColor,
             title: Padding(
               padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
@@ -208,11 +191,13 @@ class _ScoutScreenState extends State<ScoutScreen> {
                       child: Center(
                         child: Obx(
                           () => UserImageWidget(
-                              imageUrl: HomeController
-                                      .to.myProfile.value.profileImage ??
-                                  "",
-                              height: 36,
-                              width: 36),
+                            imageUrl:
+                                HomeController.to.myProfile.value.profileImage,
+                            height: 36,
+                            width: 36,
+                            userType:
+                                HomeController.to.myProfile.value.userType,
+                          ),
                         ),
                       ),
                     ))
@@ -221,7 +206,19 @@ class _ScoutScreenState extends State<ScoutScreen> {
           ),
           body:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            companyRecImages(context),
+            Text(_scontroller.recommandCompList[_currentIndex.value].slogan),
+            Text("당신에게 '집-중'하고 있는 추천 기업",
+                style: kmainbold.copyWith(color: mainWhite)),
+            SizedBox(height: 14),
+            Text(_scontroller.recommandCompList[_currentIndex.value].slogan,
+                style: kNavigationTitle.copyWith(color: mainWhite)),
+            SizedBox(height: 14),
+            Text(
+                _scontroller
+                    .recommandCompList[_currentIndex.value].recommendation,
+                style: kmain.copyWith(color: mainWhite)),
+            SizedBox(height: 24),
+            companyRecImages(_scontroller.recommandCompList.first),
             SizedBox(height: 24),
             _searchScreen(context),
             const SizedBox(height: 14.5),
@@ -271,6 +268,14 @@ class _ScoutScreenState extends State<ScoutScreen> {
         ));
   }
 }
+
+// @override
+// void initState() {
+//   super.initState();
+//   colors = [];
+//   _currentIndex = 0;
+//   _updatePalettes();
+// }
 
 // TabBarView(
 //                 controller: _controller.tabController,

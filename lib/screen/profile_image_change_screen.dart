@@ -23,21 +23,24 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProfileImageChangeScreen extends StatelessWidget {
-  ProfileImageChangeScreen({Key? key}) : super(key: key);
+  ProfileImageChangeScreen({Key? key, required this.user}) : super(key: key);
 
   final ImageController _controller = Get.put(ImageController());
   ScrollController nestedScrollController = ScrollController();
   ScrollController scrollController = ScrollController();
+
+  User user;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 44,
-        leading: GestureDetector(
-            onTap: () {
+        leading: IconButton(
+            onPressed: () {
               Get.back();
             },
-            child: SvgPicture.asset(
+            icon: SvgPicture.asset(
               'assets/icons/appbar_back.svg',
             )),
         title: Obx(
@@ -57,21 +60,21 @@ class ProfileImageChangeScreen extends StatelessWidget {
                   File? image = await _controller.cropImage();
                   if (image != null) {
                     await updateProfile(
-                            user: ProfileController.to.myUserInfo.value,
+                            user: user as Person,
                             image: image,
                             updateType: ProfileUpdateType.image)
                         .then((value) {
                       if (value.isError == false) {
-                        User user = User.fromJson(value.data);
+                        Person user = Person.fromJson(value.data);
 
                         HomeController.to.myProfile(user);
                         if (Get.isRegistered<ProfileController>()) {
                           ProfileController.to.myUserInfo(user);
                         }
                         if (Get.isRegistered<OtherProfileController>(
-                            tag: user.userid.toString())) {
+                            tag: user.userId.toString())) {
                           Get.find<OtherProfileController>(
-                                  tag: user.userid.toString())
+                                  tag: user.userId.toString())
                               .otherUser(user);
                         }
                         getbacks(3);

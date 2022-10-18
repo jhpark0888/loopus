@@ -19,7 +19,7 @@ void errorSituation(HTTPResponse httpresponse, {Rx<ScreenState>? screenState}) {
     // }
   } else if (httpresponse.errorData!['statusCode'] == 500) {
     showErrorDialog(
-        title: '현재 서버가 점검 중이에요',
+        title: '서버에 문제가 발생했습니다',
         content: '나중에 다시 접속해주세요',
         leftFunction: () {
           Get.back();

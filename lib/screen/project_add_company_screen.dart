@@ -20,7 +20,7 @@ import 'package:loopus/trash_bin/project_add_intro_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
-import 'package:loopus/widget/company_image_widget.dart';
+import 'package:loopus/trash_bin/company_image_widget.dart';
 import 'package:loopus/widget/company_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
@@ -107,8 +107,7 @@ class ProjectAddCompanyScreen extends StatelessWidget {
                 ? GestureDetector(
                     onTap: () {
                       _controller.selectCompany(Company.defaultCompany(
-                          companyName:
-                              _controller.companyController.text.trim()));
+                          name: _controller.companyController.text.trim()));
                       _controller.companyController.clear();
                       Get.back();
                     },

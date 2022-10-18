@@ -105,7 +105,7 @@
 //                                   width: 8,
 //                                 ),
 //                                 Text(
-//                                   "${post.user.realName} · ",
+//                                   "${post.user.name} · ",
 //                                   style: kButtonStyle,
 //                                 ),
 //                               ],
@@ -187,7 +187,7 @@
 //   void tapProfile() {
 //     Get.to(() => OtherProfileScreen(
 //           userid: post.userid,
-//           realname: post.user.realName,
+//           realname: post.user.name,
 //         ));
 //   }
 // }

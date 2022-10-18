@@ -11,9 +11,9 @@ class PersonTileWidget extends StatelessWidget {
     required this.user,
   });
 
-  final User user;
+  final Person user;
   late final HoverController _hoverController =
-      Get.put(HoverController(), tag: user.userid.toString());
+      Get.put(HoverController(), tag: user.userId.toString());
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +24,8 @@ class PersonTileWidget extends StatelessWidget {
       onTapUp: (details) => _hoverController.isHover(false),
       onTap: () async {
         Get.to(() => OtherProfileScreen(
-              userid: user.userid,
-              realname: user.realName,
+              userid: user.userId,
+              realname: user.name,
             ));
       },
       child: Container(
@@ -37,7 +37,7 @@ class PersonTileWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipOval(
-              child: user.profileImage == null
+              child: user.profileImage == ""
                   ? Obx(() => Opacity(
                         opacity: _hoverController.isHover.value ? 0.6 : 1,
                         child: Image.asset(
@@ -52,7 +52,7 @@ class PersonTileWidget extends StatelessWidget {
                         child: CachedNetworkImage(
                           height: 50,
                           width: 50,
-                          imageUrl: user.profileImage!,
+                          imageUrl: user.profileImage,
                           placeholder: (context, url) => kProfilePlaceHolder(),
                           fit: BoxFit.cover,
                         ),
@@ -67,7 +67,7 @@ class PersonTileWidget extends StatelessWidget {
               children: [
                 Obx(
                   () => Text(
-                    user.realName,
+                    user.name,
                     style: ktempFont.copyWith(
                         color: _hoverController.isHover.value
                             ? mainblack.withOpacity(0.6)
