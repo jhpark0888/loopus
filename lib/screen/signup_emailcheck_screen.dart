@@ -31,7 +31,7 @@ class SignupEmailcheckScreen extends StatelessWidget {
   };
 
   void _timerClose() {
-    _signupController.timer.timerClose(closeFunctuin: () {
+    _signupController.timer.timerClose(closeFunction: () {
       _signupController.signupcertification(Emailcertification.fail);
       _signupController.timer.certificateClose(const FlutterSecureStorage());
     });

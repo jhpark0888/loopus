@@ -14,6 +14,8 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/posting_add_screen.dart';
+import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/custom_pie_chart.dart';
@@ -31,7 +33,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
   ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    careerDetailController = Get.put(CareerDetailController(career: career));
+    careerDetailController = Get.put(CareerDetailController(career: Rx(career)));
     // copyList = careerList;
     return Scaffold(
       body: CustomScrollView(
@@ -54,12 +56,12 @@ class PersonalCareerDetailScreen extends StatelessWidget {
             actions: [
               _leading(
                 leading: false,
-                career: career,
+                career: careerDetailController.career.value,
               )
             ],
             pinned: true,
             flexibleSpace: _MyAppSpace(
-              career: career,
+              career: careerDetailController.career,
             ),
             expandedHeight: 200,
           ),
@@ -127,7 +129,10 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                               DivideWidget(),
                           itemCount: careerDetailController.postList.length,
                         )
-                      : EmptyContentWidget(text: '아직 포스팅이 없어요'))
+                      : GestureDetector(onTap: (){Get.to(() => PostingAddScreen(
+              project_id: career.id,
+              route: PostaddRoute.career,
+            ));},child: EmptyPostWidget(id: career.id,)))
                 ],
               ),
             ]),
@@ -138,9 +143,24 @@ class PersonalCareerDetailScreen extends StatelessWidget {
   }
 }
 
+class EmptyPostWidget extends StatelessWidget {
+  EmptyPostWidget({Key? key, required this.id}) : super(key: key);
+  int id;
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      SvgPicture.asset('assets/icons/career_post_add.svg'),
+      const SizedBox(width: 7),
+      Text(
+        '지금 바로 새로운 포스트를 작성해보세요',
+        style: kmainbold.copyWith(color: mainblue),
+      )
+    ]);
+  }
+}
 class _MyAppSpace extends StatelessWidget {
   _MyAppSpace({Key? key, required this.career}) : super(key: key);
-  Project career;
+  Rx<Project> career;
   @override
   Widget build(
     BuildContext context,
@@ -157,83 +177,84 @@ class _MyAppSpace extends StatelessWidget {
         const fadeEnd = 1.0;
         final opacity1 = 1.0 - Interval(0.0, 0.75).transform(t);
         final opacity2 = 1.0 - Interval(fadeStart, fadeEnd).transform(t);
-
-        return Stack(
-          children: [
-            SafeArea(
-              child: Center(
-                child: Opacity(
-                  opacity: 1 - opacity2,
-                  child: getCollapseTitle(
-                    career.careerName,
-                  ),
-                ),
-              ),
-            ),
-            Opacity(
-              opacity: opacity1,
-              child: Hero(
-                tag: career.id.toString(),
-                child: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: career.thumbnail == ""
-                              ? const AssetImage(
-                                  'assets/illustrations/default_image.png')
-                              : NetworkImage(career.thumbnail) as ImageProvider,
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                              const Color(0x00000000).withOpacity(0.4),
-                              BlendMode.srcOver))),
-                  width: Get.width,
-                  height: Get.width,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 58, 20, 14),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 44),
-                          getExpendTitle(
-                            career.careerName,
-                          ),
-                          const SizedBox(
-                            height: 14,
-                          ),
-                          if (career.updateDate != null)
-                            Text(
-                              '최근 포스트 ${calculateDate(career.updateDate!)}',
-                              style:
-                                  kNavigationTitle.copyWith(color: selectimage),
-                            ),
-                          const SizedBox(
-                            height: 14,
-                          ),
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                  'assets/icons/single_career.svg'),
-                              const SizedBox(width: 7),
-                              Text('개인 커리어',
-                                  style: kNavigationTitle.copyWith(
-                                      color: selectimage)),
-                              const Spacer(),
-                              Text(
-                                '포스트 ${career.post_count}',
-                                style: kNavigationTitle.copyWith(
-                                    color: selectimage),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+        return Obx(
+          ()=> Stack(
+            children: [
+              SafeArea(
+                child: Center(
+                  child: Opacity(
+                    opacity: 1 - opacity2,
+                    child: getCollapseTitle(
+                      career.value.careerName,
                     ),
                   ),
                 ),
               ),
-            )
-          ],
+              Opacity(
+                opacity: opacity1,
+                child: Hero(
+                  tag: career.value.id.toString(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: career.value.thumbnail == ""
+                                ? const AssetImage(
+                                    'assets/illustrations/default_image.png')
+                                : NetworkImage(career.value.thumbnail) as ImageProvider,
+                            fit: BoxFit.cover,
+                            colorFilter: ColorFilter.mode(
+                                const Color(0x00000000).withOpacity(0.4),
+                                BlendMode.srcOver))),
+                    width: Get.width,
+                    height: Get.width,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 58, 20, 14),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 44),
+                            getExpendTitle(
+                              career.value.careerName,
+                            ),
+                            const SizedBox(
+                              height: 14,
+                            ),
+                            if (career.value.updateDate != null)
+                              Text(
+                                '최근 포스트 ${calculateDate(career.value.updateDate!)}',
+                                style:
+                                    kNavigationTitle.copyWith(color: selectimage),
+                              ),
+                            const SizedBox(
+                              height: 14,
+                            ),
+                            Row(
+                              children: [
+                                SvgPicture.asset(
+                                    'assets/icons/single_career.svg'),
+                                const SizedBox(width: 7),
+                                Text('개인 커리어',
+                                    style: kNavigationTitle.copyWith(
+                                        color: selectimage)),
+                                const Spacer(),
+                                Text(
+                                  '포스트 ${career.value.post_count}',
+                                  style: kNavigationTitle.copyWith(
+                                      color: selectimage),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         );
       },
     );
@@ -247,7 +268,7 @@ class _MyAppSpace extends StatelessWidget {
         opacity: thumbnail != '' ? 0.25 : 1,
         child: thumbnail != ''
             ? Hero(
-                tag: career.id.toString(),
+                tag: career.value.id.toString(),
                 child: Image.network(
                   thumbnail!,
                   fit: BoxFit.cover,
@@ -290,17 +311,21 @@ class _leading extends StatelessWidget {
           Get.back();
         } else {
           if (career!.managerId == HomeController.to.myProfile.value.userId) {
-            showModalIOS(context, func1: () {
+            showBottomdialog(context,bareerColor: dividegray, func1: () {
+              Get.back();
               showButtonDialog(
-                  title: '커리어를 삭제하시겠어요?',
-                  startContent: '삭제한 커리어는 복구할 수 없어요',
+                  title: '이 커리어는 완전히 삭제돼요',
+                  startContent: '이 커리어에 작성된\n',
+                  highlightContent: '모든 포스트와 데이터는 완전 삭제되며,\n복구가 불가능해요.\n',
+                  highlightColor: rankred,
+                  endContent: '정말 삭제하시겠어요?',
                   leftFunction: () {
                     Get.back();
                   },
                   rightFunction: () {
                     dialogBack(modalIOS: true);
                     loading();
-                    deleteProject(career!.id).then((value) {
+                    deleteProject(career!.id,DeleteType.del).then((value) {
                       if (value.isError == false) {
                         Get.back();
                         deleteCareer(career!);
@@ -314,12 +339,17 @@ class _leading extends StatelessWidget {
                   rightText: '삭제',
                   leftText: '취소');
             },
-                func2: () {},
-                value1: '커리어 삭제',
-                value2: '취소',
-                isValue1Red: true,
-                isValue2Red: false,
-                isOne: true);
+                func2: () {
+                  Get.back();
+                  Get.to(()=>ProjectAddTitleScreen(screenType: Screentype.update));
+                },
+                value1: '커리어 삭제하기',
+                value2: '커리어 수정하기',
+                buttonColor1: rankred,
+                buttonColor2: maingray,
+                isOne: false);
+          }else{
+            // showModalIOS(context, func1: (){}, func2: (){}, value1: '커리어 신고하기', value2: '', isValue1Red: true, isValue2Red: false, isOne: true);
           }
         }
       },

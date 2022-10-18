@@ -99,7 +99,7 @@ class ScoutReportController extends GetxController
 
   RxInt currentField = 1.obs;
   RxInt currentRecIndex = 0.obs;
-
+  RxBool screenState = false.obs;
   @override
   void onInit() async {
     tabController = TabController(length: careerField.length, vsync: this);
@@ -164,6 +164,7 @@ class ScoutReportController extends GetxController
   }
 
   Future<void> getRecommandCompanyList() async {
+    print('${HomeController.to.myProfile.value.fieldId}이거임');
     await getRecommandCompanys(
             fieldId: HomeController.to.myProfile.value.fieldId)
         .then((value) {
@@ -172,6 +173,7 @@ class ScoutReportController extends GetxController
             .map((company) => Contact.fromJson(company))
             .toList();
         recommandCompList(companyList);
+        screenState(true);
       } else {
         errorSituation(value);
       }

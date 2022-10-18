@@ -125,18 +125,18 @@ class SignupUserInfoScreen extends StatelessWidget {
                           builder: (context, index) => Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  (year - (50 - (index + 1))).toString(),
+                                  (year - index).toString(),
                                   style: kmainbold,
                                 ),
                               ),
                           onItemTapCallback: (index) {
                             _signupController.admissioncontroller.text =
-                                (year - (50 - (index + 1))).toString();
+                                (year - index).toString();
                             Get.back();
                           },
                           onSelectedItemChanged: (index) {
                             _signupController.admissioncontroller.text =
-                                (year - (50 - (index + 1))).toString();
+                                (year - index).toString();
                           });
                     },
                     label: "입학 연도",

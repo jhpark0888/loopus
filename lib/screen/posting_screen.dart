@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/career_detail_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
@@ -307,7 +308,11 @@ class PostingScreen extends StatelessWidget {
                                                       if (value.isError ==
                                                           false) {
                                                         Get.back();
-                                                        if (Get.isRegistered<
+                                                        if(Get.isRegistered<CareerDetailController>()){
+                                                          Post tempPost = CareerDetailController.to.postList.where((p0) => p0.id == postid).first;
+                                                          CareerDetailController.to.postList.remove(tempPost);
+                                                          CareerDetailController.to.postList.refresh();
+                                                        }else if (Get.isRegistered<
                                                             ProfileController>()) {
                                                           Project project =
                                                               ProfileController

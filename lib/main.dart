@@ -17,6 +17,7 @@ import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/app.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/message_controller.dart';
+import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/screen/start_screen.dart';
@@ -26,6 +27,7 @@ import 'package:loopus/utils/local_notification.dart';
 import 'controller/notification_controller.dart';
 
 //백그라운드 메세지 왔을 때
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -37,6 +39,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       const FlutterSecureStorage().write(key: 'newMsg', value: 'true');
     }
   } else if (message.data["type"] == "certification") {
+    print(Get.isRegistered<SignupController>());
     NotificationController.certificationFunction();
   }
   print('백그라운드 알림 데이터 : ${message.data}');

@@ -206,8 +206,8 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
     }
   }
 }
-
-Future<HTTPResponse> deleteProject(int projectId) async {
+enum DeleteType{exit,del}
+Future<HTTPResponse> deleteProject(int projectId, DeleteType type ) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
@@ -215,7 +215,7 @@ Future<HTTPResponse> deleteProject(int projectId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     try {
-      final uri = Uri.parse("$serverUri/project_api/project?id=$projectId");
+      final uri = Uri.parse("$serverUri/project_api/project?id=$projectId&type=${type.name}"); //type exit del
       http.Response response =
           await http.delete(uri, headers: {"Authorization": "Token $token"});
 
@@ -239,30 +239,31 @@ Future<HTTPResponse> deleteProject(int projectId) async {
   }
 }
 
-Future<HTTPResponse> addGroupMember(
-    List<User> selectedMember, int projectId) async {
+Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember, String? title,
+    ProjectUpdateType updateType) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    List<int> member = selectedMember.map((e) => e.userId).toList();
-    Map<String, dynamic> body = {'looper': jsonEncode(member)};
-    print(body);
-    print(projectId);
+
     try {
-      final uri =
-          Uri.parse("$serverUri/project_api/project?type=looper&id=$projectId");
+      final uri = Uri.parse(
+          "$serverUri/project_api/project?type=${updateType.name}&id=$projectId");
       var request = http.MultipartRequest('PUT', uri);
       request.headers.addAll({
         "Authorization": "Token $token",
         'Content-Type': 'multipart/form-data'
       });
-      for (var member in selectedMember) {
-        var multipartFile = await http.MultipartFile.fromString(
-            'looper', member.userId.toString());
-        request.files.add(multipartFile);
+      if (updateType == ProjectUpdateType.looper) {
+        for (var member in selectedMember!) {
+          var multipartFile = await http.MultipartFile.fromString(
+              'looper', member.userId.toString());
+          request.files.add(multipartFile);
+        }
+      }else if(updateType == ProjectUpdateType.project_name){
+        request.fields['project_name'] = title!;
       }
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200) {

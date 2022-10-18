@@ -319,7 +319,7 @@ class NotificationController extends GetxController {
         SignupController _signupController = Get.find();
         FlutterSecureStorage secureStorage = const FlutterSecureStorage();
         _signupController.signupcertification(Emailcertification.success);
-        _signupController.timer.timerClose(closeFunctuin: () async {
+        _signupController.timer.timerClose(closeFunction: () async {
           _signupController.timer.certificateClose(secureStorage);
         });
 
@@ -375,7 +375,7 @@ class NotificationController extends GetxController {
     } else if (Get.isRegistered<PwChangeController>()) {
       FlutterSecureStorage secureStorage = const FlutterSecureStorage();
       PwChangeController.to.pwcertification(Emailcertification.success);
-      PwChangeController.to.timer.timerClose(closeFunctuin: () async {
+      PwChangeController.to.timer.timerClose(closeFunction: () async {
         PwChangeController.to.timer.certificateClose(secureStorage);
       });
       Get.to(() => PwChangeScreen(pwType: PwType.pwfind));

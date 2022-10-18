@@ -70,7 +70,7 @@ Future<HTTPResponse> getRecommandCompanys(
 
     // print(userid);
     final _url =
-        Uri.parse("$serverUri/scout_api/recommendation_company?type=$fieldId");
+        Uri.parse("$serverUri/scout_api/recommendation_company?type=10");
 
     try {
       http.Response response =

@@ -10,7 +10,7 @@ import 'package:loopus/model/univ_model.dart';
 import 'package:loopus/utils/certificate_timer.dart';
 import 'package:loopus/utils/error_control.dart';
 
-class SignupController extends GetxController {
+class SignupController extends GetxController with WidgetsBindingObserver {
   static SignupController get to => Get.find();
   SignupController({this.isReCertification = false});
 
@@ -44,6 +44,7 @@ class SignupController extends GetxController {
 
   @override
   void onInit() {
+    WidgetsBinding.instance!.addObserver(this);
     timer = CertificateTimer(emailcertification: signupcertification);
 
     namecontroller.addListener(() {
@@ -76,7 +77,34 @@ class SignupController extends GetxController {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.detached:
+        print("앱 상태: ${state.name}");
+        print(Get.isRegistered<SignupController>());
+        break;
+      case AppLifecycleState.inactive:
+        print("앱 상태: ${state.name}");
+        print(Get.isRegistered<SignupController>());
+        break;
+      case AppLifecycleState.paused:
+        print("앱 상태: ${state.name}");
+        print(Get.isRegistered<SignupController>());
+        break;
+      case AppLifecycleState.resumed:
+        print("앱 상태: ${state.name}");
+        print(Get.isRegistered<SignupController>());
+
+        break;
+      default:
+    }
+  }
+
+  @override
   void onClose() {
+    WidgetsBinding.instance!.removeObserver(this);
     univcontroller.clear();
     admissioncontroller.clear();
     departmentcontroller.clear();
