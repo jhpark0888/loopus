@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/career_detail_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
@@ -333,10 +334,15 @@ class PostingAddScreen extends StatelessWidget {
                   }
                 }
                 HomeController.to.onPostingRefresh();
-                getbacks(3);
+                getbacks(route == PostaddRoute.bottom ? 3 : 1);
                 dialogBack();
-                AppController.to.changeBottomNav(0);
-                HomeController.to.scrollToTop();
+                if (route == PostaddRoute.bottom) {
+                  AppController.to.changeBottomNav(0);
+                  HomeController.to.scrollToTop();
+                }else if(route == PostaddRoute.career){
+                  CareerDetailController.to.postList.add(post);
+                  CareerDetailController.to.postList.refresh(); 
+                }
 
                 showCustomDialog('포스팅을 업로드했어요', 1000);
               } else {

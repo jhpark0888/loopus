@@ -31,8 +31,8 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                   if (controller.selectList.isNotEmpty) {
                     controller.selectList
                         .sort((a, b) => a.name.compareTo(b.name));
-                    addGroupMember(controller.selectList,
-                            CareerDetailController.to.career.id)
+                    updateCareer(CareerDetailController.to.career.value.id, controller.selectList,null,ProjectUpdateType.looper
+                            )
                         .then((value) {
                       if (value.isError == false) {
                         Get.back();
