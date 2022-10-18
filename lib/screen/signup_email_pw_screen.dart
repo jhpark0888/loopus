@@ -72,7 +72,7 @@ class SignupEmailPwScreen extends StatelessWidget {
                                   errorSituation(value);
                                 }
                                 _signupController.timer.timerClose(
-                                    closeFunctuin: () {
+                                    closeFunction: () {
                                   _signupController.signupcertification(
                                       Emailcertification.fail);
                                   _signupController.timer.certificateClose(

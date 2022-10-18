@@ -205,7 +205,7 @@ class MyCompanyScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  fieldList[_controller.myCompanyInfo.value.contactField]!,
+                  fieldList[_controller.myCompanyInfo.value.fieldId]!,
                   style: kmain.copyWith(color: mainWhite),
                 ),
                 const SizedBox(

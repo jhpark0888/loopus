@@ -34,7 +34,7 @@ class PwFindScreen extends StatelessWidget {
   };
 
   void _timerClose() {
-    _pwChangeController.timer.timerClose(closeFunctuin: () {
+    _pwChangeController.timer.timerClose(closeFunction: () {
       _pwChangeController.pwcertification(Emailcertification.fail);
       _pwChangeController.timer.certificateClose(storage);
     });

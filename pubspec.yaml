@@ -37,7 +37,7 @@ dependencies:
   # kakao_flutter_sdk: ^0.9.0
   flutter_keyboard_visibility: ^5.1.1
   dropdown_button2: ^1.1.1
-  app_settings: ^4.1.1
+  app_settings: ^4.1.0
   get_storage:
   in_app_review: ^2.0.4
   device_info_plus: ^3.2.2
@@ -65,7 +65,11 @@ dependencies:
   cp949_dart: ^1.0.0+1
   flutter_local_notifications: ^9.9.0
   zoom_pinch_overlay: ^1.2.0
-  extended_nested_scroll_view: ^5.1.2
+  extended_nested_scroll_view: ^5.1.1
+  palette_generator: ^0.3.0
+  # custom_nested_scroll_view: 
+  #   git:
+  #     url: https://github.com/idootop/custom_nested_scroll_view.git
 
 dev_dependencies:
   flutter_test:
@@ -85,7 +89,7 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/illustrations/logo_icon.png"
+  image_path: "assets/illustrations/loop_logo.png"
   adaptive_icon_background: "#FFFFFF"
   min_sdk_android: 21 # android min sdk min:16, default 21
 

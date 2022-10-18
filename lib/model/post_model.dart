@@ -226,4 +226,4 @@ class Post {
 //     items.value = json.map((e) => Post.fromJson(e)).toList();
 //     return PostingModel(postingitems: items);
 //   }
-// }l
+// }

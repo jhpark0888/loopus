@@ -26,7 +26,7 @@ class CertificateTimer {
       if (sec.value != 0) {
         sec.value -= 1;
       } else {
-        timerClose(closeFunctuin: () {
+        timerClose(closeFunction: () {
           emailcertification!(Emailcertification.fail);
           dialogOn();
           certificateClose(const FlutterSecureStorage());
@@ -36,7 +36,7 @@ class CertificateTimer {
   }
 
   void timerClose({
-    void Function()? closeFunctuin,
+    Function()? closeFunction,
   }) {
     if (timer != null) {
       if (timer!.isActive) {
@@ -48,8 +48,9 @@ class CertificateTimer {
     //     validChecktimer!.cancel();
     //   }
     // }
-
-    closeFunctuin;
+    if (closeFunction != null) {
+      closeFunction();
+    }
     sec(0);
   }
 

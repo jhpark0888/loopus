@@ -36,7 +36,7 @@ class CompanyWidget extends StatelessWidget {
               RichText(
                   text: TextSpan(children: [
                 TextSpan(
-                    text: company.contactField,
+                    text: company.fieldId,
                     style: kmainheight.copyWith(color: mainblue)),
                 const TextSpan(text: ' 분야 컨택 중', style: kmainheight)
               ]))

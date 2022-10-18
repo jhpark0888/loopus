@@ -86,11 +86,11 @@ class NewsFetchPreview {
       try {
         document = parse(utf8.decode(response.bodyBytes));
       } catch (e) {
-        try {
-          document = parse(cp949.decode(response.bodyBytes));
-        } catch (e) {
-          document = parse(response.body);
-        }
+        // try {
+        document = parse(cp949.decode(response.bodyBytes));
+        // } catch (e) {
+        //   document = parse(response.body);
+        // }
       }
 
       String? description, title, image, appleIcon, favIcon;
