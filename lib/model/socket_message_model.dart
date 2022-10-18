@@ -53,13 +53,12 @@ class Chat {
 }
 
 class ChatRoom {
-  ChatRoom({
-    required this.message,
-    required this.user,
-    required this.notread,
-    required this.roomId,
-    required this.type
-  });
+  ChatRoom(
+      {required this.message,
+      required this.user,
+      required this.notread,
+      required this.roomId,
+      required this.type});
 
   Rx<Chat> message;
   int user;
@@ -67,12 +66,11 @@ class ChatRoom {
   int roomId;
   RxInt type;
   factory ChatRoom.fromJson(Map<String, dynamic> json) => ChatRoom(
-        message: Chat.fromJson(json["message"]).obs,
-        user: json['profile'],
-        notread: RxInt(json["not_read"]),
-        roomId: json['room_id'],
-        type : RxInt(json['alarm_active'] )
-      );
+      message: Chat.fromJson(json["message"]).obs,
+      user: json['profile'],
+      notread: RxInt(json["not_read"]),
+      roomId: json['room_id'],
+      type: RxInt(json['alarm_active']));
 
   factory ChatRoom.fromMsg(Map<String, dynamic> json) => ChatRoom(
         message: Chat(
@@ -96,7 +94,7 @@ class ChatRoom {
         "message": message.value.content.toString(),
         'date': message.value.date.toString(),
         "not_read": notread.value,
-        "alarm_active" : type.value
+        "alarm_active": type.value
       };
 }
 // room_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, message Text, date Text, not_read INTEGER, del_id INTEGER

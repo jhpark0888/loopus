@@ -601,8 +601,7 @@ class MyProfileScreen extends StatelessWidget {
                                       .myProjectList[index].isPublic);
                                   goCareerScreen(
                                       profileController.myProjectList[index],
-                                      profileController.myUserInfo.value.name,
-                                      profileController.myProjectList);
+                                      profileController.myUserInfo.value.name);
                                 },
                                 child: CareerWidget(
                                     career:

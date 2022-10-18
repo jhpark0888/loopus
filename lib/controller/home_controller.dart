@@ -118,7 +118,7 @@ class HomeController extends GetxController
   void getUserProfile() async {
     myId = await secureStorage.read(key: "id");
     String? userType = await secureStorage.read(key: "type");
-
+    print(userType);
     if (userType == UserType.student.name) {
       await getProfile(int.parse(myId!)).then((value) async {
         if (value.isError == false) {

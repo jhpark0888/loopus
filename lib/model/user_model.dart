@@ -12,6 +12,7 @@ class User {
   User(
       {required this.userId,
       required this.name,
+      required this.fieldId,
       required this.profileImage,
       required this.followed,
       required this.followerCount,
@@ -21,6 +22,7 @@ class User {
   int userId;
   String name;
   String profileImage;
+  String fieldId;
   Rx<FollowState> followed;
   RxInt followerCount;
   RxInt followingCount;
@@ -29,6 +31,7 @@ class User {
   factory User.defaultuser({
     int? userId,
     String? name,
+    String? fieldId,
     RxInt? followerCount,
     RxInt? followingCount,
     String? profileImage,
@@ -38,6 +41,7 @@ class User {
       User(
         userId: userId ?? 0,
         name: name ?? "",
+        fieldId: fieldId ?? "",
         profileImage: profileImage ?? "",
         followerCount: followerCount ?? 0.obs,
         followingCount: followingCount ?? 0.obs,
@@ -82,7 +86,7 @@ class Person extends User {
     required this.totalposting,
     required this.resentPostCount,
     required this.isuser,
-    required this.fieldId,
+    required fieldId,
     required profileImage,
     required this.profileTag,
     required followed,
@@ -100,6 +104,7 @@ class Person extends User {
   }) : super(
             userId: userId,
             name: name,
+            fieldId: fieldId,
             profileImage: profileImage,
             followerCount: followerCount,
             followingCount: followingCount,
@@ -113,7 +118,6 @@ class Person extends User {
   int? isuser;
   int totalposting;
   int resentPostCount;
-  String fieldId;
   List<Tag> profileTag;
   int rank;
   int lastRank;

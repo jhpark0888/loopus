@@ -295,14 +295,10 @@ class PostingWidget extends StatelessWidget {
         transition: Transition.noTransition);
   }
 
-  void tapProjectname() async {
-    await getproject(item.project!.id, item.userid).then(
-      (value) {
-        if (value.isError == false) {
-          goCareerScreen(value.data, item.user.name, []);
-        }
-      },
-    );
+  void tapProjectname() async{
+    await getproject(item.project!.id, item.userid).then((value) {if(value.isError == false){
+      goCareerScreen(value.data,item.user.name);
+    }},);
   }
 
   void tapBookmark() {

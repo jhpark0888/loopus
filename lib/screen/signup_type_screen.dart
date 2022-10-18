@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/notification_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/signup_user_info_screen.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
@@ -10,7 +11,7 @@ import 'package:loopus/widget/signup_text_widget.dart';
 
 class SignupTypeScreen extends StatelessWidget {
   SignupTypeScreen({Key? key}) : super(key: key);
-
+  NotificationController controller = Get.put(NotificationController());
   final SignupController _signupController = Get.put(SignupController());
   final GAController _gaController = Get.put(GAController());
 

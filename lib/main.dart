@@ -176,8 +176,6 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenStete extends State<WelcomeScreen> {
   String? token;
   _WelcomeScreenStete({this.token});
-  NotificationController notificationController =
-      Get.put(NotificationController());
   @override
   void initState() {
     super.initState();
@@ -227,7 +225,7 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
       body: Center(
         child: Container(
           width: Get.width / 2,
-          child: Image.asset('assets/illustrations/splash_image.png'),
+          child: Image.asset('assets/illustrations/splash.png'),
         ),
       ),
     );

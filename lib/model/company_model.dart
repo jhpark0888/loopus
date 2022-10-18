@@ -10,7 +10,7 @@ class Company extends User {
     required followed,
     required followerCount,
     required followingCount,
-    required this.contactField,
+    required fieldId,
     required this.contactcount,
     required this.homepage,
     required this.intro,
@@ -19,13 +19,13 @@ class Company extends User {
           userId: userId,
           profileImage: profileImage,
           name: name,
+          fieldId: fieldId,
           followed: followed,
           followerCount: followerCount,
           followingCount: followingCount,
           userType: UserType.company,
         );
 
-  String contactField;
   RxInt contactcount;
   String homepage;
   String intro;
@@ -37,7 +37,7 @@ class Company extends User {
     String? name,
     RxInt? followerCount,
     RxInt? followingCount,
-    String? contactField,
+    String? fieldId,
     RxInt? contactcount,
     String? homepage,
     String? intro,
@@ -50,7 +50,7 @@ class Company extends User {
           name: name ?? "",
           followerCount: followerCount ?? 0.obs,
           followingCount: followingCount ?? 0.obs,
-          contactField: contactField ?? "10",
+          fieldId: fieldId ?? "10",
           contactcount: contactcount ?? 0.obs,
           homepage: homepage ?? "",
           intro: intro ?? "",
@@ -67,7 +67,7 @@ class Company extends User {
             : "",
         followerCount: 0.obs,
         followingCount: 0.obs,
-        contactField: json['contact_field'] ?? "10",
+        fieldId: json['contact_field'] ?? "10",
         contactcount: json['count'] != null ? RxInt(json['count']) : RxInt(0),
         homepage: json["homepage"],
         intro: json["information"],

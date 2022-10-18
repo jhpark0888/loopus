@@ -1,202 +1,212 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/scout_report_controller.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/contact_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
-import 'package:loopus/trash_bin/company_image_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:loopus/controller/home_controller.dart';
+import 'package:palette_generator/palette_generator.dart';
 
-class ContactWidget extends StatelessWidget {
-  ContactWidget({Key? key, required this.contact}) : super(key: key);
+class CompanyFollowWidget extends StatelessWidget {
+  CompanyFollowWidget(
+      {Key? key,
+      required this.contact,
+      required this.user,
+      required this.isFollow})
+      : super(key: key);
 
   Contact contact;
+  User user;
+  bool isFollow;
 
-  @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      splashColor: kSplashColor,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(contact.category, style: kmainbold),
+        SizedBox(height: 14),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Column(
+                children: <Widget>[
+                  Container(height: 167.5, width: 335, color: Colors.grey),
+                  const SizedBox(height: 14),
+                  Expanded(
+                      child: Row(
+                    children: [
+                      SizedBox(width: 20),
                       UserImageWidget(
-                        imageUrl: contact.company.profileImage,
-                        userType: contact.company.userType,
+                        imageUrl: contact.companyImage,
+                        width: 40,
+                        height: 40,
+                        userType: UserType.company,
                       ),
-                      const SizedBox(
-                        height: 14,
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(contact.companyProfile.companyName,
+                                style: kmain),
+                            SizedBox(height: 7),
+                            Text(
+                              contact.category,
+                              style: kmainheight.copyWith(color: maingray),
+                            )
+                          ],
+                        ),
                       ),
-                      Text(
-                        contact.company.name,
-                        style: kmain,
-                      ),
-                      const SizedBox(
-                        height: 14,
-                      ),
-                      RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                            text: contact.company.contactField.split(",").first,
-                            style: kmainheight.copyWith(color: mainblue),
+                      Expanded(
+                          child: GestureDetector(
+                        onTap: () {
+                          user.followed.value = user.followed.value ==
+                                  FollowState.normal
+                              ? FollowState.following
+                              : user.followed.value == FollowState.follower
+                                  ? FollowState.wefollow
+                                  : user.followed.value == FollowState.following
+                                      ? FollowState.normal
+                                      : FollowState.follower;
+                        },
+                        child: Container(
+                          width: 64,
+                          height: 36,
+                          padding: const EdgeInsets.symmetric(horizontal: 14),
+                          decoration: BoxDecoration(
+                              color:
+                                  user.followed.value == FollowState.normal ||
+                                          user.followed.value ==
+                                              FollowState.follower
+                                      ? mainblue
+                                      : cardGray,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Center(
+                            child: Text(
+                              user.followed.value == FollowState.normal ||
+                                      user.followed.value ==
+                                          FollowState.follower
+                                  ? "팔로우"
+                                  : "팔로잉",
+                              style: kmain.copyWith(
+                                  color: user.followed.value ==
+                                              FollowState.normal ||
+                                          user.followed.value ==
+                                              FollowState.follower
+                                      ? mainWhite
+                                      : mainblack),
+                            ),
                           ),
-                          const TextSpan(
-                            text: ' 분야 컨택 중',
-                            style: kmainheight,
-                          ),
-                        ]),
-                      ),
-                      Text(
-                        "${contact.company.contactcount.value}건의 컨택 진행",
-                        style: kmainheight,
-                      ),
+                        ),
+                      ))
                     ],
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: tapProfile,
-                    behavior: HitTestBehavior.translucent,
-                    child: Column(
-                      children: <Widget>[
-                        UserImageWidget(
-                          imageUrl: contact.user.profileImage,
-                          userType: contact.user.userType,
-                        ),
-                        const SizedBox(
-                          height: 14,
-                        ),
-                        Text(
-                          contact.user.name,
-                          style: kmain,
-                        ),
-                        const SizedBox(
-                          height: 14,
-                        ),
-                        Text(
-                          "땡땡대",
-                          style: kmainheight,
-                        ),
-                        Text(
-                          contact.user.department,
-                          style: kmainheight,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              child: Text(
-                calculateDate(contact.date),
-                style: kmain,
-              ),
-            ),
-          ],
-        ),
-      ),
+                  ))
+                ],
+              )
+            ],
+          ),
+        )
+      ],
     );
-  }
-
-  void tapProfile() {
-    Get.to(
-        () => OtherProfileScreen(
-            user: contact.user,
-            userid: contact.user.userId,
-            realname: contact.user.name),
-        preventDuplicates: false);
   }
 }
 
-// class ContactWidget extends StatelessWidget {
-//   ContactWidget({Key? key, required this.contact}) : super(key: key);
+// class CompanyRecWidget extends StatelessWidget {
+//    CompanyRecWidget({Key? key, required this.contact})
+//       : super(key: key);
+//  final ScoutReportController _scontroller = Get.put(ScoutReportController());
+//   PageController _pController =
+//       PageController(viewportFraction: 0.7, initialPage: 0);
 
+//   final List<String> images = [];
+
+//   late List<PaletteColor> colors;
+
+//   late int _currentIndex;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     colors = [];
+//     _currentIndex = 0;
+//     _updatePalettes();
+//   }
+
+//   _updatePalettes() async {
+//     for (String image in images) {
+//       final PaletteGenerator generator =
+//           await PaletteGenerator.fromImageProvider(
+//         AssetImage(image),
+//         size: Size(200, 100),
+//       );
+//       colors.add(generator.lightMutedColor ?? PaletteColor(Colors.blue, 2));
+//     }
+//     setState(() {});
+//   }
+
+ 
 //   Contact contact;
+//  List<String> images = _scontroller.recommandCompList
+//         .map((company) => company.companyImage)
+//         .toList();
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return InkWell(
-//       onTap: () {},
-//       splashColor: kSplashColor,
-//       child: Container(
-//         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           children: [
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceAround,
-//               children: <Widget>[
-//                 Column(
-//                   children: <Widget>[
-//                     CompanyImageWidget(imageUrl: contact.company.companyImage),
-//                     const SizedBox(
-//                       height: 14,
-//                     ),
-//                     Text(
-//                       contact.company.companyName,
-//                       style: kmain,
-//                     ),
-//                     const SizedBox(
-//                       height: 14,
-//                     ),
-//                   ],
-//                 ),
-//                 Center(
-//                   child: Text(
-//                     calculateDate(contact.date),
-//                     style: kmain,
+//   return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Text("당신에게 '집-중'하고 있는 추천 기업",
+//             style: kmainbold.copyWith(color: mainWhite)),
+//         SizedBox(height: 14),
+//         Text(contact.slogan,
+//         style: kNavigationTitle.copyWith(color: mainWhite)),
+//         SizedBox(height: 14),
+//         // Text(contact.slogan, style: kmain.copyWith(color: mainWhite)),
+//         // SizedBox(height: 24),
+//         Container(
+//           width: double.infinity,
+//           height: 200,
+//           color: colors.isNotEmpty ? colors[_currentIndex].color : Colors.white,
+//           child: Stack(
+//             children: [
+//               Positioned(
+//                 top: 70,
+//                 child: Container(
+//                   width: double.infinity,
+//                   height: 120,
+//                   child: PageView(
+//                     controller: _pController,
+//                     onPageChanged: (index) {
+//                       setState(() {
+//                         _currentIndex = index;
+//                       });
+//                     },
+//                     children: images
+//                         .map((image) => Container(
+//                               width: 321,
+//                               height: 120,
+//                               padding:
+//                                   const EdgeInsets.symmetric(horizontal: 14),
+//                               margin: const EdgeInsets.symmetric(horizontal: 7),
+//                               decoration: BoxDecoration(
+//                                 borderRadius: BorderRadius.circular(8.0),
+//                                 image: DecorationImage(
+//                                     image: AssetImage(image),
+//                                     fit: BoxFit.cover),
+//                               ),
+//                             ))
+//                         .toList(),
 //                   ),
 //                 ),
-//                 Column(
-//                   children: <Widget>[
-//                     UserImageWidget(imageUrl: contact.user.profileImage ?? ""),
-//                     const SizedBox(
-//                       height: 14,
-//                     ),
-//                     Text(
-//                       contact.user.name,
-//                       style: kmain,
-//                     ),
-//                     const SizedBox(
-//                       height: 14,
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 RichText(
-//                   text: TextSpan(children: [
-//                     TextSpan(
-//                       text: contact.company.contactField.split(",").first,
-//                       style: kmainheight.copyWith(color: mainblue),
-//                     ),
-//                     TextSpan(
-//                       text:
-//                           ' 분야 컨택 중\n${contact.company.contactcount.value}건의 컨택 진행',
-//                       style: kmainheight,
-//                     ),
-//                   ]),
-//                 ),
-//                 Text(
-//                   "땡땡대\n${contact.user.department}",
-//                   style: kmainheight,
-//                 ),
-//               ],
-//             )
-//           ],
+//               ),
+//             ],
+//           ),
 //         ),
-//       ),
+//       ],
 //     );
 //   }
 // }

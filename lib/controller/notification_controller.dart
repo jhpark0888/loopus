@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
@@ -238,12 +239,22 @@ class NotificationController extends GetxController {
   static Future<String?> getToken() async {
     try {
       String? userMessageToken = await FirebaseMessaging.instance.getToken(
+
           //TODO: WEB KEY 추가
           // vapidKey:
           //     'BCLIUKVcUhNC9-qwvJ01m_YQ3l46lrehYmmBVcXOtMp21iwY6x-EKTOLg8v4wNPNRcjrLMReFfAq0ohfvHjWZOw',
           );
-      // messaging.deleteToken();
-      print('token : $userMessageToken');
+      // showButtonDialog(
+      //     title: '',
+      //     content: 'token : $userMessageToken',
+      //     leftFunction: () {
+      //       Get.back();
+      //     },
+      //     rightFunction: () {},
+      //     rightText: '',
+      //     leftText: '닫기');
+      // // messaging.deleteToken();
+      // print('token : $userMessageToken');
       return userMessageToken ?? '';
     } catch (e) {
       print(e);

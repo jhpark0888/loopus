@@ -57,13 +57,9 @@ class CareerWidget extends StatelessWidget {
             ),
             Row(
               children: [
-                //     career.isPublic
-                //         ? SvgPicture.asset('assets/icons/group.svg')
-                //         : SvgPicture.asset('assets/icons/personal_career.svg'),
-                const SizedBox(
-                  height: 12,
-                  width: 12,
-                ),
+                career.isPublic
+                      ? SvgPicture.asset('assets/icons/group_career.svg',color: career.thumbnail == "" ? mainblack : mainWhite)
+                      : SvgPicture.asset('assets/icons/single_career.svg',color: career.thumbnail == "" ? mainblack : mainWhite),
                 const SizedBox(
                   width: 7,
                 ),

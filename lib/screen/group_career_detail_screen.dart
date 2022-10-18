@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/career_detail_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
+import 'package:loopus/screen/select_career_group_member_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'dart:math' as math;
 
 import 'package:loopus/widget/custom_pie_chart.dart';
@@ -27,12 +34,13 @@ class GroupCareerDetailScreen extends StatelessWidget {
   Project career;
   // List<Project> careerList;
   late CareerDetailController careerDetailController;
+  ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     careerDetailController = Get.put(CareerDetailController(career: career));
     return Scaffold(
         body: NestedScrollView(
-            controller: careerDetailController.scrollController,
+            controller: scrollController,
             headerSliverBuilder: ((context, innerBoxIsScrolled) {
               return [
                 SliverOverlapAbsorber(
@@ -119,21 +127,44 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                 const SizedBox(height: 12),
                                 SizedBox(
                                     height: 72,
-                                    child: ListView.separated(
-                                        padding: EdgeInsets.only(left: 20),
-                                        scrollDirection: Axis.horizontal,
-                                        primary: false,
-                                        shrinkWrap: true,
-                                        itemBuilder: (context, index) {
-                                          return joinPeople(
-                                              careerDetailController
-                                                  .members[index]);
-                                        },
-                                        separatorBuilder: (context, index) {
-                                          return const SizedBox(width: 14);
-                                        },
-                                        itemCount: careerDetailController
-                                            .members.length))
+                                    child: Obx(
+                                      () => ListView.separated(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, right: 20),
+                                          scrollDirection: Axis.horizontal,
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, index) {
+                                            bool ismanager = career.managerId ==
+                                                HomeController
+                                                    .to.myProfile.value.userId;
+                                            if (ismanager && index == 0) {
+                                              return addPeople();
+                                            }
+                                            if (ismanager) {
+                                              return joinPeople(
+                                                  careerDetailController
+                                                      .members[index - 1],
+                                                  career.managerId!);
+                                            } else {
+                                              return joinPeople(
+                                                  careerDetailController
+                                                      .members[index],
+                                                  career.managerId!);
+                                            }
+                                          },
+                                          separatorBuilder: (context, index) {
+                                            return const SizedBox(width: 14);
+                                          },
+                                          itemCount: career.managerId ==
+                                                  HomeController
+                                                      .to.myProfile.value.userId
+                                              ? careerDetailController
+                                                      .members.length +
+                                                  1
+                                              : careerDetailController
+                                                  .members.length),
+                                    ))
                                 // Expanded(child: ListView(primary: false,shrinkWrap: true,children: [joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople(),joinPeople()],scrollDirection: Axis.horizontal,))
                               ],
                             ),
@@ -162,42 +193,63 @@ class GroupCareerDetailScreen extends StatelessWidget {
                 ])));
   }
 
-  Widget joinPeople(Person user) {
-    return user.name != ""
-        ? Column(
+  Widget joinPeople(User user, int manager) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(
+            () => OtherProfileScreen(userid: user.userId, realname: user.name));
+      },
+      child: Column(
+        children: [
+          UserImageWidget(
+            width: 50,
+            height: 50,
+            imageUrl: user.profileImage,
+            userType: UserType.student,
+          ),
+          const SizedBox(
+            height: 7,
+          ),
+          Row(
             children: [
-              UserImageWidget(
-                width: 50,
-                height: 50,
-                imageUrl: user.profileImage,
-                userType: user.userType,
-              ),
-              SizedBox(
-                height: 7,
-              ),
+              if (manager == user.userId)
+                Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(36),
+                        color: rankred),
+                    width: 5,
+                    height: 5),
+              if (manager == user.userId) const SizedBox(width: 3),
               Text(
                 user.name,
                 style: kmain,
-              )
+              ),
             ],
           )
-        : addPeople();
+        ],
+      ),
+    );
   }
 
   Widget addPeople() {
-    return Column(children: [
-      SvgPicture.asset(
-        'assets/icons/home_add.svg',
-        width: 50,
-        height: 50,
-        color: mainblue,
-      ),
-      const SizedBox(height: 7),
-      Text(
-        '추가',
-        style: kmain.copyWith(color: mainblue),
-      )
-    ]);
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => SelectCareerGroupMemberScreen());
+      },
+      child: Column(children: [
+        SvgPicture.asset(
+          'assets/icons/home_add.svg',
+          width: 50,
+          height: 50,
+          color: mainblue,
+        ),
+        const SizedBox(height: 7),
+        Text(
+          '추가',
+          style: kmain.copyWith(color: mainblue),
+        )
+      ]),
+    );
   }
 }
 
@@ -272,13 +324,13 @@ class _MyAppSpace extends StatelessWidget {
                           height: 14,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            career.isPublic
-                                ? SvgPicture.asset(
-                                    'assets/icons/group_career.svg')
-                                : SvgPicture.asset(
-                                    'assets/icons/personal_career.svg'),
+                            SvgPicture.asset('assets/icons/group_career.svg'),
+                            const SizedBox(width: 7),
+                            Text('그룹 커리어',
+                                style: kNavigationTitle.copyWith(
+                                    color: selectimage)),
+                            const Spacer(),
                             Text(
                               '포스트 ${career.post_count}',
                               style:
@@ -310,6 +362,14 @@ class _MyAppSpace extends StatelessWidget {
         softWrap: false,
         overflow: TextOverflow.ellipsis,
         style: kmainbold);
+  }
+
+  Widget careerType(bool isPublic) {
+    return isPublic
+        ? Row(children: [])
+        : Row(
+            children: [],
+          );
   }
 }
 
@@ -384,7 +444,23 @@ class GroupCareerScreen extends StatelessWidget {
               //     ),
             ]))
           ])
-        : EmptyContentWidget(text: '아직 포스트가 없어요'));
+        : const EmptyPostWidget());
+  }
+}
+
+class EmptyPostWidget extends StatelessWidget {
+  const EmptyPostWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      SvgPicture.asset('assets/icons/career_post_add.svg'),
+      const SizedBox(width: 7),
+      Text(
+        '지금 바로 새로운 포스트를 작성해보세요',
+        style: kmainbold.copyWith(color: mainblue),
+      )
+    ]);
   }
 }
 
@@ -419,13 +495,14 @@ class MyCareerScreen extends StatelessWidget {
               //     ),
             ]))
           ])
-        : EmptyContentWidget(text: '아직 포스트가 없어요'));
+        : const Center(child: EmptyPostWidget()));
   }
 }
 
 class _leading extends StatelessWidget {
-  _leading({Key? key, required this.leading}) : super(key: key);
+  _leading({Key? key, required this.leading, this.career}) : super(key: key);
   bool leading;
+  Project? career;
   @override
   Widget build(
     BuildContext context,
@@ -434,6 +511,40 @@ class _leading extends StatelessWidget {
       onTap: () {
         if (leading) {
           Get.back();
+        } else {
+          if (career!.managerId == HomeController.to.myProfile.value.userId) {
+            showModalIOS(context, func1: () {
+              showButtonDialog(
+                  title: '커리어를 삭제하시겠어요?',
+                  startContent: '삭제한 커리어는 복구할 수 없어요',
+                  leftFunction: () {
+                    Get.back();
+                  },
+                  rightFunction: () {
+                    dialogBack(modalIOS: true);
+                    loading();
+                    deleteProject(career!.id).then((value) {
+                      if (value.isError == false) {
+                        Get.back();
+                        // careerList!.remove(career);
+                        deleteCareer(career!);
+                        Get.back();
+                        showCustomDialog("포스팅이 삭제되었습니다", 1400);
+                      } else {
+                        errorSituation(value);
+                      }
+                    });
+                  },
+                  rightText: '삭제',
+                  leftText: '취소');
+            },
+                func2: () {},
+                value1: '커리어 삭제',
+                value2: '취소',
+                isValue1Red: true,
+                isValue2Red: false,
+                isOne: true);
+          }
         }
       },
       child: Padding(
@@ -457,5 +568,13 @@ class _leading extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void deleteCareer(Project career) {
+    if (Get.isRegistered<ProfileController>()) {
+      ProfileController controller = Get.find<ProfileController>();
+      controller.myProjectList.removeWhere((element) => element == career);
+      controller.myProjectList.refresh();
+    }
   }
 }

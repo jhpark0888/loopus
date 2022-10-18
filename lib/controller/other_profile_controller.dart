@@ -52,7 +52,7 @@ class OtherProfileController extends GetxController
     await getProfile(userid).then((value) {
       if (value.isError == false) {
         otherUser.value.copywith(value.data);
-
+        otherUser.refresh();
         lastisFollowed = otherUser.value.followed.value.index;
       } else {
         errorSituation(value, screenState: otherprofilescreenstate);

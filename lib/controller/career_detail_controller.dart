@@ -14,6 +14,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class CareerDetailController extends GetxController
     with GetTickerProviderStateMixin {
   CareerDetailController({required this.career});
+  static CareerDetailController get to => Get.find();
   ScrollController scrollController = ScrollController();
   RefreshController refreshController = RefreshController();
   Rx<ScreenState> careerDetailScreenState = ScreenState.normal.obs;
@@ -28,9 +29,6 @@ class CareerDetailController extends GetxController
     tabController = TabController(length: 2, vsync: this);
     super.onInit();
     members.value = career.members.toList();
-    if (career.managerId == HomeController.to.myProfile.value.userId) {
-      members.insert(0, Person.defaultuser());
-    }
     getPosting();
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
