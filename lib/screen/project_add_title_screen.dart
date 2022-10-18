@@ -6,6 +6,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/career_detail_controller.dart';
 import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
@@ -30,13 +31,13 @@ import '../utils/check_form_validate.dart';
 class ProjectAddTitleScreen extends StatelessWidget {
   ProjectAddTitleScreen({
     Key? key,
-    this.projectid,
+    // this.career,
     required this.screenType,
   }) : super(key: key);
 
   final Screentype screenType;
   final ProjectAddController _controller = Get.put(ProjectAddController());
-  int? projectid;
+  // Rx<Project>? career;
 
   @override
   Widget build(BuildContext context) {
@@ -115,47 +116,48 @@ class ProjectAddTitleScreen extends StatelessWidget {
                       ),
                     ),
                   )
-                : Obx(() =>
-                    Get.find<ProjectDetailController>(tag: projectid.toString())
-                            .isProjectUpdateLoading
-                            .value
-                        ? Image.asset(
-                            'assets/icons/loading.gif',
-                            scale: 9,
-                          )
-                        : TextButton(
-                            onPressed: () async {
-                              if (_controller.onTitleButton.value) {
-                                Get.find<ProjectDetailController>(
-                                        tag: projectid.toString())
-                                    .isProjectUpdateLoading
-                                    .value = true;
-                                await updateproject(
-                                        Get.find<ProjectDetailController>(
-                                                tag: projectid.toString())
-                                            .project
-                                            .value
-                                            .id,
-                                        ProjectUpdateType.project_name)
-                                    .then((value) {
-                                  Get.find<ProjectDetailController>(
-                                          tag: projectid.toString())
-                                      .isProjectUpdateLoading
-                                      .value = false;
-                                });
-                              }
-                            },
-                            child: Obx(
-                              () => Text(
-                                '저장',
-                                style: kNavigationTitle.copyWith(
-                                  color: _controller.onTitleButton.value
-                                      ? mainblue
-                                      : mainblack.withOpacity(0.38),
-                                ),
-                              ),
-                            ),
-                          ))
+                : IconButton(
+                    onPressed: () {
+                      if (_controller.onTitleButton.value) {
+                        loading();
+                        updateCareer(
+                                CareerDetailController.to.career.value.id,
+                                null,
+                                _controller.projectnamecontroller.text,
+                                ProjectUpdateType.project_name)
+                            .then((value) {
+                          if (value.isError == false) {
+                            Get.back();
+                            CareerDetailController.to.career.value.careerName =
+                                _controller.projectnamecontroller.text;
+                            CareerDetailController.to.career.refresh();
+                            if (Get.isRegistered<ProfileController>()) {
+                              ProfileController.to.myProjectList
+                                      .where(
+                                          (p0) =>
+                                              p0.id ==
+                                              CareerDetailController
+                                                  .to.career.value.id)
+                                      .first
+                                      .careerName =
+                                  _controller.projectnamecontroller.text;
+                              ProfileController.to.myProjectList.refresh();
+                            }
+                            Get.back();
+                            showCustomDialog('커리어가 수정됐어요', 1400);
+                          }
+                        });
+                      }
+                    },
+                    icon: Obx(
+                      () => Text('확인',
+                          style: kNavigationTitle.copyWith(
+                              color: _controller.onTitleButton.value
+                                  ? mainblue
+                                  : mainblack.withOpacity(0.38))),
+                    ),
+                    padding: EdgeInsets.all(0),
+                  )
           ],
           // leading: IconButton(
           //   onPressed: () {
@@ -163,17 +165,18 @@ class ProjectAddTitleScreen extends StatelessWidget {
           //   },
           //   icon: SvgPicture.asset('assets/icons/appbar_exit.svg'),
           // ),
-          title: '커리어 추가',
+          title: screenType == Screentype.add ? '커리어 추가' : '커리어 수정',
         ),
         body: Column(
           children: [
             const SizedBox(
               height: 14,
             ),
-            Text(
-              "본인의 새로운 경험을 추가해보세요",
-              style: kmain.copyWith(color: maingray),
-            ),
+            if (screenType == Screentype.add)
+              Text(
+                "본인의 새로운 경험을 추가해보세요",
+                style: kmain.copyWith(color: maingray),
+              ),
             LabelTextFieldWidget(
                 label: "커리어 이름",
                 hintText: "커리어 이름을 입력하세요",
@@ -182,35 +185,36 @@ class ProjectAddTitleScreen extends StatelessWidget {
             const SizedBox(
               height: 14,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Obx(
-                () => GestureDetector(
-                  onTap: () {
-                    _controller.isPublic(!_controller.isPublic.value);
-                  },
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/icons/check_icon.svg",
-                        width: 18,
-                        height: 18,
-                        color: _controller.isPublic.value ? null : maingray,
-                      ),
-                      const SizedBox(
-                        width: 7,
-                      ),
-                      Text(
-                        "그룹 커리어에요",
-                        style: kmain.copyWith(
-                            color:
-                                _controller.isPublic.value ? null : maingray),
-                      )
-                    ],
+            if (screenType == Screentype.add)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Obx(
+                  () => GestureDetector(
+                    onTap: () {
+                      _controller.isPublic(!_controller.isPublic.value);
+                    },
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/icons/check_icon.svg",
+                          width: 18,
+                          height: 18,
+                          color: _controller.isPublic.value ? null : maingray,
+                        ),
+                        const SizedBox(
+                          width: 7,
+                        ),
+                        Text(
+                          "그룹 커리어에요",
+                          style: kmain.copyWith(
+                              color:
+                                  _controller.isPublic.value ? null : maingray),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
             // Padding(
             //   padding: const EdgeInsets.symmetric(horizontal: 20),
             //   child: Row(

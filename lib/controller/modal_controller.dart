@@ -450,6 +450,47 @@ void showModalIOS(
   );
 }
 
+void showModalIOSText(
+  BuildContext context, {
+  required VoidCallback func1,
+  required VoidCallback func2,
+  required String value1,
+  required String value2,
+  required bool isValue1Red,
+  required bool isValue2Red,
+  required bool isOne,
+}) {
+  showCupertinoModalPopup(
+    barrierColor: mainblack.withOpacity(
+      0.3,
+    ),
+    context: context,
+    builder: (context) => CupertinoActionSheet(
+      cancelButton: Column(children: []),
+      actions: [
+        CupertinoActionSheetAction(
+          child: Text(
+            value1,
+            style: kmain.copyWith(
+              color: isValue1Red ? rankred : mainblack,
+            ),
+          ),
+          onPressed: func1,
+        ),
+        if (isOne == false)
+          CupertinoActionSheetAction(
+              child: Text(
+                value2,
+                style: kmain.copyWith(
+                  color: isValue2Red ? rankred : mainblack,
+                ),
+              ),
+              onPressed: func2)
+      ],
+    ),
+  );
+}
+
 void showBottomdialog(
   BuildContext context, {
   required VoidCallback func1,
@@ -459,11 +500,12 @@ void showBottomdialog(
   required bool isOne,
   Color? buttonColor1,
   Color? buttonColor2,
+  Color? bareerColor,
   String? title,
   String? accentTitle,
 }) {
   showModalBottomSheet(
-    barrierColor: mainWhite.withOpacity(
+    barrierColor: bareerColor?? mainWhite.withOpacity(
       0.9,
     ),
     enableDrag: false,

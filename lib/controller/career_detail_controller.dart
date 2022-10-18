@@ -18,7 +18,7 @@ class CareerDetailController extends GetxController
   ScrollController scrollController = ScrollController();
   RefreshController refreshController = RefreshController();
   Rx<ScreenState> careerDetailScreenState = ScreenState.normal.obs;
-  Project career;
+  Rx<Project> career;
   RxInt page = 1.obs;
   RxList<Post> postList = <Post>[].obs;
   RxBool enablePullUp = true.obs;
@@ -28,7 +28,7 @@ class CareerDetailController extends GetxController
   void onInit() {
     tabController = TabController(length: 2, vsync: this);
     super.onInit();
-    members.value = career.members.toList();
+    members.value = career.value.members.toList();
     getPosting();
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
@@ -41,7 +41,7 @@ class CareerDetailController extends GetxController
   }
 
   Future<void> getPosting() async {
-    getCareerPosting(career.id, page.value).then((value) {
+    getCareerPosting(career.value.id, page.value).then((value) {
       if (value.isError == false) {
         List<Post> postlist = value.data;
         if (postlist.isNotEmpty) {
