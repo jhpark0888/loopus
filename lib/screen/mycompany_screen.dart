@@ -8,9 +8,11 @@ import 'package:loopus/controller/my_company_controller.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/comp_intro_edit_screen.dart';
 import 'package:loopus/screen/company_interesting_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
+import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
@@ -348,7 +350,29 @@ class MyCompanyScreen extends StatelessWidget {
 
   Widget _introView() {
     return Obx(() => _controller.myCompanyInfo.value.intro == ""
-        ? EmptyContentWidget(text: '아직 소개글이 없어요')
+        ? Column(
+            children: [
+              const SizedBox(
+                height: 14,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    CustomExpandedButton(
+                        onTap: () {
+                          Get.to(() => CompanyIntroEditScreen());
+                        },
+                        isBlue: true,
+                        title: "기업 소개 수정하기",
+                        isBig: true),
+                  ],
+                ),
+              ),
+            ],
+          )
         : Column(
             children: [
               const SizedBox(
@@ -358,9 +382,28 @@ class MyCompanyScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   _controller.myCompanyInfo.value.intro,
-                  style: kmain.copyWith(color: mainWhite),
+                  style: kmainheight.copyWith(color: mainWhite),
                 ),
-              )
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    CustomExpandedButton(
+                        onTap: () {
+                          Get.to(() => CompanyIntroEditScreen());
+                        },
+                        isBlue: true,
+                        title: "기업 소개 수정하기",
+                        isBig: true),
+                  ],
+                ),
+              ),
             ],
           ));
   }

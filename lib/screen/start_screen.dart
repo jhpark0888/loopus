@@ -48,7 +48,7 @@ class StartScreen extends StatelessWidget {
                     () => LogInScreen(),
                   );
                 },
-                boxColor: dividegray,
+                boxColor: cardGray,
                 textColor: mainblack,
                 isBlue: false,
                 isBig: true,
@@ -102,19 +102,19 @@ class StartScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(
-                'assets/icons/home_logo_image.svg',
+              Image.asset(
+                'assets/illustrations/loop_splash.png',
                 width: 200,
-                height: 105,
+                height: 120,
               ),
-              const SizedBox(
-                height: 24,
-              ),
-              RichText(
-                  text: TextSpan(children: [
-                const TextSpan(text: "내 모든 일상이 포트폴리오가 되다,", style: kmain),
-                TextSpan(text: " 루프어스", style: kmain.copyWith(color: mainblue))
-              ]))
+              // const SizedBox(
+              //   height: 24,
+              // ),
+              // RichText(
+              //     text: TextSpan(children: [
+              //   const TextSpan(text: "내 모든 일상이 포트폴리오가 되다,", style: kmain),
+              //   TextSpan(text: " 루프어스", style: kmain.copyWith(color: mainblue))
+              // ]))
             ],
           ),
         ),

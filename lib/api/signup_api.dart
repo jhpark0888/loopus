@@ -33,12 +33,9 @@ Future<HTTPResponse> emailRequest(
   } else {
     Uri uri = Uri.parse('$serverUri/user_api/check_email');
 
-    // String? fcmToken = await NotificationController.getToken();
-
     var checkemail = {
       //TODO: 학교 도메인 확인
       "email": email,
-      // "token": fcmToken
     };
 
     try {
@@ -56,13 +53,46 @@ Future<HTTPResponse> emailRequest(
       // response.
       print("이메일 체크 : ${response.statusCode}");
       if (response.statusCode == 200) {
-        String temp_email = email.replaceAll('@', '');
-        print(temp_email);
-        FlutterSecureStorage().write(key: 'temp_email', value: temp_email);
-        await FirebaseMessaging.instance.subscribeToTopic(temp_email);
-        return HTTPResponse.success(temp_email);
+        return HTTPResponse.success("SUCCESS");
       } else {
-        return HTTPResponse.apiError("fail", response.statusCode);
+        return HTTPResponse.apiError("FAIL", response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+
+Future<HTTPResponse> certfyNumRequest(String email, String number) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    Uri uri = Uri.parse('$serverUri/user_api/activate');
+
+    var _body = {
+      "email": email,
+      "certify_num": number,
+    };
+
+    try {
+      http.Response response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(_body),
+      );
+
+      // response.
+      print("인증번호 체크 : ${response.statusCode}");
+      if (response.statusCode == 200) {
+        return HTTPResponse.success("SUCCESS");
+      } else {
+        return HTTPResponse.apiError("FAIL", response.statusCode);
       }
     } on SocketException {
       return HTTPResponse.serverError();
@@ -145,6 +175,7 @@ Future<HTTPResponse> signupRequest() async {
         body: json.encode(user),
       );
 
+      print("회원가입: ${response.statusCode}");
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
 

@@ -33,7 +33,8 @@ class App extends StatelessWidget {
       Container(
         color: mainblack.withOpacity(0.25),
       ),
-      ScoutScreen(),
+      Container(),
+      // ScoutScreen(),
       CareerBoardScreen(),
     ];
 

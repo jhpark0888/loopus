@@ -38,10 +38,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     if (newMsg == '') {
       const FlutterSecureStorage().write(key: 'newMsg', value: 'true');
     }
-  } else if (message.data["type"] == "certification") {
-    print(Get.isRegistered<SignupController>());
-    NotificationController.certificationFunction();
   }
+  // else if (message.data["type"] == "certification") {
+  //   print(Get.isRegistered<SignupController>());
+  //   NotificationController.certificationFunction();
+  // }
   print('백그라운드 알림 데이터 : ${message.data}');
 }
 

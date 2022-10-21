@@ -16,6 +16,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final bool? readOnly;
   final Widget? suffix;
+  final TextInputType? keyboardType;
 
   CustomTextField(
       {required this.textController,
@@ -25,6 +26,7 @@ class CustomTextField extends StatelessWidget {
       required this.maxLines,
       required this.counterText,
       required this.maxLength,
+      this.keyboardType,
       this.readOnly,
       this.autofocus,
       this.suffix,
@@ -36,6 +38,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       textInputAction: textInputAction,
+      keyboardType: keyboardType,
       maxLength: maxLength,
       onTap: ontap,
       obscureText: obscureText,
@@ -51,30 +54,30 @@ class CustomTextField extends StatelessWidget {
       controller: textController,
       onFieldSubmitted: onfieldSubmitted,
       decoration: InputDecoration(
-        counterText: counterText,
-        contentPadding: const EdgeInsets.only(bottom: 12),
-        isDense: true,
-        hintText: hintText,
-        hintStyle: kmain.copyWith(
-          color: maingray,
-        ),
-        suffix: suffix,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: maingray, width: 1),
-        ),
-        disabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: maingray, width: 1),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: maingray, width: 1),
-        ),
-        errorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: rankred, width: 1),
-        ),
-        focusedErrorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: rankred, width: 1),
-        ),
-      ),
+          counterText: counterText,
+          contentPadding: const EdgeInsets.only(bottom: 12),
+          isDense: true,
+          hintText: hintText,
+          hintStyle: kmain.copyWith(
+            color: maingray,
+          ),
+          suffix: suffix,
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: maingray, width: 1),
+          ),
+          disabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: maingray, width: 1),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: maingray, width: 1),
+          ),
+          errorBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: rankred, width: 1),
+          ),
+          focusedErrorBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: rankred, width: 1),
+          ),
+          errorStyle: kmain.copyWith(color: rankred)),
       validator: validator,
     );
   }

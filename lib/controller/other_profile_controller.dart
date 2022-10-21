@@ -74,24 +74,26 @@ class OtherProfileController extends GetxController
   }
 
   Future<int> getOtherPosting(int userId) async {
-    HTTPResponse hrrpResponse = await getAllPosting(userId, postPageNum);
+    HTTPResponse httpResponse = await getAllPosting(userId, postPageNum);
 
-    if (hrrpResponse.isError == false) {
-      List<Post> postlist = hrrpResponse.data;
+    if (httpResponse.isError == false) {
+      List<Post> postlist = List.from(httpResponse.data)
+          .map((post) => Post.fromJson(post))
+          .toList();
 
       allPostList.addAll(postlist);
       postPageNum += 1;
 
       otherprofilescreenstate(ScreenState.success);
     } else {
-      if (hrrpResponse.errorData!["statusCode"] != 204) {
-        errorSituation(hrrpResponse, screenState: otherprofilescreenstate);
+      if (httpResponse.errorData!["statusCode"] != 204) {
+        errorSituation(httpResponse, screenState: otherprofilescreenstate);
       }
     }
-    if (hrrpResponse.errorData == null) {
+    if (httpResponse.errorData == null) {
       return 200;
     } else {
-      return hrrpResponse.errorData!["statusCode"];
+      return httpResponse.errorData!["statusCode"];
     }
   }
 

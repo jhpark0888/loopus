@@ -1,24 +1,17 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/post_model.dart';
-import 'package:loopus/model/tag_model.dart';
-import 'package:loopus/model/career_model.dart';
 import 'package:loopus/utils/error_control.dart';
-import 'package:loopus/widget/careertile_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 import 'package:loopus/api/profile_api.dart';
-import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 
 class MyCompanyController extends GetxController
@@ -90,7 +83,8 @@ class MyCompanyController extends GetxController
   void _getPosting(int userId) async {
     await getAllPosting(userId, postPageNum).then((value) {
       if (value.isError == false) {
-        List<Post> postlist = value.data;
+        List<Post> postlist =
+            List.from(value.data).map((post) => Post.fromJson(post)).toList();
 
         allPostList.addAll(postlist);
         postPageNum += 1;

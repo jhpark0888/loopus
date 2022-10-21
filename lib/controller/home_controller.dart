@@ -51,11 +51,13 @@ class HomeController extends GetxController
 
   Project? recommendCareer;
   RxList<Post> posts = <Post>[].obs;
-  RxList<Contact> contact = <Contact>[].obs;
+  // RxList<Contact> contact = <Contact>[].obs;
   RxList<Person> growthUsers = <Person>[].obs;
-  RxList<String> newslist = <String>[].obs;
-  RxList<Person> joinSenior1 = <Person>[].obs;
-  RxList<Person> joinSenior2 = <Person>[].obs;
+  RxList<String> newsList = <String>[].obs;
+  RxList<String> youtubeList = <String>[].obs;
+  RxList<String> brunchList = <String>[].obs;
+  // RxList<Person> joinSenior1 = <Person>[].obs;
+  // RxList<Person> joinSenior2 = <Person>[].obs;
 
   late Rx<ScrollController> scrollController;
 
@@ -154,7 +156,7 @@ class HomeController extends GetxController
 
     enablePostingPullup.value = true;
     posts.clear();
-    newslist.clear();
+    newsList.clear();
     await postloadItem();
     postingRefreshController.refreshCompleted();
   }
@@ -172,7 +174,7 @@ class HomeController extends GetxController
 
         if (posts.isEmpty) {
           if (value.data['issue'] != null) {
-            newslist.value = List.from(value.data['issue']);
+            newsList.value = List.from(value.data['issue']);
           }
 
           if (value.data['project'] != null) {
@@ -195,9 +197,21 @@ class HomeController extends GetxController
   }
 
   void contentsArrange() {
-    List teptlist = [];
-    teptlist.addAll(posts);
-    teptlist.insert(3, newslist);
+    List tempList = [];
+    tempList.addAll(posts);
+    tempList.insert(3, newsList);
+
+    // List linkList = [newsList, youtubeList, brunchList];
+    // linkList.shuffle();
+    // for (int i = 0; i < linkList.length; i++) {
+    //   int linkIndex = (i + 1) * 3; // 3, 6, 9번째에 링크리스트(뉴스, 유투브, 브런치) 보여줌
+    //   if (tempList.length >= linkIndex) {
+    //     tempList.insert(linkIndex, linkList[i]);
+    //   } else {
+    //     tempList.add(linkList[i]);
+    //   }
+    // }
+
     // for (int i = 0; i < newslist.length / 10; i++) {
     //   if (teptlist.length > 3 + (i * 4)) {
     //     teptlist.insert(
@@ -207,7 +221,7 @@ class HomeController extends GetxController
     //   }
     // }
 
-    contents.value = teptlist;
+    contents.value = tempList;
   }
 
   void scrollToTop() {

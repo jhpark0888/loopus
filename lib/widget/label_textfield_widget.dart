@@ -8,13 +8,14 @@ class LabelTextFieldWidget extends StatelessWidget {
     required this.label,
     required this.hintText,
     required this.textController,
-    this.labelBold = false,
+    this.labelBold = true,
     this.readOnly,
     this.obscureText,
     this.maxLength,
     this.ontap,
     this.validator,
     this.suffix,
+    this.keyboardType,
   }) : super(key: key);
 
   String label;
@@ -27,17 +28,15 @@ class LabelTextFieldWidget extends StatelessWidget {
   Function()? ontap;
   String? Function(String?)? validator;
   Widget? suffix;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(
-            height: 24,
-          ),
           Text(
             label,
             style: labelBold ? kmainbold : kmainheight,
@@ -49,6 +48,7 @@ class LabelTextFieldWidget extends StatelessWidget {
             counterText: null,
             maxLength: null,
             textController: textController,
+            keyboardType: keyboardType,
             hintText: hintText,
             suffix: suffix,
             validator: validator,

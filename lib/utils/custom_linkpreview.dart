@@ -61,8 +61,7 @@ class CustomLinkPreview {
         return DefaultScrapper.scrape(doc, url);
       }
     } catch (e) {
-      HomeController.to.newslist.removeWhere((element) => element == url);
-      print('Default scrapper failure Error: $e');
+      // print('Default scrapper failure Error: $e');
       return WebInfo(
         description: '',
         domain: url,
@@ -174,7 +173,7 @@ class NewsFetchPreview {
         'authorImage': authorImage ?? '',
       };
     } catch (e) {
-      HomeController.to.newslist.remove(url);
+      HomeController.to.newsList.remove(url);
     }
   }
 

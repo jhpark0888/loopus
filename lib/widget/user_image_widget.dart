@@ -21,13 +21,10 @@ class UserImageWidget extends StatelessWidget {
         ? ClipOval(
             child: child,
           )
-        : Container(
-            decoration: BoxDecoration(
-              color: mainWhite,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: dividegray, width: 1.5),
-            ),
-            child: child);
+        : ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: child,
+          );
   }
 
   @override

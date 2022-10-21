@@ -177,6 +177,9 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 "본인의 새로운 경험을 추가해보세요",
                 style: kmain.copyWith(color: maingray),
               ),
+            const SizedBox(
+              height: 24,
+            ),
             LabelTextFieldWidget(
                 label: "커리어 이름",
                 hintText: "커리어 이름을 입력하세요",

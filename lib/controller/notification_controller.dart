@@ -125,7 +125,7 @@ class NotificationController extends GetxController {
       print(event.data["type"]);
       print('알림 데이터 : ${event.data}');
       if (event.data["type"] == "certification") {
-        certificationFunction();
+        // certificationFunction();
       } else {
         Map<String, dynamic> json = event.data;
         if (event.data['type'] != 'no_msg') {
@@ -319,9 +319,7 @@ class NotificationController extends GetxController {
         SignupController _signupController = Get.find();
         FlutterSecureStorage secureStorage = const FlutterSecureStorage();
         _signupController.signupcertification(Emailcertification.success);
-        _signupController.timer.timerClose(closeFunction: () async {
-          _signupController.timer.certificateClose(secureStorage);
-        });
+        _signupController.timer.timerClose(closeFunction: () async {});
 
         loading();
         await signupRequest().then((value) async {
@@ -343,8 +341,8 @@ class NotificationController extends GetxController {
             await _gaController.logScreenView('signup_6');
             // errorSituation(value);
             Get.back();
-            Get.offAll(
-                () => SignupFailScreen(signupController: _signupController));
+            // Get.offAll(
+            //     () => SignupFailScreen(signupController: _signupController));
           }
         });
       } else {
@@ -375,9 +373,7 @@ class NotificationController extends GetxController {
     } else if (Get.isRegistered<PwChangeController>()) {
       FlutterSecureStorage secureStorage = const FlutterSecureStorage();
       PwChangeController.to.pwcertification(Emailcertification.success);
-      PwChangeController.to.timer.timerClose(closeFunction: () async {
-        PwChangeController.to.timer.certificateClose(secureStorage);
-      });
+      PwChangeController.to.timer.timerClose(closeFunction: () async {});
       Get.to(() => PwChangeScreen(pwType: PwType.pwfind));
     }
   }

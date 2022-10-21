@@ -38,7 +38,7 @@ class SignupUserInfoScreen extends StatelessWidget {
           color: mainWhite,
           elevation: 0,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -53,18 +53,16 @@ class SignupUserInfoScreen extends StatelessWidget {
                           title: "이전",
                           isBig: true),
                     ),
-                    const SizedBox(
-                      width: 14,
-                    ),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Obx(
                         () => CustomExpandedButton(
                             onTap: () {
-                              if (_signupController.isUserInfoFill.value) {
+                              if (_signupController.isUserInfoCheck.value) {
                                 Get.to(() => SignupEmailPwScreen());
                               }
                             },
-                            isBlue: _signupController.isUserInfoFill.value,
+                            isBlue: _signupController.isUserInfoCheck.value,
                             title: "다음",
                             isBig: true),
                       ),
@@ -82,7 +80,7 @@ class SignupUserInfoScreen extends StatelessWidget {
                 isReCertification == false
                     ? SignUpTextWidget(
                         highlightText: "루프어스",
-                        oneLinetext: "에 오신걸 환영해요!",
+                        oneLinetext: "에 오신걸 환영해요",
                         twoLinetext: "본인 정보를 입력해주세요")
                     : SignUpTextWidget(
                         highlightText: "재인증을 위해",
@@ -92,6 +90,9 @@ class SignupUserInfoScreen extends StatelessWidget {
                     label: "이름",
                     hintText: "본인 이름을 입력하세요",
                     textController: _signupController.namecontroller),
+                const SizedBox(
+                  height: 24,
+                ),
                 LabelTextFieldWidget(
                     ontap: () {
                       Get.to(() => UnivDeptSearchScreen(
@@ -102,6 +103,9 @@ class SignupUserInfoScreen extends StatelessWidget {
                     hintText: "출신 대학을 입력하세요",
                     readOnly: true,
                     textController: _signupController.univcontroller),
+                const SizedBox(
+                  height: 24,
+                ),
                 LabelTextFieldWidget(
                     ontap: () {
                       if (_signupController.selectUniv.value.id == 0) {
@@ -116,6 +120,9 @@ class SignupUserInfoScreen extends StatelessWidget {
                     hintText: "출신 학과를 입력하세요",
                     readOnly: true,
                     textController: _signupController.departmentcontroller),
+                const SizedBox(
+                  height: 24,
+                ),
                 LabelTextFieldWidget(
                     ontap: () {
                       int year = DateTime.now().year;

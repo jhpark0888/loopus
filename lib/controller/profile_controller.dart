@@ -104,7 +104,8 @@ class ProfileController extends GetxController
   void _getPosting(int userId) async {
     await getAllPosting(userId, postPageNum).then((value) {
       if (value.isError == false) {
-        List<Post> postlist = value.data;
+        List<Post> postlist =
+            List.from(value.data).map((post) => Post.fromJson(post)).toList();
 
         allPostList.addAll(postlist);
         postPageNum += 1;

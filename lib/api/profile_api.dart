@@ -185,12 +185,9 @@ Future<HTTPResponse> getAllPosting(int userId, int page) async {
 
       print("프로필 모든 포스팅 리스트 get: ${response.statusCode}");
       if (response.statusCode == 200) {
-        List responseBody = json.decode(utf8.decode(response.bodyBytes));
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-        List<Post> postlist = responseBody.map((post) {
-          return Post.fromJson(post);
-        }).toList();
-        return HTTPResponse.success(postlist);
+        return HTTPResponse.success(responseBody);
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }

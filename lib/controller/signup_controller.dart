@@ -8,12 +8,14 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/univ_model.dart';
 import 'package:loopus/utils/certificate_timer.dart';
+import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/utils/error_control.dart';
 
-class SignupController extends GetxController with WidgetsBindingObserver {
+class SignupController extends GetxController {
   static SignupController get to => Get.find();
   SignupController({this.isReCertification = false});
 
+  //학생
   TextEditingController univcontroller = TextEditingController();
   TextEditingController admissioncontroller = TextEditingController();
   TextEditingController departmentcontroller = TextEditingController();
@@ -21,6 +23,7 @@ class SignupController extends GetxController with WidgetsBindingObserver {
   TextEditingController namecontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
   TextEditingController passwordcheckcontroller = TextEditingController();
+  TextEditingController certfyNumController = TextEditingController();
 
   Rx<Emailcertification> signupcertification = Emailcertification.normal.obs;
   Rx<ScreenState> searchscreenstate = ScreenState.normal.obs;
@@ -34,77 +37,77 @@ class SignupController extends GetxController with WidgetsBindingObserver {
   RxList<Univ> searchUnivList = <Univ>[].obs;
   RxList<Dept> searchDeptList = <Dept>[].obs;
 
-  RxBool isUserInfoFill = false.obs;
+  RxBool isUserInfoCheck = false.obs;
   RxBool isEmailPassWordCheck = true.obs;
+  RxBool isCertftNumCheck = false.obs;
   final bool isReCertification;
 
   late CertificateTimer timer;
 
-  static final FlutterSecureStorage storage = FlutterSecureStorage();
+  //기업
+  TextEditingController compNameController = TextEditingController();
+  TextEditingController compEmailController = TextEditingController();
+
+  RxBool isCompInfoCheck = false.obs;
 
   @override
   void onInit() {
-    WidgetsBinding.instance!.addObserver(this);
     timer = CertificateTimer(emailcertification: signupcertification);
 
     namecontroller.addListener(() {
-      userInfoFillCheck();
+      _userInfoFillCheck();
     });
     univcontroller.addListener(() {
-      userInfoFillCheck();
+      _userInfoFillCheck();
     });
     departmentcontroller.addListener(() {
-      userInfoFillCheck();
+      _userInfoFillCheck();
     });
     admissioncontroller.addListener(() {
-      userInfoFillCheck();
+      _userInfoFillCheck();
     });
     emailidcontroller.addListener(() {
       if (isReCertification == false) {
-        emailpasswordCheck();
+        _emailpasswordCheck();
       } else {
-        emailCheck();
+        _emailCheck();
       }
     });
     passwordcontroller.addListener(() {
-      emailpasswordCheck();
+      _emailpasswordCheck();
     });
     passwordcheckcontroller.addListener(() {
-      emailpasswordCheck();
+      _emailpasswordCheck();
+    });
+
+    certfyNumController.addListener(() {
+      if (certfyNumController.text.length == 6 && timer.sec.value != 0) {
+        isCertftNumCheck(true);
+      } else {
+        isCertftNumCheck(false);
+      }
+    });
+
+    ever(timer.sec, (_) {
+      if (timer.sec.value == 0) {
+        isCertftNumCheck(false);
+      }
+    });
+
+    //기업 addListener
+    compNameController.addListener(() {
+      _compInfoFillCheck();
+    });
+
+    compEmailController.addListener(() {
+      _compInfoFillCheck();
     });
 
     super.onInit();
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    // TODO: implement didChangeAppLifecycleState
-    super.didChangeAppLifecycleState(state);
-    switch (state) {
-      case AppLifecycleState.detached:
-        print("앱 상태: ${state.name}");
-        print(Get.isRegistered<SignupController>());
-        break;
-      case AppLifecycleState.inactive:
-        print("앱 상태: ${state.name}");
-        print(Get.isRegistered<SignupController>());
-        break;
-      case AppLifecycleState.paused:
-        print("앱 상태: ${state.name}");
-        print(Get.isRegistered<SignupController>());
-        break;
-      case AppLifecycleState.resumed:
-        print("앱 상태: ${state.name}");
-        print(Get.isRegistered<SignupController>());
-
-        break;
-      default:
-    }
-  }
-
-  @override
   void onClose() {
-    WidgetsBinding.instance!.removeObserver(this);
     univcontroller.clear();
     admissioncontroller.clear();
     departmentcontroller.clear();
@@ -112,7 +115,12 @@ class SignupController extends GetxController with WidgetsBindingObserver {
     namecontroller.clear();
     passwordcontroller.clear();
     passwordcheckcontroller.clear();
+    timer.timerClose();
     super.onClose();
+  }
+
+  String getEmail() {
+    return emailidcontroller.text + "@" + selectUniv.value.email;
   }
 
   void searchUnivLoad(String text) async {
@@ -147,22 +155,22 @@ class SignupController extends GetxController with WidgetsBindingObserver {
     departmentcontroller.clear();
   }
 
-  void userInfoFillCheck() {
+  void _userInfoFillCheck() {
     if (namecontroller.text.isNotEmpty &&
         univcontroller.text.isNotEmpty &&
         departmentcontroller.text.isNotEmpty &&
         admissioncontroller.text.isNotEmpty) {
-      isUserInfoFill(true);
+      isUserInfoCheck(true);
     } else {
-      isUserInfoFill(false);
+      isUserInfoCheck(false);
     }
   }
 
-  void emailpasswordCheck() {
+  void _emailpasswordCheck() {
     String pwText = passwordcontroller.text;
     String pwCheckText = passwordcheckcontroller.text;
-    if (pwText.trim().length > 6 &&
-        pwText == pwCheckText &&
+    if (pwText.trim().length >= 6 &&
+        pwCheckText.trim().length >= 6 &&
         emailidcontroller.text.trim() != "") {
       isEmailPassWordCheck(true);
     } else {
@@ -170,11 +178,20 @@ class SignupController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  void emailCheck() {
+  void _emailCheck() {
     if (emailidcontroller.text.trim() != "") {
       isEmailPassWordCheck(true);
     } else {
       isEmailPassWordCheck(false);
+    }
+  }
+
+  void _compInfoFillCheck() {
+    if (compNameController.text.trim() != "" &&
+        CheckValidate.validateEmailBool(compEmailController.text)) {
+      isCompInfoCheck(true);
+    } else {
+      isCompInfoCheck(false);
     }
   }
 }

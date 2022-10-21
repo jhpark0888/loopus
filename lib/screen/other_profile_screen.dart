@@ -431,30 +431,33 @@ class OtherProfileScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: CustomExpandedBoldButton(
-                        onTap: followMotion,
-                        isBlue: _controller.otherUser.value.followed.value ==
-                                    FollowState.follower ||
-                                _controller.otherUser.value.followed.value ==
-                                    FollowState.normal ||
-                                _controller.otherUser.value.banned ==
-                                    BanState.ban
-                            ? true
-                            : false,
-                        title: _controller.otherUser.value.banned ==
-                                BanState.ban
-                            ? '차단 해제'
-                            : _controller.otherUser.value.followed.value ==
-                                    FollowState.normal
-                                ? '팔로우'
-                                : _controller.otherUser.value.followed.value ==
-                                        FollowState.follower
-                                    ? '나도 팔로우하기'
-                                    : _controller.otherUser.value.followed
-                                                .value ==
-                                            FollowState.following
-                                        ? '팔로우 중'
-                                        : '팔로우 중',
+                      child: Obx(
+                        () => CustomExpandedBoldButton(
+                          onTap: followMotion,
+                          isBlue: _controller.otherUser.value.followed.value ==
+                                      FollowState.follower ||
+                                  _controller.otherUser.value.followed.value ==
+                                      FollowState.normal ||
+                                  _controller.otherUser.value.banned ==
+                                      BanState.ban
+                              ? true
+                              : false,
+                          title: _controller.otherUser.value.banned ==
+                                  BanState.ban
+                              ? '차단 해제'
+                              : _controller.otherUser.value.followed.value ==
+                                      FollowState.normal
+                                  ? '팔로우'
+                                  : _controller
+                                              .otherUser.value.followed.value ==
+                                          FollowState.follower
+                                      ? '나도 팔로우하기'
+                                      : _controller.otherUser.value.followed
+                                                  .value ==
+                                              FollowState.following
+                                          ? '팔로우 중'
+                                          : '팔로우 중',
+                        ),
                       ),
                     ),
                     const SizedBox(

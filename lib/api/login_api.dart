@@ -70,20 +70,16 @@ Future<HTTPResponse> postpwfindemailcheck(
     String email, Rx<Emailcertification> emailcertification) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     Uri uri = Uri.parse('$serverUri/user_api/password');
 
-    //이메일 줘야 됨
     final checkemail = {
       'email': email.trim(),
-      // "token": fcmToken
     };
 
     try {
       emailcertification(Emailcertification.waiting);
-      showBottomSnackbar("$email로\n인증 메일을 보냈어요\n메일을 확인하고 인증을 완료해주세요");
 
       http.Response response = await http.post(uri,
           headers: <String, String>{
@@ -93,13 +89,9 @@ Future<HTTPResponse> postpwfindemailcheck(
 
       print("비밀번호 찾기 이메일 체크 : ${response.statusCode}");
       if (response.statusCode == 200) {
-        String? fcmToken = await NotificationController.getToken();
-        String temp_email = email.replaceAll('@', '');
-        FlutterSecureStorage().write(key: 'temp_email', value: temp_email);
-        await FirebaseMessaging.instance.subscribeToTopic(temp_email);
-        return HTTPResponse.success("success");
+        return HTTPResponse.success("SUCCESS");
       } else {
-        return HTTPResponse.apiError("fail", response.statusCode);
+        return HTTPResponse.apiError("FAIL", response.statusCode);
       }
     } on SocketException {
       return HTTPResponse.serverError();

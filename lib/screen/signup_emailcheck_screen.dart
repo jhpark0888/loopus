@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/signup_api.dart';
@@ -7,7 +8,10 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/signup_complete_screen.dart';
+import 'package:loopus/screen/signup_fail_screen.dart';
 import 'package:loopus/utils/error_control.dart';
+import 'package:loopus/widget/certfynum_textfield_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/signup_text_widget.dart';
 import '../controller/ga_controller.dart';
@@ -24,18 +28,19 @@ class SignupEmailcheckScreen extends StatelessWidget {
   // };
 
   Map<Emailcertification, String> rightButtonText = {
-    Emailcertification.normal: "인증하기",
+    Emailcertification.normal: "다시 보내기",
     Emailcertification.waiting: "인증 대기중",
     Emailcertification.success: "다음",
     Emailcertification.fail: "다시 보내기",
   };
 
-  void _timerClose() {
+  void _timerClose({bool dialogOn = false}) {
     _signupController.timer.timerClose(closeFunction: () {
       _signupController.signupcertification(Emailcertification.fail);
-      _signupController.timer.certificateClose(const FlutterSecureStorage());
     });
   }
+
+  RxBool isCertiftNumdiffer = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -100,20 +105,16 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                       "") {
                                     loading();
                                     await emailRequest(
-                                            _signupController
-                                                    .emailidcontroller.text +
-                                                "@" +
-                                                _signupController
-                                                    .selectUniv.value.email,
+                                            _signupController.getEmail(),
                                             _signupController
                                                 .signupcertification)
                                         .then((value) {
                                       if (value.isError == false) {
                                         Get.back();
+                                        _signupController.certfyNumController
+                                            .clear();
                                         _signupController.timer.timerOn(180);
                                       } else {
-                                        FirebaseMessaging.instance
-                                            .unsubscribeFromTopic(value.data);
                                         Get.back();
                                         if (value.errorData!["statusCode"] ==
                                             400) {
@@ -150,19 +151,10 @@ class SignupEmailcheckScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  _signupController.isReCertification == false
-                      ? SignUpTextWidget(
-                          oneLinetext: "학교 인증을 위해",
-                          twoLinetext: "",
-                          twohighlightText: "입력한 주소로 메일을 보냈어요",
-                        )
-                      : SignUpTextWidget(
-                          oneLinetext: "재인증을 위해",
-                          twoLinetext: "",
-                          twohighlightText: "입력한 주소로 메일을 보냈어요",
-                        ),
-                  const SizedBox(
-                    height: 24,
+                  SignUpTextWidget(
+                    oneLinetext: "",
+                    highlightText: "입력하신 주소로 메일을 보냈어요",
+                    twoLinetext: "인증번호를 입력해주세요",
                   ),
                   Text(
                     "${_signupController.emailidcontroller.text}@${_signupController.selectUniv.value.email}",
@@ -172,26 +164,105 @@ class SignupEmailcheckScreen extends StatelessWidget {
                     height: 24,
                   ),
                   const Text(
-                    "위 이메일 주소에서 메일을 확인해주세요",
+                    "위 웹메일 주소에서 인증번호를 확인해주세요",
                     style: kmain,
                   ),
                   const SizedBox(
-                    height: 14,
+                    height: 24,
                   ),
-                  Text(
-                    _signupController.isReCertification == false
-                        ? "메일 속 링크를 클릭하면 가입이 완료돼요"
-                        : "메일 속 링크를 클릭하면 재인증이 완료되며,",
-                    style: kmain,
-                  ),
-                  const SizedBox(
-                    height: 14,
-                  ),
-                  if (_signupController.isReCertification == false)
-                    Text(
-                      "재인증 된 대학 메일로 로그인이 가능해요",
-                      style: kmain.copyWith(color: mainblue),
+                  Container(
+                    height: 36,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CertfyTextFieldWidget(
+                            controller: _signupController.certfyNumController,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Obx(
+                          () => CustomExpandedButton(
+                              onTap: () async {
+                                if (_signupController.isCertftNumCheck.value) {
+                                  loading();
+                                  await certfyNumRequest(
+                                          _signupController.getEmail(),
+                                          _signupController
+                                              .certfyNumController.text)
+                                      .then((value) async {
+                                    if (value.isError == false) {
+                                      isCertiftNumdiffer(false);
+                                      _signupController.timer.timerClose();
+
+                                      await signupRequest().then((value) async {
+                                        final GAController _gaController =
+                                            GAController();
+
+                                        if (value.isError == false) {
+                                          await _gaController.logSignup();
+                                          await _gaController.setUserProperties(
+                                              value.data['user_id'],
+                                              _signupController
+                                                  .selectDept.value.deptname);
+                                          await _gaController
+                                              .logScreenView('signup_6');
+                                          Get.back();
+                                          Get.offAll(() => SignupCompleteScreen(
+                                                emailId: _signupController
+                                                        .emailidcontroller
+                                                        .text +
+                                                    "@" +
+                                                    _signupController
+                                                        .selectUniv.value.email,
+                                                password: _signupController
+                                                    .passwordcontroller.text,
+                                              ));
+                                        } else {
+                                          await _gaController
+                                              .logScreenView('signup_6');
+                                          // errorSituation(value);
+                                          Get.back();
+                                          Get.to(() => SignupFailScreen());
+                                        }
+                                      });
+                                    } else {
+                                      Get.back();
+                                      if (value.errorData!["statusCode"] ==
+                                          401) {
+                                        isCertiftNumdiffer(true);
+                                      } else {
+                                        isCertiftNumdiffer(false);
+                                        errorSituation(value);
+                                      }
+                                    }
+                                  });
+                                }
+                              },
+                              isBlue: _signupController.isCertftNumCheck.value,
+                              title: "인증하기",
+                              isBig: false),
+                        )
+                      ],
                     ),
+                  ),
+                  const SizedBox(height: 8),
+                  Obx(
+                    () => isCertiftNumdiffer.value
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "인증번호가 다릅니다. 다시 확인해주세요",
+                                style: kmain.copyWith(color: rankred),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  )
                 ],
               ),
             ),

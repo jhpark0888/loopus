@@ -10,10 +10,12 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
+import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/pwchange_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 
 import 'package:loopus/widget/appbar_widget.dart';
+import 'package:loopus/widget/certfynum_textfield_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 import 'package:loopus/widget/label_textfield_widget.dart';
@@ -27,16 +29,17 @@ class PwFindScreen extends StatelessWidget {
   static FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Map<Emailcertification, String> rightButtonText = {
-    Emailcertification.normal: "인증하기",
+    Emailcertification.normal: "메일 보내기",
     Emailcertification.waiting: "인증 대기중",
     Emailcertification.success: "다음",
     Emailcertification.fail: "다시 보내기",
   };
 
+  RxBool isCertiftNumdiffer = false.obs;
+
   void _timerClose() {
     _pwChangeController.timer.timerClose(closeFunction: () {
       _pwChangeController.pwcertification(Emailcertification.fail);
-      _pwChangeController.timer.certificateClose(storage);
     });
   }
 
@@ -104,9 +107,9 @@ class PwFindScreen extends StatelessWidget {
                                             _pwChangeController.pwcertification)
                                         .then((value) {
                                       if (value.isError == false) {
+                                        showBottomSnackbar(
+                                            "${_loginController.idcontroller.text}로\n인증 메일을 보냈어요\n메일을 확인하고 인증을 완료해주세요");
                                         _pwChangeController.timer.timerOn(180);
-
-                                        // _modalController.showCustomDialog('입력하신 이메일로 새로운 비밀번호를 알려드렸어요', 1400);
                                       } else {
                                         _pwChangeController.pwcertification(
                                             Emailcertification.fail);
@@ -123,19 +126,19 @@ class PwFindScreen extends StatelessWidget {
                                         _timerClose();
                                       }
                                     });
+                                  } else if (_pwChangeController
+                                          .pwcertification.value ==
+                                      Emailcertification.success) {
+                                    Get.to(() =>
+                                        PwChangeScreen(pwType: PwType.pwfind));
                                   }
-                                } else {
-                                  // showCustomDialog('이메일 형식을 다시 확인해주세요', 1400);
                                 }
                               },
                               isBlue: _loginController.pwFindButtonOn.value
                                   ? _pwChangeController.pwcertification.value ==
-                                              Emailcertification.fail ||
-                                          _pwChangeController
-                                                  .pwcertification.value ==
-                                              Emailcertification.normal
-                                      ? true
-                                      : false
+                                          Emailcertification.waiting
+                                      ? false
+                                      : true
                                   : false,
                               title: rightButtonText[
                                   _pwChangeController.pwcertification.value],
@@ -160,6 +163,7 @@ class PwFindScreen extends StatelessWidget {
                     label: "대학 웹메일 주소",
                     hintText: "본인 대학 이메일 아이디",
                     textController: _loginController.idcontroller,
+                    keyboardType: TextInputType.emailAddress,
                     // validator: (value) =>
                     //     CheckValidate().validateEmail(value!),
                   ),
@@ -167,16 +171,76 @@ class PwFindScreen extends StatelessWidget {
                     height: 24,
                   ),
                   const Text(
-                    "위 이메일 주소에서 메일을 확인해주세요",
+                    "위 웹메일 주소에서 인증번호를 확인해주세요",
                     style: kmain,
                   ),
                   const SizedBox(
-                    height: 14,
+                    height: 24,
                   ),
-                  const Text(
-                    "메일 속 링크를 클릭하면 비밀번호 변경 화면으로 이동해요",
-                    style: kmain,
+                  Container(
+                    height: 36,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CertfyTextFieldWidget(
+                            controller: _pwChangeController.certfyNumController,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Obx(
+                          () => CustomExpandedButton(
+                              onTap: () async {
+                                loading();
+                                await certfyNumRequest(
+                                        _loginController.idcontroller.text,
+                                        _pwChangeController
+                                            .certfyNumController.text)
+                                    .then((value) async {
+                                  if (value.isError == false) {
+                                    Get.back();
+                                    isCertiftNumdiffer(false);
+                                    _pwChangeController.timer.timerClose();
+                                    PwChangeController.to.pwcertification(
+                                        Emailcertification.success);
+                                    Get.to(() =>
+                                        PwChangeScreen(pwType: PwType.pwfind));
+                                  } else {
+                                    Get.back();
+                                    if (value.errorData!["statusCode"] == 401) {
+                                      isCertiftNumdiffer(true);
+                                    } else {
+                                      isCertiftNumdiffer(false);
+                                      errorSituation(value);
+                                    }
+                                  }
+                                });
+                              },
+                              isBlue:
+                                  _pwChangeController.isCertftNumCheck.value,
+                              title: "인증하기",
+                              isBig: false),
+                        )
+                      ],
+                    ),
                   ),
+                  const SizedBox(height: 8),
+                  Obx(
+                    () => isCertiftNumdiffer.value
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "인증번호가 다릅니다. 다시 확인해주세요",
+                                style: kmain.copyWith(color: rankred),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  )
                 ],
               ),
             ),

@@ -49,7 +49,7 @@ class LogInScreen extends StatelessWidget {
           color: mainWhite,
           elevation: 0,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -65,7 +65,7 @@ class LogInScreen extends StatelessWidget {
                           isBig: true),
                     ),
                     const SizedBox(
-                      width: 14,
+                      width: 8,
                     ),
                     Expanded(
                       child: Obx(
@@ -95,60 +95,68 @@ class LogInScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                SignUpTextWidget(
+                    oneLinetext: "",
+                    highlightText: "다시 돌아온걸 환영해요",
+                    twoLinetext: "가입정보를 입력해주세요"),
                 Obx(
-                  () => SignUpTextWidget(
-                      oneLinetext:
-                          "${_loginController.loginType.value == UserType.student ? "대학" : "기업"} 메일 주소 및",
-                      twoLinetext: "비밀번호를 입력해주세요"),
-                ),
-                Obx(
-                  () => Center(
-                    child: ToggleButtons(
-                      children: const [
-                        Text(
-                          "학생",
-                        ),
-                        Text(
-                          "기업",
-                        )
-                      ],
-                      isSelected: [
-                        _loginController.loginType.value == UserType.student,
-                        _loginController.loginType.value == UserType.company
-                      ],
-                      textStyle: kmainbold,
-                      onPressed: (index) {
-                        if (index == 0) {
-                          _loginController.loginType(UserType.student);
-                        } else {
-                          _loginController.loginType(UserType.company);
-                        }
-                      },
-                      selectedColor: mainblue,
-                      selectedBorderColor: mainblue,
-                      color: dividegray,
-                      splashColor: Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                  () => ToggleButtons(
+                    children: const [
+                      Text(
+                        "학생",
+                      ),
+                      Text(
+                        "기업",
+                      )
+                    ],
+                    constraints: BoxConstraints.tightFor(
+                        width: (Get.width / 2) - 16, height: 42),
+                    isSelected: [
+                      _loginController.loginType.value == UserType.student,
+                      _loginController.loginType.value == UserType.company
+                    ],
+                    textStyle: kmainbold,
+                    onPressed: (index) {
+                      if (index == 0) {
+                        _loginController.loginType(UserType.student);
+                      } else {
+                        _loginController.loginType(UserType.company);
+                      }
+                    },
+                    fillColor: mainblue,
+                    selectedColor: mainWhite,
+                    selectedBorderColor: mainblue,
+                    color: dividegray,
+                    splashColor: Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
                   ),
+                ),
+                const SizedBox(
+                  height: 24,
                 ),
                 Obx(
                   () => LabelTextFieldWidget(
-                      label:
-                          "본인 ${_loginController.loginType.value == UserType.student ? "대학" : "기업"} 이메일",
-                      hintText:
-                          "인증한 본인 ${_loginController.loginType.value == UserType.student ? "대학" : "기업"} 이메일 주소",
-                      // validator: (value) =>
-                      //     CheckValidate().validateEmail(value!),
-                      textController: _loginController.idcontroller),
+                    label:
+                        "본인 ${_loginController.loginType.value == UserType.student ? "대학" : "기업"} 이메일",
+                    hintText:
+                        "인증한 본인 ${_loginController.loginType.value == UserType.student ? "대학" : "기업"} 이메일 주소",
+                    // validator: (value) =>
+                    //     CheckValidate().validateEmail(value!),
+                    textController: _loginController.idcontroller,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
                 ),
                 LabelTextFieldWidget(
-                    label: "비밀번호",
-                    hintText: "루프어스에 가입할 때 입력한 비밀번호",
-                    obscureText: true,
-                    // validator: (value) =>
-                    //     CheckValidate().validatePassword(value!),
-                    textController: _loginController.passwordcontroller),
+                  label: "비밀번호",
+                  hintText: "최소 6글자 비밀번호를 입력해주세요",
+                  obscureText: true,
+                  // validator: (value) =>
+                  //     CheckValidate().validatePassword(value!),
+                  textController: _loginController.passwordcontroller,
+                ),
                 const SizedBox(
                   height: 24,
                 ),
