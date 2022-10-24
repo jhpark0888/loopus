@@ -41,7 +41,7 @@ class SearchFocusScreen extends StatelessWidget {
           elevation: 0,
           backgroundColor: mainWhite,
           title: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             width: MediaQuery.of(context).size.width,
             height: 36,
             child: Row(
@@ -53,13 +53,15 @@ class SearchFocusScreen extends StatelessWidget {
                   readonly: false,
                   controller: _searchController.searchtextcontroller,
                 )),
+                const SizedBox(width: 8),
                 GestureDetector(
                   onTap: AppController.to.willPopAction,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 14),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 11),
                     child: Text(
                       '취소',
-                      style: kmain.copyWith(color: mainblue),
+                      style: kmainbold.copyWith(color: mainblue),
                     ),
                   ),
                 )

@@ -270,7 +270,7 @@ class PostingScreen extends StatelessWidget {
                                 child: SvgPicture.asset(
                                     'assets/icons/appbar_exit.svg'),
                               ),
-                              title: '게시물',
+                              title: '포스트',
                               actions: [
                                 GestureDetector(
                                   onTap: controller.post!.value.isuser == 1
@@ -308,11 +308,22 @@ class PostingScreen extends StatelessWidget {
                                                       if (value.isError ==
                                                           false) {
                                                         Get.back();
-                                                        if(Get.isRegistered<CareerDetailController>()){
-                                                          Post tempPost = CareerDetailController.to.postList.where((p0) => p0.id == postid).first;
-                                                          CareerDetailController.to.postList.remove(tempPost);
-                                                          CareerDetailController.to.postList.refresh();
-                                                        }else if (Get.isRegistered<
+                                                        if (Get.isRegistered<
+                                                            CareerDetailController>()) {
+                                                          Post tempPost =
+                                                              CareerDetailController
+                                                                  .to.postList
+                                                                  .where((p0) =>
+                                                                      p0.id ==
+                                                                      postid)
+                                                                  .first;
+                                                          CareerDetailController
+                                                              .to.postList
+                                                              .remove(tempPost);
+                                                          CareerDetailController
+                                                              .to.postList
+                                                              .refresh();
+                                                        } else if (Get.isRegistered<
                                                             ProfileController>()) {
                                                           Project project =
                                                               ProfileController
@@ -439,6 +450,7 @@ class PostingScreen extends StatelessWidget {
                                               item: controller.post!.value,
                                               type: PostingWidgetType.detail,
                                             ),
+                                            const SizedBox(height: 16),
                                             Obx(
                                               () => ListView.separated(
                                                 key: controller.commentListKey,
@@ -454,7 +466,7 @@ class PostingScreen extends StatelessWidget {
                                                 separatorBuilder:
                                                     (context, index) {
                                                   return const SizedBox(
-                                                    height: 14,
+                                                    height: 16,
                                                   );
                                                 },
                                                 itemCount: controller.post!

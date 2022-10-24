@@ -131,7 +131,7 @@ class CertificationScreen extends StatelessWidget {
     FocusScope.of(context).unfocus();
     loading();
     // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
-    await loginRequest(emailId, password, UserType.student).then((value) async {
+    await loginRequest(emailId, password).then((value) async {
       if (value.isError == false) {
         Get.back();
         if (certificateType == CertificateType.userInfoChange) {

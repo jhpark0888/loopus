@@ -64,7 +64,7 @@ class PostingWidget extends StatelessWidget {
           Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             if (type != PostingWidgetType.profile)
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                 child: Column(
                   children: [
                     GestureDetector(
@@ -78,14 +78,14 @@ class PostingWidget extends StatelessWidget {
                             userType: item.user.userType,
                           ),
                           const SizedBox(
-                            width: 14,
+                            width: 8,
                           ),
                           Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(item.user.name, style: kmainbold),
-                                const SizedBox(height: 7),
+                                const SizedBox(height: 8),
                                 Text(
                                     '${item.user.univName} | ${item.user.department}',
                                     style: kmain)
@@ -93,7 +93,7 @@ class PostingWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 10),
                     Container(
                       alignment: Alignment.centerLeft,
                       child: GestureDetector(
@@ -104,7 +104,7 @@ class PostingWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -125,8 +125,8 @@ class PostingWidget extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
+                  left: 16,
+                  right: 16,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +148,7 @@ class PostingWidget extends StatelessWidget {
                                             color: maingray)),
                                     maxLines: 3),
                             const SizedBox(
-                              height: 14,
+                              height: 10,
                             ),
                           ],
                         ),
@@ -157,8 +157,8 @@ class PostingWidget extends StatelessWidget {
                       Column(children: [
                         Obx(
                           () => Wrap(
-                              spacing: 7,
-                              runSpacing: 7,
+                              spacing: 8,
+                              runSpacing: 8,
                               children: item.tags
                                   .map((tag) => Tagwidget(
                                         tag: tag,
@@ -167,7 +167,7 @@ class PostingWidget extends StatelessWidget {
                                   .toList()),
                         ),
                         const SizedBox(
-                          height: 14,
+                          height: 10,
                         ),
                       ]),
                     if (type != PostingWidgetType.search)
@@ -187,7 +187,7 @@ class PostingWidget extends StatelessWidget {
                                           "assets/icons/like.svg"),
                                 ),
                                 const SizedBox(
-                                  width: 15,
+                                  width: 10,
                                 ),
                                 // Obx(
                                 //   () => SizedBox(
@@ -217,7 +217,7 @@ class PostingWidget extends StatelessWidget {
                           ),
                           // postingTag(),
                           const SizedBox(
-                            height: 14,
+                            height: 10,
                           ),
                           Row(children: [
                             GestureDetector(
@@ -242,7 +242,9 @@ class PostingWidget extends StatelessWidget {
                                 style: kmain.copyWith(
                                     color: isDark ? mainWhite : null)),
                           ]),
-                          const SizedBox(height: 14),
+                          SizedBox(
+                              height:
+                                  type != PostingWidgetType.detail ? 10 : 16),
                           if (item.comments.isNotEmpty &&
                               type != PostingWidgetType.detail)
                             Column(
@@ -255,7 +257,7 @@ class PostingWidget extends StatelessWidget {
                                         style: kmainbold.copyWith(
                                             color: isDark ? mainWhite : null),
                                       ),
-                                      const SizedBox(width: 7),
+                                      const SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
                                           item.comments.first.content,
@@ -267,7 +269,7 @@ class PostingWidget extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(height: 14),
+                                const SizedBox(height: 16),
                               ],
                             ),
                         ],
@@ -295,10 +297,14 @@ class PostingWidget extends StatelessWidget {
         transition: Transition.noTransition);
   }
 
-  void tapProjectname() async{
-    await getproject(item.project!.id, item.userid).then((value) {if(value.isError == false){
-      goCareerScreen(value.data,item.user.name);
-    }},);
+  void tapProjectname() async {
+    await getproject(item.project!.id, item.userid).then(
+      (value) {
+        if (value.isError == false) {
+          goCareerScreen(value.data, item.user.name);
+        }
+      },
+    );
   }
 
   void tapBookmark() {

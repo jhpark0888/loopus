@@ -72,12 +72,12 @@ class LogInScreen extends StatelessWidget {
                         () => CustomExpandedButton(
                             onTap: () async {
                               if (_loginController.loginButtonOn.value) {
-                                login(context,
-                                    emailId: _loginController.idcontroller.text,
-                                    password: _loginController
-                                        .passwordcontroller.text,
-                                    loginType:
-                                        _loginController.loginType.value);
+                                login(
+                                  context,
+                                  emailId: _loginController.idcontroller.text,
+                                  password:
+                                      _loginController.passwordcontroller.text,
+                                );
                               }
                             },
                             isBlue: _loginController.loginButtonOn.value,
@@ -99,53 +99,50 @@ class LogInScreen extends StatelessWidget {
                     oneLinetext: "",
                     highlightText: "다시 돌아온걸 환영해요",
                     twoLinetext: "가입정보를 입력해주세요"),
-                Obx(
-                  () => ToggleButtons(
-                    children: const [
-                      Text(
-                        "학생",
-                      ),
-                      Text(
-                        "기업",
-                      )
-                    ],
-                    constraints: BoxConstraints.tightFor(
-                        width: (Get.width / 2) - 16, height: 42),
-                    isSelected: [
-                      _loginController.loginType.value == UserType.student,
-                      _loginController.loginType.value == UserType.company
-                    ],
-                    textStyle: kmainbold,
-                    onPressed: (index) {
-                      if (index == 0) {
-                        _loginController.loginType(UserType.student);
-                      } else {
-                        _loginController.loginType(UserType.company);
-                      }
-                    },
-                    fillColor: mainblue,
-                    selectedColor: mainWhite,
-                    selectedBorderColor: mainblue,
-                    color: dividegray,
-                    splashColor: Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                // Obx(
+                //   () => ToggleButtons(
+                //     children: const [
+                //       Text(
+                //         "학생",
+                //       ),
+                //       Text(
+                //         "기업",
+                //       )
+                //     ],
+                //     constraints: BoxConstraints.tightFor(
+                //         width: (Get.width / 2) - 16, height: 42),
+                //     isSelected: [
+                //       _loginController.loginType.value == UserType.student,
+                //       _loginController.loginType.value == UserType.company
+                //     ],
+                //     textStyle: kmainbold,
+                //     onPressed: (index) {
+                //       if (index == 0) {
+                //         _loginController.loginType(UserType.student);
+                //       } else {
+                //         _loginController.loginType(UserType.company);
+                //       }
+                //     },
+                //     fillColor: mainblue,
+                //     selectedColor: mainWhite,
+                //     selectedBorderColor: mainblue,
+                //     color: dividegray,
+                //     splashColor: Colors.transparent,
+                //     borderRadius: BorderRadius.circular(8),
+                //   ),
+                // ),
+                // const SizedBox(
+                //   height: 24,
+                // ),
+                LabelTextFieldWidget(
+                  label: "본인 대학 이메일",
+                  hintText: "인증한 본인 대학 이메일 주소",
+                  // validator: (value) =>
+                  //     CheckValidate().validateEmail(value!),
+                  textController: _loginController.idcontroller,
+                  keyboardType: TextInputType.emailAddress,
                 ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Obx(
-                  () => LabelTextFieldWidget(
-                    label:
-                        "본인 ${_loginController.loginType.value == UserType.student ? "대학" : "기업"} 이메일",
-                    hintText:
-                        "인증한 본인 ${_loginController.loginType.value == UserType.student ? "대학" : "기업"} 이메일 주소",
-                    // validator: (value) =>
-                    //     CheckValidate().validateEmail(value!),
-                    textController: _loginController.idcontroller,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                ),
+
                 const SizedBox(
                   height: 24,
                 ),
@@ -181,25 +178,27 @@ class LogInScreen extends StatelessWidget {
   }
 }
 
-void login(context,
-    {required String emailId,
-    required String password,
-    required UserType loginType}) async {
+void login(
+  context, {
+  required String emailId,
+  required String password,
+}) async {
   FocusScope.of(context).unfocus();
   loading();
   // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
-  await loginRequest(emailId, password, loginType).then((value) async {
+  await loginRequest(emailId, password).then((value) async {
     if (value.isError == false) {
       const FlutterSecureStorage storage = FlutterSecureStorage();
       http.Response response = value.data;
       String token = jsonDecode(response.body)['token'];
       String userid = jsonDecode(response.body)['user_id'];
+      int isStudent = jsonDecode(response.body)['is_student'];
       //! GA
       // await _gaController.logLogin();
 
       storage.write(key: 'token', value: token);
       storage.write(key: 'id', value: userid);
-      storage.write(key: 'type', value: loginType.name);
+      storage.write(key: 'type', value: UserType.values[isStudent].name);
       await FirebaseMessaging.instance.subscribeToTopic(userid);
       Get.offAll(() => App());
     } else {

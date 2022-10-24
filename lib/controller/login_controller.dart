@@ -14,7 +14,7 @@ class LogInController extends GetxController {
 
   RxBool pwFindButtonOn = false.obs;
 
-  Rx<UserType> loginType = UserType.student.obs;
+  // Rx<UserType> loginType = UserType.student.obs;
 
   @override
   void onInit() {

@@ -16,17 +16,10 @@ import 'package:loopus/widget/notification_widget.dart';
 
 import '../controller/error_controller.dart';
 
-Future<void> getNotificationlist(String type, int lastindex) async {
+Future<HTTPResponse> getNotificationlist(String type, int lastindex) async {
   ConnectivityResult result = await initConnectivity();
-  NotificationDetailController controller = Get.find();
   if (result == ConnectivityResult.none) {
-    if (type == NotificationType.follow.name && lastindex == 0) {
-      controller.followreqscreenstate(ScreenState.disconnect);
-    } else if (type == "" && lastindex == 0) {
-      controller.notificationscreenstate(ScreenState.disconnect);
-    }
-
-    showdisconnectdialog();
+    return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
@@ -38,57 +31,16 @@ Future<void> getNotificationlist(String type, int lastindex) async {
 
       print("알림 $type 리스트 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
-        List responseBody = json.decode(utf8.decode(response.bodyBytes));
-        print(responseBody);
-        List<NotificationModel> notificationlist = responseBody
-            .map((project) => NotificationModel.fromJson(project))
-            .toList();
-
-        if (type == NotificationType.follow.name) {
-          if (notificationlist.isEmpty && controller.followalarmlist.isEmpty) {
-            controller.isfollowreqEmpty.value = true;
-          } else if (notificationlist.isEmpty &&
-              controller.followalarmlist.isNotEmpty) {
-            controller.enablefollowreqPullup.value = false;
-          }
-
-          controller.followalarmlist.value = notificationlist
-              .map((e) => NotificationWidget(
-                    key: UniqueKey(),
-                    notification: e,
-                    isnewAlarm: false.obs,
-                  ))
-              .toList();
-          controller.followreqscreenstate(ScreenState.success);
-        } else {
-          if (notificationlist.isEmpty && controller.alarmlist.isEmpty) {
-            controller.isalarmEmpty.value = true;
-          } else if (notificationlist.isEmpty &&
-              controller.alarmlist.isNotEmpty) {
-            controller.enablealarmPullup.value = false;
-          }
-
-          controller.alarmlist.value = notificationlist
-              .map((e) => NotificationWidget(
-                  key: UniqueKey(), notification: e, isnewAlarm: false.obs))
-              .toList();
-          controller.notificationscreenstate(ScreenState.success);
-        }
-
-        return;
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+        return HTTPResponse.success(responseBody);
       } else {
-        if (type == NotificationType.follow.name) {
-          controller.followreqscreenstate(ScreenState.error);
-        } else {
-          controller.notificationscreenstate(ScreenState.error);
-        }
-        return Future.error(response.statusCode);
+        return HTTPResponse.apiError("FAIL", response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
     } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
+      print("알림 $type 리스트 로드: $e");
+      return HTTPResponse.unexpectedError(e);
     }
   }
 }

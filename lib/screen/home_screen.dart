@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/model/issue_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/mycompany_screen.dart';
@@ -196,20 +197,20 @@ class HomeScreen extends StatelessWidget {
                                             child: Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
-                                                      horizontal: 20),
+                                                      horizontal: 16),
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   const SizedBox(
-                                                    height: 14,
+                                                    height: 8,
                                                   ),
                                                   Text(
                                                     '\'${_homeController.recommendCareer!.careerName}\'\n커리어엔 최근 어떤 일이 있었나요?',
                                                     style: kmainheight,
                                                   ),
                                                   const SizedBox(
-                                                    height: 14,
+                                                    height: 10,
                                                   ),
                                                   Text(
                                                     '포스트를 바로 작성해 보세요',
@@ -217,7 +218,7 @@ class HomeScreen extends StatelessWidget {
                                                         color: maingray),
                                                   ),
                                                   const SizedBox(
-                                                    height: 7,
+                                                    height: 10,
                                                   ),
                                                   Divider(
                                                       thickness: 1,
@@ -238,20 +239,20 @@ class HomeScreen extends StatelessWidget {
                                             child: Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
-                                                      horizontal: 20),
+                                                      horizontal: 16),
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   const SizedBox(
-                                                    height: 14,
+                                                    height: 8,
                                                   ),
                                                   const Text(
                                                     '지금 커리어를 만들고 새로운 포스트를 기록해보세요!',
                                                     style: kmainheight,
                                                   ),
                                                   const SizedBox(
-                                                    height: 14,
+                                                    height: 10,
                                                   ),
                                                   Text(
                                                     '커리어를 바로 작성해 보세요',
@@ -259,7 +260,7 @@ class HomeScreen extends StatelessWidget {
                                                         color: maingray),
                                                   ),
                                                   const SizedBox(
-                                                    height: 7,
+                                                    height: 10,
                                                   ),
                                                   Divider(
                                                       thickness: 1,
@@ -269,7 +270,7 @@ class HomeScreen extends StatelessWidget {
                                             ),
                                           ),
                                     Obx(
-                                      () => ListView.separated(
+                                      () => ListView.builder(
                                         primary: false,
                                         shrinkWrap: true,
                                         scrollDirection: Axis.vertical,
@@ -283,10 +284,10 @@ class HomeScreen extends StatelessWidget {
                                             );
                                           } else if (_homeController
                                                   .contents[index]
-                                              is RxList<String>) {
+                                              is RxList<Issue>) {
                                             return Obx(
                                               () => NewsListWidget(
-                                                  newslist: _homeController
+                                                  issueList: _homeController
                                                       .contents[index]),
                                             );
                                           } else {
@@ -295,9 +296,6 @@ class HomeScreen extends StatelessWidget {
                                               style: kmainbold,
                                             );
                                           }
-                                        },
-                                        separatorBuilder: (context, index) {
-                                          return DivideWidget();
                                         },
                                         itemCount:
                                             _homeController.contents.length,

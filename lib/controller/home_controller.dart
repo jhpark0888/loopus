@@ -9,6 +9,7 @@ import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/model/company_model.dart';
+import 'package:loopus/model/issue_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/mycompany_screen.dart';
 import 'package:loopus/trash_bin/question_api.dart';
@@ -53,9 +54,9 @@ class HomeController extends GetxController
   RxList<Post> posts = <Post>[].obs;
   // RxList<Contact> contact = <Contact>[].obs;
   RxList<Person> growthUsers = <Person>[].obs;
-  RxList<String> newsList = <String>[].obs;
-  RxList<String> youtubeList = <String>[].obs;
-  RxList<String> brunchList = <String>[].obs;
+  RxList<NewsIssue> newsList = <NewsIssue>[].obs;
+  RxList<YoutubeIssue> youtubeList = <YoutubeIssue>[].obs;
+  RxList<BrunchIssue> brunchList = <BrunchIssue>[].obs;
   // RxList<Person> joinSenior1 = <Person>[].obs;
   // RxList<Person> joinSenior2 = <Person>[].obs;
 
@@ -173,8 +174,22 @@ class HomeController extends GetxController
         List postlist = List.from(value.data['posting']);
 
         if (posts.isEmpty) {
-          if (value.data['issue'] != null) {
-            newsList.value = List.from(value.data['issue']);
+          if (value.data['news'] != null) {
+            newsList.value = List.from(value.data['news'])
+                .map((news) => NewsIssue.fromJson(news))
+                .toList();
+          }
+
+          if (value.data['brunch'] != null) {
+            brunchList.value = List.from(value.data['brunch'])
+                .map((brunch) => BrunchIssue.fromJson(brunch))
+                .toList();
+          }
+
+          if (value.data['youtube'] != null) {
+            youtubeList.value = List.from(value.data['youtube'])
+                .map((youtube) => YoutubeIssue.fromJson(youtube))
+                .toList();
           }
 
           if (value.data['project'] != null) {
@@ -199,18 +214,21 @@ class HomeController extends GetxController
   void contentsArrange() {
     List tempList = [];
     tempList.addAll(posts);
-    tempList.insert(3, newsList);
+    // tempList.insert(3, newsList);
 
-    // List linkList = [newsList, youtubeList, brunchList];
-    // linkList.shuffle();
-    // for (int i = 0; i < linkList.length; i++) {
-    //   int linkIndex = (i + 1) * 3; // 3, 6, 9번째에 링크리스트(뉴스, 유투브, 브런치) 보여줌
-    //   if (tempList.length >= linkIndex) {
-    //     tempList.insert(linkIndex, linkList[i]);
-    //   } else {
-    //     tempList.add(linkList[i]);
-    //   }
-    // }
+    List linkList = [newsList, youtubeList, brunchList];
+    linkList.shuffle();
+    int listIndex = 3;
+    for (int i = 0; i < linkList.length; i++) {
+      if (i != 0) {
+        listIndex += 4; // 4, 8, 12번째에 링크리스트(뉴스, 유투브, 브런치) 보여줌
+      }
+      if (tempList.length >= listIndex) {
+        tempList.insert(listIndex, linkList[i]);
+      } else {
+        tempList.add(linkList[i]);
+      }
+    }
 
     // for (int i = 0; i < newslist.length / 10; i++) {
     //   if (teptlist.length > 3 + (i * 4)) {

@@ -270,7 +270,7 @@ class SwiperWidget extends StatelessWidget {
       children: [
         if (swiperType == SwiperType.link)
           Container(
-              height: 300,
+              height: 270,
               decoration: const BoxDecoration(
                 color: mainblack,
                 border: Border.symmetric(
@@ -325,7 +325,7 @@ class SwiperWidget extends StatelessWidget {
           Column(
             children: [
               const SizedBox(
-                height: 14,
+                height: 10,
               ),
               SmoothPageIndicator(
                 controller: _pageController,
@@ -341,7 +341,7 @@ class SwiperWidget extends StatelessWidget {
             ],
           ),
         SizedBox(
-          height: swiperType == SwiperType.file && items.length == 1 ? 30 : 14,
+          height: swiperType == SwiperType.file && items.length == 1 ? 30 : 10,
         ),
       ],
     );

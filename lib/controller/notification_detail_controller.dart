@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/model/notification_model.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/notification_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -13,12 +16,12 @@ class NotificationDetailController extends GetxController {
   Rx<ScreenState> notificationscreenstate = ScreenState.loading.obs;
   Rx<ScreenState> followreqscreenstate = ScreenState.loading.obs;
 
-  RxList<NotificationWidget> followalarmlist = <NotificationWidget>[].obs;
-  RxList<NotificationWidget> alarmlist = <NotificationWidget>[].obs;
-  RxList<NotificationWidget> newalarmList = <NotificationWidget>[].obs;
-  RxList<NotificationWidget> weekalarmList = <NotificationWidget>[].obs;
-  RxList<NotificationWidget> monthalarmList = <NotificationWidget>[].obs;
-  RxList<NotificationWidget> oldalarmList = <NotificationWidget>[].obs;
+  RxList<NotificationModel> followalarmlist = <NotificationModel>[].obs;
+  RxList<NotificationModel> alarmlist = <NotificationModel>[].obs;
+  RxList<NotificationModel> newalarmList = <NotificationModel>[].obs;
+  RxList<NotificationModel> weekalarmList = <NotificationModel>[].obs;
+  RxList<NotificationModel> monthalarmList = <NotificationModel>[].obs;
+  RxList<NotificationModel> oldalarmList = <NotificationModel>[].obs;
 
   RefreshController alarmRefreshController =
       RefreshController(initialRefresh: false);
@@ -32,13 +35,14 @@ class NotificationDetailController extends GetxController {
   RxBool isfollowreqEmpty = false.obs;
 
   @override
-  void onInit() async{
-    alarmRefresh();
+  void onInit() async {
+    await alarmRefresh();
     // followreqRefresh();
+
     super.onInit();
   }
 
-  void alarmRefresh() async {
+  Future alarmRefresh() async {
     notificationscreenstate(ScreenState.loading);
     alarmlist.clear();
     followalarmlist.clear();
@@ -51,7 +55,6 @@ class NotificationDetailController extends GetxController {
 
     await alarmloadItem();
     await followreqloadItem();
-    sortAlarmList(alarmlist + followalarmlist);
     alarmRefreshController.refreshCompleted();
   }
 
@@ -59,8 +62,8 @@ class NotificationDetailController extends GetxController {
     //페이지 처리
     await alarmloadItem();
     await followreqloadItem();
-    sortAlarmList(alarmlist + followalarmlist);
     alarmRefreshController.loadComplete();
+    print(alarmlist.length);
   }
 
   void followreqRefresh() async {
@@ -81,44 +84,87 @@ class NotificationDetailController extends GetxController {
   }
 
   Future<void> alarmloadItem() async {
-    if(alarmlist.isNotEmpty){
-    print(alarmlist.last.notification.id);}
-    await getNotificationlist(
-        "else", alarmlist.isEmpty ? 0 : alarmlist.last.notification.id);
+    if (alarmlist.isNotEmpty) {
+      print("알람 마지막 ID:${alarmlist.last.id}");
+    }
+
+    await getNotificationlist("else", alarmlist.isEmpty ? 0 : alarmlist.last.id)
+        .then((value) {
+      if (value.isError == false) {
+        List<NotificationModel> notificationlist = List.from(value.data)
+            .map((project) => NotificationModel.fromJson(project))
+            .toList();
+
+        if (notificationlist.isEmpty && alarmlist.isEmpty) {
+          isalarmEmpty.value = true;
+        } else if (notificationlist.isEmpty && alarmlist.isNotEmpty) {
+          enablealarmPullup.value = false;
+        }
+
+        alarmlist.addAll(notificationlist);
+        sortAlarmList(notificationlist);
+
+        notificationscreenstate(ScreenState.success);
+      } else {
+        errorSituation(value);
+      }
+    });
   }
 
   Future<void> followreqloadItem() async {
+    if (followalarmlist.isNotEmpty) {
+      print("팔로우 알람 마지막 ID: ${followalarmlist.last.id}");
+    }
     await getNotificationlist(NotificationType.follow.name,
-        followalarmlist.isEmpty ? 0 : followalarmlist.last.notification.id);
+            followalarmlist.isEmpty ? 0 : followalarmlist.last.id)
+        .then((value) {
+      if (value.isError == false) {
+        List<NotificationModel> notificationlist = List.from(value.data)
+            .map((project) => NotificationModel.fromJson(project))
+            .toList();
+
+        if (notificationlist.isEmpty && followalarmlist.isEmpty) {
+          isfollowreqEmpty.value = true;
+        } else if (notificationlist.isEmpty && followalarmlist.isNotEmpty) {
+          enablefollowreqPullup.value = false;
+        }
+
+        followalarmlist.addAll(notificationlist);
+        sortAlarmList(notificationlist);
+
+        followreqscreenstate(ScreenState.success);
+      } else {
+        errorSituation(value);
+      }
+    });
   }
 
-  void sortAlarmList(List<NotificationWidget> alarmList) {
-    alarmList.sort((a, b) => b
-              .notification.date
-              .compareTo(a.notification.date));
-    if (alarmList
-        .where((noti) => noti.notification.isread.value == false)
-        .isNotEmpty) {
-      newalarmList.value = alarmList
-          .where((noti) => noti.notification.isread.value == false)
-          .toList()
-          .obs;
-      alarmList = alarmList
-          .where((noti) => noti.notification.isread.value == true)
-          .toList();
-          newalarmList.forEach((element) {element.isnewAlarm.value == true;});
-    }
+  void sortAlarmList(List<NotificationModel> alarmList) {
+    // List<NotificationModel> allAlarmList = [];
+    // allAlarmList.addAll(alarmlist);
+    // allAlarmList.addAll(followalarmlist);
+    alarmList.sort((a, b) => b.date.compareTo(a.date));
+    // if (allAlarmList.where((noti) => noti.isread.value == false).isNotEmpty) {
+    //   newalarmList.value =
+    //       sumAlarmList.where((noti) => noti.isread.value == false).toList().obs;
+    //   allAlarmList =
+    //       sumAlarmList.where((noti) => noti.isread.value == true).toList();
+    //   // newalarmList.forEach((element) {
+    //   //   element.isnewAlarm.value == true;
+    //   // });
+    // }
     alarmList.forEach((noti) {
-      if (notiDurationCaculate(startDate: noti.notification.date) == 'month') {
-        monthalarmList.add(noti);
-      } else if (notiDurationCaculate(startDate: noti.notification.date) ==
-          'week') {
+      String strDateDiffer = notiDurationCaculate(startDate: noti.date);
+      if (strDateDiffer == 'today') {
+        newalarmList.add(noti);
+      } else if (strDateDiffer == 'week') {
         weekalarmList.add(noti);
+      } else if (strDateDiffer == 'month') {
+        monthalarmList.add(noti);
       } else {
         oldalarmList.add(noti);
       }
     });
-    print('끝');
   }
 
   String notiDurationCaculate({
@@ -134,11 +180,12 @@ class NotificationDetailController extends GetxController {
         (endDateOnlyDay.difference(startDateOnlyDay).inDays).toInt();
     int _dateDiffence = (endDate.difference(startDate).inDays).toInt();
 
-    if ((_dateOnlyDiffence / 30).floor() < 1) {
+    if (_dateOnlyDiffence <= 1) {
+      durationResult.value = 'today';
+    } else if (_dateOnlyDiffence <= 7) {
+      durationResult.value = 'week';
+    } else if ((_dateOnlyDiffence / 30).floor() < 1) {
       durationResult.value = 'month';
-      if (_dateOnlyDiffence <= 7) {
-        durationResult.value = 'week';
-      }
     } else if ((_dateOnlyDiffence / 30).floor() >= 1) {
       durationResult.value = 'old';
     }

@@ -212,18 +212,18 @@ class LinkWidget extends StatelessWidget {
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 20),
+                                  vertical: 16, horizontal: 16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   Text(
                                     linkController.info.value.domain,
-                                    style: kmain,
+                                    style: kmainbold,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),
                                   const SizedBox(
-                                    height: 14,
+                                    height: 8,
                                   ),
                                   Text(
                                     linkController.info.value.title,
@@ -382,7 +382,7 @@ class ScrapCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: height ?? 300,
+        height: height ?? 270,
         width: width ?? Get.width,
         decoration: BoxDecoration(
           color: cardGray,

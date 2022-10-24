@@ -41,7 +41,7 @@ class CommentWidget extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onDoubleTap: () => tapLike(),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -49,14 +49,12 @@ class CommentWidget extends StatelessWidget {
               onTap: tapProfile,
               child: UserImageWidget(
                 imageUrl: comment.user.profileImage,
-                width: 34,
-                height: 34,
+                width: 36,
+                height: 36,
                 userType: comment.user.userType,
               ),
             ),
-            const SizedBox(
-              width: 14,
-            ),
+            const SizedBox(width: 8),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,25 +68,7 @@ class CommentWidget extends StatelessWidget {
                           style: kmainbold,
                         ),
                       ),
-                      // const SizedBox(
-                      //   width: 4,
-                      // ),
-                      // Text(
-                      //   comment.content,
-                      //   style: kmainheight,
-                      // ),
                       const Spacer(),
-                      Text(
-                        commentCalculateDate(comment.date),
-                        style: kmain.copyWith(color: maingray),
-                      ),
-                      // const SizedBox(
-                      //   width: 7,
-                      // ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      // Spacer(),
                       GestureDetector(
                         onTap: comment.user.userId ==
                                 HomeController.to.myProfile.value.userId
@@ -168,19 +148,20 @@ class CommentWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 4,
-                  ),
+                  const SizedBox(height: 8),
                   Text(
                     comment.content,
                     style: kmainheight,
                   ),
-                  const SizedBox(
-                    height: 7,
-                  ),
+                  const SizedBox(height: 8),
                   Obx(
                     () => Row(
                       children: [
+                        Text(
+                          commentCalculateDate(comment.date),
+                          style: kmain.copyWith(color: maingray),
+                        ),
+                        const Spacer(),
                         GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () {
@@ -192,7 +173,6 @@ class CommentWidget extends StatelessWidget {
                           child: Text(
                             '좋아요 ${comment.likecount.value}개',
                             style: kmain.copyWith(
-                              fontSize: 12,
                               color: maingray,
                             ),
                           ),
@@ -212,19 +192,21 @@ class CommentWidget extends StatelessWidget {
                           //         ),
                           //       )
                         ),
-                        const SizedBox(
-                          width: 14,
-                        ),
+                        const SizedBox(width: 10),
                         InkWell(
                           onTap: tapLike,
                           child: comment.isLiked.value == 0
-                              ? SvgPicture.asset("assets/icons/unlike.svg",
-                                  width: 11, height: 11)
+                              ? SvgPicture.asset(
+                                  "assets/icons/unlike.svg",
+                                  width: 16,
+                                  height: 16,
+                                  color: maingray,
+                                )
                               : SvgPicture.asset("assets/icons/like.svg",
-                                  width: 11, height: 11),
+                                  width: 16, height: 16),
                         ),
                         const SizedBox(
-                          width: 14,
+                          width: 10,
                         ),
                         InkWell(
                           onTap: () async {
@@ -245,7 +227,7 @@ class CommentWidget extends StatelessWidget {
                                 curve: Curves.ease);
                           },
                           child: SvgPicture.asset("assets/icons/reply.svg",
-                              width: 11, height: 11),
+                              width: 16, height: 16),
                         ),
                       ],
                     ),
@@ -307,7 +289,7 @@ class PostCommentWidget extends StatelessWidget {
             ? Column(
                 children: [
                   const SizedBox(
-                    height: 14,
+                    height: 16,
                   ),
                   ListView.separated(
                       primary: false,
@@ -317,12 +299,12 @@ class PostCommentWidget extends StatelessWidget {
                             reply: comment.replyList[index], postid: postid);
                       },
                       separatorBuilder: (context, index) => const SizedBox(
-                            height: 14,
+                            height: 16,
                           ),
                       itemCount: comment.replyList.length),
                   if (comment.replycount.value - comment.replyList.length > 0)
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 14, 94, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 16, 94, 0),
                       child: GestureDetector(
                         onTap: () async {
                           await replyListLoad();

@@ -19,14 +19,12 @@ import 'package:loopus/screen/pwchange_screen.dart';
 
 import '../constant.dart';
 
-Future<HTTPResponse> loginRequest(
-    String email, String pw, UserType loginType) async {
+Future<HTTPResponse> loginRequest(String email, String pw) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    Uri uri = Uri.parse(
-        '$serverUri/user_api/login?is_corp=${loginType == UserType.company ? 1 : 0}');
+    Uri uri = Uri.parse('$serverUri/user_api/login');
 
     final user = {
       'username': email.trim(),
