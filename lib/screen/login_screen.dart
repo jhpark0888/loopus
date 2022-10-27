@@ -10,11 +10,13 @@ import 'package:loopus/app.dart';
 
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
+import 'package:loopus/controller/career_board_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 
 import 'package:loopus/controller/login_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/scout_report_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/screen/loading_screen.dart';
@@ -193,6 +195,17 @@ void login(
       String token = jsonDecode(response.body)['token'];
       String userid = jsonDecode(response.body)['user_id'];
       int isStudent = jsonDecode(response.body)['is_student'];
+      if (isStudent == 1) {
+        String strSchoolId = jsonDecode(response.body)['school_id'];
+        String strDeptId = jsonDecode(response.body)['department_id'];
+
+        storage.write(key: 'strSchoolId', value: strSchoolId);
+        storage.write(key: 'strDeptId', value: strDeptId);
+
+        await FirebaseMessaging.instance.subscribeToTopic(strSchoolId);
+        await FirebaseMessaging.instance.subscribeToTopic(strDeptId);
+      }
+
       //! GA
       // await _gaController.logLogin();
 
@@ -200,6 +213,7 @@ void login(
       storage.write(key: 'id', value: userid);
       storage.write(key: 'type', value: UserType.values[isStudent].name);
       await FirebaseMessaging.instance.subscribeToTopic(userid);
+
       Get.offAll(() => App());
     } else {
       Get.back();
@@ -217,7 +231,23 @@ Future<void> logOut() async {
   AppController.to.currentIndex.value = 0;
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   String? userid = await secureStorage.read(key: "id");
+  String? type = await secureStorage.read(key: "type");
   await FirebaseMessaging.instance.unsubscribeFromTopic(userid!);
+
+  if (type == UserType.student.name) {
+    String? strSchoolId = await secureStorage.read(key: "strSchoolId");
+    String? strDeptId = await secureStorage.read(key: "strDeptId");
+
+    await FirebaseMessaging.instance.unsubscribeFromTopic("school");
+    await FirebaseMessaging.instance.unsubscribeFromTopic(userid);
+
+    if (strSchoolId != null) {
+      secureStorage.delete(key: strSchoolId);
+    }
+    if (strDeptId != null) {
+      secureStorage.delete(key: strDeptId);
+    }
+  }
 
   secureStorage.delete(key: "token");
   secureStorage.delete(key: "id");
@@ -227,6 +257,8 @@ Future<void> logOut() async {
   Get.delete<HomeController>();
   Get.delete<SearchController>();
   // Get.delete<ProfileController>();
+  Get.delete<ScoutReportController>();
+  Get.delete<CareerBoardController>();
   Get.delete<SQLController>();
   Get.offAll(() => StartScreen());
 }

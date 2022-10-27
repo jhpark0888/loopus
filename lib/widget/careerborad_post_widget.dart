@@ -108,7 +108,7 @@ class CareerBoardPostWidget extends StatelessWidget {
                         child: post.images.isNotEmpty
                             ? CachedNetworkImage(
                                 imageUrl: post.images.first,
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                                 errorWidget: (context, string, widget) {
                                   return Container(color: maingray);
                                 },

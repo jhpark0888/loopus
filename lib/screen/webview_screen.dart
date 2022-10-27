@@ -33,14 +33,14 @@ class WebViewScreen extends StatelessWidget {
                         : url! == kPrivacyPolicy
                             ? '개인정보 처리방침'
                             : '',
-                style: TextStyle(fontSize: 14),
+                style: kmain,
               )
             : Text(
                 //TODO : LINK 패턴 관리
                 url!.contains('http://')
                     ? url!.replaceFirst('http://', '')
                     : url!.replaceFirst('https://', ''),
-                style: TextStyle(fontSize: 14),
+                style: kmain,
               ),
         centerTitle: true,
         bottom: PreferredSize(
@@ -54,7 +54,7 @@ class WebViewScreen extends StatelessWidget {
                 if (_webController.progressPercent.value != 100)
                   Obx(
                     () => Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: mainblue,
                         borderRadius: BorderRadius.only(
                           topRight: Radius.circular(2),

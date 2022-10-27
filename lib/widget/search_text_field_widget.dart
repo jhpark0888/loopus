@@ -13,6 +13,7 @@ class SearchTextFieldWidget extends StatelessWidget {
     this.onchanged,
     this.onEditingComplete,
     this.autofocus,
+    this.focusNode,
     this.onSubmitted,
   }) : super(key: key);
   void Function()? ontap;
@@ -20,6 +21,7 @@ class SearchTextFieldWidget extends StatelessWidget {
   String hinttext;
   bool readonly;
   bool? autofocus;
+  FocusNode? focusNode;
   TextEditingController? controller;
   TextInputAction? textInputAction;
   Function()? onEditingComplete;
@@ -41,6 +43,7 @@ class SearchTextFieldWidget extends StatelessWidget {
         textInputAction: textInputAction,
         onEditingComplete: onEditingComplete,
         onSubmitted: onSubmitted,
+        focusNode: focusNode,
         decoration: InputDecoration(
           filled: true,
           fillColor: cardGray,

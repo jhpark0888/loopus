@@ -64,6 +64,7 @@ class SearchScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => SearchFocusScreen()));
+                        _searchController.focusNode.requestFocus();
                       },
                       readonly: true,
                       controller: null,

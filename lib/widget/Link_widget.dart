@@ -195,19 +195,12 @@ class LinkWidget extends StatelessWidget {
                         child: Column(
                           children: [
                             CachedNetworkImage(
-                              imageUrl: linkController.info.value.image != ''
-                                  ? linkController.info.value.image
-                                  : 'https://cdn.pixabay.com/photo/2022/04/22/14/14/leaves-7149850__340.jpg',
+                              imageUrl: linkController.info.value.image,
                               height: 200,
                               width: Get.width,
                               fit: BoxFit.cover,
                               errorWidget: (context, string, widget) {
-                                return const Center(
-                                  child: Text(
-                                    "이미지 없음",
-                                    style: kNavigationTitle,
-                                  ),
-                                );
+                                return Container(color: maingray);
                               },
                             ),
                             Container(
