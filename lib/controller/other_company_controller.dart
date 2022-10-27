@@ -8,92 +8,96 @@ import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/company_model.dart';
+import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/model/user_model.dart';
 
-class MyCompanyController extends GetxController
+class OtherCompanyController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  static MyCompanyController get to => Get.find();
+  OtherCompanyController({
+    required this.companyId,
+    required this.otherCompany,
+  });
+  static OtherCompanyController get to => Get.find();
+
+  int companyId;
 
   RxBool profileenablepullup = true.obs;
 
-  late TabController tabController;
   RxInt currentIndex = 0.obs;
 
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
-  RefreshController postLoadingController =
-      RefreshController(initialRefresh: false);
-
   Rx<File> companyimage = File('').obs;
-  Rx<Company> myCompanyInfo = Company.defaultCompany().obs;
+  Rx<Company> otherCompany = Company.defaultCompany().obs;
   RxList<Post> allPostList = <Post>[].obs;
   int postPageNum = 1;
 
   RxBool isnewalarm = false.obs;
-  // RxBool isnewmessage = false.obs;
 
   RxBool isLoopPeopleLoading = true.obs;
-  Rx<ScreenState> myprofilescreenstate = ScreenState.loading.obs;
+  Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
+
+  late int lastisFollowed;
 
   RxList<User> followerList = <User>[].obs;
 
-  Future onRefresh() async {
-    profileenablepullup.value = true;
-    postPageNum = 1;
-    allPostList.clear();
-    loadmyProfile();
-    refreshController.refreshCompleted();
-  }
+  // Future onRefresh() async {
+  //   profileenablepullup.value = true;
+  //   postPageNum = 1;
+  //   allPostList.clear();
+  //   loadOtherCompany();
+  //   refreshController.refreshCompleted();
+  // }
 
-  void onPostLoading() async {
-    // await Future.delayed(Duration(seconds: 2));
-    // _getPosting(myCompanyInfo.value.userid);
-  }
+  // void onPostLoading() async {
+  //   // await Future.delayed(Duration(seconds: 2));
+  //   // _getPosting(myCompanyInfo.value.userid);
+  // }
 
-  Future loadmyProfile() async {
+  Future loadOtherCompany(int companyId) async {
     // isProfileLoading.value = true;
-    myprofilescreenstate(ScreenState.loading);
-    String? userId = await const FlutterSecureStorage().read(key: "id");
+    otherprofilescreenstate(ScreenState.loading);
 
-    await getCorpProfile(int.parse(userId!)).then((value) async {
+    await getCorpProfile(companyId).then((value) async {
       if (value.isError == false) {
-        myCompanyInfo.value = Company.fromJson(value.data);
-        // isNewAlarm.value = value.data['new_alarm'];
-
+        otherCompany.value.copywith(value.data);
+        otherCompany.refresh();
+        lastisFollowed = otherCompany.value.followed.value.index;
       } else {
-        errorSituation(value, screenState: myprofilescreenstate);
+        errorSituation(value, screenState: otherprofilescreenstate);
       }
     });
 
-    _getPosting(int.parse(userId));
-    getfollowPeople(int.parse(userId));
+    getCompanyPosting(companyId);
+    getfollowPeople(companyId);
     // isProfileLoading.value = false;
   }
 
-  void _getPosting(int userId) async {
-    await getAllPosting(userId, postPageNum).then((value) {
-      if (value.isError == false) {
-        List<Post> postlist =
-            List.from(value.data).map((post) => Post.fromJson(post)).toList();
+  Future<int> getCompanyPosting(int userId) async {
+    HTTPResponse httpResponse = await getAllPosting(userId, postPageNum);
 
-        allPostList.addAll(postlist);
-        postPageNum += 1;
+    if (httpResponse.isError == false) {
+      List<Post> postlist = List.from(httpResponse.data)
+          .map((post) => Post.fromJson(post))
+          .toList();
 
-        myprofilescreenstate(ScreenState.success);
-        postLoadingController.loadComplete();
-      } else {
-        if (value.errorData!["statusCode"] == 204) {
-          postLoadingController.loadNoData();
-        } else {
-          errorSituation(value, screenState: myprofilescreenstate);
-          postLoadingController.loadComplete();
-        }
+      allPostList.addAll(postlist);
+      postPageNum += 1;
+
+      otherprofilescreenstate(ScreenState.success);
+    } else {
+      if (httpResponse.errorData!["statusCode"] != 204) {
+        errorSituation(httpResponse, screenState: otherprofilescreenstate);
       }
-    });
+    }
+
+    if (httpResponse.errorData == null) {
+      return 200;
+    } else {
+      return httpResponse.errorData!["statusCode"];
+    }
   }
 
   void getfollowPeople(int userId) {
@@ -112,12 +116,7 @@ class MyCompanyController extends GetxController
 
   @override
   void onInit() async {
-    tabController = TabController(length: 2, vsync: this)
-      ..addListener(() {
-        currentIndex.value = tabController.index;
-      });
-
-    await loadmyProfile();
+    await loadOtherCompany(companyId);
     super.onInit();
   }
 

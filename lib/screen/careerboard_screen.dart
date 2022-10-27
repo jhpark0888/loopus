@@ -41,7 +41,7 @@ class CareerBoardScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         centerTitle: false,
-        titleSpacing: 20,
+        titleSpacing: 16,
         title: Padding(
           padding: const EdgeInsets.fromLTRB(0, 24, 0, 14),
           child: Row(
@@ -50,7 +50,7 @@ class CareerBoardScreen extends StatelessWidget {
                 '커리어 보드',
                 style: ktitle,
               ),
-              const SizedBox(width: 7),
+              const SizedBox(width: 8),
               SvgPicture.asset('assets/icons/information.svg')
             ],
           ),
@@ -63,7 +63,7 @@ class CareerBoardScreen extends StatelessWidget {
                   behavior: HitTestBehavior.translucent,
                   onTap: () => HomeController.to.goMyProfile(),
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
+                    padding: const EdgeInsets.only(right: 16.0),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Obx(
@@ -81,7 +81,7 @@ class CareerBoardScreen extends StatelessWidget {
           ),
         ],
         bottom: TabBar(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           controller: _controller.tabController,
           indicatorColor: Colors.transparent,
           labelPadding: EdgeInsets.zero,
@@ -170,20 +170,20 @@ class CareerBoardScreen extends StatelessWidget {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 20.0, top: 24),
+                                        left: 16.0, top: 16),
                                     child: Text(
                                       '${currentField.value} 분야 실시간 순위',
                                       style: kmainbold,
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
-                                  const SizedBox(height: 14),
+                                  const SizedBox(height: 10),
                                   SizedBox(
-                                    height: 340,
+                                    height: 292,
                                     child: ScrollNoneffectWidget(
                                       child: ListView.separated(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
+                                              horizontal: 16),
                                           scrollDirection: Axis.horizontal,
                                           itemBuilder: (context, index) {
                                             return CareerRankWidget(
@@ -198,64 +198,63 @@ class CareerBoardScreen extends StatelessWidget {
                                             );
                                           },
                                           separatorBuilder: (context, index) {
-                                            return const SizedBox(width: 14);
+                                            return const SizedBox(width: 10);
                                           },
                                           itemCount: 2),
                                     ),
                                   ),
-                                  const SizedBox(height: 24),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: Text(
-                                      '${currentField.value} 분야 최근 인기 기업',
-                                      style: kmainbold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 14),
-                                  SizedBox(
-                                    height: 100,
-                                    child: _controller
-                                            .companyMap[currentField.key]!
-                                            .isEmpty
-                                        ? const Center(
-                                            child: Text(
-                                            "최근 인기 기업이 없습니다",
-                                            style: kmain,
-                                          ))
-                                        : ScrollNoneffectWidget(
-                                            child: ListView.separated(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20),
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemBuilder: (context, index) {
-                                                  return CompanyWidget(
-                                                      company: _controller
-                                                              .companyMap[
-                                                          currentField
-                                                              .key]![index]);
-                                                },
-                                                separatorBuilder:
-                                                    (context, index) {
-                                                  return const SizedBox(
-                                                      width: 14);
-                                                },
-                                                itemCount: _controller
-                                                    .companyMap[
-                                                        currentField.key]!
-                                                    .length),
-                                          ),
-                                  ),
-                                  const SizedBox(height: 24),
+                                  const SizedBox(height: 32),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(left: 16),
+                                  //   child: Text(
+                                  //     '${currentField.value} 분야 최근 인기 기업',
+                                  //     style: kmainbold,
+                                  //   ),
+                                  // ),
+                                  // const SizedBox(height: 14),
+                                  // SizedBox(
+                                  //   height: 100,
+                                  //   child: _controller
+                                  //           .companyMap[currentField.key]!
+                                  //           .isEmpty
+                                  //       ? const Center(
+                                  //           child: Text(
+                                  //           "최근 인기 기업이 없습니다",
+                                  //           style: kmain,
+                                  //         ))
+                                  //       : ScrollNoneffectWidget(
+                                  //           child: ListView.separated(
+                                  //               padding:
+                                  //                   const EdgeInsets.symmetric(
+                                  //                       horizontal: 20),
+                                  //               scrollDirection:
+                                  //                   Axis.horizontal,
+                                  //               itemBuilder: (context, index) {
+                                  //                 return CompanyWidget(
+                                  //                     company: _controller
+                                  //                             .companyMap[
+                                  //                         currentField
+                                  //                             .key]![index]);
+                                  //               },
+                                  //               separatorBuilder:
+                                  //                   (context, index) {
+                                  //                 return const SizedBox(
+                                  //                     width: 14);
+                                  //               },
+                                  //               itemCount: _controller
+                                  //                   .companyMap[
+                                  //                       currentField.key]!
+                                  //                   .length),
+                                  //         ),
+                                  // ),
                                   const Padding(
-                                    padding: EdgeInsets.only(left: 20),
+                                    padding: EdgeInsets.only(left: 16),
                                     child: Text('실시간 인기 포스트', style: kmainbold),
                                   ),
-                                  const SizedBox(height: 14),
+                                  const SizedBox(height: 10),
                                   Obx(
                                     () => SizedBox(
-                                      height: 430,
+                                      height: 398,
                                       child: _controller
                                               .popPostMap[currentField.key]!
                                               .isEmpty
@@ -268,7 +267,7 @@ class CareerBoardScreen extends StatelessWidget {
                                               child: ListView.separated(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                        horizontal: 20),
+                                                        horizontal: 16),
                                                 scrollDirection:
                                                     Axis.horizontal,
                                                 itemBuilder:
@@ -295,16 +294,18 @@ class CareerBoardScreen extends StatelessWidget {
                                             ),
                                     ),
                                   ),
-                                  const SizedBox(height: 24),
-                                  const Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 20.0, right: 20),
-                                      child: Text('해시태그 분석', style: kmainbold)),
-                                  const SizedBox(height: 14),
+                                  const SizedBox(height: 32),
+                                  Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 16.0, right: 16),
+                                      child: Text(
+                                          '인기있는 ${currentField.value}분야 태그',
+                                          style: kmainbold)),
+                                  const SizedBox(height: 16),
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                      left: 20.0,
-                                      right: 20,
+                                      left: 16,
+                                      right: 16,
                                     ),
                                     child: Obx(
                                       () => _controller
@@ -335,12 +336,12 @@ class CareerBoardScreen extends StatelessWidget {
                                               separatorBuilder:
                                                   (context, index) {
                                                 return const SizedBox(
-                                                    height: 14);
+                                                    height: 16);
                                               },
                                             ),
                                     ),
                                   ),
-                                  const SizedBox(height: 24),
+                                  const SizedBox(height: 16),
                                 ]),
                           ),
                         ),

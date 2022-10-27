@@ -22,13 +22,14 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class OtherProfileController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  OtherProfileController(
-      {required this.userid, required this.otherUser, this.careerName});
+  OtherProfileController({
+    required this.userid,
+    required this.otherUser,
+  });
   static OtherProfileController get to => Get.find();
 
   int userid;
 
-  String? careerName;
   RxBool profileenablepullup = true.obs;
 
   RxInt currentIndex = 0.obs;

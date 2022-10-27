@@ -7,9 +7,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/project_api.dart';
+import 'package:loopus/api/search_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
+import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/model/search_model.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
@@ -170,110 +173,111 @@ class PostingWidget extends StatelessWidget {
                           height: 10,
                         ),
                       ]),
-                    if (type != PostingWidgetType.search)
-                      Column(
-                        children: [
-                          Obx(
-                            () => Row(
-                              children: [
-                                InkWell(
-                                  onTap: tapLike,
-                                  child: item.isLiked.value == 0
-                                      ? SvgPicture.asset(
-                                          "assets/icons/unlike.svg",
-                                          color: isDark ? mainWhite : null,
-                                        )
-                                      : SvgPicture.asset(
-                                          "assets/icons/like.svg"),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                // Obx(
-                                //   () => SizedBox(
-                                //     width: item.likeCount.value != 0 ? 0 : 8,
-                                //   ),
-                                // ),
-                                InkWell(
-                                    onTap: type != PostingWidgetType.detail
-                                        ? () => tapPosting(autoFocus: true)
-                                        : null,
-                                    child: SvgPicture.asset(
-                                        "assets/icons/comment.svg",
-                                        color: isDark ? mainWhite : null)),
-                                const Spacer(),
-                                InkWell(
-                                  onTap: tapBookmark,
-                                  child: (item.isMarked.value == 0)
-                                      ? SvgPicture.asset(
-                                          "assets/icons/bookmark_inactive.svg",
-                                          color: isDark ? mainWhite : null,
-                                        )
-                                      : SvgPicture.asset(
-                                          "assets/icons/bookmark_active.svg"),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // postingTag(),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(children: [
-                            GestureDetector(
-                                behavior: HitTestBehavior.translucent,
-                                onTap: () {
-                                  Get.to(
-                                    () => LikePeopleScreen(
-                                      id: item.id,
-                                      likeType: contentType.post,
-                                    ),
-                                  );
-                                },
-                                child: Obx(
-                                  () => Text(
-                                    '좋아요 ${item.likeCount.value}개',
-                                    style: kmain.copyWith(
-                                        color: isDark ? mainWhite : null),
-                                  ),
-                                )),
-                            const Spacer(),
-                            Text(calculateDate(item.date),
-                                style: kmain.copyWith(
-                                    color: isDark ? mainWhite : null)),
-                          ]),
-                          SizedBox(
-                              height:
-                                  type != PostingWidgetType.detail ? 10 : 16),
-                          if (item.comments.isNotEmpty &&
-                              type != PostingWidgetType.detail)
-                            Column(
-                              children: [
-                                Obx(
-                                  () => Row(
-                                    children: [
-                                      Text(
-                                        item.comments.first.user.name,
-                                        style: kmainbold.copyWith(
-                                            color: isDark ? mainWhite : null),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Text(
-                                          item.comments.first.content,
-                                          style: kmain.copyWith(
-                                              color: isDark ? mainWhite : null),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
+                    Column(
+                      children: [
+                        Obx(
+                          () => Row(
+                            children: [
+                              InkWell(
+                                onTap: tapLike,
+                                child: item.isLiked.value == 0
+                                    ? SvgPicture.asset(
+                                        "assets/icons/unlike.svg",
+                                        color: isDark ? mainWhite : null,
                                       )
-                                    ],
+                                    : SvgPicture.asset("assets/icons/like.svg"),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              // Obx(
+                              //   () => SizedBox(
+                              //     width: item.likeCount.value != 0 ? 0 : 8,
+                              //   ),
+                              // ),
+                              InkWell(
+                                  onTap: type != PostingWidgetType.detail
+                                      ? () => tapPosting(autoFocus: true)
+                                      : null,
+                                  child: SvgPicture.asset(
+                                      "assets/icons/comment.svg",
+                                      color: isDark ? mainWhite : null)),
+                              const Spacer(),
+                              InkWell(
+                                onTap: tapBookmark,
+                                child: (item.isMarked.value == 0)
+                                    ? SvgPicture.asset(
+                                        "assets/icons/bookmark_inactive.svg",
+                                        color: isDark ? mainWhite : null,
+                                      )
+                                    : SvgPicture.asset(
+                                        "assets/icons/bookmark_active.svg"),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // postingTag(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(children: [
+                          GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {
+                                Get.to(
+                                  () => LikePeopleScreen(
+                                    id: item.id,
+                                    likeType: contentType.post,
                                   ),
+                                );
+                              },
+                              child: Obx(
+                                () => Text(
+                                  '좋아요 ${item.likeCount.value}개',
+                                  style: kmain.copyWith(
+                                      color: isDark ? mainWhite : null),
                                 ),
-                                const SizedBox(height: 16),
-                              ],
-                            ),
-                        ],
-                      ),
+                              )),
+                          const Spacer(),
+                          Text(calculateDate(item.date),
+                              style: kmain.copyWith(
+                                  color: isDark ? mainWhite : null)),
+                        ]),
+                        SizedBox(
+                            height: (type == PostingWidgetType.detail ||
+                                    type == PostingWidgetType.search)
+                                ? 16
+                                : 10),
+                        if (item.comments.isNotEmpty &&
+                            !(type == PostingWidgetType.detail ||
+                                type == PostingWidgetType.search))
+                          Column(
+                            children: [
+                              Obx(
+                                () => Row(
+                                  children: [
+                                    Text(
+                                      item.comments.first.user.name,
+                                      style: kmainbold.copyWith(
+                                          color: isDark ? mainWhite : null),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        item.comments.first.content,
+                                        style: kmain.copyWith(
+                                            color: isDark ? mainWhite : null),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                          ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -286,6 +290,16 @@ class PostingWidget extends StatelessWidget {
   }
 
   void tapPosting({bool autoFocus = false}) {
+    if (type == PostingWidgetType.search) {
+      addRecentSearch(SearchType.post.index,
+              SearchController.to.searchtextcontroller.text.trim())
+          .then((value) {
+        if (value.isError == false && value.data != null) {
+          RecentSearch tempRecSearch = RecentSearch.fromJson(value.data);
+          SearchController.to.recentSearchList.insert(0, tempRecSearch);
+        }
+      });
+    }
     Get.to(
         () => PostingScreen(
               post: item,

@@ -12,6 +12,7 @@ import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/screen/image_crop_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/utils/custom_crop.dart';
+import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -37,11 +38,9 @@ class UploadScreen extends StatelessWidget {
             icon: SvgPicture.asset(
               'assets/icons/appbar_back.svg',
             )),
-        title: Obx(
-          () => Text(
-            _imageController.isAlbum.value ? '사진첩 선택' : '이미지 첨부',
-            style: kNavigationTitle,
-          ),
+        title: const Text(
+          '이미지 첨부하기',
+          style: kNavigationTitle,
         ),
         centerTitle: true,
         actions: [
@@ -120,6 +119,7 @@ class UploadScreen extends StatelessWidget {
                                     child: Text(
                                     '이미지를 선택해주세요 \n 최대 10장까지 가능해요',
                                     style: kmainheight,
+                                    textAlign: TextAlign.center,
                                   ))),
                         if (_imageController.isSelect.value)
                           Positioned(
@@ -149,160 +149,162 @@ class UploadScreen extends StatelessWidget {
                       titleSpacing: 0,
                       pinned: true,
                       stretch: true,
-                      title: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _imageController.isAlbum(true);
-                              showModalBottomSheet(
-                                  barrierColor: Colors.transparent,
-                                  context: context,
-                                  isScrollControlled: true,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(16),
-                                          topRight: Radius.circular(16))),
-                                  builder: (_) => Container(
-                                        height:
-                                            Get.height - Get.statusBarHeight,
-                                        color: Colors.white,
-                                        child: SingleChildScrollView(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 20),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: List.generate(
-                                                  _imageController
-                                                      .albums.length,
-                                                  (index) => SizedBox(
-                                                      height: 110,
-                                                      child: GestureDetector(
-                                                        behavior:
-                                                            HitTestBehavior
-                                                                .translucent,
-                                                        onTap: () {
-                                                          _imageController
-                                                              .refreshController
-                                                              .loadComplete();
-                                                          _imageController
-                                                                  .albumIndex =
-                                                              index;
-                                                          _imageController
-                                                                  .imageList
-                                                                  .value =
-                                                              _imageController
-                                                                      .titleImageList[
-                                                                  index];
-                                                          _imageController
-                                                                  .headerTitle
-                                                                  .value =
-                                                              _imageController
-                                                                  .albums[index]
-                                                                  .name;
-                                                          // controller
-                                                          //     .selectedImages
-                                                          //     .clear();
-                                                          // controller
-                                                          //     .cropWidgetList
-                                                          //     .clear();
-                                                          // controller.cropKeyList
-                                                          //     .clear();
-                                                          // controller
-                                                          //     .cropAspectRatio(
-                                                          //         1);
-                                                          // controller
-                                                          //     .isSelect(false);
-                                                          Get.back();
-                                                        },
-                                                        child: Column(
-                                                          children: [
-                                                            Row(
-                                                              children: [
-                                                                Container(
-                                                                  height: 100,
-                                                                  width: 100,
-                                                                  color:
-                                                                      dividegray,
-                                                                  child: _imageController
-                                                                          .titleImageList[
-                                                                              index]
-                                                                          .isNotEmpty
-                                                                      ? _photoWidget(
-                                                                          _imageController.titleImageList[index]
-                                                                              [
-                                                                              0],
-                                                                          500,
-                                                                          500,
-                                                                          builder:
-                                                                              (data) {
-                                                                          return Image.memory(
-                                                                              data,
-                                                                              fit: BoxFit.cover);
-                                                                        })
-                                                                      : const Center(
-                                                                          child:
-                                                                              Text(
-                                                                            "이미지 없음",
-                                                                            style:
-                                                                                kmain,
-                                                                          ),
-                                                                        ),
-                                                                ),
-                                                                const SizedBox(
-                                                                    width: 15),
-                                                                Text(
-                                                                  _imageController
-                                                                      .albums[
-                                                                          index]
-                                                                      .name,
-                                                                  style:
-                                                                      kmainbold,
-                                                                ),
-                                                                const Spacer(),
-                                                                Text(
-                                                                  '${_imageController.albums[index].assetCount.toString()}개',
-                                                                  style: kmain,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            const SizedBox(
-                                                                height: 10)
-                                                          ],
-                                                        ),
-                                                      ))),
-                                            ),
-                                          ),
+                      title: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                top:
+                                    BorderSide(width: 0.5, color: dividegray))),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => AlbumSelectScreen());
+                                // _imageController.isAlbum(true);
+                                // showModalBottomSheet(
+                                //         barrierColor: Colors.transparent,
+                                //         context: context,
+                                //         isScrollControlled: true,
+                                //         shape: const RoundedRectangleBorder(
+                                //             borderRadius: BorderRadius.only(
+                                //                 topLeft: Radius.circular(16),
+                                //                 topRight: Radius.circular(16))),
+                                //         builder: (_) => Container(
+                                //               height: Get.height -
+                                //                   Get.statusBarHeight,
+                                //               color: Colors.white,
+                                //               child: SingleChildScrollView(
+                                //                 child: Padding(
+                                //                   padding:
+                                //                       const EdgeInsets.only(
+                                //                           right: 20),
+                                //                   child: Column(
+                                //                     crossAxisAlignment:
+                                //                         CrossAxisAlignment
+                                //                             .stretch,
+                                //                     children: List.generate(
+                                //                         _imageController
+                                //                             .albums.length,
+                                //                         (index) => SizedBox(
+                                //                             height: 110,
+                                //                             child:
+                                //                                 GestureDetector(
+                                //                               behavior:
+                                //                                   HitTestBehavior
+                                //                                       .translucent,
+                                //                               onTap: () {
+                                //                                 _imageController
+                                //                                     .refreshController
+                                //                                     .loadComplete();
+                                //                                 _imageController
+                                //                                         .albumIndex =
+                                //                                     index;
+                                //                                 _imageController
+                                //                                         .imageList
+                                //                                         .value =
+                                //                                     _imageController
+                                //                                             .titleImageList[
+                                //                                         index];
+                                //                                 _imageController
+                                //                                         .headerTitle
+                                //                                         .value =
+                                //                                     _imageController
+                                //                                         .albums[
+                                //                                             index]
+                                //                                         .name;
+                                //                                 // controller
+                                //                                 //     .selectedImages
+                                //                                 //     .clear();
+                                //                                 // controller
+                                //                                 //     .cropWidgetList
+                                //                                 //     .clear();
+                                //                                 // controller.cropKeyList
+                                //                                 //     .clear();
+                                //                                 // controller
+                                //                                 //     .cropAspectRatio(
+                                //                                 //         1);
+                                //                                 // controller
+                                //                                 //     .isSelect(false);
+                                //                                 Get.back();
+                                //                               },
+                                //                               child: Column(
+                                //                                 children: [
+                                //                                   Row(
+                                //                                     children: [
+                                //                                       Container(
+                                //                                         height:
+                                //                                             100,
+                                //                                         width:
+                                //                                             100,
+                                //                                         color:
+                                //                                             dividegray,
+                                //                                         child: _imageController.titleImageList[index].isNotEmpty
+                                //                                             ? _photoWidget(_imageController.titleImageList[index][0], 500, 500, builder: (data) {
+                                //                                                 return Image.memory(data, fit: BoxFit.cover);
+                                //                                               })
+                                //                                             : const Center(
+                                //                                                 child: Text(
+                                //                                                   "이미지 없음",
+                                //                                                   style: kmain,
+                                //                                                 ),
+                                //                                               ),
+                                //                                       ),
+                                //                                       const SizedBox(
+                                //                                           width:
+                                //                                               15),
+                                //                                       Text(
+                                //                                         _imageController
+                                //                                             .albums[index]
+                                //                                             .name,
+                                //                                         style:
+                                //                                             kmainbold,
+                                //                                       ),
+                                //                                       const Spacer(),
+                                //                                       Text(
+                                //                                         '${_imageController.albums[index].assetCount.toString()}개',
+                                //                                         style:
+                                //                                             kmain,
+                                //                                       ),
+                                //                                     ],
+                                //                                   ),
+                                //                                   const SizedBox(
+                                //                                       height:
+                                //                                           10)
+                                //                                 ],
+                                //                               ),
+                                //                             ))),
+                                //                   ),
+                                //                 ),
+                                //               ),
+                                //             ))
+                                //     .then((value) =>
+                                //         _imageController.isAlbum(false));
+                              },
+                              behavior: HitTestBehavior.translucent,
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 17),
+                                height: 44,
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Obx(
+                                        () => Text(
+                                          _imageController.headerTitle.value,
+                                          style: kmainbold,
                                         ),
-                                      )).then(
-                                  (value) => _imageController.isAlbum(false));
-                            },
-                            behavior: HitTestBehavior.translucent,
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 17),
-                              height: 44,
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Obx(
-                                      () => Text(
-                                        _imageController.headerTitle.value,
-                                        style: kmainbold,
                                       ),
-                                    ),
-                                    const SizedBox(width: 7),
-                                    SvgPicture.asset(
-                                        'assets/icons/drop_icon.svg')
-                                  ],
+                                      const SizedBox(width: 7),
+                                      SvgPicture.asset(
+                                          'assets/icons/drop_icon.svg')
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const Spacer()
-                          //
-                        ],
+                            const Spacer()
+                            //
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -455,5 +457,76 @@ class UploadScreen extends StatelessWidget {
             );
           }
         });
+  }
+}
+
+class AlbumSelectScreen extends StatelessWidget {
+  AlbumSelectScreen({Key? key}) : super(key: key);
+  final ImageController _imageController = Get.isRegistered<ImageController>()
+      ? Get.find<ImageController>()
+      : Get.find<MultiImageController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBarWidget(
+        title: '사진첩 선택',
+        bottomBorder: false,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: List.generate(
+              _imageController.albums.length,
+              (index) => Container(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      _imageController.refreshController.loadComplete();
+                      _imageController.albumIndex = index;
+                      _imageController.imageList.value =
+                          _imageController.titleImageList[index];
+                      _imageController.headerTitle.value =
+                          _imageController.albums[index].name;
+                      // controller
+                      //     .selectedImages
+                      //     .clear();
+                      // controller
+                      //     .cropWidgetList
+                      //     .clear();
+                      // controller.cropKeyList
+                      //     .clear();
+                      // controller
+                      //     .cropAspectRatio(
+                      //         1);
+                      // controller
+                      //     .isSelect(false);
+                      Get.back();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom:
+                                  BorderSide(color: dividegray, width: 0.5))),
+                      child: Row(
+                        children: [
+                          Text(
+                            _imageController.albums[index].name,
+                            style: kmainbold,
+                          ),
+                          const Spacer(),
+                          Text(
+                            '${_imageController.albums[index].assetCount.toString()}개',
+                            style: kmain,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ))),
+        ),
+      ),
+    );
   }
 }

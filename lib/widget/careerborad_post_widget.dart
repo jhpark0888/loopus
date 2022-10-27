@@ -29,11 +29,11 @@ class CareerBoardPostWidget extends StatelessWidget {
             transition: Transition.noTransition);
       },
       child: Container(
-        height: 430,
+        height: 398,
         width: 280,
         decoration: BoxDecoration(
             color: lightcardgray, borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.only(top: 20, bottom: 20),
+        padding: const EdgeInsets.only(top: 16, bottom: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -44,28 +44,41 @@ class CareerBoardPostWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      GestureDetector(
-                        onTap: tapProfile,
-                        child: Row(
-                          children: [
-                            UserImageWidget(
-                              imageUrl: post.user.profileImage,
-                              width: 36,
-                              height: 36,
-                              userType: post.user.userType,
-                            ),
-                            const SizedBox(width: 8),
-                            RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                  text: '${post.user.name} · ',
-                                  style: kmainbold),
-                              TextSpan(text: post.user.department, style: kmain)
-                            ])),
-                          ],
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: tapProfile,
+                          child: Row(
+                            children: [
+                              UserImageWidget(
+                                imageUrl: post.user.profileImage,
+                                width: 36,
+                                height: 36,
+                                userType: post.user.userType,
+                              ),
+                              const SizedBox(width: 8),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    post.user.name,
+                                    style: kmainbold,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    post.user.department,
+                                    style: kmain,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                      const Spacer(),
+                      // const Spacer(),
                       GestureDetector(
                         onTap: () {},
                         child: (post.isMarked.value == 0)
@@ -78,23 +91,28 @@ class CareerBoardPostWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 10),
                   Text(post.project!.careerName,
                       style: kmain.copyWith(color: maingray)),
                 ],
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
             if (post.images.isNotEmpty || post.links.isNotEmpty)
               Expanded(
                 child: Column(
                   children: [
                     SizedBox(
                         width: 280,
-                        height: 195,
+                        height: 190,
                         child: post.images.isNotEmpty
                             ? CachedNetworkImage(
-                                imageUrl: post.images.first, fit: BoxFit.fill)
+                                imageUrl: post.images.first,
+                                fit: BoxFit.fill,
+                                errorWidget: (context, string, widget) {
+                                  return Container(color: maingray);
+                                },
+                              )
                             : LinkSmallWidget(url: post.links.first)),
                     const SizedBox(height: 14),
                     Padding(
@@ -118,11 +136,15 @@ class CareerBoardPostWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 14, right: 14),
                   child: Obx(
-                    () => Text(post.content.value, style: kmainheight),
+                    () => Text(
+                      post.content.value,
+                      style: kmainheight,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Row(

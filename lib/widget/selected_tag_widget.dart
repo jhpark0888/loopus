@@ -41,20 +41,20 @@ class SelectedTagWidget extends StatelessWidget {
         }
       },
       child: Container(
-        padding: const EdgeInsets.fromLTRB(14, 7, 14, 7),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
             color: mainWhite,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(width: 0.5, color: maingray.withOpacity(0.5))),
+            border: Border.all(width: 0.5, color: dividegray)),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               text,
-              style: const TextStyle(fontSize: 14),
+              style: kmain,
             ),
             const SizedBox(
-              width: 7,
+              width: 8,
             ),
             SvgPicture.asset(
               "assets/icons/widget_delete.svg",

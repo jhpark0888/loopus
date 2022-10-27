@@ -72,10 +72,10 @@ class RealTimeRankScreen extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.stretch,
                                         children: [
-                                      const SizedBox(height: 14),
+                                      const SizedBox(height: 16),
                                       Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 20),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16),
                                           alignment: Alignment.centerRight,
                                           child: Text(
                                               isUniversity == true
@@ -93,7 +93,7 @@ class RealTimeRankScreen extends StatelessWidget {
                                             return Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
-                                                      horizontal: 20),
+                                                      horizontal: 16),
                                               child: PersonRankWidget(
                                                 user: isUniversity == true
                                                     ? _controller

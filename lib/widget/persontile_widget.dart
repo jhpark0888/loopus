@@ -54,6 +54,9 @@ class PersonTileWidget extends StatelessWidget {
                           width: 50,
                           imageUrl: user.profileImage,
                           placeholder: (context, url) => kProfilePlaceHolder(),
+                          errorWidget: (context, string, widget) {
+                            return Container(color: maingray);
+                          },
                           fit: BoxFit.cover,
                         ),
                       ),

@@ -44,6 +44,7 @@ import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/profile_sns_image_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
+import 'package:loopus/widget/tabbar_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 import 'package:path/path.dart';
@@ -462,59 +463,39 @@ class MyProfileScreen extends StatelessWidget {
   }
 
   Widget _tabView() {
-    return Column(
-      children: [
-        TabBar(
-            controller: profileController.tabController,
-            labelStyle: kmainbold,
-            labelColor: mainblack,
-            unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
-            unselectedLabelColor: dividegray,
-            automaticIndicatorColorAdjustment: false,
-            indicator: const UnderlineIndicator(
-              strokeCap: StrokeCap.round,
-              borderSide: BorderSide(width: 2, color: mainblack),
+    return TabBarWidget(
+      tabController: profileController.tabController,
+      tabs: [
+        // const Tab(
+        //   height: 40,
+        //   icon: Icon(
+        //     Icons.format_list_bulleted_rounded,
+        //   ),
+        // ),
+        // const Tab(
+        //   height: 40,
+        //   icon: Icon(Icons.line_weight_rounded),
+        // ),
+        Obx(
+          () => Tab(
+            height: 40,
+            icon: SvgPicture.asset(
+              'assets/icons/list_active.svg',
+              color:
+                  profileController.currentIndex.value == 0 ? null : dividegray,
             ),
-            isScrollable: false,
-            tabs: [
-              // const Tab(
-              //   height: 40,
-              //   icon: Icon(
-              //     Icons.format_list_bulleted_rounded,
-              //   ),
-              // ),
-              // const Tab(
-              //   height: 40,
-              //   icon: Icon(Icons.line_weight_rounded),
-              // ),
-              Obx(
-                () => Tab(
-                  height: 40,
-                  icon: SvgPicture.asset(
-                    'assets/icons/list_active.svg',
-                    color: profileController.currentIndex.value == 0
-                        ? null
-                        : dividegray,
-                  ),
-                ),
-              ),
-              Obx(
-                () => Tab(
-                  height: 40,
-                  icon: SvgPicture.asset(
-                    'assets/icons/post_active.svg',
-                    color: profileController.currentIndex.value == 1
-                        ? null
-                        : dividegray,
-                  ),
-                ),
-              ),
-            ]),
-        Divider(
-          height: 1,
-          thickness: 2,
-          color: dividegray,
-        )
+          ),
+        ),
+        Obx(
+          () => Tab(
+            height: 40,
+            icon: SvgPicture.asset(
+              'assets/icons/post_active.svg',
+              color:
+                  profileController.currentIndex.value == 1 ? null : dividegray,
+            ),
+          ),
+        ),
       ],
     );
   }

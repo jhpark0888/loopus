@@ -34,32 +34,33 @@ class SelectProjectScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (controller.selectprojectlist.value.isNotEmpty)
-                    Text(
-                      '포스트를 작성할 커리어를 선택해주세요',
-                      style: kmain.copyWith(color: maingray),
-                      textAlign: TextAlign.center,
-                    ),
+                  Text(
+                    controller.selectprojectlist.isNotEmpty
+                        ? '포스트를 작성할 커리어를 선택해주세요'
+                        : "포스트를 작성하기 위해 커리어를 추가해주세요",
+                    style: kmain.copyWith(color: maingray),
+                    textAlign: TextAlign.center,
+                  ),
                   if (controller.selectprojectlist.isNotEmpty)
-                    SizedBox(
-                      height: 24,
+                    Column(
+                      children: [
+                        ListView.separated(
+                          primary: false,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return ProjectWidget(
+                              project: controller.selectprojectlist[index].obs,
+                            );
+                          },
+                          itemCount: controller.selectprojectlist.length,
+                          separatorBuilder: (context, index) {
+                            return Divider(thickness: 0.5, color: dividegray);
+                          },
+                        ),
+                        Divider(thickness: 0.5, color: dividegray),
+                      ],
                     ),
-                  if (controller.selectprojectlist.value.isNotEmpty)
-                    ListView.separated(
-                      primary: false,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return ProjectWidget(
-                            project: controller.selectprojectlist[index].obs,
-                            type: ProjectWidgetType.addposting);
-                      },
-                      itemCount: controller.selectprojectlist.length,
-                      separatorBuilder: (context, index) {
-                        return Divider(thickness: 0.5, color: dividegray);
-                      },
-                    ),
-                  Divider(thickness: 0.5, color: dividegray),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   GestureDetector(
                     onTap: () {
                       Get.to(() =>
@@ -69,8 +70,9 @@ class SelectProjectScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SvgPicture.asset('assets/icons/career_add.svg'),
-                        const SizedBox(width: 14),
-                        Text('커리어 추가하기', style: kmain.copyWith(color: mainblue))
+                        const SizedBox(width: 8),
+                        Text('커리어 추가하기',
+                            style: kmainbold.copyWith(color: mainblue))
                       ],
                     ),
                   )

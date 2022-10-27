@@ -49,16 +49,16 @@ class CompanyWidget extends StatelessWidget {
 }
 
 class CompanyTileWidget extends StatelessWidget {
-  CompanyTileWidget({Key? key, required this.company, this.onTap})
+  CompanyTileWidget({Key? key, required this.company, this.onCancelTap})
       : super(key: key);
 
   Company company;
-  void Function()? onTap;
+  void Function()? onCancelTap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
           UserImageWidget(
@@ -68,7 +68,7 @@ class CompanyTileWidget extends StatelessWidget {
             userType: company.userType,
           ),
           const SizedBox(
-            width: 14,
+            width: 8,
           ),
           Expanded(
             child: Text(
@@ -78,13 +78,13 @@ class CompanyTileWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            width: 14,
+            width: 16,
           ),
-          if (onTap != null)
+          if (onCancelTap != null)
             GestureDetector(
-              onTap: onTap,
+              onTap: onCancelTap,
               child: SvgPicture.asset(
-                'assets/icons/appbar_exit.svg',
+                'assets/icons/widget_delete.svg',
               ),
             )
         ],

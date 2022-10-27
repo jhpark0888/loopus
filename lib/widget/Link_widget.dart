@@ -240,8 +240,8 @@ class LinkWidget extends StatelessWidget {
                       ),
                       if (widgetType == 'add')
                         Positioned(
-                            top: 15,
-                            right: 15,
+                            top: 10,
+                            right: 10,
                             child: GestureDetector(
                                 onTap: () {
                                   Get.find<PostingAddController>()
@@ -273,7 +273,7 @@ class LinkSmallWidget extends StatelessWidget {
 
   String url;
   double width = 280;
-  double height = 195;
+  double height = 190;
   late final LinkController linkController = LinkController(url: url)
     ..infoLoad();
 
@@ -308,7 +308,7 @@ class LinkSmallWidget extends StatelessWidget {
                           imageUrl: linkController.info.value.image != ''
                               ? linkController.info.value.image
                               : 'https://cdn.pixabay.com/photo/2022/04/22/14/14/leaves-7149850__340.jpg',
-                          height: 150,
+                          height: 120,
                           width: width,
                           fit: BoxFit.cover,
                           errorWidget: (context, string, widget) {
@@ -322,14 +322,23 @@ class LinkSmallWidget extends StatelessWidget {
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          child: Center(
-                            child: Text(
-                              linkController.info.value.title,
-                              style: kmain,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
+                              vertical: 16, horizontal: 16),
+                          child: Column(
+                            children: [
+                              Text(
+                                linkController.info.value.domain,
+                                style: kmainbold,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                linkController.info.value.title,
+                                style: kmain,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
                           ),
                         )
                       ],
