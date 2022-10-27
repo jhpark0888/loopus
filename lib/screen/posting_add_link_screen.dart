@@ -48,7 +48,7 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
       },
       child: Scaffold(
         appBar: AppBarWidget(
-          title: '링크 첨부',
+          title: '링크 첨부하기',
           bottomBorder: false,
           actions: [
             GestureDetector(
@@ -69,8 +69,7 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
                             color:
                                 postingAddController.scrapList.value.isNotEmpty
                                     ? mainblue
-                                    : mainblack.withOpacity(0.5)
-                          )),
+                                    : mainblack.withOpacity(0.5))),
                   ),
                 ))
           ],
@@ -90,58 +89,61 @@ class _PostingAddLinkScreenState extends State<PostingAddLinkScreen> {
         ),
         body: ScrollNoneffectWidget(
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text('링크', style: kmain),
-                    const SizedBox(height: 14),
-                    Obx(
-                      () => Row(
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                                textController:
-                                    postingAddController.linkcontroller,
-                                hintText: '링크 주소를 입력해주세요. 최대 10개까지 가능해요',
-                                validator: null,
-                                obscureText: false,
-                                maxLines: 1,
-                                counterText: '',
-                                maxLength: null,
-                                onfieldSubmitted: (string) {
-                                  addLink();
-                                }),
-                          ),
-                          if (postingAddController.isLinkTextEmpty.value ==
-                              false)
-                            GestureDetector(
-                              onTap: addLink,
-                              behavior: HitTestBehavior.translucent,
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(7, 7, 0, 7),
-                                child: Text(
-                                  "추가하기",
-                                  style: kmain.copyWith(color: mainblue),
-                                ),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('링크', style: kmainbold),
+                        const SizedBox(height: 16),
+                        Obx(
+                          () => Row(
+                            children: [
+                              Expanded(
+                                child: CustomTextField(
+                                    textController:
+                                        postingAddController.linkcontroller,
+                                    hintText: 'https:// 링크를 입력해주세요(최대 10개)',
+                                    validator: null,
+                                    obscureText: false,
+                                    maxLines: 1,
+                                    counterText: '',
+                                    maxLength: null,
+                                    onfieldSubmitted: (string) {
+                                      addLink();
+                                    }),
                               ),
-                            )
-                        ],
-                      ),
+                              if (postingAddController.isLinkTextEmpty.value ==
+                                  false)
+                                GestureDetector(
+                                  onTap: addLink,
+                                  behavior: HitTestBehavior.translucent,
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(7, 7, 0, 7),
+                                    child: Text(
+                                      "추가하기",
+                                      style: kmain.copyWith(color: mainblue),
+                                    ),
+                                  ),
+                                )
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 24),
-                    Obx(() => Column(
-                        children: postingAddController.scrapList
-                            .map((element) => Column(children: [
-                                  element,
-                                  const SizedBox(height: 14)
-                                ]))
-                            .toList()
-                            .reversed
-                            .toList()))
-                  ]),
-            ),
+                  ),
+                  Obx(() => Column(
+                      children: postingAddController.scrapList
+                          .map((element) => Column(
+                              children: [element, const SizedBox(height: 16)]))
+                          .toList()
+                          .reversed
+                          .toList()))
+                ]),
           ),
         ),
       ),

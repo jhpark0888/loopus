@@ -10,6 +10,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/notification_model.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/trash_bin/project_screen.dart';
@@ -210,6 +211,8 @@ class NotificationWidget extends StatelessWidget {
 
   void clicknotice() async {
     if (notification.type == NotificationType.careerTag) {
+      // 커리어 스크린으로 가는 법 고쳐야 할 듯
+      goCareerScreen(Project.defaultProject(id: notification.targetId), "");
       // Get.to(() => ProjectScreen(projectid: notification.targetId, isuser: 0));
     } else if (notification.type == NotificationType.postLike) {
       Get.to(

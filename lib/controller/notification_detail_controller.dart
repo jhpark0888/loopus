@@ -14,9 +14,9 @@ class NotificationDetailController extends GetxController {
   // RxBool isfollowreqloading = true.obs;
 
   Rx<ScreenState> notificationscreenstate = ScreenState.loading.obs;
-  Rx<ScreenState> followreqscreenstate = ScreenState.loading.obs;
+  // Rx<ScreenState> followreqscreenstate = ScreenState.loading.obs;
 
-  RxList<NotificationModel> followalarmlist = <NotificationModel>[].obs;
+  // RxList<NotificationModel> followalarmlist = <NotificationModel>[].obs;
   RxList<NotificationModel> alarmlist = <NotificationModel>[].obs;
   RxList<NotificationModel> newalarmList = <NotificationModel>[].obs;
   RxList<NotificationModel> weekalarmList = <NotificationModel>[].obs;
@@ -45,7 +45,7 @@ class NotificationDetailController extends GetxController {
   Future alarmRefresh() async {
     notificationscreenstate(ScreenState.loading);
     alarmlist.clear();
-    followalarmlist.clear();
+    // followalarmlist.clear();
     newalarmList.clear();
     weekalarmList.clear();
     monthalarmList.clear();
@@ -54,41 +54,41 @@ class NotificationDetailController extends GetxController {
     enablealarmPullup.value = true;
 
     await alarmloadItem();
-    await followreqloadItem();
+    // await followreqloadItem();
     alarmRefreshController.refreshCompleted();
   }
 
   void alarmLoading() async {
     //페이지 처리
     await alarmloadItem();
-    await followreqloadItem();
+    // await followreqloadItem();
     alarmRefreshController.loadComplete();
     print(alarmlist.length);
   }
 
-  void followreqRefresh() async {
-    followreqscreenstate(ScreenState.loading);
+  // void followreqRefresh() async {
+  //   followreqscreenstate(ScreenState.loading);
 
-    followalarmlist.clear();
-    isfollowreqEmpty(false);
-    enablefollowreqPullup.value = true;
+  //   followalarmlist.clear();
+  //   isfollowreqEmpty(false);
+  //   enablefollowreqPullup.value = true;
 
-    await followreqloadItem();
-    followreqRefreshController.refreshCompleted();
-  }
+  //   await followreqloadItem();
+  //   followreqRefreshController.refreshCompleted();
+  // }
 
-  void followreqLoading() async {
-    //페이지 처리
-    await followreqloadItem();
-    followreqRefreshController.loadComplete();
-  }
+  // void followreqLoading() async {
+  //   //페이지 처리
+  //   await followreqloadItem();
+  //   followreqRefreshController.loadComplete();
+  // }
 
   Future<void> alarmloadItem() async {
-    if (alarmlist.isNotEmpty) {
-      print("알람 마지막 ID:${alarmlist.last.id}");
-    }
+    // if (alarmlist.isNotEmpty) {
+    //   print("알람 마지막 ID:${alarmlist.last.id}");
+    // }
 
-    await getNotificationlist("else", alarmlist.isEmpty ? 0 : alarmlist.last.id)
+    await getNotificationlist("", alarmlist.isEmpty ? 0 : alarmlist.last.id)
         .then((value) {
       if (value.isError == false) {
         List<NotificationModel> notificationlist = List.from(value.data)
@@ -111,33 +111,33 @@ class NotificationDetailController extends GetxController {
     });
   }
 
-  Future<void> followreqloadItem() async {
-    if (followalarmlist.isNotEmpty) {
-      print("팔로우 알람 마지막 ID: ${followalarmlist.last.id}");
-    }
-    await getNotificationlist(NotificationType.follow.name,
-            followalarmlist.isEmpty ? 0 : followalarmlist.last.id)
-        .then((value) {
-      if (value.isError == false) {
-        List<NotificationModel> notificationlist = List.from(value.data)
-            .map((project) => NotificationModel.fromJson(project))
-            .toList();
+  // Future<void> followreqloadItem() async {
+  //   if (followalarmlist.isNotEmpty) {
+  //     print("팔로우 알람 마지막 ID: ${followalarmlist.last.id}");
+  //   }
+  //   await getNotificationlist(NotificationType.follow.name,
+  //           followalarmlist.isEmpty ? 0 : followalarmlist.last.id)
+  //       .then((value) {
+  //     if (value.isError == false) {
+  //       List<NotificationModel> notificationlist = List.from(value.data)
+  //           .map((project) => NotificationModel.fromJson(project))
+  //           .toList();
 
-        if (notificationlist.isEmpty && followalarmlist.isEmpty) {
-          isfollowreqEmpty.value = true;
-        } else if (notificationlist.isEmpty && followalarmlist.isNotEmpty) {
-          enablefollowreqPullup.value = false;
-        }
+  //       if (notificationlist.isEmpty && followalarmlist.isEmpty) {
+  //         isfollowreqEmpty.value = true;
+  //       } else if (notificationlist.isEmpty && followalarmlist.isNotEmpty) {
+  //         enablefollowreqPullup.value = false;
+  //       }
 
-        followalarmlist.addAll(notificationlist);
-        sortAlarmList(notificationlist);
+  //       followalarmlist.addAll(notificationlist);
+  //       sortAlarmList(notificationlist);
 
-        followreqscreenstate(ScreenState.success);
-      } else {
-        errorSituation(value);
-      }
-    });
-  }
+  //       followreqscreenstate(ScreenState.success);
+  //     } else {
+  //       errorSituation(value);
+  //     }
+  //   });
+  // }
 
   void sortAlarmList(List<NotificationModel> alarmList) {
     // List<NotificationModel> allAlarmList = [];

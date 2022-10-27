@@ -170,7 +170,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
         body: Column(
           children: [
             const SizedBox(
-              height: 14,
+              height: 16,
             ),
             if (screenType == Screentype.add)
               Text(
@@ -178,7 +178,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 style: kmain.copyWith(color: maingray),
               ),
             const SizedBox(
-              height: 24,
+              height: 16,
             ),
             LabelTextFieldWidget(
                 label: "커리어 이름",
@@ -186,11 +186,11 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 maxLength: 15,
                 textController: _controller.projectnamecontroller),
             const SizedBox(
-              height: 14,
+              height: 16,
             ),
             if (screenType == Screentype.add)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Obx(
                   () => GestureDetector(
                     onTap: () {
@@ -205,7 +205,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                           color: _controller.isPublic.value ? null : maingray,
                         ),
                         const SizedBox(
-                          width: 7,
+                          width: 8,
                         ),
                         Text(
                           "그룹 커리어에요",
@@ -218,54 +218,17 @@ class ProjectAddTitleScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 20),
-            //   child: Row(
-            //     children: [
-            //       const Text("커리어 분류", style: kmain),
-            //       const Spacer(),
-            //       Obx(
-            //         () => ToggleButtons(
-            //           children: const [
-            //             Text(
-            //               "개인",
-            //             ),
-            //             Text(
-            //               "그룹",
-            //             )
-            //           ],
-            //           isSelected: [
-            //             !_controller.isPublic.value,
-            //             _controller.isPublic.value
-            //           ],
-            //           textStyle: kmainbold,
-            //           onPressed: (index) {
-            //             if (index == 0) {
-            //               _controller.isPublic(false);
-            //             } else {
-            //               _controller.isPublic(true);
-            //             }
-            //           },
-            //           selectedColor: mainblue,
-            //           selectedBorderColor: mainblue,
-            //           color: dividegray,
-            //           splashColor: Colors.transparent,
-            //           borderRadius: BorderRadius.circular(8),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             const SizedBox(
-              height: 24,
+              height: 16,
             ),
             Obx(() => _controller.selectCompany.value.name == ""
                 ? GestureDetector(
                     onTap: () {
                       Get.to(() => ProjectAddCompanyScreen());
+                      _controller.compSearchInit();
                     },
                     child: Text(
-                      "기업과 연계된 인턴/채용 관련 커리어세요?",
+                      "기업과 연계된 인턴/채용 커리어세요?",
                       style: kmain.copyWith(color: mainblue),
                     ),
                   )
@@ -273,18 +236,18 @@ class ProjectAddTitleScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
                           "함께한 기업",
                           style: kmain,
                         ),
                       ),
                       const SizedBox(
-                        height: 14,
+                        height: 16,
                       ),
                       CompanyTileWidget(
                         company: _controller.selectCompany.value,
-                        onTap: () {
+                        onCancelTap: () {
                           _controller.selectCompany(Company.defaultCompany());
                         },
                       ),

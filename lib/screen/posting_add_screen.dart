@@ -72,13 +72,12 @@ class PostingAddScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 14),
-                      child: Column(children: [
-                        postingAddController.isAddLink.value == false
-                            ? postingAddController.isAddImage.value == true
-                                ? Obx(
-                                    () => Stack(children: [
+                    postingAddController.isAddLink.value == false
+                        ? postingAddController.isAddImage.value == true
+                            ? Obx(
+                                () => Stack(children: [
+                                  Column(
+                                    children: [
                                       SwiperWidget(
                                         items:
                                             postingAddController.images.value,
@@ -86,76 +85,94 @@ class PostingAddScreen extends StatelessWidget {
                                         aspectRatio: postingAddController
                                             .cropAspectRatio.value,
                                       ),
-                                      Positioned(
-                                          child: GestureDetector(
-                                              onTap: () => imageChange(),
-                                              child: Text('사진 수정하기',
-                                                  style: kmain.copyWith(
-                                                      color: mainblue))),
-                                          right: 20,
-                                          bottom: 5)
-                                    ]),
-                                  )
-                                : Column(children: [
-                                    SizedBox(height: 10),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: addButton(
-                                                title: '이미지',
-                                                titleEng: 'image',
-                                                ontap: () async {
-                                                  if (_imageController
-                                                      .permissionState.isAuth) {
-                                                    if (_imageController
-                                                        .albums.isNotEmpty) {
-                                                      Get.to(
-                                                          () => UploadScreen());
-                                                    } else {
-                                                      showCustomDialog(
-                                                          "이미지가 없습니다", 1000);
-                                                    }
-                                                  } else {
-                                                    showCustomDialog(
-                                                        "미디어 및 파일의 권한을 허용해주세요",
-                                                        1000);
-                                                  }
-                                                }),
-                                          ),
-                                          const SizedBox(
-                                            width: 14,
-                                          ),
-                                          Expanded(
-                                            child: addButton(
-                                                title: '링크',
-                                                titleEng: 'link',
-                                                ontap: () {
-                                                  Get.to(() =>
-                                                      PostingAddLinkScreen());
-                                                }),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 24),
-                                  ])
-                            : SwiperWidget(
-                                items: postingAddController.scrapList
-                                    .map((linkwidget) => linkwidget.url)
-                                    .toList(),
-                                swiperType: SwiperType.link,
+                                      if (postingAddController.images.length ==
+                                          1)
+                                        const SizedBox(height: 20)
+                                    ],
+                                  ),
+                                  Positioned(
+                                      child: GestureDetector(
+                                          onTap: () => _imageChange(),
+                                          child: Text('사진 수정하기',
+                                              style: kmain.copyWith(
+                                                  color: mainblue))),
+                                      right: 16,
+                                      bottom: 5)
+                                ]),
                               )
-                      ]),
-                    ),
+                            : Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 16),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: addButton(
+                                          title: '이미지',
+                                          titleEng: 'image',
+                                          ontap: () async {
+                                            if (_imageController
+                                                .permissionState.isAuth) {
+                                              if (_imageController
+                                                  .albums.isNotEmpty) {
+                                                Get.to(() => UploadScreen());
+                                              } else {
+                                                showCustomDialog(
+                                                    "이미지가 없습니다", 1000);
+                                              }
+                                            } else {
+                                              showCustomDialog(
+                                                  "미디어 및 파일의 권한을 허용해주세요", 1000);
+                                            }
+                                          }),
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Expanded(
+                                      child: addButton(
+                                          title: '링크',
+                                          titleEng: 'link',
+                                          ontap: () {
+                                            Get.to(
+                                                () => PostingAddLinkScreen());
+                                          }),
+                                    )
+                                  ],
+                                ),
+                              )
+                        : Stack(
+                            children: [
+                              Column(
+                                children: [
+                                  SwiperWidget(
+                                    items: postingAddController.scrapList
+                                        .map((linkwidget) => linkwidget.url)
+                                        .toList(),
+                                    swiperType: SwiperType.link,
+                                  ),
+                                  if (postingAddController.scrapList.length ==
+                                      1)
+                                    const SizedBox(height: 20)
+                                ],
+                              ),
+                              Positioned(
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => PostingAddLinkScreen());
+                                      },
+                                      child: Text('링크 수정하기',
+                                          style:
+                                              kmain.copyWith(color: mainblue))),
+                                  right: 16,
+                                  bottom: 5)
+                            ],
+                          ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const Divider(thickness: 0.5),
+                            const Divider(),
                             LayoutBuilder(builder: (context, constraints) {
                               return NoUlTextField(
                                 controller: postingAddController.textcontroller,
@@ -164,22 +181,21 @@ class PostingAddScreen extends StatelessWidget {
                               );
                             }),
                             Divider(key: keyController.viewKey, thickness: 0.5),
-                            const SizedBox(height: 14),
-                            const Text('태그', style: kmain),
-                            const SizedBox(height: 14),
+                            const SizedBox(height: 32),
+                            const Text('태그', style: kmainbold),
+                            const SizedBox(height: 8),
                             Obx(() => tagController.selectedtaglist.isEmpty
-                                ? Text('입력시 기업이 컨택할 가능성이 높아져요',
-                                    style: kmain.copyWith(
-                                        color: maingray.withOpacity(0.5)))
-                                : Container(
+                                ? Text('입력시 기업에게 노출될 가능성이 높아져요',
+                                    style: kmain.copyWith(color: maingray))
+                                : SizedBox(
                                     width: Get.width,
                                     child: Wrap(
-                                        spacing: 7,
-                                        runSpacing: 7,
+                                        spacing: 10,
+                                        runSpacing: 8,
                                         direction: Axis.horizontal,
                                         children:
                                             tagController.selectedtaglist))),
-                            SizedBox(height: 28),
+                            const SizedBox(height: 16),
                             KeyboardVisibilityTextWidget(
                               boolea: postingAddController.isTagClick,
                               controller: postingAddController
@@ -259,9 +275,7 @@ class PostingAddScreen extends StatelessWidget {
                                 },
                               ),
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
+                            const SizedBox(height: 16),
                             Obx(() => ListView.builder(
                                 padding: EdgeInsets.only(
                                     bottom: Get.height - 44 - 129 - 400),
@@ -294,17 +308,17 @@ class PostingAddScreen extends StatelessWidget {
     return GestureDetector(
       onTap: ontap,
       child: Container(
-        padding: EdgeInsets.all(14),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
             color: mainblue, borderRadius: BorderRadius.circular(8)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset('assets/icons/add_$titleEng.svg'),
-            SizedBox(width: 7),
+            const SizedBox(width: 8),
             Text(
               '$title 첨부하기',
-              style: kmain.copyWith(color: mainWhite),
+              style: kmainbold.copyWith(color: mainWhite),
             )
           ],
         ),
@@ -339,9 +353,9 @@ class PostingAddScreen extends StatelessWidget {
                 if (route == PostaddRoute.bottom) {
                   AppController.to.changeBottomNav(0);
                   HomeController.to.scrollToTop();
-                }else if(route == PostaddRoute.career){
+                } else if (route == PostaddRoute.career) {
                   CareerDetailController.to.postList.add(post);
-                  CareerDetailController.to.postList.refresh(); 
+                  CareerDetailController.to.postList.refresh();
                 }
 
                 showCustomDialog('포스팅을 업로드했어요', 1000);
@@ -351,7 +365,7 @@ class PostingAddScreen extends StatelessWidget {
             });
           }
         },
-        child: Text('게시',
+        child: Text('업로드',
             style: kNavigationTitle.copyWith(
                 color: checkContent() ? mainblue : maingray, fontSize: 17)));
   }
@@ -366,7 +380,7 @@ class PostingAddScreen extends StatelessWidget {
     }
   }
 
-  void imageChange() async {
+  void _imageChange() async {
     // print(postingAddController.selectedImageList);
     // print(postingAddController.selectedCropWidgetList);
     // print(postingAddController.selectedCropKeyList);

@@ -34,11 +34,11 @@ class Tagwidget extends StatelessWidget {
         }
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border:
-                Border.all(color: isDark ? mainWhite : maingray, width: 0.3)),
+                Border.all(color: isDark ? mainWhite : maingray, width: 0.5)),
         child: Text(
           tag.tag,
           style: kmain.copyWith(color: isDark ? mainWhite : null),

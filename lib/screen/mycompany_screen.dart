@@ -290,60 +290,68 @@ class MyCompanyScreen extends StatelessWidget {
   Widget _tabView() {
     return Column(
       children: [
-        Material(
-          color: mainblack,
-          child: TabBar(
-              controller: _controller.tabController,
-              labelStyle: kmainbold,
-              labelColor: mainWhite,
-              unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
-              unselectedLabelColor: dividegray,
-              automaticIndicatorColorAdjustment: false,
-              indicator: const UnderlineIndicator(
-                strokeCap: StrokeCap.round,
-                borderSide: BorderSide(width: 2, color: mainWhite),
+        Stack(
+          fit: StackFit.passthrough,
+          alignment: Alignment.bottomCenter,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: maingray, width: 2.0),
+                ),
               ),
-              isScrollable: false,
-              tabs: [
-                // const Tab(
-                //   height: 40,
-                //   icon: Icon(
-                //     Icons.format_list_bulleted_rounded,
-                //   ),
-                // ),
-                // const Tab(
-                //   height: 40,
-                //   icon: Icon(Icons.line_weight_rounded),
-                // ),
-                Obx(
-                  () => Tab(
-                    height: 40,
-                    icon: SvgPicture.asset(
-                      'assets/icons/company_intro.svg',
-                      color: _controller.currentIndex.value == 0
-                          ? mainWhite
-                          : dividegray,
-                    ),
+            ),
+            Material(
+              color: mainblack,
+              child: TabBar(
+                  controller: _controller.tabController,
+                  labelStyle: kmainbold,
+                  labelColor: mainWhite,
+                  unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
+                  unselectedLabelColor: dividegray,
+                  automaticIndicatorColorAdjustment: false,
+                  indicator: const UnderlineIndicator(
+                    strokeCap: StrokeCap.round,
+                    borderSide: BorderSide(width: 2, color: mainWhite),
                   ),
-                ),
-                Obx(
-                  () => Tab(
-                    height: 40,
-                    icon: SvgPicture.asset(
-                      'assets/icons/post_active.svg',
-                      color: _controller.currentIndex.value == 1
-                          ? mainWhite
-                          : dividegray,
+                  isScrollable: false,
+                  tabs: [
+                    // const Tab(
+                    //   height: 40,
+                    //   icon: Icon(
+                    //     Icons.format_list_bulleted_rounded,
+                    //   ),
+                    // ),
+                    // const Tab(
+                    //   height: 40,
+                    //   icon: Icon(Icons.line_weight_rounded),
+                    // ),
+                    Obx(
+                      () => Tab(
+                        height: 40,
+                        icon: SvgPicture.asset(
+                          'assets/icons/company_intro.svg',
+                          color: _controller.currentIndex.value == 0
+                              ? mainWhite
+                              : dividegray,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ]),
+                    Obx(
+                      () => Tab(
+                        height: 40,
+                        icon: SvgPicture.asset(
+                          'assets/icons/post_active.svg',
+                          color: _controller.currentIndex.value == 1
+                              ? mainWhite
+                              : dividegray,
+                        ),
+                      ),
+                    ),
+                  ]),
+            ),
+          ],
         ),
-        Divider(
-          height: 1,
-          thickness: 2,
-          color: dividegray,
-        )
       ],
     );
   }

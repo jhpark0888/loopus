@@ -3,20 +3,22 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
 class LabelTextFieldWidget extends StatelessWidget {
-  LabelTextFieldWidget({
-    Key? key,
-    required this.label,
-    required this.hintText,
-    required this.textController,
-    this.labelBold = true,
-    this.readOnly,
-    this.obscureText,
-    this.maxLength,
-    this.ontap,
-    this.validator,
-    this.suffix,
-    this.keyboardType,
-  }) : super(key: key);
+  LabelTextFieldWidget(
+      {Key? key,
+      required this.label,
+      required this.hintText,
+      required this.textController,
+      this.labelBold = true,
+      this.readOnly,
+      this.obscureText,
+      this.maxLength,
+      this.ontap,
+      this.validator,
+      this.suffix,
+      this.keyboardType,
+      this.textInputAction,
+      this.onfieldSubmitted})
+      : super(key: key);
 
   String label;
   bool labelBold;
@@ -29,6 +31,8 @@ class LabelTextFieldWidget extends StatelessWidget {
   String? Function(String?)? validator;
   Widget? suffix;
   final TextInputType? keyboardType;
+  TextInputAction? textInputAction;
+  Function(String)? onfieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,7 @@ class LabelTextFieldWidget extends StatelessWidget {
             style: labelBold ? kmainbold : kmainheight,
           ),
           const SizedBox(
-            height: 14,
+            height: 16,
           ),
           CustomTextField(
             counterText: null,
@@ -56,6 +60,8 @@ class LabelTextFieldWidget extends StatelessWidget {
             readOnly: readOnly,
             maxLines: 1,
             ontap: ontap,
+            textInputAction: textInputAction,
+            onfieldSubmitted: onfieldSubmitted,
           ),
         ],
       ),

@@ -197,6 +197,9 @@ class NewsWidget extends StatelessWidget {
                 fit: BoxFit.cover,
                 width: size,
                 height: size,
+                errorWidget: (context, string, widget) {
+                  return Container(color: maingray);
+                },
               ),
             );
     } else {
@@ -213,6 +216,9 @@ class NewsWidget extends StatelessWidget {
                 fit: BoxFit.cover,
                 width: size,
                 height: size,
+                errorWidget: (context, string, widget) {
+                  return Container(color: maingray);
+                },
               ),
             );
     }
@@ -254,6 +260,7 @@ class NewsWidget extends StatelessWidget {
                 width: 270,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     issue.image != ""
                         ? CachedNetworkImage(
@@ -261,7 +268,9 @@ class NewsWidget extends StatelessWidget {
                             height: 170,
                             width: 270,
                             fit: BoxFit.cover,
-                          )
+                            errorWidget: (context, string, widget) {
+                              return Container(color: maingray);
+                            })
                         : Container(
                             height: 170,
                             width: 270,
@@ -275,6 +284,7 @@ class NewsWidget extends StatelessWidget {
                         issue.title,
                         style: kmainheight,
                         maxLines: 2,
+                        textAlign: TextAlign.start,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

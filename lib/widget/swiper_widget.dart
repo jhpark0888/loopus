@@ -333,15 +333,15 @@ class SwiperWidget extends StatelessWidget {
                 effect: ScrollingDotsEffect(
                   dotColor: maingray,
                   activeDotColor: mainblue,
-                  spacing: 7,
+                  spacing: 8,
                   dotWidth: 7,
                   dotHeight: 7,
                 ),
               ),
             ],
           ),
-        SizedBox(
-          height: swiperType == SwiperType.file && items.length == 1 ? 30 : 10,
+        const SizedBox(
+          height: 10,
         ),
       ],
     );

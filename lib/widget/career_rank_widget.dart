@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -26,11 +28,11 @@ class CareerRankWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
+      width: 302,
       // height: 340,
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16), color: lightcardgray),
+          borderRadius: BorderRadius.circular(8), color: cardGray),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -39,7 +41,7 @@ class CareerRankWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Text(isUniversity ? '교내' : '전국', style: kmain),
+              Text(isUniversity ? '교내' : '전국', style: kmainbold),
               GestureDetector(
                   onTap: () {
                     Get.to(() => RealTimeRankScreen(
@@ -50,7 +52,7 @@ class CareerRankWidget extends StatelessWidget {
                   child: Text('전체보기', style: kmain.copyWith(color: mainblue)))
             ],
           ),
-          const SizedBox(height: 18.33),
+          const SizedBox(height: 24),
           if (ranker.isNotEmpty)
             ListView.separated(
                 primary: false,
@@ -61,9 +63,9 @@ class CareerRankWidget extends StatelessWidget {
                       isFollow: false,
                     ),
                 separatorBuilder: (context, index) => const SizedBox(
-                      height: 18.33,
+                      height: 24,
                     ),
-                itemCount: ranker.length > 3 ? 3 : ranker.length)
+                itemCount: min(3, ranker.length))
           else
             const Expanded(
               child: Center(
@@ -106,16 +108,17 @@ class PersonRankWidget extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       child: Row(children: [
         SizedBox(
-          width: 52,
+          width: 50,
+          height: 58,
           child: Column(
             children: [
               UserImageWidget(
                 imageUrl: user.profileImage,
-                width: 52,
-                height: 52,
+                width: 36,
+                height: 36,
                 userType: user.userType,
               ),
-              const SizedBox(height: 7),
+              const SizedBox(height: 8),
               Text(
                 user.name,
                 style: kmain,
@@ -124,40 +127,44 @@ class PersonRankWidget extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: 14),
-        Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Text(
-            isUniversity ? user.schoolRank.toString() : user.rank.toString(),
-            style: kmainbold.copyWith(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 3),
-          rate(
-              rank: isUniversity ? user.schoolRank : user.rank,
-              lastRank: isUniversity ? user.schoolLastRank : user.lastRank)
-        ]),
-        const SizedBox(width: 14),
+        const SizedBox(width: 16),
+        SizedBox(
+          width: 30,
+          height: 33,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Text(
+              isUniversity ? user.schoolRank.toString() : user.rank.toString(),
+              style: kmainbold,
+            ),
+            const SizedBox(height: 8),
+            rate(
+                rank: isUniversity ? user.schoolRank : user.rank,
+                lastRank: isUniversity ? user.schoolLastRank : user.lastRank)
+          ]),
+        ),
+        const SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                user.univName != "" ? user.univName : '땡땡대',
+                user.univName != "" ? user.univName : '대학교',
                 style: kmain,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 7),
+              const SizedBox(height: 8),
               Text(
                 user.department,
                 style: kmain,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 7),
+              const SizedBox(height: 8),
               RichText(
                 overflow: TextOverflow.ellipsis,
                 text: TextSpan(children: [
                   TextSpan(
-                      text: '최근 포스트 ',
-                      style: kmain.copyWith(color: maingray.withOpacity(0.5))),
+                      text: '최근 포스트 ', style: kmain.copyWith(color: maingray)),
                   TextSpan(
                       text: '${user.resentPostCount.toString()}개', style: kmain)
                 ]),
@@ -176,24 +183,17 @@ class PersonRankWidget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  user.followed.value =
-                      user.followed.value == FollowState.normal
-                          ? FollowState.following
-                          : user.followed.value == FollowState.follower
-                              ? FollowState.wefollow
-                              : user.followed.value == FollowState.following
-                                  ? FollowState.normal
-                                  : FollowState.follower;
+                  followMotion();
                 },
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
                   decoration: BoxDecoration(
                       color: user.followed.value == FollowState.normal ||
                               user.followed.value == FollowState.follower
                           ? mainblue
                           : cardGray,
-                      borderRadius: BorderRadius.circular(50)),
+                      borderRadius: BorderRadius.circular(8)),
                   child: Center(
                     child: Text(
                       user.followed.value == FollowState.normal ||

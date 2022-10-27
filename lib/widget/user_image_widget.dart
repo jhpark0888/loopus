@@ -29,29 +29,41 @@ class UserImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return imageShape(
-      imageUrl == ""
-          ? Image.asset(
-              userType == UserType.student
-                  ? "assets/illustrations/default_profile.png"
-                  : "assets/illustrations/default_company.png",
-              height: height ?? 50,
-              width: width ?? 50,
-              fit: BoxFit.cover,
-            )
-          : CachedNetworkImage(
-              imageUrl: imageUrl,
-              height: height ?? 50,
-              width: width ?? 50,
-              fit: userType == UserType.student ? BoxFit.cover : BoxFit.contain,
-              placeholder: (context, string) {
-                return Container(
-                  height: height ?? 50,
-                  width: width ?? 50,
-                  color: dividegray,
-                );
-              },
-            ),
-    );
+    return Card(
+        margin: EdgeInsets.zero,
+        elevation: 0,
+        clipBehavior: Clip.hardEdge,
+        shape: userType == UserType.student
+            ? CircleBorder(side: BorderSide(width: 0.5, color: dividegray))
+            : RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+                side: BorderSide(width: 0.5, color: dividegray)),
+        child: imageUrl == ""
+            ? Image.asset(
+                userType == UserType.student
+                    ? "assets/illustrations/default_profile.png"
+                    : "assets/illustrations/default_company.png",
+                height: height ?? 50,
+                width: width ?? 50,
+                fit: BoxFit.cover,
+              )
+            : CachedNetworkImage(
+                imageUrl: imageUrl,
+                height: height ?? 50,
+                width: width ?? 50,
+                fit: userType == UserType.student
+                    ? BoxFit.cover
+                    : BoxFit.contain,
+                placeholder: (context, string) {
+                  return Container(
+                    height: height ?? 50,
+                    width: width ?? 50,
+                    color: dividegray,
+                  );
+                },
+                errorWidget: (context, string, widget) {
+                  return Container(color: maingray);
+                },
+              ));
   }
 }

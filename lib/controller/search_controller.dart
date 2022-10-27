@@ -5,8 +5,10 @@ import 'package:loopus/api/rank_api.dart';
 import 'package:loopus/api/search_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/model/company_model.dart';
 
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/search_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/utils/error_control.dart';
@@ -21,14 +23,12 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   late ScrollController scrollcontroller;
   RefreshController refreshController = RefreshController();
   late ScrollController? scrollController;
-  int popPagenum = 1;
 
-  RxList<Person> recommandUsers = <Person>[].obs;
-  RxList<Post> popPostList = <Post>[].obs;
-
+  RxList<RecentSearch> recentSearchList = <RecentSearch>[].obs;
   RxList<Person> searchUserList = <Person>[].obs;
   RxList<Post> searchPostList = <Post>[].obs;
   RxList<Tag> searchTagList = <Tag>[].obs;
+  RxList<Company> searchCompanyList = <Company>[].obs;
 
   List<int> pagenumList = List.generate(4, (index) => 1);
   List<RefreshController> refreshControllerList =
@@ -41,17 +41,6 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
   late TabController tabController;
 
   final FocusNode focusNode = FocusNode();
-
-  void onRefresh() {
-    popPagenum = 1;
-    popPostList.clear();
-    popPostLoad();
-    refreshController.refreshCompleted();
-  }
-
-  void onLoading() {
-    popPostLoad();
-  }
 
   void onSearchLoading() async {
     // await Future.delayed(Duration(seconds: 2));
@@ -70,7 +59,7 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     // for (var i in refreshControllerList) {
     //   i.loadNoData();
     // }
-    popPostLoad();
+    getRecentSearchList();
 
     debounce(_searchword, (_) async {
       searchInit();
@@ -100,7 +89,9 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
               _searchword.value != preWordList[tabController.index]) {
             searchFunction();
           } else if (tabController.index == 3 &&
-              _searchword.value != preWordList[tabController.index]) {}
+              _searchword.value != preWordList[tabController.index]) {
+            searchFunction();
+          }
         }
       }
     });
@@ -108,87 +99,108 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     super.onInit();
   }
 
-  void popPostLoad() async {
-    await searchPopPost(popPagenum).then((value) {
+  void getRecentSearchList() async {
+    await getResentSearches().then((value) {
       if (value.isError == false) {
-        List<Post> postList =
-            List.from(value.data).map((post) => Post.fromJson(post)).toList();
+        List<RecentSearch> tempList = List.from(value.data)
+            .map((recSearch) => RecentSearch.fromJson(recSearch))
+            .toList();
 
-        popPostList.addAll(postList);
-
-        popPagenum += 1;
-        refreshController.loadComplete();
-      } else {
-        if (value.errorData!['statusCode'] == 204) {
-          refreshController.loadNoData();
-        } else {
-          refreshController.loadComplete();
-        }
+        recentSearchList(tempList);
       }
     });
   }
 
   void searchFunction() async {
-    if (tabController.index != 3) {
-      if (pagenumList[tabController.index] == 1) {
-        isSearchLoadingList[tabController.index](true);
-      }
-
-      if (tabController.index != 2) {
-        await search(SearchType.values[tabController.index], _searchword.value,
-                pagenumList[tabController.index])
-            .then((value) {
-          if (value.isError == false) {
-            List teptList = List.from(value.data);
-
-            if (teptList.isEmpty) {
-              isSearchEmptyList[tabController.index](true);
-            }
-
-            if (tabController.index == 0) {
-              List<Person> userList =
-                  teptList.map((user) => Person.fromJson(user)).toList();
-
-              searchUserList.addAll(userList);
-            } else if (tabController.index == 1) {
-              List<Post> postList =
-                  teptList.map((post) => Post.fromJson(post)).toList();
-
-              searchPostList.addAll(postList);
-            } else if (tabController.index == 3) {}
-
-            pagenumList[tabController.index] += 1;
-            preWordList[tabController.index] = _searchword.value;
-            refreshControllerList[tabController.index].loadComplete();
-          } else {
-            if (value.errorData!['statusCode'] == 204) {
-              refreshControllerList[tabController.index].loadNoData();
-            } else {
-              refreshControllerList[tabController.index].loadComplete();
-            }
-          }
-        });
-      } else {
-        await tagsearch(_searchword.value).then((value) {
-          if (value.isError == false) {
-            List<Tag> tagList = List.from(value.data['results'])
-                .map((tag) => Tag.fromJson(tag))
-                .toList();
-
-            if (tagList.isEmpty) {
-              isSearchEmptyList[tabController.index](true);
-            }
-
-            searchTagList.addAll(tagList);
-
-            pagenumList[tabController.index] += 1;
-            preWordList[tabController.index] = _searchword.value;
-          } else {}
-          refreshControllerList[tabController.index].loadNoData();
-        });
-      }
-      isSearchLoadingList[tabController.index](false);
+    if (pagenumList[tabController.index] == 1) {
+      isSearchLoadingList[tabController.index](true);
     }
+
+    if (tabController.index == 0 || tabController.index == 1) {
+      await search(SearchType.values[tabController.index], _searchword.value,
+              pagenumList[tabController.index])
+          .then((value) {
+        if (value.isError == false) {
+          List teptList = List.from(value.data);
+
+          if (teptList.isEmpty && tabController.index != 0) {
+            isSearchEmptyList[tabController.index](true);
+          }
+
+          if (tabController.index == 0) {
+            List<Person> userList =
+                teptList.map((user) => Person.fromJson(user)).toList();
+
+            searchUserList.addAll(userList);
+          } else if (tabController.index == 1) {
+            List<Post> postList =
+                teptList.map((post) => Post.fromJson(post)).toList();
+
+            searchPostList.addAll(postList);
+          }
+
+          pagenumList[tabController.index] += 1;
+          preWordList[tabController.index] = _searchword.value;
+          refreshControllerList[tabController.index].loadComplete();
+        } else {
+          if (value.errorData!['statusCode'] == 204) {
+            if (tabController.index == 0 &&
+                pagenumList[tabController.index] == 1) {
+              isSearchEmptyList[tabController.index](true);
+            } else {
+              refreshControllerList[tabController.index].loadNoData();
+            }
+          } else {
+            refreshControllerList[tabController.index].loadComplete();
+          }
+        }
+      });
+    } else if (tabController.index == 2) {
+      await tagsearch(_searchword.value).then((value) {
+        if (value.isError == false) {
+          List<Tag> tagList = List.from(value.data['results'])
+              .map((tag) => Tag.fromJson(tag))
+              .toList();
+
+          if (tagList.isEmpty) {
+            isSearchEmptyList[tabController.index](true);
+          }
+
+          searchTagList.addAll(tagList);
+
+          pagenumList[tabController.index] += 1;
+          preWordList[tabController.index] = _searchword.value;
+        } else {}
+        refreshControllerList[tabController.index].loadNoData();
+      });
+    } else if (tabController.index == 3) {
+      await companySearch(_searchword.value, pagenumList[tabController.index])
+          .then((value) {
+        if (value.isError == false) {
+          List teptList = List.from(value.data);
+
+          if (teptList.isEmpty) {
+            isSearchEmptyList[tabController.index](true);
+          }
+
+          List<Company> companyList =
+              teptList.map((company) => Company.fromJson(company)).toList();
+
+          searchCompanyList.addAll(companyList);
+
+          pagenumList[tabController.index] += 1;
+          preWordList[tabController.index] = _searchword.value;
+          refreshControllerList[tabController.index].loadComplete();
+        } else {
+          if (value.errorData!['statusCode'] == 204) {
+            refreshControllerList[tabController.index].loadNoData();
+          } else {
+            refreshControllerList[tabController.index].loadComplete();
+          }
+        }
+      });
+    }
+    isSearchLoadingList[tabController.index](false);
   }
 
   void searchInit() {
@@ -201,5 +213,6 @@ class SearchController extends GetxController with GetTickerProviderStateMixin {
     searchPostList.clear();
     searchUserList.clear();
     searchTagList.clear();
+    searchCompanyList.clear();
   }
 }

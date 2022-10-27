@@ -12,13 +12,12 @@ import 'package:loopus/model/project_model.dart';
 import 'package:loopus/trash_bin/project_screen.dart';
 import 'package:intl/intl.dart';
 
-enum ProjectWidgetType { profile, addposting }
-
 class ProjectWidget extends StatelessWidget {
-  ProjectWidget({Key? key, required this.project, required this.type})
-      : super(key: key);
+  ProjectWidget({
+    Key? key,
+    required this.project,
+  }) : super(key: key);
 
-  ProjectWidgetType type;
   // late ProjectDetailController controller = Get.put(
   //     ProjectDetailController(project.value.id),
   //     tag: project.value.id.toString());
@@ -27,28 +26,20 @@ class ProjectWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // controller.project = project;
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: 14,
+        vertical: 16,
       ),
       child: GestureDetector(
         onTapDown: (details) => _hoverController.isHoverState(),
         onTapCancel: () => _hoverController.isNonHoverState(),
         onTapUp: (details) => _hoverController.isNonHoverState(),
         onTap: () async {
-          if (type == ProjectWidgetType.profile) {
-            // Get.to(() => ProjectScreen(
-            //       projectid: project.value.id,
-            //       isuser: project.value.is_user,
-            //     ));
-          } else {
-            print(project.value.post_count);
-            Get.to(() => PostingAddScreen(
-                  project_id: project.value.id,
-                  route: PostaddRoute.bottom,
-                ));
-          }
+          print(project.value.post_count);
+          Get.to(() => PostingAddScreen(
+                project_id: project.value.id,
+                route: PostaddRoute.bottom,
+              ));
         },
         child: Obx(
           () => AnimatedScale(
@@ -61,46 +52,46 @@ class ProjectWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Obx(
-                    () => Row(
-                      children: [
-                        Text(
-                          project.value.careerName,
-                          style: kmainbold,
-                        ),
-                        Spacer(),
-                        Obx(
-                          () => Text(
-                            '${DateFormat("yyyy.MM").format(project.value.updateDate!)}',
-                            style: kmain,
-                          ),
-                          //  ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''
-                          // }
-                        ),
-                      ],
+                    () => Text(
+                      project.value.careerName,
+                      style: kmainbold,
                     ),
                   ),
                   SizedBox(
-                    height: 14,
+                    height: 16,
                   ),
                   Row(
                     children: [
-                      Text('포스트', style: kmain.copyWith(color: maingray)),
-                      SizedBox(
-                        width: 4,
+                      Obx(
+                        () => RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: '포스트 ',
+                              style: kmain.copyWith(color: maingray)),
+                          TextSpan(
+                            text: '${project.value.post_count!.value}개',
+                            style: kmain,
+                          )
+                        ])),
                       ),
+                      Spacer(),
                       Obx(
                         () => Text(
-                          '${project.value.post_count!.value}개',
+                          DateFormat("yyyy.MM")
+                              .format(project.value.updateDate!),
                           style: kmain,
                         ),
+                        //  ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''
+                        // }
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 14,
+                    height: 16,
                   ),
                   careerAnalysisWidget(
-                      fieldList[project.value.fieldIds.first]!, 21, 2, 23, 1)
+                    fieldList[project.value.fieldIds.first]!,
+                  )
                 ],
               ),
             ),
@@ -110,22 +101,48 @@ class ProjectWidget extends StatelessWidget {
     );
   }
 
-  Widget careerAnalysisWidget(String title, int countrywide,
-      int countryVariance, int campus, int campusVariance) {
+  Widget careerAnalysisWidget(String title) {
     return Row(
       children: [
         RichText(
             text: TextSpan(children: [
           TextSpan(text: title, style: kmain.copyWith(color: mainblue)),
-          const TextSpan(text: '분야', style: kmain)
+          const TextSpan(text: ' 분야', style: kmain)
         ])),
         Spacer(),
-        const SizedBox(width: 37),
-        Text('전국 $countrywide%', style: kmain),
-        rate(countryVariance),
-        const SizedBox(width: 11),
-        Text('교내 $campus%', style: kmain),
-        rate(campusVariance)
+        Row(
+          children: [
+            project.value.isPublic
+                ? SvgPicture.asset('assets/icons/group_career.svg',
+                    color: mainblack)
+                : SvgPicture.asset('assets/icons/single_career.svg',
+                    color: mainblack),
+            const SizedBox(
+              width: 8,
+            ),
+            Text(
+              project.value.isPublic ? "그룹 커리어" : "개인 커리어",
+              style: kmain.copyWith(color: mainblack),
+            ),
+
+            // const Spacer(),
+            // Row(
+            //   children: [
+            //     career.isPublic
+            //         ? SvgPicture.asset('assets/icons/group.svg')
+            //         : SvgPicture.asset('assets/icons/personal_career.svg'),
+            //     const SizedBox(
+            //       width: 7,
+            //     ),
+            //     Text(
+            //       career.isPublic ? "그룹 커리어" : "개인 커리어",
+            //       style: kmainbold.copyWith(
+            //           color: career.thumbnail == "" ? mainblack : mainWhite),
+            //     ),
+            //   ],
+            // )
+          ],
+        )
       ],
     );
   }

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:loopus/api/search_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
-import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/screen/home_screen.dart';
@@ -16,6 +15,7 @@ import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_text_field_widget.dart';
 import 'package:loopus/widget/search_widget.dart';
+import 'package:loopus/widget/tabbar_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
@@ -23,7 +23,6 @@ import '../controller/modal_controller.dart';
 
 class SearchFocusScreen extends StatelessWidget {
   final SearchController _searchController = Get.find();
-  final HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class SearchFocusScreen extends StatelessWidget {
               children: [
                 Expanded(
                     child: SearchTextFieldWidget(
-                  hinttext: '무엇을 찾으시나요?',
+                  hinttext: '검색',
                   ontap: () {},
                   readonly: false,
                   controller: _searchController.searchtextcontroller,
@@ -85,55 +84,34 @@ class SearchFocusScreen extends StatelessWidget {
                         pinned: true,
                         elevation: 0,
                         automaticallyImplyLeading: false,
-                        flexibleSpace: Column(
-                          children: [
-                            TabBar(
-                                controller: _searchController.tabController,
-                                labelStyle: kmainbold,
-                                labelColor: mainblack,
-                                unselectedLabelStyle:
-                                    kmainbold.copyWith(color: dividegray),
-                                unselectedLabelColor: dividegray,
-                                automaticIndicatorColorAdjustment: false,
-                                indicator: const UnderlineIndicator(
-                                  strokeCap: StrokeCap.round,
-                                  borderSide:
-                                      BorderSide(width: 2, color: mainblack),
+                        flexibleSpace: TabBarWidget(
+                            tabController: _searchController.tabController,
+                            tabs: const [
+                              Tab(
+                                height: 40,
+                                child: Text(
+                                  "계정",
                                 ),
-                                isScrollable: false,
-                                tabs: const [
-                                  Tab(
-                                    height: 40,
-                                    child: Text(
-                                      "계정",
-                                    ),
-                                  ),
-                                  Tab(
-                                    height: 40,
-                                    child: Text(
-                                      "포스트",
-                                    ),
-                                  ),
-                                  Tab(
-                                    height: 40,
-                                    child: Text(
-                                      "태그",
-                                    ),
-                                  ),
-                                  Tab(
-                                    height: 40,
-                                    child: Text(
-                                      "기업",
-                                    ),
-                                  ),
-                                ]),
-                            Divider(
-                              height: 1,
-                              thickness: 2,
-                              color: dividegray,
-                            )
-                          ],
-                        ),
+                              ),
+                              Tab(
+                                height: 40,
+                                child: Text(
+                                  "포스트",
+                                ),
+                              ),
+                              Tab(
+                                height: 40,
+                                child: Text(
+                                  "태그",
+                                ),
+                              ),
+                              Tab(
+                                height: 40,
+                                child: Text(
+                                  "기업",
+                                ),
+                              ),
+                            ]),
                       ),
                     ),
                   ),
@@ -164,7 +142,7 @@ class SearchFocusScreen extends StatelessWidget {
                                           primary: false,
                                           shrinkWrap: true,
                                           padding: const EdgeInsets.symmetric(
-                                              vertical: 14),
+                                              vertical: 16),
                                           itemBuilder: (context, index) {
                                             return SearchUserWidget(
                                                 user: _searchController
@@ -172,7 +150,7 @@ class SearchFocusScreen extends StatelessWidget {
                                           },
                                           separatorBuilder: (context, index) {
                                             return const SizedBox(
-                                              height: 4,
+                                              height: 24,
                                             );
                                           },
                                           itemCount: _searchController
@@ -196,21 +174,16 @@ class SearchFocusScreen extends StatelessWidget {
                                       footer: const MyCustomFooter(),
                                       onLoading:
                                           _searchController.onSearchLoading,
-                                      child: ListView.separated(
+                                      child: ListView.builder(
                                           primary: false,
                                           shrinkWrap: true,
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 14),
+                                          padding:
+                                              const EdgeInsets.only(bottom: 16),
                                           itemBuilder: (context, index) {
                                             return PostingWidget(
                                               item: _searchController
                                                   .searchPostList[index],
                                               type: PostingWidgetType.search,
-                                            );
-                                          },
-                                          separatorBuilder: (context, index) {
-                                            return DivideWidget(
-                                              height: 10,
                                             );
                                           },
                                           itemCount: _searchController
@@ -238,7 +211,7 @@ class SearchFocusScreen extends StatelessWidget {
                                           primary: false,
                                           shrinkWrap: true,
                                           padding: const EdgeInsets.symmetric(
-                                              vertical: 14),
+                                              vertical: 16),
                                           itemBuilder: (context, index) {
                                             return SearchTagWidget(
                                                 tag: _searchController
@@ -246,7 +219,7 @@ class SearchFocusScreen extends StatelessWidget {
                                           },
                                           separatorBuilder: (context, index) {
                                             return const SizedBox(
-                                              height: 4,
+                                              height: 16,
                                             );
                                           },
                                           itemCount: _searchController
@@ -254,25 +227,41 @@ class SearchFocusScreen extends StatelessWidget {
                                     ),
                                   ),
                       ),
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              "assets/icons/company_ready.svg",
-                              width: 60,
-                              height: 60,
-                            ),
-                            const SizedBox(
-                              height: 24,
-                            ),
-                            const Text(
-                              "기업 정보를 수집중이에요\n빠른 시일 내 기업 정보를 제공해 드릴게요",
-                              style: kmainheight,
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ),
+                      Obx(
+                        () => _searchController.isSearchLoadingList[3].value
+                            ? const LoadingWidget()
+                            : _searchController.isSearchEmptyList[3].value ==
+                                    true
+                                ? const SearchEmptyWidget()
+                                : Obx(
+                                    () => SmartRefresher(
+                                      physics: const BouncingScrollPhysics(),
+                                      enablePullDown: false,
+                                      enablePullUp: true,
+                                      controller: _searchController
+                                          .refreshControllerList[3],
+                                      footer: const MyCustomFooter(),
+                                      onLoading:
+                                          _searchController.onSearchLoading,
+                                      child: ListView.separated(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 16),
+                                          itemBuilder: (context, index) {
+                                            return SearchUserWidget(
+                                                user: _searchController
+                                                    .searchCompanyList[index]);
+                                          },
+                                          separatorBuilder: (context, index) {
+                                            return const SizedBox(
+                                              height: 24,
+                                            );
+                                          },
+                                          itemCount: _searchController
+                                              .searchCompanyList.length),
+                                    ),
+                                  ),
                       ),
                     ]),
               ),
