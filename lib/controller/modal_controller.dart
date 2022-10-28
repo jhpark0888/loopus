@@ -20,6 +20,7 @@ import 'package:loopus/screen/webview_screen.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 
+import '../api/profile_api.dart';
 import '../constant.dart';
 
 // class ModalController extends GetxController with GetTickerProviderStateMixin {
@@ -403,12 +404,15 @@ void showContentModal(BuildContext context) {
 void showModalIOS(
   BuildContext context, {
   required VoidCallback func1,
-  required VoidCallback func2,
+  VoidCallback? func2,
   required String value1,
   required String value2,
   required bool isValue1Red,
   required bool isValue2Red,
   required bool isOne,
+  String? GetBack,
+  VoidCallback? func3,
+  Color? boxColor,
 }) {
   showCupertinoModalPopup(
     barrierColor: mainblack.withOpacity(
@@ -416,35 +420,60 @@ void showModalIOS(
     ),
     context: context,
     builder: (context) => CupertinoActionSheet(
-      cancelButton: CupertinoActionSheetAction(
-        child: const Text(
-          '닫기',
-          style: kmain,
-        ),
-        isDefaultAction: true,
-        onPressed: () {
-          Get.back();
-        },
-      ),
-      actions: [
-        CupertinoActionSheetAction(
-          child: Text(
-            value1,
-            style: kmain.copyWith(
-              color: isValue1Red ? rankred : mainblack,
+      cancelButton: GetBack != null
+          ? CupertinoActionSheetAction(
+              child: const Text(
+                "닫기",
+                style: kmainbold,
+              ),
+              isDefaultAction: true,
+              onPressed: () {
+                Get.back();
+              },
+            )
+          :
+          // CustomExpandedButton(onTap: func3 != null ? func3 : () {}, isBlue: isBlue, title: 계, isBig: isBig)
+          Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: rankred,
+              ),
+              child: CupertinoActionSheetAction(
+                  child: const Text(
+                    "계정 신고하기",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      height: 1,
+                      color: mainWhite,
+                      fontFamily: 'NotoSansKR',
+                    ),
+                  ),
+                  isDefaultAction: true,
+                  onPressed: func3 != null ? func3 : () {}),
             ),
+      actions: [
+        Container(
+          color: mainWhite,
+          child: CupertinoActionSheetAction(
+            child: Text(
+              value1,
+              style: kmainbold.copyWith(
+                color: isValue1Red ? rankred : mainWhite,
+              ),
+            ),
+            onPressed: func1,
           ),
-          onPressed: func1,
         ),
         if (isOne == false)
           CupertinoActionSheetAction(
               child: Text(
                 value2,
-                style: kmain.copyWith(
-                  color: isValue2Red ? rankred : mainblack,
+                style: kmainbold.copyWith(
+                  color: isValue2Red ? rankred : mainWhite,
                 ),
               ),
-              onPressed: func2)
+              onPressed: func2 != null ? func2 : () {})
       ],
     ),
   );
@@ -468,24 +497,30 @@ void showModalIOSText(
     builder: (context) => CupertinoActionSheet(
       cancelButton: Column(children: []),
       actions: [
-        CupertinoActionSheetAction(
-          child: Text(
-            value1,
-            style: kmain.copyWith(
-              color: isValue1Red ? rankred : mainblack,
+        Container(
+          color: rankred,
+          child: CupertinoActionSheetAction(
+            child: Text(
+              value1,
+              style: kmain.copyWith(
+                color: isValue1Red ? rankred : mainblack,
+              ),
             ),
+            onPressed: func1,
           ),
-          onPressed: func1,
         ),
         if (isOne == false)
-          CupertinoActionSheetAction(
-              child: Text(
-                value2,
-                style: kmain.copyWith(
-                  color: isValue2Red ? rankred : mainblack,
+          Container(
+            color: mainWhite,
+            child: CupertinoActionSheetAction(
+                child: Text(
+                  value2,
+                  style: kmain.copyWith(
+                    color: isValue2Red ? rankred : mainblack,
+                  ),
                 ),
-              ),
-              onPressed: func2)
+                onPressed: func2),
+          )
       ],
     ),
   );
@@ -595,6 +630,7 @@ void showButtonDialog({
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
+              width: 300,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8), color: mainWhite),
@@ -650,6 +686,7 @@ void showButtonDialog({
                               isBlue: true,
                               title: rightText,
                               textColor: highlightColor,
+                              boxColor: rankred,
                               isBig: true)),
                     ],
                   ),
@@ -822,6 +859,7 @@ void showTextFieldDialog({
                     isBlue: true,
                     title: completeText,
                     textColor: highlightColor,
+                    boxColor: rankred,
                     isBig: true)),
           ],
         ),

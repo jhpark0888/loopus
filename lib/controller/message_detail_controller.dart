@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_list_view/flutter_list_view.dart';
@@ -14,6 +15,8 @@ import 'package:loopus/model/socket_message_model.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:web_socket_channel/io.dart';
+
+import '../model/httpresponse_model.dart';
 
 class MessageDetailController extends GetxController
     with WidgetsBindingObserver {

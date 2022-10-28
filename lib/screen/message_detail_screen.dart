@@ -13,6 +13,7 @@ import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/api/chat_api.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
@@ -40,15 +41,17 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqlite_viewer/sqlite_viewer.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../utils/error_control.dart';
+
 enum EnterRoute { popUp, messageScreen, otherProfile }
 
 class MessageDetatilScreen extends StatelessWidget {
-  MessageDetatilScreen(
-      {Key? key,
-      required this.partner,
-      required this.myProfile,
-      required this.enterRoute})
-      : super(key: key);
+  MessageDetatilScreen({
+    Key? key,
+    required this.partner,
+    required this.myProfile,
+    required this.enterRoute,
+  }) : super(key: key);
   User partner;
   User myProfile;
   EnterRoute enterRoute;
@@ -86,50 +89,83 @@ class MessageDetatilScreen extends StatelessWidget {
               GestureDetector(
                 onTap: () async {
                   showModalIOS(context, func1: () {
-                    int roomId = controller.roomid;
-                    if (controller.messageList.isNotEmpty) {
-                      deleteChatRoom(controller.roomid, myProfile.userId,
-                              int.parse(controller.messageList.last.messageId!))
-                          .then((value) {
-                        if (value.isError == false) {
-                          SQLController.to.deleteMessage(roomId);
-                          SQLController.to.deleteMessageRoom(roomId);
-                          SQLController.to.deleteUser(partner.userId);
-                          if (Get.isRegistered<MessageController>()) {
-                            MessageController.to.searchRoomList.removeAt(
-                                MessageController.to.searchRoomList.indexWhere(
-                                    (messageRoom) =>
-                                        messageRoom.chatRoom.value.roomId ==
-                                        roomId));
-                            MessageController.to.chattingRoomList.removeAt(
-                                MessageController.to.chattingRoomList
-                                    .indexWhere((messageRoom) =>
-                                        messageRoom.chatRoom.value.roomId ==
-                                        roomId));
-                          }
-                          Get.back();
-                          if (enterRoute == EnterRoute.popUp) {
-                            Get.off(() => MessageScreen());
+                    showButtonDialog(
+                        leftText: '취소',
+                        rightText: '나가기',
+                        title: '메세지 나가기',
+                        startContent:
+                            '정말 메세지를 전체 삭제한 후 나가시겠어요? \n 이후 메세지는 복구 할 수 없어요.',
+                        leftFunction: () => Get.back(),
+                        rightFunction: () {
+                          int roomId = controller.roomid;
+                          if (controller.messageList.isNotEmpty) {
+                            deleteChatRoom(
+                                    controller.roomid,
+                                    myProfile.userId,
+                                    int.parse(
+                                        controller.messageList.last.messageId!))
+                                .then((value) {
+                              if (value.isError == false) {
+                                SQLController.to.deleteMessage(roomId);
+                                SQLController.to.deleteMessageRoom(roomId);
+                                SQLController.to.deleteUser(partner.userId);
+                                if (Get.isRegistered<MessageController>()) {
+                                  MessageController.to.searchRoomList.removeAt(
+                                      MessageController.to.searchRoomList
+                                          .indexWhere((messageRoom) =>
+                                              messageRoom
+                                                  .chatRoom.value.roomId ==
+                                              roomId));
+                                  MessageController.to.chattingRoomList
+                                      .removeAt(MessageController
+                                          .to.chattingRoomList
+                                          .indexWhere((messageRoom) =>
+                                              messageRoom
+                                                  .chatRoom.value.roomId ==
+                                              roomId));
+                                }
+                                Get.back();
+                                if (enterRoute == EnterRoute.popUp) {
+                                  Get.off(() => MessageScreen());
+                                } else {
+                                  Get.back();
+                                }
+                              }
+                            });
                           } else {
                             Get.back();
+                            if (enterRoute == EnterRoute.popUp) {
+                              Get.off(() => MessageScreen());
+                            } else {
+                              Get.back();
+                            }
                           }
-                        }
-                      });
-                    } else {
-                      Get.back();
-                      if (enterRoute == EnterRoute.popUp) {
-                        Get.off(() => MessageScreen());
-                      } else {
-                        Get.back();
-                      }
-                    }
-                  }, func2: () {
-                    Get.to(() => const DatabaseList());
+                        });
+                  }, func3: () {
+                    showTextFieldDialog(
+                        textEditingController: TextEditingController(),
+                        // leftText: '취소',
+                        // rightText: '신고하기',
+                        title: '계정 신고하기',
+                        hintText:
+                            '신고 내용을 입력해주세요. 관리자 확인 \n 이후 관련 약관에 따라 처리됩니다.\n ',
+                        completeText: '신고하기 ',
+                        leftFunction: () => Get.back(),
+                        rightFunction: () {
+                          userreport(controller.partnerId).then((value) {
+                            if (value.isError == false) {
+                              dialogBack(modalIOS: true);
+                              showCustomDialog("신고가 접수되었습니다", 1000);
+                            } else {
+                              errorSituation(value);
+                            }
+                          });
+                        });
                   },
                       value1: '메세지 나가기',
                       value2: '계정 신고하기',
                       isValue1Red: true,
-                      isValue2Red: false,
+                      isValue2Red: true,
                       isOne: true);
                 },
                 child: SizedBox(
