@@ -290,10 +290,10 @@ class UploadScreen extends StatelessWidget {
                                       Obx(
                                         () => Text(
                                           _imageController.headerTitle.value,
-                                          style: kmainbold,
+                                          style: kmain,
                                         ),
                                       ),
-                                      const SizedBox(width: 7),
+                                      const SizedBox(width: 8),
                                       SvgPicture.asset(
                                           'assets/icons/drop_icon.svg')
                                     ],

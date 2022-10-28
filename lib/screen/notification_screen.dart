@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
@@ -28,10 +29,11 @@ class NotificationScreen extends StatelessWidget {
           bottomBorder: false,
           title: '알림',
           actions: [
-            Center(
-                child: Row(children: [
-              SvgPicture.asset('assets/icons/appbar_more_option.svg')
-            ]))
+            IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset('assets/icons/appbar_more_option.svg'),
+              padding: EdgeInsets.zero,
+            )
           ],
         ),
         body: Obx(() => SmartRefresher(
@@ -74,188 +76,90 @@ class NotificationScreen extends StatelessWidget {
                         ? ErrorReloadWidget(reload: () {
                             controller.alarmRefresh();
                           })
-                        : ScrollNoneffectWidget(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    const SizedBox(height: 16),
-                                    if (controller.newalarmList.isNotEmpty)
-                                      _alarmListView(
-                                          "새로운 알림", controller.newalarmList),
-                                    if (controller.weekalarmList.isNotEmpty)
-                                      _alarmListView(
-                                          "이번 주", controller.weekalarmList),
-                                    if (controller.monthalarmList.isNotEmpty)
-                                      _alarmListView(
-                                          "이번 달", controller.monthalarmList),
-                                    if (controller.oldalarmList.isNotEmpty)
-                                      _alarmListView(
-                                          "지난 알림", controller.oldalarmList),
-                                  ]),
-                            ),
-                          )
-            // CustomScrollView(
-            //     physics: const BouncingScrollPhysics(),
-            // key: const PageStorageKey("key2"),
-            // slivers: [
-            //   controller.isfollowreqEmpty.value
-            //       ? SliverList(
-            //           delegate: SliverChildBuilderDelegate(
-            //               (context, index) {
-            //             return Container(
-            //               width: Get.width,
-            //               height: Get.height * 0.75,
-            //               child: Center(
-            //                 child: Text(
-            //                   '아직 팔로우한 학생이 없어요',
-            //                   style: kSubTitle3Style.copyWith(
-            //                     color: mainblack.withOpacity(0.38),
-            //                   ),
-            //                 ),
-            //               ),
-            //             );
-            //           }, childCount: 1),
-            //         )
-            //       : Obx(
-            //           () => SliverList(
-            //               delegate: SliverChildBuilderDelegate(
-            //                   (context, index) {
-            //             return controller
-            //                         .followreqscreenstate.value ==
-            //                     ScreenState.loading
-            //                 ? Padding(
-            //                     padding: EdgeInsets.zero,
-            //                     child: Column(
-            //                       children: [
-            //                         SizedBox(
-            //                           height: 20,
-            //                         ),
-            //                         Image.asset(
-            //                           'assets/icons/loading.gif',
-            //                           scale: 6,
-            //                         ),
-            //                       ],
-            //                     ),
-            //                   )
-            //                 : controller.followreqscreenstate
-            //                             .value ==
-            //                         ScreenState.disconnect
-            //                     ? DisconnectReloadWidget(
-            //                         reload: () {
-            //                         controller.followreqRefresh();
-            //                       })
-            //                     : controller.followreqscreenstate
-            //                                 .value ==
-            //                             ScreenState.disconnect
-            //                         ? ErrorReloadWidget(reload: () {
-            //                             controller
-            //                                 .followreqRefresh();
-            //                           })
-            //                         : Dismissible(
-            //                             background: Container(
-            //                               color: rankred,
-            //                               child: Row(
-            //                                   mainAxisAlignment:
-            //                                       MainAxisAlignment
-            //                                           .end,
-            //                                   children: [
-            //                                     Padding(
-            //                                       padding: EdgeInsets
-            //                                           .only(
-            //                                               right:
-            //                                                   16),
-            //                                       child: SvgPicture
-            //                                           .asset(
-            //                                               'assets/icons/Trash.svg'),
-            //                                     )
-            //                                   ]),
-            //                             ),
-            //                             direction: DismissDirection
-            //                                 .endToStart,
-            //                             onDismissed: (direction) {
-            //                               deleteNotification(
-            //                                   controller
-            //                                       .followalarmlist[
-            //                                           index]
-            //                                       .notification
-            //                                       .id);
-            //                               controller.followalarmlist
-            //                                   .removeAt(index);
-            //                               if (controller
-            //                                   .followalarmlist
-            //                                   .isEmpty) {
-            //                                 controller
-            //                                     .isfollowreqEmpty(
-            //                                         true);
-            //                               }
-            //                             },
-            //                             child: controller
-            //                                 .followalarmlist[index],
-            //                             key: controller
-            //                                 .followalarmlist[index]
-            //                                 .key!,
-            //                           );
-            //           },
-            //                   childCount: controller
-            //                               .followreqscreenstate
-            //                               .value ==
-            //                           ScreenState.success
-            //                       ? controller
-            //                           .followalarmlist.length
-            //                       : 1)),
-            //         )
-            // ]),
-            // )),
-            //   ],
-            // ),
-            //   ),
-            // ),
-            )));
+                        : controller.alarmlist.isEmpty ||
+                                (controller.oldalarmList.isEmpty &&
+                                    controller.newalarmList.isEmpty &&
+                                    controller.weekalarmList.isEmpty &&
+                                    controller.monthalarmList.isEmpty)
+                            ? Center(
+                                child: Text(
+                                '받은 알림이 없어요',
+                                style: kmainheight.copyWith(color: maingray),
+                              ))
+                            : ScrollNoneffectWidget(
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        const SizedBox(height: 16),
+                                        if (controller.newalarmList.isNotEmpty)
+                                          _alarmListView("새로운 알림",
+                                              controller.newalarmList),
+                                        if (controller.weekalarmList.isNotEmpty)
+                                          _alarmListView(
+                                              "이번 주", controller.weekalarmList),
+                                        if (controller
+                                            .monthalarmList.isNotEmpty)
+                                          _alarmListView("이번 달",
+                                              controller.monthalarmList),
+                                        if (controller.oldalarmList.isNotEmpty)
+                                          _alarmListView(
+                                              "지난 알림", controller.oldalarmList),
+                                      ]),
+                                ),
+                              ))));
   }
 
   Widget _alarmListView(String title, List<NotificationModel> alarmList) {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Padding(
-        padding: const EdgeInsets.only(left: 16),
+        padding: const EdgeInsets.only(left: 16, right: 16),
         child: Text(
           title,
           style: kmainheight.copyWith(color: maingray),
           textAlign: TextAlign.start,
         ),
       ),
-      ListView.separated(
-        padding: const EdgeInsets.only(bottom: 24, top: 24),
-        shrinkWrap: true,
-        primary: false,
-        itemBuilder: (context, index) {
-          return Dismissible(
-            key: UniqueKey(),
-            child: NotificationWidget(
+      SlidableAutoCloseBehavior(
+        closeWhenOpened: true,
+        closeWhenTapped: true,
+        child: ListView.separated(
+          padding: const EdgeInsets.only(bottom: 24, top: 24),
+          shrinkWrap: true,
+          primary: false,
+          itemBuilder: (context, index) {
+            return NotificationWidget(
               notification: alarmList[index],
               isnewAlarm: false.obs,
-            ),
-            onDismissed: (direction) {
-              deleteNotification(alarmList[index].id).then((value) {
-                if (value.isError == false) {
-                  alarmList.removeAt(index);
-                }
-              });
-            },
-            direction: DismissDirection.endToStart,
-            background: Container(
-              color: rankred,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [SvgPicture.asset('assets/icons/trash_icon.svg')]),
-            ),
-          );
-        },
-        itemCount: alarmList.length,
-        separatorBuilder: (context, index) {
-          return const SizedBox(height: 24);
-        },
+            );
+            //  Dismissible(
+            //   key: UniqueKey(),
+            //   child: NotificationWidget(
+            //     notification: alarmList[index],
+            //     isnewAlarm: false.obs,
+            //   ),
+            //   onDismissed: (direction) {
+            //     deleteNotification(alarmList[index].id).then((value) {
+            //       if (value.isError == false) {
+            //         alarmList.removeAt(index);
+            //       }
+            //     });
+            //   },
+            //   direction: DismissDirection.endToStart,
+            //   background: Container(
+            //     color: rankred,
+            //     child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.end,
+            //         children: [SvgPicture.asset('assets/icons/trash_icon.svg')]),
+            //   ),
+            // );
+          },
+          itemCount: alarmList.length,
+          separatorBuilder: (context, index) {
+            return const SizedBox(height: 24);
+          },
+        ),
       ),
     ]);
   }

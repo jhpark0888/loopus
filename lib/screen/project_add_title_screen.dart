@@ -13,6 +13,7 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/project_add_controller.dart';
 import 'package:loopus/controller/project_detail_controller.dart';
+import 'package:loopus/controller/select_project_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/project_model.dart';
@@ -45,6 +46,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBarWidget(
+          leading: IconButton(onPressed: (){Get.back();}, icon: SvgPicture.asset('assets/icons/appbar_exit.svg'), padding: EdgeInsets.zero,),
           bottomBorder: false,
           actions: [
             screenType == Screentype.add
@@ -68,7 +70,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
 
                             Project project = Project.fromJson(value.data);
                             project.is_user = 1;
-
+                            SelectProjectController.to.selectprojectlist.insert(0, project);
                             if (Get.isRegistered<ProfileController>()) {
                               ProfileController.to.myProjectList.add(project);
                               // ProfileController.to.careerPagenums.add(1);
@@ -182,11 +184,11 @@ class ProjectAddTitleScreen extends StatelessWidget {
             ),
             LabelTextFieldWidget(
                 label: "커리어 이름",
-                hintText: "커리어 이름을 입력하세요",
-                maxLength: 15,
+                hintText: "커리어 이름을 입력하세요(최대 20글자)",
+                maxLength: 20,
                 textController: _controller.projectnamecontroller),
             const SizedBox(
-              height: 16,
+              height: 18,
             ),
             if (screenType == Screentype.add)
               Padding(
@@ -198,12 +200,16 @@ class ProjectAddTitleScreen extends StatelessWidget {
                     },
                     child: Row(
                       children: [
+                        _controller.isPublic.value ?
                         SvgPicture.asset(
+                          "assets/icons/uncheck_icon.svg",
+                          width: 18,
+                          height: 18,
+                        ) : SvgPicture.asset(
                           "assets/icons/check_icon.svg",
                           width: 18,
                           height: 18,
-                          color: _controller.isPublic.value ? null : maingray,
-                        ),
+                        ) ,
                         const SizedBox(
                           width: 8,
                         ),
@@ -219,7 +225,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 ),
               ),
             const SizedBox(
-              height: 16,
+              height: 18,
             ),
             Obx(() => _controller.selectCompany.value.name == ""
                 ? GestureDetector(

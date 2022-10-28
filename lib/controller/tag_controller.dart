@@ -52,16 +52,19 @@ class TagController extends GetxController {
     });
   }
 
-  void tagSearchFunction() async{
+  void tagSearchFunction() async {
     await tagsearch(_searchword.value).then((value) {
       if (value.isError == false) {
-        if(Get.isRegistered<PostingAddController>()){
+        if (Get.isRegistered<PostingAddController>()) {
           Get.find<PostingAddController>().getTagList.value = true;
         }
         List<Tag> taglist = List.from(value.data["results"])
             .map((map) => Tag.fromJson(map))
             .toList();
+            if(_searchword.value != ''){
+        taglist.add(Tag(tag: _searchword.value, tagId: 0, count: 0));}
 
+        print(taglist);
         if (taglist
             .where((element) => element.tag == _searchword.value)
             .isNotEmpty) {

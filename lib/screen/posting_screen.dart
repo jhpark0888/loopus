@@ -112,109 +112,106 @@ class PostingScreen extends StatelessWidget {
   }
 
   Widget _buildTextComposer() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Obx(
-          () => controller.selectedCommentId.value != 0
-              ? Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          top: BorderSide(
-                    color: dividegray,
-                    width: 0.3,
-                  ))),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  height: 44,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '     ${controller.tagUser.value.name}님에게 답글을 남기는 중',
-                        style: kmain.copyWith(color: maingray),
-                      ),
-                    ],
-                  ))
-              : Container(),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: mainWhite,
-            border: Border(
-              top: BorderSide(
-                width: 0.3,
-                color: dividegray,
-              ),
+    return Container(
+      decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: dividegray, width: 1))),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Obx(
+            () => controller.selectedCommentId.value != 0
+                ? Container(
+                    padding: const EdgeInsets.fromLTRB(24, 6.5, 0, 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: '@${controller.tagUser.value.name}',
+                              style: kmainbold.copyWith(color: maingray)),
+                          TextSpan(
+                              text: '님에게 대댓글 남기는중',
+                              style: kmain.copyWith(color: maingray))
+                        ])),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        SizedBox(
+                            width: 9,
+                            height: 9,
+                            child: IconButton(
+                              icon: SvgPicture.asset(
+                                  'assets/icons/reply_exit_icon.svg'),
+                              onPressed: () {controller.tagdelete();},
+                              padding: EdgeInsets.zero,
+                            ))
+                      ],
+                    ))
+                : Container(),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: mainWhite,
             ),
-          ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 12,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  cursorWidth: 1.2,
-                  style: const TextStyle(decoration: TextDecoration.none),
-                  cursorColor: mainblack,
-                  controller: controller.commentController,
-                  focusNode: controller.commentFocus,
-                  autofocus: autofocus,
-                  onFieldSubmitted: _commentSubmitted,
-                  minLines: 1,
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                    prefix: controller.tagUser.value.userId == 0
-                        ? null
-                        : Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 2),
-                            height: 22,
-                            decoration: BoxDecoration(
-                                // color: mainWhite,
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Text(
-                              '@${controller.tagUser.value.name}',
-                              style: kmainbold,
-                            ),
-                          ),
-                    contentPadding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
-                      ),
-                    ),
-                    hintText: "댓글 입력",
-                    hintStyle: kmain.copyWith(color: maingray),
-                    fillColor: lightcardgray,
-                    filled: true,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 14,
-              ),
-              Obx(
-                () => controller.isCommentLoading.value
-                    ? const LoadingWidget()
-                    : GestureDetector(
-                        onTap: () => _commentSubmitted(
-                            controller.commentController.text),
-                        child: SvgPicture.asset(
-                          "assets/icons/enter.svg",
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 7,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    cursorWidth: 1.2,
+                    style: const TextStyle(decoration: TextDecoration.none),
+                    cursorColor: mainblack,
+                    controller: controller.commentController,
+                    focusNode: controller.commentFocus,
+                    autofocus: autofocus,
+                    onFieldSubmitted: _commentSubmitted,
+                    minLines: 1,
+                    maxLines: 5,
+                    onChanged: (a) {
+                      print(a);
+                    },
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
                         ),
                       ),
-              )
-            ],
+                      hintText: "댓글 입력",
+                      hintStyle: kmain.copyWith(color: maingray),
+                      fillColor: lightcardgray,
+                      filled: true,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 14,
+                ),
+                Obx(
+                  () => controller.isCommentLoading.value
+                      ? const LoadingWidget()
+                      : GestureDetector(
+                          onTap: () => _commentSubmitted(
+                              controller.commentController.text),
+                          child: SvgPicture.asset(
+                            "assets/icons/enter.svg",
+                          ),
+                        ),
+                )
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

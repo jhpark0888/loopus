@@ -44,7 +44,7 @@ class NotificationDetailController extends GetxController {
 
   Future alarmRefresh() async {
     notificationscreenstate(ScreenState.loading);
-    
+
     alarmlist.value = [];
     newalarmList.value = [];
     weekalarmList.value = [];
@@ -165,6 +165,18 @@ class NotificationDetailController extends GetxController {
         oldalarmList.add(noti);
       }
     });
+  }
+
+  void removeNoti(NotificationModel noti) {
+    if (newalarmList.contains(noti) == true) {
+      newalarmList.remove(noti);
+    } else if (weekalarmList.contains(noti) == true) {
+      weekalarmList.remove(noti);
+    } else if (monthalarmList.contains(noti) == true) {
+      monthalarmList.remove(noti);
+    } else{
+      oldalarmList.remove(noti);
+    }
   }
 
   String notiDurationCaculate({
