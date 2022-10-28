@@ -126,8 +126,8 @@ class MessageDetatilScreen extends StatelessWidget {
                   }, func2: () {
                     Get.to(() => const DatabaseList());
                   },
-                      value1: '채팅방 나가기',
-                      value2: '',
+                      value1: '메세지 나가기',
+                      value2: '계정 신고하기',
                       isValue1Red: true,
                       isValue2Red: false,
                       isOne: true);
@@ -241,7 +241,7 @@ class MessageDetatilScreen extends StatelessWidget {
 
   Widget sendField() {
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
+      padding: EdgeInsets.fromLTRB(20, 12, 20, 34),
       decoration: BoxDecoration(
           border: Border(top: BorderSide(width: 1, color: dividegray))),
       child: Row(

@@ -11,11 +11,7 @@ import 'package:loopus/model/httpresponse_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/model/post_model.dart';
 
-//type: main(포스팅 및 사람), school or group(사람 순위 100명까지)
-
-Future<HTTPResponse> getCompanyInfo(
-    // String id,
-    {
+Future<HTTPResponse> getScoutCompanySearch({
   required int page,
   String query = "",
   required String fieldId,
@@ -38,29 +34,20 @@ Future<HTTPResponse> getCompanyInfo(
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
-        // List<Post> topPostList = responseBody.map((post) {
-        //   return Post.fromJson(post);
-        // }).toList();
         return HTTPResponse.success(responseBody);
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
     } on SocketException {
-      // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
-      print(e);
+      print("스카우트 리포트 기업 정보 로드: $e");
       return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
     }
   }
 }
 
-Future<HTTPResponse> getRecommandCompanys(
-    // String id,
-    {
-  required String fieldId,
-}) async {
+Future<HTTPResponse> getRecommandCompanys() async {
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {
@@ -69,8 +56,7 @@ Future<HTTPResponse> getRecommandCompanys(
     String? token = await const FlutterSecureStorage().read(key: "token");
 
     // print(userid);
-    final _url =
-        Uri.parse("$serverUri/scout_api/recommendation_company?type=10");
+    final _url = Uri.parse("$serverUri/scout_api/recommendation_company");
 
     try {
       http.Response response =
@@ -90,7 +76,7 @@ Future<HTTPResponse> getRecommandCompanys(
       // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();
     } catch (e) {
-      print(e);
+      print("스카우트 리포트 추천 기업 정보 로드: $e");
       return HTTPResponse.unexpectedError(e);
       // ErrorController.to.isServerClosed(true);
     }

@@ -50,6 +50,8 @@ class SearchFocusScreen extends StatelessWidget {
                   hinttext: '검색',
                   ontap: () {},
                   readonly: false,
+                  focusNode: _searchController.focusNode,
+                  autofocus: true,
                   controller: _searchController.searchtextcontroller,
                 )),
                 const SizedBox(width: 8),
