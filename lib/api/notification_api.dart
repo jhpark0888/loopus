@@ -32,7 +32,7 @@ Future<void> getNotificationlist(String type, int lastindex) async {
 
     var uri = Uri.parse("$serverUri/user_api/alarm?type=$type&last=$lastindex");
 
-    try {
+    // try {
       http.Response response =
           await http.get(uri, headers: {"Authorization": "Token $token"});
 
@@ -84,12 +84,12 @@ Future<void> getNotificationlist(String type, int lastindex) async {
         }
         return Future.error(response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-    }
+    // } on SocketException {
+    //   // ErrorController.to.isServerClosed(true);
+    // } catch (e) {
+    //   print(e);
+    //   // ErrorController.to.isServerClosed(true);
+    // }
   }
 }
 

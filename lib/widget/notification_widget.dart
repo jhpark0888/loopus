@@ -4,12 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loopus/api/notification_api.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/follow_people_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/notification_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/notification_model.dart';
+import 'package:loopus/model/project_model.dart';
+import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/group_career_detail_screen.dart';
+import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/trash_bin/project_screen.dart';
@@ -145,9 +150,9 @@ class NotificationWidget extends StatelessWidget {
                       //     style: kSubTitle1Style),
                       TextSpan(
                         text: notification.type == NotificationType.careerTag
-                            ? " 활동에 회원님을 태그했습니다."
+                            ? " '${notification.contents!.content}' 커리어에 회원님을 초대했습니다."
                             : notification.type == NotificationType.postLike
-                                ? '회원님의 포스트를 좋아합니다'
+                                ? '회원님의 포스트를 좋아합니다.'
                                 : notification.type ==
                                         NotificationType.commentLike
                                     ? '회원님의 댓글을 좋아합니다.'
@@ -210,7 +215,15 @@ class NotificationWidget extends StatelessWidget {
 
   void clicknotice() async {
     if (notification.type == NotificationType.careerTag) {
-      // Get.to(() => ProjectScreen(projectid: notification.targetId, isuser: 0));
+      late Project career;
+      loading();
+      getproject(notification.targetId, notification.userId).then((value) {
+        if(value.isError == false){
+        Get.back();
+        career = value.data;
+        Future.delayed(const Duration(milliseconds: 300));
+        Get.to(() => GroupCareerDetailScreen(career: career, name: (notification.user.name)));
+      }});
     } else if (notification.type == NotificationType.postLike) {
       Get.to(
           () => PostingScreen(
@@ -223,18 +236,18 @@ class NotificationWidget extends StatelessWidget {
     } else if (notification.type == NotificationType.follow) {
       Get.to(() => OtherProfileScreen(
           userid: notification.targetId, realname: notification.user.name));
-    } else if (notification.type.name.contains('comment') ||
-        notification.type.name.contains('reply')) {
+    } else if (notification.type.name.contains('reply')) {
       //다른 화면으로 이동함
       //서버에서 잘못 주는 듯
       Get.to(() => PostingScreen(
             postid: notification.contents!.postId,
             post: null,
           ));
+    }else if(notification.type.name.contains('comment')){
+      Get.to(() => PostingScreen(postid: notification.targetId));
     }
 
     if (notification.isread.value == false) {
-      print('실행되었다.');
       notification.isread.value = true;
       isRead(
         notification.targetId,

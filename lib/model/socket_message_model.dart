@@ -74,9 +74,9 @@ class ChatRoom {
 
   factory ChatRoom.fromMsg(Map<String, dynamic> json) => ChatRoom(
         message: Chat(
-                content: json['content'],
+                content: json['content'] != null ? json['content'] : '',
                 sendsuccess: 'true'.obs,
-                date: DateTime.parse(json['date']),
+                date: json['date'] != null ? DateTime.parse(json['date']) : DateTime.now(),
                 sender: json['sender'],
                 isRead: false.obs,
                 messageId: json['id'],

@@ -64,10 +64,17 @@ class ScoutScreen extends StatelessWidget {
       color: colors.isNotEmpty
                 ? colors[_currentIndex.value].color
                 : Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          Text("당신에게 '집-중'하고 있는 추천 기업",
+          
+          Container(
+            width: Get.width,
+            height: 200,
+            color: colors.isNotEmpty
+                ? colors[_currentIndex.value].color
+                : Colors.white,
+            child:Column(children: [
+              Text("당신에게 '집-중'하고 있는 추천 기업",
               style: kmainbold.copyWith(color: mainWhite)),
           SizedBox(height: 14),
           Text(contact.slogan,
@@ -75,43 +82,37 @@ class ScoutScreen extends StatelessWidget {
           SizedBox(height: 14),
           Text(contact.recommendation, style: kmain.copyWith(color: mainWhite)),
           SizedBox(height: 24),
-          Container(
-            width: Get.width,
-            height: 200,
-            color: colors.isNotEmpty
-                ? colors[_currentIndex.value].color
-                : Colors.white,
-            child: Stack(
-              children: [
-                Container(
-                  width: Get.width,
-                  height: 120,
-                  child: PageView(
-                      controller: _pController,
-                      onPageChanged: (index) {
-                        _currentIndex.value = index;
-                      },
-                      children: images
-                          .map((image) => Container(
-                                width: 321,
-                                height: 120,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 14),
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 7),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  image: DecorationImage(               
-                                      image: NetworkImage(image),
-                                      fit: BoxFit.cover),
-                                ),
-                              ))
-                          .toList(),
-                    ),
-                ),
-              ],
-            ),
+            ],)
           ),
+           Positioned(
+            top:90,
+             child: Container(
+               width: Get.width,
+               height: 120,
+               child: PageView(
+                   controller: _pController,
+                   onPageChanged: (index) {
+                     _currentIndex.value = index;
+                   },
+                   children: images
+                       .map((image) => Container(
+                             width: 321,
+                             height: 120,
+                             padding:
+                                 const EdgeInsets.symmetric(horizontal: 14),
+                             margin:
+                                 const EdgeInsets.symmetric(horizontal: 7),
+                             decoration: BoxDecoration(
+                               borderRadius: BorderRadius.circular(8.0),
+                               image: DecorationImage(               
+                                   image: NetworkImage(image),
+                                   fit: BoxFit.cover),
+                             ),
+                           ))
+                       .toList(),
+                 ),
+             ),
+           ),
         ],
       ),
     );

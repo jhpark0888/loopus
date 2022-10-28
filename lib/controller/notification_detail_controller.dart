@@ -40,17 +40,18 @@ class NotificationDetailController extends GetxController {
 
   void alarmRefresh() async {
     notificationscreenstate(ScreenState.loading);
-    alarmlist.clear();
-    followalarmlist.clear();
-    newalarmList.clear();
-    weekalarmList.clear();
-    monthalarmList.clear();
-    oldalarmList.clear();
+    
+    alarmlist.value = [];
+    followalarmlist.value = [];
+    newalarmList.value = [];
+    weekalarmList.value = [];
+    monthalarmList.value = [];
+    oldalarmList.value = [];
     isalarmEmpty(false);
     enablealarmPullup.value = true;
 
     await alarmloadItem();
-    await followreqloadItem();
+    // await followreqloadItem();
     sortAlarmList(alarmlist + followalarmlist);
     alarmRefreshController.refreshCompleted();
   }
@@ -58,7 +59,7 @@ class NotificationDetailController extends GetxController {
   void alarmLoading() async {
     //페이지 처리
     await alarmloadItem();
-    await followreqloadItem();
+    // await followreqloadItem();
     sortAlarmList(alarmlist + followalarmlist);
     alarmRefreshController.loadComplete();
   }
