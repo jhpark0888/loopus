@@ -170,7 +170,7 @@ class Person extends User {
           followerCount: followerCount ?? 0.obs,
           followingCount: followingCount ?? 0.obs,
           totalposting: totalposting ?? 0,
-          fieldId: fieldId ?? "10",
+          fieldId: fieldId ?? "16",
           isuser: isuser ?? 0,
           rank: rank ?? 0,
           lastRank: lastRank ?? 0,
@@ -220,7 +220,7 @@ class Person extends User {
         profileTag: json["profile_tag"] != null
             ? List<Tag>.from(json["profile_tag"].map((x) => Tag.fromJson(x)))
             : [],
-        fieldId: json["group"] != null ? json["group"].toString() : "10",
+        fieldId: json["group"] != null ? json["group"].toString() : "16",
         univName: json["school"] != null
             ? json['school']['school_name']
             : json["school_name"] ?? '',

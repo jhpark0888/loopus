@@ -26,14 +26,14 @@ class MessageScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBarWidget(
           bottomBorder: false,
-          title: '메시지',
-          actions: [
-            GestureDetector(
-                onTap: () {
-                  Get.to(() => DatabaseList());
-                },
-                child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))
-          ],
+          title: '메세지',
+          // actions: [
+          //   GestureDetector(
+          //       onTap: () {
+          //         Get.to(() => DatabaseList());
+          //       },
+          //       child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))
+          // ],
         ),
         // body: Obx(
         //   () => messageController.chatroomscreenstate.value ==
@@ -77,70 +77,73 @@ class MessageScreen extends StatelessWidget {
         // child:
         body: Obx(() => messageController.chatroomscreenstate.value ==
                 ScreenState.success
-            ? messageController.searchRoomList.isNotEmpty
-                ? Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                            height: 36,
-                            child: SearchTextFieldWidget(
-                              ontap: () {},
-                              hinttext: '검색',
-                              readonly: false,
-                              controller: messageController.searchName,
-                              onchanged: (name) {
-                                if (name.trim() != '') {
-                                  messageController.searchRoomList.value =
-                                      messageController.chattingRoomList
-                                          .where((chattingRoom) => chattingRoom
-                                              .user.value.name
-                                              .contains(name))
-                                          .toList();
-                                } else {
-                                  messageController.searchRoomList.value =
-                                      messageController.chattingRoomList;
-                                }
-                              },
-                            )),
-                        const SizedBox(height: 12),
-                        Expanded(
-                          child: SlidableAutoCloseBehavior(
-                            closeWhenOpened: true,
-                            closeWhenTapped: true,
-                            child: ListView.builder(
-                              shrinkWrap: false,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.only(bottom: 24),
-                              // separatorBuilder: (context, index) {
-                              //   return const SizedBox(height: 24);
-                              // },
-                              itemBuilder: (context, index) {
-                                return messageController.searchRoomList[index];
-                              },
-                              itemCount:
-                                  messageController.searchRoomList.length,
+            ? Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                        height: 36,
+                        child: SearchTextFieldWidget(
+                          ontap: () {},
+                          hinttext: '검색',
+                          readonly: false,
+                          controller: messageController.searchName,
+                          onchanged: (name) {
+                            if (name.trim() != '') {
+                              messageController.searchRoomList.value =
+                                  messageController.chattingRoomList
+                                      .where((chattingRoom) => chattingRoom
+                                          .user.value.name
+                                          .contains(name))
+                                      .toList();
+                            } else {
+                              messageController.searchRoomList.value =
+                                  messageController.chattingRoomList;
+                            }
+                          },
+                        )),
+                    const SizedBox(height: 16),
+                    messageController.searchRoomList.isNotEmpty
+                        ? Expanded(
+                            child: SlidableAutoCloseBehavior(
+                              closeWhenOpened: true,
+                              closeWhenTapped: true,
+                              child: ListView.builder(
+                                shrinkWrap: false,
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: const EdgeInsets.only(bottom: 24),
+                                // separatorBuilder: (context, index) {
+                                //   return const SizedBox(height: 24);
+                                // },
+                                itemBuilder: (context, index) {
+                                  return messageController
+                                      .searchRoomList[index];
+                                },
+                                itemCount:
+                                    messageController.searchRoomList.length,
+                              ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : Container(
-                    width: Get.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '메시지 목록이 비어있어요',
-                          style: kmain.copyWith(
-                            color: mainblack.withOpacity(0.38),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
+                          )
+                        : Expanded(
+                            child: SizedBox(
+                              width: Get.width,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '메시지 목록이 비어있어요',
+                                    style: kmain.copyWith(
+                                      color: mainblack.withOpacity(0.38),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                  ],
+                ),
+              )
             : const Center(child: LoadingWidget())));
   }
 }

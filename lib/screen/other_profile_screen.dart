@@ -37,19 +37,17 @@ import 'package:pull_to_refresh/pull_to_refresh.dart' as sr;
 import '../controller/hover_controller.dart';
 
 class OtherProfileScreen extends StatelessWidget {
-  OtherProfileScreen(
-      {Key? key,
-      this.user,
-      required this.userid,
-      required this.realname,
-      this.careerName})
-      : super(key: key);
-  String? careerName;
+  OtherProfileScreen({
+    Key? key,
+    this.user,
+    required this.userid,
+    required this.realname,
+  }) : super(key: key);
   late final OtherProfileController _controller = Get.put(
       OtherProfileController(
-          userid: userid,
-          otherUser: user != null ? user!.obs : Person.defaultuser().obs,
-          careerName: careerName),
+        userid: userid,
+        otherUser: user != null ? user!.obs : Person.defaultuser().obs,
+      ),
       tag: userid.toString());
 
   // final ImageController imageController = Get.put(ImageController());
@@ -422,7 +420,8 @@ class OtherProfileScreen extends StatelessWidget {
         const SizedBox(
           height: 14,
         ),
-        if (_controller.otherUser.value.isuser != 1)
+        if (_controller.otherUser.value.userId !=
+            int.parse(HomeController.to.myId!))
           Column(
             children: [
               Padding(
@@ -431,30 +430,33 @@ class OtherProfileScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: CustomExpandedBoldButton(
-                        onTap: followMotion,
-                        isBlue: _controller.otherUser.value.followed.value ==
-                                    FollowState.follower ||
-                                _controller.otherUser.value.followed.value ==
-                                    FollowState.normal ||
-                                _controller.otherUser.value.banned ==
-                                    BanState.ban
-                            ? true
-                            : false,
-                        title: _controller.otherUser.value.banned ==
-                                BanState.ban
-                            ? '차단 해제'
-                            : _controller.otherUser.value.followed.value ==
-                                    FollowState.normal
-                                ? '팔로우'
-                                : _controller.otherUser.value.followed.value ==
-                                        FollowState.follower
-                                    ? '나도 팔로우하기'
-                                    : _controller.otherUser.value.followed
-                                                .value ==
-                                            FollowState.following
-                                        ? '팔로우 중'
-                                        : '팔로우 중',
+                      child: Obx(
+                        () => CustomExpandedBoldButton(
+                          onTap: followMotion,
+                          isBlue: _controller.otherUser.value.followed.value ==
+                                      FollowState.follower ||
+                                  _controller.otherUser.value.followed.value ==
+                                      FollowState.normal ||
+                                  _controller.otherUser.value.banned ==
+                                      BanState.ban
+                              ? true
+                              : false,
+                          title: _controller.otherUser.value.banned ==
+                                  BanState.ban
+                              ? '차단 해제'
+                              : _controller.otherUser.value.followed.value ==
+                                      FollowState.normal
+                                  ? '팔로우'
+                                  : _controller
+                                              .otherUser.value.followed.value ==
+                                          FollowState.follower
+                                      ? '나도 팔로우하기'
+                                      : _controller.otherUser.value.followed
+                                                  .value ==
+                                              FollowState.following
+                                          ? '팔로우 중'
+                                          : '팔로우 중',
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -557,57 +559,67 @@ class OtherProfileScreen extends StatelessWidget {
   Widget _tabView() {
     return Column(
       children: [
-        TabBar(
-            labelStyle: kmainbold,
-            labelColor: mainblack,
-            unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
-            unselectedLabelColor: dividegray,
-            automaticIndicatorColorAdjustment: false,
-            indicator: const UnderlineIndicator(
-              strokeCap: StrokeCap.round,
-              borderSide: BorderSide(width: 2, color: mainblack),
+        Stack(
+          fit: StackFit.passthrough,
+          alignment: Alignment.bottomCenter,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: maingray, width: 2.0),
+                ),
+              ),
             ),
-            onTap: (index) {
-              _controller.currentIndex(index);
-            },
-            isScrollable: false,
-            tabs: [
-              // const Tab(
-              //   height: 40,
-              //   icon: Icon(
-              //     Icons.format_list_bulleted_rounded,
-              //   ),
-              // ),
-              // const Tab(
-              //   height: 40,
-              //   icon: Icon(Icons.line_weight_rounded),
-              // ),
-              Obx(
-                () => Tab(
-                  height: 40,
-                  child: SvgPicture.asset(
-                    'assets/icons/list_active.svg',
-                    color:
-                        _controller.currentIndex.value == 0 ? null : dividegray,
-                  ),
+            TabBar(
+                labelStyle: kmainbold,
+                labelColor: mainblack,
+                unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
+                unselectedLabelColor: dividegray,
+                automaticIndicatorColorAdjustment: false,
+                indicator: const UnderlineIndicator(
+                  strokeCap: StrokeCap.round,
+                  borderSide: BorderSide(width: 2, color: mainblack),
                 ),
-              ),
-              Obx(
-                () => Tab(
-                  height: 40,
-                  child: SvgPicture.asset(
-                    'assets/icons/post_active.svg',
-                    color:
-                        _controller.currentIndex.value == 1 ? null : dividegray,
+                onTap: (index) {
+                  _controller.currentIndex(index);
+                },
+                isScrollable: false,
+                tabs: [
+                  // const Tab(
+                  //   height: 40,
+                  //   icon: Icon(
+                  //     Icons.format_list_bulleted_rounded,
+                  //   ),
+                  // ),
+                  // const Tab(
+                  //   height: 40,
+                  //   icon: Icon(Icons.line_weight_rounded),
+                  // ),
+                  Obx(
+                    () => Tab(
+                      height: 40,
+                      child: SvgPicture.asset(
+                        'assets/icons/list_active.svg',
+                        color: _controller.currentIndex.value == 0
+                            ? null
+                            : dividegray,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ]),
-        Divider(
-          height: 1,
-          thickness: 2,
-          color: dividegray,
-        )
+                  Obx(
+                    () => Tab(
+                      height: 40,
+                      child: SvgPicture.asset(
+                        'assets/icons/post_active.svg',
+                        color: _controller.currentIndex.value == 1
+                            ? null
+                            : dividegray,
+                      ),
+                    ),
+                  ),
+                ]),
+          ],
+        ),
       ],
     );
   }

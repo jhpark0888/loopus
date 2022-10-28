@@ -28,10 +28,11 @@ class SignupCompleteScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: CustomExpandedButton(
                 onTap: () async {
-                  login(context,
-                      emailId: emailId,
-                      password: password,
-                      loginType: UserType.student);
+                  login(
+                    context,
+                    emailId: emailId,
+                    password: password,
+                  );
                 },
                 isBlue: true,
                 title: "시작하기",
@@ -43,7 +44,9 @@ class SignupCompleteScreen extends StatelessWidget {
             child: Column(
               children: [
                 SignUpTextWidget(
-                    oneLinetext: "인증이 완료됐어요", twoLinetext: "가입을 진심으로 환영해요!"),
+                    oneLinetext: "",
+                    highlightText: "인증이 완료됐어요",
+                    twoLinetext: "가입을 진심으로 환영해요!"),
                 Image.asset(
                   'assets/illustrations/welcome_image.png',
                   fit: BoxFit.cover,
@@ -52,7 +55,9 @@ class SignupCompleteScreen extends StatelessWidget {
                   height: 24,
                 ),
                 const Text(
-                  "이제 루프어스를 통해\n본인만의 특별한 스토리를 완성하고\n수많은 기업들과 만나보세요",
+                  "이제 루프어스를 통해\n"
+                  "본인만의 특별한 스토리를 완성하고\n"
+                  "회원님을 기다리고 있는 기업들을 만나보세요",
                   style: kmainheight,
                   textAlign: TextAlign.center,
                 ),

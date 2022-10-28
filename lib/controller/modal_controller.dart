@@ -505,9 +505,10 @@ void showBottomdialog(
   String? accentTitle,
 }) {
   showModalBottomSheet(
-    barrierColor: bareerColor?? mainWhite.withOpacity(
-      0.9,
-    ),
+    barrierColor: bareerColor ??
+        mainWhite.withOpacity(
+          0.9,
+        ),
     enableDrag: false,
     context: context,
     backgroundColor: Colors.transparent,
@@ -594,14 +595,14 @@ void showButtonDialog({
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8), color: mainWhite),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   Text(
                     title,
@@ -609,7 +610,7 @@ void showButtonDialog({
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 16,
                   ),
                   RichText(
                     text: TextSpan(children: [
@@ -630,30 +631,30 @@ void showButtonDialog({
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 16,
                   ),
                   Row(
                     children: [
                       Expanded(
                           child: CustomExpandedButton(
                               onTap: leftFunction,
-                              isBlue: true,
+                              isBlue: false,
                               title: leftText,
                               isBig: true)),
                       const SizedBox(
-                        width: 14,
+                        width: 8,
                       ),
                       Expanded(
                           child: CustomExpandedButton(
                               onTap: rightFunction,
-                              isBlue: false,
+                              isBlue: true,
                               title: rightText,
                               textColor: highlightColor,
                               isBig: true)),
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 16,
                   ),
                 ],
               ),
@@ -662,179 +663,92 @@ void showButtonDialog({
         ),
       ),
     ),
-    // AlertDialog(
-    //   insetPadding: const EdgeInsets.all(20),
-    //   buttonPadding: const EdgeInsets.all(20),
-    //   actionsAlignment: MainAxisAlignment.spaceBetween,
-    //   actions: [
-    //     Row(
-    //       children: [
-    //         Expanded(
-    //             child: CustomExpandedButton(
-    //                 onTap: leftFunction,
-    //                 isBlue: true,
-    //                 title: leftText,
-    //                 isBig: true)),
-    //         const SizedBox(
-    //           width: 14,
-    //         ),
-    //         Expanded(
-    //             child: CustomExpandedButton(
-    //                 onTap: rightFunction,
-    //                 isBlue: false,
-    //                 title: rightText,
-    //                 isBig: true)),
-    //         // Expanded(
-    //         //   child: GestureDetector(
-    //         //     onTap: leftFunction,
-    //         //     child: Container(
-    //         //       decoration: const BoxDecoration(
-    //         //         border: Border(
-    //         //           right: BorderSide(
-    //         //             width: 1,
-    //         //             color: Color(0xffe7e7e7),
-    //         //           ),
-    //         //           top: BorderSide(
-    //         //             width: 1,
-    //         //             color: Color(0xffe7e7e7),
-    //         //           ),
-    //         //         ),
-    //         //       ),
-    //         //       height: 48,
-    //         //       child: Center(
-    //         //         child: Text(
-    //         //           leftText,
-    //         //           style: kmain.copyWith(
-    //         //             color: rankred,
-    //         //           ),
-    //         //         ),
-    //         //       ),
-    //         //     ),
-    //         //   ),
-    //         // ),
-    //         // Expanded(
-    //         //   child: GestureDetector(
-    //         //     onTap: rightFunction,
-    //         //     child: Container(
-    //         //       decoration: const BoxDecoration(
-    //         //         border: Border(
-    //         //           top: BorderSide(
-    //         //             width: 1,
-    //         //             color: Color(0xffe7e7e7),
-    //         //           ),
-    //         //         ),
-    //         //       ),
-    //         //       height: 48,
-    //         //       child: Center(
-    //         //         child: Text(
-    //         //           rightText,
-    //         //           style: kmain,
-    //         //         ),
-    //         //       ),
-    //         //     ),
-    //         //   ),
-    //         // ),
-    //       ],
-    //     ),
-    //   ],
-    //   elevation: 0,
-    //   shape: const RoundedRectangleBorder(
-    //     borderRadius: BorderRadius.all(
-    //       Radius.circular(8),
-    //     ),
-    //   ),
-    //   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-    //   titlePadding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-    //   backgroundColor: Colors.white,
-    //   title: Text(
-    //     title,
-    //     style: kmainbold,
-    //     textAlign: TextAlign.center,
-    //   ),
-    //   content: Text(
-    //     content,
-    //     style: kmain,
-    //     textAlign: TextAlign.center,
-    //   ),
-    // ),
     barrierDismissible: false,
-    barrierColor: dividegray,
+    barrierColor: popupGray,
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
 }
 
-void showoneButtonDialog({
+void showOneButtonDialog({
   required String title,
-  required String content,
-  required Function() oneFunction,
-  required String oneText,
+  required String startContent,
+  String? highlightContent,
+  String? endContent,
+  required Function() buttonFunction,
+  required String buttonText,
+  Color? highlightColor,
 }) {
   Get.dialog(
-    WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: AlertDialog(
-        buttonPadding: EdgeInsets.zero,
-        actionsAlignment: MainAxisAlignment.spaceBetween,
-        actions: [
-          Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: oneFunction,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        right: BorderSide(
-                          width: 1,
-                          color: Color(0xffe7e7e7),
-                        ),
-                        top: BorderSide(
-                          width: 1,
-                          color: Color(0xffe7e7e7),
-                        ),
-                      ),
-                    ),
-                    height: 48,
-                    child: Center(
-                      child: Text(
-                        oneText,
-                        style: kmainheight.copyWith(
-                          color: rankred,
-                        ),
-                      ),
-                    ),
+    Material(
+      color: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: mainWhite),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 30,
                   ),
-                ),
+                  Text(
+                    title,
+                    style: kmainbold,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: startContent,
+                        style: kmainheight,
+                      ),
+                      TextSpan(
+                        text: highlightContent ?? "",
+                        style: kmainheight.copyWith(
+                            color: highlightColor ?? mainblue),
+                      ),
+                      TextSpan(
+                        text: endContent,
+                        style: kmainheight,
+                      )
+                    ]),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: CustomExpandedButton(
+                              onTap: buttonFunction,
+                              isBlue: true,
+                              title: buttonText,
+                              isBig: true)),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
-        elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-        ),
-        contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-        titlePadding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
-        backgroundColor: Colors.white,
-        title: Text(
-          title,
-          style: kmainheight,
-          textAlign: TextAlign.center,
-        ),
-        content: Text(
-          content,
-          style: kmainheight,
-          textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     ),
     barrierDismissible: false,
-    barrierColor: mainblack.withOpacity(0.3),
+    barrierColor: popupGray,
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
@@ -851,18 +765,18 @@ void showTextFieldDialog({
 }) {
   Get.dialog(
     AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: mainWhite,
       elevation: 0,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(8),
         ),
       ),
-      titlePadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      titlePadding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
       contentPadding: const EdgeInsets.symmetric(
-        horizontal: 20,
+        horizontal: 16,
       ),
-      buttonPadding: const EdgeInsets.all(20),
+      buttonPadding: const EdgeInsets.all(16),
       title: Text(
         title,
         style: kmainbold,
@@ -870,7 +784,7 @@ void showTextFieldDialog({
       ),
       content: TextField(
         controller: textEditingController,
-        maxLines: 6,
+        maxLines: 4,
         style: kmainheight,
         autofocus: true,
         cursorColor: mainblack,
@@ -900,7 +814,7 @@ void showTextFieldDialog({
                     title: "취소",
                     isBig: true)),
             const SizedBox(
-              width: 14,
+              width: 8,
             ),
             Expanded(
                 child: CustomExpandedButton(
@@ -914,7 +828,7 @@ void showTextFieldDialog({
       ],
     ),
     barrierDismissible: false,
-    barrierColor: maingray,
+    barrierColor: popupGray,
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );

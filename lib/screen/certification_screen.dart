@@ -98,11 +98,16 @@ class CertificationScreen extends StatelessWidget {
                 SignUpTextWidget(
                     oneLinetext: "개인 확인을 위해", twoLinetext: "계정 정보를 입력해주세요"),
                 LabelTextFieldWidget(
-                    label: "본인 대학 이메일",
-                    hintText: "인증한 본인 대학 이메일 주소",
-                    // validator: (value) =>
-                    //     CheckValidate().validateEmail(value!),
-                    textController: _controller.idcontroller),
+                  label: "본인 대학 이메일",
+                  hintText: "인증한 본인 대학 이메일 주소",
+                  // validator: (value) =>
+                  //     CheckValidate().validateEmail(value!),
+                  textController: _controller.idcontroller,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
                 LabelTextFieldWidget(
                     label: "비밀번호",
                     hintText: "루프어스에 가입할 때 입력한 비밀번호",
@@ -126,7 +131,7 @@ class CertificationScreen extends StatelessWidget {
     FocusScope.of(context).unfocus();
     loading();
     // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
-    await loginRequest(emailId, password, UserType.student).then((value) async {
+    await loginRequest(emailId, password).then((value) async {
       if (value.isError == false) {
         Get.back();
         if (certificateType == CertificateType.userInfoChange) {

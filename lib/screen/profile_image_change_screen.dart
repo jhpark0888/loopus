@@ -16,6 +16,7 @@ import 'package:loopus/controller/image_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/image_crop_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/utils/custom_crop.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
@@ -43,11 +44,9 @@ class ProfileImageChangeScreen extends StatelessWidget {
             icon: SvgPicture.asset(
               'assets/icons/appbar_back.svg',
             )),
-        title: Obx(
-          () => Text(
-            _controller.isAlbum.value ? '사진첩 선택' : '프로필 사진',
-            style: kNavigationTitle,
-          ),
+        title: const Text(
+          '프로필 사진',
+          style: kNavigationTitle,
         ),
         centerTitle: true,
         actions: [
@@ -152,115 +151,116 @@ class ProfileImageChangeScreen extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              _controller.isAlbum(true);
-                              showModalBottomSheet(
-                                  barrierColor: Colors.transparent,
-                                  context: context,
-                                  isScrollControlled: true,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(16),
-                                          topRight: Radius.circular(16))),
-                                  builder: (_) => Container(
-                                        height:
-                                            Get.height - Get.statusBarHeight,
-                                        color: Colors.white,
-                                        child: SingleChildScrollView(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 20),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: List.generate(
-                                                  _controller.albums.length,
-                                                  (index) => SizedBox(
-                                                      height: 110,
-                                                      child: GestureDetector(
-                                                        behavior:
-                                                            HitTestBehavior
-                                                                .translucent,
-                                                        onTap: () {
-                                                          _controller
-                                                              .refreshController
-                                                              .loadComplete();
-                                                          _controller
-                                                                  .albumIndex =
-                                                              index;
-                                                          _controller.imageList
-                                                              .value = _controller
-                                                                  .titleImageList[
-                                                              index];
-                                                          _controller
-                                                                  .headerTitle
-                                                                  .value =
-                                                              _controller
-                                                                  .albums[index]
-                                                                  .name;
+                              Get.to(() => AlbumSelectScreen());
+                              // _controller.isAlbum(true);
+                              // showModalBottomSheet(
+                              //     barrierColor: Colors.transparent,
+                              //     context: context,
+                              //     isScrollControlled: true,
+                              //     shape: const RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.only(
+                              //             topLeft: Radius.circular(16),
+                              //             topRight: Radius.circular(16))),
+                              //     builder: (_) => Container(
+                              //           height:
+                              //               Get.height - Get.statusBarHeight,
+                              //           color: Colors.white,
+                              //           child: SingleChildScrollView(
+                              //             child: Padding(
+                              //               padding: const EdgeInsets.only(
+                              //                   right: 20),
+                              //               child: Column(
+                              //                 crossAxisAlignment:
+                              //                     CrossAxisAlignment.stretch,
+                              //                 children: List.generate(
+                              //                     _controller.albums.length,
+                              //                     (index) => SizedBox(
+                              //                         height: 110,
+                              //                         child: GestureDetector(
+                              //                           behavior:
+                              //                               HitTestBehavior
+                              //                                   .translucent,
+                              //                           onTap: () {
+                              //                             _controller
+                              //                                 .refreshController
+                              //                                 .loadComplete();
+                              //                             _controller
+                              //                                     .albumIndex =
+                              //                                 index;
+                              //                             _controller.imageList
+                              //                                 .value = _controller
+                              //                                     .titleImageList[
+                              //                                 index];
+                              //                             _controller
+                              //                                     .headerTitle
+                              //                                     .value =
+                              //                                 _controller
+                              //                                     .albums[index]
+                              //                                     .name;
 
-                                                          Get.back();
-                                                        },
-                                                        child: Column(
-                                                          children: [
-                                                            Row(
-                                                              children: [
-                                                                Container(
-                                                                  height: 100,
-                                                                  width: 100,
-                                                                  color:
-                                                                      dividegray,
-                                                                  child: _controller
-                                                                          .titleImageList[
-                                                                              index]
-                                                                          .isNotEmpty
-                                                                      ? _photoWidget(
-                                                                          _controller.titleImageList[index]
-                                                                              [
-                                                                              0],
-                                                                          500,
-                                                                          500,
-                                                                          builder:
-                                                                              (data) {
-                                                                          return Image.memory(
-                                                                              data,
-                                                                              fit: BoxFit.cover);
-                                                                        })
-                                                                      : const Center(
-                                                                          child:
-                                                                              Text(
-                                                                            "이미지 없음",
-                                                                            style:
-                                                                                kmain,
-                                                                          ),
-                                                                        ),
-                                                                ),
-                                                                const SizedBox(
-                                                                    width: 15),
-                                                                Text(
-                                                                  _controller
-                                                                      .albums[
-                                                                          index]
-                                                                      .name,
-                                                                  style:
-                                                                      kmainbold,
-                                                                ),
-                                                                const Spacer(),
-                                                                Text(
-                                                                  '${_controller.albums[index].assetCount.toString()}개',
-                                                                  style: kmain,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            const SizedBox(
-                                                                height: 10)
-                                                          ],
-                                                        ),
-                                                      ))),
-                                            ),
-                                          ),
-                                        ),
-                                      )).then(
-                                  (value) => _controller.isAlbum(false));
+                              //                             Get.back();
+                              //                           },
+                              //                           child: Column(
+                              //                             children: [
+                              //                               Row(
+                              //                                 children: [
+                              //                                   Container(
+                              //                                     height: 100,
+                              //                                     width: 100,
+                              //                                     color:
+                              //                                         dividegray,
+                              //                                     child: _controller
+                              //                                             .titleImageList[
+                              //                                                 index]
+                              //                                             .isNotEmpty
+                              //                                         ? _photoWidget(
+                              //                                             _controller.titleImageList[index]
+                              //                                                 [
+                              //                                                 0],
+                              //                                             500,
+                              //                                             500,
+                              //                                             builder:
+                              //                                                 (data) {
+                              //                                             return Image.memory(
+                              //                                                 data,
+                              //                                                 fit: BoxFit.cover);
+                              //                                           })
+                              //                                         : const Center(
+                              //                                             child:
+                              //                                                 Text(
+                              //                                               "이미지 없음",
+                              //                                               style:
+                              //                                                   kmain,
+                              //                                             ),
+                              //                                           ),
+                              //                                   ),
+                              //                                   const SizedBox(
+                              //                                       width: 15),
+                              //                                   Text(
+                              //                                     _controller
+                              //                                         .albums[
+                              //                                             index]
+                              //                                         .name,
+                              //                                     style:
+                              //                                         kmainbold,
+                              //                                   ),
+                              //                                   const Spacer(),
+                              //                                   Text(
+                              //                                     '${_controller.albums[index].assetCount.toString()}개',
+                              //                                     style: kmain,
+                              //                                   ),
+                              //                                 ],
+                              //                               ),
+                              //                               const SizedBox(
+                              //                                   height: 10)
+                              //                             ],
+                              //                           ),
+                              //                         ))),
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         )).then(
+                              //     (value) => _controller.isAlbum(false));
                             },
                             behavior: HitTestBehavior.translucent,
                             child: Container(

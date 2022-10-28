@@ -11,6 +11,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:loopus/controller/ga_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/posting_add_controller.dart';
 import 'package:loopus/controller/posting_update_controller.dart';
@@ -357,8 +358,8 @@ Future<HTTPResponse> likepost(int id, contentType type) async {
       token = value;
     });
 
-    final likeUri =
-        Uri.parse("$serverUri/post_api/like?id=$id&type=${type.name}");
+    final likeUri = Uri.parse(
+        "$serverUri/post_api/like?id=$id&type=${HomeController.to.myProfile.value.userType == UserType.company ? "corp" : type.name}");
     try {
       final response =
           await http.post(likeUri, headers: {"Authorization": "Token $token"});

@@ -555,6 +555,7 @@ class _leading extends StatelessWidget {
                     dialogBack(modalIOS: true);
                     loading();
                     deleteProject(career!.id, DeleteType.del).then((value) {
+                      print(value.isError);
                       if (value.isError == false) {
                         Get.back();
                         // careerList!.remove(career);

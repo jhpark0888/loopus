@@ -13,6 +13,7 @@ import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
+import 'package:loopus/widget/tabbar_widget.dart';
 import 'package:loopus/widget/tag_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:underline_indicator/underline_indicator.dart';
@@ -74,21 +75,19 @@ class TagDetailScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     const SizedBox(
-                      height: 24,
+                      height: 16,
                     ),
-                    Text(
-                      "최근 태그 사용 동향",
-                      style: kmain.copyWith(color: maingray),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
+                    // Text(
+                    //   "최근 태그 사용 동향",
+                    //   style: kmain.copyWith(color: maingray),
+                    // ),
+
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
+                      padding: const EdgeInsets.symmetric(horizontal: 53),
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 130,
+                            height: 152,
                             child: Obx(
                               () => Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -101,23 +100,22 @@ class TagDetailScreen extends StatelessWidget {
                                             Text(
                                               _controller.teptNumMap[entry.key]
                                                   .toString(),
-                                              style: kmain.copyWith(
-                                                  color: mainblue),
+                                              style: kmain,
                                             ),
                                             const SizedBox(
-                                              height: 7,
+                                              height: 8,
                                             ),
                                             AnimatedSize(
                                               duration: const Duration(
                                                   milliseconds: 200),
                                               child: Container(
                                                 height: entry.value.toDouble(),
-                                                width: 14,
+                                                width: 16,
                                                 decoration: BoxDecoration(
                                                     color: mainblue,
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            20)),
+                                                            16)),
                                               ),
                                             ),
                                           ],
@@ -127,7 +125,7 @@ class TagDetailScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(
-                            height: 24,
+                            height: 8,
                           ),
                           Obx(
                             () => Row(
@@ -158,43 +156,22 @@ class TagDetailScreen extends StatelessWidget {
                     expandedHeight: 43,
                     toolbarHeight: 43,
                     elevation: 0,
-                    flexibleSpace: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TabBar(
-                          controller: _controller.tabController,
-                          labelStyle: kmainbold,
-                          labelColor: mainblack,
-                          unselectedLabelStyle:
-                              kmainbold.copyWith(color: dividegray),
-                          unselectedLabelColor: dividegray,
-                          automaticIndicatorColorAdjustment: false,
-                          indicator: const UnderlineIndicator(
-                            strokeCap: StrokeCap.round,
-                            borderSide: BorderSide(width: 2, color: mainblack),
-                          ),
-                          tabs: const [
-                            Tab(
-                              height: 40,
-                              child: Text(
-                                "인기",
-                              ),
+                    flexibleSpace: TabBarWidget(
+                        tabController: _controller.tabController,
+                        tabs: const [
+                          Tab(
+                            height: 40,
+                            child: Text(
+                              "인기",
                             ),
-                            Tab(
-                              height: 40,
-                              child: Text(
-                                "최신",
-                              ),
-                            )
-                          ],
-                        ),
-                        Divider(
-                          height: 1,
-                          thickness: 2,
-                          color: dividegray,
-                        )
-                      ],
-                    ),
+                          ),
+                          Tab(
+                            height: 40,
+                            child: Text(
+                              "최신",
+                            ),
+                          )
+                        ]),
                   ),
                 ),
               ),
@@ -217,20 +194,14 @@ class TagDetailScreen extends StatelessWidget {
                               controller: _controller.refreshControllerList[0],
                               footer: const MyCustomFooter(),
                               onLoading: _controller.onLoading,
-                              child: ListView.separated(
+                              child: ListView.builder(
                                   primary: false,
                                   shrinkWrap: true,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 14),
+                                  padding: const EdgeInsets.only(bottom: 16),
                                   itemBuilder: (context, index) {
                                     return PostingWidget(
                                       item: _controller.tagPopPostList[index],
                                       type: PostingWidgetType.search,
-                                    );
-                                  },
-                                  separatorBuilder: (context, index) {
-                                    return DivideWidget(
-                                      height: 10,
                                     );
                                   },
                                   itemCount: _controller.tagPopPostList.length),
@@ -251,20 +222,14 @@ class TagDetailScreen extends StatelessWidget {
                               controller: _controller.refreshControllerList[1],
                               footer: const MyCustomFooter(),
                               onLoading: _controller.onLoading,
-                              child: ListView.separated(
+                              child: ListView.builder(
                                   primary: false,
                                   shrinkWrap: true,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 14),
+                                  padding: const EdgeInsets.only(bottom: 16),
                                   itemBuilder: (context, index) {
                                     return PostingWidget(
                                       item: _controller.tagNewPostList[index],
                                       type: PostingWidgetType.search,
-                                    );
-                                  },
-                                  separatorBuilder: (context, index) {
-                                    return DivideWidget(
-                                      height: 10,
                                     );
                                   },
                                   itemCount: _controller.tagNewPostList.length),

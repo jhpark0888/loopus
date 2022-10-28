@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/model/issue_model.dart';
 import 'package:universal_html/html.dart';
 import 'package:html/parser.dart';
 import 'package:universal_html/parsing.dart';
@@ -61,8 +62,7 @@ class CustomLinkPreview {
         return DefaultScrapper.scrape(doc, url);
       }
     } catch (e) {
-      HomeController.to.newslist.removeWhere((element) => element == url);
-      print('Default scrapper failure Error: $e');
+      // print('Default scrapper failure Error: $e');
       return WebInfo(
         description: '',
         domain: url,
@@ -76,11 +76,146 @@ class CustomLinkPreview {
   }
 }
 
+// class NewsFetchPreview {
+//   Future fetch(url) async {
+//     final client = http.Client();
+//     try {
+//       final response = await client.get(Uri.parse(_validateUrl(url)));
+
+//       late final document;
+//       try {
+//         document = parse(utf8.decode(response.bodyBytes));
+//       } catch (e) {
+//         // try {
+//         document = parse(cp949.decode(response.bodyBytes));
+//         // } catch (e) {
+//         //   document = parse(response.body);
+//         // }
+//       }
+
+//       String? description, title, image, appleIcon, favIcon;
+//       String? authorImage, authorName;
+
+//       var elements = document.getElementsByTagName('meta');
+//       final linkElements = document.getElementsByTagName('link');
+
+//       elements.forEach((tmp) {
+//         if (tmp.attributes['property'] == 'og:title') {
+//           //fetch seo title
+//           title = tmp.attributes['content'];
+//           try {
+//             title = cp949.decodeString(title!);
+//           } catch (e) {}
+//         }
+//         //if seo title is empty then fetch normal title
+//         title ??= document.getElementsByTagName('title')[0].text;
+
+//         //fetch seo description
+//         if (tmp.attributes['property'] == 'og:description') {
+//           description = tmp.attributes['content'];
+//         }
+//         //if seo description is empty then fetch normal description.
+//         if (description == null) {
+//           //fetch base title
+//           if (tmp.attributes['name'] == 'description') {
+//             description = tmp.attributes['content'];
+//           }
+//         }
+
+//         //fetch image
+//         if (tmp.attributes['property'] == 'og:image') {
+//           image = tmp.attributes['content'];
+//           if (image != null) {
+//             if ((!image!.startsWith("www")) & (!image!.startsWith("http"))) {
+//               image = 'https:' + image!;
+//             }
+//           }
+//         }
+//       });
+
+//       linkElements.forEach((tmp) {
+//         if (tmp.attributes['rel'] == 'apple-touch-icon') {
+//           appleIcon = tmp.attributes['href'];
+//         }
+//         if (tmp.attributes['rel']?.contains('icon') == true) {
+//           favIcon = tmp.attributes['href'];
+//         }
+//       });
+
+//       if (url.toString().contains("youtu")) {
+//         String? chUrl;
+//         var spanelements = document.getElementsByTagName('span');
+//         spanelements.forEach((tmp) {
+//           if (tmp.attributes['itemprop'] == "author") {
+//             var chelements = tmp.getElementsByTagName('link');
+//             chelements.forEach((tmp) {
+//               if (tmp.attributes['itemprop'] == 'url') {
+//                 chUrl = tmp.attributes['href'];
+//               }
+//               if (tmp.attributes['itemprop'] == "name") {
+//                 authorName = tmp.attributes['content'];
+//               }
+//             });
+//           }
+//         });
+
+//         if (chUrl != null) {
+//           authorImage = await getYoutubeChannelImage(chUrl!);
+//         }
+//       }
+
+//       return {
+//         'title': title ?? '',
+//         'description': description ?? '',
+//         'image': image ?? '',
+//         'appleIcon': appleIcon ?? '',
+//         'favIcon': favIcon ?? '',
+//         'authorName': authorName ?? '',
+//         'authorImage': authorImage ?? '',
+//       };
+//     } catch (e) {
+//       HomeController.to.newsList.remove(url);
+//     }
+//   }
+
+//   _validateUrl(String url) {
+//     if (url.startsWith('http://') == true ||
+//         url.startsWith('https://') == true) {
+//       return url;
+//     } else {
+//       return 'http://$url';
+//     }
+//   }
+
+//   Future<String?> getYoutubeChannelImage(String url) async {
+//     final client = http.Client();
+//     try {
+//       final response = await client.get(Uri.parse(_validateUrl(url)));
+
+//       final document = parse(utf8.decode(response.bodyBytes));
+//       String? chImage;
+
+//       var elements = document.getElementsByTagName('meta');
+
+//       elements.forEach((tmp) {
+//         //fetch image
+//         if (tmp.attributes['property'] == 'og:image') {
+//           chImage = tmp.attributes['content'];
+//         }
+//       });
+
+//       return chImage ?? "";
+//     } catch (e) {
+//       return "";
+//     }
+//   }
+// }
+
 class NewsFetchPreview {
-  Future fetch(url) async {
+  Future fetch(Issue issue) async {
     final client = http.Client();
     try {
-      final response = await client.get(Uri.parse(_validateUrl(url)));
+      final response = await client.get(Uri.parse(_validateUrl(issue.url)));
 
       late final document;
       try {
@@ -93,8 +228,8 @@ class NewsFetchPreview {
         // }
       }
 
-      String? description, title, image, appleIcon, favIcon;
-      String? authorImage, authorName;
+      String? title, image;
+      String? chImage, chName;
 
       var elements = document.getElementsByTagName('meta');
       final linkElements = document.getElementsByTagName('link');
@@ -109,18 +244,19 @@ class NewsFetchPreview {
         }
         //if seo title is empty then fetch normal title
         title ??= document.getElementsByTagName('title')[0].text;
+        issue.title = title ?? "";
 
         //fetch seo description
-        if (tmp.attributes['property'] == 'og:description') {
-          description = tmp.attributes['content'];
-        }
-        //if seo description is empty then fetch normal description.
-        if (description == null) {
-          //fetch base title
-          if (tmp.attributes['name'] == 'description') {
-            description = tmp.attributes['content'];
-          }
-        }
+        // if (tmp.attributes['property'] == 'og:description') {
+        //   description = tmp.attributes['content'];
+        // }
+        // //if seo description is empty then fetch normal description.
+        // if (description == null) {
+        //   //fetch base title
+        //   if (tmp.attributes['name'] == 'description') {
+        //     description = tmp.attributes['content'];
+        //   }
+        // }
 
         //fetch image
         if (tmp.attributes['property'] == 'og:image') {
@@ -130,19 +266,20 @@ class NewsFetchPreview {
               image = 'https:' + image!;
             }
           }
+          issue.image = image ?? "";
         }
       });
 
-      linkElements.forEach((tmp) {
-        if (tmp.attributes['rel'] == 'apple-touch-icon') {
-          appleIcon = tmp.attributes['href'];
-        }
-        if (tmp.attributes['rel']?.contains('icon') == true) {
-          favIcon = tmp.attributes['href'];
-        }
-      });
+      // linkElements.forEach((tmp) {
+      //   if (tmp.attributes['rel'] == 'apple-touch-icon') {
+      //     appleIcon = tmp.attributes['href'];
+      //   }
+      //   if (tmp.attributes['rel']?.contains('icon') == true) {
+      //     favIcon = tmp.attributes['href'];
+      //   }
+      // });
 
-      if (url.toString().contains("youtu")) {
+      if (issue.runtimeType == YoutubeIssue) {
         String? chUrl;
         var spanelements = document.getElementsByTagName('span');
         spanelements.forEach((tmp) {
@@ -153,28 +290,27 @@ class NewsFetchPreview {
                 chUrl = tmp.attributes['href'];
               }
               if (tmp.attributes['itemprop'] == "name") {
-                authorName = tmp.attributes['content'];
+                chName = tmp.attributes['content'];
               }
             });
           }
         });
 
         if (chUrl != null) {
-          authorImage = await getYoutubeChannelImage(chUrl!);
+          chImage = await getYoutubeChannelImage(chUrl!);
         }
-      }
 
-      return {
-        'title': title ?? '',
-        'description': description ?? '',
-        'image': image ?? '',
-        'appleIcon': appleIcon ?? '',
-        'favIcon': favIcon ?? '',
-        'authorName': authorName ?? '',
-        'authorImage': authorImage ?? '',
-      };
+        (issue as YoutubeIssue).chImage = chImage ?? "";
+        issue.chName = chName ?? "";
+      }
     } catch (e) {
-      HomeController.to.newslist.remove(url);
+      if (issue.runtimeType == NewsIssue) {
+        HomeController.to.newsList.remove(issue);
+      } else if (issue.runtimeType == BrunchIssue) {
+        HomeController.to.brunchList.remove(issue);
+      } else if (issue.runtimeType == YoutubeIssue) {
+        HomeController.to.youtubeList.remove(issue);
+      }
     }
   }
 

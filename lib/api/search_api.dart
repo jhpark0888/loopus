@@ -70,10 +70,8 @@ Future<HTTPResponse> search(
     SearchType searchType, String searchtext, int pagenumber) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
-    SearchController searchController = Get.find();
     String? token = await FlutterSecureStorage().read(key: 'token');
     // 수정
 
@@ -87,11 +85,10 @@ Future<HTTPResponse> search(
       final response =
           await http.get(url, headers: {"Authorization": "Token $token"});
 
-      print("검색 : ${response.statusCode}");
+      print("${searchType.name} 검색 : ${response.statusCode}");
 
       if (response.statusCode == 200) {
         List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-        print(responseBody);
         return HTTPResponse.success(responseBody);
       } else {
         return HTTPResponse.apiError('', response.statusCode);
@@ -106,27 +103,28 @@ Future<HTTPResponse> search(
   }
 }
 
-Future<HTTPResponse> searchPopPost(int page) async {
+Future<HTTPResponse> companySearch(String searchtext, int pagenumber) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
-    SearchController searchController = Get.find();
     String? token = await FlutterSecureStorage().read(key: 'token');
     // 수정
 
-    final url = Uri.parse("$serverUri/search_api/recommend?page=$page");
+    String searchword = searchtext.trim().replaceAll(RegExp("\\s+"), " ");
+    print("검색어: $searchword");
+
+    final url = Uri.parse(
+        "$serverUri/search_api/search_company?query=$searchword&page=$pagenumber");
 
     try {
       final response =
           await http.get(url, headers: {"Authorization": "Token $token"});
 
-      print("검색 : ${response.statusCode}");
+      print("기업 검색 : ${response.statusCode}");
 
       if (response.statusCode == 200) {
         List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-        print(responseBody);
         return HTTPResponse.success(responseBody);
       } else {
         return HTTPResponse.apiError('', response.statusCode);
@@ -140,3 +138,133 @@ Future<HTTPResponse> searchPopPost(int page) async {
     }
   }
 }
+
+Future<HTTPResponse> getResentSearches() async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await FlutterSecureStorage().read(key: 'token');
+
+    final url = Uri.parse("$serverUri/search_api/search_log");
+
+    try {
+      final response =
+          await http.get(url, headers: {"Authorization": "Token $token"});
+
+      print("최근 검색 로드 : ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+        return HTTPResponse.success(responseBody);
+      } else {
+        return HTTPResponse.apiError("FAIL", response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print("최근 검색 로드 : $e");
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+
+Future<HTTPResponse> addRecentSearch(int type, String query) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await FlutterSecureStorage().read(key: 'token');
+
+    final url =
+        Uri.parse("$serverUri/search_api/search_log?type=$type&query=$query");
+
+    try {
+      final response =
+          await http.post(url, headers: {"Authorization": "Token $token"});
+
+      print("최근 검색 추가 : ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        var responseBody = response.body != ""
+            ? jsonDecode(utf8.decode(response.bodyBytes))
+            : null;
+        return HTTPResponse.success(responseBody);
+      } else {
+        return HTTPResponse.apiError("FAIL", response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print("최근 검색 추가 : $e");
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+
+// 한개 삭제: one, 모두 삭제: all
+Future<HTTPResponse> deleteResentSearch(String type, int id) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await FlutterSecureStorage().read(key: 'token');
+
+    final url = Uri.parse("$serverUri/search_api/search_log?type=$type&id=$id");
+
+    try {
+      final response =
+          await http.delete(url, headers: {"Authorization": "Token $token"});
+
+      print("최근 검색 삭제 : ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        return HTTPResponse.success("SUCCESS");
+      } else {
+        return HTTPResponse.apiError("FAIL", response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print("최근 검색 삭제 : $e");
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+
+
+
+// Future<HTTPResponse> searchPopPost(int page) async {
+//   ConnectivityResult result = await initConnectivity();
+//   if (result == ConnectivityResult.none) {
+//     showdisconnectdialog();
+//     return HTTPResponse.networkError();
+//   } else {
+//     SearchController searchController = Get.find();
+//     String? token = await FlutterSecureStorage().read(key: 'token');
+//     // 수정
+
+//     final url = Uri.parse("$serverUri/search_api/recommend?page=$page");
+
+//     try {
+//       final response =
+//           await http.get(url, headers: {"Authorization": "Token $token"});
+
+//       print("검색 : ${response.statusCode}");
+
+//       if (response.statusCode == 200) {
+//         List responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+//         print(responseBody);
+//         return HTTPResponse.success(responseBody);
+//       } else {
+//         return HTTPResponse.apiError('', response.statusCode);
+//       }
+//     } on SocketException {
+//       // ErrorController.to.isServerClosed(true);
+//       return HTTPResponse.serverError();
+//     } catch (e) {
+//       print(e);
+//       return HTTPResponse.unexpectedError(e);
+//     }
+//   }
+// }

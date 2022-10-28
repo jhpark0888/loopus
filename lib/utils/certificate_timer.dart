@@ -15,7 +15,9 @@ class CertificateTimer {
   RxInt sec = 0.obs;
   Rx<Emailcertification>? emailcertification;
 
-  void timerOn(int time) async {
+  void timerOn(
+    int time,
+  ) async {
     if (timer != null) {
       if (timer!.isActive) {
         timer!.cancel();
@@ -29,7 +31,6 @@ class CertificateTimer {
         timerClose(closeFunction: () {
           emailcertification!(Emailcertification.fail);
           dialogOn();
-          certificateClose(const FlutterSecureStorage());
         });
       }
     });
@@ -54,15 +55,21 @@ class CertificateTimer {
     sec(0);
   }
 
-  void certificateClose(FlutterSecureStorage secureStorage) async {
-    String? email = await secureStorage.read(key: 'temp_email');
-    FirebaseMessaging.instance.unsubscribeFromTopic(email!);
-    secureStorage.delete(key: 'temp_email');
-  }
+  // void certificateClose(FlutterSecureStorage secureStorage) async {
+  //   String? email = await secureStorage.read(key: 'temp_email');
+  //   FirebaseMessaging.instance.unsubscribeFromTopic(email!);
+  //   secureStorage.delete(key: 'temp_email');
+  // }
 
   void dialogOn() {
     Get.closeCurrentSnackbar();
-    showBottomSnackbar("시간이 만료되어 인증이 취소되었어요\n다시 시도해주세요");
+    showOneButtonDialog(
+        title: "인증을 위한 시간이 만료되었어요",
+        startContent: "시간이 만료되어 인증이 취소됐어요\n다시 보내기 버튼을 눌러\n 인증을 완료해주세요",
+        buttonFunction: () {
+          Get.back();
+        },
+        buttonText: "확인");
   }
 
   Widget timerDisplay() {

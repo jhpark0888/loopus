@@ -29,8 +29,9 @@ class CustomExpandedButton extends StatelessWidget {
       onTapUp: (details) => _hoverController.isHover(false),
       onTap: onTap,
       child: Container(
+        height: 42,
         padding: EdgeInsets.symmetric(
-          vertical: isBig == true ? 13 : 8,
+          vertical: isBig == true ? 14 : 11,
           horizontal: 12,
         ),
         decoration: BoxDecoration(
@@ -46,7 +47,7 @@ class CustomExpandedButton extends StatelessWidget {
           () => Text(
             title!,
             textAlign: TextAlign.center,
-            style: kmain.copyWith(
+            style: kmainbold.copyWith(
               // ignore: prefer_if_null_operators
               color: textColor != null
                   ? _hoverController.isHover.value

@@ -8,6 +8,7 @@ import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/select_career_group_member_controller.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/search_text_field_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
@@ -29,13 +30,17 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 0, right: 12.5),
                 onPressed: () {
                   if (controller.selectList.isNotEmpty) {
+                    loading();
+                    if(controller.isLoadaing.value == false){
                     controller.selectList
                         .sort((a, b) => a.name.compareTo(b.name));
+                    controller.isLoadaing(true);
                     updateCareer(CareerDetailController.to.career.value.id, controller.selectList,null,ProjectUpdateType.looper
                             )
                         .then((value) {
                       if (value.isError == false) {
-                        Get.back();
+                        controller.isLoadaing(false);
+                        getbacks(2);
                         showCustomDialog('추가되었습니다.', 1200);
 
                         CareerDetailController.to.members
@@ -43,6 +48,7 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                         CareerDetailController.to.members.refresh();
                       }
                     });
+                    }
                   }
                 },
                 icon: Obx(

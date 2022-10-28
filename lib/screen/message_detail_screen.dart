@@ -126,8 +126,8 @@ class MessageDetatilScreen extends StatelessWidget {
                   }, func2: () {
                     Get.to(() => const DatabaseList());
                   },
-                      value1: '채팅방 나가기',
-                      value2: '',
+                      value1: '메세지 나가기',
+                      value2: '계정 신고하기',
                       isValue1Red: true,
                       isValue2Red: false,
                       isOne: true);
@@ -241,7 +241,7 @@ class MessageDetatilScreen extends StatelessWidget {
 
   Widget sendField() {
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
+      padding: EdgeInsets.fromLTRB(20, 12, 20, 34),
       decoration: BoxDecoration(
           border: Border(top: BorderSide(width: 1, color: dividegray))),
       child: Row(
@@ -261,6 +261,7 @@ class MessageDetatilScreen extends StatelessWidget {
                 cursorWidth: 1.2,
                 cursorRadius: Radius.circular(5.0),
                 autofocus: false,
+                // textAlign: TextAlign.center,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: cardGray,
@@ -270,10 +271,12 @@ class MessageDetatilScreen extends StatelessWidget {
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(8)),
-                  contentPadding: const EdgeInsets.fromLTRB(24, 8, 24, 8),
+                  contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                   isDense: true,
                   hintText: '메세지 입력',
-                  hintStyle: kmain.copyWith(color: maingray),
+                  counterText: "",
+                  hintStyle:
+                      kmain.copyWith(color: maingray).copyWith(height: 1.4),
                 )),
           ),
           const SizedBox(width: 14),

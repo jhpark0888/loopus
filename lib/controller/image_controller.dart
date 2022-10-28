@@ -18,7 +18,6 @@ class ImageController extends GetxController {
       const AssetEntity(id: '', height: 0, width: 0, typeInt: 0).obs;
   RxBool isLoad = false.obs;
   RxBool isSelect = false.obs;
-  RxBool isAlbum = false.obs;
   RxList<List<AssetEntity>> titleImageList = <List<AssetEntity>>[].obs;
   List<int> albumPageNums = <int>[].obs;
   int albumIndex = 0;
@@ -119,7 +118,6 @@ class ImageController extends GetxController {
     titleImageList.clear();
     isLoad(false);
     isSelect(false);
-    isAlbum(false);
     albumIndex = 0;
     selectedImage(const AssetEntity(id: '', height: 0, width: 0, typeInt: 0));
   }

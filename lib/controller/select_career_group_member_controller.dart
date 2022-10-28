@@ -10,6 +10,7 @@ class SelectCareerGroupMemberController extends GetxController {
   RxList<Person> followList = <Person>[].obs;
   RxList<Person> searchList = <Person>[].obs;
   RxList<Person> selectList = <Person>[].obs;
+  RxBool isLoadaing = false.obs;
   @override
   void onInit() {
     getfollowlist(

@@ -21,6 +21,7 @@ class PwChangeScreen extends StatelessWidget {
   final PwChangeController _pwChangeController = Get.put(PwChangeController());
 
   PwType pwType;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -63,41 +64,45 @@ class PwChangeScreen extends StatelessWidget {
                         () => CustomExpandedButton(
                             onTap: () {
                               if (_pwChangeController.pwChangeButtonOn.value) {
-                                loading();
-                                pwType == PwType.pwchange
-                                    ? putpwchange().then((value) {
-                                        if (value.isError == false) {
-                                          getbacks(2);
-                                          showCustomDialog(
-                                              '비밀번호 변경이 완료되었습니다', 1400);
-                                        } else {
-                                          Get.back();
+                                if (_formKey.currentState!.validate()) {
+                                  loading();
+                                  pwType == PwType.pwchange
+                                      ? putpwchange().then((value) {
+                                          if (value.isError == false) {
+                                            getbacks(2);
+                                            showCustomDialog(
+                                                '비밀번호 변경이 완료되었습니다', 1400);
+                                          } else {
+                                            Get.back();
 
-                                          if (value.errorData!["statusCode"] ==
-                                              401) {
-                                            showCustomDialog(
-                                                '현재 비밀번호가 틀렸습니다.', 1400);
-                                          } else {
-                                            errorSituation(value);
+                                            if (value
+                                                    .errorData!["statusCode"] ==
+                                                401) {
+                                              showCustomDialog(
+                                                  '현재 비밀번호가 틀렸습니다.', 1400);
+                                            } else {
+                                              errorSituation(value);
+                                            }
                                           }
-                                        }
-                                      })
-                                    : putpwfindchange().then((value) {
-                                        if (value.isError == false) {
-                                          getbacks(3);
-                                          showCustomDialog(
-                                              '비밀번호 변경이 완료되었습니다', 1400);
-                                        } else {
-                                          Get.back();
-                                          if (value.errorData!["statusCode"] ==
-                                              401) {
+                                        })
+                                      : putpwfindchange().then((value) {
+                                          if (value.isError == false) {
+                                            getbacks(3);
                                             showCustomDialog(
-                                                '입력한 정보를 다시 확인해주세요', 1400);
+                                                '비밀번호 변경이 완료되었습니다', 1400);
                                           } else {
-                                            errorSituation(value);
+                                            Get.back();
+                                            if (value
+                                                    .errorData!["statusCode"] ==
+                                                401) {
+                                              showCustomDialog(
+                                                  '입력한 정보를 다시 확인해주세요', 1400);
+                                            } else {
+                                              errorSituation(value);
+                                            }
                                           }
-                                        }
-                                      });
+                                        });
+                                }
                               }
                             },
                             isBlue: _pwChangeController.pwChangeButtonOn.value,
@@ -112,43 +117,59 @@ class PwChangeScreen extends StatelessWidget {
           ),
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SignUpTextWidget(
-                  oneLinetext: "비밀번호는 최소",
-                  twoLinetext: "6글자 이상이어야 합니다",
-                ),
-                pwType == PwType.pwchange
-                    ? LabelTextFieldWidget(
-                        label: "현재 비밀번호",
-                        hintText: "최소 6글자",
-                        textController: _pwChangeController.originpwcontroller,
-                        // validator: (value) =>
-                        //     CheckValidate().validatePassword(value!),
-                        obscureText: true,
-                      )
-                    : Container(),
-                LabelTextFieldWidget(
-                  label: "새로운 비밀번호",
-                  hintText: "최소 6글자",
-                  textController: _pwChangeController.newpwcontroller,
-                  // validator: (value) =>
-                  //     CheckValidate().validatePassword(value!),
-                  obscureText: true,
-                ),
-                LabelTextFieldWidget(
-                  label: "새로운 비밀번호 확인",
-                  hintText: "",
-                  textController: _pwChangeController.newpwcheckcontroller,
-                  // validator: (value) {
-                  //   if (_pwChangeController.newpwcontroller.text != value) {
-                  //     return "입력하신 비밀번호와 일치하지 않아요";
-                  //   }
-                  // },
-                  obscureText: true,
-                ),
-              ],
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SignUpTextWidget(
+                    oneLinetext: "비밀번호는 최소",
+                    twoLinetext: "6글자 이상이어야 합니다",
+                  ),
+                  pwType == PwType.pwchange
+                      ? Column(
+                          children: [
+                            LabelTextFieldWidget(
+                              label: "현재 비밀번호",
+                              hintText: "최소 6글자",
+                              textController:
+                                  _pwChangeController.originpwcontroller,
+                              // validator: (value) =>
+                              //     CheckValidate().validatePassword(value!),
+                              obscureText: true,
+                            ),
+                            const SizedBox(
+                              height: 24,
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  LabelTextFieldWidget(
+                    label: "새로운 비밀번호",
+                    hintText: "최소 6글자",
+                    textController: _pwChangeController.newpwcontroller,
+                    // validator: (value) =>
+                    //     CheckValidate().validatePassword(value!),
+                    obscureText: true,
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  LabelTextFieldWidget(
+                    label: "새로운 비밀번호 확인",
+                    hintText: "다시 한 번 입력해주세요",
+                    textController: _pwChangeController.newpwcheckcontroller,
+                    validator: (value) {
+                      if (value != _pwChangeController.newpwcontroller.text) {
+                        return "입력하신 비밀번호와 다릅니다. 다시 확인해주세요";
+                      } else {
+                        return null;
+                      }
+                    },
+                    obscureText: true,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

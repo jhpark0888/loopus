@@ -58,7 +58,7 @@ class NotificationWidget extends StatelessWidget {
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 20,
+                horizontal: 16,
               ),
               child: Row(
                 children: [
@@ -69,7 +69,7 @@ class NotificationWidget extends StatelessWidget {
                     userType: notification.user.userType,
                   ),
                   const SizedBox(
-                    width: 12,
+                    width: 8,
                   ),
                   Flexible(
                     child: RichText(
@@ -111,7 +111,7 @@ class NotificationWidget extends StatelessWidget {
             onTap: clicknotice,
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 20,
+                horizontal: 16,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
@@ -128,7 +128,7 @@ class NotificationWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    width: 12,
+                    width: 8,
                   ),
                   Flexible(
                     child: RichText(
@@ -256,15 +256,15 @@ class NotificationWidget extends StatelessWidget {
       ).then((value) {
         if (value.isError == false) {
           if (NotificationDetailController.to.newalarmList
-              .where((noti) => noti.notification.isread.value == false)
+              .where((noti) => noti.isread.value == false)
               .isEmpty) {
             HomeController.to.isNewAlarm.value = false;
           }
           print(NotificationDetailController.to.newalarmList
-              .where((noti) => noti.notification.isread.value == false)
+              .where((noti) => noti.isread.value == false)
               .isEmpty);
           print(NotificationDetailController.to.newalarmList
-              .where((noti) => noti.notification.isread.value == false));
+              .where((noti) => noti.isread.value == false));
         }
       });
     }

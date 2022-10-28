@@ -13,6 +13,7 @@ class SearchTextFieldWidget extends StatelessWidget {
     this.onchanged,
     this.onEditingComplete,
     this.autofocus,
+    this.focusNode,
     this.onSubmitted,
   }) : super(key: key);
   void Function()? ontap;
@@ -20,6 +21,7 @@ class SearchTextFieldWidget extends StatelessWidget {
   String hinttext;
   bool readonly;
   bool? autofocus;
+  FocusNode? focusNode;
   TextEditingController? controller;
   TextInputAction? textInputAction;
   Function()? onEditingComplete;
@@ -41,6 +43,7 @@ class SearchTextFieldWidget extends StatelessWidget {
         textInputAction: textInputAction,
         onEditingComplete: onEditingComplete,
         onSubmitted: onSubmitted,
+        focusNode: focusNode,
         decoration: InputDecoration(
           filled: true,
           fillColor: cardGray,
@@ -50,12 +53,12 @@ class SearchTextFieldWidget extends StatelessWidget {
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(8)),
-          contentPadding: const EdgeInsets.only(right: 24),
+          contentPadding: const EdgeInsets.only(right: 16),
           isDense: true,
           hintText: hinttext,
           hintStyle: kmain.copyWith(color: maingray),
           prefixIcon: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 8, 14, 8),
+            padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
             child: SvgPicture.asset(
               "assets/icons/search_inactive.svg",
               width: 20,

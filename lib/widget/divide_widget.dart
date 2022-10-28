@@ -11,8 +11,8 @@ class DivideWidget extends StatelessWidget {
     return Divider(
       height: height ?? 20,
       thickness: 0.5,
-      indent: 20,
-      endIndent: 20,
+      indent: 16,
+      endIndent: 16,
       color: dividegray,
     );
   }

@@ -157,7 +157,7 @@ class UnivDeptSearchScreen extends StatelessWidget {
                       "${searchType == UnivDeptSearchType.univ ? "대학" : "학과"} 등록 문의하기",
                   completeText: '문의하기',
                   hintText:
-                      '찾으시는 ${searchType == UnivDeptSearchType.univ ? "대학" : "학과"} 이름을 입력해주세요. 빠른 시일 내 확인 후 조치하겠습니다. 감사합니다.',
+                      '찾으시는 ${searchType == UnivDeptSearchType.univ ? "대학" : "학과"}명을 입력해주세요. 빠른 시일 내 업데이트 할게요.',
                   leftFunction: () {
                     dialogBack();
                   },
@@ -182,7 +182,7 @@ class UnivDeptSearchScreen extends StatelessWidget {
               },
               child: Text(
                   "찾으시는 ${searchType == UnivDeptSearchType.univ ? "대학이" : "학과가"} 없으신가요?",
-                  style: kcaption.copyWith(color: maingray)),
+                  style: kmain.copyWith(color: mainblue)),
             ),
             const SizedBox(
               height: 14,

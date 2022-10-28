@@ -22,13 +22,14 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class OtherProfileController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  OtherProfileController(
-      {required this.userid, required this.otherUser, this.careerName});
+  OtherProfileController({
+    required this.userid,
+    required this.otherUser,
+  });
   static OtherProfileController get to => Get.find();
 
   int userid;
 
-  String? careerName;
   RxBool profileenablepullup = true.obs;
 
   RxInt currentIndex = 0.obs;
@@ -74,24 +75,26 @@ class OtherProfileController extends GetxController
   }
 
   Future<int> getOtherPosting(int userId) async {
-    HTTPResponse hrrpResponse = await getAllPosting(userId, postPageNum);
+    HTTPResponse httpResponse = await getAllPosting(userId, postPageNum);
 
-    if (hrrpResponse.isError == false) {
-      List<Post> postlist = hrrpResponse.data;
+    if (httpResponse.isError == false) {
+      List<Post> postlist = List.from(httpResponse.data)
+          .map((post) => Post.fromJson(post))
+          .toList();
 
       allPostList.addAll(postlist);
       postPageNum += 1;
 
       otherprofilescreenstate(ScreenState.success);
     } else {
-      if (hrrpResponse.errorData!["statusCode"] != 204) {
-        errorSituation(hrrpResponse, screenState: otherprofilescreenstate);
+      if (httpResponse.errorData!["statusCode"] != 204) {
+        errorSituation(httpResponse, screenState: otherprofilescreenstate);
       }
     }
-    if (hrrpResponse.errorData == null) {
+    if (httpResponse.errorData == null) {
       return 200;
     } else {
-      return hrrpResponse.errorData!["statusCode"];
+      return httpResponse.errorData!["statusCode"];
     }
   }
 

@@ -13,8 +13,10 @@ class PwChangeController extends GetxController {
   TextEditingController originpwcontroller = TextEditingController();
   TextEditingController newpwcontroller = TextEditingController();
   TextEditingController newpwcheckcontroller = TextEditingController();
+  TextEditingController certfyNumController = TextEditingController();
 
   RxBool pwChangeButtonOn = false.obs;
+  RxBool isCertftNumCheck = false.obs;
 
   late CertificateTimer timer;
 
@@ -28,12 +30,20 @@ class PwChangeController extends GetxController {
     newpwcheckcontroller.addListener(() {
       pwChangeButtonCheck();
     });
+
+    certfyNumController.addListener(() {
+      if (certfyNumController.text.length == 6 && timer.sec.value != 0) {
+        isCertftNumCheck(true);
+      } else {
+        isCertftNumCheck(false);
+      }
+    });
     super.onInit();
   }
 
   void pwChangeButtonCheck() {
     if (newpwcontroller.text.trim().length >= 6 &&
-        newpwcontroller.text.trim() == newpwcheckcontroller.text.trim()) {
+        newpwcheckcontroller.text.trim().length >= 6) {
       pwChangeButtonOn(true);
     } else {
       pwChangeButtonOn(false);

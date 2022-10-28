@@ -38,6 +38,41 @@ class Project {
   int is_user;
   bool isPublic;
   int? managerId;
+
+  factory Project.defaultProject({
+    int? id,
+    int? userid,
+    double? postRatio,
+    String? careerName,
+    String? thumbnail,
+    List<String>? fieldIds,
+    DateTime? updateDate,
+    RxList<Post>? posts,
+    List<Person>? members,
+    RxInt? post_count,
+    Person? user,
+    bool? isTop,
+    int? is_user,
+    bool? isPublic,
+    int? managerId,
+  }) =>
+      Project(
+        id: id ?? 0,
+        userid: userid ?? 0,
+        careerName: careerName ?? "",
+        thumbnail: thumbnail ?? "",
+        updateDate: updateDate ?? DateTime.now(),
+        posts: posts ?? <Post>[].obs,
+        fieldIds: fieldIds ?? ["10"],
+        members: members ?? [],
+        postRatio: postRatio ?? 0.0,
+        post_count: post_count ?? RxInt(0),
+        is_user: is_user ?? 0,
+        user: user ?? Person.defaultuser(),
+        isPublic: isPublic ?? false,
+        managerId: managerId ?? 0,
+      );
+
   factory Project.fromJson(Map<String, dynamic> json) {
     bool isProject = json["project"] != null;
     return Project(

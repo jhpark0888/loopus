@@ -141,6 +141,9 @@ class ProfileSnsInputScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(
+                  height: 24,
+                ),
                 LabelTextFieldWidget(
                     label:
                         "본인 ${snsType.snsEngtoKor} ${snsType.snsInputType} 입력",
