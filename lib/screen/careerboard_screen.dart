@@ -80,33 +80,34 @@ class CareerBoardScreen extends StatelessWidget {
             ]),
           ),
         ],
-        bottom: TabBar(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          controller: _controller.tabController,
-          indicatorColor: Colors.transparent,
-          labelPadding: EdgeInsets.zero,
-          labelColor: mainblack,
-          labelStyle: ktitle,
-          isScrollable: true,
-          unselectedLabelColor: dividegray,
-          tabs: List.from(_controller.careerField.values).map((field) {
-            if (field == List.from(_controller.careerField.values).last) {
-              return _tabWidget(field, right: false);
-            } else {
-              return _tabWidget(field);
-            }
-          }).toList(),
-          // onTap: (index) {
-          //   controller.currentField.value = index;
-          //   controller.currentFieldMap({
-          //     controller
-          //             .careerFieldList[controller.currentField.value].key:
-          //         controller
-          //             .careerFieldList[controller.currentField.value]
-          //             .value
-          //   });
-          // },
-        ),
+        // bottom:
+        // TabBar(
+        //   padding: const EdgeInsets.symmetric(horizontal: 16),
+        //   controller: _controller.tabController,
+        //   indicatorColor: Colors.transparent,
+        //   labelPadding: EdgeInsets.zero,
+        //   labelColor: mainblack,
+        //   labelStyle: ktitle,
+        //   isScrollable: true,
+        //   unselectedLabelColor: dividegray,
+        //   tabs: List.from(_controller.careerField.values).map((field) {
+        //     if (field == List.from(_controller.careerField.values).last) {
+        //       return _tabWidget(field, right: false);
+        //     } else {
+        //       return _tabWidget(field);
+        //     }
+        //   }).toList(),
+        //   // onTap: (index) {
+        //   //   controller.currentField.value = index;
+        //   //   controller.currentFieldMap({
+        //   //     controller
+        //   //             .careerFieldList[controller.currentField.value].key:
+        //   //         controller
+        //   //             .careerFieldList[controller.currentField.value]
+        //   //             .value
+        //   //   });
+        //   // },
+        // ),
       ),
       body: ScrollNoneffectWidget(
           child: TabBarView(
@@ -119,25 +120,25 @@ class CareerBoardScreen extends StatelessWidget {
     ));
   }
 
-  Widget _tabWidget(String field, {bool right = true}) {
-    return IntrinsicHeight(
-      child: Row(
-        children: [
-          Tab(
-            text: field,
-          ),
-          if (right)
-            VerticalDivider(
-              thickness: 1,
-              width: 28,
-              indent: 14,
-              endIndent: 14,
-              color: dividegray,
-            )
-        ],
-      ),
-    );
-  }
+  // Widget _tabWidget(String field, {bool right = true}) {
+  //   return IntrinsicHeight(
+  //     child: Row(
+  //       children: [
+  //         Tab(
+  //           text: field,
+  //         ),
+  //         if (right)
+  //           VerticalDivider(
+  //             thickness: 1,
+  //             width: 28,
+  //             indent: 14,
+  //             endIndent: 14,
+  //             color: dividegray,
+  //           )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget tabViews(MapEntry<String, String> currentField) {
     return Obx(
@@ -295,11 +296,11 @@ class CareerBoardScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 32),
-                                  Padding(
-                                      padding: const EdgeInsets.only(
+                                  const Padding(
+                                      padding: EdgeInsets.only(
                                           left: 16.0, right: 16),
-                                      child: Text(
-                                          '인기있는 ${currentField.value}분야 태그',
+                                      child: Text('인기있는 태그',
+                                          // ${currentField.value}분야
                                           style: kmainbold)),
                                   const SizedBox(height: 16),
                                   Padding(
