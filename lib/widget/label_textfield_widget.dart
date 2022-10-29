@@ -11,6 +11,7 @@ class LabelTextFieldWidget extends StatelessWidget {
       this.labelBold = true,
       this.readOnly,
       this.obscureText,
+      this.countertext,
       this.maxLength,
       this.ontap,
       this.validator,
@@ -21,6 +22,7 @@ class LabelTextFieldWidget extends StatelessWidget {
       : super(key: key);
 
   String label;
+  String? countertext;
   bool labelBold;
   String hintText;
   TextEditingController textController;
@@ -49,8 +51,8 @@ class LabelTextFieldWidget extends StatelessWidget {
             height: 16,
           ),
           CustomTextField(
-            counterText: null,
-            maxLength: null,
+            counterText: countertext ?? '',
+            maxLength: maxLength,
             textController: textController,
             keyboardType: keyboardType,
             hintText: hintText,

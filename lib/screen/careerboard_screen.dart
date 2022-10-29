@@ -13,6 +13,7 @@ import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
+import 'package:loopus/screen/realtime_rank_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
@@ -33,6 +34,8 @@ import '../constant.dart';
 
 class CareerBoardScreen extends StatelessWidget {
   final CareerBoardController _controller = Get.put(CareerBoardController());
+
+  late bool isUniversity;
 
   @override
   Widget build(BuildContext context) {
@@ -79,33 +82,34 @@ class CareerBoardScreen extends StatelessWidget {
             ]),
           ),
         ],
-        bottom: TabBar(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          controller: _controller.tabController,
-          indicatorColor: Colors.transparent,
-          labelPadding: EdgeInsets.zero,
-          labelColor: mainblack,
-          labelStyle: ktitle,
-          isScrollable: true,
-          unselectedLabelColor: dividegray,
-          tabs: List.from(_controller.careerField.values).map((field) {
-            if (field == List.from(_controller.careerField.values).last) {
-              return _tabWidget(field, right: false);
-            } else {
-              return _tabWidget(field);
-            }
-          }).toList(),
-          // onTap: (index) {
-          //   controller.currentField.value = index;
-          //   controller.currentFieldMap({
-          //     controller
-          //             .careerFieldList[controller.currentField.value].key:
-          //         controller
-          //             .careerFieldList[controller.currentField.value]
-          //             .value
-          //   });
-          // },
-        ),
+        // bottom:
+        // TabBar(
+        //   padding: const EdgeInsets.symmetric(horizontal: 16),
+        //   controller: _controller.tabController,
+        //   indicatorColor: Colors.transparent,
+        //   labelPadding: EdgeInsets.zero,
+        //   labelColor: mainblack,
+        //   labelStyle: ktitle,
+        //   isScrollable: true,
+        //   unselectedLabelColor: dividegray,
+        //   tabs: List.from(_controller.careerField.values).map((field) {
+        //     if (field == List.from(_controller.careerField.values).last) {
+        //       return _tabWidget(field, right: false);
+        //     } else {
+        //       return _tabWidget(field);
+        //     }
+        //   }).toList(),
+        //   // onTap: (index) {
+        //   //   controller.currentField.value = index;
+        //   //   controller.currentFieldMap({
+        //   //     controller
+        //   //             .careerFieldList[controller.currentField.value].key:
+        //   //         controller
+        //   //             .careerFieldList[controller.currentField.value]
+        //   //             .value
+        //   //   });
+        //   // },
+        // ),
       ),
       body: ScrollNoneffectWidget(
           child: TabBarView(
@@ -118,25 +122,25 @@ class CareerBoardScreen extends StatelessWidget {
     );
   }
 
-  Widget _tabWidget(String field, {bool right = true}) {
-    return IntrinsicHeight(
-      child: Row(
-        children: [
-          Tab(
-            text: field,
-          ),
-          if (right)
-            VerticalDivider(
-              thickness: 1,
-              width: 28,
-              indent: 14,
-              endIndent: 14,
-              color: dividegray,
-            )
-        ],
-      ),
-    );
-  }
+  // Widget _tabWidget(String field, {bool right = true}) {
+  //   return IntrinsicHeight(
+  //     child: Row(
+  //       children: [
+  //         Tab(
+  //           text: field,
+  //         ),
+  //         if (right)
+  //           VerticalDivider(
+  //             thickness: 1,
+  //             width: 28,
+  //             indent: 14,
+  //             endIndent: 14,
+  //             color: dividegray,
+  //           )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget tabViews(MapEntry<String, String> currentField) {
     return Obx(
@@ -169,11 +173,28 @@ class CareerBoardScreen extends StatelessWidget {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 16.0, top: 16),
-                                    child: Text(
-                                      '${currentField.value} 분야 실시간 순위',
-                                      style: kmainbold,
-                                      textAlign: TextAlign.start,
+                                        left: 16.0, top: 16, right: 16),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        const Text(
+                                          '실시간 커리어 순위',
+                                          style: kmainbold,
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        GestureDetector(
+                                            onTap: () {
+                                              Get.to(() => RealTimeRankScreen(
+                                                    currentField: currentField,
+                                                    isUniversity: isUniversity,
+                                                  ));
+                                            },
+                                            child: Text('전체보기',
+                                                style: kmain.copyWith(
+                                                    color: mainblue))),
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(height: 10),
@@ -186,12 +207,9 @@ class CareerBoardScreen extends StatelessWidget {
                                           scrollDirection: Axis.horizontal,
                                           itemBuilder: (context, index) {
                                             return CareerRankWidget(
-                                              isUniversity:
-                                                  index == 0 ? true : false,
-                                              ranker: index == 0
-                                                  ? _controller.campusRankerMap[
-                                                      currentField.key]!
-                                                  : _controller.koreaRankerMap[
+                                              isUniversity: index == true,
+                                              ranker:
+                                                  _controller.koreaRankerMap[
                                                       currentField.key]!,
                                               currentField: currentField,
                                             );
@@ -294,11 +312,11 @@ class CareerBoardScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 32),
-                                  Padding(
+                                  const Padding(
                                       padding: const EdgeInsets.only(
                                           left: 16.0, right: 16),
-                                      child: Text(
-                                          '인기있는 ${currentField.value}분야 태그',
+                                      child: Text('인기있는 태그',
+                                          // ${currentField.value}분야
                                           style: kmainbold)),
                                   const SizedBox(height: 16),
                                   Padding(

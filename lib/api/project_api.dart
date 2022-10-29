@@ -221,7 +221,6 @@ Future<HTTPResponse> deleteProject(int projectId, DeleteType type ) async {
 
       print("프로젝트(커리어) 삭제 : ${response.statusCode}");
       if (response.statusCode == 200) {
-        var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
         return HTTPResponse.success('');
       } else if (response.statusCode == 404) {

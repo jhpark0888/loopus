@@ -101,8 +101,7 @@ class PostingAddScreen extends StatelessWidget {
                                 ]),
                               )
                             : Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 16),
+                                padding: const EdgeInsets.fromLTRB(16,16,16,32),
                                 child: Row(
                                   children: [
                                     Expanded(
@@ -201,6 +200,7 @@ class PostingAddScreen extends StatelessWidget {
                               controller: postingAddController
                                   .keyboardVisibilityController,
                               textfield: CustomTextField(
+                                style: kmainheight,
                                 textController:
                                     tagController.tagsearchContoller,
                                 autofocus: false,
@@ -308,7 +308,7 @@ class PostingAddScreen extends StatelessWidget {
     return GestureDetector(
       onTap: ontap,
       child: Container(
-        padding: const EdgeInsets.all(14),
+        height: 42,
         decoration: BoxDecoration(
             color: mainblue, borderRadius: BorderRadius.circular(8)),
         child: Row(
@@ -327,8 +327,8 @@ class PostingAddScreen extends StatelessWidget {
   }
 
   Widget uploadButton() {
-    return GestureDetector(
-        onTap: () async {
+    return IconButton(
+        onPressed: () async {
           if (checkContent()) {
             loading();
             await addposting(project_id, _imageController.cropAspectRatio.value)
@@ -365,9 +365,9 @@ class PostingAddScreen extends StatelessWidget {
             });
           }
         },
-        child: Text('업로드',
+        icon: Text('업로드',
             style: kNavigationTitle.copyWith(
-                color: checkContent() ? mainblue : maingray, fontSize: 17)));
+                color: checkContent() ? mainblue : maingray, fontSize: 17)), padding: EdgeInsets.zero,);
   }
 
   bool checkContent() {

@@ -27,13 +27,13 @@ class MessageScreen extends StatelessWidget {
         appBar: AppBarWidget(
           bottomBorder: false,
           title: '메세지',
-          actions: [
-            GestureDetector(
-                onTap: () {
-                  Get.to(() => DatabaseList());
-                },
-                child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))
-          ],
+          // actions: [
+          //   GestureDetector(
+          //       onTap: () {
+          //         Get.to(() => DatabaseList());
+          //       },
+          //       child: SvgPicture.asset('assets/icons/appbar_more_option.svg'))
+          // ],
         ),
         // body: Obx(
         //   () => messageController.chatroomscreenstate.value ==

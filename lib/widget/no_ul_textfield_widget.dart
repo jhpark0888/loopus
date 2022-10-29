@@ -34,7 +34,7 @@ class NoUlTextField extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.only(bottom: 12),
+        contentPadding: const EdgeInsets.only(bottom: 12, top: 13),
         isDense: true,
         hintText: hintText,
         hintStyle: kmain.copyWith(

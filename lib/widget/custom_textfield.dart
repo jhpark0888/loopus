@@ -17,6 +17,7 @@ class CustomTextField extends StatelessWidget {
   final bool? readOnly;
   final Widget? suffix;
   final TextInputType? keyboardType;
+  TextStyle? style;
 
   CustomTextField(
       {required this.textController,
@@ -29,6 +30,7 @@ class CustomTextField extends StatelessWidget {
       this.keyboardType,
       this.readOnly,
       this.autofocus,
+      this.style,
       this.suffix,
       this.ontap,
       this.textInputAction,
@@ -47,7 +49,7 @@ class CustomTextField extends StatelessWidget {
       minLines: 1,
       maxLines: maxLines ?? 1,
       autofocus: autofocus ?? true,
-      style: kmain,
+      style: style?? kmain,
       cursorColor: mainblue,
       cursorWidth: 1.2,
       cursorRadius: const Radius.circular(2),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -9,10 +8,10 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/socket_message_model.dart';
+import 'package:loopus/model/user_model.dart' as person;
 import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
-
 LocalNotificaition localNotificaition = LocalNotificaition();
 
 class LocalNotificaition {
@@ -21,23 +20,19 @@ class LocalNotificaition {
   Future<void> initLocalNotificationPlugin() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('mipmap/launcher_icon');
-    const IOSInitializationSettings initializationSettingsIos =
-        IOSInitializationSettings(
-            requestAlertPermission: true,
-            requestBadgePermission: true,
-            requestSoundPermission: true);
-    const MacOSInitializationSettings initializationSettingsMacOS =
-        MacOSInitializationSettings(
+    const DarwinInitializationSettings darwinInitializationSettings =
+        DarwinInitializationSettings(
             requestAlertPermission: true,
             requestBadgePermission: true,
             requestSoundPermission: true);
     const InitializationSettings initializationSettings =
         InitializationSettings(
             android: initializationSettingsAndroid,
-            iOS: initializationSettingsIos,
-            macOS: initializationSettingsMacOS);
+            iOS: darwinInitializationSettings,
+            macOS: darwinInitializationSettings);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
+    onDidReceiveNotificationResponse: onSelectNotification
+        );
 
     const AndroidNotificationChannel androidNotificationChannel =
         AndroidNotificationChannel(
@@ -60,11 +55,12 @@ class LocalNotificaition {
         ?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
-  void onSelectNotification(String? payload) {
-    print('눌림');
-    print(payload);
+  void onSelectNotification(NotificationResponse? payload) {
+    
     try {
-      Map<String, dynamic> json = jsonDecode(payload!);
+      print('눌림');
+    print(payload!.payload);
+      Map<String, dynamic> json = jsonDecode(payload.payload!);
       if (json['type'] == 'msg') {
         print('눌림');
         HomeController.to.isNewMsg(true);
@@ -72,11 +68,12 @@ class LocalNotificaition {
         getUserProfile([partnerId]).then((user) async {
           if (user.isError == false) {
             Get.to(() => MessageDetatilScreen(
-                  partner: user.data[0],
+                  partner: person.Person.fromJson(user.data['profile'].first),
                   myProfile: HomeController.to.myProfile.value,
                   enterRoute: EnterRoute.popUp,
                 ));
-            HomeController.to.enterMessageRoom.value = user.data.first.userid;
+            HomeController.to.enterMessageRoom.value =
+                user.data['profile'].first['user_id'];
 
             await SQLController.to.findMessageRoom(
                 roomid: int.parse(json['room_id']),
@@ -115,7 +112,7 @@ class LocalNotificaition {
             showWhen: false);
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: androidNotificationDetails,
-        iOS: IOSNotificationDetails(presentSound: true));
+        iOS: DarwinNotificationDetails(presentSound: true));
     await flutterLocalNotificationsPlugin.show(
         0, title, body, platformChannelSpecifics,
         payload: jsonEncode(noti));

@@ -11,7 +11,7 @@ class NotificationModel {
       required this.user,
       required this.type,
       required this.targetId,
-      required this.content,
+      // required this.content,
       required this.date,
       required this.isread,
       required this.contents,
@@ -22,7 +22,7 @@ class NotificationModel {
   Person user;
   NotificationType type;
   int targetId;
-  String? content;
+  // String? content;
   Content? contents;
   DateTime date;
   RxBool isread;
@@ -45,14 +45,23 @@ class NotificationModel {
                               ? NotificationType.replyLike
                               : json['type'] == 7
                                   ? NotificationType.comment
-                                  : NotificationType.reply,
+                                  : json['type'] == 8
+                                      ? NotificationType.reply
+                                      : json['type'] == 9
+                                          ? NotificationType.schoolNoti
+                                          : json['type'] == 10
+                                              ? NotificationType.rankUpdate
+                                              : NotificationType.appNoti,
           targetId: json["target_id"],
-          content: json['type'] <= 4 ? json["content"] : '',
-          contents: json['type'] > 4
-              ? json['content'] != null
-                  ? Content.fromJson(json["content"])
-                  : Content(content: '', postId: json["target_id"])
-              : null,
+          // content: json['type'] <= 4 ? json["content"] : '',
+          // contents: json['type'] > 4
+          //     ? json['content'] != null
+          //         ? Content.fromJson(json["content"])
+          //         : Content(content: '', postId: json["target_id"])
+          //     : null,
+          contents: json['content'].runtimeType == String
+              ? Content.fromJson(json)
+              : Content.fromJson(json),
           date: DateTime.parse(json["date"]),
           isread: RxBool(json["is_read"]),
           looped: json["looped"] != null
@@ -63,7 +72,7 @@ class NotificationModel {
         "user_id": userId,
         "type": type,
         "target_id": targetId,
-        "content": content,
+        "content": contents!.content,
         "date": date.toIso8601String(),
       };
 }
@@ -74,5 +83,5 @@ class Content {
   Content({required this.content, required this.postId});
 
   factory Content.fromJson(Map<String, dynamic> json) =>
-      Content(content: json['content'], postId: json['post_id']);
+      Content(content: json['content'] ?? '', postId: json['post_id'] ?? 0);
 }

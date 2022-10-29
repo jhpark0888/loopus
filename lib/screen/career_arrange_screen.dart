@@ -89,7 +89,7 @@ class CareerArrangeScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SvgPicture.asset('assets/icons/career_add.svg'),
-                            const SizedBox(width: 14),
+                            const SizedBox(width: 8),
                             Text('커리어 추가하기',
                                 style: kmain.copyWith(color: mainblue))
                           ],

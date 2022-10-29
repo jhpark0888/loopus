@@ -273,7 +273,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
                                     Obx(
                                       () => Text(
                                         _controller.headerTitle.value,
-                                        style: kmainbold,
+                                        style: kmain,
                                       ),
                                     ),
                                     const SizedBox(width: 7),

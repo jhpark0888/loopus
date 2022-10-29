@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/api/notification_api.dart';
 import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
@@ -26,9 +27,11 @@ import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/firebase_options.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/notification_model.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/before_message_detail_screen.dart';
+import 'package:loopus/screen/group_career_detail_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/notification_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
@@ -72,27 +75,31 @@ class NotificationController extends GetxController {
   }
 
   //푸쉬알림 클릭했을 때
-  void _backgroundMessage(RemoteMessage message) {
+  void _backgroundMessage(RemoteMessage message) async{
     Map<String, dynamic> json = message.data;
 
     if (message.data["type"] == "msg") {
-      // Get.put(MessageDetailController(userid: id)).firstmessagesload();
+      // Get.put(MessageDetailController(us-erid: id)).firstmessagesload();
       json["date"] = DateTime.now().toString();
       json["content"] = message.notification!.body;
       json["not_read"] = 1;
       int partnerId = int.parse(message.data['sender']);
       getUserProfile([partnerId]).then((user) async {
+        print('user.data : ${user.data['profile'].first}');
         if (user.isError == false) {
-          Get.to(() => MessageDetatilScreen(
-                partner: user.data[0],
-                myProfile: HomeController.to.myProfile.value,
-                enterRoute: EnterRoute.popUp,
-              ));
-          HomeController.to.enterMessageRoom.value = user.data.first.userid;
+          if (user.data != null) {
+            Get.to(() => MessageDetatilScreen(
+                  partner: Person.fromJson(user.data['profile'].first),
+                  myProfile: HomeController.to.myProfile.value,
+                  enterRoute: EnterRoute.popUp,
+                ));
+            HomeController.to.enterMessageRoom.value =
+                user.data['profile'].first['user_id'];
 
-          await SQLController.to.findMessageRoom(
-              roomid: int.parse(json['room_id']),
-              chatRoom: ChatRoom.fromMsg(json).toJson());
+            await SQLController.to.findMessageRoom(
+                roomid: int.parse(json['room_id']),
+                chatRoom: ChatRoom.fromMsg(json).toJson());
+          }
         }
       });
     } else {
@@ -107,6 +114,13 @@ class NotificationController extends GetxController {
         Get.to(() => PostingScreen(postid: postId!));
       } else if (type == 2) {
         Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
+      } else if(type == 3){
+        String? userId = await FlutterSecureStorage().read(key: 'id');
+        getproject(id, int.parse(userId!)).then((value){if(value.isError != true){
+          Project career = value.data;
+          String name = career.members.where((element) => element.userId == int.parse(userId)).first.name;
+        Get.to(()=> GroupCareerDetailScreen(career: career, name: name));  
+        }});
       }
       isRead(id, convertType(type), senderId);
     }
@@ -124,14 +138,16 @@ class NotificationController extends GetxController {
       print(event);
       print(event.data["type"]);
       print('알림 데이터 : ${event.data}');
+
       if (event.data["type"] == "certification") {
         // certificationFunction();
       } else {
         Map<String, dynamic> json = event.data;
-        if (event.data['type'] != 'no_msg') {
-          localNotificaition.sampleNotification(
-              event.notification!.title!, event.notification!.body!, json);
-        }
+        // if (event.data['type'] != 'no_msg') {
+        localNotificaition.sampleNotification(
+            event.notification!.title!, event.notification!.body!, json);
+        // }
+
         if (event.data["type"] == "msg" || event.data['type'] == 'no_msg') {
           HomeController.to.isNewMsg(true);
           json["date"] = DateTime.now().toString();

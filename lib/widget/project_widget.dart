@@ -77,8 +77,7 @@ class ProjectWidget extends StatelessWidget {
                       Spacer(),
                       Obx(
                         () => Text(
-                          DateFormat("yyyy.MM")
-                              .format(project.value.updateDate!),
+                          '${lastPostCalculateDate(project.value.updateDate!)} 마지막 포스트',
                           style: kmain,
                         ),
                         //  ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''

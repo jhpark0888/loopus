@@ -19,18 +19,19 @@ class SelectProjectScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        leading: GestureDetector(
-            onTap: () {
+        leading: IconButton(
+          padding: EdgeInsets.zero,
+            onPressed: () {
               Get.back();
             },
-            child: SvgPicture.asset('assets/icons/appbar_exit.svg')),
+            icon: SvgPicture.asset('assets/icons/appbar_exit.svg')),
         title: '커리어 선택',
         bottomBorder: false,
       ),
       body: SingleChildScrollView(
         child: Obx(
           () => Padding(
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
