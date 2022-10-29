@@ -56,8 +56,9 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <meta-data android:name="google_analytics_automatic_screen_reporting_enabled" android:value="false" />
+    </application>
 
-        <!-- Provide required visibility configuration for API level 30 and above -->
+    <!-- Provide required visibility configuration for API level 30 and above -->
         <queries>
         <!-- If your app checks for SMS support -->
           <intent>
@@ -70,6 +71,4 @@
               <data android:scheme="tel" />
           </intent>
         </queries>
-
-    </application>
 </manifest>
