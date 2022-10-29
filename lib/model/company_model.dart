@@ -8,6 +8,7 @@ class Company extends User {
     required profileImage,
     required name,
     required followed,
+    required banned,
     required followerCount,
     required followingCount,
     required fieldId,
@@ -24,6 +25,7 @@ class Company extends User {
           name: name,
           fieldId: fieldId,
           followed: followed,
+          banned: banned,
           followerCount: followerCount,
           followingCount: followingCount,
           userType: UserType.company,
@@ -49,6 +51,7 @@ class Company extends User {
     String? intro,
     String? address,
     Rx<FollowState>? followed,
+    Rx<BanState>? banned,
     List<CompanyImage>? images,
     String? slogan,
     String? category,
@@ -65,6 +68,7 @@ class Company extends User {
         intro: intro ?? "",
         address: address ?? "",
         followed: followed ?? FollowState.normal.obs,
+        banned: banned ?? BanState.normal.obs,
         images: images ?? [],
         slogan: slogan ?? "",
         category: category ?? "",
@@ -80,7 +84,11 @@ class Company extends User {
           : json['company_name'] ?? "",
       followerCount: 0.obs,
       followingCount: 0.obs,
-      fieldId: json['contact_field'] ?? "16",
+      fieldId: json['contact_field'] != null
+          ? json['contact_field'].toString()
+          : json["group"] != null
+              ? json['group'].toString()
+              : "16",
       contactcount: json['count'] != null ? RxInt(json['count']) : RxInt(0),
       homepage: json["homepage"] ?? "",
       intro: json["information"] ?? "",
@@ -88,6 +96,9 @@ class Company extends User {
       followed: json["looped"] != null
           ? FollowState.values[json["looped"]].obs
           : FollowState.normal.obs,
+      banned: json["is_banned"] != null
+          ? BanState.values[json["is_banned"]].obs
+          : BanState.normal.obs,
       images: json["company_images"] != null
           ? json["company_images"].runtimeType != Iterable
               ? [CompanyImage.fromJson(json["company_images"])]
@@ -121,6 +132,9 @@ class Company extends User {
     followed = json["looped"] != null
         ? FollowState.values[json["looped"]].obs
         : followed;
+    banned.value = json["is_banned"] != null
+        ? BanState.values[json["is_banned"]]
+        : banned.value;
     images = json["company_images"] != null
         ? List.from(json["company_images"])
             .map((image) => CompanyImage.fromJson(image))

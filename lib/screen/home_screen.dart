@@ -176,7 +176,7 @@ class HomeScreen extends StatelessWidget {
                             enablePullDown: true,
                             enablePullUp:
                                 _homeController.enablePostingPullup.value,
-                            header: const MyCustomHeader(),
+                            header: MyCustomHeader(),
                             footer: const MyCustomFooter(),
                             onRefresh: _homeController.onPostingRefresh,
                             onLoading: _homeController.onPostingLoading,

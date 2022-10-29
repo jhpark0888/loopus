@@ -46,7 +46,7 @@ class BookmarkScreen extends StatelessWidget {
                                   controller: _controller.refreshController,
                                   enablePullDown: true,
                                   enablePullUp: true,
-                                  header: const MyCustomHeader(),
+                                  header: MyCustomHeader(),
                                   footer: const MyCustomFooter(),
                                   onRefresh: _controller.onBookmarkRefresh,
                                   onLoading: _controller.onBookmarkLoading,

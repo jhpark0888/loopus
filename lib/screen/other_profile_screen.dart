@@ -13,6 +13,7 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/group_career_detail_screen.dart';
 import 'package:loopus/screen/career_arrange_screen.dart';
 import 'package:loopus/screen/profile_sns_add_screen.dart';
+import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/profile_sns_image_widget.dart';
 import 'personal_career_detail_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';

@@ -30,7 +30,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 //           enablePullUp: (homeController.isPostingLoading.value == true)
 //               ? false
 //               : homeController.enablePostingPullup.value,
-//           header: const MyCustomHeader(),
+//           header: MyCustomHeader(),
 //           footer: const MyCustomFooter(),
 //           onRefresh: homeController.onPostingRefresh,
 //           onLoading: homeController.onPostingLoading,

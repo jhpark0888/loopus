@@ -15,6 +15,7 @@ class User {
       required this.fieldId,
       required this.profileImage,
       required this.followed,
+      required this.banned,
       required this.followerCount,
       required this.followingCount,
       required this.userType});
@@ -24,6 +25,7 @@ class User {
   String profileImage;
   String fieldId;
   Rx<FollowState> followed;
+  Rx<BanState> banned;
   RxInt followerCount;
   RxInt followingCount;
   UserType userType;
@@ -36,6 +38,7 @@ class User {
     RxInt? followingCount,
     String? profileImage,
     Rx<FollowState>? followed,
+    Rx<BanState>? banned,
     UserType? userType,
   }) =>
       User(
@@ -46,6 +49,7 @@ class User {
         followerCount: followerCount ?? 0.obs,
         followingCount: followingCount ?? 0.obs,
         followed: followed ?? FollowState.normal.obs,
+        banned: banned ?? BanState.normal.obs,
         userType: userType ?? UserType.student,
       );
 
@@ -90,7 +94,7 @@ class Person extends User {
     required profileImage,
     required this.profileTag,
     required followed,
-    required this.banned,
+    required banned,
     required this.rank,
     required this.lastRank,
     required this.schoolRank,
@@ -108,6 +112,7 @@ class Person extends User {
             profileImage: profileImage,
             followerCount: followerCount,
             followingCount: followingCount,
+            banned: banned,
             followed: followed,
             userType: UserType.student);
 
@@ -129,7 +134,6 @@ class Person extends User {
   double schoolRatioVariance;
   String admissionYear;
   RxList<SNS> snsList;
-  Rx<BanState> banned;
 
   factory Person.defaultuser({
     int? userId,

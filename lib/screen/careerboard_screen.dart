@@ -36,8 +36,7 @@ class CareerBoardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         elevation: 0,
         centerTitle: false,
@@ -116,7 +115,7 @@ class CareerBoardScreen extends StatelessWidget {
                   (index) => tabViews(
                         _controller.careerFieldList[index],
                       )))),
-    ));
+    );
   }
 
   Widget _tabWidget(String field, {bool right = true}) {
@@ -161,7 +160,7 @@ class CareerBoardScreen extends StatelessWidget {
                           physics: const BouncingScrollPhysics(),
                           controller: _controller
                               .refreshControllerMap[currentField.key]!,
-                          header: const MyCustomHeader(),
+                          header: MyCustomHeader(),
                           footer: const MyCustomFooter(),
                           onRefresh: _controller.onRefresh,
                           child: SingleChildScrollView(
