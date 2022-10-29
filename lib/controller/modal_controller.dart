@@ -434,6 +434,7 @@ void showModalIOS(
           :
           // CustomExpandedButton(onTap: func3 != null ? func3 : () {}, isBlue: isBlue, title: 계, isBig: isBig)
           Container(
+              height: 44,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: rankred,
@@ -454,7 +455,11 @@ void showModalIOS(
             ),
       actions: [
         Container(
-          color: mainWhite,
+          height: 44,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: mainWhite,
+          ),
           child: CupertinoActionSheetAction(
             child: Text(
               value1,
@@ -821,7 +826,7 @@ void showTextFieldDialog({
       ),
       content: TextField(
         controller: textEditingController,
-        maxLines: 4,
+        maxLines: 3,
         style: kmainheight,
         autofocus: true,
         cursorColor: mainblack,
@@ -831,13 +836,15 @@ void showTextFieldDialog({
           fillColor: cardGray,
           hintText: hintText,
           hintStyle: kmainheight.copyWith(color: maingray),
-          contentPadding: const EdgeInsets.all(14),
+          contentPadding: const EdgeInsets.all(16),
           enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(8)),
+            borderSide: BorderSide.none,
+            // borderRadius: BorderRadius.circular(8)
+          ),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(8)),
+            borderSide: BorderSide.none,
+            // borderRadius: BorderRadius.circular(8)
+          ),
         ),
       ),
       actionsAlignment: MainAxisAlignment.spaceBetween,

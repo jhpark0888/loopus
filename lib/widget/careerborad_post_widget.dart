@@ -158,7 +158,7 @@ class CareerBoardPostWidget extends StatelessWidget {
                     style: kmain,
                   ),
                   const Spacer(),
-                  Text('교내추천', style: kmain.copyWith(color: maingray))
+                  // Text('교내추천', style: kmain.copyWith(color: maingray))
                 ],
               ),
             )
