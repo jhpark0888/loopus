@@ -26,7 +26,7 @@ class BookmarkScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: '북마크',
+        title: '스크랩',
         bottomBorder: false,
       ),
       body: Obx(

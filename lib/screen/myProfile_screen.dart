@@ -106,7 +106,7 @@ class MyProfileScreen extends StatelessWidget {
                   Get.to(() => SettingScreen());
                 },
                 icon: SvgPicture.asset(
-                  'assets/icons/setting.svg',
+                  'assets/icons/Setting.svg',
                   width: 28,
                 ),
               ),

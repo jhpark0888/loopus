@@ -21,6 +21,7 @@ import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/custom_pie_chart.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
+import 'package:loopus/widget/empty_post_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 
 class PersonalCareerDetailScreen extends StatelessWidget {
@@ -33,7 +34,8 @@ class PersonalCareerDetailScreen extends StatelessWidget {
   ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    careerDetailController = Get.put(CareerDetailController(career: Rx(career)));
+    careerDetailController =
+        Get.put(CareerDetailController(career: Rx(career)));
     // copyList = careerList;
     return Scaffold(
       body: CustomScrollView(
@@ -71,7 +73,8 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 32, horizontal: 20),
                     child: Row(
                       children: [
                         CustomPieChart(
@@ -129,10 +132,14 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                               DivideWidget(),
                           itemCount: careerDetailController.postList.length,
                         )
-                      : GestureDetector(onTap: (){Get.to(() => PostingAddScreen(
-              project_id: career.id,
-              route: PostaddRoute.career,
-            ));},child: EmptyPostWidget(id: career.id,)))
+                      : GestureDetector(
+                          onTap: () {
+                            Get.to(() => PostingAddScreen(
+                                  project_id: career.id,
+                                  route: PostaddRoute.career,
+                                ));
+                          },
+                          child: EmptyPostWidget()))
                 ],
               ),
             ]),
@@ -143,21 +150,6 @@ class PersonalCareerDetailScreen extends StatelessWidget {
   }
 }
 
-class EmptyPostWidget extends StatelessWidget {
-  EmptyPostWidget({Key? key, required this.id}) : super(key: key);
-  int id;
-  @override
-  Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      SvgPicture.asset('assets/icons/career_post_add.svg'),
-      const SizedBox(width: 7),
-      Text(
-        '지금 바로 새로운 포스트를 작성해보세요',
-        style: kmainbold.copyWith(color: mainblue),
-      )
-    ]);
-  }
-}
 class _MyAppSpace extends StatelessWidget {
   _MyAppSpace({Key? key, required this.career}) : super(key: key);
   Rx<Project> career;
@@ -178,7 +170,7 @@ class _MyAppSpace extends StatelessWidget {
         final opacity1 = 1.0 - Interval(0.0, 0.75).transform(t);
         final opacity2 = 1.0 - Interval(fadeStart, fadeEnd).transform(t);
         return Obx(
-          ()=> Stack(
+          () => Stack(
             children: [
               SafeArea(
                 child: Center(
@@ -200,7 +192,8 @@ class _MyAppSpace extends StatelessWidget {
                             image: career.value.thumbnail == ""
                                 ? const AssetImage(
                                     'assets/illustrations/default_image.png')
-                                : NetworkImage(career.value.thumbnail) as ImageProvider,
+                                : NetworkImage(career.value.thumbnail)
+                                    as ImageProvider,
                             fit: BoxFit.cover,
                             colorFilter: ColorFilter.mode(
                                 const Color(0x00000000).withOpacity(0.4),
@@ -224,8 +217,8 @@ class _MyAppSpace extends StatelessWidget {
                             if (career.value.updateDate != null)
                               Text(
                                 '최근 포스트 ${calculateDate(career.value.updateDate!)}',
-                                style:
-                                    kNavigationTitle.copyWith(color: selectimage),
+                                style: kNavigationTitle.copyWith(
+                                    color: selectimage),
                               ),
                             const SizedBox(
                               height: 14,
@@ -311,7 +304,7 @@ class _leading extends StatelessWidget {
           Get.back();
         } else {
           if (career!.managerId == HomeController.to.myProfile.value.userId) {
-            showBottomdialog(context,bareerColor: dividegray, func1: () {
+            showBottomdialog(context, bareerColor: dividegray, func1: () {
               Get.back();
               showButtonDialog(
                   title: '이 커리어는 완전히 삭제돼요',
@@ -325,7 +318,7 @@ class _leading extends StatelessWidget {
                   rightFunction: () {
                     dialogBack(modalIOS: true);
                     loading();
-                    deleteProject(career!.id,DeleteType.del).then((value) {
+                    deleteProject(career!.id, DeleteType.del).then((value) {
                       if (value.isError == false) {
                         Get.back();
                         deleteCareer(career!);
@@ -338,17 +331,17 @@ class _leading extends StatelessWidget {
                   },
                   rightText: '삭제',
                   leftText: '취소');
+            }, func2: () {
+              Get.back();
+              Get.to(
+                  () => ProjectAddTitleScreen(screenType: Screentype.update));
             },
-                func2: () {
-                  Get.back();
-                  Get.to(()=>ProjectAddTitleScreen(screenType: Screentype.update));
-                },
                 value1: '커리어 삭제하기',
                 value2: '커리어 수정하기',
                 buttonColor1: rankred,
                 buttonColor2: maingray,
                 isOne: false);
-          }else{
+          } else {
             // showModalIOS(context, func1: (){}, func2: (){}, value1: '커리어 신고하기', value2: '', isValue1Red: true, isValue2Red: false, isOne: true);
           }
         }

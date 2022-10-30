@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/rank_api.dart';
 import 'package:loopus/api/scout_api.dart';
@@ -71,13 +72,20 @@ class ScoutReportController extends GetxController
   RxInt curRcmdCompIndex = 0.obs;
 
   Rx<ScreenState> screenState = ScreenState.loading.obs;
+  int isCorp = 0;
 
   @override
   void onInit() async {
     screenState(ScreenState.loading);
+    String? userType = await FlutterSecureStorage().read(key: "type");
+    if (userType == "student") {
+      isCorp = 0;
+    } else {
+      isCorp = 1;
+    }
 
     getCompanyList("main");
-    await getRecommandCompanyList();
+    await getRecommandCompanyList(isCorp.toString());
     pController = PageController(
         viewportFraction: 0.8, initialPage: recommendCompList.length * 300);
     screenState(ScreenState.success);
@@ -90,7 +98,7 @@ class ScoutReportController extends GetxController
     companyFieldList.clear();
     refreshController.loadComplete();
     getCompanyList("main");
-    getRecommandCompanyList();
+    getRecommandCompanyList(isCorp.toString());
     refreshController.refreshCompleted();
   }
 
@@ -125,8 +133,8 @@ class ScoutReportController extends GetxController
     });
   }
 
-  Future getRecommandCompanyList() async {
-    await getRecommandCompanys().then((value) async {
+  Future getRecommandCompanyList(String isCorp) async {
+    await getRecommandCompanys(isCorp).then((value) async {
       if (value.isError == false) {
         List<Company> companyList = List.from(value.data)
             .map((company) => Company.fromJson(company))
