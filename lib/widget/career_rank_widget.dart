@@ -39,17 +39,17 @@ class CareerRankWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
-            // children: [
-            //   Text(isUniversity ? '교내' : '전국', style: kmainbold),
-            //   GestureDetector(
-            //       onTap: () {
-            //         Get.to(() => RealTimeRankScreen(
-            //               currentField: currentField,
-            //               isUniversity: isUniversity,
-            //             ));
-            //       },
-            //       child: Text('전체보기', style: kmain.copyWith(color: mainblue)))
-            // ],
+            children: [
+              Text(isUniversity ? '교내' : '전국', style: kmainbold),
+              GestureDetector(
+                  onTap: () {
+                    Get.to(() => RealTimeRankScreen(
+                          currentField: currentField,
+                          isUniversity: isUniversity,
+                        ));
+                  },
+                  child: Text('전체보기', style: kmain.copyWith(color: mainblue)))
+            ],
           ),
           const SizedBox(height: 24),
           if (ranker.isNotEmpty)

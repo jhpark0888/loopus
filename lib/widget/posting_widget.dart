@@ -76,8 +76,8 @@ class PostingWidget extends StatelessWidget {
                         children: [
                           UserImageWidget(
                             imageUrl: item.user.profileImage,
-                            width: 35,
-                            height: 35,
+                            width: 36,
+                            height: 36,
                             userType: item.user.userType,
                           ),
                           const SizedBox(
@@ -178,6 +178,9 @@ class PostingWidget extends StatelessWidget {
                         Obx(
                           () => Row(
                             children: [
+                              SizedBox(
+                                width: 2,
+                              ),
                               InkWell(
                                 onTap: tapLike,
                                 child: item.isLiked.value == 0
@@ -188,7 +191,7 @@ class PostingWidget extends StatelessWidget {
                                     : SvgPicture.asset("assets/icons/like.svg"),
                               ),
                               const SizedBox(
-                                width: 10,
+                                width: 14.7,
                               ),
                               // Obx(
                               //   () => SizedBox(

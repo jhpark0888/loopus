@@ -34,7 +34,7 @@ class Tagwidget extends StatelessWidget {
         }
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border:

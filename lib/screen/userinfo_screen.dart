@@ -148,8 +148,8 @@ class UserInfoScreen extends StatelessWidget {
         value2: '취소',
         buttonColor1: mainblue,
         buttonColor2: maingray,
-        title: "개인 정보 수정을 위해선 재인증 절차가 필요합니다\n",
-        accentTitle: "학적이 변경된 경우, 변경된 학적 정보를 입력해주세요",
+        // title: "개인 정보 수정을 위해선 재인증 절차가 필요합니다\n",
+        // accentTitle: "학적이 변경된 경우, 변경된 학적 정보를 입력해주세요",
         isOne: false);
   }
 }

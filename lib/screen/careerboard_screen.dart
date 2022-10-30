@@ -220,7 +220,7 @@ class CareerBoardScreen extends StatelessWidget {
                                           itemCount: 2),
                                     ),
                                   ),
-                                  const SizedBox(height: 32),
+                                  const SizedBox(height: 16),
                                   // Padding(
                                   //   padding: const EdgeInsets.only(left: 16),
                                   //   child: Text(
@@ -264,6 +264,32 @@ class CareerBoardScreen extends StatelessWidget {
                                   //                   .length),
                                   //         ),
                                   // ),
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 16),
+                                    child: Text('성장 중인 친구들을 만나보세요',
+                                        style: kmainbold),
+                                  ),
+                                  // ScrollNoneffectWidget(
+                                  //   child: ListView.separated(
+                                  //       padding: const EdgeInsets.symmetric(
+                                  //           horizontal: 20),
+                                  //       scrollDirection: Axis.horizontal,
+                                  //       itemBuilder: (context, index) {
+                                  //         return Container(
+                                  //           width: 100,
+                                  //           height: 100,
+                                  //           decoration: BoxDecoration(
+                                  //               color: Colors.red),
+                                  //         );
+                                  //       },
+                                  //       separatorBuilder: (context, index) {
+                                  //         return const SizedBox(width: 14);
+                                  //       },
+                                  //       itemCount: 3),
+                                  // ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
                                   const Padding(
                                     padding: EdgeInsets.only(left: 16),
                                     child: Text('실시간 인기 포스트', style: kmainbold),

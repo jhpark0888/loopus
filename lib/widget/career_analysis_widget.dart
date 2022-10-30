@@ -3,20 +3,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loopus/constant.dart';
 
 class CareerAnalysisWidget extends StatelessWidget {
-  CareerAnalysisWidget(
-      {Key? key,
-      required this.field,
-      required this.groupRatio,
-      required this.schoolRatio,
-      this.lastgroupRatio = 0.0,
-      this.lastschoolRatio = 0.0})
-      : super(key: key);
+  CareerAnalysisWidget({
+    Key? key,
+    required this.field,
+    required this.groupRatio,
+    // required this.schoolRatio,
+    this.lastgroupRatio = 0.0,
+    // this.lastschoolRatio = 0.0
+  }) : super(key: key);
 
   String field;
   double groupRatio;
   double lastgroupRatio;
-  double schoolRatio;
-  double lastschoolRatio;
+  // double schoolRatio;
+  // double lastschoolRatio;
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +38,15 @@ class CareerAnalysisWidget extends StatelessWidget {
             ],
           ),
         ),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('교내 ${(schoolRatio * 100).toInt()}%', style: kmain),
-              rate(((schoolRatio - lastschoolRatio) * 100).toInt()),
-            ],
-          ),
-        )
+        // Expanded(
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       Text('교내 ${(schoolRatio * 100).toInt()}%', style: kmain),
+        //       rate(((schoolRatio - lastschoolRatio) * 100).toInt()),
+        //     ],
+        //   ),
+        // )
       ],
     );
   }

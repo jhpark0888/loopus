@@ -96,7 +96,7 @@ class CertificationScreen extends StatelessWidget {
             child: Column(
               children: [
                 SignUpTextWidget(
-                    oneLinetext: "개인 확인을 위해", twoLinetext: "계정 정보를 입력해주세요"),
+                    oneLinetext: "본인 확인을 위해", twoLinetext: "계정 정보를 입력해주세요"),
                 LabelTextFieldWidget(
                   label: "본인 대학 이메일",
                   hintText: "인증한 본인 대학 이메일 주소",
@@ -110,7 +110,7 @@ class CertificationScreen extends StatelessWidget {
                 ),
                 LabelTextFieldWidget(
                     label: "비밀번호",
-                    hintText: "루프어스에 가입할 때 입력한 비밀번호",
+                    hintText: "루프어스 비밀번호",
                     obscureText: true,
                     // validator: (value) =>
                     //     CheckValidate().validatePassword(value!),

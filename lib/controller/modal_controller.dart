@@ -677,22 +677,28 @@ void showButtonDialog({
                   Row(
                     children: [
                       Expanded(
-                          child: CustomExpandedButton(
-                              onTap: leftFunction,
-                              isBlue: false,
-                              title: leftText,
-                              isBig: true)),
+                          child: Container(
+                        height: 42,
+                        child: CustomExpandedButton(
+                            onTap: leftFunction,
+                            isBlue: false,
+                            title: leftText,
+                            isBig: true),
+                      )),
                       const SizedBox(
                         width: 8,
                       ),
                       Expanded(
-                          child: CustomExpandedButton(
-                              onTap: rightFunction,
-                              isBlue: true,
-                              title: rightText,
-                              textColor: highlightColor,
-                              boxColor: rankred,
-                              isBig: true)),
+                          child: Container(
+                        height: 42,
+                        child: CustomExpandedButton(
+                            onTap: rightFunction,
+                            isBlue: true,
+                            title: rightText,
+                            textColor: highlightColor,
+                            boxColor: rankred,
+                            isBig: true),
+                      )),
                     ],
                   ),
                   const SizedBox(
@@ -852,22 +858,25 @@ void showTextFieldDialog({
         Row(
           children: [
             Expanded(
-                child: CustomExpandedButton(
-                    onTap: leftFunction,
-                    isBlue: false,
-                    title: "취소",
-                    isBig: true)),
+                child: Container(
+              height: 42,
+              child: CustomExpandedButton(
+                  onTap: leftFunction, isBlue: false, title: "취소", isBig: true),
+            )),
             const SizedBox(
               width: 8,
             ),
             Expanded(
-                child: CustomExpandedButton(
-                    onTap: rightFunction,
-                    isBlue: true,
-                    title: completeText,
-                    textColor: highlightColor,
-                    boxColor: rankred,
-                    isBig: true)),
+                child: Container(
+              height: 42,
+              child: CustomExpandedButton(
+                  onTap: rightFunction,
+                  isBlue: true,
+                  title: completeText,
+                  textColor: highlightColor,
+                  boxColor: rankred,
+                  isBig: true),
+            )),
           ],
         ),
       ],

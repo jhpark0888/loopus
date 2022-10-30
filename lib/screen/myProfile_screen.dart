@@ -119,7 +119,7 @@ class MyProfileScreen extends StatelessWidget {
 
             // controller: profileController.profilerefreshController,
             // enablePullDown: true,
-            // header: MyCustomHeader(),
+            // header: const MyCustomHeader(),
             onRefresh: profileController.onRefresh,
             child: ExtendedNestedScrollView(
               // primary: true,
@@ -537,16 +537,16 @@ class MyProfileScreen extends StatelessWidget {
                                   profileController.myUserInfo.value.fieldId]!,
                               groupRatio:
                                   profileController.myUserInfo.value.groupRatio,
-                              schoolRatio: profileController
-                                  .myUserInfo.value.schoolRatio,
+                              // schoolRatio: profileController
+                              //     .myUserInfo.value.schoolRatio,
                               lastgroupRatio: profileController
                                       .myUserInfo.value.groupRatio +
                                   profileController
                                       .myUserInfo.value.groupRatioVariance,
-                              lastschoolRatio: profileController
-                                      .myUserInfo.value.schoolRatio +
-                                  profileController
-                                      .myUserInfo.value.schoolRatioVariance,
+                              // lastschoolRatio: profileController
+                              //         .myUserInfo.value.schoolRatio +
+                              //     profileController
+                              //         .myUserInfo.value.schoolRatioVariance,
                             ),
                             const SizedBox(height: 24),
                             Row(
@@ -573,31 +573,26 @@ class MyProfileScreen extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 14),
-                            KeepAliveWidget(
-                              child: ListView.separated(
-                                primary: false,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) =>
-                                    GestureDetector(
-                                  onTap: () {
-                                    print(profileController
-                                        .myProjectList[index].isPublic);
-                                    goCareerScreen(
-                                        profileController.myProjectList[index],
-                                        profileController
-                                            .myUserInfo.value.name);
-                                  },
-                                  child: CareerWidget(
-                                      career: profileController
-                                          .myProjectList[index]),
-                                ),
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                  height: 14,
-                                ),
-                                itemCount:
-                                    profileController.myProjectList.length,
+                            ListView.separated(
+                              primary: false,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) => GestureDetector(
+                                onTap: () {
+                                  print(profileController
+                                      .myProjectList[index].isPublic);
+                                  goCareerScreen(
+                                      profileController.myProjectList[index],
+                                      profileController.myUserInfo.value.name);
+                                },
+                                child: CareerWidget(
+                                    career:
+                                        profileController.myProjectList[index]),
                               ),
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
+                                height: 14,
+                              ),
+                              itemCount: profileController.myProjectList.length,
                             ),
                             const SizedBox(height: 24),
                           ],

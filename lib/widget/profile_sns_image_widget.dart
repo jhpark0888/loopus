@@ -19,9 +19,9 @@ class ProfileSnsImageWidget extends StatelessWidget {
       },
       child: Image.asset(
         "assets/illustrations/${sns.snsType.name}_image.png",
-        fit: BoxFit.cover,
-        width: 24,
-        height: 24,
+        // fit: BoxFit.cover,
+        width: 28,
+        height: 28,
       ),
     );
   }
