@@ -76,7 +76,8 @@ class GroupCareerDetailScreen extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.only(top: Platform.isAndroid ? 70 : 105),
+                    padding:
+                        EdgeInsets.only(top: Platform.isAndroid ? 70 : 100),
                     child: Column(
                       children: [
                         Padding(
@@ -118,7 +119,9 @@ class GroupCareerDetailScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        DivideWidget(height: 1,),
+                        DivideWidget(
+                          height: 1,
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(top: 24),
                           child: Container(
@@ -314,7 +317,8 @@ class _MyAppSpace extends StatelessWidget {
                   width: Get.width,
                   height: Get.width,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 44, 16, 26),
+                    padding: EdgeInsets.fromLTRB(
+                        16, Platform.isAndroid ? 44 : 60, 16, 26),
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -330,8 +334,7 @@ class _MyAppSpace extends StatelessWidget {
                           if (career.updateDate != null)
                             Text(
                               '최근 포스트 ${calculateDate(career.updateDate!)}',
-                              style:
-                                  kmain.copyWith(color: mainWhite),
+                              style: kmain.copyWith(color: mainWhite),
                             ),
                           const SizedBox(
                             height: 16,
@@ -341,13 +344,11 @@ class _MyAppSpace extends StatelessWidget {
                               SvgPicture.asset('assets/icons/group_career.svg'),
                               const SizedBox(width: 8),
                               Text('그룹 커리어',
-                                  style: kmain.copyWith(
-                                      color: mainWhite)),
+                                  style: kmain.copyWith(color: mainWhite)),
                               const Spacer(),
                               Text(
                                 '포스트 ${career.post_count}',
-                                style: kmain.copyWith(
-                                    color: mainWhite),
+                                style: kmain.copyWith(color: mainWhite),
                               )
                             ],
                           )
@@ -527,33 +528,34 @@ class _leading extends StatelessWidget {
             showBottomdialog(context, bareerColor: popupGray, func2: () {
               Get.back();
               showButtonDialog(
-                  title: '이 커리어는 완전히 삭제돼요',
-                  startContent: '이 커리어에 작성된\n',
-                  highlightContent: '모든 포스트와 데이터는 완전 삭제되며,\n복구가 불가능해요.\n',
-                  highlightColor: rankred,
-                  rightColor: mainWhite,
-                  endContent: '정말 삭제하시겠어요?',
-                  leftFunction: () {
-                    Get.back();
-                  },
-                  rightFunction: () {
-                    dialogBack(modalIOS: true);
-                    loading();
-                    deleteProject(career!.id, DeleteType.del).then((value) {
-                      print(value.isError);
-                      if (value.isError == false) {
-                        Get.back();
-                        // careerList!.remove(career);
-                        deleteCareer(career!);
-                        Get.back();
-                        showCustomDialog("해당 커리어가 삭제되었어요", 1400);
-                      } else {
-                        errorSituation(value);
-                      }
-                    });
-                  },
-                  rightText: '삭제',
-                  leftText: '취소',);
+                title: '이 커리어는 완전히 삭제돼요',
+                startContent: '이 커리어에 작성된\n',
+                highlightContent: '모든 포스트와 데이터는 완전 삭제되며,\n복구가 불가능해요.\n',
+                highlightColor: rankred,
+                rightColor: mainWhite,
+                endContent: '정말 삭제하시겠어요?',
+                leftFunction: () {
+                  Get.back();
+                },
+                rightFunction: () {
+                  dialogBack(modalIOS: true);
+                  loading();
+                  deleteProject(career!.id, DeleteType.del).then((value) {
+                    print(value.isError);
+                    if (value.isError == false) {
+                      Get.back();
+                      // careerList!.remove(career);
+                      deleteCareer(career!);
+                      Get.back();
+                      showCustomDialog("해당 커리어가 삭제되었어요", 1400);
+                    } else {
+                      errorSituation(value);
+                    }
+                  });
+                },
+                rightText: '삭제',
+                leftText: '취소',
+              );
             }, func1: () {
               Get.back();
               Get.to(
