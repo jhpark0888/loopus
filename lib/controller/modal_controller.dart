@@ -623,6 +623,7 @@ void showButtonDialog({
   required String rightText,
   required String leftText,
   Color? highlightColor,
+  Color? rightColor
 }) {
   Get.dialog(
     Material(
@@ -694,7 +695,7 @@ void showButtonDialog({
                             onTap: rightFunction,
                             isBlue: true,
                             title: rightText,
-                            textColor: highlightColor,
+                            textColor: rightColor ?? mainWhite,
                             boxColor: rankred,
                             isBig: true),
                       )),

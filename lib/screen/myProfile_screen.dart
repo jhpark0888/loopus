@@ -82,10 +82,10 @@ class MyProfileScreen extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            centerTitle: true,
+            centerTitle: false,
             title: const Text(
               '프로필',
-              style: ktitle,
+              style: kNavigationTitle,
             ),
             leading: IconButton(
                 onPressed: () {
@@ -94,19 +94,21 @@ class MyProfileScreen extends StatelessWidget {
                 icon: SvgPicture.asset('assets/icons/appbar_back.svg')),
             actions: [
               IconButton(
+                  padding: EdgeInsets.zero,
                   onPressed: () {
                     Get.to(() => BookmarkScreen());
                   },
                   icon: SvgPicture.asset(
                     'assets/icons/bookmark_inactive.svg',
-                    width: 28,
                   )),
-              GestureDetector(
-                onTap: () {
+              IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
                   Get.to(() => SettingScreen());
                 },
-                child: SvgPicture.asset(
+                icon: SvgPicture.asset(
                   'assets/icons/setting.svg',
+                  color: mainblack,
                 ),
               ),
             ],
@@ -366,16 +368,16 @@ class MyProfileScreen extends StatelessWidget {
                   height: 24,
                   userType: profileController.myUserInfo.value.userType,
                 ),
-                const SizedBox(width: 7),
+                const SizedBox(width: 8),
                 Text(
                   profileController.myUserInfo.value.univName,
                   style: kmain,
                 ),
                 const SizedBox(
-                  height: 12,
+                  height: 9,
                   child: VerticalDivider(
                     thickness: 1,
-                    width: 14,
+                    width: 16,
                     color: mainblack,
                   ),
                 ),
@@ -384,10 +386,10 @@ class MyProfileScreen extends StatelessWidget {
                   style: kmain,
                 ),
                 const SizedBox(
-                  height: 12,
+                  height: 9,
                   child: VerticalDivider(
                     thickness: 1,
-                    width: 14,
+                    width: 16,
                     color: mainblack,
                   ),
                 ),
@@ -520,44 +522,46 @@ class MyProfileScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                const Text('커리어 분석', style: kmainbold),
-                                const SizedBox(width: 7),
+                                Text(
+                                    '${profileController.myUserInfo.value.name}님과 관련있는 기업',
+                                    style: kmainbold),
+                                const SizedBox(width: 8),
                                 SvgPicture.asset(
                                   'assets/icons/information.svg',
                                   width: 20,
                                   height: 20,
-                                  color: mainblack.withOpacity(0.6),
                                 )
                               ],
                             ),
-                            const SizedBox(height: 14),
-                            CareerAnalysisWidget(
-                              field: fieldList[
-                                  profileController.myUserInfo.value.fieldId]!,
-                              groupRatio:
-                                  profileController.myUserInfo.value.groupRatio,
-                              // schoolRatio: profileController
-                              //     .myUserInfo.value.schoolRatio,
-                              lastgroupRatio: profileController
-                                      .myUserInfo.value.groupRatio +
-                                  profileController
-                                      .myUserInfo.value.groupRatioVariance,
-                              // lastschoolRatio: profileController
-                              //         .myUserInfo.value.schoolRatio +
-                              //     profileController
-                              //         .myUserInfo.value.schoolRatioVariance,
-                            ),
+                            const SizedBox(height: 16),
+                            Container(),
                             const SizedBox(height: 24),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 const Text('커리어', style: kmainbold),
-                                const SizedBox(width: 7),
+                                const SizedBox(width: 8),
+                                CareerAnalysisWidget(
+                                  field: fieldList[profileController
+                                      .myUserInfo.value.fieldId]!,
+                                  groupRatio: profileController
+                                      .myUserInfo.value.groupRatio,
+                                  // schoolRatio: profileController
+                                  //     .myUserInfo.value.schoolRatio,
+                                  lastgroupRatio: profileController
+                                          .myUserInfo.value.groupRatio +
+                                      profileController
+                                          .myUserInfo.value.groupRatioVariance,
+                                  // lastschoolRatio: profileController
+                                  //         .myUserInfo.value.schoolRatio +
+                                  //     profileController
+                                  //         .myUserInfo.value.schoolRatioVariance,
+                                ),
+                                // const SizedBox(width: 8),
                                 SvgPicture.asset(
                                   'assets/icons/information.svg',
                                   width: 20,
                                   height: 20,
-                                  color: mainblack.withOpacity(0.6),
                                 ),
                                 const Spacer(),
                                 GestureDetector(
@@ -571,7 +575,7 @@ class MyProfileScreen extends StatelessWidget {
                                 )
                               ],
                             ),
-                            const SizedBox(height: 14),
+                            const SizedBox(height: 16),
                             ListView.separated(
                               primary: false,
                               shrinkWrap: true,
@@ -614,14 +618,14 @@ class MyProfileScreen extends StatelessWidget {
             enablePullUp: true,
             footer: const MyCustomFooter(),
             onLoading: profileController.onPostLoading,
-            child: ListView.separated(
+            child: ListView.builder(
                 // key: const PageStorageKey("postView"), 이거 넣으면 포스팅들이 마지막 사진이나 링크로 가게됨
                 itemBuilder: (context, index) => PostingWidget(
                     item: profileController.allPostList[index],
-                    type: PostingWidgetType.profile),
-                separatorBuilder: (context, index) => DivideWidget(
-                      height: 10,
-                    ),
+                    type: PostingWidgetType.normal),
+                // separatorBuilder: (context, index) => DivideWidget(
+                //       height: 10,
+                //     ),
                 itemCount: profileController.allPostList.length),
           ));
   }

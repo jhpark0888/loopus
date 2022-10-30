@@ -37,12 +37,14 @@ Future<HTTPResponse> addproject() async {
     String? token = await const FlutterSecureStorage().read(key: "token");
     Uri uri = Uri.parse('$serverUri/project_api/project');
     try {
+      print(projectAddController.selectCompany.value.name);
       var body = {
         'project_name': projectAddController.projectnamecontroller.text,
         'looper': projectAddController.selectedpersontaglist
             .map((person) => person.id)
             .toList(),
-        'is_public': projectAddController.isPublic.value
+        'is_public': projectAddController.isPublic.value,
+        'company' : projectAddController.selectCompany.value.userId
       };
 
       final headers = {
@@ -157,6 +159,9 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
       if (updateType == ProjectUpdateType.project_name) {
         request.fields['project_name'] =
             projectAddController.projectnamecontroller.text;
+            if(projectAddController.selectCompany.value.name != ''){
+              request.fields['company'] = projectAddController.selectCompany.value.userId.toString();
+            }
       } else if (updateType == ProjectUpdateType.date) {
         request.fields['start_date'] = DateFormat('yyyy-MM-dd').format(
             DateTime.parse(projectAddController.selectedStartDateTime.value));

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/search_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/career_detail_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/utils/check_form_validate.dart';
@@ -48,7 +49,9 @@ class ProjectAddController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    if(Get.isRegistered<CareerDetailController>()){
+      projectnamecontroller.text = CareerDetailController.to.career.value.careerName;
+    }
     projectnamecontroller.addListener(() {
       onTitleButton(
           CheckValidate.validateSpecificWords(projectnamecontroller.text));

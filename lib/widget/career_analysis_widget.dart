@@ -20,24 +20,23 @@ class CareerAnalysisWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: RichText(
-              text: TextSpan(children: [
-            TextSpan(text: field, style: kmain.copyWith(color: mainblue)),
-            const TextSpan(text: ' 분야', style: kmain)
-          ])),
-        ),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('전국 ${(groupRatio * 100).toInt()}%', style: kmain),
-              rate(((groupRatio - lastgroupRatio) * 100).toInt()),
-            ],
-          ),
-        ),
+    return 
+    // Row(
+    //   children: [
+        // Expanded(
+        //   child: RichText(
+        //       text: TextSpan(children: [
+        //     TextSpan(text: field, style: kmain.copyWith(color: mainblue)),
+        //     const TextSpan(text: ' 분야', style: kmain)
+        //   ])),
+        // ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('상위 ${(groupRatio * 100).toInt()}%', style: kmain),
+            rate(((groupRatio - lastgroupRatio) * 100).toInt()),
+          ],
+        );
         // Expanded(
         //   child: Row(
         //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,8 +46,8 @@ class CareerAnalysisWidget extends StatelessWidget {
         //     ],
         //   ),
         // )
-      ],
-    );
+    //   ],
+    // );
   }
 
   Widget rate(int variance) {
@@ -58,7 +57,7 @@ class CareerAnalysisWidget extends StatelessWidget {
       if (variance != 0)
         Text('${variance.abs()}%',
             style:
-                kcaption.copyWith(color: variance >= 1 ? rankred : mainblue)),
+                kcaption.copyWith(color: variance >= 1 ? rankred : rankblue)),
       const SizedBox(width: 8)
     ]);
   }

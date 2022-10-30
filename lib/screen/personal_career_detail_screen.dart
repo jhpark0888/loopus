@@ -65,7 +65,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
             flexibleSpace: _MyAppSpace(
               career: careerDetailController.career,
             ),
-            expandedHeight: 200,
+            expandedHeight: 180,
           ),
           SliverList(
             delegate: SliverChildListDelegate([
@@ -74,7 +74,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 32, horizontal: 20),
+                        vertical: 24, horizontal: 16),
                     child: Row(
                       children: [
                         CustomPieChart(
@@ -82,19 +82,17 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                           // careerList: careerList,
                           currentId: career.id,
                         ),
-                        const SizedBox(width: 32),
+                        const SizedBox(width: 24),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                  text: 'IT 분야',
-                                  style: kmainbold.copyWith(color: mainblue)),
-                              const TextSpan(text: '커리어', style: kmainbold)
+                                text: const TextSpan(children: [
+                              TextSpan(text: 'IT 분야', style: kmainbold),
+                              TextSpan(text: '커리어', style: kmainbold)
                             ])),
-                            const SizedBox(height: 14),
+                            const SizedBox(height: 8),
                             RichText(
                                 text: TextSpan(children: [
                               TextSpan(
@@ -114,22 +112,24 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Divider(
+                        height: 1,
                         thickness: 0.5,
                         color: dividegray,
                       )),
                   // const SizedBox(height: 24),
                   Obx(() => careerDetailController.postList.isNotEmpty
-                      ? ListView.separated(
+                      ? ListView.builder(
+                          padding: EdgeInsets.zero,
                           primary: false,
                           shrinkWrap: true,
                           itemBuilder: (context, postindex) {
                             return PostingWidget(
                               item: careerDetailController.postList[postindex],
-                              type: PostingWidgetType.profile,
+                              type: PostingWidgetType.normal,
                             );
                           },
-                          separatorBuilder: (context, postindex) =>
-                              DivideWidget(),
+                          // separatorBuilder: (context, postindex) =>
+                          //     DivideWidget(),
                           itemCount: careerDetailController.postList.length,
                         )
                       : GestureDetector(
@@ -139,7 +139,12 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                                   route: PostaddRoute.career,
                                 ));
                           },
-                          child: EmptyPostWidget()))
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 24),
+                              EmptyPostWidget(),
+                            ],
+                          )))
                 ],
               ),
             ]),
@@ -201,14 +206,13 @@ class _MyAppSpace extends StatelessWidget {
                     width: Get.width,
                     height: Get.width,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 58, 20, 14),
+                      padding: const EdgeInsets.fromLTRB(16, 44, 16, 0),
                       child: SingleChildScrollView(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 44),
-                            const SizedBox(height: 16),
                             getExpendTitle(
                               career.value.careerName,
                             ),
@@ -218,8 +222,7 @@ class _MyAppSpace extends StatelessWidget {
                             if (career.value.updateDate != null)
                               Text(
                                 '최근 포스트 ${calculateDate(career.value.updateDate!)}',
-                                style: kNavigationTitle.copyWith(
-                                    color: selectimage),
+                                style: kmain.copyWith(color: mainWhite),
                               ),
                             const SizedBox(
                               height: 16,
@@ -230,13 +233,11 @@ class _MyAppSpace extends StatelessWidget {
                                     'assets/icons/single_career.svg'),
                                 const SizedBox(width: 8),
                                 Text('개인 커리어',
-                                    style: kNavigationTitle.copyWith(
-                                        color: selectimage)),
+                                    style: kmain.copyWith(color: mainWhite)),
                                 const Spacer(),
                                 Text(
                                   '포스트 ${career.value.post_count}',
-                                  style: kNavigationTitle.copyWith(
-                                      color: selectimage),
+                                  style: kmain.copyWith(color: mainWhite),
                                 ),
                               ],
                             ),
@@ -300,6 +301,7 @@ class _leading extends StatelessWidget {
     BuildContext context,
   ) {
     return IconButton(
+      padding: EdgeInsets.zero,
       onPressed: () {
         if (leading) {
           Get.back();
@@ -343,7 +345,16 @@ class _leading extends StatelessWidget {
                 buttonColor2: maingray,
                 isOne: false);
           } else {
-            // showModalIOS(context, func1: (){}, func2: (){}, value1: '커리어 신고하기', value2: '', isValue1Red: true, isValue2Red: false, isOne: true);
+            showBottomdialog(context,
+                func1: () {},
+                func2: () {},
+                value1: '계정 차단하기',
+                value2: '계정 신고하기',
+                buttonColor1: mainWhite,
+                buttonColor2: rankred,
+                textColor1: rankred,
+                textColor2: mainWhite,
+                isOne: false);
           }
         }
       },

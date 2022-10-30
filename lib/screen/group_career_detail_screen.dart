@@ -9,6 +9,7 @@ import 'package:loopus/controller/career_detail_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/main.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
@@ -119,7 +120,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                         ),
                         DivideWidget(height: 1,),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.only(top: 24),
                           child: Container(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -134,7 +135,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 16),
                                 SizedBox(
-                                    height: 71,
+                                    height: 72,
                                     child: Obx(
                                       () => ListView.separated(
                                           padding: const EdgeInsets.only(
@@ -219,7 +220,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
             userType: UserType.student,
           ),
           const SizedBox(
-            height: 7,
+            height: 8,
           ),
           Row(
             children: [
@@ -254,9 +255,9 @@ class GroupCareerDetailScreen extends StatelessWidget {
           height: 50,
           color: mainblue,
         ),
-        const SizedBox(height: 7),
+        const SizedBox(height: 8),
         Text(
-          '추가',
+          '초대',
           style: kmain.copyWith(color: mainblue),
         )
       ]),
@@ -313,7 +314,7 @@ class _MyAppSpace extends StatelessWidget {
                   width: Get.width,
                   height: Get.width,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 58, 20, 14),
+                    padding: const EdgeInsets.fromLTRB(16, 44, 16, 26),
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -324,29 +325,29 @@ class _MyAppSpace extends StatelessWidget {
                             CareerDetailController.to.career.value.careerName,
                           ),
                           const SizedBox(
-                            height: 14,
+                            height: 16,
                           ),
                           if (career.updateDate != null)
                             Text(
                               '최근 포스트 ${calculateDate(career.updateDate!)}',
                               style:
-                                  kNavigationTitle.copyWith(color: selectimage),
+                                  kmain.copyWith(color: mainWhite),
                             ),
                           const SizedBox(
-                            height: 14,
+                            height: 16,
                           ),
                           Row(
                             children: [
                               SvgPicture.asset('assets/icons/group_career.svg'),
-                              const SizedBox(width: 7),
+                              const SizedBox(width: 8),
                               Text('그룹 커리어',
-                                  style: kNavigationTitle.copyWith(
-                                      color: selectimage)),
+                                  style: kmain.copyWith(
+                                      color: mainWhite)),
                               const Spacer(),
                               Text(
                                 '포스트 ${career.post_count}',
-                                style: kNavigationTitle.copyWith(
-                                    color: selectimage),
+                                style: kmain.copyWith(
+                                    color: mainWhite),
                               )
                             ],
                           )
@@ -391,6 +392,7 @@ Widget adapt(TabController tabController, String name) {
       width: Get.width,
       decoration: const BoxDecoration(color: mainWhite),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           TabBar(
             controller: tabController,
@@ -522,13 +524,14 @@ class _leading extends StatelessWidget {
           Get.back();
         } else {
           if (career!.managerId == HomeController.to.myProfile.value.userId) {
-            showBottomdialog(context, bareerColor: dividegray, func2: () {
+            showBottomdialog(context, bareerColor: popupGray, func2: () {
               Get.back();
               showButtonDialog(
                   title: '이 커리어는 완전히 삭제돼요',
                   startContent: '이 커리어에 작성된\n',
                   highlightContent: '모든 포스트와 데이터는 완전 삭제되며,\n복구가 불가능해요.\n',
                   highlightColor: rankred,
+                  rightColor: mainWhite,
                   endContent: '정말 삭제하시겠어요?',
                   leftFunction: () {
                     Get.back();
@@ -550,7 +553,7 @@ class _leading extends StatelessWidget {
                     });
                   },
                   rightText: '삭제',
-                  leftText: '취소');
+                  leftText: '취소',);
             }, func1: () {
               Get.back();
               Get.to(
@@ -558,14 +561,15 @@ class _leading extends StatelessWidget {
             },
                 value1: '커리어 수정하기',
                 value2: '커리어 삭제하기',
-                buttonColor1: maingray,
+                buttonColor1: mainWhite,
                 buttonColor2: rankred,
+                textColor1: mainblack,
                 isOne: false);
           } else if (career!.members
               .where((element) =>
                   element.userId == HomeController.to.myProfile.value.userId)
               .isNotEmpty) {
-            showBottomdialog(context, bareerColor: dividegray, func2: () {
+            showBottomdialog(context, bareerColor: popupGray, func2: () {
               Get.back();
               showButtonDialog(
                   title: '그룹 커리어에서 나가게 돼요',
@@ -573,6 +577,7 @@ class _leading extends StatelessWidget {
                       '이 커리어에 ${HomeController.to.myProfile.value.name}님은\n',
                   highlightContent: '더이상 글을 남길 수 없게 돼요.\n',
                   highlightColor: rankred,
+                  rightColor: mainWhite,
                   endContent:
                       '${HomeController.to.myProfile.value.name}님이 작성한 글은\n 그룹 커리어 내 남아 있을 수 있어요.\n정말 나가시겠어요?',
                   leftFunction: () {
@@ -599,8 +604,10 @@ class _leading extends StatelessWidget {
                 value1: '커리어 신고하기',
                 value2: '커리어 나가기',
                 isOne: false,
-                buttonColor1: maingray,
-                buttonColor2: rankred);
+                buttonColor1: mainWhite,
+                buttonColor2: rankred,
+                textColor1: mainblack,
+                textColor2: mainWhite);
           } else {}
         }
       },
