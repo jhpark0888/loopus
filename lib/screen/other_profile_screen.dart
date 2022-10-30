@@ -13,6 +13,8 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/group_career_detail_screen.dart';
 import 'package:loopus/screen/career_arrange_screen.dart';
 import 'package:loopus/screen/profile_sns_add_screen.dart';
+import 'package:loopus/widget/Link_widget.dart';
+import 'package:loopus/widget/follow_button_widget.dart';
 import 'package:loopus/widget/profile_sns_image_widget.dart';
 import 'personal_career_detail_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';
@@ -57,8 +59,6 @@ class OtherProfileScreen extends StatelessWidget {
   int userid;
   String realname;
 
-  final Debouncer _debouncer = Debouncer();
-
   final sr.RefreshController _otherprofilerefreshController =
       sr.RefreshController(initialRefresh: false);
   final sr.RefreshController _otherpostLoadingController =
@@ -95,27 +95,47 @@ class OtherProfileScreen extends StatelessWidget {
                       ScreenState.success
                   ? Container()
                   : _controller.otherUser.value.isuser == 1
-                      ? IconButton(
-                          onPressed: () {
+                      ? GestureDetector(
+                          onTap: () {
                             Get.to(() => SettingScreen());
                           },
-                          icon: SvgPicture.asset(
+                          child: SvgPicture.asset(
                             'assets/icons/setting.svg',
                           ),
                         )
                       : IconButton(
                           onPressed: () {
-                            showModalIOS(
+                            showBottomdialog(
                               context,
-                              func3: () {
-                                showTextFieldDialog(
-                                    textEditingController:
-                                        TextEditingController(),
-                                    title: '계정 신고하기',
-                                    hintText:
-                                        '신고 내용을 입력해주세요. 관리자 확인 \n 이후 관련 약관에 따라 처리됩니다.\n ',
-                                    completeText: '신고하기 ',
-                                    // startContent: '관리자가 검토할 예정이에요',
+                              func1: () {
+                                showButtonDialog(
+                                    leftText: '취소',
+                                    rightText: '차단',
+                                    title: '<$realname> 유저를 차단하시겠어요?',
+                                    startContent:
+                                        '차단하면 <$realname> 유저와의 팔로우도 해제됩니다',
+                                    leftFunction: () => Get.back(),
+                                    rightFunction: () {
+                                      userban(_controller.userid).then((value) {
+                                        if (value.isError == false) {
+                                          dialogBack();
+                                          _controller.otherUser.value
+                                              .banned(BanState.ban);
+
+                                          showCustomDialog(
+                                              "해당 유저가 차단 되었습니다", 1000);
+                                        } else {
+                                          errorSituation(value);
+                                        }
+                                      });
+                                    });
+                              },
+                              func2: () {
+                                showButtonDialog(
+                                    leftText: '취소',
+                                    rightText: '신고',
+                                    title: '<$realname> 유저를 신고하시겠어요?',
+                                    startContent: '관리자가 검토할 예정이에요',
                                     leftFunction: () => Get.back(),
                                     rightFunction: () {
                                       userreport(_controller.userid)
@@ -129,33 +149,12 @@ class OtherProfileScreen extends StatelessWidget {
                                       });
                                     });
                               },
-                              func1: () {
-                                showButtonDialog(
-                                    leftText: '취소',
-                                    rightText: '차단',
-                                    title: '계정 차단하기',
-                                    startContent: '$realname님을 차단하시겠어요?',
-                                    leftFunction: () => Get.back(),
-                                    rightFunction: () {
-                                      userban(_controller.userid).then((value) {
-                                        if (value.isError == false) {
-                                          dialogBack();
-                                          _controller.otherUser.value
-                                              .banned(BanState.ban);
-
-                                          showCustomDialog(
-                                              "$realname님이 차단 되었습니다", 1000);
-                                        } else {
-                                          errorSituation(value);
-                                        }
-                                      });
-                                    });
-                              },
                               value1: '계정 차단하기',
                               value2: '계정 신고하기',
-                              isValue1Red: true,
-                              isValue2Red: true,
-                              isOne: true,
+                              buttonColor1: mainWhite,
+                              buttonColor2: rankred,
+                              textColor1: rankred,
+                              isOne: false,
                             );
                           },
                           icon: SvgPicture.asset(
@@ -433,32 +432,8 @@ class OtherProfileScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Obx(
-                        () => CustomExpandedBoldButton(
-                          onTap: followMotion,
-                          isBlue: _controller.otherUser.value.followed.value ==
-                                      FollowState.follower ||
-                                  _controller.otherUser.value.followed.value ==
-                                      FollowState.normal ||
-                                  _controller.otherUser.value.banned ==
-                                      BanState.ban
-                              ? true
-                              : false,
-                          title: _controller.otherUser.value.banned ==
-                                  BanState.ban
-                              ? '차단 해제'
-                              : _controller.otherUser.value.followed.value ==
-                                      FollowState.normal
-                                  ? '팔로우'
-                                  : _controller
-                                              .otherUser.value.followed.value ==
-                                          FollowState.follower
-                                      ? '나도 팔로우하기'
-                                      : _controller.otherUser.value.followed
-                                                  .value ==
-                                              FollowState.following
-                                          ? '팔로우 중'
-                                          : '팔로우 중',
-                        ),
+                        () => FollowButtonWidget(
+                            user: _controller.otherUser.value),
                       ),
                     ),
                     const SizedBox(
@@ -820,41 +795,4 @@ class OtherProfileScreen extends StatelessWidget {
   //   );
   // }
 
-  void followMotion() {
-    if (_controller.otherUser.value.isuser == 1) {
-      // KakaoShareManager()
-      //     .isKakaotalkInstalled()
-      //     .then((installed) {
-      //   if (installed) {
-      //     KakaoShareManager().shareMyCode();
-      //   } else {
-      //     // show alert
-      //   }
-      // });
-    } else {
-      if (_controller.otherUser.value.banned == BanState.ban) {
-        userbancancel(userid);
-      } else {
-        _controller.otherUser.value.followClick();
-
-        _debouncer.run(() {
-          if (_controller.otherUser.value.followed.value.index !=
-              _controller.lastisFollowed) {
-            if (<int>[2, 3]
-                .contains(_controller.otherUser.value.followed.value.index)) {
-              postfollowRequest(userid);
-              print("팔로우");
-            } else {
-              deletefollow(userid);
-              print("팔로우 해제");
-            }
-            _controller.lastisFollowed =
-                _controller.otherUser.value.followed.value.index;
-          } else {
-            print("아무일도 안 일어남");
-          }
-        });
-      }
-    }
-  }
 }

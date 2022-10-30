@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -73,12 +75,12 @@ class GroupCareerDetailScreen extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 105),
+                    padding: EdgeInsets.only(top: Platform.isAndroid ? 70 : 105),
                     child: Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 30.5),
+                              vertical: 24, horizontal: 30.5),
                           child: Row(
                             children: [
                               CustomPieChart(
@@ -97,6 +99,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                     const TextSpan(
                                         text: ' 커리어', style: kmainbold)
                                   ])),
+                                  const SizedBox(height: 8),
                                   RichText(
                                       text: TextSpan(children: [
                                     TextSpan(
@@ -114,7 +117,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        DivideWidget(),
+                        DivideWidget(height: 1,),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Container(

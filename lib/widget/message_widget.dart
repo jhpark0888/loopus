@@ -41,8 +41,8 @@ class MessageWidget extends StatelessWidget {
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 7,
+          horizontal: 16,
+          vertical: 8,
         ),
         child: message.sender == myId.toString()
             ? Column(
@@ -73,8 +73,8 @@ class MessageWidget extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(12.0, 0, 8.0, 0.0),
                         child: Text(
                           messageDurationCalculate(message.date),
-                          style: kcaption.copyWith(
-                            color: mainblack,
+                          style: kmainheight.copyWith(
+                            color: maingray,
                           ),
                         ),
                       ),
@@ -84,10 +84,10 @@ class MessageWidget extends StatelessWidget {
                                   BoxConstraints(maxWidth: Get.width * (3 / 5)),
                               decoration: BoxDecoration(
                                   color: mainblue,
-                                  borderRadius: BorderRadius.circular(16)),
+                                  borderRadius: BorderRadius.circular(8)),
                               child: Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(14, 7, 14, 7),
+                                      const EdgeInsets.all(8),
                                   child: Text(
                                     message.content,
                                     style:
@@ -103,10 +103,10 @@ class MessageWidget extends StatelessWidget {
                           : Container(
                               decoration: BoxDecoration(
                                   color: mainblue,
-                                  borderRadius: BorderRadius.circular(16)),
+                                  borderRadius: BorderRadius.circular(8)),
                               child: Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(14, 7, 14, 7),
+                                      const EdgeInsets.all(8),
                                   child: Text(
                                     message.content,
                                     style: kmainheight.copyWith(
@@ -124,12 +124,12 @@ class MessageWidget extends StatelessWidget {
                   ),
                   Obx(() => isFirst.value
                       ? Column(children: [
-                          const SizedBox(height: 7),
+                          const SizedBox(height: 8),
                           message.isRead!.value
                               ? const Text(
                                   '읽음',
                                   textAlign: TextAlign.end,
-                                  style: kcaption,
+                                  style: kmainheight,
                                 )
                               : const SizedBox.shrink()
                         ])
@@ -183,10 +183,9 @@ class MessageWidget extends StatelessWidget {
                                           ),
                                           color: cardGray,
                                           borderRadius:
-                                              BorderRadius.circular(16)),
+                                              BorderRadius.circular(8)),
                                       child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              14, 7, 14, 7),
+                                          padding: const EdgeInsets.all(8),
                                           child: Text(
                                             message.content,
                                             style: kmainheight,
@@ -208,10 +207,9 @@ class MessageWidget extends StatelessWidget {
                                           ),
                                           color: cardGray,
                                           borderRadius:
-                                              BorderRadius.circular(16)),
+                                              BorderRadius.circular(8)),
                                       child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              14, 7, 14, 7),
+                                          padding: const EdgeInsets.all(8),
                                           child: Text(
                                             message.content,
                                             style: kmainheight,
@@ -232,7 +230,7 @@ class MessageWidget extends StatelessWidget {
                                     8.0, 18.0, 12.0, 0.0),
                                 child: Text(
                                   messageDurationCalculate(message.date),
-                                  style: kcaption.copyWith(color: mainblack),
+                                  style: kmainheight.copyWith(color: maingray),
                                   textAlign: TextAlign.end,
                                 ),
                               )
@@ -261,9 +259,9 @@ class MessageWidget extends StatelessWidget {
   Widget changeDay() {
     if (isDayChange.value) {
       return Padding(
-          padding: const EdgeInsets.fromLTRB(20, 7, 20, 14),
+          padding: const EdgeInsets.fromLTRB(0, 7, 0, 14),
           child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(

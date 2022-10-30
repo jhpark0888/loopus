@@ -101,6 +101,7 @@ class CareerBoardPostWidget extends StatelessWidget {
             if (post.images.isNotEmpty || post.links.isNotEmpty)
               Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                         width: 280,

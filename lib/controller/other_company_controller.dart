@@ -39,9 +39,7 @@ class OtherCompanyController extends GetxController
   RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
 
-  late int lastisFollowed;
-
-  RxList<User> followerList = <User>[].obs;
+  // RxList<User> followerList = <User>[].obs;
 
   // Future onRefresh() async {
   //   profileenablepullup.value = true;
@@ -64,14 +62,13 @@ class OtherCompanyController extends GetxController
       if (value.isError == false) {
         otherCompany.value.copywith(value.data);
         otherCompany.refresh();
-        lastisFollowed = otherCompany.value.followed.value.index;
       } else {
         errorSituation(value, screenState: otherprofilescreenstate);
       }
     });
 
     getCompanyPosting(companyId);
-    getfollowPeople(companyId);
+    // getfollowPeople(companyId);
     // isProfileLoading.value = false;
   }
 
@@ -100,19 +97,19 @@ class OtherCompanyController extends GetxController
     }
   }
 
-  void getfollowPeople(int userId) {
-    getfollowlist(userId, FollowListType.follower).then((value) {
-      if (value.isError == false) {
-        List<User> templist = List.from(value.data["follow"])
-            .map((friend) => Person.fromJson(friend))
-            .toList();
+  // void getfollowPeople(int userId) {
+  //   getfollowlist(userId, FollowListType.follower).then((value) {
+  //     if (value.isError == false) {
+  //       List<User> templist = List.from(value.data["follow"])
+  //           .map((friend) => Person.fromJson(friend))
+  //           .toList();
 
-        followerList(templist);
-      } else {
-        errorSituation(value);
-      }
-    });
-  }
+  //       followerList(templist);
+  //     } else {
+  //       errorSituation(value);
+  //     }
+  //   });
+  // }
 
   @override
   void onInit() async {

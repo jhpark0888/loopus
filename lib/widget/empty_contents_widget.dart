@@ -13,7 +13,7 @@ class EmptyContentWidget extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         text,
-        style: kmain.copyWith(color: mainblack.withOpacity(0.6)),
+        style: kmainbold.copyWith(color: maingray),
       ),
     );
   }

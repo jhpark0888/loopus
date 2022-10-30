@@ -50,16 +50,16 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: mainWhite,
+        leadingWidth: 44,
         leading: leading ??
-            IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
+            GestureDetector(
+                onTap: () {
                   if (FocusScope.of(context).hasFocus) {
                     FocusScope.of(context).unfocus();
                   }
                   Get.back();
                 },
-                icon: SvgPicture.asset('assets/icons/appbar_back.svg')),
+                child: SvgPicture.asset('assets/icons/appbar_back.svg')),
         actions: actions,
       ),
     );

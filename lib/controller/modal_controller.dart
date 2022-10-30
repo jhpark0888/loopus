@@ -410,17 +410,16 @@ void showModalIOS(
   required bool isValue1Red,
   required bool isValue2Red,
   required bool isOne,
-  String? GetBack,
+  bool? GetBack,
+  required bool cancleButton,
   VoidCallback? func3,
   Color? boxColor,
 }) {
   showCupertinoModalPopup(
-    barrierColor: mainblack.withOpacity(
-      0.3,
-    ),
+    barrierColor: popupGray,
     context: context,
     builder: (context) => CupertinoActionSheet(
-      cancelButton: GetBack != null
+      cancelButton: cancleButton ? GetBack != null
           ? CupertinoActionSheetAction(
               child: const Text(
                 "닫기",
@@ -452,19 +451,19 @@ void showModalIOS(
                   ),
                   isDefaultAction: true,
                   onPressed: func3 != null ? func3 : () {}),
-            ),
+            ) : null,
       actions: [
         Container(
           height: 44,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: mainWhite,
+            color: isValue1Red ? rankred : mainWhite,
           ),
           child: CupertinoActionSheetAction(
             child: Text(
               value1,
               style: kmainbold.copyWith(
-                color: isValue1Red ? rankred : mainWhite,
+                color: isValue1Red ? mainWhite : mainblack,
               ),
             ),
             onPressed: func1,
@@ -540,15 +539,15 @@ void showBottomdialog(
   required bool isOne,
   Color? buttonColor1,
   Color? buttonColor2,
+  Color? textColor1,
+  Color? textColor2,
   Color? bareerColor,
   String? title,
   String? accentTitle,
 }) {
   showModalBottomSheet(
     barrierColor: bareerColor ??
-        mainWhite.withOpacity(
-          0.9,
-        ),
+        popupGray,
     enableDrag: false,
     context: context,
     backgroundColor: Colors.transparent,
@@ -556,7 +555,7 @@ void showBottomdialog(
       onTap: () => Get.back(),
       behavior: HitTestBehavior.translucent,
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -579,15 +578,15 @@ void showBottomdialog(
                 child: Center(
                   child: Text(
                     value1,
-                    style: kmain.copyWith(
-                      color: mainWhite,
+                    style: kmainbold.copyWith(
+                      color: textColor1 ?? mainWhite,
                     ),
                   ),
                 ),
               ),
             ),
             const SizedBox(
-              height: 14,
+              height: 8,
             ),
             if (isOne == false)
               GestureDetector(
@@ -600,8 +599,8 @@ void showBottomdialog(
                   child: Center(
                     child: Text(
                       value2,
-                      style: kmain.copyWith(
-                        color: mainWhite,
+                      style: kmainbold.copyWith(
+                        color: textColor2 ?? mainWhite,
                       ),
                     ),
                   ),

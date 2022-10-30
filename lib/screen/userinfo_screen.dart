@@ -38,6 +38,7 @@ class UserInfoScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
+          const SizedBox(height: 16),
           CustomListTile(
             title: "이름",
             titleColor: maingray,
@@ -144,7 +145,7 @@ class UserInfoScreen extends StatelessWidget {
               ));
         },
         func2: () => Get.back(),
-        value1: '재인증을 통해 개인 정보 수정하기',
+        value1: '계정 인증을 통해 개인 정보 수정하기',
         value2: '취소',
         buttonColor1: mainblue,
         buttonColor2: maingray,

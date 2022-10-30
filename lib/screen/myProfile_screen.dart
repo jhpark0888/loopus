@@ -101,13 +101,12 @@ class MyProfileScreen extends StatelessWidget {
                     'assets/icons/bookmark_inactive.svg',
                     width: 28,
                   )),
-              IconButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   Get.to(() => SettingScreen());
                 },
-                icon: SvgPicture.asset(
-                  'assets/icons/Setting.svg',
-                  width: 28,
+                child: SvgPicture.asset(
+                  'assets/icons/setting.svg',
                 ),
               ),
             ],
@@ -410,7 +409,7 @@ class MyProfileScreen extends StatelessWidget {
               children: [
                 Obx(() => profileController.myUserInfo.value.snsList.isNotEmpty
                     ? SizedBox(
-                        height: 24,
+                        height: 28,
                         child: ListView.separated(
                             primary: false,
                             shrinkWrap: true,
@@ -446,9 +445,9 @@ class MyProfileScreen extends StatelessWidget {
                   },
                   child: SvgPicture.asset(
                     "assets/icons/home_add.svg",
-                    width: 24,
-                    height: 24,
-                    color: dividegray,
+                    width: 28,
+                    height: 28,
+                    color: mainblue,
                   ),
                 )
               ],
@@ -513,7 +512,7 @@ class MyProfileScreen extends StatelessWidget {
                     //     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                     //         context)),
                     SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       sliver: SliverToBoxAdapter(
                         child: Column(
                           children: [
@@ -590,7 +589,7 @@ class MyProfileScreen extends StatelessWidget {
                               ),
                               separatorBuilder: (context, index) =>
                                   const SizedBox(
-                                height: 14,
+                                height: 16,
                               ),
                               itemCount: profileController.myProjectList.length,
                             ),

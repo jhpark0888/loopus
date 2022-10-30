@@ -55,40 +55,40 @@ class MessageRoomWidget extends StatelessWidget {
           key: ValueKey(chatRoom.value.roomId.toString()),
           closeOnScroll: true,
           groupTag: '1',
-          endActionPane: ActionPane(motion: const ScrollMotion(), children: [
-            SlidableAction(
-              // An action can be bigger than the others.
-              onPressed: (context) {
-                showButtonDialog(
-                    title: chatRoom.value.type.value == 1 ? '알림해제' : '알림켜기',
-                    startContent: chatRoom.value.type.value == 1
-                        ? '해제를 하면 해당 유저로부터 알림을 받을 수 없습니다.'
-                        : '켜기를 하면 해당 유저로부터 알림을 받을 수 있습니다.',
-                    leftFunction: () {
-                      Get.back();
-                    },
-                    rightFunction: () async {
-                      await roomAlarmStatus(
-                              HomeController.to.myProfile.value.userId,
-                              chatRoom.value.roomId,
-                              chatRoom.value.type.value)
-                          .then((value) {
-                        if (value.isError == false) {
-                          SQLController.to
-                              .updateRoomAlarmActive(chatRoom.value.type.value,
-                                  chatRoom.value.roomId)
-                              .then((type) => chatRoom.value.type.value = type);
-                        }
-                      });
-                      Get.back();
-                    },
-                    rightText: chatRoom.value.type.value == 1 ? '해제' : "켜기",
-                    leftText: '취소');
-              },
-              backgroundColor: maingray,
-              foregroundColor: Colors.white,
-              label: chatRoom.value.type.value == 1 ? '알림끄기' : '알림켜기',
-            ),
+          endActionPane: ActionPane(extentRatio: 0.2,motion: const ScrollMotion(), children: [
+            // SlidableAction(
+            //   // An action can be bigger than the others.
+            //   onPressed: (context) {
+            //     showButtonDialog(
+            //         title: chatRoom.value.type.value == 1 ? '알림해제' : '알림켜기',
+            //         startContent: chatRoom.value.type.value == 1
+            //             ? '해제를 하면 해당 유저로부터 알림을 받을 수 없습니다.'
+            //             : '켜기를 하면 해당 유저로부터 알림을 받을 수 있습니다.',
+            //         leftFunction: () {
+            //           Get.back();
+            //         },
+            //         rightFunction: () async {
+            //           await roomAlarmStatus(
+            //                   HomeController.to.myProfile.value.userId,
+            //                   chatRoom.value.roomId,
+            //                   chatRoom.value.type.value)
+            //               .then((value) {
+            //             if (value.isError == false) {
+            //               SQLController.to
+            //                   .updateRoomAlarmActive(chatRoom.value.type.value,
+            //                       chatRoom.value.roomId)
+            //                   .then((type) => chatRoom.value.type.value = type);
+            //             }
+            //           });
+            //           Get.back();
+            //         },
+            //         rightText: chatRoom.value.type.value == 1 ? '해제' : "켜기",
+            //         leftText: '취소');
+            //   },
+            //   backgroundColor: maingray,
+            //   foregroundColor: Colors.white,
+            //   label: chatRoom.value.type.value == 1 ? '알림끄기' : '알림켜기',
+            // ),
             SlidableAction(
               onPressed: (context) {
                 showButtonDialog(
@@ -150,14 +150,14 @@ class MessageRoomWidget extends StatelessWidget {
                   height: 36,
                   userType: user.value.userType,
                 ),
-                const SizedBox(width: 14),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(user.value.name, style: kmainbold),
-                      const SizedBox(height: 7),
+                      const SizedBox(height: 8),
                       Obx(
                         () => Row(
                           mainAxisSize: MainAxisSize.max,
