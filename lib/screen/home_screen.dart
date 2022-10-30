@@ -199,6 +199,7 @@ class HomeScreen extends StatelessWidget {
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 16),
                                               child: Column(
+                                                mainAxisSize: MainAxisSize.min,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [

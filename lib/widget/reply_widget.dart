@@ -40,7 +40,7 @@ class ReplyWidget extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onDoubleTap: () => tapLike(),
       child: Container(
-        padding: const EdgeInsets.only(left: 58, right: 20),
+        padding: const EdgeInsets.only(left: 60, right: 20),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -48,13 +48,13 @@ class ReplyWidget extends StatelessWidget {
               onTap: tapProfile,
               child: UserImageWidget(
                 imageUrl: reply.user.profileImage,
-                width: 29,
-                height: 29,
+                width: 36,
+                height: 36,
                 userType: reply.user.userType,
               ),
             ),
             const SizedBox(
-              width: 14,
+              width: 8,
             ),
             Expanded(
               child: Column(
@@ -95,19 +95,13 @@ class ReplyWidget extends StatelessWidget {
                       //   )
                       // ])),
                       const Spacer(),
-                      Text(
-                        commentCalculateDate(reply.date),
-                        style: kmain.copyWith(color: maingray),
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
                       GestureDetector(
                         onTap: reply.user.userId ==
                                 HomeController.to.myProfile.value.userId
                             ? () {
                                 showModalIOS(
                                   context,
+                                  cancleButton: false,
                                   func1: () {
                                     showButtonDialog(
                                         leftText: '취소',
@@ -173,54 +167,61 @@ class ReplyWidget extends StatelessWidget {
                                         });
                                   },
                                   func2: () {},
-                                  value1: '이 답글 신고하기',
+                                  value1: '답글 신고하기',
                                   value2: '',
                                   isValue1Red: true,
                                   isValue2Red: false,
                                   isOne: true,
+                                  cancleButton: false
                                 );
                               },
                         behavior: HitTestBehavior.translucent,
                         child: SizedBox(
                             height: 16,
                             child: SvgPicture.asset(
-                                'assets/icons/more_option.svg')),
+                                'assets/icons/more_option.svg',color: maingray,)),
                       ),
                     ],
                   ),
                   const SizedBox(
-                    height: 4,
+                    height: 8,
                   ),
                   RichText(
                       text: TextSpan(children: [
-                    TextSpan(
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Get.to(
-                              () => OtherProfileScreen(
-                                  user: reply.taggedUser,
-                                  userid: reply.taggedUser.userId,
-                                  realname: reply.taggedUser.name),
-                              preventDuplicates: false);
-                        },
-                      text: '@${reply.taggedUser.name}',
-                      style: kmainbold.copyWith(
-                          height: 1.5,
-                          color: Color.fromARGB(255, 71, 155, 224),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                    ),
+                    // TextSpan(
+                    //   recognizer: TapGestureRecognizer()
+                    //     ..onTap = () {
+                    //       Get.to(
+                    //           () => OtherProfileScreen(
+                    //               user: reply.taggedUser,
+                    //               userid: reply.taggedUser.userId,
+                    //               realname: reply.taggedUser.name),
+                    //           preventDuplicates: false);
+                    //     },
+                    //   text: '@${reply.taggedUser.name}',
+                    //   style: kmainbold.copyWith(
+                    //       height: 1.5,
+                    //       color: Color.fromARGB(255, 71, 155, 224),
+                    //       fontSize: 14,
+                    //       fontWeight: FontWeight.w400),
+                    // ),
                     TextSpan(
                       text: reply.content,
                       style: kmainheight,
                     )
                   ])),
                   const SizedBox(
-                    height: 7,
+                    height: 8,
                   ),
                   Obx(
                     () => Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
+                        Text(
+                        '${commentCalculateDate(reply.date)} 전',
+                        style: kmain.copyWith(color: maingray),
+                      ),
+                      const Spacer(),
                         GestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: () {
@@ -233,22 +234,19 @@ class ReplyWidget extends StatelessWidget {
                               '좋아요 ${reply.likecount.value}개',
                               style: kmain.copyWith(
                                 color: maingray,
-                                fontSize: 12,
                               ),
                             )),
                         const SizedBox(
-                          width: 14,
+                          width: 16,
                         ),
                         InkWell(
                           onTap: tapLike,
                           child: reply.isLiked.value == 0
-                              ? SvgPicture.asset("assets/icons/unlike.svg",
-                                  width: 11, height: 11)
-                              : SvgPicture.asset("assets/icons/like.svg",
-                                  width: 11, height: 11),
+                              ? SvgPicture.asset("assets/icons/unlike.svg",width: 16,height: 16,color: maingray ,)
+                              : SvgPicture.asset("assets/icons/like.svg",width: 16,height: 16,),
                         ),
                         const SizedBox(
-                          width: 14,
+                          width: 16,
                         ),
                         InkWell(
                           onTap: () async {
@@ -269,7 +267,7 @@ class ReplyWidget extends StatelessWidget {
                                 curve: Curves.ease);
                           },
                           child: SvgPicture.asset("assets/icons/reply.svg",
-                              height: 11, width: 11),
+                              height: 16, width: 16),
                         ),
                       ],
                     ),

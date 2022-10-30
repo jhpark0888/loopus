@@ -141,7 +141,7 @@ class MessageDetatilScreen extends StatelessWidget {
                             }
                           }
                         });
-                  }, func3: () {
+                  }, func2: () {
                     showTextFieldDialog(
                         textEditingController: TextEditingController(),
                         // leftText: '취소',
@@ -164,9 +164,10 @@ class MessageDetatilScreen extends StatelessWidget {
                   },
                       value1: '메세지 나가기',
                       value2: '계정 신고하기',
-                      isValue1Red: true,
+                      isValue1Red: false,
                       isValue2Red: true,
-                      isOne: true);
+                      isOne: true,
+                      cancleButton: true);
                 },
                 child: SizedBox(
                     height: 44,

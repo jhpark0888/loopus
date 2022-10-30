@@ -203,7 +203,8 @@ class OtherCompanyScreen extends StatelessWidget {
                           value2: '기본 이미지로 변경',
                           isValue1Red: false,
                           isValue2Red: false,
-                          isOne: false);
+                          isOne: false,
+                          cancleButton: false);
                     }
                   },
                   child: UserImageWidget(

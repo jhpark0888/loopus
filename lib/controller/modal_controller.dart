@@ -410,17 +410,16 @@ void showModalIOS(
   required bool isValue1Red,
   required bool isValue2Red,
   required bool isOne,
-  String? GetBack,
+  bool? GetBack,
+  required bool cancleButton,
   VoidCallback? func3,
   Color? boxColor,
 }) {
   showCupertinoModalPopup(
-    barrierColor: mainblack.withOpacity(
-      0.3,
-    ),
+    barrierColor: popupGray,
     context: context,
     builder: (context) => CupertinoActionSheet(
-      cancelButton: GetBack != null
+      cancelButton: cancleButton ? GetBack != null
           ? CupertinoActionSheetAction(
               child: const Text(
                 "닫기",
@@ -451,15 +450,15 @@ void showModalIOS(
                   ),
                   isDefaultAction: true,
                   onPressed: func3 != null ? func3 : () {}),
-            ),
+            ) : null,
       actions: [
         Container(
-          color: mainWhite,
+          color: isValue1Red ? rankred : mainWhite,
           child: CupertinoActionSheetAction(
             child: Text(
               value1,
               style: kmainbold.copyWith(
-                color: isValue1Red ? rankred : mainWhite,
+                color: isValue1Red ? mainWhite : mainblack,
               ),
             ),
             onPressed: func1,
@@ -541,9 +540,7 @@ void showBottomdialog(
 }) {
   showModalBottomSheet(
     barrierColor: bareerColor ??
-        mainWhite.withOpacity(
-          0.9,
-        ),
+        popupGray,
     enableDrag: false,
     context: context,
     backgroundColor: Colors.transparent,
@@ -572,10 +569,13 @@ void showBottomdialog(
                     borderRadius: BorderRadius.circular(8),
                     color: buttonColor1 ?? mainblue),
                 child: Center(
-                  child: Text(
-                    value1,
-                    style: kmain.copyWith(
-                      color: mainWhite,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    child: Text(
+                      value1,
+                      style: kmainbold.copyWith(
+                        color: buttonColor1 == mainWhite ? mainblack : mainWhite
+                      ),
                     ),
                   ),
                 ),
@@ -593,10 +593,13 @@ void showBottomdialog(
                       borderRadius: BorderRadius.circular(8),
                       color: buttonColor2 ?? maingray),
                   child: Center(
-                    child: Text(
-                      value2,
-                      style: kmain.copyWith(
-                        color: mainWhite,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      child: Text(
+                        value2,
+                        style: kmainbold.copyWith(
+                          color: buttonColor2 == mainWhite ? mainblack : mainWhite,
+                        ),
                       ),
                     ),
                   ),

@@ -33,14 +33,14 @@ class WebViewScreen extends StatelessWidget {
                         : url! == kPrivacyPolicy
                             ? '개인정보 처리방침'
                             : '',
-                style: kmain,
+                style: kNavigationTitle,
               )
             : Text(
                 //TODO : LINK 패턴 관리
                 url!.contains('http://')
                     ? url!.replaceFirst('http://', '')
                     : url!.replaceFirst('https://', ''),
-                style: kmain,
+                style: kNavigationTitle,
               ),
         centerTitle: true,
         bottom: PreferredSize(
@@ -189,6 +189,7 @@ class NavigationControls extends StatelessWidget {
         return Row(
           children: <Widget>[
             IconButton(
+              padding: EdgeInsets.zero,
               icon: SvgPicture.asset('assets/icons/arrow_left.svg'),
               onPressed: !webViewReady
                   ? null
@@ -203,9 +204,10 @@ class NavigationControls extends StatelessWidget {
                     },
             ),
             SizedBox(
-              width: 12,
+              width: 10,
             ),
             IconButton(
+              padding: EdgeInsets.zero,
               icon: SvgPicture.asset('assets/icons/arrow_right.svg'),
               onPressed: !webViewReady
                   ? null
@@ -220,9 +222,10 @@ class NavigationControls extends StatelessWidget {
                     },
             ),
             SizedBox(
-              width: 12,
+              width: 10,
             ),
             IconButton(
+              padding: EdgeInsets.zero,
               icon: SvgPicture.asset('assets/icons/refresh.svg'),
               onPressed: !webViewReady
                   ? null

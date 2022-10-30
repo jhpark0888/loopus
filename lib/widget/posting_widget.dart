@@ -76,8 +76,8 @@ class PostingWidget extends StatelessWidget {
                         children: [
                           UserImageWidget(
                             imageUrl: item.user.profileImage,
-                            width: 35,
-                            height: 35,
+                            width: 36,
+                            height: 36,
                             userType: item.user.userType,
                           ),
                           const SizedBox(
@@ -90,7 +90,7 @@ class PostingWidget extends StatelessWidget {
                                 Text(item.user.name, style: kmainbold),
                                 const SizedBox(height: 8),
                                 Text(
-                                    '${item.user.univName} | ${item.user.department}',
+                                    '${item.user.univName} · ${item.user.department}',
                                     style: kmain)
                               ])
                         ],

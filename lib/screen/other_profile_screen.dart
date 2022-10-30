@@ -154,6 +154,7 @@ class OtherProfileScreen extends StatelessWidget {
                               isValue1Red: true,
                               isValue2Red: true,
                               isOne: false,
+                              cancleButton: false
                             );
                           },
                           icon: SvgPicture.asset(

@@ -65,20 +65,19 @@ class LikePeopleScreen extends StatelessWidget {
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: [
-                                    SizedBox(height: 14),
+                                    SizedBox(height: 16),
                                     Container(
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 20),
-                                      alignment: Alignment.centerRight,
                                       child: Obx(
                                         () => Text(
                                           "좋아요 ${_controller.likeUserList.length}개",
-                                          style: kmain,
+                                          style: kmain.copyWith(color: maingray),
                                         ),
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 18,
+                                      height: 24,
                                     ),
                                     Obx(
                                       () => ListView.separated(
@@ -92,7 +91,7 @@ class LikePeopleScreen extends StatelessWidget {
                                             );
                                           },
                                           separatorBuilder: (context, index) =>
-                                              SizedBox(height: 12),
+                                              SizedBox(height: 24),
                                           itemCount:
                                               _controller.likeUserList.length),
                                     )

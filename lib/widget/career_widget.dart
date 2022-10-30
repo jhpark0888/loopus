@@ -32,7 +32,7 @@ class CareerWidget extends StatelessWidget {
       },
       tag: career.id.toString(),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         decoration: BoxDecoration(
             color: career.thumbnail == "" ? cardGray : null,
             borderRadius: BorderRadius.circular(8),
@@ -53,7 +53,7 @@ class CareerWidget extends StatelessWidget {
                   color: career.thumbnail == "" ? mainblack : mainWhite),
             ),
             const SizedBox(
-              height: 14,
+              height: 16,
             ),
             Row(
               children: [
@@ -61,7 +61,7 @@ class CareerWidget extends StatelessWidget {
                       ? SvgPicture.asset('assets/icons/group_career.svg',color: career.thumbnail == "" ? mainblack : mainWhite)
                       : SvgPicture.asset('assets/icons/single_career.svg',color: career.thumbnail == "" ? mainblack : mainWhite),
                 const SizedBox(
-                  width: 7,
+                  width: 8,
                 ),
                 Text(
                   career.isPublic ? "그룹 커리어" : "개인 커리어",
@@ -69,7 +69,7 @@ class CareerWidget extends StatelessWidget {
                       color: career.thumbnail == "" ? mainblack : mainWhite),
                 ),
                 const SizedBox(
-                  width: 7,
+                  width: 8,
                 ),
                 memberList(),
                 const Spacer(),

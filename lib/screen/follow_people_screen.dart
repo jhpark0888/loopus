@@ -66,10 +66,9 @@ class FollowPeopleScreen extends StatelessWidget {
                                     Container(
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 20),
-                                        alignment: Alignment.centerRight,
                                         child: Text(
-                                            "$followText ${_controller.userList.length}개",
-                                            style: kmain)),
+                                            "$followText ${_controller.userList.length}개의 프로필",
+                                            style: kmain.copyWith(color: maingray))),
                                     const SizedBox(
                                       height: 24,
                                     ),

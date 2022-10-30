@@ -77,7 +77,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 32, horizontal: 20),
+                              vertical: 32, horizontal: 16),
                           child: Row(
                             children: [
                               CustomPieChart(
@@ -99,7 +99,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                     const TextSpan(
                                         text: '커리어', style: kmainbold)
                                   ])),
-                                  const SizedBox(height: 14),
+                                  const SizedBox(height: 8),
                                   RichText(
                                       text: TextSpan(children: [
                                     TextSpan(

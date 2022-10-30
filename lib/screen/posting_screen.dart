@@ -116,7 +116,8 @@ class PostingScreen extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border(top: BorderSide(color: dividegray, width: 1))),
       child: Column(
-        mainAxisSize: MainAxisSize.min,mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Obx(
             () => controller.selectedCommentId.value != 0
@@ -143,7 +144,9 @@ class PostingScreen extends StatelessWidget {
                             child: IconButton(
                               icon: SvgPicture.asset(
                                   'assets/icons/reply_exit_icon.svg'),
-                              onPressed: () {controller.tagdelete();},
+                              onPressed: () {
+                                controller.tagdelete();
+                              },
                               padding: EdgeInsets.zero,
                             ))
                       ],
@@ -260,27 +263,31 @@ class PostingScreen extends StatelessWidget {
                         : Scaffold(
                             // resizeToAvoidBottomInset: false,
                             appBar: AppBarWidget(
-                              leading: GestureDetector(
-                                onTap: () {
+                              bottomBorder: false,
+                              leading: IconButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: () {
                                   Get.back();
                                 },
-                                child: SvgPicture.asset(
-                                    'assets/icons/appbar_exit.svg'),
+                                icon: SvgPicture.asset(
+                                    'assets/icons/appbar_back.svg'),
                               ),
                               title: '포스트',
                               actions: [
                                 GestureDetector(
                                   onTap: controller.post!.value.isuser == 1
                                       ? () {
-                                          showModalIOS(
-                                            context,
-                                            func1: () {
-                                              showButtonDialog(
+                                         showBottomdialog(context, func1: (){Get.to(() => PostUpdateScreen(
+                                                    post:
+                                                        controller.post!.value,
+                                                  ));}, func2: (){
+                                                    Get.back();
+                                                    showButtonDialog(
                                                   leftText: '취소',
                                                   rightText: '삭제',
-                                                  title: '포스팅을 삭제하시겠어요?',
+                                                  title: '포스트 삭제하기',
                                                   startContent:
-                                                      '삭제한 포스팅은 복구할 수 없어요',
+                                                      '정말 포스트를 삭제하시겠어요?\n이후 복구할 수 없어요.',
                                                   leftFunction: () =>
                                                       Get.back(),
                                                   rightFunction: () async {
@@ -350,7 +357,7 @@ class PostingScreen extends StatelessWidget {
                                                                     .value.id);
 
                                                         showCustomDialog(
-                                                            "포스팅이 삭제되었습니다",
+                                                            "포스트가 삭제되었습니다",
                                                             1400);
                                                       } else {
                                                         errorSituation(value);
@@ -362,32 +369,19 @@ class PostingScreen extends StatelessWidget {
                                                       //     .removeWhere((post) => post.id == postid);
                                                     });
                                                   });
-                                            },
-                                            func2: () {
-                                              Get.to(() => PostUpdateScreen(
-                                                    post:
-                                                        controller.post!.value,
-                                                  ));
-                                            },
-                                            value1: '포스팅 삭제하기',
-                                            value2: '포스팅 수정하기',
-                                            isValue1Red: true,
-                                            isValue2Red: false,
-                                            isOne: false,
-                                          );
-                                        }
+                                                  }, value1: '포스트 수정하기', value2: '포스트 삭제하기', isOne: false,buttonColor1: mainWhite, buttonColor2: rankred);}
                                       : () {
-                                          showModalIOS(
-                                            context,
-                                            func1: () {
-                                              showButtonDialog(
-                                                  leftText: '취소',
-                                                  rightText: '신고',
-                                                  title: '정말 포스팅을 신고하시겠어요?',
-                                                  startContent:
-                                                      '관리자가 검토 절차를 거칩니다',
-                                                  leftFunction: () =>
-                                                      Get.back(),
+                                        showBottomdialog(context, func1: (){showTextFieldDialog(
+                                                  title: '포스트 신고하기',
+                                                  hintText:
+                                                      '신고 내용을 입력해주세요. 관리자 확인 이후 관련 약관에 따라 처리됩니다.',
+                                                  completeText: '신고하기',
+                                                  textEditingController:
+                                                      controller
+                                                          .reportController,
+                                                  leftFunction: () {
+                                                    Get.back();
+                                                  },
                                                   rightFunction: () {
                                                     contentreport(
                                                             controller
@@ -404,15 +398,7 @@ class PostingScreen extends StatelessWidget {
                                                         errorSituation(value);
                                                       }
                                                     });
-                                                  });
-                                            },
-                                            func2: () {},
-                                            value1: '이 포스팅 신고하기',
-                                            value2: '',
-                                            isValue1Red: true,
-                                            isValue2Red: false,
-                                            isOne: true,
-                                          );
+                                                  });}, func2: (){}, value1: '포스트 신고하기', value2: '', isOne: true, buttonColor1: rankred);
                                         },
                                   child: SvgPicture.asset(
                                       'assets/icons/appbar_more_option.svg'),

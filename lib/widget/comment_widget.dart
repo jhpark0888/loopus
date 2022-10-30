@@ -60,6 +60,7 @@ class CommentWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       GestureDetector(
                         onTap: tapProfile,
@@ -103,9 +104,11 @@ class CommentWidget extends StatelessWidget {
                                   func2: () {},
                                   value1: '댓글 삭제하기',
                                   value2: '',
-                                  isValue1Red: true,
+                                  isValue1Red: false,
                                   isValue2Red: false,
                                   isOne: true,
+                                  GetBack: false,
+                                  cancleButton: false
                                 );
                               }
                             : () {
@@ -133,18 +136,21 @@ class CommentWidget extends StatelessWidget {
                                         });
                                   },
                                   func2: () {},
-                                  value1: '이 댓글 신고하기',
+                                  value1: '댓글 신고하기',
                                   value2: '',
                                   isValue1Red: true,
                                   isValue2Red: false,
                                   isOne: true,
+                                  cancleButton: false
                                 );
                               },
                         behavior: HitTestBehavior.translucent,
                         child: SizedBox(
                             height: 16,
                             child: SvgPicture.asset(
-                                'assets/icons/more_option.svg')),
+                              'assets/icons/more_option.svg',
+                              color: maingray,
+                            )),
                       ),
                     ],
                   ),
@@ -158,7 +164,7 @@ class CommentWidget extends StatelessWidget {
                     () => Row(
                       children: [
                         Text(
-                          commentCalculateDate(comment.date),
+                          '${commentCalculateDate(comment.date)} 전',
                           style: kmain.copyWith(color: maingray),
                         ),
                         const Spacer(),
@@ -192,7 +198,7 @@ class CommentWidget extends StatelessWidget {
                           //         ),
                           //       )
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 16),
                         InkWell(
                           onTap: tapLike,
                           child: comment.isLiked.value == 0
@@ -206,7 +212,7 @@ class CommentWidget extends StatelessWidget {
                                   width: 16, height: 16),
                         ),
                         const SizedBox(
-                          width: 10,
+                          width: 16,
                         ),
                         InkWell(
                           onTap: () async {
@@ -304,15 +310,32 @@ class PostCommentWidget extends StatelessWidget {
                       itemCount: comment.replyList.length),
                   if (comment.replycount.value - comment.replyList.length > 0)
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 16, 94, 0),
+                      padding: const EdgeInsets.fromLTRB(60, 23, 16, 0),
                       child: GestureDetector(
                         onTap: () async {
                           await replyListLoad();
                         },
-                        child: Text(
-                            " - 이후 ${comment.replycount.value - comment.replyList.length}개 답글 보기",
-                            style:
-                                kmain.copyWith(color: maingray, fontSize: 14)),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                height: 0.5,
+                                color: maingray,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Text(
+                                "${comment.replycount.value - comment.replyList.length}개 댓글 더보기",
+                                style: kmainbold),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Divider(
+                                height: 0.5,
+                                color: maingray,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     )
                 ],
