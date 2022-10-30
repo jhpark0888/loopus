@@ -80,7 +80,7 @@ Future<HTTPResponse> addproject() async {
         // String responsebody = await response.stream.bytesToString();
         // var responsemap = json.decode(responsebody);
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
-
+        print(responseBody);
         return HTTPResponse.success(responseBody);
       } else {
         //!GA

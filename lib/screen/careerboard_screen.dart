@@ -35,7 +35,7 @@ import '../constant.dart';
 class CareerBoardScreen extends StatelessWidget {
   final CareerBoardController _controller = Get.put(CareerBoardController());
 
-  late bool isUniversity;
+  late bool isUniversity = false;
 
   @override
   Widget build(BuildContext context) {
@@ -197,29 +197,15 @@ class CareerBoardScreen extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  const SizedBox(height: 24),
                                   SizedBox(
-                                    height: 292,
-                                    child: ScrollNoneffectWidget(
-                                      child: ListView.separated(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 16),
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (context, index) {
-                                            return CareerRankWidget(
-                                              isUniversity: index == true,
-                                              ranker:
-                                                  _controller.koreaRankerMap[
-                                                      currentField.key]!,
-                                              currentField: currentField,
-                                            );
-                                          },
-                                          separatorBuilder: (context, index) {
-                                            return const SizedBox(width: 10);
-                                          },
-                                          itemCount: 2),
-                                    ),
-                                  ),
+                                      height: 292,
+                                      child: CareerRankWidget(
+                                        isUniversity: false,
+                                        ranker: _controller
+                                            .koreaRankerMap[currentField.key]!,
+                                        currentField: currentField,
+                                      )),
                                   const SizedBox(height: 16),
                                   // Padding(
                                   //   padding: const EdgeInsets.only(left: 16),

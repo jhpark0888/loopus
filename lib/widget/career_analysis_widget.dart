@@ -34,6 +34,7 @@ class CareerAnalysisWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('상위 ${(groupRatio * 100).toInt()}%', style: kmain),
+            const SizedBox(width: 8),
             rate(((groupRatio - lastgroupRatio) * 100).toInt()),
           ],
         );
@@ -51,15 +52,15 @@ class CareerAnalysisWidget extends StatelessWidget {
   }
 
   Widget rate(int variance) {
-    return Row(children: [
+    if(variance != 0){return Row(children: [
       arrowDirection(variance),
       const SizedBox(width: 3),
-      if (variance != 0)
         Text('${variance.abs()}%',
             style:
                 kcaption.copyWith(color: variance >= 1 ? rankred : rankblue)),
       const SizedBox(width: 8)
-    ]);
+    ]);}
+    else{return const SizedBox.shrink();}
   }
 
   Widget arrowDirection(int variance) {

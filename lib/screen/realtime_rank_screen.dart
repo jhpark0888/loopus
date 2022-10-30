@@ -37,7 +37,7 @@ class RealTimeRankScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBarWidget(
-          title: '${currentField.value} 실시간 순위',
+          title: '실시간 커리어 순위',
           bottomBorder: false,
         ),
         body: Obx(() => _controller.allrankerScreenstate.value ==
@@ -80,7 +80,7 @@ class RealTimeRankScreen extends StatelessWidget {
                                           child: Text(
                                               isUniversity == true
                                                   ? "교내 TOP 50"
-                                                  : "국내 TOP 50",
+                                                  : "TOP 50",
                                               style: kmain)),
                                       const SizedBox(
                                         height: 24,

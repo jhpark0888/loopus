@@ -8,6 +8,7 @@ import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/career_detail_controller.dart';
 import 'package:loopus/controller/ga_controller.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/local_data_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -18,6 +19,7 @@ import 'package:loopus/controller/tag_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/project_add_company_screen.dart';
 import 'package:loopus/trash_bin/project_add_intro_screen.dart';
 import 'package:loopus/screen/project_add_period_screen.dart';
@@ -46,7 +48,13 @@ class ProjectAddTitleScreen extends StatelessWidget {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBarWidget(
-          leading: IconButton(onPressed: (){Get.back();}, icon: SvgPicture.asset('assets/icons/appbar_exit.svg'), padding: EdgeInsets.zero,),
+          leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: SvgPicture.asset('assets/icons/appbar_exit.svg'),
+            padding: EdgeInsets.zero,
+          ),
           bottomBorder: false,
           actions: [
             screenType == Screentype.add
@@ -70,13 +78,19 @@ class ProjectAddTitleScreen extends StatelessWidget {
 
                             Project project = Project.fromJson(value.data);
                             project.is_user = 1;
-                            SelectProjectController.to.selectprojectlist.insert(0, project);
+                            SelectProjectController.to.selectprojectlist
+                                .insert(0, project);
                             if (Get.isRegistered<ProfileController>()) {
                               ProfileController.to.myProjectList.add(project);
                               // ProfileController.to.careerPagenums.add(1);
                             }
-                            Get.back();
+                            getbacks(2);
+                            Future.delayed(const Duration(milliseconds: 1000));
 
+                            goCareerScreen(project,
+                                HomeController.to.myProfile.value.name);
+
+                            Future.delayed(const Duration(milliseconds: 1000));
                             SchedulerBinding.instance!
                                 .addPostFrameCallback((_) {
                               showCustomDialog('활동이 성공적으로 만들어졌어요!', 1000);
@@ -200,16 +214,17 @@ class ProjectAddTitleScreen extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        _controller.isPublic.value ?
-                        SvgPicture.asset(
-                          "assets/icons/uncheck_icon.svg",
-                          width: 18,
-                          height: 18,
-                        ) : SvgPicture.asset(
-                          "assets/icons/check_icon.svg",
-                          width: 18,
-                          height: 18,
-                        ) ,
+                        _controller.isPublic.value
+                            ? SvgPicture.asset(
+                                "assets/icons/uncheck_icon.svg",
+                                width: 18,
+                                height: 18,
+                              )
+                            : SvgPicture.asset(
+                                "assets/icons/check_icon.svg",
+                                width: 18,
+                                height: 18,
+                              ),
                         const SizedBox(
                           width: 8,
                         ),

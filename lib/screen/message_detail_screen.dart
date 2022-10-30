@@ -25,6 +25,7 @@ import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/message_model.dart';
 import 'package:loopus/model/socket_message_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/message_screen.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
@@ -73,7 +74,7 @@ class MessageDetatilScreen extends StatelessWidget {
             title: partner.name,
             bottomBorder: false,
             leading: IconButton(
-              padding: EdgeInsets.zero,
+                padding: EdgeInsets.zero,
                 onPressed: () {
                   if (enterRoute == EnterRoute.popUp) {
                     if (Get.isRegistered<MessageController>()) {
@@ -89,8 +90,9 @@ class MessageDetatilScreen extends StatelessWidget {
             actions: [
               GestureDetector(
                 onTap: () async {
-                  showModalIOS(context, func1: () {
-                    showButtonDialog(
+                  showBottomdialog(context,
+                      func1: () {
+                        showButtonDialog(
                         leftText: '취소',
                         rightText: '나가기',
                         title: '메세지 나가기',
@@ -100,6 +102,7 @@ class MessageDetatilScreen extends StatelessWidget {
                         rightFunction: () {
                           int roomId = controller.roomid;
                           if (controller.messageList.isNotEmpty) {
+                            loading();
                             deleteChatRoom(
                                     controller.roomid,
                                     myProfile.userId,
@@ -107,6 +110,7 @@ class MessageDetatilScreen extends StatelessWidget {
                                         controller.messageList.last.messageId!))
                                 .then((value) {
                               if (value.isError == false) {
+                                Get.back();
                                 SQLController.to.deleteMessage(roomId);
                                 SQLController.to.deleteMessageRoom(roomId);
                                 SQLController.to.deleteUser(partner.userId);
@@ -129,8 +133,9 @@ class MessageDetatilScreen extends StatelessWidget {
                                 if (enterRoute == EnterRoute.popUp) {
                                   Get.off(() => MessageScreen());
                                 } else {
-                                  Get.back();
+                                  getbacks(2);
                                 }
+                                showCustomDialog('메세지를 삭제했어요', 1400);
                               }
                             });
                           } else {
@@ -142,8 +147,9 @@ class MessageDetatilScreen extends StatelessWidget {
                             }
                           }
                         });
-                  }, func2: () {
-                    showTextFieldDialog(
+                      },
+                      func2: () {
+                        showTextFieldDialog(
                         textEditingController: TextEditingController(),
                         // leftText: '취소',
                         // rightText: '신고하기',
@@ -162,13 +168,10 @@ class MessageDetatilScreen extends StatelessWidget {
                             }
                           });
                         });
-                  },
+                      },
                       value1: '메세지 나가기',
                       value2: '계정 신고하기',
-                      isValue1Red: false,
-                      isValue2Red: true,
-                      isOne: true,
-                      cancleButton: true);
+                      isOne: false, buttonColor1: mainWhite, buttonColor2: rankred, textColor1: rankred, textColor2: mainWhite);  
                 },
                 child: SizedBox(
                     height: 44,
@@ -295,7 +298,7 @@ class MessageDetatilScreen extends StatelessWidget {
                   maxLines: 3,
                   autocorrect: false,
                   readOnly: false,
-                  style: kmain,
+                  style: kmainheight,
                   cursorColor: mainblack,
                   cursorWidth: 1.2,
                   cursorRadius: Radius.circular(5.0),
@@ -310,7 +313,7 @@ class MessageDetatilScreen extends StatelessWidget {
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(8)),
-                    contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    contentPadding: const EdgeInsets.fromLTRB(16, 11, 16, 11),
                     isDense: true,
                     hintText: '메세지 입력',
                     counterText: "",

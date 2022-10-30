@@ -18,11 +18,11 @@ class ProfileSnsAddScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: "SNS 추가하기",
+        title: "SNS 추가",
         bottomBorder: false,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -31,7 +31,7 @@ class ProfileSnsAddScreen extends StatelessWidget {
               style: kmainbold,
             ),
             const SizedBox(
-              height: 14,
+              height: 24,
             ),
             ListView.separated(
                 primary: false,
@@ -39,7 +39,7 @@ class ProfileSnsAddScreen extends StatelessWidget {
                 itemBuilder: (context, index) =>
                     snsRowWidget(SNSType.values[index]),
                 separatorBuilder: (context, index) => const SizedBox(
-                      height: 14,
+                      height: 24,
                     ),
                 itemCount: SNSType.values.length)
           ],
@@ -62,11 +62,11 @@ class ProfileSnsAddScreen extends StatelessWidget {
           Image.asset(
             "assets/illustrations/${snsType.name}_image.png",
             fit: BoxFit.cover,
-            width: 24,
-            height: 24,
+            width: 36,
+            height: 36,
           ),
           const SizedBox(
-            width: 14,
+            width: 16,
           ),
           Text(
             "${snsType.snsEngtoKor} ${snsType == SNSType.naver ? "블로그 " : ""}"

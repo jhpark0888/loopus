@@ -314,7 +314,7 @@ class _MyAppSpace extends StatelessWidget {
                   width: Get.width,
                   height: Get.width,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 44, 16, 26),
+                    padding: EdgeInsets.fromLTRB(16,Platform.isAndroid ? 44 : 60, 16, 26),
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -542,7 +542,6 @@ class _leading extends StatelessWidget {
                     deleteProject(career!.id, DeleteType.del).then((value) {
                       print(value.isError);
                       if (value.isError == false) {
-                        Get.back();
                         // careerList!.remove(career);
                         deleteCareer(career!);
                         Get.back();
@@ -588,7 +587,6 @@ class _leading extends StatelessWidget {
                     loading();
                     deleteProject(career!.id, DeleteType.exit).then((value) {
                       if (value.isError == false) {
-                        Get.back();
                         deleteCareer(career!);
                         Get.back();
                         showCustomDialog("해당 커리어를 나갔어요", 1400);
@@ -608,7 +606,8 @@ class _leading extends StatelessWidget {
                 buttonColor2: rankred,
                 textColor1: mainblack,
                 textColor2: mainWhite);
-          } else {}
+          } else {
+          }
         }
       },
       icon: LayoutBuilder(

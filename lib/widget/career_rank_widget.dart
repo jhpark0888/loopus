@@ -29,30 +29,30 @@ class CareerRankWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 302,
+      // width: 302,
       // height: 340,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
       decoration: BoxDecoration(color: mainWhite),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Text(isUniversity ? '교내' : '전국', style: kmainbold),
-              GestureDetector(
-                  onTap: () {
-                    Get.to(() => RealTimeRankScreen(
-                          currentField: currentField,
-                          isUniversity: isUniversity,
-                        ));
-                  },
-                  child: Text('전체보기', style: kmain.copyWith(color: mainblue)))
-            ],
-          ),
-          const SizedBox(height: 24),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   mainAxisSize: MainAxisSize.max,
+          //   children: [
+          //     Text(isUniversity ? '교내' : '전국', style: kmainbold),
+          //     GestureDetector(
+          //         onTap: () {
+          //           Get.to(() => RealTimeRankScreen(
+          //                 currentField: currentField,
+          //                 isUniversity: isUniversity,
+          //               ));
+          //         },
+          //         child: Text('전체보기', style: kmain.copyWith(color: mainblue)))
+          //   ],
+          // ),
+          // const SizedBox(height: 24),
           if (ranker.isNotEmpty)
             ListView.separated(
                 primary: false,
@@ -123,7 +123,7 @@ class PersonRankWidget extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 8),
         SizedBox(
           width: 30,
           height: 33,
@@ -139,7 +139,7 @@ class PersonRankWidget extends StatelessWidget {
                 lastRank: isUniversity ? user.schoolLastRank : user.lastRank)
           ]),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 8),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,15 +178,18 @@ class PersonRankWidget extends StatelessWidget {
 
   Widget rate({required int rank, required int lastRank}) {
     int variance = rank - lastRank;
-    return Row(children: [
-      const SizedBox(width: 4),
-      arrowDirection(variance),
-      const SizedBox(width: 2),
-      if (variance != 0)
+    if (variance != 0) {
+      return Row(children: [
+        const SizedBox(width: 4),
+        arrowDirection(variance),
+        const SizedBox(width: 2),
         Text(lastRank != 0 ? '${variance.abs()}' : "NEW",
             style:
                 kcaption.copyWith(color: variance >= 1 ? rankred : rankblue)),
-    ]);
+      ]);
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 
   Widget arrowDirection(int variance) {

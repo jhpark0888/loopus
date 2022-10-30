@@ -178,9 +178,7 @@ class PostingWidget extends StatelessWidget {
                         Obx(
                           () => Row(
                             children: [
-                              SizedBox(
-                                width: 2,
-                              ),
+                              
                               InkWell(
                                 onTap: tapLike,
                                 child: item.isLiked.value == 0
@@ -191,7 +189,7 @@ class PostingWidget extends StatelessWidget {
                                     : SvgPicture.asset("assets/icons/like.svg"),
                               ),
                               const SizedBox(
-                                width: 14.7,
+                                width: 10,
                               ),
                               // Obx(
                               //   () => SizedBox(

@@ -119,7 +119,7 @@ class SearchTagWidget extends StatelessWidget {
             const Spacer(),
             Text(
               '${tag.count}회',
-              style: kmainbold,
+              style: kmain,
             )
           ],
         ),

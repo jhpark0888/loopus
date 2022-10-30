@@ -88,7 +88,9 @@ class OtherProfileScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBarWidget(
-          title: '$realname님의 프로필',
+          titleSpacing: 0.0,
+          centetTitle: false,
+          title: '프로필',
           actions: [
             Obx(
               () => _controller.otherprofilescreenstate.value !=
@@ -111,9 +113,8 @@ class OtherProfileScreen extends StatelessWidget {
                                 showButtonDialog(
                                     leftText: '취소',
                                     rightText: '차단',
-                                    title: '<$realname> 유저를 차단하시겠어요?',
-                                    startContent:
-                                        '차단하면 <$realname> 유저와의 팔로우도 해제됩니다',
+                                    title: '계정 차단',
+                                    startContent: '$realname님을 차단하시겠어요?',
                                     leftFunction: () => Get.back(),
                                     rightFunction: () {
                                       userban(_controller.userid).then((value) {
@@ -131,14 +132,17 @@ class OtherProfileScreen extends StatelessWidget {
                                     });
                               },
                               func2: () {
-                                showButtonDialog(
-                                    leftText: '취소',
-                                    rightText: '신고',
-                                    title: '<$realname> 유저를 신고하시겠어요?',
-                                    startContent: '관리자가 검토할 예정이에요',
-                                    leftFunction: () => Get.back(),
-                                    rightFunction: () {
-                                      userreport(_controller.userid)
+                                showTextFieldDialog(
+                                    title: '계정 신고',
+                                    hintText:
+                                        '신고 사유를 입력해주세요. 관리자 확인 이후 해당 계정은 이용약관에 따라 제재를 받을 수 있습니다.',
+                                    completeText: '신고',
+                                    textEditingController:
+                                        _controller.reportController,
+                                    leftFunction: () {
+                                      Get.back();
+                                    },
+                                    rightFunction: () {userreport(_controller.userid)
                                           .then((value) {
                                         if (value.isError == false) {
                                           dialogBack(modalIOS: true);
@@ -146,8 +150,7 @@ class OtherProfileScreen extends StatelessWidget {
                                         } else {
                                           errorSituation(value);
                                         }
-                                      });
-                                    });
+                                      });});
                               },
                               value1: '계정 차단하기',
                               value2: '계정 신고하기',
@@ -626,9 +629,6 @@ class OtherProfileScreen extends StatelessWidget {
                                 const SizedBox(width: 8),
                                 SvgPicture.asset(
                                   'assets/icons/information.svg',
-                                  width: 11,
-                                  height: 15,
-                                  color: mainblack.withOpacity(0.6),
                                 )
                               ],
                             ),
@@ -654,12 +654,26 @@ class OtherProfileScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 const Text('커리어', style: kmainbold),
-                                const SizedBox(width: 7),
+                                const SizedBox(width: 8),
+                                CareerAnalysisWidget(
+                              field: fieldList[
+                                  _controller.otherUser.value.fieldId]!,
+                              groupRatio:
+                                  _controller.otherUser.value.groupRatio,
+                              // schoolRatio:
+                              //     _controller.otherUser.value.schoolRatio,
+                              // lastgroupRatio:
+                              //     _controller.otherUser.value.groupRatio +
+                              //         _controller
+                              //             .otherUser.value.groupRatioVariance,
+                              // lastschoolRatio:
+                              //     _controller.otherUser.value.schoolRatio +
+                              //         _controller
+                              //             .otherUser.value.schoolRatioVariance,
+                            ),
+                            // const SizedBox(width: 8),
                                 SvgPicture.asset(
                                   'assets/icons/information.svg',
-                                  width: 11,
-                                  height: 15,
-                                  color: mainblack.withOpacity(0.6),
                                 ),
                                 const Spacer(),
                                 if (_controller.otherUser.value.userId ==

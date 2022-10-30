@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/ban_api.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/app_controller.dart';
@@ -309,7 +310,7 @@ class _leading extends StatelessWidget {
           Get.back();
         } else {
           if (career!.managerId == HomeController.to.myProfile.value.userId) {
-            showBottomdialog(context, bareerColor: dividegray, func1: () {
+            showBottomdialog(context, bareerColor: popupGray, func2: () {
               Get.back();
               showButtonDialog(
                   title: '이 커리어는 완전히 삭제돼요',
@@ -325,7 +326,6 @@ class _leading extends StatelessWidget {
                     loading();
                     deleteProject(career!.id, DeleteType.del).then((value) {
                       if (value.isError == false) {
-                        Get.back();
                         deleteCareer(career!);
                         Get.back();
                         showCustomDialog("포스팅이 삭제되었습니다", 1400);
@@ -336,61 +336,62 @@ class _leading extends StatelessWidget {
                   },
                   rightText: '삭제',
                   leftText: '취소');
-            }, func2: () {
+            }, func1: () {
               Get.back();
               Get.to(
                   () => ProjectAddTitleScreen(screenType: Screentype.update));
             },
-                value1: '커리어 삭제하기',
-                value2: '커리어 수정하기',
-                buttonColor1: rankred,
-                buttonColor2: maingray,
+                value2: '커리어 삭제하기',
+                value1: '커리어 수정하기',
+                buttonColor2: rankred,
+                buttonColor1: mainWhite,
+                textColor2: mainWhite,
+                textColor1: mainblack,
                 isOne: false);
           } else {
-            showBottomdialog(context,
-                func1: () {
-                  showButtonDialog(
-                                    leftText: '취소',
-                                    rightText: '차단',
-                                    title: '계정 차단',
-                                    startContent:
-                                        '${career!.members.first.name}님을 차단하시겠어요?',
-                                    leftFunction: () => Get.back(),
-                                    rightFunction: () {
-                                      userban(career!.userid!).then((value) {
-                                        if (value.isError == false) {
-                                          dialogBack();
-                                          if(Get.isRegistered<OtherProfileController>()){
-                                          OtherProfileController.to.otherUser.value
-                                              .banned(BanState.ban);
-                                          }
-                                          showCustomDialog(
-                                              "해당 유저가 차단 되었습니다", 1000);
-                                        } else {
-                                          errorSituation(value);
-                                        }
-                                      });
-                                    });
-                },
-                func2: () {
-                  showButtonDialog(
-                                    leftText: '취소',
-                                    rightText: '신고',
-                                    title: '<${career!.members.first.name}> 유저를 신고하시겠어요?',
-                                    startContent: '관리자가 검토할 예정이에요',
-                                    leftFunction: () => Get.back(),
-                                    rightFunction: () {
-                                      // userreport(_controller.userid)
-                                      //     .then((value) {
-                                      //   if (value.isError == false) {
-                                      //     dialogBack(modalIOS: true);
-                                      //     showCustomDialog("신고가 접수되었습니다", 1000);
-                                      //   } else {
-                                      //     errorSituation(value);
-                                      //   }
-                                      // });
-                                    });
-                },
+            showBottomdialog(context, func1: () {
+              showButtonDialog(
+                  leftText: '취소',
+                  rightText: '차단',
+                  title: '계정 차단',
+                  startContent: '${career!.members.first.name}님을 차단하시겠어요?',
+                  leftFunction: () => Get.back(),
+                  rightFunction: () {
+                    userban(career!.userid!).then((value) {
+                      if (value.isError == false) {
+                        dialogBack();
+                        if (Get.isRegistered<OtherProfileController>()) {
+                          OtherProfileController.to.otherUser.value
+                              .banned(BanState.ban);
+                        }
+                        showCustomDialog("해당 유저가 차단 되었습니다", 1000);
+                      } else {
+                        errorSituation(value);
+                      }
+                    });
+                  });
+            }, func2: () {
+              showTextFieldDialog(
+                  title: '계정 신고',
+                  hintText:
+                      '신고 사유를 입력해주세요. 관리자 확인 이후 해당 계정은 이용약관에 따라 제재를 받을 수 있습니다.',
+                  completeText: '신고',
+                  textEditingController:
+                      CareerDetailController.to.reportController,
+                  leftFunction: () {
+                    Get.back();
+                  },
+                  rightFunction: () {
+                    userreport(career!.userid!).then((value) {
+                      if (value.isError == false) {
+                        dialogBack(modalIOS: true);
+                        showCustomDialog("신고가 접수되었습니다", 1000);
+                      } else {
+                        errorSituation(value);
+                      }
+                    });
+                  });
+            },
                 value1: '계정 차단하기',
                 value2: '계정 신고하기',
                 buttonColor1: mainWhite,

@@ -65,20 +65,20 @@ class CareerArrangeScreen extends StatelessWidget {
                   // shrinkWrap: true,
                   // itemCount: _controller.careerList.length,
                   header: Column(
-                    children: const [
+                    children: [
                       Text(
                         "커리어를 선택해 원하는 위치로 변경할 수 있어요",
-                        style: kmainbold,
+                        style: kmain.copyWith(color: maingray),
                       ),
-                      SizedBox(
-                        height: 14,
+                      const SizedBox(
+                        height: 16,
                       ),
                     ],
                   ),
                   footer: Column(
                     children: [
                       const SizedBox(
-                        height: 14,
+                        height: 16,
                       ),
                       GestureDetector(
                         onTap: () {
@@ -88,7 +88,7 @@ class CareerArrangeScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SvgPicture.asset('assets/icons/career_add.svg'),
+                            SizedBox(width : 20, height : 20, child: SvgPicture.asset('assets/icons/career_add.svg')),
                             const SizedBox(width: 8),
                             Text('커리어 추가하기',
                                 style: kmain.copyWith(color: mainblue))
@@ -103,7 +103,7 @@ class CareerArrangeScreen extends StatelessWidget {
                       .map((career) => Padding(
                             key: UniqueKey(),
                             padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
+                                vertical: 10, horizontal: 16),
                             child: CareerArrangeWidget(
                               career: career,
                             ),
@@ -202,13 +202,11 @@ class CareerArrangeWidget extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      //     career.isPublic
-                      //         ? SvgPicture.asset('assets/icons/group.svg')
-                      //         : SvgPicture.asset('assets/icons/personal_career.svg'),
-                      const SizedBox(
-                        height: 12,
-                        width: 12,
-                      ),
+                          career.isPublic
+                              ? SvgPicture.asset('assets/icons/group_career.svg',color:
+                                career.thumbnail == "" ? mainblack : mainWhite)
+                              : SvgPicture.asset('assets/icons/single_career.svg',color:
+                                career.thumbnail == "" ? mainblack : mainWhite),
                       const SizedBox(
                         width: 7,
                       ),

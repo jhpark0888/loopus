@@ -93,7 +93,7 @@ class ProfileImageChangeScreen extends StatelessWidget {
                   () => Text(
                     '확인',
                     style: kNavigationTitle.copyWith(
-                        color: _controller.isSelect.value ? null : maingray),
+                        color: _controller.isSelect.value ? mainblue : maingray),
                   ),
                 ),
               ),

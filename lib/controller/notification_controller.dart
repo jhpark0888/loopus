@@ -168,13 +168,14 @@ class NotificationController extends GetxController {
               if (value == false) {
                 await getUserProfile([chatRoom.user]).then((value) async {
                   if (value.isError == false) {
-                    await SQLController.to.insertUser(value.data[0]);
+                    Person person = Person.fromJson(value.data['profile'][0]);
+                    await SQLController.to.insertUser(person);
                     MessageController.to.searchRoomList.add(MessageRoomWidget(
                         chatRoom: chatRoom.obs,
-                        user: Rx<Person>(value.data[0])));
+                        user: Rx<Person>(person)));
                     MessageController.to.chattingRoomList.add(MessageRoomWidget(
                         chatRoom: chatRoom.obs,
-                        user: Rx<Person>(value.data[0])));
+                        user: Rx<Person>(person)));
                   }
                 });
               } else {

@@ -10,7 +10,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       this.title,
       this.leading,
       this.actions,
-      this.bottomBorder = true})
+      this.bottomBorder = true,
+      this.titleSpacing,
+      this.centetTitle})
       : super(key: key);
 
   final AppBar appbar = AppBar();
@@ -18,7 +20,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget? leading;
   List<Widget>? actions;
   bool bottomBorder;
-
+  bool? centetTitle;
+  double? titleSpacing;
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
@@ -34,7 +37,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           title ?? '',
           style: kNavigationTitle,
         ),
-        centerTitle: true,
+        titleSpacing: titleSpacing,
+        centerTitle: centetTitle ?? true,
         bottom: bottomBorder
             ? PreferredSize(
                 child: Container(

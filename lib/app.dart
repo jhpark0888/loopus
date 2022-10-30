@@ -104,7 +104,7 @@ class App extends StatelessWidget {
                     BottomNavigationBarItem(
                         tooltip: '',
                         icon: SvgPicture.asset(
-                          "assets/icons/home_add.svg",
+                          "assets/icons/bottom_add.svg",
                         ),
                         label: "추가"),
                     BottomNavigationBarItem(

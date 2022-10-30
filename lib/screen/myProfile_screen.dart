@@ -81,6 +81,7 @@ class MyProfileScreen extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
+            titleSpacing: 0,
             elevation: 0,
             centerTitle: false,
             title: const Text(
