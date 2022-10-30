@@ -369,7 +369,7 @@ class PostingScreen extends StatelessWidget {
                                                       //     .removeWhere((post) => post.id == postid);
                                                     });
                                                   });
-                                                  }, value1: '포스트 수정하기', value2: '포스트 삭제하기', isOne: false,buttonColor1: mainWhite, buttonColor2: rankred);}
+                                                  }, value1: '포스트 수정하기', value2: '포스트 삭제하기', isOne: false,buttonColor1: mainWhite, buttonColor2: rankred,textColor1: mainblack);}
                                       : () {
                                         showBottomdialog(context, func1: (){showTextFieldDialog(
                                                   title: '포스트 신고하기',

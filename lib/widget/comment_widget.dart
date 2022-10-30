@@ -105,7 +105,7 @@ class CommentWidget extends StatelessWidget {
                                               }
                                             });
                                           });
-                                }, func2: (){}, value1: '댓글 삭제하기', value2: '', isOne: true, buttonColor1: mainWhite);
+                                }, func2: (){}, value1: '댓글 삭제하기', value2: '', isOne: true, buttonColor1: mainWhite,textColor1: mainblack);
                                 }
                               : () {
                                  showBottomdialog(context, func1: (){
