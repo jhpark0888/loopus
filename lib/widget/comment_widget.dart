@@ -58,9 +58,12 @@ class CommentWidget extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
-                    mainAxisSize: MainAxisSize.min,
+                    // mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
                         onTap: tapProfile,
@@ -70,87 +73,61 @@ class CommentWidget extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      GestureDetector(
-                        onTap: comment.user.userId ==
-                                HomeController.to.myProfile.value.userId
-                            ? () {
-                                showModalIOS(
-                                  context,
-                                  func1: () {
-                                    showButtonDialog(
-                                        leftText: '취소',
-                                        rightText: '삭제',
-                                        title: '댓글을 삭제하시겠어요?',
-                                        startContent: '삭제한 댓글은 복구할 수 없어요',
-                                        leftFunction: () => Get.back(),
-                                        rightFunction: () async {
-                                          dialogBack(modalIOS: true);
+                      SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: comment.user.userId ==
+                                  HomeController.to.myProfile.value.userId
+                              ? () {
+                                showBottomdialog(context, func1: (){
+                                  showButtonDialog(
+                                          leftText: '취소',
+                                          rightText: '삭제',
+                                          title: '댓글을 삭제하시겠어요?',
+                                          startContent: '삭제한 댓글은 복구할 수 없어요',
+                                          leftFunction: () => Get.back(),
+                                          rightFunction: () async {
+                                            dialogBack(modalIOS: true);
 
-                                          await commentDelete(comment.id,
-                                                  contentType.comment)
-                                              .then((value) {
-                                            if (value.isError == false) {
-                                              postController
-                                                  .post!.value.comments
-                                                  .removeWhere((element) =>
-                                                      element.id == comment.id);
-                                            } else {
-                                              showCustomDialog(
-                                                  "댓글 삭제에 실패하였습니다", 1000);
-                                            }
+                                            await commentDelete(comment.id,
+                                                    contentType.comment)
+                                                .then((value) {
+                                              if (value.isError == false) {
+                                                postController
+                                                    .post!.value.comments
+                                                    .removeWhere((element) =>
+                                                        element.id == comment.id);
+                                              } else {
+                                                showCustomDialog(
+                                                    "댓글 삭제에 실패하였습니다", 1000);
+                                              }
+                                            });
                                           });
-                                        });
-                                  },
-                                  func2: () {},
-                                  value1: '댓글 삭제하기',
-                                  value2: '',
-                                  isValue1Red: false,
-                                  isValue2Red: false,
-                                  isOne: true,
-                                  GetBack: false,
-                                  cancleButton: false
-                                );
-                              }
-                            : () {
-                                showModalIOS(
-                                  context,
-                                  func1: () {
-                                    showButtonDialog(
-                                        leftText: '취소',
-                                        rightText: '신고',
-                                        title: '정말 댓글을 신고하시겠어요?',
-                                        startContent: '관리자가 검토 절차를 거칩니다',
-                                        leftFunction: () => Get.back(),
-                                        rightFunction: () {
-                                          contentreport(comment.id,
-                                                  contentType.comment)
-                                              .then((value) {
-                                            if (value.isError == false) {
-                                              getbacks(2);
-                                              showCustomDialog(
-                                                  "신고가 접수되었습니다", 1000);
-                                            } else {
-                                              errorSituation(value);
-                                            }
-                                          });
-                                        });
-                                  },
-                                  func2: () {},
-                                  value1: '댓글 신고하기',
-                                  value2: '',
-                                  isValue1Red: true,
-                                  isValue2Red: false,
-                                  isOne: true,
-                                  cancleButton: false
-                                );
-                              },
-                        behavior: HitTestBehavior.translucent,
-                        child: SizedBox(
-                            height: 16,
-                            child: SvgPicture.asset(
-                              'assets/icons/more_option.svg',
-                              color: maingray,
-                            )),
+                                }, func2: (){}, value1: '댓글 삭제하기', value2: '', isOne: true, buttonColor1: mainWhite);
+                                }
+                              : () {
+                                 showBottomdialog(context, func1: (){
+                                  showTextFieldDialog(title: '댓글 신고하기', hintText: '신고 내용을 입력해주세요. 관리자 확인 이후 관련 약관에 따라 처리됩니다.', completeText: '신고하기', textEditingController: postController.reportController, leftFunction: (){Get.back();}, rightFunction: (){contentreport(comment.id,
+                                                    contentType.comment)
+                                                .then((value) {
+                                              if (value.isError == false) {
+                                                getbacks(2);
+                                                showCustomDialog(
+                                                    "신고가 접수되었습니다", 1000);
+                                              } else {
+                                                errorSituation(value);
+                                              }
+                                            });});
+                                }, func2: (){}, value1: '댓글 신고하기', value2: '', isOne: true, buttonColor1: rankred);
+                                },
+                          // behavior: HitTestBehavior.translucent,
+                          icon: SvgPicture.asset(
+                            'assets/icons/comment_option_icon.svg',
+                            color: maingray,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -199,41 +176,51 @@ class CommentWidget extends StatelessWidget {
                           //       )
                         ),
                         const SizedBox(width: 16),
-                        InkWell(
-                          onTap: tapLike,
-                          child: comment.isLiked.value == 0
-                              ? SvgPicture.asset(
-                                  "assets/icons/unlike.svg",
-                                  width: 16,
-                                  height: 16,
-                                  color: maingray,
-                                )
-                              : SvgPicture.asset("assets/icons/like.svg",
-                                  width: 16, height: 16),
+                        SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: tapLike,
+                            icon: comment.isLiked.value == 0
+                                ? SvgPicture.asset(
+                                    "assets/icons/unlike.svg",
+                                    width: 16,
+                                    height: 16,
+                                    color: maingray,
+                                  )
+                                : SvgPicture.asset("assets/icons/like.svg",
+                                    width: 16, height: 16),
+                          ),
                         ),
                         const SizedBox(
                           width: 16,
                         ),
-                        InkWell(
-                          onTap: () async {
-                            postController.commentFocus.requestFocus();
-                            postController.commentController.text = '\u200B ';
-                            postController.commentController.selection =
-                                TextSelection.fromPosition(TextPosition(
-                                    offset: postController
-                                        .commentController.text.length));
-                            postController.selectedCommentId(comment.id);
-                            postController.tagUser(comment.user);
+                        SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () async {
+                              postController.commentFocus.requestFocus();
+                              postController.commentController.text = '\u200B ';
+                              postController.commentController.selection =
+                                  TextSelection.fromPosition(TextPosition(
+                                      offset: postController
+                                          .commentController.text.length));
+                              postController.selectedCommentId(comment.id);
+                              postController.tagUser(comment.user);
 
-                            await Future.delayed(
-                                const Duration(milliseconds: 600));
-                            Scrollable.ensureVisible(context,
-                                alignment: 1,
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.ease);
-                          },
-                          child: SvgPicture.asset("assets/icons/reply.svg",
-                              width: 16, height: 16),
+                              await Future.delayed(
+                                  const Duration(milliseconds: 600));
+                              Scrollable.ensureVisible(context,
+                                  alignment: 1,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.ease);
+                            },
+                            icon: SvgPicture.asset("assets/icons/reply.svg",
+                                width: 16, height: 16),
+                          ),
                         ),
                       ],
                     ),

@@ -73,6 +73,7 @@ class MessageDetatilScreen extends StatelessWidget {
             title: partner.name,
             bottomBorder: false,
             leading: IconButton(
+              padding: EdgeInsets.zero,
                 onPressed: () {
                   if (enterRoute == EnterRoute.popUp) {
                     if (Get.isRegistered<MessageController>()) {

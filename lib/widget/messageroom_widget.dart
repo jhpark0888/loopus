@@ -150,14 +150,14 @@ class MessageRoomWidget extends StatelessWidget {
                   height: 36,
                   userType: user.value.userType,
                 ),
-                const SizedBox(width: 14),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(user.value.name, style: kmainbold),
-                      const SizedBox(height: 7),
+                      const SizedBox(height: 8),
                       Obx(
                         () => Row(
                           mainAxisSize: MainAxisSize.max,
