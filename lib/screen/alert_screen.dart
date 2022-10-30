@@ -34,6 +34,9 @@ class _AlertScreenState extends State<AlertScreen> {
       ),
       body: Column(
         children: [
+          SizedBox(
+            height: 24,
+          ),
           CustomListTile(
             onTap: () {
               AppSettings.openNotificationSettings();
@@ -42,7 +45,7 @@ class _AlertScreenState extends State<AlertScreen> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              vertical: 20,
+              vertical: 8,
               horizontal: 16,
             ),
             child: Row(

@@ -36,103 +36,105 @@ class UserInfoScreen extends StatelessWidget {
         bottomBorder: false,
         title: '개인 정보',
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 16),
-          CustomListTile(
-            title: "이름",
-            titleColor: maingray,
-            onTap: () => userInfoModify(context),
-            trailing: HomeController.to.myProfile.value.name,
-          ),
-          CustomListTile(
-            title: "대학",
-            titleColor: maingray,
-            onTap: () => userInfoModify(context),
-            trailing: HomeController.to.myProfile.value is Person
-                ? (HomeController.to.myProfile.value as Person).univName
-                : "",
-          ),
-          CustomListTile(
-            title: "학과",
-            titleColor: maingray,
-            onTap: () => userInfoModify(context),
-            trailing: HomeController.to.myProfile.value is Person
-                ? (HomeController.to.myProfile.value as Person).department
-                : "",
-          ),
-          CustomListTile(
-            title: "입학 연도",
-            titleColor: maingray,
-            onTap: () => userInfoModify(context),
-            trailing: HomeController.to.myProfile.value is Person
-                ? (HomeController.to.myProfile.value as Person).admissionYear
-                : "",
-          ),
-          CustomListTile(
-            title: "비밀번호 변경",
-            onTap: () {
-              Get.to(() => PwChangeScreen(
-                    pwType: PwType.pwchange,
-                  ));
-            },
-          ),
-          CustomListTile(
-            title: "로그아웃",
-            onTap: () {
-              showButtonDialog(
-                  title: '로그아웃 하시겠어요?',
-                  startContent: '언제든 다시 로그인 할 수 있어요',
-                  leftFunction: () => Get.back(),
-                  rightFunction: () {
-                    logOut();
-                  },
-                  rightText: '로그아웃',
-                  leftText: '취소');
-            },
-          ),
-          CustomListTile(
-            title: "회원탈퇴",
-            titleColor: rankred,
-            onTap: () {
-              showButtonDialog2(
-                  title: '정말 탈퇴하시겠어요?',
-                  startContent: '탈퇴 시 작성된 모든 데이터는 삭제되며,\n',
-                  highlightContent: " 이후 복구가 불가능",
-                  endContent: "해요 \n 다시 한 번 신중하게 생각 후 \n 탈퇴를 진행해주세요",
-                  highlightColor: rankred,
-                  leftFunction: () => Get.back(),
-                  rightFunction: () {
-                    Get.to(() => CertificationScreen(
-                          certificateType: CertificateType.withDrawal,
-                        ));
-                  },
-                  rightText: '탈퇴',
-                  leftText: '취소');
-            },
-          ),
-          CustomListTile(
-            title: "채팅 데이터베이스 초기화",
-            onTap: () {
-              showButtonDialog(
-                  title: '데이터베이스를 초기화 하시겠어요?',
-                  startContent: '채팅 정보가 날라가게 돼요',
-                  leftFunction: () => Get.back(),
-                  rightFunction: () async {
-                    deleteDatabase(join(await getDatabasesPath(),
-                        'MY_database${HomeController.to.myProfile.value.userId}.db'));
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 16),
+            CustomListTile(
+              title: "이름",
+              titleColor: maingray,
+              onTap: () => userInfoModify(context),
+              trailing: HomeController.to.myProfile.value.name,
+            ),
+            CustomListTile(
+              title: "대학",
+              titleColor: maingray,
+              onTap: () => userInfoModify(context),
+              trailing: HomeController.to.myProfile.value is Person
+                  ? (HomeController.to.myProfile.value as Person).univName
+                  : "",
+            ),
+            CustomListTile(
+              title: "학과",
+              titleColor: maingray,
+              onTap: () => userInfoModify(context),
+              trailing: HomeController.to.myProfile.value is Person
+                  ? (HomeController.to.myProfile.value as Person).department
+                  : "",
+            ),
+            CustomListTile(
+              title: "입학 연도",
+              titleColor: maingray,
+              onTap: () => userInfoModify(context),
+              trailing: HomeController.to.myProfile.value is Person
+                  ? (HomeController.to.myProfile.value as Person).admissionYear
+                  : "",
+            ),
+            CustomListTile(
+              title: "비밀번호 변경",
+              onTap: () {
+                Get.to(() => PwChangeScreen(
+                      pwType: PwType.pwchange,
+                    ));
+              },
+            ),
+            CustomListTile(
+              title: "로그아웃",
+              onTap: () {
+                showButtonDialog(
+                    title: '로그아웃 하시겠어요?',
+                    startContent: '언제든 다시 로그인 할 수 있어요',
+                    leftFunction: () => Get.back(),
+                    rightFunction: () {
+                      logOut();
+                    },
+                    rightText: '로그아웃',
+                    leftText: '취소');
+              },
+            ),
+            CustomListTile(
+              title: "회원탈퇴",
+              titleColor: rankred,
+              onTap: () {
+                showButtonDialog2(
+                    title: '정말 탈퇴하시겠어요?',
+                    startContent: '탈퇴 시 작성된 모든 데이터는 삭제되며,\n',
+                    highlightContent: " 이후 복구가 불가능",
+                    endContent: "해요 \n 다시 한 번 신중하게 생각 후 \n 탈퇴를 진행해주세요",
+                    highlightColor: rankred,
+                    leftFunction: () => Get.back(),
+                    rightFunction: () {
+                      Get.to(() => CertificationScreen(
+                            certificateType: CertificateType.withDrawal,
+                          ));
+                    },
+                    rightText: '탈퇴',
+                    leftText: '취소');
+              },
+            ),
+            CustomListTile(
+              title: "채팅 데이터베이스 초기화",
+              onTap: () {
+                showButtonDialog(
+                    title: '데이터베이스를 초기화 하시겠어요?',
+                    startContent: '채팅 정보가 날라가게 돼요',
+                    leftFunction: () => Get.back(),
+                    rightFunction: () async {
+                      deleteDatabase(join(await getDatabasesPath(),
+                          'MY_database${HomeController.to.myProfile.value.userId}.db'));
 
-                    deleteDatabase(
-                            join(await getDatabasesPath(), 'MY_database.db'))
-                        .then((value) => showBottomSnackbar('삭제되었어요'));
-                    Future.delayed(const Duration(milliseconds: 300));
-                    Get.back();
-                  },
-                  rightText: '초기화',
-                  leftText: '취소');
-            },
-          ),
-        ],
+                      deleteDatabase(
+                              join(await getDatabasesPath(), 'MY_database.db'))
+                          .then((value) => showBottomSnackbar('삭제되었어요'));
+                      Future.delayed(const Duration(milliseconds: 300));
+                      Get.back();
+                    },
+                    rightText: '초기화',
+                    leftText: '취소');
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

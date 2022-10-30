@@ -419,39 +419,41 @@ void showModalIOS(
     barrierColor: popupGray,
     context: context,
     builder: (context) => CupertinoActionSheet(
-      cancelButton: cancleButton ? GetBack != null
-          ? CupertinoActionSheetAction(
-              child: const Text(
-                "닫기",
-                style: kmainbold,
-              ),
-              isDefaultAction: true,
-              onPressed: () {
-                Get.back();
-              },
-            )
-          :
-          // CustomExpandedButton(onTap: func3 != null ? func3 : () {}, isBlue: isBlue, title: 계, isBig: isBig)
-          Container(
-              height: 44,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: rankred,
-              ),
-              child: CupertinoActionSheetAction(
+      cancelButton: cancleButton
+          ? GetBack != null
+              ? CupertinoActionSheetAction(
                   child: const Text(
-                    "계정 신고하기",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      height: 1,
-                      color: mainWhite,
-                      fontFamily: 'NotoSansKR',
-                    ),
+                    "닫기",
+                    style: kmainbold,
                   ),
                   isDefaultAction: true,
-                  onPressed: func3 != null ? func3 : () {}),
-            ) : null,
+                  onPressed: () {
+                    Get.back();
+                  },
+                )
+              :
+              // CustomExpandedButton(onTap: func3 != null ? func3 : () {}, isBlue: isBlue, title: 계, isBig: isBig)
+              Container(
+                  height: 44,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: rankred,
+                  ),
+                  child: CupertinoActionSheetAction(
+                      child: const Text(
+                        "계정 신고하기",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          height: 1,
+                          color: mainWhite,
+                          fontFamily: 'NotoSansKR',
+                        ),
+                      ),
+                      isDefaultAction: true,
+                      onPressed: func3 != null ? func3 : () {}),
+                )
+          : null,
       actions: [
         Container(
           height: 44,
@@ -546,8 +548,7 @@ void showBottomdialog(
   String? accentTitle,
 }) {
   showModalBottomSheet(
-    barrierColor: bareerColor ??
-        popupGray,
+    barrierColor: bareerColor ?? popupGray,
     enableDrag: false,
     context: context,
     backgroundColor: Colors.transparent,
@@ -890,6 +891,88 @@ void showOneButtonDialog({
                               isBig: true)),
                     ],
                   ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+    barrierDismissible: false,
+    barrierColor: popupGray,
+    transitionCurve: kAnimationCurve,
+    transitionDuration: kAnimationDuration,
+  );
+}
+
+void showCustomDialogline2({
+  required String title,
+  required String startContent,
+  String? highlightContent,
+  String? endContent,
+  Color? highlightColor,
+}) {
+  Get.dialog(
+    Material(
+      color: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: mainWhite),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    title,
+                    style: kmainbold,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: startContent,
+                        style: kmainheight,
+                      ),
+                      TextSpan(
+                        text: highlightContent ?? "",
+                        style: kmainheight.copyWith(
+                            color: highlightColor ?? mainblue),
+                      ),
+                      TextSpan(
+                        text: endContent,
+                        style: kmainheight,
+                      )
+                    ]),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //         child: CustomExpandedButton(
+                  //             onTap: buttonFunction,
+                  //             isBlue: true,
+                  //             title: buttonText,
+                  //             isBig: true)),
+                  //   ],
+                  // ),
                   const SizedBox(
                     height: 16,
                   ),

@@ -53,100 +53,102 @@ class SettingScreen extends StatelessWidget {
         bottomBorder: false,
         title: '설정',
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 16),
-          _category("개인"),
-          if (HomeController.to.myProfile.value.userType == UserType.student)
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            _category("개인"),
+            if (HomeController.to.myProfile.value.userType == UserType.student)
+              CustomListTile(
+                title: "개인 정보",
+                onTap: () {
+                  Get.to(() => UserInfoScreen());
+                },
+              ),
             CustomListTile(
-              title: "개인 정보",
+              title: "알림 설정",
               onTap: () {
-                Get.to(() => UserInfoScreen());
+                Get.to(() => AlertScreen());
               },
             ),
-          CustomListTile(
-            title: "알림 설정",
-            onTap: () {
-              Get.to(() => AlertScreen());
-            },
-          ),
-          CustomListTile(
-            title: "차단 관리",
-            onTap: () {
-              Get.to(() => BanPeopleScreen());
-            },
-          ),
-          _category("서비스"),
-          CustomListTile(
-            title: "서비스 이용약관",
-            onTap: () {
-              Get.to(() => WebViewScreen(url: kTermsOfService));
-            },
-          ),
-          CustomListTile(
-            title: "개인정보 처리방침",
-            onTap: () {
-              Get.to(() => WebViewScreen(url: kPrivacyPolicy));
-            },
-          ),
-          CustomListTile(
-            title: "문의하기",
-            onTap: () {
-              Get.to(() => ContactContentScreen());
-            },
-          ),
-          if (HomeController.to.myProfile.value.userType == UserType.company)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _category("회원"),
-                CustomListTile(
-                  title: "비밀번호 변경",
-                  onTap: () {
-                    Get.to(() => PwChangeScreen(
-                          pwType: PwType.pwchange,
-                        ));
-                  },
-                ),
-                CustomListTile(
-                  title: "로그아웃",
-                  onTap: () {
-                    showButtonDialog(
-                        title: '로그아웃 하시겠어요?',
-                        startContent: '언제든 다시 로그인 할 수 있어요',
-                        leftFunction: () => Get.back(),
-                        rightFunction: () {
-                          logOut();
-                        },
-                        rightText: '로그아웃',
-                        leftText: '취소');
-                  },
-                ),
-                CustomListTile(
-                  title: "회원탈퇴",
-                  titleColor: rankred,
-                  onTap: () {
-                    showButtonDialog(
-                        title: '정말 탈퇴하시겠어요?',
-                        startContent: '탈퇴 시 작성된 모든 데이터는 삭제되며,\n이후',
-                        highlightContent: " 복구가 불가능 ",
-                        endContent: "해요\n다시 한 번 신중하게 생각 후 탈퇴를 진행해주세요",
-                        highlightColor: rankred,
-                        leftFunction: () => Get.back(),
-                        rightFunction: () {
-                          Get.to(() => CertificationScreen(
-                                certificateType: CertificateType.withDrawal,
-                              ));
-                        },
-                        rightText: '탈퇴',
-                        leftText: '취소');
-                  },
-                ),
-              ],
+            CustomListTile(
+              title: "차단 관리",
+              onTap: () {
+                Get.to(() => BanPeopleScreen());
+              },
             ),
-          const SizedBox(height: 16),
-        ],
+            _category("서비스"),
+            CustomListTile(
+              title: "서비스 이용약관",
+              onTap: () {
+                Get.to(() => WebViewScreen(url: kTermsOfService));
+              },
+            ),
+            CustomListTile(
+              title: "개인정보 처리방침",
+              onTap: () {
+                Get.to(() => WebViewScreen(url: kPrivacyPolicy));
+              },
+            ),
+            CustomListTile(
+              title: "문의하기",
+              onTap: () {
+                Get.to(() => ContactContentScreen());
+              },
+            ),
+            if (HomeController.to.myProfile.value.userType == UserType.company)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _category("회원"),
+                  CustomListTile(
+                    title: "비밀번호 변경",
+                    onTap: () {
+                      Get.to(() => PwChangeScreen(
+                            pwType: PwType.pwchange,
+                          ));
+                    },
+                  ),
+                  CustomListTile(
+                    title: "로그아웃",
+                    onTap: () {
+                      showButtonDialog(
+                          title: '로그아웃 하시겠어요?',
+                          startContent: '언제든 다시 로그인 할 수 있어요',
+                          leftFunction: () => Get.back(),
+                          rightFunction: () {
+                            logOut();
+                          },
+                          rightText: '로그아웃',
+                          leftText: '취소');
+                    },
+                  ),
+                  CustomListTile(
+                    title: "회원탈퇴",
+                    titleColor: rankred,
+                    onTap: () {
+                      showButtonDialog(
+                          title: '정말 탈퇴하시겠어요?',
+                          startContent: '탈퇴 시 작성된 모든 데이터는 삭제되며,\n이후',
+                          highlightContent: " 복구가 불가능 ",
+                          endContent: "해요\n다시 한 번 신중하게 생각 후 탈퇴를 진행해주세요",
+                          highlightColor: rankred,
+                          leftFunction: () => Get.back(),
+                          rightFunction: () {
+                            Get.to(() => CertificationScreen(
+                                  certificateType: CertificateType.withDrawal,
+                                ));
+                          },
+                          rightText: '탈퇴',
+                          leftText: '취소');
+                    },
+                  ),
+                ],
+              ),
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }
