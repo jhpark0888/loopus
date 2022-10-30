@@ -907,6 +907,88 @@ void showOneButtonDialog({
   );
 }
 
+void showCustomDialogline2({
+  required String title,
+  required String startContent,
+  String? highlightContent,
+  String? endContent,
+  Color? highlightColor,
+}) {
+  Get.dialog(
+    Material(
+      color: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: mainWhite),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    title,
+                    style: kmainbold,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: startContent,
+                        style: kmainheight,
+                      ),
+                      TextSpan(
+                        text: highlightContent ?? "",
+                        style: kmainheight.copyWith(
+                            color: highlightColor ?? mainblue),
+                      ),
+                      TextSpan(
+                        text: endContent,
+                        style: kmainheight,
+                      )
+                    ]),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //         child: CustomExpandedButton(
+                  //             onTap: buttonFunction,
+                  //             isBlue: true,
+                  //             title: buttonText,
+                  //             isBig: true)),
+                  //   ],
+                  // ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+    barrierDismissible: false,
+    barrierColor: popupGray,
+    transitionCurve: kAnimationCurve,
+    transitionDuration: kAnimationDuration,
+  );
+}
+
 void showTextFieldDialog({
   required String title,
   required String hintText,

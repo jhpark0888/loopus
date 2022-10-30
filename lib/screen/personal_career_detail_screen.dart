@@ -139,13 +139,9 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                                   route: PostaddRoute.career,
                                 ));
                           },
-<<<<<<< HEAD
                           child: EmptyPostWidget(
                             id: career.id,
                           )))
-=======
-                          child: EmptyPostWidget()))
->>>>>>> 28a7ab40bc98d8ccde726bcc136f8d3d4512119b
                 ],
               ),
             ]),
@@ -156,7 +152,6 @@ class PersonalCareerDetailScreen extends StatelessWidget {
   }
 }
 
-<<<<<<< HEAD
 class EmptyPostWidget extends StatelessWidget {
   EmptyPostWidget({Key? key, required this.id}) : super(key: key);
   int id;
@@ -173,8 +168,6 @@ class EmptyPostWidget extends StatelessWidget {
   }
 }
 
-=======
->>>>>>> 28a7ab40bc98d8ccde726bcc136f8d3d4512119b
 class _MyAppSpace extends StatelessWidget {
   _MyAppSpace({Key? key, required this.career}) : super(key: key);
   Rx<Project> career;

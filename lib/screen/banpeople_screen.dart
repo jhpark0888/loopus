@@ -20,7 +20,7 @@ class BanPeopleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: "차단 목록",
+        title: "차단 관리 ",
         bottomBorder: false,
       ),
       body: SingleChildScrollView(
