@@ -419,39 +419,41 @@ void showModalIOS(
     barrierColor: popupGray,
     context: context,
     builder: (context) => CupertinoActionSheet(
-      cancelButton: cancleButton ? GetBack != null
-          ? CupertinoActionSheetAction(
-              child: const Text(
-                "닫기",
-                style: kmainbold,
-              ),
-              isDefaultAction: true,
-              onPressed: () {
-                Get.back();
-              },
-            )
-          :
-          // CustomExpandedButton(onTap: func3 != null ? func3 : () {}, isBlue: isBlue, title: 계, isBig: isBig)
-          Container(
-              height: 44,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: rankred,
-              ),
-              child: CupertinoActionSheetAction(
+      cancelButton: cancleButton
+          ? GetBack != null
+              ? CupertinoActionSheetAction(
                   child: const Text(
-                    "계정 신고하기",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      height: 1,
-                      color: mainWhite,
-                      fontFamily: 'NotoSansKR',
-                    ),
+                    "닫기",
+                    style: kmainbold,
                   ),
                   isDefaultAction: true,
-                  onPressed: func3 != null ? func3 : () {}),
-            ) : null,
+                  onPressed: () {
+                    Get.back();
+                  },
+                )
+              :
+              // CustomExpandedButton(onTap: func3 != null ? func3 : () {}, isBlue: isBlue, title: 계, isBig: isBig)
+              Container(
+                  height: 44,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: rankred,
+                  ),
+                  child: CupertinoActionSheetAction(
+                      child: const Text(
+                        "계정 신고하기",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          height: 1,
+                          color: mainWhite,
+                          fontFamily: 'NotoSansKR',
+                        ),
+                      ),
+                      isDefaultAction: true,
+                      onPressed: func3 != null ? func3 : () {}),
+                )
+          : null,
       actions: [
         Container(
           height: 44,
@@ -546,8 +548,7 @@ void showBottomdialog(
   String? accentTitle,
 }) {
   showModalBottomSheet(
-    barrierColor: bareerColor ??
-        popupGray,
+    barrierColor: bareerColor ?? popupGray,
     enableDrag: false,
     context: context,
     backgroundColor: Colors.transparent,
