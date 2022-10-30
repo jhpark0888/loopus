@@ -31,8 +31,7 @@ class CareerRankWidget extends StatelessWidget {
       width: 302,
       // height: 340,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8), color: cardGray),
+      decoration: BoxDecoration(color: mainWhite),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

@@ -57,7 +57,7 @@ class LikePeopleScreen extends StatelessWidget {
                                 physics: const BouncingScrollPhysics(),
                                 controller: _controller.refreshController,
                                 enablePullUp: true,
-                                header: const MyCustomHeader(),
+                                header: MyCustomHeader(),
                                 footer: const MyCustomFooter(),
                                 onRefresh: _controller.onRefresh,
                                 child: SingleChildScrollView(

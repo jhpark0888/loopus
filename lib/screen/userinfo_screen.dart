@@ -94,11 +94,11 @@ class UserInfoScreen extends StatelessWidget {
             title: "회원탈퇴",
             titleColor: rankred,
             onTap: () {
-              showButtonDialog(
+              showButtonDialog2(
                   title: '정말 탈퇴하시겠어요?',
-                  startContent: '탈퇴 시 작성된 모든 데이터는 삭제되며,\n이후',
-                  highlightContent: " 복구가 불가능 ",
-                  endContent: "해요\n다시 한 번 신중하게 생각 후 탈퇴를 진행해주세요",
+                  startContent: '탈퇴 시 작성된 모든 데이터는 삭제되며,\n',
+                  highlightContent: " 이후 복구가 불가능",
+                  endContent: "해요 \n 다시 한 번 신중하게 생각 후 \n 탈퇴를 진행해주세요",
                   highlightColor: rankred,
                   leftFunction: () => Get.back(),
                   rightFunction: () {
@@ -148,8 +148,8 @@ class UserInfoScreen extends StatelessWidget {
         value2: '취소',
         buttonColor1: mainblue,
         buttonColor2: maingray,
-        title: "개인 정보 수정을 위해선 재인증 절차가 필요합니다\n",
-        accentTitle: "학적이 변경된 경우, 변경된 학적 정보를 입력해주세요",
+        // title: "개인 정보 수정을 위해선 재인증 절차가 필요합니다\n",
+        // accentTitle: "학적이 변경된 경우, 변경된 학적 정보를 입력해주세요",
         isOne: false);
   }
 }

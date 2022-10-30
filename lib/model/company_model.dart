@@ -8,9 +8,11 @@ class Company extends User {
     required profileImage,
     required name,
     required followed,
+    required banned,
     required followerCount,
     required followingCount,
     required fieldId,
+    required this.itrUsers,
     required this.contactcount,
     required this.homepage,
     required this.intro,
@@ -24,6 +26,7 @@ class Company extends User {
           name: name,
           fieldId: fieldId,
           followed: followed,
+          banned: banned,
           followerCount: followerCount,
           followingCount: followingCount,
           userType: UserType.company,
@@ -36,6 +39,7 @@ class Company extends User {
   List<CompanyImage> images;
   String slogan;
   String category;
+  List<User> itrUsers;
 
   factory Company.defaultCompany({
     int? userId,
@@ -49,9 +53,11 @@ class Company extends User {
     String? intro,
     String? address,
     Rx<FollowState>? followed,
+    Rx<BanState>? banned,
     List<CompanyImage>? images,
     String? slogan,
     String? category,
+    List<Person>? itrUsers,
   }) =>
       Company(
         userId: userId ?? 0,
@@ -65,38 +71,59 @@ class Company extends User {
         intro: intro ?? "",
         address: address ?? "",
         followed: followed ?? FollowState.normal.obs,
+        banned: banned ?? BanState.normal.obs,
         images: images ?? [],
         slogan: slogan ?? "",
         category: category ?? "",
+        itrUsers: itrUsers ?? [],
       );
 
   factory Company.fromJson(Map<String, dynamic> json) => Company(
-      userId: json['user_id'] ?? json['id'] ?? json['user'],
-      profileImage: json["company_logo"] != null
-          ? json["company_logo"]['logo'] ?? ""
-          : json['logo'] ?? "",
-      name: json["company_logo"] != null
-          ? json["company_logo"]['company_name'] ?? ""
-          : json['company_name'] ?? "",
-      followerCount: 0.obs,
-      followingCount: 0.obs,
-      fieldId: json['contact_field'] ?? "16",
-      contactcount: json['count'] != null ? RxInt(json['count']) : RxInt(0),
-      homepage: json["homepage"] ?? "",
-      intro: json["information"] ?? "",
-      address: json["location"] ?? "",
-      followed: json["looped"] != null
-          ? FollowState.values[json["looped"]].obs
-          : FollowState.normal.obs,
-      images: json["company_images"] != null
-          ? json["company_images"].runtimeType != Iterable
-              ? [CompanyImage.fromJson(json["company_images"])]
-              : List.from(json["company_images"])
-                  .map((image) => CompanyImage.fromJson(image))
-                  .toList()
-          : [],
-      slogan: json["slogan"] ?? "",
-      category: json["category"] ?? "");
+        userId: json['user_id'] ?? json['id'] ?? json['user'],
+        profileImage: json["company_logo"] != null
+            ? json["company_logo"]['logo'] ?? ""
+            : json['logo'] ?? "",
+        name: json["company_logo"] != null
+            ? json["company_logo"]['company_name'] ?? ""
+            : json['company_name'] ?? "",
+        followerCount: 0.obs,
+        followingCount: 0.obs,
+        fieldId: json['contact_field'] != null
+            ? json['contact_field'].toString()
+            : json["group"] != null
+                ? json['group'].toString()
+                : "16",
+        contactcount: json['count'] != null ? RxInt(json['count']) : RxInt(0),
+        homepage: json["homepage"] ?? "",
+        intro: json["information"] ?? "",
+        address: json["location"] ?? "",
+        followed: json["looped"] != null
+            ? FollowState.values[json["looped"]].obs
+            : FollowState.normal.obs,
+        banned: json["is_banned"] != null
+            ? BanState.values[json["is_banned"]].obs
+            : BanState.normal.obs,
+        images: json["company_images"] != null
+            ? json["company_images"].runtimeType != List
+                ? [CompanyImage.fromJson(json["company_images"])]
+                : List.from(json["company_images"])
+                    .map((image) => CompanyImage.fromJson(image))
+                    .toList()
+            : json["images"] != null
+                ? json["images"].runtimeType != List
+                    ? [CompanyImage.fromJson(json["images"])]
+                    : List.from(json["images"])
+                        .map((image) => CompanyImage.fromJson(image))
+                        .toList()
+                : [],
+        slogan: json["slogan"] ?? "",
+        category: json["category"] ?? "",
+        itrUsers: json["interest"] != null
+            ? List.from(json["interest"])
+                .map((person) => Person.fromJson(person))
+                .toList()
+            : [],
+      );
 
   void copywith(Map<String, dynamic> json) {
     userId = json["user_id"] ?? json['id'] ?? userId;
@@ -121,6 +148,9 @@ class Company extends User {
     followed = json["looped"] != null
         ? FollowState.values[json["looped"]].obs
         : followed;
+    banned.value = json["is_banned"] != null
+        ? BanState.values[json["is_banned"]]
+        : banned.value;
     images = json["company_images"] != null
         ? List.from(json["company_images"])
             .map((image) => CompanyImage.fromJson(image))
@@ -128,6 +158,11 @@ class Company extends User {
         : images;
     slogan = json["slogan"] ?? slogan;
     category = json["category"] ?? category;
+    itrUsers = json["interest"] != null
+        ? List.from(json["interest"])
+            .map((person) => Person.fromJson(person))
+            .toList()
+        : itrUsers;
   }
 }
 

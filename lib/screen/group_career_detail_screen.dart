@@ -21,6 +21,7 @@ import 'dart:math' as math;
 import 'package:loopus/widget/custom_pie_chart.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
+import 'package:loopus/widget/empty_post_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
@@ -59,7 +60,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                         career: career,
                       )
                     ],
-                    expandedHeight: 200,
+                    expandedHeight: 180,
                     floating: true,
                     forceElevated: innerBoxIsScrolled,
                     toolbarHeight: 48,
@@ -72,12 +73,12 @@ class GroupCareerDetailScreen extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 70.0),
+                    padding: const EdgeInsets.only(top: 105),
                     child: Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 32, horizontal: 16),
+                              vertical: 16, horizontal: 30.5),
                           child: Row(
                             children: [
                               CustomPieChart(
@@ -85,19 +86,16 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                 // careerList: careerList,
                                 currentId: career.id,
                               ),
-                              const SizedBox(width: 32),
+                              const SizedBox(width: 24),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   RichText(
                                       text: TextSpan(children: [
-                                    TextSpan(
-                                        text: 'IT 분야',
-                                        style: kmainbold.copyWith(
-                                            color: mainblue)),
+                                    TextSpan(text: 'IT 분야', style: kmainbold),
                                     const TextSpan(
-                                        text: '커리어', style: kmainbold)
+                                        text: ' 커리어', style: kmainbold)
                                   ])),
                                   const SizedBox(height: 8),
                                   RichText(
@@ -119,7 +117,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                         ),
                         DivideWidget(),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Container(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -132,13 +130,13 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
-                                const SizedBox(height: 12),
+                                const SizedBox(height: 16),
                                 SizedBox(
-                                    height: 72,
+                                    height: 71,
                                     child: Obx(
                                       () => ListView.separated(
                                           padding: const EdgeInsets.only(
-                                              left: 20, right: 20),
+                                              left: 16, right: 16),
                                           scrollDirection: Axis.horizontal,
                                           primary: false,
                                           shrinkWrap: true,
@@ -465,26 +463,8 @@ class GroupCareerScreen extends StatelessWidget {
                     route: PostaddRoute.career,
                   ));
             },
-            child: EmptyPostWidget(
-              id: id,
-            ),
+            child: EmptyPostWidget(),
           ));
-  }
-}
-
-class EmptyPostWidget extends StatelessWidget {
-  EmptyPostWidget({Key? key, required this.id}) : super(key: key);
-  int id;
-  @override
-  Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      SvgPicture.asset('assets/icons/career_post_add.svg'),
-      const SizedBox(width: 7),
-      Text(
-        '지금 바로 새로운 포스트를 작성해보세요',
-        style: kmainbold.copyWith(color: mainblue),
-      )
-    ]);
   }
 }
 
@@ -521,7 +501,7 @@ class MyCareerScreen extends StatelessWidget {
               //     ),
             ]))
           ])
-        : Center(child: EmptyPostWidget(id: id)));
+        : Center(child: EmptyPostWidget()));
   }
 }
 
@@ -540,7 +520,7 @@ class _leading extends StatelessWidget {
           Get.back();
         } else {
           if (career!.managerId == HomeController.to.myProfile.value.userId) {
-            showBottomdialog(context,bareerColor: dividegray, func2: () {
+            showBottomdialog(context, bareerColor: dividegray, func2: () {
               Get.back();
               showButtonDialog(
                   title: '이 커리어는 완전히 삭제돼요',
@@ -583,7 +563,7 @@ class _leading extends StatelessWidget {
               .where((element) =>
                   element.userId == HomeController.to.myProfile.value.userId)
               .isNotEmpty) {
-            showBottomdialog(context,bareerColor: dividegray, func2: () {
+            showBottomdialog(context, bareerColor: dividegray, func2: () {
               Get.back();
               showButtonDialog(
                   title: '그룹 커리어에서 나가게 돼요',

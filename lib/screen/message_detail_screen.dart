@@ -277,75 +277,77 @@ class MessageDetatilScreen extends StatelessWidget {
   }
 
   Widget sendField() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(20, 12, 20, 34),
-      decoration: BoxDecoration(
-          border: Border(top: BorderSide(width: 1, color: dividegray))),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-                dragStartBehavior: DragStartBehavior.start,
-                focusNode: controller.focusNode,
-                keyboardType: TextInputType.multiline,
-                controller: controller.sendText,
-                minLines: 1,
-                maxLines: 3,
-                autocorrect: false,
-                readOnly: false,
-                style: kmain,
-                cursorColor: mainblack,
-                cursorWidth: 1.2,
-                cursorRadius: Radius.circular(5.0),
-                autofocus: false,
-                // textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: cardGray,
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(8)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(8)),
-                  contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                  isDense: true,
-                  hintText: '메세지 입력',
-                  counterText: "",
-                  hintStyle:
-                      kmain.copyWith(color: maingray).copyWith(height: 1.4),
-                )),
-          ),
-          const SizedBox(width: 14),
-          GestureDetector(
-              onTap: () async {
-                print(controller.messageList
-                    .where((p0) => p0.sendsuccess!.value == 'false')
-                    .length
-                    .toString());
-                Chat temp = Chat(
-                    messageId: controller.messageList
-                        .where((p0) => p0.sendsuccess!.value == 'false')
-                        .length
-                        .toString(),
-                    content: controller.sendText.text,
-                    date: DateTime.now(),
-                    sender: controller.myId.toString(),
-                    isRead: false.obs,
-                    roomId: controller.roomid,
-                    sendsuccess: 'false'.obs);
-                if (controller.sendText.text.isNotEmpty) {
-                  await SQLController.to.insertmessage(temp);
-                  await sendMessage();
-                  controller.messageList.insert(0, temp);
-                  controller.sendText.clear();
-                  await Future.delayed(const Duration(milliseconds: 300));
-                  controller.listViewController.jumpTo(
-                      controller.listViewController.position.minScrollExtent);
-                }
-              },
-              child: SvgPicture.asset('assets/icons/enter.svg'))
-        ],
+    return SafeArea(
+      child: Container(
+        padding: EdgeInsets.fromLTRB(16, 6.5, 16, 6.5),
+        decoration: BoxDecoration(
+            border: Border(top: BorderSide(width: 1, color: dividegray))),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                  dragStartBehavior: DragStartBehavior.start,
+                  focusNode: controller.focusNode,
+                  keyboardType: TextInputType.multiline,
+                  controller: controller.sendText,
+                  minLines: 1,
+                  maxLines: 3,
+                  autocorrect: false,
+                  readOnly: false,
+                  style: kmain,
+                  cursorColor: mainblack,
+                  cursorWidth: 1.2,
+                  cursorRadius: Radius.circular(5.0),
+                  autofocus: false,
+                  // textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: cardGray,
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(8)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(8)),
+                    contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    isDense: true,
+                    hintText: '메세지 입력',
+                    counterText: "",
+                    hintStyle:
+                        kmain.copyWith(color: maingray).copyWith(height: 1.4),
+                  )),
+            ),
+            const SizedBox(width: 14),
+            GestureDetector(
+                onTap: () async {
+                  print(controller.messageList
+                      .where((p0) => p0.sendsuccess!.value == 'false')
+                      .length
+                      .toString());
+                  Chat temp = Chat(
+                      messageId: controller.messageList
+                          .where((p0) => p0.sendsuccess!.value == 'false')
+                          .length
+                          .toString(),
+                      content: controller.sendText.text,
+                      date: DateTime.now(),
+                      sender: controller.myId.toString(),
+                      isRead: false.obs,
+                      roomId: controller.roomid,
+                      sendsuccess: 'false'.obs);
+                  if (controller.sendText.text.isNotEmpty) {
+                    await SQLController.to.insertmessage(temp);
+                    await sendMessage();
+                    controller.messageList.insert(0, temp);
+                    controller.sendText.clear();
+                    await Future.delayed(const Duration(milliseconds: 300));
+                    controller.listViewController.jumpTo(
+                        controller.listViewController.position.minScrollExtent);
+                  }
+                },
+                child: SvgPicture.asset('assets/icons/enter.svg'))
+          ],
+        ),
       ),
     );
   }

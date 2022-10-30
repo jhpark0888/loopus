@@ -305,8 +305,8 @@ class OtherCompanyScreen extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Get.to(() => CompanyInterestingScreen(
-                      userId: _controller.otherCompany.value.userId,
-                      listType: FollowListType.follower));
+                        company: _controller.otherCompany.value,
+                      ));
                 },
                 child: Text(
                   "전체보기",
@@ -325,12 +325,12 @@ class OtherCompanyScreen extends StatelessWidget {
             child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemBuilder: (context, index) =>
-                    interestingUser(_controller.followerList[index]),
+                itemBuilder: (context, index) => interestingUser(
+                    _controller.otherCompany.value.itrUsers[index]),
                 separatorBuilder: (context, index) => const SizedBox(
                       width: 14,
                     ),
-                itemCount: math.min(_controller.followerList.length, 10)),
+                itemCount: _controller.otherCompany.value.itrUsers.length),
           ),
         ),
         const SizedBox(
@@ -510,7 +510,7 @@ class OtherCompanyScreen extends StatelessWidget {
       children: [
         UserImageWidget(imageUrl: user.profileImage, userType: user.userType),
         const SizedBox(
-          height: 7,
+          height: 8,
         ),
         Text(
           user.name,

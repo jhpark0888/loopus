@@ -137,8 +137,8 @@ class LogInScreen extends StatelessWidget {
                 //   height: 24,
                 // ),
                 LabelTextFieldWidget(
-                  label: "본인 대학 이메일",
-                  hintText: "인증한 본인 대학 이메일 주소",
+                  label: "대학 웹메일 주소 또는 기업 메일",
+                  hintText: "가입시 인증 받은 대학 또는 기업 메일 주소를 입력해주세요",
                   // validator: (value) =>
                   //     CheckValidate().validateEmail(value!),
                   textController: _loginController.idcontroller,

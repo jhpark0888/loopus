@@ -47,7 +47,8 @@ Future<HTTPResponse> getScoutCompanySearch({
   }
 }
 
-Future<HTTPResponse> getRecommandCompanys() async {
+// student: 0 , corp: 1
+Future<HTTPResponse> getRecommandCompanys(String isCorp) async {
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {
@@ -55,8 +56,9 @@ Future<HTTPResponse> getRecommandCompanys() async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    // print(userid);
     final _url = Uri.parse("$serverUri/scout_api/recommendation_company");
+    // final _url =
+    //     Uri.parse("$serverUri/scout_api/recommendation_company?type=$isCorp");
 
     try {
       http.Response response =

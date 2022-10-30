@@ -65,7 +65,7 @@ class RealTimeRankScreen extends StatelessWidget {
                                 physics: const BouncingScrollPhysics(),
                                 controller:
                                     _controller.allrankerRefreshController,
-                                header: const MyCustomHeader(),
+                                header: MyCustomHeader(),
                                 onRefresh: onRefresh,
                                 child: SingleChildScrollView(
                                     child: Column(

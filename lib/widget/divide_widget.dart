@@ -9,7 +9,7 @@ class DivideWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Divider(
-      height: height ?? 20,
+      height: height ?? 16,
       thickness: 0.5,
       indent: 16,
       endIndent: 16,

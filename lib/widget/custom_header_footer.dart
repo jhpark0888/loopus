@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MyCustomHeader extends StatelessWidget {
-  const MyCustomHeader({Key? key}) : super(key: key);
+  MyCustomHeader({Key? key, this.color}) : super(key: key);
+
+  Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -16,37 +19,28 @@ class MyCustomHeader extends StatelessWidget {
       releaseText: "",
       completeText: "",
       idleText: "",
-      refreshingIcon: Column(
-        children: [
-          Image.asset(
-            'assets/icons/loading.gif',
-            scale: 6,
-          ),
-        ],
+      outerBuilder: (child) {
+        return Container(
+          height: Get.height,
+          decoration: BoxDecoration(color: color),
+          child: Align(alignment: Alignment.bottomCenter, child: child),
+        );
+      },
+      refreshingIcon: Image.asset(
+        'assets/icons/loading.gif',
+        scale: 6,
       ),
-      releaseIcon: Column(
-        children: [
-          Image.asset(
-            'assets/icons/loading.gif',
-            scale: 6,
-          ),
-        ],
+      releaseIcon: Image.asset(
+        'assets/icons/loading.gif',
+        scale: 6,
       ),
-      completeIcon: Column(
-        children: [
-          const Icon(
-            Icons.check_rounded,
-            color: mainblue,
-          ),
-        ],
+      completeIcon: const Icon(
+        Icons.check_rounded,
+        color: mainblue,
       ),
-      idleIcon: Column(
-        children: [
-          Image.asset(
-            'assets/icons/loading.png',
-            scale: 12,
-          ),
-        ],
+      idleIcon: Image.asset(
+        'assets/icons/loading.gif',
+        scale: 6,
       ),
     );
   }

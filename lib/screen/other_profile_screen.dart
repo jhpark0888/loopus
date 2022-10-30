@@ -107,12 +107,15 @@ class OtherProfileScreen extends StatelessWidget {
                           onPressed: () {
                             showModalIOS(
                               context,
-                              func1: () {
-                                showButtonDialog(
-                                    leftText: '취소',
-                                    rightText: '신고',
-                                    title: '<$realname> 유저를 신고하시겠어요?',
-                                    startContent: '관리자가 검토할 예정이에요',
+                              func3: () {
+                                showTextFieldDialog(
+                                    textEditingController:
+                                        TextEditingController(),
+                                    title: '계정 신고하기',
+                                    hintText:
+                                        '신고 내용을 입력해주세요. 관리자 확인 \n 이후 관련 약관에 따라 처리됩니다.\n ',
+                                    completeText: '신고하기 ',
+                                    // startContent: '관리자가 검토할 예정이에요',
                                     leftFunction: () => Get.back(),
                                     rightFunction: () {
                                       userreport(_controller.userid)
@@ -126,13 +129,12 @@ class OtherProfileScreen extends StatelessWidget {
                                       });
                                     });
                               },
-                              func2: () {
+                              func1: () {
                                 showButtonDialog(
                                     leftText: '취소',
                                     rightText: '차단',
-                                    title: '<$realname> 유저를 차단하시겠어요?',
-                                    startContent:
-                                        '차단하면 <$realname> 유저와의 팔로우도 해제됩니다',
+                                    title: '계정 차단하기',
+                                    startContent: '$realname님을 차단하시겠어요?',
                                     leftFunction: () => Get.back(),
                                     rightFunction: () {
                                       userban(_controller.userid).then((value) {
@@ -142,15 +144,15 @@ class OtherProfileScreen extends StatelessWidget {
                                               .banned(BanState.ban);
 
                                           showCustomDialog(
-                                              "해당 유저가 차단 되었습니다", 1000);
+                                              "$realname님이 차단 되었습니다", 1000);
                                         } else {
                                           errorSituation(value);
                                         }
                                       });
                                     });
                               },
-                              value1: '이 유저 신고하기',
-                              value2: '이 유저 차단하기',
+                              value1: '계정 차단하기',
+                              value2: '계정 신고하기',
                               isValue1Red: true,
                               isValue2Red: true,
                               isOne: false,
@@ -233,7 +235,7 @@ class OtherProfileScreen extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(
-          height: 24,
+          height: 16,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -260,7 +262,7 @@ class OtherProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 7,
+                    height: 8,
                   ),
                   Text(
                     '팔로워',
@@ -348,7 +350,7 @@ class OtherProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 7,
+                    height: 8,
                   ),
                   Text(
                     '팔로잉',
@@ -361,7 +363,7 @@ class OtherProfileScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(
-          height: 14,
+          height: 13,
         ),
         Obx(
           () => Text(
@@ -370,7 +372,7 @@ class OtherProfileScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          height: 14,
+          height: 8,
         ),
         Obx(
           () => IntrinsicHeight(
@@ -384,16 +386,16 @@ class OtherProfileScreen extends StatelessWidget {
                   height: 24,
                   userType: _controller.otherUser.value.userType,
                 ),
-                const SizedBox(width: 7),
+                const SizedBox(width: 8),
                 Text(
                   _controller.otherUser.value.univName,
                   style: kmain,
                 ),
                 const SizedBox(
-                  height: 12,
+                  height: 9,
                   child: VerticalDivider(
                     thickness: 1,
-                    width: 14,
+                    width: 16,
                     color: mainblack,
                   ),
                 ),
@@ -402,10 +404,10 @@ class OtherProfileScreen extends StatelessWidget {
                   style: kmain,
                 ),
                 const SizedBox(
-                  height: 12,
+                  height: 9,
                   child: VerticalDivider(
                     thickness: 1,
-                    width: 14,
+                    width: 16,
                     color: mainblack,
                   ),
                 ),
@@ -419,7 +421,7 @@ class OtherProfileScreen extends StatelessWidget {
         ),
         _snsView(),
         const SizedBox(
-          height: 14,
+          height: 8,
         ),
         if (_controller.otherUser.value.userId !=
             int.parse(HomeController.to.myId!))
@@ -495,7 +497,7 @@ class OtherProfileScreen extends StatelessWidget {
 
   Widget _snsListWidget() {
     return SizedBox(
-      height: 24,
+      height: 28,
       child: ListView.separated(
           primary: false,
           shrinkWrap: true,
@@ -506,7 +508,7 @@ class OtherProfileScreen extends StatelessWidget {
             );
           },
           separatorBuilder: (context, index) => const SizedBox(
-                width: 7,
+                width: 8,
               ),
           itemCount: _controller.otherUser.value.snsList.length),
     );
@@ -517,7 +519,7 @@ class OtherProfileScreen extends StatelessWidget {
       () => int.parse(HomeController.to.myId!) ==
               _controller.otherUser.value.userId
           ? Padding(
-              padding: const EdgeInsets.only(top: 14),
+              padding: const EdgeInsets.only(top: 25),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -531,7 +533,7 @@ class OtherProfileScreen extends StatelessWidget {
                           ),
                         ),
                   const SizedBox(
-                    width: 7,
+                    width: 8,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -551,7 +553,7 @@ class OtherProfileScreen extends StatelessWidget {
             )
           : _controller.otherUser.value.snsList.isNotEmpty
               ? Padding(
-                  padding: const EdgeInsets.only(top: 14),
+                  padding: const EdgeInsets.only(top: 8),
                   child: _snsListWidget())
               : Container(),
     );
@@ -638,41 +640,41 @@ class OtherProfileScreen extends StatelessWidget {
                     //     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                     //         context)),
                     SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       sliver: SliverToBoxAdapter(
                         child: Column(
                           children: [
-                            const SizedBox(height: 24),
+                            const SizedBox(height: 25),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                const Text('커리어 분석', style: kmainbold),
-                                const SizedBox(width: 7),
+                                Text('$realname님과 관련있는 기업', style: kmainbold),
+                                const SizedBox(width: 8),
                                 SvgPicture.asset(
                                   'assets/icons/information.svg',
-                                  width: 20,
-                                  height: 20,
+                                  width: 11,
+                                  height: 15,
                                   color: mainblack.withOpacity(0.6),
                                 )
                               ],
                             ),
-                            const SizedBox(height: 14),
-                            CareerAnalysisWidget(
-                              field: fieldList[
-                                  _controller.otherUser.value.fieldId]!,
-                              groupRatio:
-                                  _controller.otherUser.value.groupRatio,
-                              schoolRatio:
-                                  _controller.otherUser.value.schoolRatio,
-                              lastgroupRatio:
-                                  _controller.otherUser.value.groupRatio +
-                                      _controller
-                                          .otherUser.value.groupRatioVariance,
-                              lastschoolRatio:
-                                  _controller.otherUser.value.schoolRatio +
-                                      _controller
-                                          .otherUser.value.schoolRatioVariance,
-                            ),
+                            const SizedBox(height: 16),
+                            // CareerAnalysisWidget(
+                            //   field: fieldList[
+                            //       _controller.otherUser.value.fieldId]!,
+                            //   groupRatio:
+                            //       _controller.otherUser.value.groupRatio,
+                            //   // schoolRatio:
+                            //   //     _controller.otherUser.value.schoolRatio,
+                            //   // lastgroupRatio:
+                            //   //     _controller.otherUser.value.groupRatio +
+                            //   //         _controller
+                            //   //             .otherUser.value.groupRatioVariance,
+                            //   // lastschoolRatio:
+                            //   //     _controller.otherUser.value.schoolRatio +
+                            //   //         _controller
+                            //   //             .otherUser.value.schoolRatioVariance,
+                            // ),
                             const SizedBox(height: 24),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -681,8 +683,8 @@ class OtherProfileScreen extends StatelessWidget {
                                 const SizedBox(width: 7),
                                 SvgPicture.asset(
                                   'assets/icons/information.svg',
-                                  width: 20,
-                                  height: 20,
+                                  width: 11,
+                                  height: 15,
                                   color: mainblack.withOpacity(0.6),
                                 ),
                                 const Spacer(),
@@ -715,11 +717,11 @@ class OtherProfileScreen extends StatelessWidget {
                               ),
                               separatorBuilder: (context, index) =>
                                   const SizedBox(
-                                height: 14,
+                                height: 16,
                               ),
                               itemCount: _controller.otherProjectList.length,
                             ),
-                            const SizedBox(height: 24),
+                            // const SizedBox(height: 24),
                           ],
                         ),
                       ),

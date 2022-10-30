@@ -26,7 +26,7 @@ class BookmarkScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: '북마크',
+        title: '스크랩',
         bottomBorder: false,
       ),
       body: Obx(
@@ -46,7 +46,7 @@ class BookmarkScreen extends StatelessWidget {
                                   controller: _controller.refreshController,
                                   enablePullDown: true,
                                   enablePullUp: true,
-                                  header: const MyCustomHeader(),
+                                  header: MyCustomHeader(),
                                   footer: const MyCustomFooter(),
                                   onRefresh: _controller.onBookmarkRefresh,
                                   onLoading: _controller.onBookmarkLoading,

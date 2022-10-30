@@ -13,6 +13,7 @@ import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
+import 'package:loopus/screen/realtime_rank_screen.dart';
 import 'package:loopus/screen/upload_screen.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/widget/career_rank_widget.dart';
@@ -34,10 +35,11 @@ import '../constant.dart';
 class CareerBoardScreen extends StatelessWidget {
   final CareerBoardController _controller = Get.put(CareerBoardController());
 
+  late bool isUniversity;
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         elevation: 0,
         centerTitle: false,
@@ -117,7 +119,7 @@ class CareerBoardScreen extends StatelessWidget {
                   (index) => tabViews(
                         _controller.careerFieldList[index],
                       )))),
-    ));
+    );
   }
 
   // Widget _tabWidget(String field, {bool right = true}) {
@@ -162,7 +164,7 @@ class CareerBoardScreen extends StatelessWidget {
                           physics: const BouncingScrollPhysics(),
                           controller: _controller
                               .refreshControllerMap[currentField.key]!,
-                          header: const MyCustomHeader(),
+                          header: MyCustomHeader(),
                           footer: const MyCustomFooter(),
                           onRefresh: _controller.onRefresh,
                           child: SingleChildScrollView(
@@ -171,11 +173,28 @@ class CareerBoardScreen extends StatelessWidget {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 16.0, top: 16),
-                                    child: Text(
-                                      '${currentField.value} 분야 실시간 순위',
-                                      style: kmainbold,
-                                      textAlign: TextAlign.start,
+                                        left: 16.0, top: 16, right: 16),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        const Text(
+                                          '실시간 커리어 순위',
+                                          style: kmainbold,
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        GestureDetector(
+                                            onTap: () {
+                                              Get.to(() => RealTimeRankScreen(
+                                                    currentField: currentField,
+                                                    isUniversity: isUniversity,
+                                                  ));
+                                            },
+                                            child: Text('전체보기',
+                                                style: kmain.copyWith(
+                                                    color: mainblue))),
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(height: 10),
@@ -188,12 +207,9 @@ class CareerBoardScreen extends StatelessWidget {
                                           scrollDirection: Axis.horizontal,
                                           itemBuilder: (context, index) {
                                             return CareerRankWidget(
-                                              isUniversity:
-                                                  index == 0 ? true : false,
-                                              ranker: index == 0
-                                                  ? _controller.campusRankerMap[
-                                                      currentField.key]!
-                                                  : _controller.koreaRankerMap[
+                                              isUniversity: index == true,
+                                              ranker:
+                                                  _controller.koreaRankerMap[
                                                       currentField.key]!,
                                               currentField: currentField,
                                             );
@@ -204,7 +220,7 @@ class CareerBoardScreen extends StatelessWidget {
                                           itemCount: 2),
                                     ),
                                   ),
-                                  const SizedBox(height: 32),
+                                  const SizedBox(height: 16),
                                   // Padding(
                                   //   padding: const EdgeInsets.only(left: 16),
                                   //   child: Text(
@@ -248,6 +264,32 @@ class CareerBoardScreen extends StatelessWidget {
                                   //                   .length),
                                   //         ),
                                   // ),
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 16),
+                                    child: Text('성장 중인 친구들을 만나보세요',
+                                        style: kmainbold),
+                                  ),
+                                  // ScrollNoneffectWidget(
+                                  //   child: ListView.separated(
+                                  //       padding: const EdgeInsets.symmetric(
+                                  //           horizontal: 20),
+                                  //       scrollDirection: Axis.horizontal,
+                                  //       itemBuilder: (context, index) {
+                                  //         return Container(
+                                  //           width: 100,
+                                  //           height: 100,
+                                  //           decoration: BoxDecoration(
+                                  //               color: Colors.red),
+                                  //         );
+                                  //       },
+                                  //       separatorBuilder: (context, index) {
+                                  //         return const SizedBox(width: 14);
+                                  //       },
+                                  //       itemCount: 3),
+                                  // ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
                                   const Padding(
                                     padding: EdgeInsets.only(left: 16),
                                     child: Text('실시간 인기 포스트', style: kmainbold),
@@ -297,7 +339,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 32),
                                   const Padding(
-                                      padding: EdgeInsets.only(
+                                      padding: const EdgeInsets.only(
                                           left: 16.0, right: 16),
                                       child: Text('인기있는 태그',
                                           // ${currentField.value}분야

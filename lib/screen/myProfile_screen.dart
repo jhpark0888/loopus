@@ -106,7 +106,7 @@ class MyProfileScreen extends StatelessWidget {
                   Get.to(() => SettingScreen());
                 },
                 icon: SvgPicture.asset(
-                  'assets/icons/setting.svg',
+                  'assets/icons/Setting.svg',
                   width: 28,
                 ),
               ),
@@ -537,16 +537,16 @@ class MyProfileScreen extends StatelessWidget {
                                   profileController.myUserInfo.value.fieldId]!,
                               groupRatio:
                                   profileController.myUserInfo.value.groupRatio,
-                              schoolRatio: profileController
-                                  .myUserInfo.value.schoolRatio,
+                              // schoolRatio: profileController
+                              //     .myUserInfo.value.schoolRatio,
                               lastgroupRatio: profileController
                                       .myUserInfo.value.groupRatio +
                                   profileController
                                       .myUserInfo.value.groupRatioVariance,
-                              lastschoolRatio: profileController
-                                      .myUserInfo.value.schoolRatio +
-                                  profileController
-                                      .myUserInfo.value.schoolRatioVariance,
+                              // lastschoolRatio: profileController
+                              //         .myUserInfo.value.schoolRatio +
+                              //     profileController
+                              //         .myUserInfo.value.schoolRatioVariance,
                             ),
                             const SizedBox(height: 24),
                             Row(

@@ -46,7 +46,7 @@ class NotificationScreen extends StatelessWidget {
                     ScreenState.loading)
                 ? false
                 : controller.enablealarmPullup.value,
-            header: const MyCustomHeader(),
+            header: MyCustomHeader(),
             footer: const MyCustomFooter(),
             onRefresh: controller.alarmRefresh,
             onLoading: controller.alarmLoading,

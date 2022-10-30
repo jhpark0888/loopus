@@ -39,7 +39,7 @@ class MyCompanyController extends GetxController
   RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> myprofilescreenstate = ScreenState.loading.obs;
 
-  RxList<User> followerList = <User>[].obs;
+  // RxList<User> followerList = <User>[].obs;
 
   Future onRefresh() async {
     profileenablepullup.value = true;
@@ -63,14 +63,14 @@ class MyCompanyController extends GetxController
       if (value.isError == false) {
         myCompanyInfo.value = Company.fromJson(value.data);
         // isNewAlarm.value = value.data['new_alarm'];
-
+        print(myCompanyInfo.value.images);
       } else {
         errorSituation(value, screenState: myprofilescreenstate);
       }
     });
 
     _getPosting(int.parse(userId));
-    getfollowPeople(int.parse(userId));
+    // getfollowPeople(int.parse(userId));
     // isProfileLoading.value = false;
   }
 
@@ -96,23 +96,23 @@ class MyCompanyController extends GetxController
     });
   }
 
-  void getfollowPeople(int userId) {
-    getfollowlist(userId, FollowListType.follower).then((value) {
-      if (value.isError == false) {
-        List<User> templist = List.from(value.data["follow"])
-            .map((friend) => Person.fromJson(friend))
-            .toList();
+  // void getfollowPeople(int userId) {
+  //   getfollowlist(userId, FollowListType.follower).then((value) {
+  //     if (value.isError == false) {
+  //       List<User> templist = List.from(value.data["follow"])
+  //           .map((friend) => Person.fromJson(friend))
+  //           .toList();
 
-        followerList(templist);
-      } else {
-        errorSituation(value);
-      }
-    });
-  }
+  //       followerList(templist);
+  //     } else {
+  //       errorSituation(value);
+  //     }
+  //   });
+  // }
 
   @override
   void onInit() async {
-    tabController = TabController(length: 2, vsync: this)
+    tabController = TabController(length: 3, vsync: this)
       ..addListener(() {
         currentIndex.value = tabController.index;
       });
