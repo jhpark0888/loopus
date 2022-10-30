@@ -53,6 +53,25 @@ class User {
         userType: userType ?? UserType.student,
       );
 
+  // factory User.fromJson(Map<String, dynamic> json) => User(
+  //       userId: json["user_id"],
+  //       name: json["real_name"],
+  //       profileImage: json["profile_image"] ?? "",
+  //       followerCount: json["follower_count"] != null
+  //           ? RxInt(json["follower_count"])
+  //           : 0.obs,
+  //       followingCount: json["following_count"] != null
+  //           ? RxInt(json["following_count"])
+  //           : 0.obs,
+  //       fieldId: json["group"] != null ? json["group"].toString() : "16",
+  //       followed: json["looped"] != null
+  //           ? FollowState.values[json["looped"]].obs
+  //           : FollowState.normal.obs,
+  //       banned: json["is_banned"] != null
+  //           ? BanState.values[json["is_banned"]].obs
+  //           : BanState.normal.obs,
+  //     );
+
   void followClick() {
     if (followed.value == FollowState.normal) {
       // followController.islooped(1);

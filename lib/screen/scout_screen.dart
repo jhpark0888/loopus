@@ -59,23 +59,25 @@ class ScoutScreen extends StatelessWidget {
                 color: _scontroller.colors.isNotEmpty
                     ? _scontroller
                         .colors[_scontroller.curRcmdCompIndex.value].color
-                    : mainWhite,
+                    : mainblue,
               ),
               Scaffold(
                 appBar: AppBar(
                   systemOverlayStyle: SystemUiOverlayStyle(
-                      statusBarColor: _scontroller.colors.isNotEmpty
-                          ? _scontroller
-                              .colors[_scontroller.curRcmdCompIndex.value].color
-                          : mainWhite,
-                      statusBarIconBrightness: Brightness.light),
+                    statusBarColor: _scontroller.colors.isNotEmpty
+                        ? _scontroller
+                            .colors[_scontroller.curRcmdCompIndex.value].color
+                        : mainblue,
+                    statusBarIconBrightness: Brightness.light,
+                    statusBarBrightness: Brightness.light,
+                  ),
                   elevation: 0,
                   centerTitle: false,
                   titleSpacing: 16,
                   backgroundColor: _scontroller.colors.isNotEmpty
                       ? _scontroller
                           .colors[_scontroller.curRcmdCompIndex.value].color
-                      : mainWhite,
+                      : mainblue,
                   title: Row(
                     children: [
                       Text(
@@ -91,7 +93,7 @@ class ScoutScreen extends StatelessWidget {
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
-                          Get.to(() => MyProfileScreen());
+                          HomeController.to.goMyProfile();
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(right: 16.0),
@@ -120,7 +122,7 @@ class ScoutScreen extends StatelessWidget {
                               ? _scontroller
                                   .colors[_scontroller.curRcmdCompIndex.value]
                                   .color
-                              : mainWhite,
+                              : mainblue,
                         ),
                         footer: const MyCustomFooter(),
                         enablePullUp: true,
@@ -237,7 +239,7 @@ class ScoutScreen extends StatelessWidget {
     return Container(
       color: _scontroller.colors.isNotEmpty
           ? _scontroller.colors[_scontroller.curRcmdCompIndex.value].color
-          : mainWhite,
+          : mainblue,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -251,10 +253,12 @@ class ScoutScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-                _scontroller
-                    .recommendCompList[_scontroller.curRcmdCompIndex.value]
-                    .slogan
-                    .replaceAll('\r\n', " "),
+                _scontroller.recommendCompList.isNotEmpty
+                    ? _scontroller
+                        .recommendCompList[_scontroller.curRcmdCompIndex.value]
+                        .slogan
+                        .replaceAll('\r\n', " ")
+                    : "",
                 overflow: TextOverflow.ellipsis,
                 style: kNavigationTitle.copyWith(color: mainWhite)),
           ),
@@ -262,59 +266,69 @@ class ScoutScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-                _scontroller
-                    .recommendCompList[_scontroller.curRcmdCompIndex.value]
-                    .name,
+                _scontroller.recommendCompList.isNotEmpty
+                    ? _scontroller
+                        .recommendCompList[_scontroller.curRcmdCompIndex.value]
+                        .name
+                    : "",
                 maxLines: 1,
                 style: kmainbold.copyWith(color: mainWhite)),
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            height: 120,
-            child: ScrollNoneffectWidget(
-              child: PageView.builder(
-                controller: _scontroller.pController,
-                onPageChanged: (index) {
-                  _scontroller.curRcmdCompIndex.value =
-                      index % _scontroller.recommendCompList.length;
-                },
-                itemBuilder: (context, index) {
-                  int compIndex = index % _scontroller.recommendCompList.length;
-                  return GestureDetector(
-                    onTap: () {
-                      Get.to(
-                          () => OtherCompanyScreen(
-                                companyId: _scontroller
-                                    .recommendCompList[compIndex].userId,
-                                companyName: _scontroller
-                                    .recommendCompList[compIndex].name,
-                                company:
-                                    _scontroller.recommendCompList[compIndex],
-                              ),
-                          preventDuplicates: false);
-                    },
-                    child: Container(
-                      width: 330,
-                      height: 120,
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      clipBehavior: Clip.hardEdge,
-                      child: CachedNetworkImage(
-                        imageUrl: _scontroller
-                            .recommendCompList[compIndex].images.first.image,
-                        fit: BoxFit.cover,
-                        errorWidget: (context, string, widget) {
-                          return Container(
-                            color: maingray,
-                          );
-                        },
-                      ),
+          Obx(
+            () => SizedBox(
+              height: 120,
+              child: _scontroller.recommendCompList.isNotEmpty
+                  ? PageView.builder(
+                      controller: _scontroller.pController,
+                      onPageChanged: (index) {
+                        _scontroller.curRcmdCompIndex.value =
+                            index % _scontroller.recommendCompList.length;
+                      },
+                      itemBuilder: (context, index) {
+                        int compIndex =
+                            index % _scontroller.recommendCompList.length;
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(
+                                () => OtherCompanyScreen(
+                                      companyId: _scontroller
+                                          .recommendCompList[compIndex].userId,
+                                      companyName: _scontroller
+                                          .recommendCompList[compIndex].name,
+                                      company: _scontroller
+                                          .recommendCompList[compIndex],
+                                    ),
+                                preventDuplicates: false);
+                          },
+                          child: Container(
+                            width: 330,
+                            height: 120,
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            clipBehavior: Clip.hardEdge,
+                            child: CachedNetworkImage(
+                              imageUrl: _scontroller
+                                  .recommendCompList[compIndex]
+                                  .images
+                                  .first
+                                  .image,
+                              fit: BoxFit.cover,
+                              errorWidget: (context, string, widget) {
+                                return Container(
+                                  color: maingray,
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  : Container(
+                      color: mainblue,
                     ),
-                  );
-                },
-              ),
             ),
           ),
           const SizedBox(height: 16),

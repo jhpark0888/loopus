@@ -21,6 +21,7 @@ import 'dart:math' as math;
 import 'package:loopus/widget/custom_pie_chart.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
+import 'package:loopus/widget/empty_post_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
@@ -461,26 +462,8 @@ class GroupCareerScreen extends StatelessWidget {
                     route: PostaddRoute.career,
                   ));
             },
-            child: EmptyPostWidget(
-              id: id,
-            ),
+            child: EmptyPostWidget(),
           ));
-  }
-}
-
-class EmptyPostWidget extends StatelessWidget {
-  EmptyPostWidget({Key? key, required this.id}) : super(key: key);
-  int id;
-  @override
-  Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      SvgPicture.asset('assets/icons/career_post_add.svg'),
-      const SizedBox(width: 7),
-      Text(
-        '지금 바로 새로운 포스트를 작성해보세요',
-        style: kmainbold.copyWith(color: mainblue),
-      )
-    ]);
   }
 }
 
@@ -517,7 +500,7 @@ class MyCareerScreen extends StatelessWidget {
               //     ),
             ]))
           ])
-        : Center(child: EmptyPostWidget(id: id)));
+        : Center(child: EmptyPostWidget()));
   }
 }
 

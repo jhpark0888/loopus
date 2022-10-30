@@ -21,6 +21,7 @@ import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/custom_pie_chart.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
+import 'package:loopus/widget/empty_post_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 
 class PersonalCareerDetailScreen extends StatelessWidget {
@@ -138,9 +139,13 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                                   route: PostaddRoute.career,
                                 ));
                           },
+<<<<<<< HEAD
                           child: EmptyPostWidget(
                             id: career.id,
                           )))
+=======
+                          child: EmptyPostWidget()))
+>>>>>>> 28a7ab40bc98d8ccde726bcc136f8d3d4512119b
                 ],
               ),
             ]),
@@ -151,6 +156,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
   }
 }
 
+<<<<<<< HEAD
 class EmptyPostWidget extends StatelessWidget {
   EmptyPostWidget({Key? key, required this.id}) : super(key: key);
   int id;
@@ -167,6 +173,8 @@ class EmptyPostWidget extends StatelessWidget {
   }
 }
 
+=======
+>>>>>>> 28a7ab40bc98d8ccde726bcc136f8d3d4512119b
 class _MyAppSpace extends StatelessWidget {
   _MyAppSpace({Key? key, required this.career}) : super(key: key);
   Rx<Project> career;
