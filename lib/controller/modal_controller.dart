@@ -539,6 +539,8 @@ void showBottomdialog(
   required bool isOne,
   Color? buttonColor1,
   Color? buttonColor2,
+  Color? textColor1,
+  Color? textColor2,
   Color? bareerColor,
   String? title,
   String? accentTitle,
@@ -553,7 +555,7 @@ void showBottomdialog(
       onTap: () => Get.back(),
       behavior: HitTestBehavior.translucent,
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -574,20 +576,17 @@ void showBottomdialog(
                     borderRadius: BorderRadius.circular(8),
                     color: buttonColor1 ?? mainblue),
                 child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    child: Text(
-                      value1,
-                      style: kmainbold.copyWith(
-                        color: buttonColor1 == mainWhite ? mainblack : mainWhite
-                      ),
+                  child: Text(
+                    value1,
+                    style: kmainbold.copyWith(
+                      color: textColor1 ?? mainWhite,
                     ),
                   ),
                 ),
               ),
             ),
             const SizedBox(
-              height: 14,
+              height: 8,
             ),
             if (isOne == false)
               GestureDetector(
@@ -598,13 +597,10 @@ void showBottomdialog(
                       borderRadius: BorderRadius.circular(8),
                       color: buttonColor2 ?? maingray),
                   child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      child: Text(
-                        value2,
-                        style: kmainbold.copyWith(
-                          color: buttonColor2 == mainWhite ? mainblack : mainWhite,
-                        ),
+                    child: Text(
+                      value2,
+                      style: kmainbold.copyWith(
+                        color: textColor2 ?? mainWhite,
                       ),
                     ),
                   ),

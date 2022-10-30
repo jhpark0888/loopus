@@ -101,13 +101,12 @@ class MyProfileScreen extends StatelessWidget {
                     'assets/icons/bookmark_inactive.svg',
                     width: 28,
                   )),
-              IconButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   Get.to(() => SettingScreen());
                 },
-                icon: SvgPicture.asset(
-                  'assets/icons/Setting.svg',
-                  width: 28,
+                child: SvgPicture.asset(
+                  'assets/icons/setting.svg',
                 ),
               ),
             ],

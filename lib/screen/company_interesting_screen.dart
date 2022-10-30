@@ -19,6 +19,7 @@ import 'package:loopus/widget/error_reload_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/search_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:loopus/widget/user_tile_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../constant.dart';
 
@@ -243,7 +244,7 @@ class CompanyInterestingScreen extends StatelessWidget {
                     primary: false,
                     shrinkWrap: true,
                     itemBuilder: (context, index) =>
-                        SearchUserWidget(user: company.itrUsers[index]),
+                        UserTileWidget(user: company.itrUsers[index]),
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 24),
                     itemCount: company.itrUsers.length),
@@ -252,125 +253,5 @@ class CompanyInterestingScreen extends StatelessWidget {
             ),
           ),
         ));
-  }
-}
-
-class FollowTileWidget extends StatelessWidget {
-  FollowTileWidget({
-    Key? key,
-    required this.user,
-  }) : super(key: key);
-  final Debouncer _debouncer = Debouncer();
-  Person user;
-
-  late int lastisFollowed;
-  int num = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Get.to(
-            () => OtherProfileScreen(
-                user: user, userid: user.userId, realname: user.name),
-            preventDuplicates: false);
-      },
-      behavior: HitTestBehavior.translucent,
-      child: Row(children: [
-        UserImageWidget(
-          imageUrl: user.profileImage,
-          width: 36,
-          height: 36,
-          userType: user.userType,
-        ),
-        const SizedBox(width: 14),
-        Expanded(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              user.name,
-              style: kmainbold,
-            ),
-            const SizedBox(height: 7),
-            Text(
-              "${user.univName} · ${user.department}",
-              style: kmain,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ]),
-        ),
-        const SizedBox(width: 14),
-        if (user.userId != HomeController.to.myProfile.value.userId)
-          Obx(
-            () => Row(children: [
-              const SizedBox(
-                width: 14,
-              ),
-              GestureDetector(
-                onTap: () {
-                  user.followed.value =
-                      user.followed.value == FollowState.normal
-                          ? FollowState.following
-                          : user.followed.value == FollowState.follower
-                              ? FollowState.wefollow
-                              : user.followed.value == FollowState.following
-                                  ? FollowState.normal
-                                  : FollowState.follower;
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-                  decoration: BoxDecoration(
-                      color: user.followed.value == FollowState.normal ||
-                              user.followed.value == FollowState.follower
-                          ? mainblue
-                          : cardGray,
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Center(
-                    child: Text(
-                      user.followed.value == FollowState.normal ||
-                              user.followed.value == FollowState.follower
-                          ? "팔로우"
-                          : "팔로잉",
-                      style: kmain.copyWith(
-                          color: user.followed.value == FollowState.normal ||
-                                  user.followed.value == FollowState.follower
-                              ? mainWhite
-                              : mainblack),
-                    ),
-                  ),
-                ),
-              )
-            ]),
-          )
-      ]),
-    );
-  }
-
-  void followMotion() {
-    if (num == 0) {
-      lastisFollowed = user.followed.value.index;
-    }
-    if (user.banned.value == BanState.ban) {
-      userbancancel(user.userId);
-    } else {
-      user.followClick();
-      num += 1;
-
-      _debouncer.run(() {
-        if (user.followed.value.index != lastisFollowed) {
-          if (<int>[2, 3].contains(user.followed.value.index)) {
-            postfollowRequest(user.userId);
-            print("팔로우");
-          } else {
-            deletefollow(user.userId);
-            print("팔로우 해제");
-          }
-          lastisFollowed = user.followed.value.index;
-        } else {
-          print("아무일도 안 일어남");
-        }
-      });
-    }
   }
 }

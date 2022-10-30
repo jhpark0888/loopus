@@ -94,6 +94,16 @@ class User {
       followerCount.value -= 1;
     }
   }
+
+  void banClick() {
+    if (banned.value == BanState.normal) {
+      banned(BanState.ban);
+    } else if (banned.value == BanState.ban) {
+      banned(BanState.normal);
+    } else if (banned.value == BanState.isbanned) {
+      banned(BanState.ban);
+    }
+  }
 }
 
 class Person extends User {

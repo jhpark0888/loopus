@@ -3,9 +3,12 @@ import 'package:get/get.dart';
 import 'package:loopus/api/ban_api.dart';
 import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/banpeople_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/utils/debouncer.dart';
+import 'package:loopus/utils/error_control.dart';
 
 class FollowButtonWidget extends StatelessWidget {
   FollowButtonWidget({Key? key, required this.user}) : super(key: key);
@@ -19,39 +22,39 @@ class FollowButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return user.userId != HomeController.to.myProfile.value.userId
         ? Obx(
-            () => Row(children: [
-              const SizedBox(
-                width: 14,
-              ),
-              GestureDetector(
-                onTap: () {
-                  followMotion();
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-                  decoration: BoxDecoration(
-                      color: user.followed.value == FollowState.normal ||
-                              user.followed.value == FollowState.follower
-                          ? mainblue
-                          : cardGray,
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Center(
-                    child: Text(
-                      user.followed.value == FollowState.normal ||
-                              user.followed.value == FollowState.follower
-                          ? "팔로우"
-                          : "팔로잉",
-                      style: kmain.copyWith(
-                          color: user.followed.value == FollowState.normal ||
-                                  user.followed.value == FollowState.follower
-                              ? mainWhite
-                              : mainblack),
-                    ),
+            () => GestureDetector(
+              onTap: () {
+                followMotion();
+              },
+              child: Container(
+                height: 36,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 11),
+                decoration: BoxDecoration(
+                    color: user.banned.value == BanState.ban
+                        ? rankred
+                        : user.followed.value == FollowState.normal ||
+                                user.followed.value == FollowState.follower
+                            ? mainblue
+                            : cardGray,
+                    borderRadius: BorderRadius.circular(8)),
+                child: Center(
+                  child: Text(
+                    user.banned.value == BanState.ban
+                        ? '차단 해제'
+                        : user.followed.value == FollowState.normal ||
+                                user.followed.value == FollowState.follower
+                            ? "팔로우"
+                            : "팔로잉",
+                    style: kmainbold.copyWith(
+                        color: user.followed.value == FollowState.normal ||
+                                user.followed.value == FollowState.follower
+                            ? mainWhite
+                            : mainblack),
                   ),
                 ),
-              )
-            ]),
+              ),
+            ),
           )
         : Container();
   }
@@ -61,7 +64,19 @@ class FollowButtonWidget extends StatelessWidget {
       lastisFollowed = user.followed.value.index;
     }
     if (user.banned.value == BanState.ban) {
-      userbancancel(user.userId);
+      userbancancel(user.userId).then((value) {
+        if (value.isError == false) {
+          user.banClick();
+          showCustomDialog("해당 유저가 차단해제 되었습니다", 1000);
+
+          if (Get.isRegistered<BanPeopleController>()) {
+            BanPeopleController.to.banlist
+                .removeWhere((banUser) => banUser.userId == user.userId);
+          }
+        } else {
+          errorSituation(value);
+        }
+      });
     } else {
       user.followClick();
       number += 1;

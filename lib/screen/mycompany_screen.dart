@@ -12,6 +12,8 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
 import 'package:loopus/screen/comp_intro_edit_screen.dart';
 import 'package:loopus/screen/company_interesting_screen.dart';
+import 'package:loopus/screen/company_visit_screen.dart';
+import 'package:loopus/screen/follow_people_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/webview_screen.dart';
@@ -24,6 +26,7 @@ import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/search_widget.dart';
 import 'package:loopus/widget/tabbar_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:loopus/widget/user_tile_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart' as sr;
 import 'package:underline_indicator/underline_indicator.dart';
 import 'dart:math' as math;
@@ -50,7 +53,7 @@ class MyCompanyScreen extends StatelessWidget {
         title: Obx(
           () => Text(
             '${_controller.myCompanyInfo.value.name} 프로필',
-            style: ktitle.copyWith(color: mainWhite),
+            style: kNavigationTitle.copyWith(color: mainWhite),
           ),
         ),
         leading: GestureDetector(
@@ -72,13 +75,12 @@ class MyCompanyScreen extends StatelessWidget {
                 width: 28,
                 color: mainWhite,
               )),
-          IconButton(
-            onPressed: () {
+          GestureDetector(
+            onTap: () {
               Get.to(() => SettingScreen());
             },
-            icon: SvgPicture.asset(
-              'assets/icons/Setting.svg',
-              width: 28,
+            child: SvgPicture.asset(
+              'assets/icons/setting.svg',
               color: mainWhite,
             ),
           ),
@@ -153,14 +155,14 @@ class MyCompanyScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Obx(
           () => GestureDetector(
-              onTap: () => showModalIOS(context,
-                  func1: changeProfileImage,
-                  func2: changeDefaultImage,
-                  value1: '라이브러리에서 선택',
-                  value2: '기본 이미지로 변경',
-                  isValue1Red: false,
-                  isValue2Red: false,
-                  isOne: false,cancleButton: false),
+              onTap: () => showBottomdialog(context,
+                  func1: changeDefaultImage,
+                  func2: changeProfileImage,
+                  value1: '기본 이미지로 변경',
+                  value2: '사진첩에서 사진 선택',
+                  buttonColor1: maingray,
+                  buttonColor2: mainblue,
+                  isOne: false),
               child: UserImageWidget(
                 imageUrl: _controller.myCompanyInfo.value.profileImage,
                 width: 90,
@@ -450,15 +452,12 @@ class MyCompanyScreen extends StatelessWidget {
             enablePullUp: true,
             footer: const MyCustomFooter(),
             onLoading: _controller.onPostLoading,
-            child: ListView.separated(
+            child: ListView.builder(
                 // key: const PageStorageKey("postView"), 이거 넣으면 포스팅들이 마지막 사진이나 링크로 가게됨
                 itemBuilder: (context, index) => PostingWidget(
                       item: _controller.allPostList[index],
                       type: PostingWidgetType.profile,
                       isDark: true,
-                    ),
-                separatorBuilder: (context, index) => DivideWidget(
-                      height: 10,
                     ),
                 itemCount: _controller.allPostList.length),
           ));
@@ -478,35 +477,70 @@ class MyCompanyScreen extends StatelessWidget {
             const SizedBox(height: 16),
             _labelRow(
               "팔로워",
-              () {},
+              () {
+                Get.to(() => FollowPeopleScreen(
+                    userId: _controller.myCompanyInfo.value.userId,
+                    listType: FollowListType.follower));
+              },
               count: _controller.myCompanyInfo.value.followerCount.value,
             ),
             const SizedBox(height: 16),
             _labelRow(
               "팔로잉",
-              () {},
+              () {
+                Get.to(() => FollowPeopleScreen(
+                    userId: _controller.myCompanyInfo.value.userId,
+                    listType: FollowListType.following));
+              },
               count: _controller.myCompanyInfo.value.followingCount.value,
             ),
             const SizedBox(height: 16),
-            _labelRow(
-              "최근 루프어스가 살펴본 프로필",
-              () {},
+            Obx(
+              () => _labelRow(
+                "최근 ${_controller.myCompanyInfo.value.name}가 살펴본 프로필",
+                () {
+                  Get.to(() => CompanyVisitScreen(
+                        isCompVisit: true,
+                        company: _controller.myCompanyInfo.value,
+                      ));
+                },
+              ),
             ),
-            // ListView.separated(
-            //   padding: const EdgeInsets.symmetric(vertical: 16),
-            //   itemBuilder: (context, index) =>SearchUserWidget(user: user),
-            //  separatorBuilder: (context, index) => const SizedBox(height: 24),
-            //   itemCount: )
+            ListView.separated(
+                primary: false,
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                itemBuilder: (context, index) => UserTileWidget(
+                      user: _controller.showUserList[index],
+                      isDark: true,
+                    ),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 24),
+                itemCount: _controller.showUserList.length),
             const SizedBox(height: 16),
-            _labelRow(
-              "최근 루프어스를 조회한 프로필",
-              () {},
+            Obx(
+              () => _labelRow(
+                "최근 ${_controller.myCompanyInfo.value.name}를 조회한 프로필",
+                () {
+                  Get.to(() => CompanyVisitScreen(
+                        isCompVisit: false,
+                        company: _controller.myCompanyInfo.value,
+                      ));
+                },
+              ),
             ),
-            // ListView.separated(
-            //   padding: const EdgeInsets.symmetric(vertical: 16),
-            //   itemBuilder: (context, index) =>SearchUserWidget(user: user),
-            //  separatorBuilder: (context, index) => const SizedBox(height: 24),
-            //   itemCount: )
+            ListView.separated(
+                primary: false,
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                itemBuilder: (context, index) => UserTileWidget(
+                      user: _controller.visitUserList[index],
+                      isDark: true,
+                    ),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 24),
+                itemCount: _controller.visitUserList.length),
+            const SizedBox(height: 16),
           ],
         ),
       ),

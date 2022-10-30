@@ -72,20 +72,20 @@ class ScoutReportController extends GetxController
   RxInt curRcmdCompIndex = 0.obs;
 
   Rx<ScreenState> screenState = ScreenState.loading.obs;
-  int isCorp = 0;
+  RxInt isCorp = 0.obs;
 
   @override
   void onInit() async {
     screenState(ScreenState.loading);
     String? userType = await FlutterSecureStorage().read(key: "type");
     if (userType == "student") {
-      isCorp = 0;
+      isCorp.value = 0;
     } else {
-      isCorp = 1;
+      isCorp.value = 1;
     }
 
     getCompanyList("main");
-    await getRecommandCompanyList(isCorp.toString());
+    await getRecommandCompanyList(isCorp.value.toString());
     pController = PageController(
         viewportFraction: 0.8, initialPage: recommendCompList.length * 300);
     screenState(ScreenState.success);
@@ -98,7 +98,7 @@ class ScoutReportController extends GetxController
     companyFieldList.clear();
     refreshController.loadComplete();
     getCompanyList("main");
-    getRecommandCompanyList(isCorp.toString());
+    getRecommandCompanyList(isCorp.value.toString());
     refreshController.refreshCompleted();
   }
 

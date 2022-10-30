@@ -45,8 +45,6 @@ class OtherProfileController extends GetxController
 
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
 
-  late int lastisFollowed;
-
   KeyController keycontroller = Get.put(KeyController(isTextField: false.obs));
 
   Future loadotherProfile(int userid) async {
@@ -54,7 +52,6 @@ class OtherProfileController extends GetxController
       if (value.isError == false) {
         otherUser.value.copywith(value.data);
         otherUser.refresh();
-        lastisFollowed = otherUser.value.followed.value.index;
       } else {
         errorSituation(value, screenState: otherprofilescreenstate);
       }

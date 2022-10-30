@@ -16,6 +16,7 @@ import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/persontile_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_widget.dart';
+import 'package:loopus/widget/user_tile_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class LikePeopleScreen extends StatelessWidget {
@@ -68,7 +69,8 @@ class LikePeopleScreen extends StatelessWidget {
                                     SizedBox(height: 16),
                                     Container(
                                       padding:
-                                          EdgeInsets.symmetric(horizontal: 20),
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      alignment: Alignment.centerRight,
                                       child: Obx(
                                         () => Text(
                                           "좋아요 ${_controller.likeUserList.length}개",
@@ -81,11 +83,13 @@ class LikePeopleScreen extends StatelessWidget {
                                     ),
                                     Obx(
                                       () => ListView.separated(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16),
                                           scrollDirection: Axis.vertical,
                                           primary: false,
                                           shrinkWrap: true,
                                           itemBuilder: (context, index) {
-                                            return SearchUserWidget(
+                                            return UserTileWidget(
                                               user: _controller
                                                   .likeUserList[index],
                                             );
