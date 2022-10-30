@@ -718,6 +718,111 @@ void showButtonDialog({
   );
 }
 
+void showButtonDialog2({
+  required String title,
+  required String startContent,
+  String? highlightContent,
+  String? endContent,
+  required Function() leftFunction,
+  required Function() rightFunction,
+  required String rightText,
+  required String leftText,
+  Color? highlightColor,
+}) {
+  Get.dialog(
+    Material(
+      color: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 300,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: mainWhite),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    title,
+                    style: kmainbold,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: startContent,
+                        style: kmainheight,
+                      ),
+                      TextSpan(
+                        text: highlightContent ?? "",
+                        style: kmainheight.copyWith(
+                            color: highlightColor ?? mainblue),
+                      ),
+                      TextSpan(
+                        text: endContent,
+                        style: kmainheight,
+                      )
+                    ]),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Container(
+                        height: 42,
+                        child: CustomExpandedButton(
+                            onTap: leftFunction,
+                            isBlue: false,
+                            title: leftText,
+                            boxColor: mainblue,
+                            isBig: true),
+                      )),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                          child: Container(
+                        height: 42,
+                        child: CustomExpandedButton(
+                            onTap: rightFunction,
+                            isBlue: true,
+                            title: rightText,
+                            textColor: highlightColor,
+                            boxColor: maingray,
+                            isBig: true),
+                      )),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+    barrierDismissible: false,
+    barrierColor: popupGray,
+    transitionCurve: kAnimationCurve,
+    transitionDuration: kAnimationDuration,
+  );
+}
+
 void showOneButtonDialog({
   required String title,
   required String startContent,
@@ -875,6 +980,96 @@ void showTextFieldDialog({
                   title: completeText,
                   textColor: highlightColor,
                   boxColor: rankred,
+                  isBig: true),
+            )),
+          ],
+        ),
+      ],
+    ),
+    barrierDismissible: false,
+    barrierColor: popupGray,
+    transitionCurve: kAnimationCurve,
+    transitionDuration: kAnimationDuration,
+  );
+}
+
+void showTextFieldDialog2({
+  required String title,
+  required String hintText,
+  required String completeText,
+  Color? highlightColor,
+  required TextEditingController textEditingController,
+  required Function() leftFunction,
+  required Function() rightFunction,
+}) {
+  Get.dialog(
+    AlertDialog(
+      backgroundColor: mainWhite,
+      elevation: 0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+      ),
+      titlePadding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
+      buttonPadding: const EdgeInsets.all(16),
+      title: Text(
+        title,
+        style: kmainbold,
+        textAlign: TextAlign.center,
+      ),
+      content: TextField(
+        controller: textEditingController,
+        maxLines: 3,
+        style: kmainheight,
+        autofocus: true,
+        cursorColor: mainblack,
+        cursorWidth: 1.2,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: cardGray,
+          hintText: hintText,
+          hintStyle: kmainheight.copyWith(color: maingray),
+          contentPadding: const EdgeInsets.all(16),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            // borderRadius: BorderRadius.circular(8)
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            // borderRadius: BorderRadius.circular(8)
+          ),
+        ),
+      ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
+      actions: [
+        Row(
+          children: [
+            Expanded(
+                child: Container(
+              height: 42,
+              child: CustomExpandedButton(
+                  onTap: leftFunction,
+                  isBlue: false,
+                  title: "취소",
+                  isBig: true,
+                  boxColor: mainblue),
+            )),
+            const SizedBox(
+              width: 8,
+            ),
+            Expanded(
+                child: Container(
+              height: 42,
+              child: CustomExpandedButton(
+                  onTap: rightFunction,
+                  isBlue: true,
+                  title: completeText,
+                  textColor: highlightColor,
+                  boxColor: maingray,
                   isBig: true),
             )),
           ],

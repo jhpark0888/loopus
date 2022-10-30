@@ -140,7 +140,7 @@ class CertificationScreen extends StatelessWidget {
               ));
         } else {
           TextEditingController textController = TextEditingController();
-          showTextFieldDialog(
+          showTextFieldDialog2(
             title: "탈퇴 사유를 입력해주세요",
             completeText: '탈퇴하기',
             hintText:

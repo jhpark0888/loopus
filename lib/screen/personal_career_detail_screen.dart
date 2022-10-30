@@ -257,7 +257,6 @@ class _MyAppSpace extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(width: 30),
                           ],
                         ),
                       ),

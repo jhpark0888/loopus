@@ -152,7 +152,7 @@ class UnivDeptSearchScreen extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 TextEditingController textController = TextEditingController();
-                showTextFieldDialog(
+                showTextFieldDialog2(
                   title:
                       "${searchType == UnivDeptSearchType.univ ? "대학" : "학과"} 등록 문의하기",
                   completeText: '문의하기',
@@ -171,7 +171,8 @@ class UnivDeptSearchScreen extends StatelessWidget {
                         .then((value) {
                       if (value.isError == false) {
                         dialogBack();
-                        showCustomDialog("문의가 접수되었습니다", 1000);
+                        showCustomDialog(
+                            "문의하기가 완료 됐어요 \n 빠른 시일 내 처리해 드릴게요", 1000);
                       } else {
                         errorSituation(value);
                       }
