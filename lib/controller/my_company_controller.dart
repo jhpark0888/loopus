@@ -39,6 +39,9 @@ class MyCompanyController extends GetxController
   RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> myprofilescreenstate = ScreenState.loading.obs;
 
+  RxList showUserList = <Person>[].obs;
+  RxList visitUserList = <Person>[].obs;
+
   // RxList<User> followerList = <User>[].obs;
 
   Future onRefresh() async {
@@ -70,7 +73,7 @@ class MyCompanyController extends GetxController
     });
 
     _getPosting(int.parse(userId));
-    // getfollowPeople(int.parse(userId));
+    getVisitShowUserList();
     // isProfileLoading.value = false;
   }
 
@@ -96,19 +99,24 @@ class MyCompanyController extends GetxController
     });
   }
 
-  // void getfollowPeople(int userId) {
-  //   getfollowlist(userId, FollowListType.follower).then((value) {
-  //     if (value.isError == false) {
-  //       List<User> templist = List.from(value.data["follow"])
-  //           .map((friend) => Person.fromJson(friend))
-  //           .toList();
+  void getVisitShowUserList() {
+    getCompShowUsers("all", 1).then((value) {
+      if (value.isError == false) {
+        List<User> tempShowList = List.from(value.data["show"])
+            .map((friend) => Person.fromJson(friend))
+            .toList();
 
-  //       followerList(templist);
-  //     } else {
-  //       errorSituation(value);
-  //     }
-  //   });
-  // }
+        List<User> tempVisitList = List.from(value.data["shown"])
+            .map((friend) => Person.fromJson(friend))
+            .toList();
+
+        showUserList(tempShowList);
+        visitUserList(tempVisitList);
+      } else {
+        errorSituation(value);
+      }
+    });
+  }
 
   @override
   void onInit() async {

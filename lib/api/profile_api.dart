@@ -98,6 +98,37 @@ Future<HTTPResponse> getCorpProfile(int userId) async {
   }
 }
 
+// type: all, shown(기업이 조회한 프로필), user(기업을 조회한 유저들)
+Future<HTTPResponse> getCompShowUsers(String type, int page) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    print('user token: $token');
+
+    var uri = Uri.parse("$serverUri/user_api/view_list?type=$type&page=$page");
+    try {
+      http.Response response =
+          await http.get(uri, headers: {"Authorization": "Token $token"});
+
+      print("기업 조회 $type 로드: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+        return HTTPResponse.success(responseBody);
+      } else {
+        return HTTPResponse.apiError("", response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+
 Future<HTTPResponse> getProjectlist(int userId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
@@ -362,42 +393,6 @@ Future<HTTPResponse> putpwchange() async {
     }
   }
 }
-
-// Future postlogout() async {
-//   ConnectivityResult result = await initConnectivity();
-//   if (result == ConnectivityResult.none) {
-//     showdisconnectdialog();
-//   } else {
-//     String? token = await const FlutterSecureStorage().read(key: "token");
-//     print('user token: $token');
-
-//     var uri = Uri.parse("$serverUri/user_api/logout");
-
-//     try {
-//       http.Response response =
-//           await http.post(uri, headers: {"Authorization": "Token $token"});
-
-//       print("로그아웃: ${response.statusCode}");
-//       if (response.statusCode == 200) {
-//         AppController.to.currentIndex.value = 0;
-//         FlutterSecureStorage().delete(key: "token");
-//         FlutterSecureStorage().delete(key: "id");
-//         Get.delete<AppController>();
-//         Get.delete<HomeController>();
-//         Get.delete<SearchController>();
-//         Get.delete<ProfileController>();
-//         Get.offAll(() => StartScreen());
-//       } else {
-//         return Future.error(response.statusCode);
-//       }
-//     } on SocketException {
-//       // ErrorController.to.isServerClosed(true);
-//     } catch (e) {
-//       print(e);
-//       // ErrorController.to.isServerClosed(true);
-//     }
-//   }
-// }
 
 Future<HTTPResponse> deleteuser(String pw, String reason) async {
   ConnectivityResult result = await initConnectivity();

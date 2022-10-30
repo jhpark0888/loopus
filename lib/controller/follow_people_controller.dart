@@ -26,7 +26,7 @@ class FollowPeopleController extends GetxController {
         userList.addAll(templist);
         followPeopleScreenState(ScreenState.success);
       } else {
-        errorSituation(value);
+        errorSituation(value, screenState: followPeopleScreenState);
       }
     });
   }

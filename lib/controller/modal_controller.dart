@@ -540,6 +540,8 @@ void showBottomdialog(
   required bool isOne,
   Color? buttonColor1,
   Color? buttonColor2,
+  Color? textColor1,
+  Color? textColor2,
   Color? bareerColor,
   String? title,
   String? accentTitle,
@@ -556,7 +558,7 @@ void showBottomdialog(
       onTap: () => Get.back(),
       behavior: HitTestBehavior.translucent,
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -579,15 +581,15 @@ void showBottomdialog(
                 child: Center(
                   child: Text(
                     value1,
-                    style: kmain.copyWith(
-                      color: mainWhite,
+                    style: kmainbold.copyWith(
+                      color: textColor1 ?? mainWhite,
                     ),
                   ),
                 ),
               ),
             ),
             const SizedBox(
-              height: 14,
+              height: 8,
             ),
             if (isOne == false)
               GestureDetector(
@@ -600,8 +602,8 @@ void showBottomdialog(
                   child: Center(
                     child: Text(
                       value2,
-                      style: kmain.copyWith(
-                        color: mainWhite,
+                      style: kmainbold.copyWith(
+                        color: textColor2 ?? mainWhite,
                       ),
                     ),
                   ),

@@ -12,6 +12,7 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/realtime_rank_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
+import 'package:loopus/widget/follow_button_widget.dart';
 import 'package:loopus/widget/persontile_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 
@@ -87,13 +88,9 @@ class PersonRankWidget extends StatelessWidget {
       required this.user,
       required this.isFollow})
       : super(key: key);
-  final Debouncer _debouncer = Debouncer();
   Person user;
   bool isUniversity;
   bool isFollow;
-
-  late int lastisFollowed;
-  int num = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -174,42 +171,7 @@ class PersonRankWidget extends StatelessWidget {
         ),
         // 나 일때는 팔로우 버튼 없어야 함
         //지금은 is_user를 안 주는 듯
-        if (isFollow && user.userId != HomeController.to.myProfile.value.userId)
-          Obx(
-            () => Row(children: [
-              const SizedBox(
-                width: 14,
-              ),
-              GestureDetector(
-                onTap: () {
-                  followMotion();
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-                  decoration: BoxDecoration(
-                      color: user.followed.value == FollowState.normal ||
-                              user.followed.value == FollowState.follower
-                          ? mainblue
-                          : cardGray,
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Center(
-                    child: Text(
-                      user.followed.value == FollowState.normal ||
-                              user.followed.value == FollowState.follower
-                          ? "팔로우"
-                          : "팔로잉",
-                      style: kmain.copyWith(
-                          color: user.followed.value == FollowState.normal ||
-                                  user.followed.value == FollowState.follower
-                              ? mainWhite
-                              : mainblack),
-                    ),
-                  ),
-                ),
-              )
-            ]),
-          )
+        if (isFollow) FollowButtonWidget(user: user)
       ]),
     );
   }
@@ -234,33 +196,6 @@ class PersonRankWidget extends StatelessWidget {
       return SvgPicture.asset('assets/icons/rate_upper_arrow.svg');
     } else {
       return SvgPicture.asset('assets/icons/rate_down_arrow.svg');
-    }
-  }
-
-  void followMotion() {
-    if (num == 0) {
-      lastisFollowed = user.followed.value.index;
-    }
-    if (user.banned.value == BanState.ban) {
-      userbancancel(user.userId);
-    } else {
-      user.followClick();
-      num += 1;
-
-      _debouncer.run(() {
-        if (user.followed.value.index != lastisFollowed) {
-          if (<int>[2, 3].contains(user.followed.value.index)) {
-            postfollowRequest(user.userId);
-            print("팔로우");
-          } else {
-            deletefollow(user.userId);
-            print("팔로우 해제");
-          }
-          lastisFollowed = user.followed.value.index;
-        } else {
-          print("아무일도 안 일어남");
-        }
-      });
     }
   }
 }

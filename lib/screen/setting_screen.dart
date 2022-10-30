@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/hover_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/screen/alert_screen.dart';
 import 'package:loopus/screen/banpeople_screen.dart';
+import 'package:loopus/screen/certification_screen.dart';
 import 'package:loopus/screen/contact_content_screen.dart';
+import 'package:loopus/screen/login_screen.dart';
+import 'package:loopus/screen/pwchange_screen.dart';
 import 'package:loopus/screen/userinfo_screen.dart';
 import 'package:loopus/screen/webview_screen.dart';
 import 'package:loopus/utils/user_device_info.dart';
@@ -51,19 +56,15 @@ class SettingScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: Text(
-              "개인",
-              style: kmainbold.copyWith(color: maingray),
+          const SizedBox(height: 16),
+          _category("개인"),
+          if (HomeController.to.myProfile.value.userType == UserType.student)
+            CustomListTile(
+              title: "개인 정보",
+              onTap: () {
+                Get.to(() => UserInfoScreen());
+              },
             ),
-          ),
-          CustomListTile(
-            title: "개인 정보",
-            onTap: () {
-              Get.to(() => UserInfoScreen());
-            },
-          ),
           CustomListTile(
             title: "알림 설정",
             onTap: () {
@@ -76,13 +77,7 @@ class SettingScreen extends StatelessWidget {
               Get.to(() => BanPeopleScreen());
             },
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: Text(
-              "서비스",
-              style: kmainbold.copyWith(color: maingray),
-            ),
-          ),
+          _category("서비스"),
           CustomListTile(
             title: "서비스 이용약관",
             onTap: () {
@@ -101,7 +96,67 @@ class SettingScreen extends StatelessWidget {
               Get.to(() => ContactContentScreen());
             },
           ),
+          if (HomeController.to.myProfile.value.userType == UserType.company)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _category("회원"),
+                CustomListTile(
+                  title: "비밀번호 변경",
+                  onTap: () {
+                    Get.to(() => PwChangeScreen(
+                          pwType: PwType.pwchange,
+                        ));
+                  },
+                ),
+                CustomListTile(
+                  title: "로그아웃",
+                  onTap: () {
+                    showButtonDialog(
+                        title: '로그아웃 하시겠어요?',
+                        startContent: '언제든 다시 로그인 할 수 있어요',
+                        leftFunction: () => Get.back(),
+                        rightFunction: () {
+                          logOut();
+                        },
+                        rightText: '로그아웃',
+                        leftText: '취소');
+                  },
+                ),
+                CustomListTile(
+                  title: "회원탈퇴",
+                  titleColor: rankred,
+                  onTap: () {
+                    showButtonDialog(
+                        title: '정말 탈퇴하시겠어요?',
+                        startContent: '탈퇴 시 작성된 모든 데이터는 삭제되며,\n이후',
+                        highlightContent: " 복구가 불가능 ",
+                        endContent: "해요\n다시 한 번 신중하게 생각 후 탈퇴를 진행해주세요",
+                        highlightColor: rankred,
+                        leftFunction: () => Get.back(),
+                        rightFunction: () {
+                          Get.to(() => CertificationScreen(
+                                certificateType: CertificateType.withDrawal,
+                              ));
+                        },
+                        rightText: '탈퇴',
+                        leftText: '취소');
+                  },
+                ),
+              ],
+            ),
+          const SizedBox(height: 16),
         ],
+      ),
+    );
+  }
+
+  Widget _category(String text) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+      child: Text(
+        text,
+        style: kmainbold.copyWith(color: maingray),
       ),
     );
   }
@@ -129,10 +184,7 @@ class CustomListTile extends StatelessWidget {
       onTapUp: (details) => _hoverController.isHover(false),
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: 12,
-          horizontal: 20,
-        ),
+        padding: EdgeInsets.fromLTRB(16, 0, 16, 24),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

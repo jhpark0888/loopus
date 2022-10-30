@@ -56,9 +56,9 @@ Future<HTTPResponse> getRecommandCompanys(String isCorp) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
-    final _url = Uri.parse("$serverUri/scout_api/recommendation_company");
-    // final _url =
-    //     Uri.parse("$serverUri/scout_api/recommendation_company?type=$isCorp");
+    // final _url = Uri.parse("$serverUri/scout_api/recommendation_company");
+    final _url =
+        Uri.parse("$serverUri/scout_api/recommendation_company?type=$isCorp");
 
     try {
       http.Response response =

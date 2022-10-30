@@ -34,13 +34,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../model/company_model.dart';
 
-// [{
-//   "id": 1,
-//   "companys" [
-//     {},{},{},
-//   ]
-// }]
-
 class ScoutScreen extends StatelessWidget {
   ScoutScreen({Key? key}) : super(key: key);
   final ScoutReportController _scontroller = Get.put(ScoutReportController());
@@ -246,8 +239,13 @@ class ScoutScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text("당신에게 '집중'하고 있는 추천 기업",
-                style: kmainbold.copyWith(color: mainWhite)),
+            child: Obx(
+              () => Text(
+                  _scontroller.isCorp.value == 1
+                      ? "유저님의 기업과 유사한 다른 기업"
+                      : "당신에게 '집중'하고 있는 추천 기업",
+                  style: kmainbold.copyWith(color: mainWhite)),
+            ),
           ),
           const SizedBox(height: 16),
           Padding(

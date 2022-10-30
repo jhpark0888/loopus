@@ -317,6 +317,7 @@ class LinkSmallWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               vertical: 16, horizontal: 16),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 linkController.info.value.domain,
