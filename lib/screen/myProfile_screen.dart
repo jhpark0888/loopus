@@ -624,9 +624,6 @@ class MyProfileScreen extends StatelessWidget {
                 itemBuilder: (context, index) => PostingWidget(
                     item: profileController.allPostList[index],
                     type: PostingWidgetType.normal),
-                // separatorBuilder: (context, index) => DivideWidget(
-                //       height: 10,
-                //     ),
                 itemCount: profileController.allPostList.length),
           ));
   }

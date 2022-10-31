@@ -81,46 +81,63 @@ class CommentWidget extends StatelessWidget {
                           onPressed: comment.user.userId ==
                                   HomeController.to.myProfile.value.userId
                               ? () {
-                                showBottomdialog(context, func1: (){
-                                  showButtonDialog(
-                                          leftText: '취소',
-                                          rightText: '삭제',
-                                          title: '댓글을 삭제하시겠어요?',
-                                          startContent: '삭제한 댓글은 복구할 수 없어요',
-                                          leftFunction: () => Get.back(),
-                                          rightFunction: () async {
-                                            dialogBack(modalIOS: true);
+                                  showBottomdialog(context, func1: () {
+                                    showButtonDialog(
+                                        leftText: '취소',
+                                        rightText: '삭제',
+                                        title: '댓글을 삭제하시겠어요?',
+                                        startContent: '삭제한 댓글은 복구할 수 없어요',
+                                        leftFunction: () => Get.back(),
+                                        rightFunction: () async {
+                                          dialogBack(modalIOS: true);
 
-                                            await commentDelete(comment.id,
-                                                    contentType.comment)
-                                                .then((value) {
-                                              if (value.isError == false) {
-                                                postController
-                                                    .post!.value.comments
-                                                    .removeWhere((element) =>
-                                                        element.id == comment.id);
-                                              } else {
-                                                showCustomDialog(
-                                                    "댓글 삭제에 실패하였습니다", 1000);
-                                              }
-                                            });
+                                          await commentDelete(comment.id,
+                                                  contentType.comment)
+                                              .then((value) {
+                                            if (value.isError == false) {
+                                              postController
+                                                  .post!.value.comments
+                                                  .removeWhere((element) =>
+                                                      element.id == comment.id);
+                                            } else {
+                                              showCustomDialog(
+                                                  "댓글 삭제에 실패하였습니다", 1000);
+                                            }
                                           });
-                                }, func2: (){}, value1: '댓글 삭제하기', value2: '', isOne: true, buttonColor1: mainWhite,textColor1: mainblack);
+                                });}, func2: (){}, value1: '댓글 삭제하기', value2: '', isOne: true, buttonColor1: mainWhite,textColor1: mainblack);
                                 }
                               : () {
-                                 showBottomdialog(context, func1: (){
-                                  showTextFieldDialog(title: '댓글 신고하기', hintText: '신고 내용을 입력해주세요. 관리자 확인 이후 관련 약관에 따라 처리됩니다.', completeText: '신고하기', textEditingController: postController.reportController, leftFunction: (){Get.back();}, rightFunction: (){contentreport(comment.id,
-                                                    contentType.comment)
-                                                .then((value) {
-                                              if (value.isError == false) {
-                                                getbacks(2);
-                                                showCustomDialog(
-                                                    "신고가 접수되었습니다", 1000);
-                                              } else {
-                                                errorSituation(value);
-                                              }
-                                            });});
-                                }, func2: (){}, value1: '댓글 신고하기', value2: '', isOne: true, buttonColor1: rankred);
+                                  showBottomdialog(context, func1: () {
+                                    showTextFieldDialog(
+                                        title: '댓글 신고하기',
+                                        hintText:
+                                            '신고 내용을 입력해주세요. 관리자 확인 이후 관련 약관에 따라 처리됩니다.',
+                                        rightText: '신고하기',
+                                        rightBoxColor: rankred,
+                                        textEditingController:
+                                            postController.reportController,
+                                        leftFunction: () {
+                                          Get.back();
+                                        },
+                                        rightFunction: () {
+                                          contentreport(comment.id,
+                                                  contentType.comment)
+                                              .then((value) {
+                                            if (value.isError == false) {
+                                              getbacks(2);
+                                              showCustomDialog(
+                                                  "신고가 접수되었습니다", 1000);
+                                            } else {
+                                              errorSituation(value);
+                                            }
+                                          });
+                                        });
+                                  },
+                                      func2: () {},
+                                      value1: '댓글 신고하기',
+                                      value2: '',
+                                      isOne: true,
+                                      buttonColor1: rankred);
                                 },
                           // behavior: HitTestBehavior.translucent,
                           icon: SvgPicture.asset(

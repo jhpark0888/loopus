@@ -48,7 +48,7 @@ Future<HTTPResponse> getScoutCompanySearch({
 }
 
 // student: 0 , corp: 1
-Future<HTTPResponse> getRecommandCompanys(String isCorp) async {
+Future<HTTPResponse> getRecommandCompanys(int isCorp) async {
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {

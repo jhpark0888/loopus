@@ -57,7 +57,9 @@ class SignupEmailPwScreen extends StatelessWidget {
                                           "@" +
                                           _signupController
                                               .selectUniv.value.email,
-                                      _signupController.signupcertification)
+                                      _signupController.signupcertification,
+                                      isCreate:
+                                          !_signupController.isReCertification)
                                   .then((value) {
                                 if (value.isError == false) {
                                   Get.back();

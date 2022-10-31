@@ -277,128 +277,136 @@ class PostingScreen extends StatelessWidget {
                                 GestureDetector(
                                   onTap: controller.post!.value.isuser == 1
                                       ? () {
-                                         showBottomdialog(context, func1: (){Get.to(() => PostUpdateScreen(
-                                                    post:
-                                                        controller.post!.value,
-                                                  ));}, func2: (){
+                                          showBottomdialog(context, func1: () {
+                                            Get.to(() => PostUpdateScreen(
+                                                  post: controller.post!.value,
+                                                ));
+                                          }, func2: () {
+                                            Get.back();
+                                            showButtonDialog(
+                                                leftText: '취소',
+                                                rightText: '삭제',
+                                                title: '포스트 삭제하기',
+                                                startContent:
+                                                    '정말 포스트를 삭제하시겠어요?\n이후 복구할 수 없어요.',
+                                                leftFunction: () => Get.back(),
+                                                rightFunction: () async {
+                                                  dialogBack(modalIOS: true);
+                                                  loading();
+                                                  // await Future.delayed(
+                                                  //         Duration(milliseconds: 1000))
+                                                  //     .then((value) {
+                                                  //   getbacks(2);
+                                                  //   showCustomDialog("포스팅이 삭제되었습니다", 1400);
+                                                  // });
+                                                  deleteposting(
+                                                          controller
+                                                              .post!.value.id,
+                                                          controller.post!.value
+                                                              .project!.id)
+                                                      .then((value) {
                                                     Get.back();
-                                                    showButtonDialog(
-                                                  leftText: '취소',
-                                                  rightText: '삭제',
-                                                  title: '포스트 삭제하기',
-                                                  startContent:
-                                                      '정말 포스트를 삭제하시겠어요?\n이후 복구할 수 없어요.',
-                                                  leftFunction: () =>
-                                                      Get.back(),
-                                                  rightFunction: () async {
-                                                    dialogBack(modalIOS: true);
-                                                    loading();
-                                                    // await Future.delayed(
-                                                    //         Duration(milliseconds: 1000))
-                                                    //     .then((value) {
-                                                    //   getbacks(2);
-                                                    //   showCustomDialog("포스팅이 삭제되었습니다", 1400);
-                                                    // });
-                                                    deleteposting(
-                                                            controller
-                                                                .post!.value.id,
-                                                            controller
-                                                                .post!
-                                                                .value
-                                                                .project!
-                                                                .id)
-                                                        .then((value) {
+                                                    if (value.isError ==
+                                                        false) {
                                                       Get.back();
-                                                      if (value.isError ==
-                                                          false) {
-                                                        Get.back();
-                                                        if (Get.isRegistered<
-                                                            CareerDetailController>()) {
-                                                          Post tempPost =
-                                                              CareerDetailController
-                                                                  .to.postList
-                                                                  .where((p0) =>
-                                                                      p0.id ==
-                                                                      postid)
-                                                                  .first;
-                                                          CareerDetailController
-                                                              .to.postList
-                                                              .remove(tempPost);
-                                                          CareerDetailController
-                                                              .to.postList
-                                                              .refresh();
-                                                        } else if (Get.isRegistered<
-                                                            ProfileController>()) {
-                                                          Project project =
-                                                              ProfileController
-                                                                  .to
-                                                                  .myProjectList
-                                                                  .where((career) =>
-                                                                      career
-                                                                          .id ==
-                                                                      controller
-                                                                          .post!
-                                                                          .value
-                                                                          .project!
-                                                                          .id)
-                                                                  .first;
-                                                          project.posts
-                                                              .removeWhere(
-                                                                  (post) =>
-                                                                      post.id ==
-                                                                      controller
-                                                                          .post!
-                                                                          .value
-                                                                          .id);
-                                                        }
-                                                        HomeController.to
-                                                            .postingRemove(
-                                                                controller.post!
-                                                                    .value.id);
-
-                                                        showCustomDialog(
-                                                            "포스트가 삭제되었습니다",
-                                                            1400);
-                                                      } else {
-                                                        errorSituation(value);
+                                                      if (Get.isRegistered<
+                                                          CareerDetailController>()) {
+                                                        Post tempPost =
+                                                            CareerDetailController
+                                                                .to.postList
+                                                                .where((p0) =>
+                                                                    p0.id ==
+                                                                    postid)
+                                                                .first;
+                                                        CareerDetailController
+                                                            .to.postList
+                                                            .remove(tempPost);
+                                                        CareerDetailController
+                                                            .to.postList
+                                                            .refresh();
+                                                      } else if (Get.isRegistered<
+                                                          ProfileController>()) {
+                                                        Project project =
+                                                            ProfileController.to
+                                                                .myProjectList
+                                                                .where((career) =>
+                                                                    career.id ==
+                                                                    controller
+                                                                        .post!
+                                                                        .value
+                                                                        .project!
+                                                                        .id)
+                                                                .first;
+                                                        project.posts
+                                                            .removeWhere(
+                                                                (post) =>
+                                                                    post.id ==
+                                                                    controller
+                                                                        .post!
+                                                                        .value
+                                                                        .id);
                                                       }
+                                                      HomeController.to
+                                                          .postingRemove(
+                                                              controller.post!
+                                                                  .value.id);
 
-                                                      // HomeController.to.recommandpostingResult.value.postingitems
-                                                      //     .removeWhere((post) => post.id == postid);
-                                                      // HomeController.to.latestpostingResult.value.postingitems
-                                                      //     .removeWhere((post) => post.id == postid);
-                                                    });
+                                                      showCustomDialog(
+                                                          "포스트가 삭제되었습니다", 1400);
+                                                    } else {
+                                                      errorSituation(value);
+                                                    }
+
+                                                    // HomeController.to.recommandpostingResult.value.postingitems
+                                                    //     .removeWhere((post) => post.id == postid);
+                                                    // HomeController.to.latestpostingResult.value.postingitems
+                                                    //     .removeWhere((post) => post.id == postid);
                                                   });
-                                                  }, value1: '포스트 수정하기', value2: '포스트 삭제하기', isOne: false,buttonColor1: mainWhite, buttonColor2: rankred,textColor1: mainblack);}
+                                                });
+                                          },
+                                              value1: '포스트 수정하기',
+                                              value2: '포스트 삭제하기',
+                                              isOne: false,
+                                              buttonColor1: mainWhite,
+                                              buttonColor2: rankred,
+                                              textColor1: mainblack);
+                                        }
                                       : () {
-                                        showBottomdialog(context, func1: (){showTextFieldDialog(
-                                                  title: '포스트 신고하기',
-                                                  hintText:
-                                                      '신고 내용을 입력해주세요. 관리자 확인 이후 관련 약관에 따라 처리됩니다.',
-                                                  completeText: '신고하기',
-                                                  textEditingController:
-                                                      controller
-                                                          .reportController,
-                                                  leftFunction: () {
-                                                    Get.back();
-                                                  },
-                                                  rightFunction: () {
-                                                    contentreport(
-                                                            controller
-                                                                .post!.value.id,
-                                                            contentType.post)
-                                                        .then((value) {
-                                                      if (value.isError ==
-                                                          false) {
-                                                        getbacks(2);
-                                                        showCustomDialog(
-                                                            "신고가 접수되었습니다",
-                                                            1000);
-                                                      } else {
-                                                        errorSituation(value);
-                                                      }
-                                                    });
-                                                  });}, func2: (){}, value1: '포스트 신고하기', value2: '', isOne: true, buttonColor1: rankred);
+                                          showBottomdialog(context, func1: () {
+                                            showTextFieldDialog(
+                                                title: '포스트 신고하기',
+                                                hintText:
+                                                    '신고 내용을 입력해주세요. 관리자 확인 이후 관련 약관에 따라 처리됩니다.',
+                                                rightText: '신고하기',
+                                                rightBoxColor: rankred,
+                                                leftBoxColor: maingray,
+                                                textEditingController:
+                                                    controller.reportController,
+                                                leftFunction: () {
+                                                  Get.back();
+                                                },
+                                                rightFunction: () {
+                                                  contentreport(
+                                                          controller
+                                                              .post!.value.id,
+                                                          contentType.post)
+                                                      .then((value) {
+                                                    if (value.isError ==
+                                                        false) {
+                                                      getbacks(2);
+                                                      showCustomDialog(
+                                                          "신고가 접수되었습니다", 1000);
+                                                    } else {
+                                                      errorSituation(value);
+                                                    }
+                                                  });
+                                                });
+                                          },
+                                              func2: () {},
+                                              value1: '포스트 신고하기',
+                                              value2: '',
+                                              isOne: true,
+                                              buttonColor1: rankred);
                                         },
                                   child: SvgPicture.asset(
                                       'assets/icons/appbar_more_option.svg'),

@@ -34,8 +34,9 @@ import 'package:loopus/controller/hover_controller.dart';
 import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:loopus/widget/user_tile_widget.dart';
 
-enum PostingWidgetType { normal, search, profile, detail }
+enum PostingWidgetType { normal, search, detail }
 
 class PostingWidget extends StatelessWidget {
   // final int index;
@@ -65,52 +66,28 @@ class PostingWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            if (type != PostingWidgetType.profile)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                child: Column(
-                  children: [
-                    GestureDetector(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: Column(
+                children: [
+                  GestureDetector(
                       onTap: () => tapProfile(),
-                      child: Row(
-                        children: [
-                          UserImageWidget(
-                            imageUrl: item.user.profileImage,
-                            width: 36,
-                            height: 36,
-                            userType: item.user.userType,
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(item.user.name, style: kmainbold),
-                                const SizedBox(height: 8),
-                                Text(
-                                    '${item.user.univName} · ${item.user.department}',
-                                    style: kmain)
-                              ])
-                        ],
+                      child: UserTileWidget(user: item.user)),
+                  const SizedBox(height: 10),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: tapProjectname,
+                      child: Text(
+                        item.project!.careerName,
+                        style: kmain.copyWith(color: maingray),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: GestureDetector(
-                        onTap: tapProjectname,
-                        child: Text(
-                          item.project!.careerName,
-                          style: kmain.copyWith(color: maingray),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
               ),
+            ),
           ]),
           if (item.images.isNotEmpty || item.links.isNotEmpty)
             SwiperWidget(

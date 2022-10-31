@@ -156,7 +156,9 @@ class MessageDetatilScreen extends StatelessWidget {
                         title: '계정 신고하기',
                         hintText:
                             '신고 내용을 입력해주세요. 관리자 확인 \n 이후 관련 약관에 따라 처리됩니다.\n ',
-                        completeText: '신고하기 ',
+                        rightText: '신고하기 ',
+                        rightBoxColor: rankred,
+                        leftBoxColor: maingray,
                         leftFunction: () => Get.back(),
                         rightFunction: () {
                           userreport(controller.partnerId).then((value) {

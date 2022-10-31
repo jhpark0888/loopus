@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -39,7 +40,7 @@ class CareerWidget extends StatelessWidget {
             image: career.thumbnail == ""
                 ? null
                 : DecorationImage(
-                    image: NetworkImage(career.thumbnail),
+                    image: CachedNetworkImageProvider(career.thumbnail),
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         const Color(0x00000000).withOpacity(0.4),

@@ -137,12 +137,13 @@ class CertificationScreen extends StatelessWidget {
         if (certificateType == CertificateType.userInfoChange) {
           Get.to(() => SignupUserInfoScreen(
                 isReCertification: true,
+                reCertPw: _controller.passwordcontroller.text,
               ));
         } else {
           TextEditingController textController = TextEditingController();
-          showTextFieldDialog2(
+          showTextFieldDialog(
             title: "탈퇴 사유를 입력해주세요",
-            completeText: '탈퇴하기',
+            rightText: '탈퇴하기',
             hintText:
                 "루프어스를 탈퇴하는 이유를 알려주세요. 보다 나은 서비스로 보답하겠습니다.\n이후 모든 계정 데이터는 삭제됩니다.",
             leftFunction: () {
@@ -151,6 +152,9 @@ class CertificationScreen extends StatelessWidget {
             rightFunction: () {
               withDrawal(textController.text);
             },
+            leftBoxColor: mainblue,
+            rightBoxColor: maingray,
+            rightTextColor: rankred,
             textEditingController: textController,
           );
         }
@@ -176,9 +180,11 @@ class CertificationScreen extends StatelessWidget {
         Get.back();
         if (value.errorData!["statusCode"] == 401) {
           showCustomDialog("비밀번호를 다시 입력해주세요", 1000);
-        } else if (value.errorData!["statusCode"] == 403) {
-          showCustomDialog("공유 커리어를 정리 후 탈퇴를 다시 진행해주세요", 1000);
-        } else {
+        }
+        // else if (value.errorData!["statusCode"] == 403) {
+        //   showCustomDialog("공유 커리어를 정리 후 탈퇴를 다시 진행해주세요", 1000);
+        // }
+        else {
           errorSituation(value);
         }
       }

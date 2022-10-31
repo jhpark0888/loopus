@@ -70,13 +70,13 @@ class UnivDeptSearchScreen extends StatelessWidget {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBarWidget(
-          title: searchType == UnivDeptSearchType.univ ? "대학 검색" : "학과 검색",
-          bottomBorder: false,
-        ),
-        body: SafeArea(
-          child: Column(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBarWidget(
+            title: searchType == UnivDeptSearchType.univ ? "대학 검색" : "학과 검색",
+            bottomBorder: false,
+          ),
+          body: SafeArea(
+              child: Column(
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -157,10 +157,12 @@ class UnivDeptSearchScreen extends StatelessWidget {
                 onTap: () {
                   TextEditingController textController =
                       TextEditingController();
-                  showTextFieldDialog2(
+                  showTextFieldDialog(
                     title:
-                        "${searchType == UnivDeptSearchType.univ ? "대학" : "학과"} 등록 문의하기",
-                    completeText: '문의하기',
+                        "${searchType == UnivDeptSearchType.univ ? "대학" : "학과"} 문의하기",
+                    rightText: '문의하기',
+                    rightBoxColor: mainblue,
+                    leftBoxColor: maingray,
                     hintText:
                         '찾으시는 ${searchType == UnivDeptSearchType.univ ? "대학" : "학과"}명을 입력해주세요. 빠른 시일 내 업데이트 할게요.',
                     leftFunction: () {
@@ -190,11 +192,11 @@ class UnivDeptSearchScreen extends StatelessWidget {
                     "찾으시는 ${searchType == UnivDeptSearchType.univ ? "대학이" : "학과가"} 없으신가요?",
                     style: kmain.copyWith(color: mainblue)),
               ),
-              // const SizedBox(height: 40)
+              const SizedBox(
+                height: 14,
+              )
             ],
-          ),
-        ),
-      ),
+          ))),
     );
   }
 }

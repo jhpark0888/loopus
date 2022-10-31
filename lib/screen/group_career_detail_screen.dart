@@ -76,7 +76,8 @@ class GroupCareerDetailScreen extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.only(top: Platform.isAndroid ? 70 : 105),
+                    padding:
+                        EdgeInsets.only(top: Platform.isAndroid ? 70 : 105),
                     child: Column(
                       children: [
                         Padding(
@@ -118,7 +119,9 @@ class GroupCareerDetailScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        DivideWidget(height: 1,),
+                        DivideWidget(
+                          height: 1,
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(top: 24),
                           child: Container(
@@ -492,7 +495,7 @@ class MyCareerScreen extends StatelessWidget {
                     if (controller.postList[index].user.name == name) {
                       return PostingWidget(
                         item: controller.postList[index],
-                        type: PostingWidgetType.profile,
+                        type: PostingWidgetType.normal,
                       );
                     } else {
                       return const SizedBox.shrink();

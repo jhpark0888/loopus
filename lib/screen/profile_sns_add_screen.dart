@@ -68,11 +68,30 @@ class ProfileSnsAddScreen extends StatelessWidget {
           const SizedBox(
             width: 16,
           ),
-          Text(
-            "${snsType.snsEngtoKor} ${snsType == SNSType.naver ? "블로그 " : ""}"
-            "${snsList.any((element) => element.snsType == snsType) ? "수정하기" : "추가하기"}",
-            style: kmain.copyWith(color: mainblue),
+          Obx(
+            () => Text(
+              "${snsType.snsEngtoKor} ${snsType == SNSType.naver ? "블로그 " : ""}"
+              "${_controller.snsList.any((element) => element.snsType == snsType) ? "수정하기" : "추가하기"}",
+              style: kmain.copyWith(color: mainblue),
+            ),
           ),
+          const Spacer(),
+          Obx(
+            () =>
+                _controller.snsList.any((element) => element.snsType == snsType)
+                    ? GestureDetector(
+                        onTap: () {
+                          _controller.snsDelete(snsList
+                              .where((element) => element.snsType == snsType)
+                              .first);
+                        },
+                        child: Text(
+                          "삭제",
+                          style: kmain.copyWith(color: maingray),
+                        ),
+                      )
+                    : Container(),
+          )
         ],
       ),
     );
@@ -100,14 +119,12 @@ class ProfileSnsInputScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // snskorname = snsEngtoKor(snsType);
-    // inputType = snsInputType(snsType);
-    if (_controller.snsList.any((element) => element.snsType == snsType)) {
-      _controller.snsController.text = _controller.snsList
-          .where((element) => element.snsType == snsType)
-          .first
-          .url;
-    }
+    // if (_controller.snsList.any((element) => element.snsType == snsType)) {
+    //   _controller.snsController.text = _controller.snsList
+    //       .where((element) => element.snsType == snsType)
+    //       .first
+    //       .url;
+    // }
 
     return KeyboardDismissOnTap(
       child: Scaffold(
@@ -120,6 +137,7 @@ class ProfileSnsInputScreen extends StatelessWidget {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _controller.snsAdd(SNS(
+                        id: 0,
                         snsType: snsType,
                         url: snsType.snsUrl + _controller.snsController.text));
                   }

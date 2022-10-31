@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
@@ -107,7 +108,9 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                     await emailRequest(
                                             _signupController.getEmail(),
                                             _signupController
-                                                .signupcertification)
+                                                .signupcertification,
+                                            isCreate: !_signupController
+                                                .isReCertification)
                                         .then((value) {
                                       if (value.isError == false) {
                                         Get.back();
@@ -197,37 +200,84 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                       isCertiftNumdiffer(false);
                                       _signupController.timer.timerClose();
 
-                                      await signupRequest().then((value) async {
-                                        final GAController _gaController =
-                                            GAController();
+                                      if (_signupController.isReCertification ==
+                                          false) {
+                                        //회원가입
+                                        await signupRequest()
+                                            .then((value) async {
+                                          final GAController _gaController =
+                                              GAController();
 
-                                        if (value.isError == false) {
-                                          await _gaController.logSignup();
-                                          await _gaController.setUserProperties(
-                                              value.data['user_id'],
-                                              _signupController
-                                                  .selectDept.value.deptname);
-                                          await _gaController
-                                              .logScreenView('signup_6');
-                                          Get.back();
-                                          Get.offAll(() => SignupCompleteScreen(
-                                                emailId: _signupController
-                                                        .emailidcontroller
-                                                        .text +
-                                                    "@" +
-                                                    _signupController
-                                                        .selectUniv.value.email,
-                                                password: _signupController
-                                                    .passwordcontroller.text,
-                                              ));
-                                        } else {
-                                          await _gaController
-                                              .logScreenView('signup_6');
-                                          // errorSituation(value);
-                                          Get.back();
-                                          Get.to(() => SignupFailScreen());
-                                        }
-                                      });
+                                          if (value.isError == false) {
+                                            await _gaController.logSignup();
+                                            await _gaController
+                                                .setUserProperties(
+                                                    value.data['user_id'],
+                                                    _signupController.selectDept
+                                                        .value.deptname);
+                                            await _gaController
+                                                .logScreenView('signup_6');
+                                            Get.back();
+                                            Get.offAll(
+                                                () => SignupCompleteScreen(
+                                                      emailId: _signupController
+                                                              .emailidcontroller
+                                                              .text +
+                                                          "@" +
+                                                          _signupController
+                                                              .selectUniv
+                                                              .value
+                                                              .email,
+                                                      password: _signupController
+                                                          .passwordcontroller
+                                                          .text,
+                                                    ));
+                                          } else {
+                                            await _gaController
+                                                .logScreenView('signup_6');
+                                            // errorSituation(value);
+                                            Get.back();
+                                            Get.to(() => SignupFailScreen());
+                                          }
+                                        });
+                                      } else {
+                                        updateProfile(
+                                                updateType:
+                                                    ProfileUpdateType.profile,
+                                                email: _signupController
+                                                    .getEmail(),
+                                                name: _signupController
+                                                    .namecontroller.text
+                                                    .trim(),
+                                                deptId: _signupController
+                                                    .selectDept.value.id,
+                                                univId: _signupController
+                                                    .selectUniv.value.id,
+                                                admission: _signupController
+                                                    .admissioncontroller.text)
+                                            .then((value) {
+                                          if (value.isError == false) {
+                                            Get.back();
+                                            Get.offAll(
+                                                () => SignupCompleteScreen(
+                                                      emailId: _signupController
+                                                              .emailidcontroller
+                                                              .text +
+                                                          "@" +
+                                                          _signupController
+                                                              .selectUniv
+                                                              .value
+                                                              .email,
+                                                      password:
+                                                          _signupController
+                                                              .reCertPw!,
+                                                    ));
+                                          } else {
+                                            Get.back();
+                                            Get.to(() => SignupFailScreen());
+                                          }
+                                        });
+                                      }
                                     } else {
                                       Get.back();
                                       if (value.errorData!["statusCode"] ==

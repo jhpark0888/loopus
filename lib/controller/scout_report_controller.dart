@@ -85,7 +85,7 @@ class ScoutReportController extends GetxController
     }
 
     getCompanyList("main");
-    await getRecommandCompanyList(isCorp.value.toString());
+    await getRecommandCompanyList(isCorp.value);
     pController = PageController(
         viewportFraction: 0.8, initialPage: recommendCompList.length * 300);
     screenState(ScreenState.success);
@@ -98,7 +98,7 @@ class ScoutReportController extends GetxController
     companyFieldList.clear();
     refreshController.loadComplete();
     getCompanyList("main");
-    getRecommandCompanyList(isCorp.value.toString());
+    getRecommandCompanyList(isCorp.value);
     refreshController.refreshCompleted();
   }
 
@@ -133,7 +133,7 @@ class ScoutReportController extends GetxController
     });
   }
 
-  Future getRecommandCompanyList(String isCorp) async {
+  Future getRecommandCompanyList(int isCorp) async {
     await getRecommandCompanys(isCorp).then((value) async {
       if (value.isError == false) {
         List<Company> companyList = List.from(value.data)

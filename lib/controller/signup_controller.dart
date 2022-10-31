@@ -13,7 +13,7 @@ import 'package:loopus/utils/error_control.dart';
 
 class SignupController extends GetxController {
   static SignupController get to => Get.find();
-  SignupController({this.isReCertification = false});
+  SignupController({this.isReCertification = false, this.reCertPw});
 
   //학생
   TextEditingController univcontroller = TextEditingController();
@@ -28,6 +28,8 @@ class SignupController extends GetxController {
   Rx<Emailcertification> signupcertification = Emailcertification.normal.obs;
   Rx<ScreenState> searchscreenstate = ScreenState.normal.obs;
   // Rx<ScreenState> tagscreenstate = ScreenState.success.obs;
+
+  String? reCertPw;
 
   Rx<UserType> selectedType = UserType.student.obs;
 
