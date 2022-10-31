@@ -77,7 +77,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding:
-                        EdgeInsets.only(top: Platform.isAndroid ? 70 : 105),
+                        EdgeInsets.only(top: Platform.isAndroid ? 70 : 100),
                     child: Column(
                       children: [
                         Padding(
@@ -317,7 +317,8 @@ class _MyAppSpace extends StatelessWidget {
                   width: Get.width,
                   height: Get.width,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16,Platform.isAndroid ? 44 : 60, 16, 26),
+                    padding: EdgeInsets.fromLTRB(
+                        16, Platform.isAndroid ? 44 : 60, 16, 26),
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -333,8 +334,7 @@ class _MyAppSpace extends StatelessWidget {
                           if (career.updateDate != null)
                             Text(
                               '최근 포스트 ${calculateDate(career.updateDate!)}',
-                              style:
-                                  kmain.copyWith(color: mainWhite),
+                              style: kmain.copyWith(color: mainWhite),
                             ),
                           const SizedBox(
                             height: 16,
@@ -344,13 +344,11 @@ class _MyAppSpace extends StatelessWidget {
                               SvgPicture.asset('assets/icons/group_career.svg'),
                               const SizedBox(width: 8),
                               Text('그룹 커리어',
-                                  style: kmain.copyWith(
-                                      color: mainWhite)),
+                                  style: kmain.copyWith(color: mainWhite)),
                               const Spacer(),
                               Text(
                                 '포스트 ${career.post_count}',
-                                style: kmain.copyWith(
-                                    color: mainWhite),
+                                style: kmain.copyWith(color: mainWhite),
                               )
                             ],
                           )

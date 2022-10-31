@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
@@ -207,7 +208,8 @@ class _MyAppSpace extends StatelessWidget {
                     width: Get.width,
                     height: Get.width,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 44, 16, 0),
+                      padding: EdgeInsets.fromLTRB(
+                          16, Platform.isAndroid ? 44 : 60, 16, 26),
                       child: SingleChildScrollView(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
