@@ -29,7 +29,7 @@ class FollowButtonWidget extends StatelessWidget {
               child: Container(
                 height: 36,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 11),
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
                 decoration: BoxDecoration(
                     color: user.banned.value == BanState.ban
                         ? rankred

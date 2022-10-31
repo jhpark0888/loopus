@@ -24,7 +24,7 @@ Future<HTTPResponse> getCareerBoardRequest(
     String? token = await const FlutterSecureStorage().read(key: "token");
 
     // print(userid);
-    final topPostUrl = Uri.parse("$serverUri/rank/ranking?id=$id&type=$type");
+    final topPostUrl = Uri.parse("$serverUri/rank/ranking?id=16&type=$type");
 
     try {
       http.Response response = await http

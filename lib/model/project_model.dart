@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:get/get.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -21,6 +22,7 @@ class Project {
       this.isTop,
       required this.user,
       required this.isPublic,
+      this.company,
       this.managerId});
 
   int id;
@@ -38,6 +40,7 @@ class Project {
   int is_user;
   bool isPublic;
   int? managerId;
+  Company? company;
 
   factory Project.defaultProject({
     int? id,
@@ -55,6 +58,7 @@ class Project {
     int? is_user,
     bool? isPublic,
     int? managerId,
+    Company? company
   }) =>
       Project(
         id: id ?? 0,
@@ -71,10 +75,12 @@ class Project {
         user: user ?? Person.defaultuser(),
         isPublic: isPublic ?? false,
         managerId: managerId ?? 0,
+        company: company
       );
 
   factory Project.fromJson(Map<String, dynamic> json) {
     bool isProject = json["project"] != null;
+    bool isCompany = json['thumbnail'].runtimeType == String;
     return Project(
       id: isProject
           ? json["project"]['project_id'] != null
@@ -87,9 +93,11 @@ class Project {
       careerName: isProject
           ? json["project"]["project_name"] ?? ""
           : json["project_name"] ?? "",
-      thumbnail: isProject
-          ? json["project"]["thumbnail"] ?? ""
-          : json["thumbnail"] ?? "",
+      thumbnail: isCompany
+          ? json['thumbnail']['company_logo'] ?? ""
+          : isProject
+              ? json["project"]["thumbnail"] ?? ""
+              : json["thumbnail"] ?? "",
       updateDate: isProject
           ? json["project"]["post_update_date"] != null
               ? DateTime.parse(json["project"]["post_update_date"])
@@ -134,6 +142,7 @@ class Project {
                       .where((element) => element['is_manager'] != null))
                   .first['profile']['user_id']
               : 0,
+      company: isCompany ? Company.fromJson(json['thumbnail']) : null
     );
   }
 

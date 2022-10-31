@@ -37,7 +37,7 @@ Future<HTTPResponse> addproject() async {
     String? token = await const FlutterSecureStorage().read(key: "token");
     Uri uri = Uri.parse('$serverUri/project_api/project');
     try {
-      print(projectAddController.selectCompany.value.name);
+      print(projectAddController.selectCompany.value.userId);
       var body = {
         'project_name': projectAddController.projectnamecontroller.text,
         'looper': projectAddController.selectedpersontaglist

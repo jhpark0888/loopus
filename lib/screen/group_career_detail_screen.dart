@@ -448,6 +448,7 @@ class GroupCareerScreen extends StatelessWidget {
             SliverList(
                 delegate: SliverChildListDelegate([
               ListView.builder(
+                padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   primary: false,
                   itemBuilder: (context, index) {

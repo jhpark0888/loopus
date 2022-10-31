@@ -87,7 +87,7 @@ class MessageWidget extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
                                   padding:
-                                      const EdgeInsets.all(8),
+                                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                   child: Text(
                                     message.content,
                                     style:
@@ -106,7 +106,7 @@ class MessageWidget extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
                                   padding:
-                                      const EdgeInsets.all(8),
+                                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                   child: Text(
                                     message.content,
                                     style: kmainheight.copyWith(
@@ -185,7 +185,7 @@ class MessageWidget extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(8)),
                                       child: Padding(
-                                          padding: const EdgeInsets.all(8),
+                                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                           child: Text(
                                             message.content,
                                             style: kmainheight,
@@ -209,7 +209,7 @@ class MessageWidget extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(8)),
                                       child: Padding(
-                                          padding: const EdgeInsets.all(8),
+                                          padding:const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                           child: Text(
                                             message.content,
                                             style: kmainheight,
