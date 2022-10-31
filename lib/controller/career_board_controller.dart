@@ -75,7 +75,7 @@ class CareerBoardController extends GetxController
 
   late TabController tabController;
 
-  RxInt currentField = 1.obs;
+  RxInt currentField = 16.obs;
 
   @override
   void onInit() async {
@@ -95,7 +95,8 @@ class CareerBoardController extends GetxController
     });
 
     careerFieldList.value = careerField.entries.toList();
-    currentFieldMap[careerFieldList[0].key] = careerFieldList[0].value;
+    currentFieldMap[careerFieldList.last.key] = careerFieldList.last.value;
+    print('currentFieldMap: ${currentFieldMap}');
     careerBoardLoad(currentFieldMap.keys.first);
 
     // currentFieldMap.listen((data) async {
@@ -109,6 +110,7 @@ class CareerBoardController extends GetxController
   }
 
   void careerBoardLoad(String fieldId, {bool isloading = true}) async {
+    print('$fieldId이거야');
     if (isloading) {
       screenStateMap[fieldId]!.value = ScreenState.loading;
     }

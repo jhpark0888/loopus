@@ -36,9 +36,10 @@ class CareerBoardScreen extends StatelessWidget {
   final CareerBoardController _controller = Get.put(CareerBoardController());
 
   late bool isUniversity = false;
-
+  
   @override
   Widget build(BuildContext context) {
+    print(_controller.careerFieldList);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -115,17 +116,7 @@ class CareerBoardScreen extends StatelessWidget {
         //   // },
         // ),
       ),
-      body: ScrollNoneffectWidget(
-          child: 
-      tabViews(_controller.careerFieldList[16])
-          // TabBarView(
-          //     controller: _controller.tabController,
-          //     children: List.generate(
-          //         _controller.careerField.length,
-          //         (index) => tabViews(
-          //               _controller.careerFieldList[index],
-          //             )))
-                      ),
+      body: tabViews(context,_controller.careerFieldList.last),
     );
   }
 
@@ -149,7 +140,8 @@ class CareerBoardScreen extends StatelessWidget {
   //   );
   // }
 
-  Widget tabViews(MapEntry<String, String> currentField) {
+  Widget tabViews(BuildContext context,MapEntry<String, String> currentField) {
+    print( "${_controller.screenStateMap[currentField.key]!.value}이건데");
     return Obx(
       () => _controller.screenStateMap[currentField.key]!.value ==
               ScreenState.loading
@@ -206,7 +198,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 24),
                                   SizedBox(
-                                      height: 292,
+                                      height: 246,
                                       child: CareerRankWidget(
                                         isUniversity: false,
                                         ranker: _controller
