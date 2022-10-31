@@ -116,13 +116,16 @@ class CareerBoardScreen extends StatelessWidget {
         // ),
       ),
       body: ScrollNoneffectWidget(
-          child: TabBarView(
-              controller: _controller.tabController,
-              children: List.generate(
-                  _controller.careerField.length,
-                  (index) => tabViews(
-                        _controller.careerFieldList[index],
-                      )))),
+          child: 
+      tabViews(_controller.careerFieldList[16])
+          // TabBarView(
+          //     controller: _controller.tabController,
+          //     children: List.generate(
+          //         _controller.careerField.length,
+          //         (index) => tabViews(
+          //               _controller.careerFieldList[index],
+          //             )))
+                      ),
     );
   }
 
