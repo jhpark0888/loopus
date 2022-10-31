@@ -80,7 +80,7 @@ class MyCompanyScreen extends StatelessWidget {
               Get.to(() => SettingScreen());
             },
             child: SvgPicture.asset(
-              'assets/icons/setting.svg',
+              'assets/icons/Setting.svg',
               color: mainWhite,
             ),
           ),

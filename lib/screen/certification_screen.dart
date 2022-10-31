@@ -16,6 +16,7 @@ import 'package:loopus/controller/home_controller.dart';
 
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
+import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/login_screen.dart';
@@ -28,7 +29,7 @@ import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/label_textfield_widget.dart';
 import 'package:loopus/widget/signup_text_widget.dart';
 
-enum CertificateType { userInfoChange, withDrawal }
+enum CertificateType { userInfoChange, withDrawal, pwChange }
 
 class CertificationScreen extends StatelessWidget {
   CertificationScreen({Key? key, required this.certificateType})
@@ -36,6 +37,10 @@ class CertificationScreen extends StatelessWidget {
 
   final CertificationController _controller =
       Get.put(CertificationController());
+  final PwChangeController _pwChangeController = Get.put(PwChangeController());
+
+  late PwType pwType;
+  final _formKey = GlobalKey<FormState>();
   CertificateType certificateType;
 
   @override
@@ -184,4 +189,46 @@ class CertificationScreen extends StatelessWidget {
       }
     });
   }
+
+  // void pwChange(context,
+  //     {required String emailId, required String password}) async {
+  //   FocusScope.of(context).unfocus();
+  //   loading();
+  //   // Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
+  //   await loginRequest(emailId, password).then((value) async {
+  //     if (_pwChangeController.pwChangeButtonOn.value) {
+  //       if (_formKey.currentState!.validate()) {
+  //         loading();
+  //         pwType == PwType.pwchange
+  //             ? putpwchange().then((value) {
+  //                 if (value.isError == false) {
+  //                   getbacks(2);
+  //                   showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
+  //                 } else {
+  //                   Get.back();
+
+  //                   if (value.errorData!["statusCode"] == 401) {
+  //                     showCustomDialog('현재 비밀번호가 틀렸습니다.', 1400);
+  //                   } else {
+  //                     errorSituation(value);
+  //                   }
+  //                 }
+  //               })
+  //             : putpwfindchange().then((value) {
+  //                 if (value.isError == false) {
+  //                   getbacks(3);
+  //                   showCustomDialog('비밀번호 변경이 완료되었습니다', 1400);
+  //                 } else {
+  //                   Get.back();
+  //                   if (value.errorData!["statusCode"] == 401) {
+  //                     showCustomDialog('입력한 정보를 다시 확인해주세요', 1400);
+  //                   } else {
+  //                     errorSituation(value);
+  //                   }
+  //                 }
+  //               });
+  //       }
+  //     }
+  //   });
+  // }
 }
