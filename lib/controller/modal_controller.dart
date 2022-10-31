@@ -424,7 +424,7 @@ void showModalIOS(
               ? CupertinoActionSheetAction(
                   child: const Text(
                     "닫기",
-                    style: kmainbold,
+                    style: kmain,
                   ),
                   isDefaultAction: true,
                   onPressed: () {
@@ -464,7 +464,7 @@ void showModalIOS(
           child: CupertinoActionSheetAction(
             child: Text(
               value1,
-              style: kmainbold.copyWith(
+              style: kmain.copyWith(
                 color: isValue1Red ? mainWhite : mainblack,
               ),
             ),
@@ -475,7 +475,7 @@ void showModalIOS(
           CupertinoActionSheetAction(
               child: Text(
                 value2,
-                style: kmainbold.copyWith(
+                style: kmain.copyWith(
                   color: isValue2Red ? rankred : mainWhite,
                 ),
               ),
@@ -579,7 +579,7 @@ void showBottomdialog(
                 child: Center(
                   child: Text(
                     value1,
-                    style: kmainbold.copyWith(
+                    style: kmain.copyWith(
                       color: textColor1 ?? mainWhite,
                     ),
                   ),
@@ -590,18 +590,20 @@ void showBottomdialog(
               height: 8,
             ),
             if (isOne == false)
-              GestureDetector(
-                onTap: func2,
-                child: Container(
-                  height: 42,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: buttonColor2 ?? maingray),
-                  child: Center(
-                    child: Text(
-                      value2,
-                      style: kmainbold.copyWith(
-                        color: textColor2 ?? mainWhite,
+              SafeArea(
+                child: GestureDetector(
+                  onTap: func2,
+                  child: Container(
+                    height: 42,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: buttonColor2 ?? maingray),
+                    child: Center(
+                      child: Text(
+                        value2,
+                        style: kmain.copyWith(
+                          color: textColor2 ?? mainWhite,
+                        ),
                       ),
                     ),
                   ),
@@ -943,7 +945,7 @@ void showCustomDialogline2({
                   ),
                   Text(
                     title,
-                    style: kmainbold,
+                    style: kmain,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -1079,7 +1081,7 @@ void showTextFieldDialog({
                   isBlue: true,
                   title: rightText,
                   textColor: rightTextColor,
-                  boxColor: rankred,
+                  boxColor: rightBoxColor,
                   isBig: true),
             )),
           ],

@@ -62,7 +62,7 @@ class SignupCompanyScreen extends StatelessWidget {
                     twoLinetext: "이메일 주소를 남겨주세요"),
                 LabelTextFieldWidget(
                   label: "기업 이름",
-                  hintText: "루프어스는 기업 규모와 상관 없이 모든 기업을 환영해요",
+                  hintText: "루프어스는 모든 기업을 환영해요",
                   textController: _signupController.compNameController,
                 ),
                 const SizedBox(height: 24),

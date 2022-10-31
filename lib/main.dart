@@ -93,12 +93,14 @@ class MyApp extends StatelessWidget {
   final ThemeData themeData = ThemeData(
       fontFamily: 'SUIT',
       appBarTheme: const AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: mainWhite,
-            statusBarBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.dark),
-        backgroundColor: mainWhite,
-        foregroundColor: mainblack,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        //   // (
+        //   //     statusBarColor: mainWhite,
+        //   //     statusBarBrightness: Brightness.dark,
+
+        //   //     statusBarIconBrightness: Brightness.dark),
+        backgroundColor: Colors.transparent,
+        // foregroundColor: mainblack,
       ),
       canvasColor: mainWhite,
       textTheme: const TextTheme(

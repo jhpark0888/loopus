@@ -27,12 +27,12 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: preferredSize,
       child: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: mainWhite,
-            statusBarIconBrightness:
-                Brightness.dark, // For Android (dark icons)
-            statusBarBrightness: Brightness.dark // For iOS (dark icons),
-            ),
+        // systemOverlayStyle: const SystemUiOverlayStyle(
+        //     statusBarColor: mainWhite,
+        //     statusBarIconBrightness:
+        //         Brightness.dark, // For Android (dark icons)
+        //     statusBarBrightness: Brightness.dark // For iOS (dark icons),
+        //     ),
         title: Text(
           title ?? '',
           style: kNavigationTitle,

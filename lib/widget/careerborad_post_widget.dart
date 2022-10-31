@@ -29,12 +29,12 @@ class CareerBoardPostWidget extends StatelessWidget {
             transition: Transition.noTransition);
       },
       child: Container(
-        height: 398,
+        height: 345,
         width: 280,
         decoration: BoxDecoration(
             color: mainWhite,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: maingray, width: 1)),
+            border: Border.all(color: maingray, width: 0.5)),
         padding: const EdgeInsets.only(top: 16, bottom: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -117,7 +117,7 @@ class CareerBoardPostWidget extends StatelessWidget {
                                 },
                               )
                             : LinkSmallWidget(url: post.links.first)),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.only(left: 14, right: 14),
                       child: Obx(
@@ -127,7 +127,7 @@ class CareerBoardPostWidget extends StatelessWidget {
                           moreSpan: TextSpan(
                               text: "...더보기",
                               style: kmainheight.copyWith(color: maingray)),
-                          maxLines: 3,
+                          maxLines: 1,
                         ),
                       ),
                     ),
@@ -147,9 +147,9 @@ class CareerBoardPostWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            const SizedBox(height: 10),
+            // const SizedBox(height: 10),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   Text('좋아요 ', style: kmain.copyWith(color: maingray)),

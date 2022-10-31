@@ -47,7 +47,7 @@ class CustomExpandedButton extends StatelessWidget {
           () => Text(
             title!,
             textAlign: TextAlign.center,
-            style: kmainbold.copyWith(
+            style: kmain.copyWith(
               // ignore: prefer_if_null_operators
               color: textColor != null
                   ? _hoverController.isHover.value
@@ -106,7 +106,7 @@ class CustomExpandedBoldButton extends StatelessWidget {
             () => Text(
               title!,
               textAlign: TextAlign.center,
-              style: kmainbold.copyWith(
+              style: kmain.copyWith(
                 // ignore: prefer_if_null_operators
                 color: isBlue
                     ? _hoverController.isHover.value

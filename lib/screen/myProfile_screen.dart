@@ -81,6 +81,7 @@ class MyProfileScreen extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
+            // brightness: Brightness.dark,
             titleSpacing: 0,
             elevation: 0,
             centerTitle: false,
@@ -503,111 +504,109 @@ class MyProfileScreen extends StatelessWidget {
   }
 
   Widget _careerView(BuildContext context) {
-    return SafeArea(
-      child: Obx(() => profileController.myProjectList.isEmpty
-          ? EmptyContentWidget(text: '아직 커리어가 없어요')
-          : Builder(
-              builder: (context) {
-                return CustomScrollView(
-                  // key: const PageStorageKey<String>("careerView"),
-                  slivers: [
-                    // SliverOverlapInjector(
-                    //     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                    //         context)),
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverToBoxAdapter(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 24),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                    '${profileController.myUserInfo.value.name}님과 관련있는 기업',
-                                    style: kmainbold),
-                                const SizedBox(width: 8),
-                                SvgPicture.asset(
-                                  'assets/icons/information.svg',
-                                  width: 20,
-                                  height: 20,
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            Container(),
-                            const SizedBox(height: 24),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Text('커리어', style: kmainbold),
-                                const SizedBox(width: 8),
-                                CareerAnalysisWidget(
-                                  field: fieldList[profileController
-                                      .myUserInfo.value.fieldId]!,
-                                  groupRatio: profileController
-                                      .myUserInfo.value.groupRatio,
-                                  // schoolRatio: profileController
-                                  //     .myUserInfo.value.schoolRatio,
-                                  lastgroupRatio: profileController
-                                          .myUserInfo.value.groupRatio +
-                                      profileController
-                                          .myUserInfo.value.groupRatioVariance,
-                                  // lastschoolRatio: profileController
-                                  //         .myUserInfo.value.schoolRatio +
-                                  //     profileController
-                                  //         .myUserInfo.value.schoolRatioVariance,
-                                ),
-                                // const SizedBox(width: 8),
-                                SvgPicture.asset(
-                                  'assets/icons/information.svg',
-                                  width: 20,
-                                  height: 20,
-                                ),
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => CareerArrangeScreen());
-                                  },
-                                  child: Text(
-                                    "수정하기",
-                                    style: kmain.copyWith(color: mainblue),
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            ListView.separated(
-                              primary: false,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) => GestureDetector(
+    return Obx(() => profileController.myProjectList.isEmpty
+        ? EmptyContentWidget(text: '아직 커리어가 없어요')
+        : Builder(
+            builder: (context) {
+              return CustomScrollView(
+                // key: const PageStorageKey<String>("careerView"),
+                slivers: [
+                  // SliverOverlapInjector(
+                  //     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                  //         context)),
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                  '${profileController.myUserInfo.value.name}님과 관련있는 기업',
+                                  style: kmainbold),
+                              const SizedBox(width: 8),
+                              SvgPicture.asset(
+                                'assets/icons/information.svg',
+                                width: 20,
+                                height: 20,
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Container(),
+                          const SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text('커리어', style: kmainbold),
+                              const SizedBox(width: 8),
+                              CareerAnalysisWidget(
+                                field: fieldList[profileController
+                                    .myUserInfo.value.fieldId]!,
+                                groupRatio: profileController
+                                    .myUserInfo.value.groupRatio,
+                                // schoolRatio: profileController
+                                //     .myUserInfo.value.schoolRatio,
+                                lastgroupRatio: profileController
+                                        .myUserInfo.value.groupRatio +
+                                    profileController
+                                        .myUserInfo.value.groupRatioVariance,
+                                // lastschoolRatio: profileController
+                                //         .myUserInfo.value.schoolRatio +
+                                //     profileController
+                                //         .myUserInfo.value.schoolRatioVariance,
+                              ),
+                              // const SizedBox(width: 8),
+                              SvgPicture.asset(
+                                'assets/icons/information.svg',
+                                width: 20,
+                                height: 20,
+                              ),
+                              const Spacer(),
+                              GestureDetector(
                                 onTap: () {
-                                  print(profileController
-                                      .myProjectList[index].isPublic);
-                                  goCareerScreen(
-                                      profileController.myProjectList[index],
-                                      profileController.myUserInfo.value.name);
+                                  Get.to(() => CareerArrangeScreen());
                                 },
-                                child: CareerWidget(
-                                    career:
-                                        profileController.myProjectList[index]),
-                              ),
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                height: 16,
-                              ),
-                              itemCount: profileController.myProjectList.length,
+                                child: Text(
+                                  "수정하기",
+                                  style: kmain.copyWith(color: mainblue),
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          ListView.separated(
+                            primary: false,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => GestureDetector(
+                              onTap: () {
+                                print(profileController
+                                    .myProjectList[index].isPublic);
+                                goCareerScreen(
+                                    profileController.myProjectList[index],
+                                    profileController.myUserInfo.value.name);
+                              },
+                              child: CareerWidget(
+                                  career:
+                                      profileController.myProjectList[index]),
                             ),
-                            const SizedBox(height: 24),
-                          ],
-                        ),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              height: 16,
+                            ),
+                            itemCount: profileController.myProjectList.length,
+                          ),
+                          const SizedBox(height: 24),
+                        ],
                       ),
-                    )
-                  ],
-                );
-              },
-            )),
-    );
+                    ),
+                  )
+                ],
+              );
+            },
+          ));
   }
 
   Widget _postView() {

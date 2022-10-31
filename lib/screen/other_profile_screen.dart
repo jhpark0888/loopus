@@ -608,120 +608,117 @@ class OtherProfileScreen extends StatelessWidget {
   }
 
   Widget _careerView(BuildContext context) {
-    return SafeArea(
-      child: Obx(() => _controller.otherProjectList.isEmpty
-          ? EmptyContentWidget(text: '아직 커리어가 없어요')
-          : Builder(
-              builder: (context) {
-                return CustomScrollView(
-                  // key: const PageStorageKey<String>("careerView"),
-                  slivers: [
-                    // SliverOverlapInjector(
-                    //     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                    //         context)),
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverToBoxAdapter(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 25),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('$realname님과 관련있는 기업', style: kmainbold),
-                                const SizedBox(width: 8),
-                                SvgPicture.asset(
-                                  'assets/icons/information.svg',
+    return Obx(() => _controller.otherProjectList.isEmpty
+        ? EmptyContentWidget(text: '아직 커리어가 없어요')
+        : Builder(
+            builder: (context) {
+              return CustomScrollView(
+                // key: const PageStorageKey<String>("careerView"),
+                slivers: [
+                  // SliverOverlapInjector(
+                  //     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                  //         context)),
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 25),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text('$realname님과 관련있는 기업', style: kmainbold),
+                              const SizedBox(width: 8),
+                              SvgPicture.asset(
+                                'assets/icons/information.svg',
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          // CareerAnalysisWidget(
+                          //   field: fieldList[
+                          //       _controller.otherUser.value.fieldId]!,
+                          //   groupRatio:
+                          //       _controller.otherUser.value.groupRatio,
+                          //   // schoolRatio:
+                          //   //     _controller.otherUser.value.schoolRatio,
+                          //   // lastgroupRatio:
+                          //   //     _controller.otherUser.value.groupRatio +
+                          //   //         _controller
+                          //   //             .otherUser.value.groupRatioVariance,
+                          //   // lastschoolRatio:
+                          //   //     _controller.otherUser.value.schoolRatio +
+                          //   //         _controller
+                          //   //             .otherUser.value.schoolRatioVariance,
+                          // ),
+                          const SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text('커리어', style: kmainbold),
+                              const SizedBox(width: 8),
+                              CareerAnalysisWidget(
+                                field: fieldList[
+                                    _controller.otherUser.value.fieldId]!,
+                                groupRatio:
+                                    _controller.otherUser.value.groupRatio,
+                                // schoolRatio:
+                                //     _controller.otherUser.value.schoolRatio,
+                                // lastgroupRatio:
+                                //     _controller.otherUser.value.groupRatio +
+                                //         _controller
+                                //             .otherUser.value.groupRatioVariance,
+                                // lastschoolRatio:
+                                //     _controller.otherUser.value.schoolRatio +
+                                //         _controller
+                                //             .otherUser.value.schoolRatioVariance,
+                              ),
+                              // const SizedBox(width: 8),
+                              SvgPicture.asset(
+                                'assets/icons/information.svg',
+                              ),
+                              const Spacer(),
+                              if (_controller.otherUser.value.userId ==
+                                  HomeController.to.myProfile.value.userId)
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => CareerArrangeScreen());
+                                  },
+                                  child: Text(
+                                    "정렬 수정",
+                                    style: kmain.copyWith(color: mainblue),
+                                  ),
                                 )
-                              ],
+                            ],
+                          ),
+                          const SizedBox(height: 14),
+                          ListView.separated(
+                            primary: false,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => GestureDetector(
+                              onTap: () {
+                                goCareerScreen(
+                                    _controller.otherProjectList[index],
+                                    _controller.otherUser.value.name);
+                              },
+                              child: CareerWidget(
+                                  career: _controller.otherProjectList[index]),
                             ),
-                            const SizedBox(height: 16),
-                            // CareerAnalysisWidget(
-                            //   field: fieldList[
-                            //       _controller.otherUser.value.fieldId]!,
-                            //   groupRatio:
-                            //       _controller.otherUser.value.groupRatio,
-                            //   // schoolRatio:
-                            //   //     _controller.otherUser.value.schoolRatio,
-                            //   // lastgroupRatio:
-                            //   //     _controller.otherUser.value.groupRatio +
-                            //   //         _controller
-                            //   //             .otherUser.value.groupRatioVariance,
-                            //   // lastschoolRatio:
-                            //   //     _controller.otherUser.value.schoolRatio +
-                            //   //         _controller
-                            //   //             .otherUser.value.schoolRatioVariance,
-                            // ),
-                            const SizedBox(height: 24),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Text('커리어', style: kmainbold),
-                                const SizedBox(width: 8),
-                                CareerAnalysisWidget(
-                                  field: fieldList[
-                                      _controller.otherUser.value.fieldId]!,
-                                  groupRatio:
-                                      _controller.otherUser.value.groupRatio,
-                                  // schoolRatio:
-                                  //     _controller.otherUser.value.schoolRatio,
-                                  // lastgroupRatio:
-                                  //     _controller.otherUser.value.groupRatio +
-                                  //         _controller
-                                  //             .otherUser.value.groupRatioVariance,
-                                  // lastschoolRatio:
-                                  //     _controller.otherUser.value.schoolRatio +
-                                  //         _controller
-                                  //             .otherUser.value.schoolRatioVariance,
-                                ),
-                                // const SizedBox(width: 8),
-                                SvgPicture.asset(
-                                  'assets/icons/information.svg',
-                                ),
-                                const Spacer(),
-                                if (_controller.otherUser.value.userId ==
-                                    HomeController.to.myProfile.value.userId)
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.to(() => CareerArrangeScreen());
-                                    },
-                                    child: Text(
-                                      "정렬 수정",
-                                      style: kmain.copyWith(color: mainblue),
-                                    ),
-                                  )
-                              ],
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              height: 16,
                             ),
-                            const SizedBox(height: 14),
-                            ListView.separated(
-                              primary: false,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) => GestureDetector(
-                                onTap: () {
-                                  goCareerScreen(
-                                      _controller.otherProjectList[index],
-                                      _controller.otherUser.value.name);
-                                },
-                                child: CareerWidget(
-                                    career:
-                                        _controller.otherProjectList[index]),
-                              ),
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                height: 16,
-                              ),
-                              itemCount: _controller.otherProjectList.length,
-                            ),
-                            // const SizedBox(height: 24),
-                          ],
-                        ),
+                            itemCount: _controller.otherProjectList.length,
+                          ),
+                          // const SizedBox(height: 24),
+                        ],
                       ),
-                    )
-                  ],
-                );
-              },
-            )),
-    );
+                    ),
+                  )
+                ],
+              );
+            },
+          ));
   }
 
   Widget _postView() {
