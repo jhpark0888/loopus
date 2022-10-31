@@ -13,7 +13,6 @@ import 'package:loopus/model/post_model.dart';
 
 Future<HTTPResponse> getScoutCompanySearch({
   required int page,
-  String query = "",
   required String fieldId,
 }) async {
   ConnectivityResult result = await initConnectivity();
@@ -25,7 +24,7 @@ Future<HTTPResponse> getScoutCompanySearch({
 
     // print(userid);
     final _url = Uri.parse(
-        "$serverUri/scout_api/company_group?type=$fieldId&page=$page&query=$query");
+        "$serverUri/scout_api/company_group?type=$fieldId&page=$page");
 
     try {
       http.Response response =

@@ -53,7 +53,11 @@ class CareerBoardScreen extends StatelessWidget {
                 style: ktitle,
               ),
               const SizedBox(width: 8),
-              SvgPicture.asset('assets/icons/information.svg')
+              GestureDetector(
+                  onTap: () {
+                    // showPopUpDialog("안녕", "하이요", 1000);
+                  },
+                  child: SvgPicture.asset('assets/icons/information.svg'))
             ],
           ),
         ),

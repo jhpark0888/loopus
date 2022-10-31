@@ -614,18 +614,17 @@ void showBottomdialog(
   );
 }
 
-void showButtonDialog({
-  required String title,
-  required String startContent,
-  String? highlightContent,
-  String? endContent,
-  required Function() leftFunction,
-  required Function() rightFunction,
-  required String rightText,
-  required String leftText,
-  Color? highlightColor,
-  Color? rightColor
-}) {
+void showButtonDialog(
+    {required String title,
+    required String startContent,
+    String? highlightContent,
+    String? endContent,
+    required Function() leftFunction,
+    required Function() rightFunction,
+    required String rightText,
+    required String leftText,
+    Color? highlightColor,
+    Color? rightColor}) {
   Get.dialog(
     Material(
       color: Colors.transparent,
@@ -1520,6 +1519,43 @@ void showErrorDialog({
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
   );
+}
+
+void showPopUpDialog(String title, String content, int duration) {
+  Timer _timer = Timer(Duration(milliseconds: duration), () {
+    Get.back();
+  });
+  Get.dialog(
+    AlertDialog(
+      elevation: 0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8.0),
+        ),
+      ),
+      title: Text(
+        title,
+        style: kmainbold,
+        textAlign: TextAlign.center,
+      ),
+      titlePadding: const EdgeInsets.fromLTRB(16, 30, 16, 0),
+      contentPadding: const EdgeInsets.all(16),
+      backgroundColor: Colors.white,
+      content: Text(
+        title,
+        style: kmainheight,
+        textAlign: TextAlign.center,
+      ),
+    ),
+    barrierDismissible: false,
+    barrierColor: mainblack.withOpacity(0.3),
+    transitionCurve: kAnimationCurve,
+    transitionDuration: kAnimationDuration,
+  ).then((value) {
+    if (_timer.isActive) {
+      _timer.cancel();
+    }
+  });
 }
 
 void showCustomDialog(String title, int duration) {
