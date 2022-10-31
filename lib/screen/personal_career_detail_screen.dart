@@ -18,6 +18,7 @@ import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/other_company_screen.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
 import 'package:loopus/utils/duration_calculate.dart';
@@ -27,6 +28,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/empty_post_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
+import 'package:loopus/widget/user_image_widget.dart';
 
 class PersonalCareerDetailScreen extends StatelessWidget {
   PersonalCareerDetailScreen(
@@ -76,6 +78,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  joinCompany(),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 24, horizontal: 16),
@@ -154,6 +157,47 @@ class PersonalCareerDetailScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget joinCompany() {
+    return career.company != null ? Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (career.company != null) {
+              if (career.company!.userId != 0) {
+                Get.to(() => OtherCompanyScreen(
+                    companyId: career.company!.userId,
+                    companyName: career.company!.name));
+              }
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              UserImageWidget(
+                imageUrl:
+                    career.company != null ? career.company!.profileImage : '',
+                userType: UserType.company,
+                height: 36,
+                width: 36,
+              ),
+              const SizedBox(width: 8),
+              RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: career.company != null ? career.company!.name : '네이버',
+                    style: kmainbold),
+                const TextSpan(text: '와 함께한 커리어에요', style: kmain)
+              ]))
+            ]),
+          ),
+        ),
+        DivideWidget(
+          height: 1,
+        ),
+      ],
+    ): const SizedBox.shrink();
   }
 }
 

@@ -13,6 +13,7 @@ import 'package:loopus/main.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/other_company_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
@@ -80,6 +81,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                         EdgeInsets.only(top: Platform.isAndroid ? 70 : 100),
                     child: Column(
                       children: [
+                        joinCompany(),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 24, horizontal: 30.5),
@@ -206,6 +208,47 @@ class GroupCareerDetailScreen extends StatelessWidget {
                     id: career.id,
                   )
                 ])));
+  }
+
+  Widget joinCompany() {
+    return career.company != null ? Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (career.company != null) {
+              if (career.company!.userId != 0) {
+                Get.to(() => OtherCompanyScreen(
+                    companyId: career.company!.userId,
+                    companyName: career.company!.name));
+              }
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              UserImageWidget(
+                imageUrl:
+                    career.company != null ? career.company!.profileImage : '',
+                userType: UserType.company,
+                height: 36,
+                width: 36,
+              ),
+              const SizedBox(width: 8),
+              RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: career.company != null ? career.company!.name : '네이버',
+                    style: kmainbold),
+                const TextSpan(text: '와 함께한 커리어에요', style: kmain)
+              ]))
+            ]),
+          ),
+        ),
+        DivideWidget(
+          height: 1,
+        ),
+      ],
+    ): const SizedBox.shrink();
   }
 
   Widget joinPeople(User user, int manager) {
@@ -446,7 +489,7 @@ class GroupCareerScreen extends StatelessWidget {
             SliverList(
                 delegate: SliverChildListDelegate([
               ListView.builder(
-                padding: EdgeInsets.zero,
+                  padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   primary: false,
                   itemBuilder: (context, index) {
@@ -529,32 +572,33 @@ class _leading extends StatelessWidget {
             showBottomdialog(context, bareerColor: popupGray, func2: () {
               Get.back();
               showButtonDialog(
-                  title: '이 커리어는 완전히 삭제돼요',
-                  startContent: '이 커리어에 작성된\n',
-                  highlightContent: '모든 포스트와 데이터는 완전 삭제되며,\n복구가 불가능해요.\n',
-                  highlightColor: rankred,
-                  rightColor: mainWhite,
-                  endContent: '정말 삭제하시겠어요?',
-                  leftFunction: () {
-                    Get.back();
-                  },
-                  rightFunction: () {
-                    dialogBack(modalIOS: true);
-                    loading();
-                    deleteProject(career!.id, DeleteType.del).then((value) {
-                      print(value.isError);
-                      if (value.isError == false) {
-                        // careerList!.remove(career);
-                        deleteCareer(career!);
-                        Get.back();
-                        showCustomDialog("해당 커리어가 삭제되었어요", 1400);
-                      } else {
-                        errorSituation(value);
-                      }
-                    });
-                  },
-                  rightText: '삭제',
-                  leftText: '취소',);
+                title: '이 커리어는 완전히 삭제돼요',
+                startContent: '이 커리어에 작성된\n',
+                highlightContent: '모든 포스트와 데이터는 완전 삭제되며,\n복구가 불가능해요.\n',
+                highlightColor: rankred,
+                rightColor: mainWhite,
+                endContent: '정말 삭제하시겠어요?',
+                leftFunction: () {
+                  Get.back();
+                },
+                rightFunction: () {
+                  dialogBack(modalIOS: true);
+                  loading();
+                  deleteProject(career!.id, DeleteType.del).then((value) {
+                    print(value.isError);
+                    if (value.isError == false) {
+                      // careerList!.remove(career);
+                      deleteCareer(career!);
+                      Get.back();
+                      showCustomDialog("해당 커리어가 삭제되었어요", 1400);
+                    } else {
+                      errorSituation(value);
+                    }
+                  });
+                },
+                rightText: '삭제',
+                leftText: '취소',
+              );
             }, func1: () {
               Get.back();
               Get.to(
@@ -608,8 +652,7 @@ class _leading extends StatelessWidget {
                 buttonColor2: rankred,
                 textColor1: mainblack,
                 textColor2: mainWhite);
-          } else {
-          }
+          } else {}
         }
       },
       icon: LayoutBuilder(

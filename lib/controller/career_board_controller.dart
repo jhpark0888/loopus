@@ -96,7 +96,6 @@ class CareerBoardController extends GetxController
 
     careerFieldList.value = careerField.entries.toList();
     currentFieldMap[careerFieldList.last.key] = careerFieldList.last.value;
-    print('currentFieldMap: ${currentFieldMap}');
     careerBoardLoad(currentFieldMap.keys.first);
 
     // currentFieldMap.listen((data) async {
@@ -110,7 +109,6 @@ class CareerBoardController extends GetxController
   }
 
   void careerBoardLoad(String fieldId, {bool isloading = true}) async {
-    print('$fieldId이거야');
     if (isloading) {
       screenStateMap[fieldId]!.value = ScreenState.loading;
     }

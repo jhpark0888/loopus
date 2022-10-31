@@ -141,7 +141,6 @@ class CareerBoardScreen extends StatelessWidget {
   // }
 
   Widget tabViews(BuildContext context,MapEntry<String, String> currentField) {
-    print( "${_controller.screenStateMap[currentField.key]!.value}이건데");
     return Obx(
       () => _controller.screenStateMap[currentField.key]!.value ==
               ScreenState.loading
