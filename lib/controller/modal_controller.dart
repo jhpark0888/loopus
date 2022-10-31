@@ -831,12 +831,14 @@ void showOneButtonDialog({
   required Function() buttonFunction,
   required String buttonText,
   Color? highlightColor,
+  Color? btnColor,
+  Color? btnTextColor,
 }) {
   Get.dialog(
     Material(
       color: Colors.transparent,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 35),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -883,11 +885,17 @@ void showOneButtonDialog({
                   Row(
                     children: [
                       Expanded(
-                          child: CustomExpandedButton(
-                              onTap: buttonFunction,
-                              isBlue: true,
-                              title: buttonText,
-                              isBig: true)),
+                          child: SizedBox(
+                        height: 42,
+                        child: CustomExpandedButton(
+                          onTap: buttonFunction,
+                          isBlue: true,
+                          title: buttonText,
+                          isBig: true,
+                          boxColor: btnColor,
+                          textColor: btnTextColor,
+                        ),
+                      )),
                     ],
                   ),
                   const SizedBox(
