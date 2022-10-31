@@ -99,7 +99,7 @@ class LogInScreen extends StatelessWidget {
               children: [
                 SignUpTextWidget(
                     oneLinetext: "",
-                    highlightText: "다시 돌아온걸 환영해요",
+                    highlightText: "루프어스에 로그인해요",
                     twoLinetext: "가입정보를 입력해주세요"),
                 // Obx(
                 //   () => ToggleButtons(
@@ -137,8 +137,8 @@ class LogInScreen extends StatelessWidget {
                 //   height: 24,
                 // ),
                 LabelTextFieldWidget(
-                  label: "대학 웹메일 주소 또는 기업 메일",
-                  hintText: "가입시 인증 받은 대학 또는 기업 메일 주소를 입력해주세요",
+                  label: "대학 웹메일 또는 기업 메일",
+                  hintText: "인증 받은 대학 메일 또는 기업 아이디를 입력해주세요.",
                   // validator: (value) =>
                   //     CheckValidate().validateEmail(value!),
                   textController: _loginController.idcontroller,

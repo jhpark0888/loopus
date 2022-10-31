@@ -103,7 +103,7 @@ class MyProfileScreen extends StatelessWidget {
                       Get.to(() => BookmarkScreen());
                     },
                     icon: SvgPicture.asset(
-                      'assets/icons/bookmark_inactive.svg',
+                      'assets/icons/appbar_bookmark.svg',
                     )),
                 IconButton(
                   padding: EdgeInsets.zero,
@@ -595,37 +595,36 @@ class MyProfileScreen extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 16),
-                            ListView.separated(
-                              primary: false,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) => GestureDetector(
-                                onTap: () {
-                                  print(profileController
-                                      .myProjectList[index].isPublic);
-                                  goCareerScreen(
-                                      profileController.myProjectList[index],
-                                      profileController.myUserInfo.value.name);
-                                },
-                                child: CareerWidget(
-                                    career:
-                                        profileController.myProjectList[index]),
-                              ),
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                height: 16,
-                              ),
-                              itemCount: profileController.myProjectList.length,
+                          ListView.separated(
+                            primary: false,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => GestureDetector(
+                              onTap: () {
+                                print(profileController
+                                    .myProjectList[index].isPublic);
+                                goCareerScreen(
+                                    profileController.myProjectList[index],
+                                    profileController.myUserInfo.value.name);
+                              },
+                              child: CareerWidget(
+                                  career:
+                                      profileController.myProjectList[index]),
                             ),
-                            const SizedBox(height: 24),
-                          ],
-                        ),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              height: 16,
+                            ),
+                            itemCount: profileController.myProjectList.length,
+                          ),
+                          const SizedBox(height: 24),
+                        ],
                       ),
-                    )
-                  ],
-                );
-              },
-            )),
-    );
+                    ),
+                  )
+                ],
+              );
+            },
+          )));
   }
 
   Widget _postView() {

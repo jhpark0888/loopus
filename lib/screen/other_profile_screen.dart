@@ -144,7 +144,7 @@ class OtherProfileScreen extends StatelessWidget {
                                 showTextFieldDialog(
                                     title: '계정 신고',
                                     hintText:
-                                        '신고 사유를 입력해주세요. 관리자 확인 이후 해당 계정은 이용약관에 따라 제재를 받을 수 있습니다.',
+                                        '신고 사유를 입력해주세요. 관리자 확인 \n 이후 해당 계정은 이용약관에 따라 제재를 \n받을 수 있습니다.',
                                     rightText: '신고',
                                     rightBoxColor: rankred,
                                     textEditingController:
@@ -754,14 +754,15 @@ class OtherProfileScreen extends StatelessWidget {
                                 },
                                 child: CareerWidget(
                                     career:
-                                        _controller.otherProjectList[index]),
-                              ),
+                                        _controller.otherProjectList[index]),),
                               separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                height: 16,
-                              ),
-                              itemCount: _controller.otherProjectList.length,
+                                const SizedBox(
+                              height: 16,
                             ),
+                            itemCount: _controller.otherProjectList.length,
+                          ),
+                          const SizedBox(height: 24),
+                            
                             if (_controller.isOfficial.value == 2)
                               Padding(
                                 padding:
@@ -774,17 +775,16 @@ class OtherProfileScreen extends StatelessWidget {
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
-                              )
+                              ),
                             // const SizedBox(height: 24),
                           ],
                         ),
                       ),
-                    )
-                  ],
-                );
-              },
-            )),
-    );
+                    ),
+                ]
+              );
+            },
+          )));
   }
 
   Widget _postView() {

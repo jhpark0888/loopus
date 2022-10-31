@@ -35,6 +35,7 @@ class OtherCompanyController extends GetxController
   int postPageNum = 1;
 
   RxBool isnewalarm = false.obs;
+  TextEditingController reportController = TextEditingController();
 
   RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;

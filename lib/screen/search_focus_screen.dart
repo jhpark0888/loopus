@@ -59,7 +59,7 @@ class SearchFocusScreen extends StatelessWidget {
                   onTap: AppController.to.willPopAction,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 11),
+                        horizontal: 16, vertical: 9),
                     child: Text(
                       '취소',
                       style: kmainbold.copyWith(color: mainblue),

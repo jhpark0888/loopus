@@ -47,7 +47,7 @@ class FollowButtonWidget extends StatelessWidget {
                                 user.followed.value == FollowState.follower
                             ? "팔로우"
                             : "팔로잉",
-                    style: kmainbold.copyWith(
+                    style: kmain.copyWith(
                         color: user.followed.value == FollowState.normal ||
                                 user.followed.value == FollowState.follower
                             ? mainWhite
