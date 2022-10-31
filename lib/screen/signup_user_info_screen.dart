@@ -19,12 +19,14 @@ import 'package:loopus/widget/custom_expanded_button.dart';
 
 // ignore: must_be_immutable
 class SignupUserInfoScreen extends StatelessWidget {
-  SignupUserInfoScreen({Key? key, this.isReCertification = false})
+  SignupUserInfoScreen(
+      {Key? key, this.isReCertification = false, this.reCertPw})
       : super(key: key);
 
-  late final SignupController _signupController =
-      Get.put(SignupController(isReCertification: isReCertification));
+  late final SignupController _signupController = Get.put(SignupController(
+      isReCertification: isReCertification, reCertPw: reCertPw));
   final bool isReCertification;
+  String? reCertPw;
 
   @override
   Widget build(BuildContext context) {

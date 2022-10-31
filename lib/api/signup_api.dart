@@ -25,13 +25,15 @@ import '../app.dart';
 import '../constant.dart';
 
 Future<HTTPResponse> emailRequest(
-    String email, Rx<Emailcertification> emailcertification) async {
+    String email, Rx<Emailcertification> emailcertification,
+    {required bool isCreate}) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     emailcertification(Emailcertification.fail);
     return HTTPResponse.networkError();
   } else {
-    Uri uri = Uri.parse('$serverUri/user_api/check_email');
+    Uri uri = Uri.parse(
+        '$serverUri/user_api/check_email?is_create=${isCreate ? 1 : 0}');
 
     var checkemail = {
       //TODO: 학교 도메인 확인

@@ -716,14 +716,11 @@ class OtherProfileScreen extends StatelessWidget {
             enablePullUp: true,
             footer: const MyCustomFooter(),
             onLoading: onLoading,
-            child: ListView.separated(
+            child: ListView.builder(
                 // key: const PageStorageKey("postView"), 이거 넣으면 포스팅들이 마지막 사진이나 링크로 가게됨
                 itemBuilder: (context, index) => PostingWidget(
                     item: _controller.allPostList[index],
-                    type: PostingWidgetType.profile),
-                separatorBuilder: (context, index) => DivideWidget(
-                      height: 10,
-                    ),
+                    type: PostingWidgetType.normal),
                 itemCount: _controller.allPostList.length),
           ));
   }

@@ -50,11 +50,15 @@ extension SNSurl on SNSType {
 }
 
 class SNS {
-  SNS({required this.snsType, required this.url});
+  SNS({required this.id, required this.snsType, required this.url});
 
+  int id;
   SNSType snsType;
   String url;
 
-  factory SNS.fromJson(Map<String, dynamic> json) =>
-      SNS(snsType: SNSType.values[json["type"]], url: json["url"]);
+  factory SNS.fromJson(Map<String, dynamic> json) => SNS(
+        id: json["id"],
+        snsType: SNSType.values[json["type"]],
+        url: json["url"] ?? "",
+      );
 }

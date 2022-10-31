@@ -152,10 +152,12 @@ class UnivDeptSearchScreen extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 TextEditingController textController = TextEditingController();
-                showTextFieldDialog2(
+                showTextFieldDialog(
                   title:
-                      "${searchType == UnivDeptSearchType.univ ? "대학" : "학과"} 등록 문의하기",
-                  completeText: '문의하기',
+                      "${searchType == UnivDeptSearchType.univ ? "대학" : "학과"} 문의하기",
+                  rightText: '문의하기',
+                  rightBoxColor: mainblue,
+                  leftBoxColor: maingray,
                   hintText:
                       '찾으시는 ${searchType == UnivDeptSearchType.univ ? "대학" : "학과"}명을 입력해주세요. 빠른 시일 내 업데이트 할게요.',
                   leftFunction: () {

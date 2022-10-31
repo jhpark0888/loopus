@@ -419,39 +419,41 @@ void showModalIOS(
     barrierColor: popupGray,
     context: context,
     builder: (context) => CupertinoActionSheet(
-      cancelButton: cancleButton ? GetBack != null
-          ? CupertinoActionSheetAction(
-              child: const Text(
-                "닫기",
-                style: kmainbold,
-              ),
-              isDefaultAction: true,
-              onPressed: () {
-                Get.back();
-              },
-            )
-          :
-          // CustomExpandedButton(onTap: func3 != null ? func3 : () {}, isBlue: isBlue, title: 계, isBig: isBig)
-          Container(
-              height: 44,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: rankred,
-              ),
-              child: CupertinoActionSheetAction(
+      cancelButton: cancleButton
+          ? GetBack != null
+              ? CupertinoActionSheetAction(
                   child: const Text(
-                    "계정 신고하기",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      height: 1,
-                      color: mainWhite,
-                      fontFamily: 'NotoSansKR',
-                    ),
+                    "닫기",
+                    style: kmainbold,
                   ),
                   isDefaultAction: true,
-                  onPressed: func3 != null ? func3 : () {}),
-            ) : null,
+                  onPressed: () {
+                    Get.back();
+                  },
+                )
+              :
+              // CustomExpandedButton(onTap: func3 != null ? func3 : () {}, isBlue: isBlue, title: 계, isBig: isBig)
+              Container(
+                  height: 44,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: rankred,
+                  ),
+                  child: CupertinoActionSheetAction(
+                      child: const Text(
+                        "계정 신고하기",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          height: 1,
+                          color: mainWhite,
+                          fontFamily: 'NotoSansKR',
+                        ),
+                      ),
+                      isDefaultAction: true,
+                      onPressed: func3 != null ? func3 : () {}),
+                )
+          : null,
       actions: [
         Container(
           height: 44,
@@ -546,8 +548,7 @@ void showBottomdialog(
   String? accentTitle,
 }) {
   showModalBottomSheet(
-    barrierColor: bareerColor ??
-        popupGray,
+    barrierColor: bareerColor ?? popupGray,
     enableDrag: false,
     context: context,
     backgroundColor: Colors.transparent,
@@ -909,11 +910,15 @@ void showOneButtonDialog({
 void showTextFieldDialog({
   required String title,
   required String hintText,
-  required String completeText,
-  Color? highlightColor,
+  String? leftText,
+  required String rightText,
   required TextEditingController textEditingController,
   required Function() leftFunction,
   required Function() rightFunction,
+  Color? leftBoxColor,
+  Color? rightBoxColor,
+  Color? leftTextColor,
+  Color? rightTextColor,
 }) {
   Get.dialog(
     AlertDialog(
@@ -947,11 +952,11 @@ void showTextFieldDialog({
           hintText: hintText,
           hintStyle: kmainheight.copyWith(color: maingray),
           contentPadding: const EdgeInsets.all(16),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide.none,
             // borderRadius: BorderRadius.circular(8)
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide.none,
             // borderRadius: BorderRadius.circular(8)
           ),
@@ -962,23 +967,29 @@ void showTextFieldDialog({
         Row(
           children: [
             Expanded(
-                child: Container(
+                child: SizedBox(
               height: 42,
               child: CustomExpandedButton(
-                  onTap: leftFunction, isBlue: false, title: "취소", isBig: true),
+                onTap: leftFunction,
+                isBlue: false,
+                title: leftText ?? "취소",
+                isBig: true,
+                boxColor: leftBoxColor ?? maingray,
+                textColor: leftTextColor,
+              ),
             )),
             const SizedBox(
               width: 8,
             ),
             Expanded(
-                child: Container(
+                child: SizedBox(
               height: 42,
               child: CustomExpandedButton(
                   onTap: rightFunction,
                   isBlue: true,
-                  title: completeText,
-                  textColor: highlightColor,
-                  boxColor: rankred,
+                  title: rightText,
+                  textColor: rightTextColor,
+                  boxColor: rightBoxColor,
                   isBig: true),
             )),
           ],
@@ -992,95 +1003,99 @@ void showTextFieldDialog({
   );
 }
 
-void showTextFieldDialog2({
-  required String title,
-  required String hintText,
-  required String completeText,
-  Color? highlightColor,
-  required TextEditingController textEditingController,
-  required Function() leftFunction,
-  required Function() rightFunction,
-}) {
-  Get.dialog(
-    AlertDialog(
-      backgroundColor: mainWhite,
-      elevation: 0,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(8),
-        ),
-      ),
-      titlePadding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-      ),
-      buttonPadding: const EdgeInsets.all(16),
-      title: Text(
-        title,
-        style: kmainbold,
-        textAlign: TextAlign.center,
-      ),
-      content: TextField(
-        controller: textEditingController,
-        maxLines: 3,
-        style: kmainheight,
-        autofocus: true,
-        cursorColor: mainblack,
-        cursorWidth: 1.2,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: cardGray,
-          hintText: hintText,
-          hintStyle: kmainheight.copyWith(color: maingray),
-          contentPadding: const EdgeInsets.all(16),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            // borderRadius: BorderRadius.circular(8)
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            // borderRadius: BorderRadius.circular(8)
-          ),
-        ),
-      ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
-      actions: [
-        Row(
-          children: [
-            Expanded(
-                child: Container(
-              height: 42,
-              child: CustomExpandedButton(
-                  onTap: leftFunction,
-                  isBlue: false,
-                  title: "취소",
-                  isBig: true,
-                  boxColor: mainblue),
-            )),
-            const SizedBox(
-              width: 8,
-            ),
-            Expanded(
-                child: Container(
-              height: 42,
-              child: CustomExpandedButton(
-                  onTap: rightFunction,
-                  isBlue: true,
-                  title: completeText,
-                  textColor: highlightColor,
-                  boxColor: maingray,
-                  isBig: true),
-            )),
-          ],
-        ),
-      ],
-    ),
-    barrierDismissible: false,
-    barrierColor: popupGray,
-    transitionCurve: kAnimationCurve,
-    transitionDuration: kAnimationDuration,
-  );
-}
+// void showTextFieldDialog2({
+//   required String title,
+//   required String hintText,
+//   required String completeText,
+//   Color? highlightColor,
+//   required TextEditingController textEditingController,
+//   required Function() leftFunction,
+//   required Function() rightFunction,
+//   Color? leftBoxColor,
+//   Color? rightBoxColor,
+//   Color? leftTextColor,
+//   Color? rightTextColor,
+// }) {
+//   Get.dialog(
+//     AlertDialog(
+//       backgroundColor: mainWhite,
+//       elevation: 0,
+//       shape: const RoundedRectangleBorder(
+//         borderRadius: BorderRadius.all(
+//           Radius.circular(8),
+//         ),
+//       ),
+//       titlePadding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
+//       contentPadding: const EdgeInsets.symmetric(
+//         horizontal: 16,
+//       ),
+//       buttonPadding: const EdgeInsets.all(16),
+//       title: Text(
+//         title,
+//         style: kmainbold,
+//         textAlign: TextAlign.center,
+//       ),
+//       content: TextField(
+//         controller: textEditingController,
+//         maxLines: 3,
+//         style: kmainheight,
+//         autofocus: true,
+//         cursorColor: mainblack,
+//         cursorWidth: 1.2,
+//         decoration: InputDecoration(
+//           filled: true,
+//           fillColor: cardGray,
+//           hintText: hintText,
+//           hintStyle: kmainheight.copyWith(color: maingray),
+//           contentPadding: const EdgeInsets.all(16),
+//           enabledBorder: OutlineInputBorder(
+//             borderSide: BorderSide.none,
+//             // borderRadius: BorderRadius.circular(8)
+//           ),
+//           focusedBorder: OutlineInputBorder(
+//             borderSide: BorderSide.none,
+//             // borderRadius: BorderRadius.circular(8)
+//           ),
+//         ),
+//       ),
+//       actionsAlignment: MainAxisAlignment.spaceBetween,
+//       actions: [
+//         Row(
+//           children: [
+//             Expanded(
+//                 child: Container(
+//               height: 42,
+//               child: CustomExpandedButton(
+//                   onTap: leftFunction,
+//                   isBlue: false,
+//                   title: "취소",
+//                   isBig: true,
+//                   boxColor: mainblue),
+//             )),
+//             const SizedBox(
+//               width: 8,
+//             ),
+//             Expanded(
+//                 child: Container(
+//               height: 42,
+//               child: CustomExpandedButton(
+//                   onTap: rightFunction,
+//                   isBlue: true,
+//                   title: completeText,
+//                   textColor: highlightColor,
+//                   boxColor: maingray,
+//                   isBig: true),
+//             )),
+//           ],
+//         ),
+//       ],
+//     ),
+//     barrierDismissible: false,
+//     barrierColor: popupGray,
+//     transitionCurve: kAnimationCurve,
+//     transitionDuration: kAnimationDuration,
+//   );
+// }
 
 void showWithDrawalDialog({
   required String title,
@@ -1436,6 +1451,9 @@ void showCustomDialog(String title, int duration) {
           Radius.circular(8.0),
         ),
       ),
+      // title: Text(title,
+      //   style: kmainheight,
+      //   textAlign: TextAlign.center,),
       contentPadding: const EdgeInsets.fromLTRB(
         24,
         12,

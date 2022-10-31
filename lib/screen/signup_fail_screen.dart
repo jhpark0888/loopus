@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/api/signup_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/ga_controller.dart';
@@ -34,41 +35,67 @@ class SignupFailScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: CustomExpandedButton(
                   onTap: () async {
-                    await signupRequest().then((value) async {
-                      final GAController _gaController = GAController();
+                    if (_signupController.isReCertification == false) {
+                      await signupRequest().then((value) async {
+                        final GAController _gaController = GAController();
 
-                      if (value.isError == false) {
-                        // String token = jsonDecode(response.body)['token'];
-                        // String userid = jsonDecode(response.body)['user_id'];
+                        if (value.isError == false) {
+                          // String token = jsonDecode(response.body)['token'];
+                          // String userid = jsonDecode(response.body)['user_id'];
 
-                        // await storage.write(key: 'token', value: token);
-                        // await storage.write(key: 'id', value: userid);
-                        //!GA
-                        await _gaController.logSignup();
-                        await _gaController.setUserProperties(
-                            value.data['user_id'],
-                            _signupController.selectDept.value.deptname);
+                          // await storage.write(key: 'token', value: token);
+                          // await storage.write(key: 'id', value: userid);
+                          //!GA
+                          await _gaController.logSignup();
+                          await _gaController.setUserProperties(
+                              value.data['user_id'],
+                              _signupController.selectDept.value.deptname);
 
-                        // Get.offAll(() => App());
+                          // Get.offAll(() => App());
 
-                        // SchedulerBinding.instance!.addPostFrameCallback((_) {
-                        //   showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
-                        // });
+                          // SchedulerBinding.instance!.addPostFrameCallback((_) {
+                          //   showCustomDialog('관심태그 기반으로 홈 화면을 구성했어요', 1500);
+                          // });
 
-                        await _gaController.logScreenView('signup_6');
-                        Get.offAll(() => SignupCompleteScreen(
-                              emailId:
-                                  _signupController.emailidcontroller.text +
-                                      "@" +
-                                      _signupController.selectUniv.value.email,
-                              password:
-                                  _signupController.passwordcontroller.text,
-                            ));
-                      } else {
-                        await _gaController.logScreenView('signup_6');
-                        errorSituation(value);
-                      }
-                    });
+                          await _gaController.logScreenView('signup_6');
+                          Get.offAll(() => SignupCompleteScreen(
+                                emailId: _signupController
+                                        .emailidcontroller.text +
+                                    "@" +
+                                    _signupController.selectUniv.value.email,
+                                password:
+                                    _signupController.passwordcontroller.text,
+                              ));
+                        } else {
+                          await _gaController.logScreenView('signup_6');
+                          errorSituation(value);
+                        }
+                      });
+                    } else {
+                      updateProfile(
+                              updateType: ProfileUpdateType.profile,
+                              email: _signupController.getEmail(),
+                              name:
+                                  _signupController.namecontroller.text.trim(),
+                              deptId: _signupController.selectDept.value.id,
+                              univId: _signupController.selectUniv.value.id,
+                              admission:
+                                  _signupController.admissioncontroller.text)
+                          .then((value) {
+                        if (value.isError == false) {
+                          Get.back();
+                          Get.offAll(() => SignupCompleteScreen(
+                                emailId: _signupController
+                                        .emailidcontroller.text +
+                                    "@" +
+                                    _signupController.selectUniv.value.email,
+                                password: _signupController.reCertPw!,
+                              ));
+                        } else {
+                          errorSituation(value);
+                        }
+                      });
+                    }
                   },
                   isBlue: true,
                   title: "다시 시도하기",

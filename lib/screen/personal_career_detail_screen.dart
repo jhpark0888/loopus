@@ -119,17 +119,15 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                       )),
                   // const SizedBox(height: 24),
                   Obx(() => careerDetailController.postList.isNotEmpty
-                      ? ListView.separated(
+                      ? ListView.builder(
                           primary: false,
                           shrinkWrap: true,
                           itemBuilder: (context, postindex) {
                             return PostingWidget(
                               item: careerDetailController.postList[postindex],
-                              type: PostingWidgetType.profile,
+                              type: PostingWidgetType.normal,
                             );
                           },
-                          separatorBuilder: (context, postindex) =>
-                              DivideWidget(),
                           itemCount: careerDetailController.postList.length,
                         )
                       : GestureDetector(

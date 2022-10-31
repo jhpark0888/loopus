@@ -38,9 +38,12 @@ Future<HTTPResponse> getProfile(int userId) async {
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
+    String? userType = await const FlutterSecureStorage().read(key: "type");
+    int isStudent = UserType.school.name == userType ? 1 : 0;
     print('user token: $token');
 
-    var uri = Uri.parse("$serverUri/user_api/profile?id=$userId");
+    var uri = Uri.parse(
+        "$serverUri/user_api/profile?id=$userId&is_student=$isStudent");
     try {
       http.Response response =
           await http.get(uri, headers: {"Authorization": "Token $token"});
@@ -71,9 +74,12 @@ Future<HTTPResponse> getCorpProfile(int userId) async {
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
+    String? userType = await const FlutterSecureStorage().read(key: "type");
+    int isStudent = UserType.school.name == userType ? 1 : 0;
     print('user token: $token');
 
-    var uri = Uri.parse("$serverUri/user_api/corp_profile?id=$userId");
+    var uri = Uri.parse(
+        "$serverUri/user_api/corp_profile?id=$userId&is_student=$isStudent");
     try {
       http.Response response =
           await http.get(uri, headers: {"Authorization": "Token $token"});
@@ -344,6 +350,39 @@ Future<HTTPResponse> updateProfile(
         if (kDebugMode) {
           print("profile status code : ${response.statusCode}");
         }
+        return HTTPResponse.apiError("fail", response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+
+Future<HTTPResponse> deleteSNS(int snsId) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+    Uri uri = Uri.parse('$serverUri/user_api/profile?type=sns&id=$snsId');
+
+    try {
+      http.Response response = await http.delete(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Token $token',
+        },
+      );
+
+      print("SNS 삭제 : ${response.statusCode}");
+      if (response.statusCode == 200) {
+        return HTTPResponse.success("success");
+      } else {
         return HTTPResponse.apiError("fail", response.statusCode);
       }
     } on SocketException {
