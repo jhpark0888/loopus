@@ -32,6 +32,7 @@ class UploadScreen extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: 44,
         leading: IconButton(
+          padding: EdgeInsets.zero,
             onPressed: () {
               Get.back();
             },
