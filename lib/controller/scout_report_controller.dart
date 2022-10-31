@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -74,6 +75,8 @@ class ScoutReportController extends GetxController
   Rx<ScreenState> screenState = ScreenState.loading.obs;
   RxInt isCorp = 0.obs;
 
+  Timer? timer;
+
   @override
   void onInit() async {
     screenState(ScreenState.loading);
@@ -89,10 +92,21 @@ class ScoutReportController extends GetxController
     pController = PageController(
         viewportFraction: 0.8, initialPage: recommendCompList.length * 300);
     screenState(ScreenState.success);
+
+    pController.addListener(() {
+      if (timer != null) {
+        timer!.cancel();
+        timerstart();
+      }
+    });
+
     super.onInit();
   }
 
   void onRefresh() {
+    if (timer != null) {
+      timer!.cancel();
+    }
     pageNum = 1;
     fieldIdList.clear();
     companyFieldList.clear();
@@ -104,6 +118,17 @@ class ScoutReportController extends GetxController
 
   void onLoading() {
     getCompanyList("main");
+  }
+
+  void timerstart() {
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+      // currentPage++;
+
+      pController.nextPage(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeIn,
+      );
+    });
   }
 
   void getCompanyList(String type) async {
@@ -145,6 +170,7 @@ class ScoutReportController extends GetxController
 
         await _updatePalettes(images);
         recommendCompList(companyList);
+        timerstart();
       } else {
         errorSituation(value);
       }
@@ -152,6 +178,7 @@ class ScoutReportController extends GetxController
   }
 
   Future _updatePalettes(List<String> images) async {
+    List<PaletteColor> tempColors = [];
     for (String image in images) {
       try {
         final PaletteGenerator generator =
@@ -159,12 +186,21 @@ class ScoutReportController extends GetxController
           NetworkImage(image),
           size: const Size(200, 120),
         );
-        colors.add(generator.lightMutedColor ??
-            generator.lightVibrantColor ??
+        tempColors.add(generator.darkMutedColor ??
+            generator.darkVibrantColor ??
             PaletteColor(mainWhite, 2));
       } catch (e) {
-        colors.add(PaletteColor(mainblue, 2));
+        tempColors.add(PaletteColor(mainblue, 2));
       }
     }
+    colors(tempColors);
+  }
+
+  @override
+  void onClose() {
+    if (timer != null) {
+      timer!.cancel();
+    }
+    super.onClose();
   }
 }

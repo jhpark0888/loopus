@@ -186,24 +186,69 @@ class ScoutScreen extends StatelessWidget {
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 16),
-                                                itemBuilder: (context,
-                                                        compIndex) =>
-                                                    SizedBox(
-                                                      width: 300,
-                                                      height: 210,
-                                                      child: CompanyWidget(
-                                                          company: _scontroller
-                                                                  .companyFieldList[
-                                                              index][compIndex]),
-                                                    ),
+                                                itemBuilder:
+                                                    (context, compIndex) {
+                                                  if (compIndex ==
+                                                      _scontroller
+                                                          .companyFieldList[
+                                                              index]
+                                                          .length) {
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        Get.to(() => ScoutFieldCompScreen(
+                                                            fieldId: _scontroller
+                                                                    .fieldIdList[
+                                                                index],
+                                                            companyList:
+                                                                _scontroller
+                                                                    .companyFieldList[
+                                                                        index]
+                                                                    .obs));
+                                                      },
+                                                      behavior: HitTestBehavior
+                                                          .translucent,
+                                                      child: SizedBox(
+                                                        width: 148,
+                                                        height: 210,
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                                "assets/icons/comp_more_icon.svg"),
+                                                            const SizedBox(
+                                                              height: 16,
+                                                            ),
+                                                            Text(
+                                                              "더 많은 기업 보기",
+                                                              style: kmain.copyWith(
+                                                                  color:
+                                                                      mainblue),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+                                                  return SizedBox(
+                                                    width: 300,
+                                                    height: 210,
+                                                    child: CompanyWidget(
+                                                        company: _scontroller
+                                                                .companyFieldList[
+                                                            index][compIndex]),
+                                                  );
+                                                },
                                                 separatorBuilder:
                                                     (context, index) =>
                                                         const SizedBox(
                                                           width: 16,
                                                         ),
                                                 itemCount: _scontroller
-                                                    .companyFieldList[index]
-                                                    .length),
+                                                        .companyFieldList[index]
+                                                        .length +
+                                                    1),
                                           )
                                         ],
                                       );

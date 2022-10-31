@@ -29,7 +29,7 @@ class ScoutFieldCompController {
             .toList();
 
         pageNum += 1;
-        companyList.addAll(companyList);
+        companyList.addAll(tempList);
         // for (Company company in tempList) {
         //   // print(companyList.any((element) => element.userId == company.userId));
         //   if (!companyList.any((element) => element.userId == company.userId)) {

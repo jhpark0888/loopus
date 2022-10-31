@@ -45,6 +45,10 @@ class CareerBoardController extends GetxController
     for (var key in fieldList.keys)
       if (key != "10") key: <Person>[].obs
   };
+  Map<String, RxList<Person>> hotUserListMap = {
+    for (var key in fieldList.keys)
+      if (key != "10") key: <Person>[].obs
+  };
   Map<String, RxList<Post>> popPostMap = {
     for (var key in fieldList.keys)
       if (key != "10") key: <Post>[].obs
@@ -112,6 +116,7 @@ class CareerBoardController extends GetxController
     if (isloading) {
       screenStateMap[fieldId]!.value = ScreenState.loading;
     }
+    await getHotUserList(fieldId);
     await getPostingGraph(fieldId);
     await getCareerBoard(fieldId);
     print(screenStateMap[fieldId]!.value);
@@ -127,11 +132,6 @@ class CareerBoardController extends GetxController
       if (value.isError == false) {
         List<Post> postlist = List.from(value.data["posting"]).map((post) {
           return Post.fromJson(post);
-        }).toList();
-
-        campusRankerMap[id.toString()]!.value =
-            List.from(value.data["school_ranking"]).map((user) {
-          return Person.fromJson(user);
         }).toList();
 
         koreaRankerMap[id.toString()]!.value =
@@ -173,6 +173,18 @@ class CareerBoardController extends GetxController
         errorSituation(value, screenState: allrankerScreenstate);
       }
       // print(activeFieldsPost.value);
+    });
+  }
+
+  Future getHotUserList(String fieldId) async {
+    await getHotUsers().then((value) {
+      if (value.isError == false) {
+        List<Person> tempList = List.from(value.data)
+            .map((person) => Person.fromJson(person))
+            .toList();
+
+        hotUserListMap[fieldId]!(tempList);
+      } else {}
     });
   }
 

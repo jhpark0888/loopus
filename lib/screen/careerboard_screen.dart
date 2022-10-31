@@ -23,6 +23,7 @@ import 'package:loopus/widget/company_widget.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/disconnect_reload_widget.dart';
 import 'package:loopus/widget/error_reload_widget.dart';
+import 'package:loopus/widget/hot_user_widget.dart';
 import 'package:loopus/widget/loading_widget.dart';
 import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/selected_tag_widget.dart';
@@ -36,7 +37,7 @@ class CareerBoardScreen extends StatelessWidget {
   final CareerBoardController _controller = Get.put(CareerBoardController());
 
   late bool isUniversity = false;
-  
+
   @override
   Widget build(BuildContext context) {
     print(_controller.careerFieldList);
@@ -55,9 +56,7 @@ class CareerBoardScreen extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               GestureDetector(
-                  onTap: () {
-                    // showPopUpDialog("안녕", "하이요", 1000);
-                  },
+                  onTap: () {},
                   child: SvgPicture.asset('assets/icons/information.svg'))
             ],
           ),
@@ -116,7 +115,7 @@ class CareerBoardScreen extends StatelessWidget {
         //   // },
         // ),
       ),
-      body: tabViews(context,_controller.careerFieldList.last),
+      body: tabViews(context, _controller.careerFieldList.last),
     );
   }
 
@@ -140,11 +139,11 @@ class CareerBoardScreen extends StatelessWidget {
   //   );
   // }
 
-  Widget tabViews(BuildContext context,MapEntry<String, String> currentField) {
+  Widget tabViews(BuildContext context, MapEntry<String, String> currentField) {
     return Obx(
       () => _controller.screenStateMap[currentField.key]!.value ==
               ScreenState.loading
-          ? const LoadingWidget()
+          ? const Center(child: LoadingWidget())
           : _controller.screenStateMap[currentField.key]!.value ==
                   ScreenState.normal
               ? Container()
@@ -253,26 +252,37 @@ class CareerBoardScreen extends StatelessWidget {
                                     child: Text('성장 중인 친구들을 만나보세요',
                                         style: kmainbold),
                                   ),
-                                  // ScrollNoneffectWidget(
-                                  //   child: ListView.separated(
-                                  //       padding: const EdgeInsets.symmetric(
-                                  //           horizontal: 20),
-                                  //       scrollDirection: Axis.horizontal,
-                                  //       itemBuilder: (context, index) {
-                                  //         return Container(
-                                  //           width: 100,
-                                  //           height: 100,
-                                  //           decoration: BoxDecoration(
-                                  //               color: Colors.red),
-                                  //         );
-                                  //       },
-                                  //       separatorBuilder: (context, index) {
-                                  //         return const SizedBox(width: 14);
-                                  //       },
-                                  //       itemCount: 3),
-                                  // ),
                                   const SizedBox(
-                                    height: 16,
+                                    height: 14,
+                                  ),
+                                  Obx(
+                                    () => ScrollNoneffectWidget(
+                                      child: SizedBox(
+                                        height: 95,
+                                        child: ListView.separated(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              return HotUserWidget(
+                                                  person: _controller
+                                                          .hotUserListMap[
+                                                      currentField
+                                                          .key]![index]);
+                                            },
+                                            separatorBuilder: (context, index) {
+                                              return const SizedBox(width: 10);
+                                            },
+                                            itemCount: _controller
+                                                .hotUserListMap[
+                                                    currentField.key]!
+                                                .length),
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(
+                                    height: 32,
                                   ),
                                   const Padding(
                                     padding: EdgeInsets.only(left: 16),

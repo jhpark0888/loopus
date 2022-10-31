@@ -190,7 +190,7 @@ class CompanyImage {
 
   factory CompanyImage.fromJson(Map<String, dynamic> json) => CompanyImage(
         image: json['image'] ?? "",
-        imageInfo: json["imageInfo"] ?? "",
+        imageInfo: json["image_info"] ?? "",
       );
 
   factory CompanyImage.fromString(String image) => CompanyImage(

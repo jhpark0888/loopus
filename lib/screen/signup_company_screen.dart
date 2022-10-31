@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
+import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/label_textfield_widget.dart';
@@ -42,7 +45,33 @@ class SignupCompanyScreen extends StatelessWidget {
                 Expanded(
                   child: Obx(
                     () => CustomExpandedButton(
-                        onTap: () {},
+                        onTap: () async {
+                          if (_signupController.isCompInfoCheck.value) {
+                            await inquiryRequest(InquiryType.company_signup,
+                                    email: _signupController
+                                        .compEmailController.text
+                                        .trim(),
+                                    name: _signupController
+                                        .compNameController.text
+                                        .trim())
+                                .then((value) {
+                              if (value.isError == false) {
+                                showOneButtonDialog(
+                                    title: "메일을 보냈어요",
+                                    startContent:
+                                        "메일에 첨부된 양식을 작성해주시면,\n빠른 시일 내 가입을 도와드릴게요",
+                                    buttonFunction: () {
+                                      dialogBack();
+                                    },
+                                    btnColor: mainblue,
+                                    btnTextColor: mainWhite,
+                                    buttonText: "확인");
+                              } else {
+                                errorSituation(value);
+                              }
+                            });
+                          }
+                        },
                         isBlue: _signupController.isCompInfoCheck.value,
                         title: "다음",
                         isBig: true),
@@ -57,7 +86,7 @@ class SignupCompanyScreen extends StatelessWidget {
             child: Column(
               children: [
                 SignUpTextWidget(
-                    highlightText: "기업 회원님",
+                    highlightText: "기업 회원님 ",
                     oneLinetext: "가입을 위해",
                     twoLinetext: "이메일 주소를 남겨주세요"),
                 LabelTextFieldWidget(

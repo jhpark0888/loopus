@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/sns_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/univ_model.dart';
@@ -53,24 +54,14 @@ class User {
         userType: userType ?? UserType.student,
       );
 
-  // factory User.fromJson(Map<String, dynamic> json) => User(
-  //       userId: json["user_id"],
-  //       name: json["real_name"],
-  //       profileImage: json["profile_image"] ?? "",
-  //       followerCount: json["follower_count"] != null
-  //           ? RxInt(json["follower_count"])
-  //           : 0.obs,
-  //       followingCount: json["following_count"] != null
-  //           ? RxInt(json["following_count"])
-  //           : 0.obs,
-  //       fieldId: json["group"] != null ? json["group"].toString() : "16",
-  //       followed: json["looped"] != null
-  //           ? FollowState.values[json["looped"]].obs
-  //           : FollowState.normal.obs,
-  //       banned: json["is_banned"] != null
-  //           ? BanState.values[json["is_banned"]].obs
-  //           : BanState.normal.obs,
-  //     );
+  factory User.fromJson(Map<String, dynamic> json) {
+    bool isStudent = json["department"] != null;
+    if (isStudent == true) {
+      return Person.fromJson(json);
+    } else {
+      return Company.fromJson(json);
+    }
+  }
 
   void followClick() {
     if (followed.value == FollowState.normal) {

@@ -519,9 +519,14 @@ Future<HTTPResponse> userreport(int userid) async {
   }
 }
 
-enum InquiryType { normal, school, department }
+enum InquiryType { normal, school, department, company_signup, company_info }
 
-Future<HTTPResponse> inquiryRequest(InquiryType type, {String? content}) async {
+Future<HTTPResponse> inquiryRequest(
+  InquiryType type, {
+  String? content,
+  String? email,
+  String? name,
+}) async {
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {
@@ -558,6 +563,12 @@ Future<HTTPResponse> inquiryRequest(InquiryType type, {String? content}) async {
       body = {
         "school": SignupController.to.selectUniv.value.univname,
         "content": content
+      };
+    } else {
+      body = {
+        "company_name": name,
+        "email": email,
+        "type": type.name,
       };
     }
 

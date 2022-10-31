@@ -178,7 +178,7 @@ Future<HTTPResponse> signupRequest() async {
       );
 
       print("회원가입: ${response.statusCode}");
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
         return HTTPResponse.success(responseBody);

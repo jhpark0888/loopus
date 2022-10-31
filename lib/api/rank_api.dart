@@ -55,7 +55,6 @@ Future<HTTPResponse> getPostingTrend(String id) async {
   ConnectivityResult result = await initConnectivity();
 
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
@@ -77,6 +76,38 @@ Future<HTTPResponse> getPostingTrend(String id) async {
         return HTTPResponse.apiError('이미 삭제된 포스팅입니다', response.statusCode);
       } else {
         return HTTPResponse.apiError('', response.statusCode);
+      }
+    } on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+      // ErrorController.to.isServerClosed(true);
+    }
+  }
+}
+
+Future<HTTPResponse> getHotUsers() async {
+  ConnectivityResult result = await initConnectivity();
+
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+    // print(userid);
+    final url = Uri.parse("$serverUri/rank/hot_user?group=16");
+
+    try {
+      http.Response response =
+          await http.get(url, headers: {"Authorization": "Token $token"});
+
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+        return HTTPResponse.success(responseBody);
+      } else {
+        return HTTPResponse.apiError('FAIL', response.statusCode);
       }
     } on SocketException {
       // ErrorController.to.isServerClosed(true);

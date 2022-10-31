@@ -349,10 +349,13 @@ class MyCompanyScreen extends StatelessWidget {
                           },
                         ),
                         const SizedBox(height: 16),
-                        Text(
-                          _controller
-                              .myCompanyInfo.value.images[index].imageInfo,
-                          style: kmainheight.copyWith(color: mainWhite),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            _controller
+                                .myCompanyInfo.value.images[index].imageInfo,
+                            style: kmainheight.copyWith(color: mainWhite),
+                          ),
                         )
                       ],
                     ),
@@ -368,15 +371,9 @@ class MyCompanyScreen extends StatelessWidget {
               children: [
                 CustomExpandedButton(
                     onTap: () {
-                      showOneButtonDialog(
-                          title: "가입하신 이메일을 확인해주세요",
-                          startContent:
-                              "해당 주소로 기업 소개 수정을 위한\n양식을 보내드렸어요\n확인 후 company@loopus.co.kr로\n답장주시면 빠른 시일 내 수정해드리겠습니다",
-                          buttonFunction: () {
-                            dialogBack();
-                          },
-                          buttonText: "확인");
-                      // Get.to(() => CompanyIntroEditScreen());
+                      Get.to(() => CompanyIntroEditScreen(
+                            name: _controller.myCompanyInfo.value.name,
+                          ));
                     },
                     isBlue: true,
                     title: "기업 소개 수정하기",

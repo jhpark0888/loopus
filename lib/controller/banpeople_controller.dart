@@ -4,28 +4,29 @@ import 'package:loopus/api/post_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/utils/error_control.dart';
 
 class BanPeopleController extends GetxController {
   static BanPeopleController get to => Get.find();
   Rx<ScreenState> banpeoplescreenstate = ScreenState.loading.obs;
 
-  RxList<Person> banlist = <Person>[].obs;
+  RxList<User> banlist = <User>[].obs;
 
   void loadbanlist() async {
     banpeoplescreenstate(ScreenState.loading);
     HTTPResponse result = await getbanlist();
     if (result.isError == false) {
-      List<Person> userlist = List.from(result.data['banlist'])
-          .map((banuser) => Person.fromJson(banuser))
+      List<User> userlist = List.from(result.data['banlist'])
+          .map((banuser) => User.fromJson(banuser))
           .toList();
+
+      for (var user in userlist) {
+        user.banned(BanState.ban);
+      }
       banlist(userlist);
       banpeoplescreenstate(ScreenState.success);
     } else {
-      if (result.errorData!["statusCode"] == 59) {
-        banpeoplescreenstate(ScreenState.disconnect);
-      } else {
-        banpeoplescreenstate(ScreenState.error);
-      }
+      errorSituation(result, screenState: banpeoplescreenstate);
     }
   }
 
