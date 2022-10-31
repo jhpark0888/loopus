@@ -30,7 +30,7 @@ class UserTileWidget extends StatelessWidget {
                   user: user as Person,
                   userid: user.userId,
                   realname: user.name),
-              preventDuplicates: false);
+              preventDuplicates: false,);
         } else {
           Get.to(
               () => OtherCompanyScreen(

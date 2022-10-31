@@ -64,7 +64,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                         career: career,
                       )
                     ],
-                    expandedHeight: 180,
+                    expandedHeight: 190,
                     floating: true,
                     forceElevated: innerBoxIsScrolled,
                     toolbarHeight: 48,
@@ -140,7 +140,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 16),
                                 SizedBox(
-                                    height: 72,
+                                    height: 78,
                                     child: Obx(
                                       () => ListView.separated(
                                           padding: const EdgeInsets.only(

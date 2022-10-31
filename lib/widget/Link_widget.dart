@@ -216,7 +216,7 @@ class LinkWidget extends StatelessWidget {
                               ),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 16, horizontal: 16),
+                                  vertical: 8, horizontal: 16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [

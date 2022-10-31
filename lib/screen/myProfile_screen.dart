@@ -80,39 +80,43 @@ class MyProfileScreen extends StatelessWidget {
           return true;
         },
         child: Scaffold(
-          appBar: AppBar(
-            titleSpacing: 0,
-            elevation: 0,
-            centerTitle: false,
-            title: const Text(
-              '프로필',
-              style: kNavigationTitle,
-            ),
-            leading: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: SvgPicture.asset('assets/icons/appbar_back.svg')),
-            actions: [
-              IconButton(
+          appBar: PreferredSize(
+                preferredSize: Size.fromHeight(44),
+            child: AppBar(
+              titleSpacing: 0,
+              elevation: 0,
+              centerTitle: false,
+              title: const Text(
+                '프로필',
+                style: kNavigationTitle,
+              ),
+              leading: IconButton(
+                padding: EdgeInsets.zero,
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: SvgPicture.asset('assets/icons/appbar_back.svg')),
+              actions: [
+                IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      Get.to(() => BookmarkScreen());
+                    },
+                    icon: SvgPicture.asset(
+                      'assets/icons/bookmark_inactive.svg',
+                    )),
+                IconButton(
                   padding: EdgeInsets.zero,
                   onPressed: () {
-                    Get.to(() => BookmarkScreen());
+                    Get.to(() => SettingScreen());
                   },
                   icon: SvgPicture.asset(
-                    'assets/icons/bookmark_inactive.svg',
-                  )),
-              IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  Get.to(() => SettingScreen());
-                },
-                icon: SvgPicture.asset(
-                  'assets/icons/setting.svg',
-                  color: mainblack,
+                    'assets/icons/setting.svg',
+                    color: mainblack,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           body: RefreshIndicator(
             notificationPredicate: (notification) {
@@ -527,10 +531,18 @@ class MyProfileScreen extends StatelessWidget {
                                     '${profileController.myUserInfo.value.name}님과 관련있는 기업',
                                     style: kmainbold),
                                 const SizedBox(width: 8),
-                                SvgPicture.asset(
-                                  'assets/icons/information.svg',
-                                  width: 20,
-                                  height: 20,
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: (){showPopUpDialog('관련있는 기업', '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요', 3000);},
+                                    icon: SvgPicture.asset(
+                                      'assets/icons/information.svg',
+                                      width: 16,
+                                      height: 16,
+                                    ),
+                                  ),
                                 )
                               ],
                             ),
@@ -559,10 +571,16 @@ class MyProfileScreen extends StatelessWidget {
                                   //         .myUserInfo.value.schoolRatioVariance,
                                 ),
                                 // const SizedBox(width: 8),
-                                SvgPicture.asset(
-                                  'assets/icons/information.svg',
-                                  width: 20,
-                                  height: 20,
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: (){showPopUpDialog('커리어', '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요', 3000);},
+                                    icon: SvgPicture.asset(
+                                      'assets/icons/information.svg',
+                                    ),
+                                  ),
                                 ),
                                 const Spacer(),
                                 GestureDetector(

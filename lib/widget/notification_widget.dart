@@ -64,12 +64,12 @@ class NotificationWidget extends StatelessWidget {
               closeOnScroll: true,
               groupTag: '1',
               endActionPane: ActionPane(
-                extentRatio: 0.15,
+                extentRatio: 0.20,
                 motion: const ScrollMotion(),
                 children: [
                   // SlidableAction(onPressed: (c){},label: '',),
                   // SlidableAction(onPressed: (c){},label: '',),
-                  SlidableAction(
+                  SlidableAction(spacing: 0,
                     flex: 1,
                     onPressed: (context) {
                       deleteNotification(notification.id).then((value) {
@@ -79,7 +79,7 @@ class NotificationWidget extends StatelessWidget {
                   }
                 });
                     },
-                    label: 'ss',
+                    label: '삭제',
                     backgroundColor: rankred,
                   )
                 ],
@@ -144,7 +144,7 @@ class NotificationWidget extends StatelessWidget {
               closeOnScroll: true,
               groupTag: '1',
               endActionPane: ActionPane(
-                extentRatio: 0.15,
+                extentRatio: 0.20,
                 motion: const ScrollMotion(),
                 children: [
                   // SlidableAction(onPressed: (c){},label: '',),
@@ -159,7 +159,7 @@ class NotificationWidget extends StatelessWidget {
                   }
                 });
                     },
-                    label: 'ss',
+                    label: '삭제',
                     backgroundColor: rankred,
                   )
                 ],

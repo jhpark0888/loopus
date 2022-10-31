@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:http/retry.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
+import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/scout_report_controller.dart';
 import 'package:loopus/model/contact_model.dart';
 import 'package:loopus/model/user_model.dart';
@@ -78,7 +79,19 @@ class ScoutScreen extends StatelessWidget {
                         style: ktitle.copyWith(color: mainWhite),
                       ),
                       const SizedBox(width: 8),
-                      SvgPicture.asset('assets/icons/information.svg')
+                      SizedBox(
+                          height: 16,
+                          width: 16,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                              onPressed: () {
+                                showPopUpDialog(
+                                    '스카우트 중인 기업',
+                                    '채용을 진행중이거나\n루프어스에서 활동중인 기업 정보를 보여줘요\n수많은 기업의 정보를 확인하고,\n본인만의 커리어를 통해\n채용의 기회를 얻어보세요',
+                                    3000);
+                              },
+                              icon: SvgPicture.asset(
+                                  'assets/icons/information.svg')))
                     ],
                   ),
                   excludeHeaderSemantics: false,
@@ -177,7 +190,7 @@ class ScoutScreen extends StatelessWidget {
                                           ),
                                           SizedBox(
                                             width: Get.width,
-                                            height: 210,
+                                            height: 216,
                                             child: ListView.separated(
                                                 primary: false,
                                                 shrinkWrap: true,
@@ -190,7 +203,7 @@ class ScoutScreen extends StatelessWidget {
                                                         compIndex) =>
                                                     SizedBox(
                                                       width: 300,
-                                                      height: 210,
+                                                      height: 216,
                                                       child: CompanyWidget(
                                                           company: _scontroller
                                                                   .companyFieldList[

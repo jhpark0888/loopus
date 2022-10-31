@@ -105,7 +105,7 @@ class CareerBoardPostWidget extends StatelessWidget {
                   children: [
                     SizedBox(
                         width: 280,
-                        height: 190,
+                        height: 200,
                         child: post.images.isNotEmpty
                             ? CachedNetworkImage(
                                 imageUrl: post.images.first,

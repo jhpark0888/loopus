@@ -302,9 +302,9 @@ class HomeController extends GetxController
 
   void goMyProfile() {
     if (HomeController.to.myProfile.value.userType == UserType.student) {
-      Get.to(() => MyProfileScreen());
+      Get.to(() => MyProfileScreen(), transition: Transition.rightToLeft);
     } else {
-      Get.to(() => MyCompanyScreen());
+      Get.to(() => MyCompanyScreen(), transition: Transition.rightToLeft);
     }
   }
 }

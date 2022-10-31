@@ -1550,7 +1550,7 @@ void showPopUpDialog(String title, String content, int duration) {
       contentPadding: const EdgeInsets.all(16),
       backgroundColor: Colors.white,
       content: Text(
-        title,
+        content,
         style: kmainheight,
         textAlign: TextAlign.center,
       ),

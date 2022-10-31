@@ -54,11 +54,12 @@ class CareerBoardScreen extends StatelessWidget {
                 style: ktitle,
               ),
               const SizedBox(width: 8),
-              GestureDetector(
-                  onTap: () {
-                    // showPopUpDialog("안녕", "하이요", 1000);
+              IconButton(
+                padding: EdgeInsets.zero,
+                  onPressed: () {
+                    showPopUpDialog('커리어보드', '루프어스에서 집계하는 점수를 통해\n커리어 상위권 프로필을 보여줘요\n최근 발전하고 있는 프로필과\n인기 포스트 등을 확인할 수 있어요', 3000);
                   },
-                  child: SvgPicture.asset('assets/icons/information.svg'))
+                  icon: SvgPicture.asset('assets/icons/information.svg'))
             ],
           ),
         ),
@@ -197,7 +198,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 24),
                                   SizedBox(
-                                      height: 246,
+                                      height: 276,
                                       child: CareerRankWidget(
                                         isUniversity: false,
                                         ranker: _controller

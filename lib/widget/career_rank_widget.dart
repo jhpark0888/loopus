@@ -60,7 +60,6 @@ class CareerRankWidget extends StatelessWidget {
                 itemBuilder: (context, index) => PersonRankWidget(
                       user: ranker[index],
                       isUniversity: isUniversity,
-                      isFollow: false,
                     ),
                 separatorBuilder: (context, index) => const SizedBox(
                       height: 24,
@@ -85,12 +84,10 @@ class PersonRankWidget extends StatelessWidget {
   PersonRankWidget(
       {Key? key,
       required this.isUniversity,
-      required this.user,
-      required this.isFollow})
+      required this.user})
       : super(key: key);
   Person user;
   bool isUniversity;
-  bool isFollow;
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +101,24 @@ class PersonRankWidget extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       child: Row(children: [
         SizedBox(
+          width: 30,
+          height: 42,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Text(
+              isUniversity ? user.schoolRank.toString() : user.rank.toString(),
+              style: kmainbold,
+            ),
+            const SizedBox(height: 8),
+            rate(
+                rank: isUniversity ? user.schoolRank : user.rank,
+                lastRank: isUniversity ? user.schoolLastRank : user.lastRank)
+          ]),
+        ),
+        const SizedBox(width: 8),
+        SizedBox(
           width: 50,
-          height: 58,
+          height: 64,
           child: Column(
             children: [
               UserImageWidget(
@@ -122,22 +135,6 @@ class PersonRankWidget extends StatelessWidget {
               )
             ],
           ),
-        ),
-        const SizedBox(width: 8),
-        SizedBox(
-          width: 30,
-          height: 33,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            Text(
-              isUniversity ? user.schoolRank.toString() : user.rank.toString(),
-              style: kmainbold,
-            ),
-            const SizedBox(height: 8),
-            rate(
-                rank: isUniversity ? user.schoolRank : user.rank,
-                lastRank: isUniversity ? user.schoolLastRank : user.lastRank)
-          ]),
         ),
         const SizedBox(width: 8),
         Expanded(
@@ -171,7 +168,7 @@ class PersonRankWidget extends StatelessWidget {
         ),
         // 나 일때는 팔로우 버튼 없어야 함
         //지금은 is_user를 안 주는 듯
-        if (isFollow) FollowButtonWidget(user: user)
+         FollowButtonWidget(user: user)
       ]),
     );
   }

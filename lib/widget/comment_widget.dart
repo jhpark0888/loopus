@@ -148,7 +148,7 @@ class CommentWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  // const SizedBox(height: 4),
                   Text(
                     comment.content,
                     style: kmainheight,

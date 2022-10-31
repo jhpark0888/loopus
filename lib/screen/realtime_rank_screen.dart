@@ -90,22 +90,24 @@ class RealTimeRankScreen extends StatelessWidget {
                                           primary: false,
                                           shrinkWrap: true,
                                           itemBuilder: (context, index) {
+                                            print(_controller.koreaRankerMap[currentField.key]![index].followed);
                                             return Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 16),
                                               child: PersonRankWidget(
-                                                user: isUniversity == true
-                                                    ? _controller
-                                                            .campusRankerMap[
-                                                        currentField
-                                                            .key]![index]
-                                                    : _controller
+                                                user: 
+                                                // isUniversity == true
+                                                    // ? _controller
+                                                    //         .campusRankerMap[
+                                                    //     currentField
+                                                    //         .key]![index]
+                                                    // : 
+                                                    _controller
                                                             .koreaRankerMap[
                                                         currentField
                                                             .key]![index],
                                                 isUniversity: isUniversity,
-                                                isFollow: true,
                                               ),
                                             );
                                           },

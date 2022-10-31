@@ -71,7 +71,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
             flexibleSpace: _MyAppSpace(
               career: careerDetailController.career,
             ),
-            expandedHeight: 180,
+            expandedHeight: 190,
           ),
           SliverList(
             delegate: SliverChildListDelegate([

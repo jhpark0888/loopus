@@ -55,7 +55,7 @@ class MessageRoomWidget extends StatelessWidget {
           key: ValueKey(chatRoom.value.roomId.toString()),
           closeOnScroll: true,
           groupTag: '1',
-          endActionPane: ActionPane(extentRatio: 0.2,motion: const ScrollMotion(), children: [
+          endActionPane: ActionPane(extentRatio: 0.25,motion: const ScrollMotion(), children: [
             // SlidableAction(
             //   // An action can be bigger than the others.
             //   onPressed: (context) {
@@ -89,7 +89,7 @@ class MessageRoomWidget extends StatelessWidget {
             //   foregroundColor: Colors.white,
             //   label: chatRoom.value.type.value == 1 ? '알림끄기' : '알림켜기',
             // ),
-            SlidableAction(
+            SlidableAction(spacing: 0,
               onPressed: (context) {
                 showButtonDialog(
                     title: '채팅방 나가기',

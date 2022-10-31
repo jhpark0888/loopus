@@ -185,11 +185,11 @@ class PostingWidget extends StatelessWidget {
                                 onTap: tapBookmark,
                                 child: (item.isMarked.value == 0)
                                     ? SvgPicture.asset(
-                                        "assets/icons/bookmark_inactive.svg",
+                                        "assets/icons/post_bookmark_inactive.svg",
                                         color: isDark ? mainWhite : null,
                                       )
                                     : SvgPicture.asset(
-                                        "assets/icons/bookmark_active.svg"),
+                                        "assets/icons/post_bookmark_active.svg"),
                               ),
                             ],
                           ),
@@ -285,8 +285,7 @@ class PostingWidget extends StatelessWidget {
               autofocus: autoFocus,
             ),
         opaque: false,
-        preventDuplicates: false,
-        transition: Transition.noTransition);
+        preventDuplicates: false,);
   }
 
   void tapProjectname() async {

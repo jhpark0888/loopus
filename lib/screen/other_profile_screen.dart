@@ -10,6 +10,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/bookmark_screen.dart';
 import 'package:loopus/screen/group_career_detail_screen.dart';
 import 'package:loopus/screen/career_arrange_screen.dart';
 import 'package:loopus/screen/profile_sns_add_screen.dart';
@@ -89,9 +90,16 @@ class OtherProfileScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBarWidget(
           titleSpacing: 0.0,
-          centetTitle: false,
+          centetTitle: _controller.otherUser.value.isuser != 1,
           title: '프로필',
           actions: [
+            if (_controller.otherUser.value.isuser == 1)
+              IconButton(
+                padding: EdgeInsets.zero,
+                  onPressed: () {
+                    Get.to(() => BookmarkScreen());
+                  },
+                  icon: SvgPicture.asset('assets/icons/appbar_bookmark.svg')),
             Obx(
               () => _controller.otherprofilescreenstate.value !=
                       ScreenState.success
@@ -143,7 +151,8 @@ class OtherProfileScreen extends StatelessWidget {
                                     leftFunction: () {
                                       Get.back();
                                     },
-                                    rightFunction: () {userreport(_controller.userid)
+                                    rightFunction: () {
+                                      userreport(_controller.userid)
                                           .then((value) {
                                         if (value.isError == false) {
                                           dialogBack(modalIOS: true);
@@ -151,7 +160,8 @@ class OtherProfileScreen extends StatelessWidget {
                                         } else {
                                           errorSituation(value);
                                         }
-                                      });});
+                                      });
+                                    });
                               },
                               value1: '계정 차단하기',
                               value2: '계정 신고하기',
@@ -521,9 +531,9 @@ class OtherProfileScreen extends StatelessWidget {
                     },
                     child: SvgPicture.asset(
                       "assets/icons/home_add.svg",
-                      width: 24,
-                      height: 24,
-                      color: dividegray,
+                      width: 28,
+                      height: 28,
+                      color: mainblue,
                     ),
                   )
                 ],
@@ -622,18 +632,30 @@ class OtherProfileScreen extends StatelessWidget {
                       sliver: SliverToBoxAdapter(
                         child: Column(
                           children: [
-                            const SizedBox(height: 25),
+                            const SizedBox(height: 24),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text('$realname님과 관련있는 기업', style: kmainbold),
                                 const SizedBox(width: 8),
-                                SvgPicture.asset(
-                                  'assets/icons/information.svg',
+                                if(_controller.otherUser.value.isuser == 1)
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: (){
+                                      showPopUpDialog('관련있는 기업', '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요', 3000);
+                                    },
+                                    icon: SvgPicture.asset(
+                                      'assets/icons/information.svg',
+                                    ),
+                                  ),
                                 )
                               ],
                             ),
                             const SizedBox(height: 16),
+                            Text('아직 $realname님과 관련있는 기업이 없어요',style: kmain.copyWith(color: maingray),),
                             // CareerAnalysisWidget(
                             //   field: fieldList[
                             //       _controller.otherUser.value.fieldId]!,
@@ -657,24 +679,33 @@ class OtherProfileScreen extends StatelessWidget {
                                 const Text('커리어', style: kmainbold),
                                 const SizedBox(width: 8),
                                 CareerAnalysisWidget(
-                              field: fieldList[
-                                  _controller.otherUser.value.fieldId]!,
-                              groupRatio:
-                                  _controller.otherUser.value.groupRatio,
-                              // schoolRatio:
-                              //     _controller.otherUser.value.schoolRatio,
-                              // lastgroupRatio:
-                              //     _controller.otherUser.value.groupRatio +
-                              //         _controller
-                              //             .otherUser.value.groupRatioVariance,
-                              // lastschoolRatio:
-                              //     _controller.otherUser.value.schoolRatio +
-                              //         _controller
-                              //             .otherUser.value.schoolRatioVariance,
-                            ),
-                            // const SizedBox(width: 8),
-                                SvgPicture.asset(
-                                  'assets/icons/information.svg',
+                                  field: fieldList[
+                                      _controller.otherUser.value.fieldId]!,
+                                  groupRatio:
+                                      _controller.otherUser.value.groupRatio,
+                                  // schoolRatio:
+                                  //     _controller.otherUser.value.schoolRatio,
+                                  // lastgroupRatio:
+                                  //     _controller.otherUser.value.groupRatio +
+                                  //         _controller
+                                  //             .otherUser.value.groupRatioVariance,
+                                  // lastschoolRatio:
+                                  //     _controller.otherUser.value.schoolRatio +
+                                  //         _controller
+                                  //             .otherUser.value.schoolRatioVariance,
+                                ),
+                                // const SizedBox(width: 8),
+                                if(_controller.otherUser.value.isuser == 1)
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: (){showPopUpDialog('커리어', '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요', 3000);},
+                                    icon: SvgPicture.asset(
+                                      'assets/icons/information.svg',
+                                    ),
+                                  ),
                                 ),
                                 const Spacer(),
                                 if (_controller.otherUser.value.userId ==
