@@ -80,7 +80,7 @@ class MyCompanyScreen extends StatelessWidget {
               Get.to(() => SettingScreen());
             },
             child: SvgPicture.asset(
-              'assets/icons/Setting.svg',
+              'assets/icons/setting.svg',
               color: mainWhite,
             ),
           ),
@@ -368,7 +368,15 @@ class MyCompanyScreen extends StatelessWidget {
               children: [
                 CustomExpandedButton(
                     onTap: () {
-                      Get.to(() => CompanyIntroEditScreen());
+                      showOneButtonDialog(
+                          title: "가입하신 이메일을 확인해주세요",
+                          startContent:
+                              "해당 주소로 기업 소개 수정을 위한\n양식을 보내드렸어요\n확인 후 company@loopus.co.kr로\n답장주시면 빠른 시일 내 수정해드리겠습니다",
+                          buttonFunction: () {
+                            dialogBack();
+                          },
+                          buttonText: "확인");
+                      // Get.to(() => CompanyIntroEditScreen());
                     },
                     isBlue: true,
                     title: "기업 소개 수정하기",
@@ -506,17 +514,19 @@ class MyCompanyScreen extends StatelessWidget {
                 },
               ),
             ),
-            ListView.separated(
-                primary: false,
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                itemBuilder: (context, index) => UserTileWidget(
-                      user: _controller.showUserList[index],
-                      isDark: true,
-                    ),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 24),
-                itemCount: _controller.showUserList.length),
+            Obx(
+              () => ListView.separated(
+                  primary: false,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  itemBuilder: (context, index) => UserTileWidget(
+                        user: _controller.showUserList[index],
+                        isDark: true,
+                      ),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 24),
+                  itemCount: _controller.showUserList.length),
+            ),
             const SizedBox(height: 16),
             Obx(
               () => _labelRow(
@@ -529,17 +539,19 @@ class MyCompanyScreen extends StatelessWidget {
                 },
               ),
             ),
-            ListView.separated(
-                primary: false,
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                itemBuilder: (context, index) => UserTileWidget(
-                      user: _controller.visitUserList[index],
-                      isDark: true,
-                    ),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 24),
-                itemCount: _controller.visitUserList.length),
+            Obx(
+              () => ListView.separated(
+                  primary: false,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  itemBuilder: (context, index) => UserTileWidget(
+                        user: _controller.visitUserList[index],
+                        isDark: true,
+                      ),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 24),
+                  itemCount: _controller.visitUserList.length),
+            ),
             const SizedBox(height: 16),
           ],
         ),

@@ -194,15 +194,26 @@ class LinkWidget extends StatelessWidget {
                       ScrapCard(
                         child: Column(
                           children: [
-                            CachedNetworkImage(
-                              imageUrl: linkController.info.value.image,
-                              height: 200,
-                              width: Get.width,
-                              fit: BoxFit.cover,
-                              errorWidget: (context, string, widget) {
-                                return Container(color: maingray);
-                              },
-                            ),
+                            if (linkController.info.value.image != "")
+                              CachedNetworkImage(
+                                imageUrl: linkController.info.value.image,
+                                height: 200,
+                                width: Get.width,
+                                fit: BoxFit.cover,
+                                errorWidget: (context, string, widget) {
+                                  return Image.asset(
+                                    "assets/illustrations/link_noimage.png",
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              )
+                            else
+                              Image.asset(
+                                "assets/illustrations/link_noimage.png",
+                                height: 200,
+                                fit: BoxFit.cover,
+                              ),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 16, horizontal: 16),
@@ -297,22 +308,28 @@ class LinkSmallWidget extends StatelessWidget {
                     height: height,
                     child: Column(
                       children: [
-                        CachedNetworkImage(
-                          imageUrl: linkController.info.value.image != ''
-                              ? linkController.info.value.image
-                              : 'https://cdn.pixabay.com/photo/2022/04/22/14/14/leaves-7149850__340.jpg',
-                          height: 120,
-                          width: width,
-                          fit: BoxFit.cover,
-                          errorWidget: (context, string, widget) {
-                            return const Center(
-                              child: Text(
-                                "이미지 없음",
-                                style: kNavigationTitle,
-                              ),
-                            );
-                          },
-                        ),
+                        if (linkController.info.value.image != "")
+                          CachedNetworkImage(
+                            imageUrl: linkController.info.value.image,
+                            height: 120,
+                            width: width,
+                            fit: BoxFit.cover,
+                            errorWidget: (context, string, widget) {
+                              return Image.asset(
+                                "assets/illustrations/link_noimage.png",
+                                height: 120,
+                                width: width,
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          )
+                        else
+                          Image.asset(
+                            "assets/illustrations/link_noimage.png",
+                            height: 120,
+                            width: width,
+                            fit: BoxFit.cover,
+                          ),
                         Container(
                           padding: const EdgeInsets.symmetric(
                               vertical: 16, horizontal: 16),

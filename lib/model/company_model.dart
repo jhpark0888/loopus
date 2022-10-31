@@ -82,8 +82,17 @@ class Company extends User {
 
   factory Company.fromJson(Map<String, dynamic> json) => Company(
       userId: json['user_id'] ?? json['id'] ?? json['user'],
-      profileImage: json["company_logo"] ?? "",
-      name: json['company_name'] ?? "",
+      profileImage: json["company_logo"] != null
+          ? json["company_logo"].runtimeType == String
+              ? json["company_logo"]
+              : json["company_logo"]["logo"] ?? ""
+          : "",
+      name: json['company_name'] != null
+          ? json['company_name']
+          : json["company_logo"] != null
+              ? json["company_logo"]["company_name"] ?? ""
+              : ""
+                  "",
       followerCount: 0.obs,
       followingCount: 0.obs,
       fieldId: json['contact_field'] != null
@@ -123,8 +132,16 @@ class Company extends User {
 
   void copywith(Map<String, dynamic> json) {
     userId = json["user_id"] ?? json['id'] ?? userId;
-    profileImage = json["company_logo"] ?? profileImage;
-    name = json['company_name'] ?? name;
+    profileImage = json["company_logo"] != null
+        ? json["company_logo"].runtimeType == String
+            ? json["company_logo"]
+            : json["company_logo"]["logo"] ?? profileImage
+        : profileImage;
+    name = json['company_name'] != null
+        ? json['company_name']
+        : json["company_logo"] != null
+            ? json["company_logo"]["company_name"] ?? name
+            : name;
     followerCount.value = json["follower_count"] != null
         ? json["follower_count"] as int
         : followerCount.value;

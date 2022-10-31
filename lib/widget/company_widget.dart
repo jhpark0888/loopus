@@ -62,31 +62,34 @@ class CompanyWidget extends StatelessWidget {
                 userType: company.userType,
               ),
               const SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    company.name,
-                    style: kmain,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Text(
-                        fieldList[company.fieldId]!,
-                        style: kmain.copyWith(color: maingray),
-                      ),
-                      const Spacer(),
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: "관심", style: kmain.copyWith(color: maingray)),
-                        TextSpan(text: "${company.itrCount}명", style: kmain)
-                      ]))
-                    ],
-                  )
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      company.name,
+                      style: kmain,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Text(
+                          fieldList[company.fieldId]!,
+                          style: kmain.copyWith(color: maingray),
+                        ),
+                        const Spacer(),
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: "관심 ",
+                              style: kmain.copyWith(color: maingray)),
+                          TextSpan(text: "${company.itrCount}명", style: kmain)
+                        ]))
+                      ],
+                    )
+                  ],
+                ),
               ),
             ],
           ),
