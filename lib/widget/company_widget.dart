@@ -71,15 +71,22 @@ class CompanyWidget extends StatelessWidget {
                     style: kmain,
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    fieldList[company.fieldId]!,
-                    style: kmain.copyWith(color: maingray),
+                  Row(
+                    children: [
+                      Text(
+                        fieldList[company.fieldId]!,
+                        style: kmain.copyWith(color: maingray),
+                      ),
+                      const Spacer(),
+                      RichText(
+                          text: TextSpan(children: [
+                        TextSpan(
+                            text: "관심", style: kmain.copyWith(color: maingray)),
+                        TextSpan(text: "${company.itrCount}명", style: kmain)
+                      ]))
+                    ],
                   )
                 ],
-              ),
-              const Spacer(),
-              FollowButtonWidget(
-                user: company,
               ),
             ],
           ),
