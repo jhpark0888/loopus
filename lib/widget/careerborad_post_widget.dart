@@ -32,7 +32,9 @@ class CareerBoardPostWidget extends StatelessWidget {
         height: 398,
         width: 280,
         decoration: BoxDecoration(
-            color: lightcardgray, borderRadius: BorderRadius.circular(8)),
+            color: mainWhite,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: maingray, width: 1)),
         padding: const EdgeInsets.only(top: 16, bottom: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -1079,7 +1079,7 @@ void showTextFieldDialog({
                   isBlue: true,
                   title: rightText,
                   textColor: rightTextColor,
-                  boxColor: rightBoxColor,
+                  boxColor: rankred,
                   isBig: true),
             )),
           ],

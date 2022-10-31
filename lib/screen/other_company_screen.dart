@@ -125,10 +125,9 @@ class OtherCompanyScreen extends StatelessWidget {
                                 showButtonDialog(
                                     leftText: '취소',
                                     rightText: '차단',
-                                    title:
-                                        '<${_controller.otherCompany.value.name}> 유저를 차단하시겠어요?',
+                                    title: '계정 차단',
                                     startContent:
-                                        '차단하면 <${_controller.otherCompany.value.name}> 유저와의 팔로우도 해제됩니다',
+                                        '${_controller.otherCompany.value.name}님을 차단하시겠어요?',
                                     leftFunction: () => Get.back(),
                                     rightFunction: () {
                                       userban(_controller
@@ -140,7 +139,8 @@ class OtherCompanyScreen extends StatelessWidget {
                                               .banClick();
 
                                           showCustomDialog(
-                                              "해당 유저가 차단 되었습니다", 1000);
+                                              "${_controller.otherCompany.value.name}님이 차단되었습니다",
+                                              1000);
                                         } else {
                                           errorSituation(value);
                                         }
@@ -148,13 +148,16 @@ class OtherCompanyScreen extends StatelessWidget {
                                     });
                               },
                               func2: () {
-                                showButtonDialog(
-                                    leftText: '취소',
+                                showTextFieldDialog(
+                                    title: '계정 신고',
+                                    hintText:
+                                        '신고 사유를 입력해주세요. 관리자 확인 \n 이후 해당 계정은 이용약관에 따라 제재를 \n받을 수 있습니다.',
                                     rightText: '신고',
-                                    title:
-                                        '<${_controller.otherCompany.value.name}> 유저를 신고하시겠어요?',
-                                    startContent: '관리자가 검토할 예정이에요',
-                                    leftFunction: () => Get.back(),
+                                    textEditingController:
+                                        _controller.reportController,
+                                    leftFunction: () {
+                                      Get.back();
+                                    },
                                     rightFunction: () {
                                       userreport(_controller
                                               .otherCompany.value.userId)
