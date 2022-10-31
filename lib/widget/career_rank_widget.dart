@@ -180,9 +180,9 @@ class PersonRankWidget extends StatelessWidget {
         const SizedBox(width: 4),
         arrowDirection(variance),
         const SizedBox(width: 2),
+        // 양수: 파랑, 음수: 빨강
         Text(lastRank != 0 ? '${variance.abs()}' : "NEW",
-            style:
-                kcaption.copyWith(color: variance >= 1 ? rankred : rankblue)),
+            style: kcaption.copyWith(color: variance > 0 ? rankblue : rankred)),
       ]);
     } else {
       return const SizedBox.shrink();
@@ -192,9 +192,11 @@ class PersonRankWidget extends StatelessWidget {
   Widget arrowDirection(int variance) {
     if (variance == 0) {
       return const SizedBox.shrink();
-    } else if (variance >= 1) {
+    } else if (variance < 0) {
+      // 음수
       return SvgPicture.asset('assets/icons/rate_upper_arrow.svg');
     } else {
+      // 양수
       return SvgPicture.asset('assets/icons/rate_down_arrow.svg');
     }
   }

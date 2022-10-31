@@ -547,7 +547,7 @@ class MyProfileScreen extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 16),
-                            Container(),
+                            Text('아직 ${profileController.myUserInfo.value.name} 관련있는 기업이 없어요',style: kmain.copyWith(color: maingray),),
                             const SizedBox(height: 24),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,

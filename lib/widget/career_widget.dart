@@ -121,8 +121,8 @@ class CareerWidget extends StatelessWidget {
   }
 
   Widget memberList() {
-    List<Person> memberList = career.members.length > 4
-        ? career.members.sublist(0, 4)
+    List<Person> memberList = career.members.length > 3
+        ? career.members.sublist(0, 3)
         : career.members;
 
     return career.members.isNotEmpty
@@ -140,9 +140,9 @@ class CareerWidget extends StatelessWidget {
               const SizedBox(
                 width: 7,
               ),
-              if (career.members.length > 4)
+              if (career.members.length > 3)
                 Text(
-                  "+${career.members.length - 4}",
+                  "+${career.members.length - 3}",
                   style: kmain.copyWith(
                       color: career.thumbnail == "" ? mainblack : mainWhite),
                 )

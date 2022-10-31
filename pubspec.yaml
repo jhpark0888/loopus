@@ -68,6 +68,8 @@ dependencies:
   extended_nested_scroll_view: ^5.1.1
   palette_generator: ^0.3.0
   url_launcher: ^6.1.6
+  gradient_borders: ^0.2.0
+
   # custom_nested_scroll_view: 
   #   git:
   #     url: https://github.com/idootop/custom_nested_scroll_view.git

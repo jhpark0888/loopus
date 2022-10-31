@@ -102,7 +102,8 @@ class OtherProfileScreen extends StatelessWidget {
                   icon: SvgPicture.asset('assets/icons/appbar_bookmark.svg')),
             Obx(
               () => _controller.otherprofilescreenstate.value !=
-                      ScreenState.success
+                          ScreenState.success ||
+                      _controller.isBanned.value
                   ? Container()
                   : _controller.otherUser.value.isuser == 1
                       ? GestureDetector(
@@ -179,39 +180,43 @@ class OtherProfileScreen extends StatelessWidget {
           ],
           bottomBorder: false,
         ),
-        body: RefreshIndicator(
-          notificationPredicate: (notification) {
-            return notification.depth == 2;
-          },
-          onRefresh: onRefresh,
-          child: ExtendedNestedScrollView(
-            onlyOneScrollInBody: true,
-            headerSliverBuilder: (context, value) {
-              return [
-                SliverToBoxAdapter(
-                  child: _profileView(context),
+        body: Obx(
+          () => _controller.isBanned.value
+              ? Container()
+              : RefreshIndicator(
+                  notificationPredicate: (notification) {
+                    return notification.depth == 2;
+                  },
+                  onRefresh: onRefresh,
+                  child: ExtendedNestedScrollView(
+                    onlyOneScrollInBody: true,
+                    headerSliverBuilder: (context, value) {
+                      return [
+                        SliverToBoxAdapter(
+                          child: _profileView(context),
+                        ),
+                        // SliverOverlapAbsorber(
+                        //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        //       context),
+                        //   sliver:
+                        SliverAppBar(
+                          backgroundColor: mainWhite,
+                          toolbarHeight: 44,
+                          pinned: true,
+                          primary: false,
+                          elevation: 0,
+                          automaticallyImplyLeading: false,
+                          flexibleSpace: _tabView(),
+                        ),
+                        // ),
+                      ];
+                    },
+                    body: TabBarView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [_careerView(context), _postView()],
+                    ),
+                  ),
                 ),
-                // SliverOverlapAbsorber(
-                //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                //       context),
-                //   sliver:
-                SliverAppBar(
-                  backgroundColor: mainWhite,
-                  toolbarHeight: 44,
-                  pinned: true,
-                  primary: false,
-                  elevation: 0,
-                  automaticallyImplyLeading: false,
-                  flexibleSpace: _tabView(),
-                ),
-                // ),
-              ];
-            },
-            body: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              children: [_careerView(context), _postView()],
-            ),
-          ),
         ),
       ),
     );
@@ -618,7 +623,23 @@ class OtherProfileScreen extends StatelessWidget {
   Widget _careerView(BuildContext context) {
     return SafeArea(
       child: Obx(() => _controller.otherProjectList.isEmpty
-          ? EmptyContentWidget(text: '아직 커리어가 없어요')
+          ? Column(
+              children: [
+                Expanded(child: EmptyContentWidget(text: '아직 커리어가 없어요')),
+                if (_controller.isOfficial.value == 2)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: Center(
+                      child: Text(
+                        "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
+                        "\n실제 서비스 가입 유무는 다를 수 있습니다.",
+                        style: kcaption.copyWith(color: popupGray),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+              ],
+            )
           : Builder(
               builder: (context) {
                 return CustomScrollView(
@@ -741,6 +762,19 @@ class OtherProfileScreen extends StatelessWidget {
                               ),
                               itemCount: _controller.otherProjectList.length,
                             ),
+                            if (_controller.isOfficial.value == 2)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 24),
+                                child: Center(
+                                  child: Text(
+                                    "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
+                                    "\n실제 서비스 가입 유무는 다를 수 있습니다.",
+                                    style: kcaption.copyWith(color: popupGray),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              )
                             // const SizedBox(height: 24),
                           ],
                         ),

@@ -105,7 +105,8 @@ class OtherCompanyScreen extends StatelessWidget {
           actions: [
             Obx(
               () => _controller.otherprofilescreenstate.value !=
-                      ScreenState.success
+                          ScreenState.success ||
+                      _controller.isBanned.value
                   ? Container()
                   : _controller.otherCompany.value.userId ==
                           int.parse(HomeController.to.myId!)
@@ -184,42 +185,46 @@ class OtherCompanyScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: RefreshIndicator(
-          notificationPredicate: (notification) {
-            return notification.depth == 2;
-          },
-          onRefresh: onRefresh,
-          child: ExtendedNestedScrollView(
-            onlyOneScrollInBody: true,
-            headerSliverBuilder: (context, value) {
-              return [
-                SliverToBoxAdapter(
-                  child: _profileView(context),
+        body: Obx(
+          () => _controller.isBanned.value
+              ? Container()
+              : RefreshIndicator(
+                  notificationPredicate: (notification) {
+                    return notification.depth == 2;
+                  },
+                  onRefresh: onRefresh,
+                  child: ExtendedNestedScrollView(
+                    onlyOneScrollInBody: true,
+                    headerSliverBuilder: (context, value) {
+                      return [
+                        SliverToBoxAdapter(
+                          child: _profileView(context),
+                        ),
+                        // SliverOverlapAbsorber(
+                        //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        //       context),
+                        //   sliver:
+                        SliverAppBar(
+                          backgroundColor: mainWhite,
+                          toolbarHeight: 44,
+                          pinned: true,
+                          primary: false,
+                          elevation: 0,
+                          automaticallyImplyLeading: false,
+                          flexibleSpace: _tabView(),
+                        ),
+                        // ),
+                      ];
+                    },
+                    body: TabBarView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        _introView(),
+                        _postView(),
+                      ],
+                    ),
+                  ),
                 ),
-                // SliverOverlapAbsorber(
-                //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                //       context),
-                //   sliver:
-                SliverAppBar(
-                  backgroundColor: mainWhite,
-                  toolbarHeight: 44,
-                  pinned: true,
-                  primary: false,
-                  elevation: 0,
-                  automaticallyImplyLeading: false,
-                  flexibleSpace: _tabView(),
-                ),
-                // ),
-              ];
-            },
-            body: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _introView(),
-                _postView(),
-              ],
-            ),
-          ),
         ),
       ),
     );
@@ -496,7 +501,7 @@ class OtherCompanyScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Obx(
-            () => ListView.separated(
+            () => ListView.builder(
                 primary: false,
                 shrinkWrap: true,
                 itemBuilder: (context, index) => Column(
@@ -517,16 +522,19 @@ class OtherCompanyScreen extends StatelessWidget {
                             );
                           },
                         ),
-                        const SizedBox(height: 16),
-                        Text(
-                          _controller
-                              .otherCompany.value.images[index].imageInfo,
-                          style: kmainheight.copyWith(color: mainWhite),
-                        )
+                        if (_controller
+                                .otherCompany.value.images[index].imageInfo !=
+                            "")
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Text(
+                              _controller
+                                  .otherCompany.value.images[index].imageInfo,
+                              style: kmainheight.copyWith(color: mainWhite),
+                            ),
+                          )
                       ],
                     ),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16),
                 itemCount: _controller.otherCompany.value.images.length),
           ),
           if (_controller.otherCompany.value.userId ==
@@ -539,7 +547,9 @@ class OtherCompanyScreen extends StatelessWidget {
                 children: [
                   CustomExpandedButton(
                       onTap: () {
-                        Get.to(() => CompanyIntroEditScreen());
+                        Get.to(() => CompanyIntroEditScreen(
+                              name: _controller.otherCompany.value.name,
+                            ));
                       },
                       isBlue: true,
                       title: "기업 소개 수정하기",
@@ -547,6 +557,18 @@ class OtherCompanyScreen extends StatelessWidget {
                 ],
               ),
             ),
+          if (_controller.isFake.value == 1)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Center(
+                child: Text(
+                  "루프어스에서 기업 정보를 조사하여 제공하는 페이지입니다."
+                  "\n기업의 서비스 가입 유무는 다를 수 있습니다.",
+                  style: kcaption.copyWith(color: iconcolor),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
         ],
       ),
     );

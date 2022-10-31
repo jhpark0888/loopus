@@ -38,6 +38,8 @@ class ScoutFieldCompScreen extends StatelessWidget {
                 onLoading: _controller.onLoading,
                 child: Obx(
                   () => ListView.separated(
+                      primary: false,
+                      shrinkWrap: true,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       itemBuilder: (context, index) {
                         return Padding(

@@ -39,6 +39,11 @@ class OtherCompanyController extends GetxController
   RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
 
+  RxBool isBanned = false.obs;
+
+  // 가짜 : 1 , 진짜 : 0
+  RxInt isFake = 0.obs;
+
   // RxList<User> followerList = <User>[].obs;
 
   // Future onRefresh() async {
@@ -61,9 +66,15 @@ class OtherCompanyController extends GetxController
     await getCorpProfile(companyId).then((value) async {
       if (value.isError == false) {
         otherCompany.value.copywith(value.data);
+        isFake.value = value.data["type"] ?? 0;
+
         otherCompany.refresh();
       } else {
-        errorSituation(value, screenState: otherprofilescreenstate);
+        if (value.errorData!["statusCode"] == 204) {
+          isBanned.value = true;
+        } else {
+          errorSituation(value, screenState: otherprofilescreenstate);
+        }
       }
     });
 
