@@ -17,6 +17,7 @@ class ContactContentScreen extends StatelessWidget {
   final ContactContentController _contactContentController =
       Get.put(ContactContentController());
   final ProfileController _profileController = Get.find();
+  bool isBlue = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +38,9 @@ class ContactContentScreen extends StatelessWidget {
               });
             },
             child: Text(
-              '보내기',
-              style: kmainbold.copyWith(color: mainblue),
+              '확인',
+              style: kNavigationTitle.copyWith(
+                  color: isBlue ? rankblue : maingray),
             ),
           ),
         ],
@@ -60,7 +62,7 @@ class ContactContentScreen extends StatelessWidget {
               counterText: null,
               maxLength: null,
               textController: _contactContentController.emailcontroller,
-              hintText: '이메일 주소',
+              hintText: '답변 받으실 이메일 주소를 입력해 주세요',
               validator: null,
               obscureText: false,
               maxLines: 5,
@@ -79,7 +81,7 @@ class ContactContentScreen extends StatelessWidget {
               counterText: null,
               maxLength: null,
               textController: _contactContentController.contentcontroller,
-              hintText: '문의 내용',
+              hintText: '문의 내용을 입력해주세요',
               validator: null,
               obscureText: false,
               maxLines: 12,
