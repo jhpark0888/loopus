@@ -13,7 +13,7 @@ void errorSituation(HTTPResponse httpresponse, {Rx<ScreenState>? screenState}) {
     }
   } else if (httpresponse.errorData!['statusCode'] == 404) {
     Get.back();
-    showCustomDialog('존재하지 않는 콘텐츠입니다', 1200);
+    showCustomDialog('존재하지 않습니다', 1200);
     // if (screenState != null) {
     //   screenState.value = ScreenState.error;
     // }

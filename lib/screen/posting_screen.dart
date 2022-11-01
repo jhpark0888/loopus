@@ -11,12 +11,14 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/model/comment_model.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/other_company_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/post_update_screen.dart';
 import 'package:loopus/utils/check_form_validate.dart';
@@ -373,6 +375,10 @@ class PostingScreen extends StatelessWidget {
                                         }
                                       : () {
                                           showBottomdialog(context, func1: () {
+                                            TextEditingController
+                                                reportController =
+                                                TextEditingController();
+
                                             showTextFieldDialog(
                                                 title: '포스트 신고하기',
                                                 hintText:
@@ -381,7 +387,7 @@ class PostingScreen extends StatelessWidget {
                                                 rightBoxColor: rankred,
                                                 leftBoxColor: maingray,
                                                 textEditingController:
-                                                    controller.reportController,
+                                                    reportController,
                                                 leftFunction: () {
                                                   Get.back();
                                                 },
@@ -532,11 +538,21 @@ class PostingScreen extends StatelessWidget {
   }
 
   void tapProfile() {
-    Get.to(
-        () => OtherProfileScreen(
-            user: controller.post!.value.user,
-            userid: controller.post!.value.user.userId,
-            realname: controller.post!.value.user.name),
-        preventDuplicates: false);
+    if (controller.post!.value.user.userType == UserType.student) {
+      Get.to(
+          () => OtherProfileScreen(
+              user: (controller.post!.value.user as Person),
+              userid: controller.post!.value.user.userId,
+              realname: controller.post!.value.user.name),
+          preventDuplicates: false);
+    } else {
+      Get.to(
+          () => OtherCompanyScreen(
+                companyId: controller.post!.value.user.userId,
+                companyName: controller.post!.value.user.name,
+                company: (controller.post!.value.user as Company),
+              ),
+          preventDuplicates: false);
+    }
   }
 }

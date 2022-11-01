@@ -37,7 +37,7 @@ class Post {
   RxInt isLiked;
   RxInt isMarked;
   int isuser;
-  Person user;
+  User user;
 
   factory Post.fromJson(Map<String, dynamic> json) =>
       Get.isRegistered<PostingDetailController>(tag: json["id"].toString())
@@ -87,7 +87,7 @@ class Post {
                       ? RxInt(json["is_marked"])
                       : RxInt(0),
                   isuser: json["is_user"] ?? 0,
-                  user: Person.fromJson(json["profile"]),
+                  user: User.fromJson(json["profile"]),
                 )
           : Post(
               id: json["id"],
@@ -129,8 +129,8 @@ class Post {
                   : RxInt(0),
               isuser: json["is_user"] ?? 0,
               user: json['profile'] != null
-                  ? Person.fromJson(json["profile"])
-                  : Person.defaultuser(),
+                  ? User.fromJson(json["profile"])
+                  : User.defaultuser(),
             );
 
   void copywith(Map<String, dynamic> json) {

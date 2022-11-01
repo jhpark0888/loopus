@@ -28,13 +28,6 @@ class NotificationScreen extends StatelessWidget {
         appBar: AppBarWidget(
           bottomBorder: false,
           title: '알림',
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: SvgPicture.asset('assets/icons/appbar_more_option.svg'),
-              padding: EdgeInsets.zero,
-            )
-          ],
         ),
         body: Obx(() => SmartRefresher(
             controller: controller.alarmRefreshController,

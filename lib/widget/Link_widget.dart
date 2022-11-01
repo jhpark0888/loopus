@@ -222,16 +222,16 @@ class LinkWidget extends StatelessWidget {
                                 children: [
                                   Text(
                                     linkController.info.value.domain,
-                                    style: kmainbold,
+                                    style: kmain.copyWith(color: maingray),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),
                                   const SizedBox(
-                                    height: 8,
+                                    height: 4,
                                   ),
                                   Text(
                                     linkController.info.value.title,
-                                    style: kmain,
+                                    style: kmainbold,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),
@@ -338,14 +338,14 @@ class LinkSmallWidget extends StatelessWidget {
                             children: [
                               Text(
                                 linkController.info.value.domain,
-                                style: kmainbold,
+                                style: kmain.copyWith(color: maingray),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                              const SizedBox(height: 8),
+                              const SizedBox(height: 4),
                               Text(
                                 linkController.info.value.title,
-                                style: kmain,
+                                style: kmainbold,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),

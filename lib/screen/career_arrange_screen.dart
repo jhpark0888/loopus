@@ -88,7 +88,11 @@ class CareerArrangeScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(width : 20, height : 20, child: SvgPicture.asset('assets/icons/career_add.svg')),
+                            SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: SvgPicture.asset(
+                                    'assets/icons/career_add.svg')),
                             const SizedBox(width: 8),
                             Text('커리어 추가하기',
                                 style: kmain.copyWith(color: mainblue))
@@ -156,78 +160,62 @@ class CareerArrangeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      flightShuttleBuilder: (
-        BuildContext flightContext,
-        Animation<double> animation,
-        HeroFlightDirection flightDirection,
-        BuildContext fromHeroContext,
-        BuildContext toHeroContext,
-      ) {
-        final Widget toHero = toHeroContext.widget;
-        return FadeTransition(
-          opacity: animation.drive(
-            Tween<double>(begin: 0.25, end: 0.25),
-          ),
-          child: toHero,
-        );
-      },
-      tag: career.id.toString(),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-              decoration: BoxDecoration(
-                  color: career.thumbnail == "" ? cardGray : null,
-                  borderRadius: BorderRadius.circular(8),
-                  image: career.thumbnail == ""
-                      ? null
-                      : DecorationImage(
-                          image: NetworkImage(career.thumbnail),
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                              const Color(0x00000000).withOpacity(0.4),
-                              BlendMode.srcOver))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    career.careerName,
-                    style: kmainbold.copyWith(
-                        color: career.thumbnail == "" ? mainblack : mainWhite),
-                  ),
-                  const SizedBox(
-                    height: 14,
-                  ),
-                  Row(
-                    children: [
-                          career.isPublic
-                              ? SvgPicture.asset('assets/icons/group_career.svg',color:
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            decoration: BoxDecoration(
+                color: career.thumbnail == "" ? cardGray : null,
+                borderRadius: BorderRadius.circular(8),
+                image: career.thumbnail == ""
+                    ? null
+                    : DecorationImage(
+                        image: NetworkImage(career.thumbnail),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                            const Color(0x00000000).withOpacity(0.4),
+                            BlendMode.srcOver))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  career.careerName,
+                  style: kmainbold.copyWith(
+                      color: career.thumbnail == "" ? mainblack : mainWhite),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    career.isPublic
+                        ? SvgPicture.asset('assets/icons/group_career.svg',
+                            color:
                                 career.thumbnail == "" ? mainblack : mainWhite)
-                              : SvgPicture.asset('assets/icons/single_career.svg',color:
-                                career.thumbnail == "" ? mainblack : mainWhite),
-                      const SizedBox(
-                        width: 7,
-                      ),
-                      Text(
-                        career.isPublic ? "그룹 커리어" : "개인 커리어",
-                        style: kmain.copyWith(
+                        : SvgPicture.asset('assets/icons/single_career.svg',
                             color:
                                 career.thumbnail == "" ? mainblack : mainWhite),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+                    const SizedBox(
+                      width: 7,
+                    ),
+                    Text(
+                      career.isPublic ? "그룹 커리어" : "개인 커리어",
+                      style: kmain.copyWith(
+                          color:
+                              career.thumbnail == "" ? mainblack : mainWhite),
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
-          const SizedBox(
-            width: 14,
-          ),
-          SvgPicture.asset('assets/icons/reorder.svg')
-        ],
-      ),
+        ),
+        const SizedBox(
+          width: 14,
+        ),
+        SvgPicture.asset('assets/icons/reorder.svg')
+      ],
     );
   }
 }

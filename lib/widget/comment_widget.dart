@@ -104,18 +104,27 @@ class CommentWidget extends StatelessWidget {
                                                   "댓글 삭제에 실패하였습니다", 1000);
                                             }
                                           });
-                                });}, func2: (){}, value1: '댓글 삭제하기', value2: '', isOne: true, buttonColor1: mainWhite,textColor1: mainblack);
+                                        });
+                                  },
+                                      func2: () {},
+                                      value1: '댓글 삭제하기',
+                                      value2: '',
+                                      isOne: true,
+                                      buttonColor1: mainWhite,
+                                      textColor1: mainblack);
                                 }
                               : () {
                                   showBottomdialog(context, func1: () {
+                                    TextEditingController reportController =
+                                        TextEditingController();
+
                                     showTextFieldDialog(
                                         title: '댓글 신고하기',
                                         hintText:
                                             '신고 내용을 입력해주세요. 관리자 확인 이후 관련 약관에 따라 처리됩니다.',
                                         rightText: '신고하기',
                                         rightBoxColor: rankred,
-                                        textEditingController:
-                                            postController.reportController,
+                                        textEditingController: reportController,
                                         leftFunction: () {
                                           Get.back();
                                         },

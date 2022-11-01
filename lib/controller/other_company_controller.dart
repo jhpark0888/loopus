@@ -9,6 +9,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/httpresponse_model.dart';
+import 'package:loopus/model/issue_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -35,10 +36,10 @@ class OtherCompanyController extends GetxController
   int postPageNum = 1;
 
   RxBool isnewalarm = false.obs;
-  TextEditingController reportController = TextEditingController();
 
   RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
+  RxList<NewsIssue> newsList = <NewsIssue>[].obs;
 
   RxBool isBanned = false.obs;
 
@@ -68,6 +69,14 @@ class OtherCompanyController extends GetxController
       if (value.isError == false) {
         otherCompany.value.copywith(value.data);
         isFake.value = value.data["type"] ?? 0;
+
+        List<NewsIssue> tempNewsList = List.from(value.data["news"])
+            .map(
+              (news) => NewsIssue.fromJson(news),
+            )
+            .toList();
+
+        newsList(tempNewsList);
 
         otherCompany.refresh();
       } else {

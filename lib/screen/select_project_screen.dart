@@ -20,7 +20,7 @@ class SelectProjectScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBarWidget(
         leading: IconButton(
-          padding: EdgeInsets.zero,
+            padding: EdgeInsets.zero,
             onPressed: () {
               Get.back();
             },
@@ -55,7 +55,11 @@ class SelectProjectScreen extends StatelessWidget {
                           },
                           itemCount: controller.selectprojectlist.length,
                           separatorBuilder: (context, index) {
-                            return Divider(thickness: 0.5, color: dividegray);
+                            return Divider(
+                              thickness: 0.5,
+                              color: dividegray,
+                              height: 8,
+                            );
                           },
                         ),
                         Divider(thickness: 0.5, color: dividegray),
@@ -72,8 +76,7 @@ class SelectProjectScreen extends StatelessWidget {
                       children: [
                         SvgPicture.asset('assets/icons/career_add.svg'),
                         const SizedBox(width: 8),
-                        Text('커리어 추가하기',
-                            style: kmainbold.copyWith(color: mainblue))
+                        Text('커리어 추가하기', style: kmain.copyWith(color: mainblue))
                       ],
                     ),
                   )

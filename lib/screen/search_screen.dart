@@ -132,6 +132,7 @@ class SearchScreen extends StatelessWidget {
                             const SizedBox(height: 24),
                         itemCount: _searchController.recentSearchList.length),
                   ),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),

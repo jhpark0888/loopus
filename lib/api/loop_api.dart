@@ -99,10 +99,10 @@ Future<void> getprojectfollowlist(int userid, FollowListType followtype) async {
 Future<void> postfollowRequest(int friendid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
   String? userType = await const FlutterSecureStorage().read(key: "type");
-  int isStudent = UserType.school.name == userType ? 1 : 0;
+  int isStudent = UserType.student.name == userType ? 1 : 0;
 
   final uri =
-      Uri.parse("$serverUri/loop_api/loop/$friendid&is_student=$isStudent");
+      Uri.parse("$serverUri/loop_api/loop/$friendid?is_student=$isStudent");
 
   http.Response response =
       await http.post(uri, headers: {"Authorization": "Token $token"});

@@ -15,19 +15,7 @@ class ProjectDetailController extends GetxController {
   // RxBool isNetworkConnect = false.obs;
   Rx<ScreenState> projectscreenstate = ScreenState.loading.obs;
 
-  Rx<Project> project = Project(
-          id: 0,
-          userid: 0,
-          careerName: '',
-          updateDate: DateTime.now(),
-          thumbnail: "",
-          posts: <Post>[].obs,
-          fieldIds: [],
-          members: [],
-          is_user: 0,
-          user: Person.defaultuser(),
-          isPublic: false)
-      .obs;
+  Rx<Project> project = Project.defaultProject().obs;
   int projectid;
   // RxList<ProjectPostingWidget> postinglist = <ProjectPostingWidget>[].obs;
 

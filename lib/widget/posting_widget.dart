@@ -12,8 +12,11 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/search_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
+import 'package:loopus/screen/other_company_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/utils/check_form_validate.dart';
@@ -74,17 +77,18 @@ class PostingWidget extends StatelessWidget {
                       onTap: () => tapProfile(),
                       child: UserTileWidget(user: item.user)),
                   const SizedBox(height: 10),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      onTap: tapProjectname,
-                      child: Text(
-                        item.project!.careerName,
-                        style: kmain.copyWith(color: maingray),
+                  if (item.user.userType == UserType.student)
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      alignment: Alignment.centerLeft,
+                      child: GestureDetector(
+                        onTap: tapProjectname,
+                        child: Text(
+                          item.project!.careerName,
+                          style: kmain.copyWith(color: maingray),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
                 ],
               ),
             ),
@@ -155,7 +159,6 @@ class PostingWidget extends StatelessWidget {
                         Obx(
                           () => Row(
                             children: [
-                              
                               InkWell(
                                 onTap: tapLike,
                                 child: item.isLiked.value == 0
@@ -279,13 +282,14 @@ class PostingWidget extends StatelessWidget {
       });
     }
     Get.to(
-        () => PostingScreen(
-              post: item,
-              postid: item.id,
-              autofocus: autoFocus,
-            ),
-        opaque: false,
-        preventDuplicates: false,);
+      () => PostingScreen(
+        post: item,
+        postid: item.id,
+        autofocus: autoFocus,
+      ),
+      opaque: false,
+      preventDuplicates: false,
+    );
   }
 
   void tapProjectname() async {
@@ -362,11 +366,21 @@ class PostingWidget extends StatelessWidget {
   }
 
   void tapProfile() {
-    Get.to(
-        () => OtherProfileScreen(
-            user: item.user,
-            userid: item.user.userId,
-            realname: item.user.name),
-        preventDuplicates: false);
+    if (item.user.userType == UserType.student) {
+      Get.to(
+          () => OtherProfileScreen(
+              user: (item.user as Person),
+              userid: item.user.userId,
+              realname: item.user.name),
+          preventDuplicates: false);
+    } else {
+      Get.to(
+          () => OtherCompanyScreen(
+                companyId: item.user.userId,
+                companyName: item.user.name,
+                company: (item.user as Company),
+              ),
+          preventDuplicates: false);
+    }
   }
 }

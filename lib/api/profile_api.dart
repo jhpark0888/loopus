@@ -39,7 +39,7 @@ Future<HTTPResponse> getProfile(int userId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     String? userType = await const FlutterSecureStorage().read(key: "type");
-    int isStudent = UserType.school.name == userType ? 1 : 0;
+    int isStudent = UserType.student.name == userType ? 1 : 0;
     print('user token: $token');
 
     var uri = Uri.parse(
@@ -75,7 +75,7 @@ Future<HTTPResponse> getCorpProfile(int userId) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     String? userType = await const FlutterSecureStorage().read(key: "type");
-    int isStudent = UserType.school.name == userType ? 1 : 0;
+    int isStudent = UserType.student.name == userType ? 1 : 0;
     print('user token: $token');
 
     var uri = Uri.parse(

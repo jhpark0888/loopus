@@ -26,11 +26,10 @@ class UserTileWidget extends StatelessWidget {
       onTap: () {
         if (user.userType == UserType.student) {
           Get.to(
-              () => OtherProfileScreen(
-                  user: user as Person,
-                  userid: user.userId,
-                  realname: user.name),
-              preventDuplicates: false,);
+            () => OtherProfileScreen(
+                user: user as Person, userid: user.userId, realname: user.name),
+            preventDuplicates: false,
+          );
         } else {
           Get.to(
               () => OtherCompanyScreen(
@@ -59,7 +58,7 @@ class UserTileWidget extends StatelessWidget {
                 Text(user.name,
                     style:
                         kmainbold.copyWith(color: isDark ? mainWhite : null)),
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 user.userType == UserType.student
                     ? Text(
                         '${(user as Person).univName} · ${(user as Person).department}',

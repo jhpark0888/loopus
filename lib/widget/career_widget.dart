@@ -54,7 +54,7 @@ class CareerWidget extends StatelessWidget {
                   color: career.thumbnail == "" ? mainblack : mainWhite),
             ),
             const SizedBox(
-              height: 16,
+              height: 10,
             ),
             Row(
               children: [

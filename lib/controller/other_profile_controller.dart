@@ -41,8 +41,6 @@ class OtherProfileController extends GetxController
   RxList<Post> allPostList = <Post>[].obs;
   int postPageNum = 1;
 
-  TextEditingController reportController = TextEditingController();
-
   RxList<Person> otherlooplist = <Person>[].obs;
 
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;

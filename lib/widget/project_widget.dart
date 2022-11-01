@@ -58,7 +58,7 @@ class ProjectWidget extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 16,
+                    height: 8,
                   ),
                   Row(
                     children: [
@@ -86,10 +86,10 @@ class ProjectWidget extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 16,
+                    height: 8,
                   ),
                   careerAnalysisWidget(
-                    fieldList[project.value.fieldIds.first]!,
+                    fieldList[project.value.fieldId]!,
                   )
                 ],
               ),

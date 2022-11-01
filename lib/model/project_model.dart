@@ -10,7 +10,7 @@ class Project {
   Project(
       {required this.id,
       required this.userid,
-      required this.fieldIds,
+      required this.fieldId,
       this.postRatio,
       required this.careerName,
       required this.thumbnail,
@@ -30,7 +30,7 @@ class Project {
   double? postRatio;
   String careerName;
   String thumbnail;
-  List<String> fieldIds;
+  String fieldId;
   DateTime? updateDate;
   RxList<Post> posts;
   List<Person> members;
@@ -42,108 +42,110 @@ class Project {
   int? managerId;
   Company? company;
 
-  factory Project.defaultProject({
-    int? id,
-    int? userid,
-    double? postRatio,
-    String? careerName,
-    String? thumbnail,
-    List<String>? fieldIds,
-    DateTime? updateDate,
-    RxList<Post>? posts,
-    List<Person>? members,
-    RxInt? post_count,
-    Person? user,
-    bool? isTop,
-    int? is_user,
-    bool? isPublic,
-    int? managerId,
-    Company? company
-  }) =>
+  factory Project.defaultProject(
+          {int? id,
+          int? userid,
+          double? postRatio,
+          String? careerName,
+          String? thumbnail,
+          String? fieldId,
+          DateTime? updateDate,
+          RxList<Post>? posts,
+          List<Person>? members,
+          RxInt? post_count,
+          Person? user,
+          bool? isTop,
+          int? is_user,
+          bool? isPublic,
+          int? managerId,
+          Company? company}) =>
       Project(
-        id: id ?? 0,
-        userid: userid ?? 0,
-        careerName: careerName ?? "",
-        thumbnail: thumbnail ?? "",
-        updateDate: updateDate ?? DateTime.now(),
-        posts: posts ?? <Post>[].obs,
-        fieldIds: fieldIds ?? ["10"],
-        members: members ?? [],
-        postRatio: postRatio ?? 0.0,
-        post_count: post_count ?? RxInt(0),
-        is_user: is_user ?? 0,
-        user: user ?? Person.defaultuser(),
-        isPublic: isPublic ?? false,
-        managerId: managerId ?? 0,
-        company: company
-      );
+          id: id ?? 0,
+          userid: userid ?? 0,
+          careerName: careerName ?? "",
+          thumbnail: thumbnail ?? "",
+          updateDate: updateDate ?? DateTime.now(),
+          posts: posts ?? <Post>[].obs,
+          fieldId: fieldId ?? "16",
+          members: members ?? [],
+          postRatio: postRatio ?? 0.0,
+          post_count: post_count ?? RxInt(0),
+          is_user: is_user ?? 0,
+          user: user ?? Person.defaultuser(),
+          isPublic: isPublic ?? false,
+          managerId: managerId ?? 0,
+          company: company);
 
   factory Project.fromJson(Map<String, dynamic> json) {
     bool isProject = json["project"] != null;
     bool isCompany = json['thumbnail'].runtimeType == String;
     return Project(
-      id: isProject
-          ? json["project"]['project_id'] != null
-              ? json["project"]["project_id"]
-              : json["project"]['id'] != null
-                  ? json["project"]["id"]
-                  : 0
-          : json["id"] ?? 0,
-      userid: json["user_id"],
-      careerName: isProject
-          ? json["project"]["project_name"] ?? ""
-          : json["project_name"] ?? "",
-      thumbnail: isCompany
-          ? json['thumbnail']['company_logo'] ?? ""
-          : isProject
-              ? json["project"]["thumbnail"] ?? ""
-              : json["thumbnail"] ?? "",
-      updateDate: isProject
-          ? json["project"]["post_update_date"] != null
-              ? DateTime.parse(json["project"]["post_update_date"])
-              : DateTime.now()
-          : json["post_update_date"] != null
-              ? DateTime.parse(json["post_update_date"])
-              : DateTime.now(),
-      posts: json["post"] != null
-          ? RxList<Post>.from(json["post"].map((x) => Post.fromJson(x)))
-          : <Post>[].obs,
-      fieldIds: isProject
-          ? json["project"]["group"] != null
-              ? [json["project"]["group"].toString()]
-              // SplayTreeMap<String, int>.from(
-              //             (json["group"] as Map<String, dynamic>),
-              //             (keys1, keys2) => keys1.compareTo(keys2))
-              //         .keys
-              //         .toList()
-              //         .isNotEmpty
-              //     ? SplayTreeMap<String, int>.from(
-              //         (json["group"] as Map<String, dynamic>),
-              //         (keys1, keys2) => keys1.compareTo(keys2)).keys.toList()
-              //     : ["10"]
-              : ["10"]
-          : ["10"],
-      members: json["member"] != null
-          ? List<Person>.from(json["member"].map((x) => x['profile'] != null
-              ? Person.fromJson(x["profile"])
-              : Person.fromJson(x)))
-          : [],
-      postRatio:
-          json['ratio'] != null ? double.parse(json['ratio'].toString()) : 0.0,
-      post_count:
-          json["post_count"] != null ? RxInt(json["post_count"]) : RxInt(0),
-      is_user: json['is_user'] ?? 0,
-      user: json["profile"] != null ? Person.fromJson(json["profile"]) : null,
-      isPublic: json["project"] != null ? json["project"]["is_public"] : false,
-      managerId: isProject
-          ? json['manager']
-          : json['member'] != null
-              ? (List.from(json['member'])
-                      .where((element) => element['is_manager'] != null))
-                  .first['profile']['user_id']
-              : 0,
-      company: isCompany ? Company.fromJson(json['thumbnail']) : null
-    );
+        id: isProject
+            ? json["project"]['project_id'] != null
+                ? json["project"]["project_id"]
+                : json["project"]['id'] != null
+                    ? json["project"]["id"]
+                    : 0
+            : json["id"] ?? 0,
+        userid: json["user_id"],
+        careerName: isProject
+            ? json["project"]["project_name"] ?? ""
+            : json["project_name"] ?? "",
+        thumbnail: isCompany
+            ? json['thumbnail']['company_logo'] ?? ""
+            : isProject
+                ? json["project"]["thumbnail"] ?? ""
+                : json["thumbnail"] ?? "",
+        updateDate: isProject
+            ? json["project"]["post_update_date"] != null
+                ? DateTime.parse(json["project"]["post_update_date"])
+                : DateTime.now()
+            : json["post_update_date"] != null
+                ? DateTime.parse(json["post_update_date"])
+                : DateTime.now(),
+        posts: json["post"] != null
+            ? RxList<Post>.from(json["post"].map((x) => Post.fromJson(x)))
+            : <Post>[].obs,
+        fieldId: isProject
+            ? json["project"]["group"] != null
+                ? json["project"]["group"].toString()
+                : "16"
+            // SplayTreeMap<String, int>.from(
+            //             (json["group"] as Map<String, dynamic>),
+            //             (keys1, keys2) => keys1.compareTo(keys2))
+            //         .keys
+            //         .toList()
+            //         .isNotEmpty
+            //     ? SplayTreeMap<String, int>.from(
+            //         (json["group"] as Map<String, dynamic>),
+            //         (keys1, keys2) => keys1.compareTo(keys2)).keys.toList()
+            //     : ["10"]
+
+            : json["group"] != null
+                ? json["group"].toString()
+                : "16",
+        members: json["member"] != null
+            ? List<Person>.from(json["member"].map((x) => x['profile'] != null
+                ? Person.fromJson(x["profile"])
+                : Person.fromJson(x)))
+            : [],
+        postRatio: json['ratio'] != null
+            ? double.parse(json['ratio'].toString())
+            : 0.0,
+        post_count:
+            json["post_count"] != null ? RxInt(json["post_count"]) : RxInt(0),
+        is_user: json['is_user'] ?? 0,
+        user: json["profile"] != null ? Person.fromJson(json["profile"]) : null,
+        isPublic:
+            json["project"] != null ? json["project"]["is_public"] : false,
+        managerId: isProject
+            ? json['manager']
+            : json['member'] != null
+                ? (List.from(json['member'])
+                        .where((element) => element['is_manager'] != null))
+                    .first['profile']['user_id']
+                : 0,
+        company: isCompany ? Company.fromJson(json['thumbnail']) : null);
   }
 
   Map<String, dynamic> toJson() => {
