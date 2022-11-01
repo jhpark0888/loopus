@@ -81,10 +81,7 @@ class CareerRankWidget extends StatelessWidget {
 }
 
 class PersonRankWidget extends StatelessWidget {
-  PersonRankWidget(
-      {Key? key,
-      required this.isUniversity,
-      required this.user})
+  PersonRankWidget({Key? key, required this.isUniversity, required this.user})
       : super(key: key);
   Person user;
   bool isUniversity;
@@ -127,16 +124,17 @@ class PersonRankWidget extends StatelessWidget {
                 height: 36,
                 userType: user.userType,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Text(
                 user.name,
                 style: kmain,
                 maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               )
             ],
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,13 +144,13 @@ class PersonRankWidget extends StatelessWidget {
                 style: kmain,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Text(
                 user.department,
                 style: kmain,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               RichText(
                 overflow: TextOverflow.ellipsis,
                 text: TextSpan(children: [
@@ -168,7 +166,7 @@ class PersonRankWidget extends StatelessWidget {
         ),
         // 나 일때는 팔로우 버튼 없어야 함
         //지금은 is_user를 안 주는 듯
-         FollowButtonWidget(user: user)
+        FollowButtonWidget(user: user)
       ]),
     );
   }

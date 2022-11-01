@@ -86,8 +86,8 @@ class MessageWidget extends StatelessWidget {
                                   color: mainblue,
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 16),
                                   child: Text(
                                     message.content,
                                     style:
@@ -105,8 +105,8 @@ class MessageWidget extends StatelessWidget {
                                   color: mainblue,
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 16),
                                   child: Text(
                                     message.content,
                                     style: kmainheight.copyWith(
@@ -185,7 +185,8 @@ class MessageWidget extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(8)),
                                       child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8, horizontal: 16),
                                           child: Text(
                                             message.content,
                                             style: kmainheight,
@@ -209,7 +210,8 @@ class MessageWidget extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(8)),
                                       child: Padding(
-                                          padding:const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8, horizontal: 16),
                                           child: Text(
                                             message.content,
                                             style: kmainheight,

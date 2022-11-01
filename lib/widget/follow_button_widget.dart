@@ -24,13 +24,11 @@ class FollowButtonWidget extends StatelessWidget {
         ? Obx(
             () => GestureDetector(
               onTap: () {
-                print(user.followed);
-                // followMotion();
+                followMotion();
               },
               child: Container(
                 height: 36,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                     color: user.banned.value == BanState.ban
                         ? rankred

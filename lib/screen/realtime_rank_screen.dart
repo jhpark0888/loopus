@@ -82,29 +82,26 @@ class RealTimeRankScreen extends StatelessWidget {
                                                   ? "교내 TOP 50"
                                                   : "TOP 50",
                                               style: kmain)),
-                                      const SizedBox(
-                                        height: 24,
-                                      ),
                                       ListView.separated(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 24),
                                           scrollDirection: Axis.vertical,
                                           primary: false,
                                           shrinkWrap: true,
                                           itemBuilder: (context, index) {
-                                            print(_controller.koreaRankerMap[currentField.key]![index].followed);
                                             return Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 16),
                                               child: PersonRankWidget(
-                                                user: 
-                                                // isUniversity == true
+                                                user:
+                                                    // isUniversity == true
                                                     // ? _controller
                                                     //         .campusRankerMap[
                                                     //     currentField
                                                     //         .key]![index]
-                                                    // : 
-                                                    _controller
-                                                            .koreaRankerMap[
+                                                    // :
+                                                    _controller.koreaRankerMap[
                                                         currentField
                                                             .key]![index],
                                                 isUniversity: isUniversity,

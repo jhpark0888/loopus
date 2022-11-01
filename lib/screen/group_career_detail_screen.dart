@@ -27,6 +27,7 @@ import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/empty_post_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
+import 'package:loopus/widget/tabbar_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
@@ -44,8 +45,11 @@ class GroupCareerDetailScreen extends StatelessWidget {
   ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    careerDetailController =
-        Get.put(CareerDetailController(career: Rx(career)));
+    careerDetailController = Get.put(
+        CareerDetailController(
+          career: Rx(career),
+        ),
+        tag: career.id.toString());
     return Scaffold(
         body: NestedScrollView(
             controller: scrollController,
@@ -99,7 +103,9 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                 children: [
                                   RichText(
                                       text: TextSpan(children: [
-                                    TextSpan(text: 'IT 분야', style: kmainbold),
+                                    TextSpan(
+                                        text: '${fieldList[career.fieldId]} 분야',
+                                        style: kmainbold),
                                     const TextSpan(
                                         text: ' 커리어', style: kmainbold)
                                   ])),
@@ -110,7 +116,8 @@ class GroupCareerDetailScreen extends StatelessWidget {
                                         text: '$name님의 전체 커리어 중\n',
                                         style: kmainheight),
                                     TextSpan(
-                                        text: '${career.postRatio! * 100}%',
+                                        text:
+                                            '${(career.postRatio! * 100).toInt()}%',
                                         style: kmainbold),
                                     const TextSpan(
                                         text: '를 차지하는 커리어에요',
@@ -211,44 +218,51 @@ class GroupCareerDetailScreen extends StatelessWidget {
   }
 
   Widget joinCompany() {
-    return career.company != null ? Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            if (career.company != null) {
-              if (career.company!.userId != 0) {
-                Get.to(() => OtherCompanyScreen(
-                    companyId: career.company!.userId,
-                    companyName: career.company!.name));
-              }
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              UserImageWidget(
-                imageUrl:
-                    career.company != null ? career.company!.profileImage : '',
-                userType: UserType.company,
-                height: 36,
-                width: 36,
+    return career.company != null
+        ? Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (career.company != null) {
+                    if (career.company!.userId != 0) {
+                      Get.to(() => OtherCompanyScreen(
+                          companyId: career.company!.userId,
+                          companyName: career.company!.name));
+                    }
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        UserImageWidget(
+                          imageUrl: career.company != null
+                              ? career.company!.profileImage
+                              : '',
+                          userType: UserType.company,
+                          height: 36,
+                          width: 36,
+                        ),
+                        const SizedBox(width: 8),
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: career.company != null
+                                  ? career.company!.name
+                                  : '네이버',
+                              style: kmainbold),
+                          const TextSpan(text: '와 함께한 커리어에요', style: kmain)
+                        ]))
+                      ]),
+                ),
               ),
-              const SizedBox(width: 8),
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: career.company != null ? career.company!.name : '네이버',
-                    style: kmainbold),
-                const TextSpan(text: '와 함께한 커리어에요', style: kmain)
-              ]))
-            ]),
-          ),
-        ),
-        DivideWidget(
-          height: 1,
-        ),
-      ],
-    ): const SizedBox.shrink();
+              DivideWidget(
+                height: 1,
+              ),
+            ],
+          )
+        : const SizedBox.shrink();
   }
 
   Widget joinPeople(User user, int manager) {
@@ -257,42 +271,71 @@ class GroupCareerDetailScreen extends StatelessWidget {
         Get.to(
             () => OtherProfileScreen(userid: user.userId, realname: user.name));
       },
-      child: Column(
-        children: [
-          UserImageWidget(
-            width: 50,
-            height: 50,
-            imageUrl: user.profileImage,
-            userType: UserType.student,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Row(
-            children: [
-              if (manager == user.userId)
-                Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(36),
-                        color: rankred),
-                    width: 5,
-                    height: 5),
-              if (manager == user.userId) const SizedBox(width: 3),
-              Text(
-                user.name,
-                style: kmain,
-              ),
-            ],
-          )
-        ],
-      ),
+      child: manager == user.userId
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 11),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(36),
+                          color: rankred),
+                      width: 5,
+                      height: 5),
+                ),
+                const SizedBox(width: 3),
+                Column(
+                  children: [
+                    UserImageWidget(
+                      width: 50,
+                      height: 50,
+                      imageUrl: user.profileImage,
+                      userType: UserType.student,
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      user.name,
+                      style: kmain,
+                      maxLines: 1,
+                    )
+                  ],
+                ),
+              ],
+            )
+          : Column(
+              children: [
+                UserImageWidget(
+                  width: 50,
+                  height: 50,
+                  imageUrl: user.profileImage,
+                  userType: UserType.student,
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      user.name,
+                      style: kmain,
+                      maxLines: 1,
+                    ),
+                  ],
+                )
+              ],
+            ),
     );
   }
 
   Widget addPeople() {
     return GestureDetector(
       onTap: () {
-        Get.to(() => SelectCareerGroupMemberScreen());
+        Get.to(() => SelectCareerGroupMemberScreen(
+              careerId: career.id,
+            ));
       },
       child: Column(children: [
         SvgPicture.asset(
@@ -339,7 +382,11 @@ class _MyAppSpace extends StatelessWidget {
                   child: Opacity(
                     opacity: 1 - opacity2,
                     child: getCollapseTitle(
-                      CareerDetailController.to.career.value.careerName,
+                      Get.find<CareerDetailController>(
+                              tag: career.id.toString())
+                          .career
+                          .value
+                          .careerName,
                     ),
                   ),
                 ),
@@ -369,7 +416,11 @@ class _MyAppSpace extends StatelessWidget {
                         children: [
                           const SizedBox(height: 44),
                           getExpendTitle(
-                            CareerDetailController.to.career.value.careerName,
+                            Get.find<CareerDetailController>(
+                                    tag: career.id.toString())
+                                .career
+                                .value
+                                .careerName,
                           ),
                           const SizedBox(
                             height: 16,
@@ -435,46 +486,24 @@ Widget adapt(TabController tabController, String name) {
   return Container(
       width: Get.width,
       decoration: const BoxDecoration(color: mainWhite),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TabBar(
-            controller: tabController,
-            tabs: [
-              Tab(
-                  height: 48,
-                  child: Container(
-                    child: Text(
-                      '${name} 님의 포스트',
-                      style: kmainbold,
-                    ),
-                  )),
-              Tab(
-                  height: 48,
-                  child: Container(
-                    child: Text(
-                      '그룹 전체 포스트',
-                      style: kmainbold,
-                    ),
-                  ))
-            ],
-            labelStyle: kmainbold,
-            labelColor: mainblack,
-            unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
-            unselectedLabelColor: dividegray,
-            automaticIndicatorColorAdjustment: false,
-            indicator: const UnderlineIndicator(
-              strokeCap: StrokeCap.round,
-              borderSide: BorderSide(width: 2, color: mainblack),
-            ),
-          ),
-          Divider(
-            height: 1,
-            thickness: 2,
-            color: dividegray,
-          )
-        ],
-      ));
+      child: TabBarWidget(tabController: tabController, tabs: [
+        Tab(
+            height: 48,
+            child: Container(
+              child: Text(
+                '${name} 님의 포스트',
+                style: kmainbold,
+              ),
+            )),
+        Tab(
+            height: 48,
+            child: Container(
+              child: Text(
+                '그룹 전체 포스트',
+                style: kmainbold,
+              ),
+            ))
+      ]));
 }
 
 class GroupCareerScreen extends StatelessWidget {
@@ -482,8 +511,8 @@ class GroupCareerScreen extends StatelessWidget {
   int id;
   @override
   Widget build(BuildContext context) {
-    CareerDetailController controller = Get.find();
-    print(controller.postList.isNotEmpty);
+    CareerDetailController controller = Get.find(tag: id.toString());
+    // print(controller.postList.isNotEmpty);
     return Obx(() => controller.postList.isNotEmpty
         ? CustomScrollView(slivers: [
             SliverList(
@@ -524,8 +553,8 @@ class MyCareerScreen extends StatelessWidget {
   int id;
   @override
   Widget build(BuildContext context) {
-    CareerDetailController controller = Get.find();
-    print(controller.postList.isNotEmpty);
+    CareerDetailController controller = Get.find(tag: id.toString());
+    // print(controller.postList.isNotEmpty);
     return Obx(() => controller.postList.isNotEmpty
         ? CustomScrollView(slivers: [
             SliverList(

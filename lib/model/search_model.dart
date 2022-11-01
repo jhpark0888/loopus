@@ -20,13 +20,17 @@ class RecentSearch {
         id: json["id"],
         searchType: tempSearchType,
         data: tempSearchType == SearchType.profile
-            ? Person.fromJson(json["data"])
+            ? json["data"] != null
+                ? Person.fromJson(json["data"])
+                : Person.defaultuser()
             : tempSearchType == SearchType.post
                 ? json["data"]
                 : tempSearchType == SearchType.tag
                     ? Tag.fromJson(json["data"])
                     : tempSearchType == SearchType.company
-                        ? Company.fromJson(json["data"])
+                        ? json["data"] != null
+                            ? Company.fromJson(json["data"])
+                            : Company.defaultCompany()
                         : null);
   }
 }

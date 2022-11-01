@@ -65,133 +65,119 @@ class MyProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () async {
-          // try {
-          //   if (Platform.isAndroid &&
-          //       (AppController.to.currentIndex.value == 4)) {
-          //     AppController.to.currentIndex(0);
-          //     return false;
-          //   }
-          // } catch (e) {
-          //   print(e);
-          // }
-
-          return true;
-        },
-        child: Scaffold(
-          appBar: PreferredSize(
-                preferredSize: Size.fromHeight(44),
-            child: AppBar(
-              titleSpacing: 0,
-              elevation: 0,
-              centerTitle: false,
-              title: const Text(
-                '프로필',
-                style: kNavigationTitle,
-              ),
-              leading: IconButton(
-                padding: EdgeInsets.zero,
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: SvgPicture.asset('assets/icons/appbar_back.svg')),
-              actions: [
-                IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      Get.to(() => BookmarkScreen());
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/icons/appbar_bookmark.svg',
-                    )),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    Get.to(() => SettingScreen());
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/icons/setting.svg',
-                    color: mainblack,
-                  ),
-                ),
-              ],
-            ),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(44),
+        child: AppBar(
+          titleSpacing: 0,
+          elevation: 0,
+          centerTitle: false,
+          title: const Text(
+            '프로필',
+            style: kNavigationTitle,
           ),
-          body: RefreshIndicator(
-            notificationPredicate: (notification) {
-              return notification.depth == 2;
-            },
-
-            // controller: profileController.profilerefreshController,
-            // enablePullDown: true,
-            // header: const MyCustomHeader(),
-            onRefresh: profileController.onRefresh,
-            child: ExtendedNestedScrollView(
-              // primary: true,
-              // slivers: [
-              //   SliverToBoxAdapter(
-              //     child: _profileView(context),
-              //   ),
-              //   // SliverOverlapAbsorber(
-              //   //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-              //   //       context),
-              //   //   sliver:
-
-              //   SliverPersistentHeader(
-              //     pinned: true,
-              //     delegate: _SliverTabBarViewDelegate(child: _tabView()),
-              //   ),
-              //   // SliverAppBar(
-              //   //   backgroundColor: mainWhite,
-              //   //   toolbarHeight: 44,
-              //   //   pinned: true,
-              //   //   primary: false,
-              //   //   elevation: 0,
-              //   //   automaticallyImplyLeading: false,
-              //   //   flexibleSpace: _tabView(),
-              //   // ),
-              //   // ),
-              //   // NestedScrollView(headerSliverBuilder: headerSliverBuilder, body: body)
-              //   SliverFillRemaining(
-              //     hasScrollBody: true,
-              //     child: TabBarView(
-              //       physics: const NeverScrollableScrollPhysics(),
-              //       controller: profileController.tabController,
-              //       children: [_careerView(context), _postView()],
-              //     ),
-              //   )
-              // ],
-              onlyOneScrollInBody: true,
-              headerSliverBuilder: (context, value) {
-                return [
-                  SliverToBoxAdapter(
-                    child: _profileView(context),
-                  ),
-                  // SliverOverlapAbsorber(
-                  //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                  //       context),
-                  //   sliver:
-                  SliverAppBar(
-                    backgroundColor: mainWhite,
-                    toolbarHeight: 44,
-                    pinned: true,
-                    primary: false,
-                    elevation: 0,
-                    automaticallyImplyLeading: false,
-                    flexibleSpace: _tabView(),
-                  ),
-                  // ),
-                ];
+          leading: IconButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                Get.back();
               },
-              body: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: profileController.tabController,
-                children: [_careerView(context), _postView()],
+              icon: SvgPicture.asset('assets/icons/appbar_back.svg')),
+          actions: [
+            IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  Get.to(() => BookmarkScreen());
+                },
+                icon: SvgPicture.asset(
+                  'assets/icons/appbar_bookmark.svg',
+                )),
+            IconButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                Get.to(() => SettingScreen());
+              },
+              icon: SvgPicture.asset(
+                'assets/icons/setting.svg',
+                color: mainblack,
               ),
             ),
+          ],
+        ),
+      ),
+      body: RefreshIndicator(
+        notificationPredicate: (notification) {
+          return notification.depth == 2;
+        },
+
+        // controller: profileController.profilerefreshController,
+        // enablePullDown: true,
+        // header: const MyCustomHeader(),
+        onRefresh: profileController.onRefresh,
+        child: ExtendedNestedScrollView(
+          // primary: true,
+          // slivers: [
+          //   SliverToBoxAdapter(
+          //     child: _profileView(context),
+          //   ),
+          //   // SliverOverlapAbsorber(
+          //   //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+          //   //       context),
+          //   //   sliver:
+
+          //   SliverPersistentHeader(
+          //     pinned: true,
+          //     delegate: _SliverTabBarViewDelegate(child: _tabView()),
+          //   ),
+          //   // SliverAppBar(
+          //   //   backgroundColor: mainWhite,
+          //   //   toolbarHeight: 44,
+          //   //   pinned: true,
+          //   //   primary: false,
+          //   //   elevation: 0,
+          //   //   automaticallyImplyLeading: false,
+          //   //   flexibleSpace: _tabView(),
+          //   // ),
+          //   // ),
+          //   // NestedScrollView(headerSliverBuilder: headerSliverBuilder, body: body)
+          //   SliverFillRemaining(
+          //     hasScrollBody: true,
+          //     child: TabBarView(
+          //       physics: const NeverScrollableScrollPhysics(),
+          //       controller: profileController.tabController,
+          //       children: [_careerView(context), _postView()],
+          //     ),
+          //   )
+          // ],
+          onlyOneScrollInBody: true,
+          headerSliverBuilder: (context, value) {
+            return [
+              SliverToBoxAdapter(
+                child: _profileView(context),
+              ),
+              // SliverOverlapAbsorber(
+              //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+              //       context),
+              //   sliver:
+              SliverAppBar(
+                backgroundColor: mainWhite,
+                toolbarHeight: 44,
+                pinned: true,
+                primary: false,
+                elevation: 0,
+                automaticallyImplyLeading: false,
+                flexibleSpace: _tabView(),
+              ),
+              // ),
+            ];
+          },
+          body: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: profileController.tabController,
+            children: [_careerView(context), _postView()],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   void changeProfileImage() async {
@@ -418,6 +404,7 @@ class MyProfileScreen extends StatelessWidget {
                     ? SizedBox(
                         height: 28,
                         child: ListView.separated(
+                            padding: const EdgeInsets.only(right: 8),
                             primary: false,
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
@@ -434,16 +421,7 @@ class MyProfileScreen extends StatelessWidget {
                             itemCount: profileController
                                 .myUserInfo.value.snsList.length),
                       )
-                    : GestureDetector(
-                        onTap: () {},
-                        child: Text(
-                          "SNS를 추가해주세요",
-                          style: kmainbold.copyWith(color: dividegray),
-                        ),
-                      )),
-                const SizedBox(
-                  width: 7,
-                ),
+                    : Container()),
                 GestureDetector(
                   onTap: () {
                     Get.to(() => ProfileSnsAddScreen(
@@ -456,7 +434,24 @@ class MyProfileScreen extends StatelessWidget {
                     height: 28,
                     color: mainblue,
                   ),
-                )
+                ),
+                Obx(() => profileController.myUserInfo.value.snsList.isNotEmpty
+                    ? Container()
+                    : GestureDetector(
+                        onTap: () {
+                          Get.to(() => ProfileSnsAddScreen(
+                                snsList:
+                                    profileController.myUserInfo.value.snsList,
+                              ));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Text(
+                            "SNS를 등록해주세요",
+                            style: kmain.copyWith(color: mainblue),
+                          ),
+                        ),
+                      ))
               ],
             ),
             const SizedBox(
@@ -508,123 +503,139 @@ class MyProfileScreen extends StatelessWidget {
 
   Widget _careerView(BuildContext context) {
     return SafeArea(
-      child: Obx(() => profileController.myProjectList.isEmpty
-          ? EmptyContentWidget(text: '아직 커리어가 없어요')
-          : Builder(
-              builder: (context) {
-                return CustomScrollView(
-                  // key: const PageStorageKey<String>("careerView"),
-                  slivers: [
-                    // SliverOverlapInjector(
-                    //     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                    //         context)),
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverToBoxAdapter(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 24),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                    '${profileController.myUserInfo.value.name}님과 관련있는 기업',
-                                    style: kmainbold),
-                                const SizedBox(width: 8),
-                                SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: IconButton(
-                                    padding: EdgeInsets.zero,
-                                    onPressed: (){showPopUpDialog('관련있는 기업', '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요', 3000);},
-                                    icon: SvgPicture.asset(
-                                      'assets/icons/information.svg',
-                                      width: 16,
-                                      height: 16,
+        child: Obx(() => profileController.myProjectList.isEmpty
+            ? EmptyContentWidget(text: '아직 커리어가 없어요')
+            : Builder(
+                builder: (context) {
+                  return CustomScrollView(
+                    // key: const PageStorageKey<String>("careerView"),
+                    slivers: [
+                      // SliverOverlapInjector(
+                      //     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      //         context)),
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 24),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      '${profileController.myUserInfo.value.name}님과 관련있는 기업',
+                                      style: kmainbold),
+                                  const SizedBox(width: 8),
+                                  SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      onPressed: () {
+                                        showPopUpDialog(
+                                            '관련있는 기업',
+                                            '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요',
+                                            3000);
+                                      },
+                                      icon: SvgPicture.asset(
+                                        'assets/icons/information.svg',
+                                        width: 16,
+                                        height: 16,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                '아직 ${profileController.myUserInfo.value.name} 관련있는 기업이 없어요',
+                                style: kmain.copyWith(color: maingray),
+                              ),
+                              const SizedBox(height: 24),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Text('커리어', style: kmainbold),
+                                  const SizedBox(width: 8),
+                                  CareerAnalysisWidget(
+                                    field: fieldList[profileController
+                                        .myUserInfo.value.fieldId]!,
+                                    groupRatio: profileController
+                                        .myUserInfo.value.groupRatio,
+                                    // schoolRatio: profileController
+                                    //     .myUserInfo.value.schoolRatio,
+                                    lastgroupRatio: profileController
+                                            .myUserInfo.value.groupRatio +
+                                        profileController.myUserInfo.value
+                                            .groupRatioVariance,
+                                    // lastschoolRatio: profileController
+                                    //         .myUserInfo.value.schoolRatio +
+                                    //     profileController
+                                    //         .myUserInfo.value.schoolRatioVariance,
+                                  ),
+                                  // const SizedBox(width: 8),
+                                  SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      onPressed: () {
+                                        showPopUpDialog(
+                                            '커리어',
+                                            '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요',
+                                            3000);
+                                      },
+                                      icon: SvgPicture.asset(
+                                        'assets/icons/information.svg',
+                                      ),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            Text('아직 ${profileController.myUserInfo.value.name} 관련있는 기업이 없어요',style: kmain.copyWith(color: maingray),),
-                            const SizedBox(height: 24),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Text('커리어', style: kmainbold),
-                                const SizedBox(width: 8),
-                                CareerAnalysisWidget(
-                                  field: fieldList[profileController
-                                      .myUserInfo.value.fieldId]!,
-                                  groupRatio: profileController
-                                      .myUserInfo.value.groupRatio,
-                                  // schoolRatio: profileController
-                                  //     .myUserInfo.value.schoolRatio,
-                                  lastgroupRatio: profileController
-                                          .myUserInfo.value.groupRatio +
-                                      profileController
-                                          .myUserInfo.value.groupRatioVariance,
-                                  // lastschoolRatio: profileController
-                                  //         .myUserInfo.value.schoolRatio +
-                                  //     profileController
-                                  //         .myUserInfo.value.schoolRatioVariance,
-                                ),
-                                // const SizedBox(width: 8),
-                                SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: IconButton(
-                                    padding: EdgeInsets.zero,
-                                    onPressed: (){showPopUpDialog('커리어', '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요', 3000);},
-                                    icon: SvgPicture.asset(
-                                      'assets/icons/information.svg',
+                                  const Spacer(),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => CareerArrangeScreen());
+                                    },
+                                    child: Text(
+                                      "수정하기",
+                                      style: kmain.copyWith(color: mainblue),
                                     ),
-                                  ),
-                                ),
-                                const Spacer(),
-                                GestureDetector(
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              ListView.separated(
+                                primary: false,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) =>
+                                    GestureDetector(
                                   onTap: () {
-                                    Get.to(() => CareerArrangeScreen());
+                                    print(profileController
+                                        .myProjectList[index].isPublic);
+                                    goCareerScreen(
+                                        profileController.myProjectList[index],
+                                        profileController
+                                            .myUserInfo.value.name);
                                   },
-                                  child: Text(
-                                    "수정하기",
-                                    style: kmain.copyWith(color: mainblue),
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                          ListView.separated(
-                            primary: false,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) => GestureDetector(
-                              onTap: () {
-                                print(profileController
-                                    .myProjectList[index].isPublic);
-                                goCareerScreen(
-                                    profileController.myProjectList[index],
-                                    profileController.myUserInfo.value.name);
-                              },
-                              child: CareerWidget(
-                                  career:
-                                      profileController.myProjectList[index]),
-                            ),
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                              height: 16,
-                            ),
-                            itemCount: profileController.myProjectList.length,
+                                  child: CareerWidget(
+                                      career: profileController
+                                          .myProjectList[index]),
+                                ),
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(
+                                  height: 16,
+                                ),
+                                itemCount:
+                                    profileController.myProjectList.length,
+                              ),
+                              const SizedBox(height: 24),
+                            ],
                           ),
-                          const SizedBox(height: 24),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              );
-            },
-          )));
+                        ),
+                      )
+                    ],
+                  );
+                },
+              )));
   }
 
   Widget _postView() {

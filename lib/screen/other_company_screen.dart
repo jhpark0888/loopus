@@ -21,11 +21,13 @@ import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/webview_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/error_control.dart';
+import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/follow_button_widget.dart';
+import 'package:loopus/widget/news_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart' as sr;
@@ -149,13 +151,14 @@ class OtherCompanyScreen extends StatelessWidget {
                                     });
                               },
                               func2: () {
+                                TextEditingController reportController =
+                                    TextEditingController();
                                 showTextFieldDialog(
                                     title: '계정 신고',
                                     hintText:
                                         '신고 사유를 입력해주세요. 관리자 확인 \n 이후 해당 계정은 이용약관에 따라 제재를 \n받을 수 있습니다.',
                                     rightText: '신고',
-                                    textEditingController:
-                                        _controller.reportController,
+                                    textEditingController: reportController,
                                     leftFunction: () {
                                       Get.back();
                                     },
@@ -307,12 +310,14 @@ class OtherCompanyScreen extends StatelessWidget {
                   fieldList[_controller.otherCompany.value.fieldId]!,
                   style: kmain.copyWith(color: mainWhite),
                 ),
-                const SizedBox(width: 8),
-                const VerticalDivider(
-                  thickness: 2,
-                  color: mainWhite,
+                const SizedBox(
+                  height: 9,
+                  child: VerticalDivider(
+                    thickness: 1,
+                    width: 16,
+                    color: mainWhite,
+                  ),
                 ),
-                const SizedBox(width: 8),
                 Text(
                   _controller.otherCompany.value.address,
                   style: kmain.copyWith(color: mainWhite),
@@ -417,7 +422,7 @@ class OtherCompanyScreen extends StatelessWidget {
                       height: 16,
                     ),
                     SizedBox(
-                      height: 72,
+                      height: 74,
                       child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -508,6 +513,7 @@ class OtherCompanyScreen extends StatelessWidget {
                 primary: false,
                 shrinkWrap: true,
                 itemBuilder: (context, index) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CachedNetworkImage(
                           imageUrl: _controller
@@ -525,6 +531,30 @@ class OtherCompanyScreen extends StatelessWidget {
                             );
                           },
                         ),
+                        if (index == 0)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  "기업소개",
+                                  style: kmainbold.copyWith(color: mainWhite),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  "\"${_controller.otherCompany.value.slogan}\"",
+                                  style: kmainboldHeight.copyWith(
+                                      color: mainWhite),
+                                ),
+                              ],
+                            ),
+                          ),
                         if (_controller
                                 .otherCompany.value.images[index].imageInfo !=
                             "")
@@ -560,6 +590,17 @@ class OtherCompanyScreen extends StatelessWidget {
                 ],
               ),
             ),
+          Obx(
+            () => _controller.newsList.isNotEmpty
+                ? KeepAliveWidget(
+                    child: NewsListWidget(
+                      title: "기업 뉴스",
+                      issueList: _controller.newsList,
+                      isDark: true,
+                    ),
+                  )
+                : Container(),
+          ),
           if (_controller.isFake.value == 1)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 24),
@@ -605,7 +646,7 @@ class OtherCompanyScreen extends StatelessWidget {
       children: [
         UserImageWidget(imageUrl: user.profileImage, userType: user.userType),
         const SizedBox(
-          height: 8,
+          height: 4,
         ),
         Text(
           user.name,

@@ -44,7 +44,7 @@ Future<HTTPResponse> addproject() async {
             .map((person) => person.id)
             .toList(),
         'is_public': projectAddController.isPublic.value,
-        'company' : projectAddController.selectCompany.value.userId
+        'company': projectAddController.selectCompany.value.userId
       };
 
       final headers = {
@@ -159,9 +159,10 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
       if (updateType == ProjectUpdateType.project_name) {
         request.fields['project_name'] =
             projectAddController.projectnamecontroller.text;
-            if(projectAddController.selectCompany.value.name != ''){
-              request.fields['company'] = projectAddController.selectCompany.value.userId.toString();
-            }
+        if (projectAddController.selectCompany.value.name != '') {
+          request.fields['company'] =
+              projectAddController.selectCompany.value.userId.toString();
+        }
       } else if (updateType == ProjectUpdateType.date) {
         request.fields['start_date'] = DateFormat('yyyy-MM-dd').format(
             DateTime.parse(projectAddController.selectedStartDateTime.value));
@@ -211,8 +212,9 @@ Future updateproject(int projectId, ProjectUpdateType updateType) async {
     }
   }
 }
-enum DeleteType{exit,del}
-Future<HTTPResponse> deleteProject(int projectId, DeleteType type ) async {
+
+enum DeleteType { exit, del }
+Future<HTTPResponse> deleteProject(int projectId, DeleteType type) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
@@ -220,13 +222,13 @@ Future<HTTPResponse> deleteProject(int projectId, DeleteType type ) async {
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
     try {
-      final uri = Uri.parse("$serverUri/project_api/project?id=$projectId&type=${type.name}"); //type exit del
+      final uri = Uri.parse(
+          "$serverUri/project_api/project?id=$projectId&type=${type.name}"); //type exit del
       http.Response response =
           await http.delete(uri, headers: {"Authorization": "Token $token"});
 
       print("프로젝트(커리어) 삭제 : ${response.statusCode}");
       if (response.statusCode == 200) {
-
         return HTTPResponse.success('');
       } else if (response.statusCode == 404) {
         Get.back();
@@ -243,11 +245,10 @@ Future<HTTPResponse> deleteProject(int projectId, DeleteType type ) async {
   }
 }
 
-Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember, String? title,
-    ProjectUpdateType updateType) async {
+Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember,
+    String? title, ProjectUpdateType updateType) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
@@ -266,10 +267,12 @@ Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember, Str
               'looper', member.userId.toString());
           request.files.add(multipartFile);
         }
-      }else if(updateType == ProjectUpdateType.project_name){
+      } else if (updateType == ProjectUpdateType.project_name) {
         request.fields['project_name'] = title!;
       }
+      print(request.files);
       http.StreamedResponse response = await request.send();
+      print("커리어 업데이트: ${response.statusCode}");
       if (response.statusCode == 200) {
         return HTTPResponse.success('');
       }
@@ -277,7 +280,7 @@ Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember, Str
     } on SocketException {
       return HTTPResponse.serverError();
     } catch (e) {
-      print(e);
+      print("커리어 업데이트 에러: $e");
       return HTTPResponse.unexpectedError(e);
     }
   }

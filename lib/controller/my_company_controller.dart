@@ -8,6 +8,7 @@ import 'package:loopus/api/loop_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/model/company_model.dart';
+import 'package:loopus/model/issue_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -39,8 +40,9 @@ class MyCompanyController extends GetxController
   RxBool isLoopPeopleLoading = true.obs;
   Rx<ScreenState> myprofilescreenstate = ScreenState.loading.obs;
 
-  RxList showUserList = <Person>[].obs;
-  RxList visitUserList = <Person>[].obs;
+  RxList<Person> showUserList = <Person>[].obs;
+  RxList<Person> visitUserList = <Person>[].obs;
+  RxList<NewsIssue> newsList = <NewsIssue>[].obs;
 
   // RxList<User> followerList = <User>[].obs;
 
@@ -65,6 +67,13 @@ class MyCompanyController extends GetxController
     await getCorpProfile(int.parse(userId!)).then((value) async {
       if (value.isError == false) {
         myCompanyInfo.value = Company.fromJson(value.data);
+        List<NewsIssue> tempNewsList = List.from(value.data["news"])
+            .map(
+              (news) => NewsIssue.fromJson(news),
+            )
+            .toList();
+
+        newsList(tempNewsList);
         // isNewAlarm.value = value.data['new_alarm'];
         print(myCompanyInfo.value.images);
       } else {
@@ -102,11 +111,11 @@ class MyCompanyController extends GetxController
   void getVisitShowUserList() {
     getCompShowUsers("all", 1).then((value) {
       if (value.isError == false) {
-        List<User> tempShowList = List.from(value.data["show"])
+        List<Person> tempShowList = List.from(value.data["show"])
             .map((friend) => Person.fromJson(friend))
             .toList();
 
-        List<User> tempVisitList = List.from(value.data["shown"])
+        List<Person> tempVisitList = List.from(value.data["shown"])
             .map((friend) => Person.fromJson(friend))
             .toList();
 

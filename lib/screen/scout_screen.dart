@@ -83,7 +83,7 @@ class ScoutScreen extends StatelessWidget {
                           height: 16,
                           width: 16,
                           child: IconButton(
-                            padding: EdgeInsets.zero,
+                              padding: EdgeInsets.zero,
                               onPressed: () {
                                 showPopUpDialog(
                                     '스카우트 중인 기업',
@@ -147,7 +147,8 @@ class ScoutScreen extends StatelessWidget {
                                   child: ListView.separated(
                                     primary: false,
                                     shrinkWrap: true,
-                                    padding: const EdgeInsets.only(top: 24),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 24),
                                     itemBuilder: (context, index) {
                                       if (_scontroller
                                           .companyFieldList[index].isEmpty) {
@@ -300,12 +301,12 @@ class ScoutScreen extends StatelessWidget {
             child: Obx(
               () => Text(
                   _scontroller.isCorp.value == 1
-                      ? "유저님의 기업과 유사한 다른 기업"
+                      ? "회원님의 기업과 유사한 기업"
                       : "당신에게 '집중'하고 있는 추천 기업",
                   style: kmainbold.copyWith(color: mainWhite)),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
@@ -318,7 +319,7 @@ class ScoutScreen extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: kNavigationTitle.copyWith(color: mainWhite)),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(

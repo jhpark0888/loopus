@@ -40,8 +40,8 @@ class PersonalCareerDetailScreen extends StatelessWidget {
   ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    careerDetailController =
-        Get.put(CareerDetailController(career: Rx(career)));
+    careerDetailController = Get.put(CareerDetailController(career: Rx(career)),
+        tag: career.id.toString());
     // copyList = careerList;
     return Scaffold(
       body: CustomScrollView(
@@ -95,9 +95,11 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             RichText(
-                                text: const TextSpan(children: [
-                              TextSpan(text: 'IT 분야', style: kmainbold),
-                              TextSpan(text: '커리어', style: kmainbold)
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: '${fieldList[career.fieldId]} 분야',
+                                  style: kmainbold),
+                              const TextSpan(text: ' 커리어', style: kmainbold)
                             ])),
                             const SizedBox(height: 8),
                             RichText(
@@ -106,7 +108,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                                   text: '$name님의 전체 커리어 중\n',
                                   style: kmainheight),
                               TextSpan(
-                                  text: '${career.postRatio! * 100}%',
+                                  text: '${(career.postRatio! * 100).toInt()}%',
                                   style: kmainbold),
                               const TextSpan(
                                   text: '를 차지하는 커리어에요', style: kmainheight)
@@ -160,44 +162,51 @@ class PersonalCareerDetailScreen extends StatelessWidget {
   }
 
   Widget joinCompany() {
-    return career.company != null ? Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            if (career.company != null) {
-              if (career.company!.userId != 0) {
-                Get.to(() => OtherCompanyScreen(
-                    companyId: career.company!.userId,
-                    companyName: career.company!.name));
-              }
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              UserImageWidget(
-                imageUrl:
-                    career.company != null ? career.company!.profileImage : '',
-                userType: UserType.company,
-                height: 36,
-                width: 36,
+    return career.company != null
+        ? Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (career.company != null) {
+                    if (career.company!.userId != 0) {
+                      Get.to(() => OtherCompanyScreen(
+                          companyId: career.company!.userId,
+                          companyName: career.company!.name));
+                    }
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        UserImageWidget(
+                          imageUrl: career.company != null
+                              ? career.company!.profileImage
+                              : '',
+                          userType: UserType.company,
+                          height: 36,
+                          width: 36,
+                        ),
+                        const SizedBox(width: 8),
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: career.company != null
+                                  ? career.company!.name
+                                  : '네이버',
+                              style: kmainbold),
+                          const TextSpan(text: '와 함께한 커리어에요', style: kmain)
+                        ]))
+                      ]),
+                ),
               ),
-              const SizedBox(width: 8),
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: career.company != null ? career.company!.name : '네이버',
-                    style: kmainbold),
-                const TextSpan(text: '와 함께한 커리어에요', style: kmain)
-              ]))
-            ]),
-          ),
-        ),
-        DivideWidget(
-          height: 1,
-        ),
-      ],
-    ): const SizedBox.shrink();
+              DivideWidget(
+                height: 1,
+              ),
+            ],
+          )
+        : const SizedBox.shrink();
   }
 }
 
@@ -415,13 +424,13 @@ class _leading extends StatelessWidget {
                     });
                   });
             }, func2: () {
+              TextEditingController reportController = TextEditingController();
               showTextFieldDialog(
                   title: '계정 신고',
                   hintText:
                       '신고 사유를 입력해주세요. 관리자 확인 이후 해당 계정은 이용약관에 따라 제재를 받을 수 있습니다.',
                   rightText: '신고',
-                  textEditingController:
-                      CareerDetailController.to.reportController,
+                  textEditingController: reportController,
                   leftFunction: () {
                     Get.back();
                   },

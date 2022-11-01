@@ -18,7 +18,6 @@ class CareerDetailController extends GetxController
   ScrollController scrollController = ScrollController();
   RefreshController refreshController = RefreshController();
   Rx<ScreenState> careerDetailScreenState = ScreenState.normal.obs;
-  TextEditingController reportController = TextEditingController();
   Rx<Project> career;
   RxInt page = 1.obs;
   RxList<Post> postList = <Post>[].obs;

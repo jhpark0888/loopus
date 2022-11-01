@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/post_model.dart';
+import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/other_company_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/overflow_text_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
+import 'package:loopus/widget/user_tile_widget.dart';
 
 class CareerBoardPostWidget extends StatelessWidget {
   CareerBoardPostWidget({Key? key, required this.post}) : super(key: key);
@@ -47,38 +51,7 @@ class CareerBoardPostWidget extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: GestureDetector(
-                          onTap: tapProfile,
-                          child: Row(
-                            children: [
-                              UserImageWidget(
-                                imageUrl: post.user.profileImage,
-                                width: 36,
-                                height: 36,
-                                userType: post.user.userType,
-                              ),
-                              const SizedBox(width: 8),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    post.user.name,
-                                    style: kmainbold,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    post.user.department,
-                                    style: kmain,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
+                        child: UserTileWidget(user: post.user),
                       ),
                       // const Spacer(),
                       GestureDetector(
@@ -172,11 +145,21 @@ class CareerBoardPostWidget extends StatelessWidget {
   }
 
   void tapProfile() {
-    Get.to(
-        () => OtherProfileScreen(
-            user: post.user,
-            userid: post.user.userId,
-            realname: post.user.name),
-        preventDuplicates: false);
+    if (post.user.userType == UserType.student) {
+      Get.to(
+          () => OtherProfileScreen(
+              user: (post.user as Person),
+              userid: post.user.userId,
+              realname: post.user.name),
+          preventDuplicates: false);
+    } else {
+      Get.to(
+          () => OtherCompanyScreen(
+                companyId: post.user.userId,
+                companyName: post.user.name,
+                company: (post.user as Company),
+              ),
+          preventDuplicates: false);
+    }
   }
 }

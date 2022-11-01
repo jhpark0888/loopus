@@ -94,9 +94,13 @@ import 'package:loopus/widget/user_image_widget.dart';
 // }
 
 class NewsListWidget extends StatelessWidget {
-  NewsListWidget({Key? key, required this.issueList}) : super(key: key);
+  NewsListWidget(
+      {Key? key, required this.issueList, this.title, this.isDark = false})
+      : super(key: key);
 
   RxList<Issue> issueList;
+  String? title;
+  bool isDark;
 
   String _issueListTitle() {
     if (issueList is RxList<NewsIssue>) {
@@ -118,8 +122,8 @@ class NewsListWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              _issueListTitle(),
-              style: kmainbold,
+              title ?? _issueListTitle(),
+              style: kmainbold.copyWith(color: isDark ? mainWhite : null),
             ),
           ),
           const SizedBox(
@@ -133,7 +137,8 @@ class NewsListWidget extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return Obx(() => KeepAliveWidget(
-                      child: NewsWidget(issue: issueList[index])));
+                      child:
+                          NewsWidget(issue: issueList[index], isDark: isDark)));
                 },
                 separatorBuilder: (context, index) {
                   return const SizedBox(
@@ -176,11 +181,14 @@ class NewsListWidget extends StatelessWidget {
 // }
 
 class NewsWidget extends StatelessWidget {
-  NewsWidget({Key? key, required this.issue}) : super(key: key);
+  NewsWidget({Key? key, required this.issue, this.isDark = false})
+      : super(key: key);
   Issue issue;
 
   late final NewsController _newsController = NewsController(issue: issue)
     ..geturlinfo();
+
+  bool isDark;
 
   Widget _authorImageView() {
     double size = 18;
@@ -229,19 +237,19 @@ class NewsWidget extends StatelessWidget {
       NewsIssue newsIssue = issue as NewsIssue;
       return Text(
         newsIssue.corp,
-        style: kmain,
+        style: kmain.copyWith(color: isDark ? mainWhite : null),
       );
     } else if (issue is BrunchIssue) {
       BrunchIssue brunchIssue = issue as BrunchIssue;
       return Text(
         brunchIssue.writer,
-        style: kmain,
+        style: kmain.copyWith(color: isDark ? mainWhite : null),
       );
     } else {
       YoutubeIssue youtubeIssue = issue as YoutubeIssue;
       return Text(
         youtubeIssue.chName,
-        style: kmain,
+        style: kmain.copyWith(color: isDark ? mainWhite : null),
       );
     }
   }
@@ -271,10 +279,11 @@ class NewsWidget extends StatelessWidget {
                             errorWidget: (context, string, widget) {
                               return Container(color: maingray);
                             })
-                        : Container(
+                        : Image.asset(
+                            "assets/illustrations/link_noimage.png",
                             height: 170,
                             width: 270,
-                            color: cardGray,
+                            fit: BoxFit.cover,
                           ),
                     const SizedBox(
                       height: 10,
@@ -282,7 +291,8 @@ class NewsWidget extends StatelessWidget {
                     Expanded(
                       child: Text(
                         issue.title,
-                        style: kmainheight,
+                        style: kmainheight.copyWith(
+                            color: isDark ? mainWhite : null),
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.ellipsis,

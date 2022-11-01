@@ -141,14 +141,15 @@ class OtherProfileScreen extends StatelessWidget {
                                     });
                               },
                               func2: () {
+                                TextEditingController reportController =
+                                    TextEditingController();
                                 showTextFieldDialog(
                                     title: '계정 신고',
                                     hintText:
                                         '신고 사유를 입력해주세요. 관리자 확인 \n 이후 해당 계정은 이용약관에 따라 제재를 \n받을 수 있습니다.',
                                     rightText: '신고',
                                     rightBoxColor: rankred,
-                                    textEditingController:
-                                        _controller.reportController,
+                                    textEditingController: reportController,
                                     leftFunction: () {
                                       Get.back();
                                     },
@@ -512,22 +513,16 @@ class OtherProfileScreen extends StatelessWidget {
       () => int.parse(HomeController.to.myId!) ==
               _controller.otherUser.value.userId
           ? Padding(
-              padding: const EdgeInsets.only(top: 25),
+              padding: const EdgeInsets.only(top: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _controller.otherUser.value.snsList.isNotEmpty
-                      ? _snsListWidget()
-                      : GestureDetector(
-                          onTap: () {},
-                          child: Text(
-                            "SNS를 추가해주세요",
-                            style: kmainbold.copyWith(color: dividegray),
-                          ),
-                        ),
-                  const SizedBox(
-                    width: 8,
-                  ),
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: _snsListWidget(),
+                        )
+                      : Container(),
                   GestureDetector(
                     onTap: () {
                       Get.to(() => ProfileSnsAddScreen(
@@ -540,7 +535,23 @@ class OtherProfileScreen extends StatelessWidget {
                       height: 28,
                       color: mainblue,
                     ),
-                  )
+                  ),
+                  _controller.otherUser.value.snsList.isNotEmpty
+                      ? Container()
+                      : GestureDetector(
+                          onTap: () {
+                            Get.to(() => ProfileSnsAddScreen(
+                                  snsList: _controller.otherUser.value.snsList,
+                                ));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: Text(
+                              "SNS를 추가해주세요",
+                              style: kmain.copyWith(color: mainblue),
+                            ),
+                          ),
+                        )
                 ],
               ),
             )
@@ -678,12 +689,21 @@ class OtherProfileScreen extends StatelessWidget {
                                         ),
                                       )
                                   ],
+<<<<<<< HEAD
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
                                   '아직 $realname님과 관련있는 기업이 없어요',
                                   style: kmain.copyWith(color: maingray),
                                 ),
+=======
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  '아직 $realname님과 관련있는 기업이 없어요',
+                                  style: kmain.copyWith(color: maingray),
+                                ),
+>>>>>>> d7526337f512fd75e5f46bd8349e2ed9dcb01d23
                                 // CareerAnalysisWidget(
                                 //   field: fieldList[
                                 //       _controller.otherUser.value.fieldId]!,

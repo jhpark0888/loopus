@@ -29,7 +29,7 @@ class CustomExpandedButton extends StatelessWidget {
       onTapUp: (details) => _hoverController.isHover(false),
       onTap: onTap,
       child: Container(
-        height: 42,
+        height: isBig == true ? 42 : 36,
         padding: EdgeInsets.symmetric(
           vertical: isBig == true ? 10 : 11,
           horizontal: 12,

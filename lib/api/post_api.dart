@@ -358,14 +358,15 @@ Future<HTTPResponse> likepost(int id, contentType type) async {
       token = value;
     });
     String? userType = await const FlutterSecureStorage().read(key: "type");
-    int isStudent = UserType.school.name == userType ? 1 : 0;
+    int isStudent = UserType.student.name == userType ? 1 : 0;
+    print(userType);
 
-    final likeUri =
-        Uri.parse("$serverUri/post_api/like?id=$id&is_student=$isStudent");
+    final likeUri = Uri.parse(
+        "$serverUri/post_api/like?id=$id&type=${type.name}&is_student=$isStudent");
     try {
       final response =
           await http.post(likeUri, headers: {"Authorization": "Token $token"});
-      print('좋아요 $type : ${response.statusCode}');
+      print('좋아요 ${type.name} : ${response.statusCode}');
       if (response.statusCode == 202) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         return HTTPResponse.success("success");
@@ -455,7 +456,7 @@ Future<HTTPResponse> commentPost(
     int id, contentType type, String text, int? tagUserId) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
   String? userType = await const FlutterSecureStorage().read(key: "type");
-  int isStudent = UserType.school.name == userType ? 1 : 0;
+  int isStudent = UserType.student.name == userType ? 1 : 0;
 
   final CommentUri = Uri.parse(
       "$serverUri/post_api/comment?id=$id&type=${type.name}&is_student=$isStudent");

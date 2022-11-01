@@ -101,7 +101,8 @@ class PostingAddScreen extends StatelessWidget {
                                 ]),
                               )
                             : Padding(
-                                padding: const EdgeInsets.fromLTRB(16,16,16,32),
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 16, 16, 32),
                                 child: Row(
                                   children: [
                                     Expanded(
@@ -328,46 +329,50 @@ class PostingAddScreen extends StatelessWidget {
 
   Widget uploadButton() {
     return IconButton(
-        onPressed: () async {
-          if (checkContent()) {
-            loading();
-            await addposting(project_id, _imageController.cropAspectRatio.value)
-                .then((value) {
-              Get.back();
-              if (value.isError == false) {
-                Post post = Post.fromJson(value.data);
+      onPressed: () async {
+        if (checkContent()) {
+          loading();
+          await addposting(project_id, _imageController.cropAspectRatio.value)
+              .then((value) {
+            Get.back();
+            if (value.isError == false) {
+              CareerDetailController careerController =
+                  Get.find(tag: project_id.toString());
+              Post post = Post.fromJson(value.data);
 
-                if (Get.isRegistered<ProfileController>()) {
-                  Project? career =
-                      ProfileController.to.myProjectList.firstWhereOrNull(
-                    (career) => career.id == project_id,
-                  );
+              if (Get.isRegistered<ProfileController>()) {
+                Project? career =
+                    ProfileController.to.myProjectList.firstWhereOrNull(
+                  (career) => career.id == project_id,
+                );
 
-                  if (career != null) {
-                    career.posts.insert(0, post);
-                  }
+                if (career != null) {
+                  career.posts.insert(0, post);
                 }
-                HomeController.to.onPostingRefresh();
-                getbacks(route == PostaddRoute.bottom ? 3 : 1);
-                dialogBack();
-                if (route == PostaddRoute.bottom) {
-                  AppController.to.changeBottomNav(0);
-                  HomeController.to.scrollToTop();
-                } else if (route == PostaddRoute.career) {
-                  CareerDetailController.to.postList.add(post);
-                  CareerDetailController.to.postList.refresh();
-                }
-
-                showCustomDialog('포스팅을 업로드했어요', 1000);
-              } else {
-                errorSituation(value);
               }
-            });
-          }
-        },
-        icon: Text('업로드',
-            style: kNavigationTitle.copyWith(
-                color: checkContent() ? mainblue : maingray, fontSize: 17)), padding: EdgeInsets.zero,);
+              HomeController.to.onPostingRefresh();
+              getbacks(route == PostaddRoute.bottom ? 3 : 1);
+              dialogBack();
+              if (route == PostaddRoute.bottom) {
+                AppController.to.changeBottomNav(0);
+                HomeController.to.scrollToTop();
+              } else if (route == PostaddRoute.career) {
+                careerController.postList.add(post);
+                careerController.postList.refresh();
+              }
+
+              showCustomDialog('포스팅을 업로드했어요', 1000);
+            } else {
+              errorSituation(value);
+            }
+          });
+        }
+      },
+      icon: Text('업로드',
+          style: kNavigationTitle.copyWith(
+              color: checkContent() ? mainblue : maingray, fontSize: 17)),
+      padding: EdgeInsets.zero,
+    );
   }
 
   bool checkContent() {

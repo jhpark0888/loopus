@@ -68,7 +68,7 @@ class SearchUserWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(user.name, style: kmainbold),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               user.userType == UserType.student
                   ? Text(
                       '${(user as Person).univName} · ${(user as Person).department}',
@@ -206,7 +206,7 @@ class RecentSearchWidget extends StatelessWidget {
                 (recentSearch.data as Person).name,
                 style: kmainbold,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Text(
                 "${(recentSearch.data as Person).univName} · ${(recentSearch.data as Person).department}",
                 style: kmain,
@@ -228,7 +228,7 @@ class RecentSearchWidget extends StatelessWidget {
                         (recentSearch.data as Company).name,
                         style: kmainbold,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4),
                       Text(
                         "${fieldList[(recentSearch.data as Company).fieldId]} · ${(recentSearch.data as Company).address}",
                         style: kmain,

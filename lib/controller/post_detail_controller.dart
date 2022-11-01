@@ -25,7 +25,6 @@ class PostingDetailController extends GetxController {
 
   TextEditingController commentController = TextEditingController();
   FocusNode commentFocus = FocusNode();
-  TextEditingController reportController = TextEditingController();
   RxInt selectedCommentId = 0.obs;
   Rx<Person> tagUser = Person.defaultuser().obs;
 

@@ -22,6 +22,7 @@ import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/empty_post_widget.dart';
+import 'package:loopus/widget/news_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:loopus/widget/search_widget.dart';
 import 'package:loopus/widget/tabbar_widget.dart';
@@ -187,12 +188,14 @@ class MyCompanyScreen extends StatelessWidget {
                   fieldList[_controller.myCompanyInfo.value.fieldId]!,
                   style: kmain.copyWith(color: mainWhite),
                 ),
-                const SizedBox(width: 8),
-                const VerticalDivider(
-                  thickness: 2,
-                  color: mainWhite,
+                const SizedBox(
+                  height: 9,
+                  child: VerticalDivider(
+                    thickness: 1,
+                    width: 16,
+                    color: mainWhite,
+                  ),
                 ),
-                const SizedBox(width: 8),
                 Text(
                   _controller.myCompanyInfo.value.address,
                   style: kmain.copyWith(color: mainWhite),
@@ -253,7 +256,7 @@ class MyCompanyScreen extends StatelessWidget {
                       height: 16,
                     ),
                     SizedBox(
-                      height: 72,
+                      height: 74,
                       child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -349,14 +352,37 @@ class MyCompanyScreen extends StatelessWidget {
                           },
                         ),
                         const SizedBox(height: 16),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            _controller
-                                .myCompanyInfo.value.images[index].imageInfo,
-                            style: kmainheight.copyWith(color: mainWhite),
+                        if (index == 0)
+                          Column(
+                            children: [
+                              Text(
+                                "기업소개",
+                                style: kmainbold.copyWith(color: mainWhite),
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Text(
+                                "\"${_controller.myCompanyInfo.value.slogan}\"",
+                                style:
+                                    kmainboldHeight.copyWith(color: mainWhite),
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                            ],
                           ),
-                        )
+                        if (_controller
+                                .myCompanyInfo.value.images[index].imageInfo !=
+                            "")
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(
+                              _controller
+                                  .myCompanyInfo.value.images[index].imageInfo,
+                              style: kmainheight.copyWith(color: mainWhite),
+                            ),
+                          )
                       ],
                     ),
                 separatorBuilder: (context, index) =>
@@ -381,6 +407,15 @@ class MyCompanyScreen extends StatelessWidget {
               ],
             ),
           ),
+          Obx(
+            () => _controller.newsList.isNotEmpty
+                ? NewsListWidget(
+                    title: "기업 뉴스",
+                    issueList: _controller.newsList,
+                    isDark: true,
+                  )
+                : Container(),
+          )
         ],
       ),
     );
@@ -576,7 +611,7 @@ class MyCompanyScreen extends StatelessWidget {
       children: [
         UserImageWidget(imageUrl: user.profileImage, userType: user.userType),
         const SizedBox(
-          height: 7,
+          height: 4,
         ),
         Text(
           user.name,
