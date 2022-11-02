@@ -689,21 +689,12 @@ class OtherProfileScreen extends StatelessWidget {
                                         ),
                                       )
                                   ],
-<<<<<<< HEAD
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
                                   '아직 $realname님과 관련있는 기업이 없어요',
                                   style: kmain.copyWith(color: maingray),
                                 ),
-=======
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  '아직 $realname님과 관련있는 기업이 없어요',
-                                  style: kmain.copyWith(color: maingray),
-                                ),
->>>>>>> d7526337f512fd75e5f46bd8349e2ed9dcb01d23
                                 // CareerAnalysisWidget(
                                 //   field: fieldList[
                                 //       _controller.otherUser.value.fieldId]!,
