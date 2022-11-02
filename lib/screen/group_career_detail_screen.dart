@@ -91,6 +91,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               vertical: 24, horizontal: 30.5),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CustomPieChart(
                                 career: career,
