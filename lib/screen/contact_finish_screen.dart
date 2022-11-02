@@ -22,7 +22,7 @@ class ContactFinishScreen extends StatelessWidget {
             },
             child: Text(
               '완료',
-              style: kmainbold.copyWith(color: mainblue),
+              style: kNavigationTitle.copyWith(color: mainblue),
             ),
           ),
         ],
