@@ -62,9 +62,11 @@ class PersonalCareerDetailScreen extends StatelessWidget {
             backgroundColor: Colors.white,
             leading: _leading(leading: true),
             actions: [
-              _leading(
-                leading: false,
-                career: careerDetailController.career.value,
+              Obx(
+                () => _leading(
+                  leading: false,
+                  career: careerDetailController.career.value,
+                ),
               )
             ],
             pinned: true,
@@ -139,19 +141,24 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                           },
                           itemCount: careerDetailController.postList.length,
                         )
-                      : GestureDetector(
-                          onTap: () {
-                            Get.to(() => PostingAddScreen(
-                                  project_id: career.id,
-                                  route: PostaddRoute.career,
-                                ));
-                          },
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 24),
-                              EmptyPostWidget(),
-                            ],
-                          )))
+                      : HomeController.to.myId ==
+                              careerDetailController.career.value.user.userId
+                                  .toString()
+                          ? GestureDetector(
+                              onTap: () {
+                                Get.to(() => PostingAddScreen(
+                                      project_id: career.id,
+                                      route: PostaddRoute.career,
+                                    ));
+                              },
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 24),
+                                  EmptyPostWidget(),
+                                ],
+                              ))
+                          : Center(
+                              child: EmptyContentWidget(text: "아직 포스트가 없어요")))
                 ],
               ),
             ]),
@@ -391,8 +398,10 @@ class _leading extends StatelessWidget {
                   leftText: '취소');
             }, func1: () {
               Get.back();
-              Get.to(
-                  () => ProjectAddTitleScreen(screenType: Screentype.update));
+              Get.to(() => ProjectAddTitleScreen(
+                    screenType: Screentype.update,
+                    careerId: career!.id,
+                  ));
             },
                 value2: '커리어 삭제하기',
                 value1: '커리어 수정하기',
@@ -407,7 +416,7 @@ class _leading extends StatelessWidget {
                   leftText: '취소',
                   rightText: '차단',
                   title: '계정 차단',
-                  startContent: '${career!.members.first.name}님을 차단하시겠어요?',
+                  startContent: '${career!.user.name}님을 차단하시겠어요?',
                   leftFunction: () => Get.back(),
                   rightFunction: () {
                     userban(career!.userid!).then((value) {

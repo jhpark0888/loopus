@@ -27,6 +27,7 @@ class CareerDetailController extends GetxController
   @override
   void onInit() {
     tabController = TabController(length: 2, vsync: this);
+
     super.onInit();
     members.value = career.value.members.toList();
     getPosting();

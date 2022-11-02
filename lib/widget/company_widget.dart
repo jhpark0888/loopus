@@ -71,7 +71,7 @@ class CompanyWidget extends StatelessWidget {
                       company.name,
                       style: kmain,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
                     Row(
                       children: [
                         Text(

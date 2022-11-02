@@ -16,6 +16,7 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/comp_intro_edit_screen.dart';
 import 'package:loopus/screen/company_interesting_screen.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
+import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/webview_screen.dart';
@@ -26,48 +27,60 @@ import 'package:loopus/widget/custom_expanded_button.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
 import 'package:loopus/widget/divide_widget.dart';
 import 'package:loopus/widget/empty_contents_widget.dart';
+import 'package:loopus/widget/empty_post_widget.dart';
 import 'package:loopus/widget/follow_button_widget.dart';
 import 'package:loopus/widget/news_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart' as sr;
 import 'package:underline_indicator/underline_indicator.dart';
 import 'dart:math' as math;
 
-class OtherCompanyScreen extends StatelessWidget {
+class OtherCompanyScreen extends StatefulWidget {
   OtherCompanyScreen(
       {Key? key,
       required this.companyId,
       required this.companyName,
       this.company})
       : super(key: key);
-  late final OtherCompanyController _controller = Get.put(
-      OtherCompanyController(
-          companyId: companyId,
-          otherCompany:
-              company != null ? company!.obs : Company.defaultCompany().obs),
-      tag: companyId.toString());
-
   Company? company;
   int companyId;
   String companyName;
 
+  @override
+  State<OtherCompanyScreen> createState() => _OtherCompanyScreenState();
+}
+
+class _OtherCompanyScreenState extends State<OtherCompanyScreen>
+    with SingleTickerProviderStateMixin {
+  late final OtherCompanyController _controller = Get.put(
+      OtherCompanyController(
+          companyId: widget.companyId,
+          otherCompany: widget.company != null
+              ? widget.company!.obs
+              : Company.defaultCompany().obs),
+      tag: widget.companyId.toString());
+
   final sr.RefreshController _otherCompanyrefreshController =
       sr.RefreshController(initialRefresh: false);
+
   final sr.RefreshController _otherpostLoadingController =
       sr.RefreshController(initialRefresh: false);
+
+  late TabController _tabController;
 
   Future onRefresh() async {
     _controller.profileenablepullup.value = true;
     _controller.postPageNum = 1;
     _controller.allPostList.clear();
-    _controller.loadOtherCompany(companyId);
+    _controller.loadOtherCompany(widget.companyId);
     _otherCompanyrefreshController.refreshCompleted();
   }
 
   void onLoading() async {
     // await Future.delayed(Duration(seconds: 2));
-    int statusCode = await _controller.getCompanyPosting(companyId);
+    int statusCode = await _controller.getCompanyPosting(widget.companyId);
     if (statusCode == 204) {
       _otherpostLoadingController.loadNoData();
     } else {
@@ -76,162 +89,169 @@ class OtherCompanyScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        backgroundColor: mainblack,
-        appBar: AppBar(
-          systemOverlayStyle: const SystemUiOverlayStyle(
-              statusBarColor: mainblack,
-              statusBarIconBrightness:
-                  Brightness.light, // For Android (dark icons)
-              statusBarBrightness: Brightness.light // For iOS (dark icons),
-              ),
-          backgroundColor: mainblack,
-          elevation: 0,
-          centerTitle: true,
-          title: Text(
-            '$companyName 프로필',
-            style: kNavigationTitle.copyWith(color: mainWhite),
-          ),
-          leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: SvgPicture.asset(
-              'assets/icons/appbar_back.svg',
-              color: mainWhite,
-            ),
-          ),
-          actions: [
-            Obx(
-              () => _controller.otherprofilescreenstate.value !=
-                          ScreenState.success ||
-                      _controller.isBanned.value
-                  ? Container()
-                  : _controller.otherCompany.value.userId ==
-                          int.parse(HomeController.to.myId!)
-                      ? GestureDetector(
-                          onTap: () {
-                            Get.to(() => SettingScreen());
-                          },
-                          child: SvgPicture.asset(
-                            'assets/icons/setting.svg',
-                          ),
-                        )
-                      : IconButton(
-                          onPressed: () {
-                            showBottomdialog(
-                              context,
-                              func1: () {
-                                showButtonDialog(
-                                    leftText: '취소',
-                                    rightText: '차단',
-                                    title: '계정 차단',
-                                    startContent:
-                                        '${_controller.otherCompany.value.name}님을 차단하시겠어요?',
-                                    leftFunction: () => Get.back(),
-                                    rightFunction: () {
-                                      userban(_controller
-                                              .otherCompany.value.userId)
-                                          .then((value) {
-                                        if (value.isError == false) {
-                                          dialogBack();
-                                          _controller.otherCompany.value
-                                              .banClick();
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      _controller.currentIndex.value = _tabController.index;
+    });
+  }
 
-                                          showCustomDialog(
-                                              "${_controller.otherCompany.value.name}님이 차단되었습니다",
-                                              1000);
-                                        } else {
-                                          errorSituation(value);
-                                        }
-                                      });
-                                    });
-                              },
-                              func2: () {
-                                TextEditingController reportController =
-                                    TextEditingController();
-                                showTextFieldDialog(
-                                    title: '계정 신고',
-                                    hintText:
-                                        '신고 사유를 입력해주세요. 관리자 확인 \n 이후 해당 계정은 이용약관에 따라 제재를 \n받을 수 있습니다.',
-                                    rightText: '신고',
-                                    textEditingController: reportController,
-                                    leftFunction: () {
-                                      Get.back();
-                                    },
-                                    rightFunction: () {
-                                      userreport(_controller
-                                              .otherCompany.value.userId)
-                                          .then((value) {
-                                        if (value.isError == false) {
-                                          dialogBack(modalIOS: true);
-                                          showCustomDialog("신고가 접수되었습니다", 1000);
-                                        } else {
-                                          errorSituation(value);
-                                        }
-                                      });
-                                    });
-                              },
-                              value1: '계정 차단하기',
-                              value2: '계정 신고하기',
-                              buttonColor1: mainWhite,
-                              buttonColor2: rankred,
-                              textColor1: rankred,
-                              isOne: false,
-                            );
-                          },
-                          icon: SvgPicture.asset(
-                            'assets/icons/more_option.svg',
-                            color: mainWhite,
-                          ),
-                        ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: mainblack,
+      appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: mainblack,
+            statusBarIconBrightness:
+                Brightness.light, // For Android (dark icons)
+            statusBarBrightness: Brightness.light // For iOS (dark icons),
             ),
-          ],
+        backgroundColor: mainblack,
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          '${widget.companyName} 프로필',
+          style: kNavigationTitle.copyWith(color: mainWhite),
         ),
-        body: Obx(
-          () => _controller.isBanned.value
-              ? Container()
-              : RefreshIndicator(
-                  notificationPredicate: (notification) {
-                    return notification.depth == 2;
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: SvgPicture.asset(
+            'assets/icons/appbar_back.svg',
+            color: mainWhite,
+          ),
+        ),
+        actions: [
+          Obx(
+            () => _controller.otherprofilescreenstate.value !=
+                        ScreenState.success ||
+                    _controller.isBanned.value
+                ? Container()
+                : _controller.otherCompany.value.userId ==
+                        int.parse(HomeController.to.myId!)
+                    ? GestureDetector(
+                        onTap: () {
+                          Get.to(() => SettingScreen());
+                        },
+                        child: SvgPicture.asset(
+                          'assets/icons/setting.svg',
+                        ),
+                      )
+                    : IconButton(
+                        onPressed: () {
+                          showBottomdialog(
+                            context,
+                            func1: () {
+                              showButtonDialog(
+                                  leftText: '취소',
+                                  rightText: '차단',
+                                  title: '계정 차단',
+                                  startContent:
+                                      '${_controller.otherCompany.value.name}님을 차단하시겠어요?',
+                                  leftFunction: () => Get.back(),
+                                  rightFunction: () {
+                                    userban(_controller
+                                            .otherCompany.value.userId)
+                                        .then((value) {
+                                      if (value.isError == false) {
+                                        dialogBack();
+                                        _controller.otherCompany.value
+                                            .banClick();
+
+                                        showCustomDialog(
+                                            "${_controller.otherCompany.value.name}님이 차단되었습니다",
+                                            1000);
+                                      } else {
+                                        errorSituation(value);
+                                      }
+                                    });
+                                  });
+                            },
+                            func2: () {
+                              TextEditingController reportController =
+                                  TextEditingController();
+                              showTextFieldDialog(
+                                  title: '계정 신고',
+                                  hintText:
+                                      '신고 사유를 입력해주세요. 관리자 확인 \n 이후 해당 계정은 이용약관에 따라 제재를 \n받을 수 있습니다.',
+                                  rightText: '신고',
+                                  textEditingController: reportController,
+                                  leftFunction: () {
+                                    Get.back();
+                                  },
+                                  rightFunction: () {
+                                    userreport(_controller
+                                            .otherCompany.value.userId)
+                                        .then((value) {
+                                      if (value.isError == false) {
+                                        dialogBack(modalIOS: true);
+                                        showCustomDialog("신고가 접수되었습니다", 1000);
+                                      } else {
+                                        errorSituation(value);
+                                      }
+                                    });
+                                  });
+                            },
+                            value1: '계정 차단하기',
+                            value2: '계정 신고하기',
+                            buttonColor1: mainWhite,
+                            buttonColor2: rankred,
+                            textColor1: rankred,
+                            isOne: false,
+                          );
+                        },
+                        icon: SvgPicture.asset(
+                          'assets/icons/more_option.svg',
+                          color: mainWhite,
+                        ),
+                      ),
+          ),
+        ],
+      ),
+      body: Obx(
+        () => _controller.isBanned.value
+            ? Container()
+            : RefreshIndicator(
+                notificationPredicate: (notification) {
+                  return notification.depth == 2;
+                },
+                onRefresh: onRefresh,
+                child: ExtendedNestedScrollView(
+                  onlyOneScrollInBody: true,
+                  headerSliverBuilder: (context, value) {
+                    return [
+                      SliverToBoxAdapter(
+                        child: _profileView(context),
+                      ),
+                      // SliverOverlapAbsorber(
+                      //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      //       context),
+                      //   sliver:
+                      SliverAppBar(
+                        backgroundColor: mainWhite,
+                        toolbarHeight: 44,
+                        pinned: true,
+                        primary: false,
+                        elevation: 0,
+                        automaticallyImplyLeading: false,
+                        flexibleSpace: _tabView(),
+                      ),
+                      // ),
+                    ];
                   },
-                  onRefresh: onRefresh,
-                  child: ExtendedNestedScrollView(
-                    onlyOneScrollInBody: true,
-                    headerSliverBuilder: (context, value) {
-                      return [
-                        SliverToBoxAdapter(
-                          child: _profileView(context),
-                        ),
-                        // SliverOverlapAbsorber(
-                        //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        //       context),
-                        //   sliver:
-                        SliverAppBar(
-                          backgroundColor: mainWhite,
-                          toolbarHeight: 44,
-                          pinned: true,
-                          primary: false,
-                          elevation: 0,
-                          automaticallyImplyLeading: false,
-                          flexibleSpace: _tabView(),
-                        ),
-                        // ),
-                      ];
-                    },
-                    body: TabBarView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        _introView(),
-                        _postView(),
-                      ],
-                    ),
+                  body: TabBarView(
+                    controller: _tabController,
+                    // physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      _introView(),
+                      _postView(),
+                    ],
                   ),
                 ),
-        ),
+              ),
       ),
     );
   }
@@ -462,6 +482,7 @@ class OtherCompanyScreen extends StatelessWidget {
                 ),
               ),
               TabBar(
+                  controller: _tabController,
                   labelStyle: kmainbold,
                   labelColor: mainWhite,
                   unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
@@ -472,6 +493,9 @@ class OtherCompanyScreen extends StatelessWidget {
                     borderSide: BorderSide(width: 2, color: mainWhite),
                   ),
                   isScrollable: false,
+                  onTap: (index) {
+                    _controller.currentIndex(index);
+                  },
                   tabs: [
                     Obx(
                       () => Tab(
@@ -504,126 +528,141 @@ class OtherCompanyScreen extends StatelessWidget {
   }
 
   Widget _introView() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Obx(
-            () => ListView.builder(
-                primary: false,
-                shrinkWrap: true,
-                itemBuilder: (context, index) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: _controller
-                              .otherCompany.value.images[index].image,
-                          width: Get.width,
-                          fit: BoxFit.cover,
-                          placeholder: (context, string) {
-                            return Container(
-                              color: maingray,
-                            );
-                          },
-                          errorWidget: (context, string, widget) {
-                            return Container(
-                              color: maingray,
-                            );
-                          },
-                        ),
-                        if (index == 0)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Text(
-                                  "기업소개",
-                                  style: kmainbold.copyWith(color: mainWhite),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Text(
-                                  "\"${_controller.otherCompany.value.slogan}\"",
-                                  style: kmainboldHeight.copyWith(
-                                      color: mainWhite),
-                                ),
-                              ],
-                            ),
+    return ScrollNoneffectWidget(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(
+              () => ListView.builder(
+                  primary: false,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: _controller
+                                .otherCompany.value.images[index].image,
+                            width: Get.width,
+                            fit: BoxFit.cover,
+                            placeholder: (context, string) {
+                              return Container(
+                                color: maingray,
+                              );
+                            },
+                            errorWidget: (context, string, widget) {
+                              return Container(
+                                color: maingray,
+                              );
+                            },
                           ),
-                        if (_controller
-                                .otherCompany.value.images[index].imageInfo !=
-                            "")
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Text(
-                              _controller
-                                  .otherCompany.value.images[index].imageInfo,
-                              style: kmainheight.copyWith(color: mainWhite),
+                          if (index == 0)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Text(
+                                    "기업소개",
+                                    style: kmainbold.copyWith(color: mainWhite),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Text(
+                                    "\"${_controller.otherCompany.value.slogan}\"",
+                                    style: kmainboldHeight.copyWith(
+                                        color: mainWhite),
+                                  ),
+                                ],
+                              ),
                             ),
-                          )
-                      ],
-                    ),
-                itemCount: _controller.otherCompany.value.images.length),
-          ),
-          if (_controller.otherCompany.value.userId ==
-              int.parse(HomeController.to.myId!))
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  CustomExpandedButton(
-                      onTap: () {
-                        Get.to(() => CompanyIntroEditScreen(
-                              name: _controller.otherCompany.value.name,
-                            ));
-                      },
-                      isBlue: true,
-                      title: "기업 소개 수정하기",
-                      isBig: true),
-                ],
-              ),
+                          if (_controller
+                                  .otherCompany.value.images[index].imageInfo !=
+                              "")
+                            Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Text(
+                                _controller
+                                    .otherCompany.value.images[index].imageInfo,
+                                style: kmainheight.copyWith(color: mainWhite),
+                              ),
+                            )
+                        ],
+                      ),
+                  itemCount: _controller.otherCompany.value.images.length),
             ),
-          Obx(
-            () => _controller.newsList.isNotEmpty
-                ? KeepAliveWidget(
-                    child: NewsListWidget(
-                      title: "기업 뉴스",
-                      issueList: _controller.newsList,
-                      isDark: true,
-                    ),
-                  )
-                : Container(),
-          ),
-          if (_controller.isFake.value == 1)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              child: Center(
-                child: Text(
-                  "루프어스에서 기업 정보를 조사하여 제공하는 페이지입니다."
-                  "\n기업의 서비스 가입 유무는 다를 수 있습니다.",
-                  style: kcaption.copyWith(color: iconcolor),
-                  textAlign: TextAlign.center,
+            if (_controller.otherCompany.value.userId ==
+                int.parse(HomeController.to.myId!))
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    CustomExpandedButton(
+                        onTap: () {
+                          Get.to(() => CompanyIntroEditScreen(
+                                name: _controller.otherCompany.value.name,
+                              ));
+                        },
+                        isBlue: true,
+                        title: "기업 소개 수정하기",
+                        isBig: true),
+                  ],
                 ),
               ),
-            )
-        ],
+            Obx(
+              () => _controller.newsList.isNotEmpty
+                  ? KeepAliveWidget(
+                      child: NewsListWidget(
+                        title: "기업 뉴스",
+                        issueList: _controller.newsList,
+                        isDark: true,
+                      ),
+                    )
+                  : Container(),
+            ),
+            if (_controller.isFake.value == 1)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: Center(
+                  child: Text(
+                    "루프어스에서 기업 정보를 조사하여 제공하는 페이지입니다."
+                    "\n기업의 서비스 가입 유무는 다를 수 있습니다.",
+                    style: kcaption.copyWith(color: iconcolor),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )
+          ],
+        ),
       ),
     );
   }
 
   Widget _postView() {
     return Obx(() => _controller.allPostList.isEmpty
-        ? Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            child: EmptyContentWidget(text: '아직 포스팅이 없어요'),
-          )
+        ? HomeController.to.myId ==
+                _controller.otherCompany.value.userId.toString()
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: GestureDetector(
+                    onTap: () {
+                      Get.to(() => PostingAddScreen(
+                          project_id: companyCareerId,
+                          route: PostaddRoute.career));
+                    },
+                    child: EmptyPostWidget()))
+            : Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: EmptyContentWidget(text: '아직 포스팅이 없어요'),
+              )
         : sr.SmartRefresher(
             controller: _otherpostLoadingController,
             enablePullDown: false,

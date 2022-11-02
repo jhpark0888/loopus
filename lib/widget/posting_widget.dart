@@ -75,7 +75,10 @@ class PostingWidget extends StatelessWidget {
                 children: [
                   GestureDetector(
                       onTap: () => tapProfile(),
-                      child: UserTileWidget(user: item.user)),
+                      child: UserTileWidget(
+                        user: item.user,
+                        isDark: isDark,
+                      )),
                   const SizedBox(height: 10),
                   if (item.user.userType == UserType.student)
                     Container(
@@ -296,7 +299,10 @@ class PostingWidget extends StatelessWidget {
     await getproject(item.project!.id, item.userid).then(
       (value) {
         if (value.isError == false) {
-          goCareerScreen(value.data, item.user.name);
+          goCareerScreen(
+            value.data,
+            item.user.name,
+          );
         }
       },
     );

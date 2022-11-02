@@ -106,7 +106,7 @@ class ProfileSnsAddController extends GetxController {
       if (value.isEmpty) {
         return 'URL을 입력하세요';
       } else {
-        if (!value.startsWith("http://")) {
+        if (!value.startsWith("https://")) {
           return "https:// 로 시작하는 정확한 URL 주소를 입력해주세요.";
         } else {
           return null;

@@ -35,7 +35,7 @@ class Project {
   RxList<Post> posts;
   List<Person> members;
   RxInt? post_count;
-  Person? user;
+  Person user;
   bool? isTop;
   int is_user;
   bool isPublic;
@@ -135,7 +135,9 @@ class Project {
         post_count:
             json["post_count"] != null ? RxInt(json["post_count"]) : RxInt(0),
         is_user: json['is_user'] ?? 0,
-        user: json["profile"] != null ? Person.fromJson(json["profile"]) : null,
+        user: json["profile"] != null
+            ? Person.fromJson(json["profile"])
+            : Person.defaultuser(),
         isPublic:
             json["project"] != null ? json["project"]["is_public"] : false,
         managerId: isProject

@@ -14,6 +14,7 @@ import 'package:loopus/screen/comp_intro_edit_screen.dart';
 import 'package:loopus/screen/company_interesting_screen.dart';
 import 'package:loopus/screen/company_visit_screen.dart';
 import 'package:loopus/screen/follow_people_screen.dart';
+import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
 import 'package:loopus/screen/webview_screen.dart';
@@ -24,6 +25,7 @@ import 'package:loopus/widget/empty_contents_widget.dart';
 import 'package:loopus/widget/empty_post_widget.dart';
 import 'package:loopus/widget/news_widget.dart';
 import 'package:loopus/widget/posting_widget.dart';
+import 'package:loopus/widget/scroll_noneffect_widget.dart';
 import 'package:loopus/widget/search_widget.dart';
 import 'package:loopus/widget/tabbar_widget.dart';
 import 'package:loopus/widget/user_image_widget.dart';
@@ -116,7 +118,7 @@ class MyCompanyScreen extends StatelessWidget {
             ];
           },
           body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(),
+            // physics: const NeverScrollableScrollPhysics(),
             controller: _controller.tabController,
             children: [_introView(), _postView(), _visitView()],
           ),
@@ -325,98 +327,101 @@ class MyCompanyScreen extends StatelessWidget {
   }
 
   Widget _introView() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Obx(
-            () => ListView.separated(
-                primary: false,
-                shrinkWrap: true,
-                itemBuilder: (context, index) => Column(
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: _controller
-                              .myCompanyInfo.value.images[index].image,
-                          width: Get.width,
-                          fit: BoxFit.cover,
-                          placeholder: (context, string) {
-                            return Container(
-                              color: maingray,
-                            );
-                          },
-                          errorWidget: (context, string, widget) {
-                            return Container(
-                              color: maingray,
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        if (index == 0)
-                          Column(
-                            children: [
-                              Text(
-                                "기업소개",
-                                style: kmainbold.copyWith(color: mainWhite),
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Text(
-                                "\"${_controller.myCompanyInfo.value.slogan}\"",
-                                style:
-                                    kmainboldHeight.copyWith(color: mainWhite),
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                            ],
+    return ScrollNoneffectWidget(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(
+              () => ListView.separated(
+                  primary: false,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => Column(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: _controller
+                                .myCompanyInfo.value.images[index].image,
+                            width: Get.width,
+                            fit: BoxFit.cover,
+                            placeholder: (context, string) {
+                              return Container(
+                                color: maingray,
+                              );
+                            },
+                            errorWidget: (context, string, widget) {
+                              return Container(
+                                color: maingray,
+                              );
+                            },
                           ),
-                        if (_controller
-                                .myCompanyInfo.value.images[index].imageInfo !=
-                            "")
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(
-                              _controller
-                                  .myCompanyInfo.value.images[index].imageInfo,
-                              style: kmainheight.copyWith(color: mainWhite),
+                          const SizedBox(height: 16),
+                          if (index == 0)
+                            Column(
+                              children: [
+                                Text(
+                                  "기업소개",
+                                  style: kmainbold.copyWith(color: mainWhite),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  "\"${_controller.myCompanyInfo.value.slogan}\"",
+                                  style: kmainboldHeight.copyWith(
+                                      color: mainWhite),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                              ],
                             ),
-                          )
-                      ],
-                    ),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16),
-                itemCount: _controller.myCompanyInfo.value.images.length),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                CustomExpandedButton(
-                    onTap: () {
-                      Get.to(() => CompanyIntroEditScreen(
-                            name: _controller.myCompanyInfo.value.name,
-                          ));
-                    },
-                    isBlue: true,
-                    title: "기업 소개 수정하기",
-                    isBig: true),
-              ],
+                          if (_controller.myCompanyInfo.value.images[index]
+                                  .imageInfo !=
+                              "")
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Text(
+                                _controller.myCompanyInfo.value.images[index]
+                                    .imageInfo,
+                                style: kmainheight.copyWith(color: mainWhite),
+                              ),
+                            )
+                        ],
+                      ),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 16),
+                  itemCount: _controller.myCompanyInfo.value.images.length),
             ),
-          ),
-          Obx(
-            () => _controller.newsList.isNotEmpty
-                ? NewsListWidget(
-                    title: "기업 뉴스",
-                    issueList: _controller.newsList,
-                    isDark: true,
-                  )
-                : Container(),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  CustomExpandedButton(
+                      onTap: () {
+                        Get.to(() => CompanyIntroEditScreen(
+                              name: _controller.myCompanyInfo.value.name,
+                            ));
+                      },
+                      isBlue: true,
+                      title: "기업 소개 수정하기",
+                      isBig: true),
+                ],
+              ),
+            ),
+            Obx(
+              () => _controller.newsList.isNotEmpty
+                  ? NewsListWidget(
+                      title: "기업 뉴스",
+                      issueList: _controller.newsList,
+                      isDark: true,
+                    )
+                  : Container(),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -485,7 +490,12 @@ class MyCompanyScreen extends StatelessWidget {
     return Obx(() => _controller.allPostList.isEmpty
         ? Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
-            child: EmptyPostWidget())
+            child: GestureDetector(
+                onTap: () {
+                  Get.to(() => PostingAddScreen(
+                      project_id: companyCareerId, route: PostaddRoute.career));
+                },
+                child: EmptyPostWidget()))
         : sr.SmartRefresher(
             controller: _controller.postLoadingController,
             enablePullDown: false,

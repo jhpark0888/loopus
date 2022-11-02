@@ -167,7 +167,7 @@ class Post {
     // isLiked = json["is_liked"] != null ? RxInt(json["is_liked"]) : isLiked;
     // isMarked = json["is_marked"] != null ? RxInt(json["is_marked"]) : isMarked;
     isuser = json["is_user"] ?? isuser;
-    user = json["profile"] != null ? Person.fromJson(json["profile"]) : user;
+    user = json["profile"] != null ? User.fromJson(json["profile"]) : user;
   }
 
   Map<String, dynamic> toJson() => {

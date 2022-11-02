@@ -171,7 +171,7 @@ class MyProfileScreen extends StatelessWidget {
             ];
           },
           body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(),
+            // physics: const NeverScrollableScrollPhysics(),
             controller: profileController.tabController,
             children: [_careerView(context), _postView()],
           ),
@@ -612,9 +612,9 @@ class MyProfileScreen extends StatelessWidget {
                                     print(profileController
                                         .myProjectList[index].isPublic);
                                     goCareerScreen(
-                                        profileController.myProjectList[index],
-                                        profileController
-                                            .myUserInfo.value.name);
+                                      profileController.myProjectList[index],
+                                      profileController.myUserInfo.value.name,
+                                    );
                                   },
                                   child: CareerWidget(
                                       career: profileController

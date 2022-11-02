@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/error_controller.dart';
 import 'package:loopus/controller/looppeople_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
@@ -98,8 +99,7 @@ Future<void> getprojectfollowlist(int userid, FollowListType followtype) async {
 
 Future<void> postfollowRequest(int friendid) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
-  String? userType = await const FlutterSecureStorage().read(key: "type");
-  int isStudent = UserType.student.name == userType ? 1 : 0;
+  int isStudent = AppController.to.userType == UserType.student ? 1 : 0;
 
   final uri =
       Uri.parse("$serverUri/loop_api/loop/$friendid?is_student=$isStudent");

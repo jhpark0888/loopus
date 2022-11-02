@@ -98,7 +98,7 @@ class PersonRankWidget extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       child: Row(children: [
         SizedBox(
-          width: 30,
+          width: 40,
           height: 42,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -174,20 +174,33 @@ class PersonRankWidget extends StatelessWidget {
   Widget rate({required int rank, required int lastRank}) {
     int variance = rank - lastRank;
     if (variance != 0) {
-      return Row(children: [
-        const SizedBox(width: 4),
-        arrowDirection(variance),
+      return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        arrowDirection(variance, lastRank),
         const SizedBox(width: 2),
         // 양수: 파랑, 음수: 빨강
         Text(lastRank != 0 ? '${variance.abs()}' : "NEW",
-            style: kcaption.copyWith(color: variance > 0 ? rankblue : rankred)),
+            style: kcaption.copyWith(
+                color: lastRank == 0
+                    ? rankred
+                    : variance > 0
+                        ? rankblue
+                        : rankred)),
       ]);
     } else {
-      return const SizedBox.shrink();
+      return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Container(
+          color: mainblack,
+          height: 2,
+          width: 6,
+        )
+      ]);
     }
   }
 
-  Widget arrowDirection(int variance) {
+  Widget arrowDirection(int variance, int lastRank) {
+    if (lastRank == 0) {
+      return SvgPicture.asset('assets/icons/rate_upper_arrow.svg');
+    }
     if (variance == 0) {
       return const SizedBox.shrink();
     } else if (variance < 0) {
