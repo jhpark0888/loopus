@@ -88,10 +88,10 @@
 				<array>
 					<string>ShareMedia</string>
 				</array>
-		</dict>
-		<dict/>
-	</array>
-   <key>NSPhotoLibraryUsageDescription</key>
-   <string>To upload photos, please allow permission to access your photo library.</string>
-</dict>
+			</dict>
+			<dict/>
+		</array>
+  		<key>NSPhotoLibraryUsageDescription</key>
+  		<string>To upload photos, please allow permission to access your photo library.</string>
+	</dict>
 </plist>
