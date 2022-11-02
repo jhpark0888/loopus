@@ -59,6 +59,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                   handle:
                       NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
+                    backgroundColor: mainWhite,
                     leading: _leading(
                       leading: true,
                     ),
@@ -196,6 +197,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                   ),
                 ),
                 SliverAppBar(
+                  backgroundColor: mainWhite,
                   titleSpacing: 0,
                   title: adapt(careerDetailController.tabController, name),
                   automaticallyImplyLeading: false,

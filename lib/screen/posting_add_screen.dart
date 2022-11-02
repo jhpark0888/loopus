@@ -336,8 +336,6 @@ class PostingAddScreen extends StatelessWidget {
               .then((value) {
             Get.back();
             if (value.isError == false) {
-              CareerDetailController careerController =
-                  Get.find(tag: project_id.toString());
               Post post = Post.fromJson(value.data);
 
               if (Get.isRegistered<ProfileController>()) {
@@ -357,6 +355,8 @@ class PostingAddScreen extends StatelessWidget {
                 AppController.to.changeBottomNav(0);
                 HomeController.to.scrollToTop();
               } else if (route == PostaddRoute.career) {
+                CareerDetailController careerController =
+                  Get.find(tag: project_id.toString());
                 careerController.postList.add(post);
                 careerController.postList.refresh();
               }
