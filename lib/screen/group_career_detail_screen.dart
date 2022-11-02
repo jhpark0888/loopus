@@ -212,9 +212,11 @@ class GroupCareerDetailScreen extends StatelessWidget {
                   MyCareerScreen(
                     name: name,
                     id: career.id,
+                    myCareer: career.members.where((element) => element.userId == HomeController.to.myProfile.value.userId).isNotEmpty,
                   ),
                   GroupCareerScreen(
                     id: career.id,
+                    myCareer: career.members.where((element) => element.userId == HomeController.to.myProfile.value.userId).isNotEmpty,
                   )
                 ])));
   }
@@ -509,8 +511,9 @@ Widget adapt(TabController tabController, String name) {
 }
 
 class GroupCareerScreen extends StatelessWidget {
-  GroupCareerScreen({Key? key, required this.id}) : super(key: key);
+  GroupCareerScreen({Key? key, required this.id, required this.myCareer}) : super(key: key);
   int id;
+  bool myCareer;
   @override
   Widget build(BuildContext context) {
     CareerDetailController controller = Get.find(tag: id.toString());
@@ -536,7 +539,8 @@ class GroupCareerScreen extends StatelessWidget {
               //     ),
             ]))
           ])
-        : GestureDetector(
+        : myCareer ? 
+        GestureDetector(
             onTap: () {
               Get.to(() => PostingAddScreen(
                     project_id: id,
@@ -544,15 +548,16 @@ class GroupCareerScreen extends StatelessWidget {
                   ));
             },
             child: EmptyPostWidget(),
-          ));
+          ) : const SizedBox.shrink());
   }
 }
 
 class MyCareerScreen extends StatelessWidget {
-  MyCareerScreen({Key? key, required this.name, required this.id})
+  MyCareerScreen({Key? key, required this.name, required this.id, required this.myCareer})
       : super(key: key);
   String name;
   int id;
+  bool myCareer;
   @override
   Widget build(BuildContext context) {
     CareerDetailController controller = Get.find(tag: id.toString());
@@ -581,7 +586,7 @@ class MyCareerScreen extends StatelessWidget {
               //     ),
             ]))
           ])
-        : Center(child: EmptyPostWidget()));
+        : myCareer ? Center(child: EmptyPostWidget()) : const SizedBox.shrink());
   }
 }
 

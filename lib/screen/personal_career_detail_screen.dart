@@ -139,7 +139,8 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                           },
                           itemCount: careerDetailController.postList.length,
                         )
-                      : GestureDetector(
+                      : career.members.where((e)=> e.userId == HomeController.to.myProfile.value.userId).isNotEmpty ?
+                      GestureDetector(
                           onTap: () {
                             Get.to(() => PostingAddScreen(
                                   project_id: career.id,
@@ -151,7 +152,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                               const SizedBox(height: 24),
                               EmptyPostWidget(),
                             ],
-                          )))
+                          )) : const SizedBox.shrink())
                 ],
               ),
             ]),
