@@ -11,6 +11,7 @@ import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/mycompany_screen.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/project_add_title_screen.dart';
+import 'package:loopus/screen/signup_tutorial_screen.dart';
 import 'package:loopus/utils/custom_linkpreview.dart';
 // import 'package:loopus/screen/post_add_test.dart';
 import 'package:loopus/widget/custom_header_footer.dart';
@@ -132,10 +133,7 @@ class HomeScreen extends StatelessWidget {
             ),
             Center(
               child: GestureDetector(
-                onTap: () => _homeController.goMyProfile()
-                // Get.to(() => DatabaseList())
-
-                ,
+                onTap: () => _homeController.goMyProfile(),
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Obx(
@@ -222,7 +220,7 @@ class HomeScreen extends StatelessWidget {
                                                     height: 10,
                                                   ),
                                                   Divider(
-                                                    height: 1,
+                                                      height: 1,
                                                       thickness: 1,
                                                       color: maingray),
                                                 ],

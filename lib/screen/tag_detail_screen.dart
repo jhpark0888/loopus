@@ -24,7 +24,14 @@ class TagDetailScreen extends StatelessWidget {
   TagDetailScreen({required this.tag});
 
   late final TagDetailController _controller =
-      Get.put(TagDetailController(tag.tagId), tag: tag.tagId.toString());
+      Get.put(TagDetailController(tag.tagId), tag: tag.tagId.toString())
+        ..postLoadFunction(refreshControllerList, tagBarGraph: tagBarGraph);
+
+  TagBarGraph tagBarGraph = TagBarGraph();
+
+  List<RefreshController> refreshControllerList =
+      List.generate(2, (index) => RefreshController()..loadNoData());
+
   Tag tag;
 
   Widget emptyTagWidget() {
@@ -35,6 +42,10 @@ class TagDetailScreen extends StatelessWidget {
         style: kmain,
       ),
     );
+  }
+
+  void onLoading() async {
+    _controller.postLoadFunction(refreshControllerList);
   }
 
   @override
@@ -59,6 +70,7 @@ class TagDetailScreen extends StatelessWidget {
                 toolbarHeight: 44,
                 elevation: 0,
                 leading: IconButton(
+                  padding: EdgeInsets.zero,
                   onPressed: () {
                     Get.back();
                   },
@@ -93,17 +105,17 @@ class TagDetailScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: _controller.tagUsageTrendNum.entries
+                                children: tagBarGraph.tagUsageTrendNum.entries
                                     .map((entry) => Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Text(
-                                              _controller.teptNumMap[entry.key]
+                                              tagBarGraph.teptNumMap[entry.key]
                                                   .toString(),
                                               style: kmain,
                                             ),
                                             const SizedBox(
-                                              height: 8,
+                                              height: 2,
                                             ),
                                             AnimatedSize(
                                               duration: const Duration(
@@ -130,7 +142,7 @@ class TagDetailScreen extends StatelessWidget {
                           Obx(
                             () => Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: _controller.tagUsageTrendNum.keys
+                              children: tagBarGraph.tagUsageTrendNum.keys
                                   .map((month) => Text(
                                         '$month월',
                                         style: kmain,
@@ -191,9 +203,9 @@ class TagDetailScreen extends StatelessWidget {
                               primary: true,
                               enablePullDown: false,
                               enablePullUp: true,
-                              controller: _controller.refreshControllerList[0],
+                              controller: refreshControllerList[0],
                               footer: const MyCustomFooter(),
-                              onLoading: _controller.onLoading,
+                              onLoading: onLoading,
                               child: ListView.builder(
                                   primary: false,
                                   shrinkWrap: true,
@@ -219,9 +231,9 @@ class TagDetailScreen extends StatelessWidget {
                               primary: true,
                               enablePullDown: false,
                               enablePullUp: true,
-                              controller: _controller.refreshControllerList[1],
+                              controller: refreshControllerList[1],
                               footer: const MyCustomFooter(),
-                              onLoading: _controller.onLoading,
+                              onLoading: onLoading,
                               child: ListView.builder(
                                   primary: false,
                                   shrinkWrap: true,

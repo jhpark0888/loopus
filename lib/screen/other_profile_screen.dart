@@ -79,6 +79,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _controller.currentIndex.value = 0;
     _tabController.addListener(() {
       _controller.currentIndex.value = _tabController.index;
     });
@@ -694,9 +695,9 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                           padding: EdgeInsets.zero,
                                           onPressed: () {
                                             showPopUpDialog(
-                                                '관련있는 기업',
-                                                '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요',
-                                                3000);
+                                              '관련있는 기업',
+                                              '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요',
+                                            );
                                           },
                                           icon: SvgPicture.asset(
                                             'assets/icons/information.svg',
@@ -757,9 +758,9 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                           padding: EdgeInsets.zero,
                                           onPressed: () {
                                             showPopUpDialog(
-                                                '커리어',
-                                                '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요',
-                                                3000);
+                                              '커리어',
+                                              '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요',
+                                            );
                                           },
                                           icon: SvgPicture.asset(
                                             'assets/icons/information.svg',

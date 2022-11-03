@@ -18,23 +18,15 @@ class TagDetailController extends GetxController
   RxList<Post> tagNewPostList = <Post>[].obs;
 
   List<int> pagenumList = List.generate(2, (index) => 1);
-  List<RefreshController> refreshControllerList =
-      List.generate(2, (index) => RefreshController()..loadNoData());
+
   List<RxBool> isTagEmptyList = List.generate(2, (index) => false.obs);
   List<RxBool> isTagLoadingList = List.generate(2, (index) => false.obs);
-
-  RxMap<String, double> tagUsageTrendNum = <String, double>{}.obs;
-
-  Map<String, int> teptNumMap = {};
 
   late TabController tabController;
 
   int tagid;
 
   RxBool isTagLoading = true.obs;
-  void onLoading() async {
-    postLoadFunction();
-  }
 
   @override
   void onInit() async {
@@ -48,9 +40,7 @@ class TagDetailController extends GetxController
     //   i.loadNoData();
     // }
 
-    await postLoadFunction();
-
-    numNormalization();
+    // await postLoadFunction();
 
     super.onInit();
   }
@@ -69,19 +59,22 @@ class TagDetailController extends GetxController
   //       LinkedHashMap.fromEntries(tagUsageTrendNum.entries.toList().reversed);
   // }
 
-  Future postLoadFunction() async {
+  Future postLoadFunction(List<RefreshController> refreshControllerList,
+      {TagBarGraph? tagBarGraph}) async {
     await getTagPosting(tagid, pagenumList[tabController.index],
             tabController.index == 0 ? "pop" : "new")
         .then((value) {
       if (value.isError == false) {
         if (value.data["monthly_count"] != null) {
-          teptNumMap = Map.from(value.data["monthly_count"]);
+          if (tagBarGraph != null) {
+            tagBarGraph.teptNumMap = Map.from(value.data["monthly_count"]);
 
-          teptNumMap =
-              LinkedHashMap.fromEntries(teptNumMap.entries.toList().reversed);
+            tagBarGraph.teptNumMap = LinkedHashMap.fromEntries(
+                tagBarGraph.teptNumMap.entries.toList().reversed);
 
-          for (var key in teptNumMap.keys) {
-            tagUsageTrendNum[key] = 0.0;
+            for (var key in tagBarGraph.teptNumMap.keys) {
+              tagBarGraph.tagUsageTrendNum[key] = 0.0;
+            }
           }
         }
 
@@ -136,6 +129,12 @@ class TagDetailController extends GetxController
     // isTagLoadingList[tabController.index](false);
     // }
   }
+}
+
+class TagBarGraph {
+  RxMap<String, double> tagUsageTrendNum = <String, double>{}.obs;
+
+  Map<String, int> teptNumMap = {};
 
   void numNormalization() async {
     int maxNum = teptNumMap.values.toList().reduce(max);

@@ -1095,100 +1095,6 @@ void showTextFieldDialog({
   );
 }
 
-// void showTextFieldDialog2({
-//   required String title,
-//   required String hintText,
-//   required String completeText,
-//   Color? highlightColor,
-//   required TextEditingController textEditingController,
-//   required Function() leftFunction,
-//   required Function() rightFunction,
-//   Color? leftBoxColor,
-//   Color? rightBoxColor,
-//   Color? leftTextColor,
-//   Color? rightTextColor,
-// }) {
-//   Get.dialog(
-//     AlertDialog(
-//       backgroundColor: mainWhite,
-//       elevation: 0,
-//       shape: const RoundedRectangleBorder(
-//         borderRadius: BorderRadius.all(
-//           Radius.circular(8),
-//         ),
-//       ),
-//       titlePadding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
-//       contentPadding: const EdgeInsets.symmetric(
-//         horizontal: 16,
-//       ),
-//       buttonPadding: const EdgeInsets.all(16),
-//       title: Text(
-//         title,
-//         style: kmainbold,
-//         textAlign: TextAlign.center,
-//       ),
-//       content: TextField(
-//         controller: textEditingController,
-//         maxLines: 3,
-//         style: kmainheight,
-//         autofocus: true,
-//         cursorColor: mainblack,
-//         cursorWidth: 1.2,
-//         decoration: InputDecoration(
-//           filled: true,
-//           fillColor: cardGray,
-//           hintText: hintText,
-//           hintStyle: kmainheight.copyWith(color: maingray),
-//           contentPadding: const EdgeInsets.all(16),
-//           enabledBorder: OutlineInputBorder(
-//             borderSide: BorderSide.none,
-//             // borderRadius: BorderRadius.circular(8)
-//           ),
-//           focusedBorder: OutlineInputBorder(
-//             borderSide: BorderSide.none,
-//             // borderRadius: BorderRadius.circular(8)
-//           ),
-//         ),
-//       ),
-//       actionsAlignment: MainAxisAlignment.spaceBetween,
-//       actions: [
-//         Row(
-//           children: [
-//             Expanded(
-//                 child: Container(
-//               height: 42,
-//               child: CustomExpandedButton(
-//                   onTap: leftFunction,
-//                   isBlue: false,
-//                   title: "취소",
-//                   isBig: true,
-//                   boxColor: mainblue),
-//             )),
-//             const SizedBox(
-//               width: 8,
-//             ),
-//             Expanded(
-//                 child: Container(
-//               height: 42,
-//               child: CustomExpandedButton(
-//                   onTap: rightFunction,
-//                   isBlue: true,
-//                   title: completeText,
-//                   textColor: highlightColor,
-//                   boxColor: maingray,
-//                   isBig: true),
-//             )),
-//           ],
-//         ),
-//       ],
-//     ),
-//     barrierDismissible: false,
-//     barrierColor: popupGray,
-//     transitionCurve: kAnimationCurve,
-//     transitionDuration: kAnimationDuration,
-//   );
-// }
-
 void showWithDrawalDialog({
   required String title,
   required String hintText,
@@ -1531,10 +1437,7 @@ void showErrorDialog({
   );
 }
 
-void showPopUpDialog(String title, String content, int duration) {
-  Timer _timer = Timer(Duration(milliseconds: duration), () {
-    Get.back();
-  });
+void showPopUpDialog(String title, String content) {
   Get.dialog(
     AlertDialog(
       elevation: 0,
@@ -1557,15 +1460,10 @@ void showPopUpDialog(String title, String content, int duration) {
         textAlign: TextAlign.center,
       ),
     ),
-    barrierDismissible: false,
     barrierColor: mainblack.withOpacity(0.3),
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,
-  ).then((value) {
-    if (_timer.isActive) {
-      _timer.cancel();
-    }
-  });
+  );
 }
 
 void showCustomDialog(String title, int duration) {
@@ -1678,5 +1576,26 @@ void showCustomYearPicker(
                 builder: builder, childCount: childCount),
           ),
         )),
+  );
+}
+
+void showSignUpEmailHint() {
+  Get.dialog(
+    AlertDialog(
+      titlePadding: EdgeInsets.zero,
+      contentPadding: EdgeInsets.zero,
+      actionsPadding: EdgeInsets.zero,
+      buttonPadding: EdgeInsets.zero,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8.0),
+        ),
+      ),
+      content: Image.asset("assets/illustrations/emailhint_image.png"),
+    ),
+    barrierColor: popupGray,
+    transitionCurve: kAnimationCurve,
+    transitionDuration: kAnimationDuration,
   );
 }
