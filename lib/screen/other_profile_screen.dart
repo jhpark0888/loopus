@@ -642,22 +642,29 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
   Widget _careerView(BuildContext context) {
     return SafeArea(
         child: Obx(() => _controller.otherProjectList.isEmpty
-            ? Column(
-                children: [
-                  Expanded(child: EmptyContentWidget(text: '아직 커리어가 없어요')),
-                  if (_controller.isOfficial.value == 2)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 24),
-                      child: Center(
-                        child: Text(
-                          "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
-                          "\n실제 서비스 가입 유무는 다를 수 있습니다.",
-                          style: kcaption.copyWith(color: popupGray),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    )
-                ],
+            ? Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      if (_controller.isOfficial.value == 2)
+                        Expanded(child: EmptyContentWidget(text: '아직 커리어가 없어요'))
+                      else
+                        EmptyContentWidget(text: '아직 커리어가 없어요'),
+                      if (_controller.isOfficial.value == 2)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          child: Center(
+                            child: Text(
+                              "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
+                              "\n실제 서비스 가입 유무는 다를 수 있습니다.",
+                              style: kcaption.copyWith(color: popupGray),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
+                ),
               )
             : Builder(
                 builder: (context) {
@@ -826,7 +833,9 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
 
   Widget _postView() {
     return Obx(() => _controller.allPostList.isEmpty
-        ? EmptyContentWidget(text: '아직 포스팅이 없어요')
+        ? Center(
+            child: SingleChildScrollView(
+                child: EmptyContentWidget(text: '아직 포스팅이 없어요')))
         : sr.SmartRefresher(
             controller: _otherpostLoadingController,
             enablePullDown: false,

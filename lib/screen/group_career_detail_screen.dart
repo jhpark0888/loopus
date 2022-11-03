@@ -59,6 +59,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                   handle:
                       NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
+                    backgroundColor: mainWhite,
                     leading: _leading(
                       leading: true,
                     ),
@@ -92,6 +93,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               vertical: 24, horizontal: 30.5),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CustomPieChart(
                                 career: career,
@@ -198,6 +200,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
                   ),
                 ),
                 SliverAppBar(
+                  backgroundColor: mainWhite,
                   titleSpacing: 0,
                   title: adapt(careerDetailController.tabController, name),
                   automaticallyImplyLeading: false,
@@ -562,43 +565,42 @@ class MyCareerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     CareerDetailController controller = Get.find(tag: careerId.toString());
     // print(controller.postList.isNotEmpty);
-    return Obx(() => controller.postList
-            .where((post) => post.userid == userId)
-            .isNotEmpty
-        ? CustomScrollView(slivers: [
-            SliverList(
-                delegate: SliverChildListDelegate([
-              ListView.builder(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  primary: false,
-                  itemBuilder: (context, index) {
-                    if (controller.postList[index].user.userId == userId) {
-                      return PostingWidget(
-                        item: controller.postList[index],
-                        type: PostingWidgetType.normal,
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                  itemCount: controller.postList.length),
-              // PostingWidget(
-              //       item: controller.postList[index],
-              //       type: PostingWidgetType.profile,
-              //     ),
-            ]))
-          ])
-        : HomeController.to.myId == controller.career.value.userid.toString()
-            ? GestureDetector(
-                onTap: () {
-                  Get.to(() => PostingAddScreen(
-                        project_id: careerId,
-                        route: PostaddRoute.career,
-                      ));
-                },
-                child: EmptyPostWidget())
-            : EmptyContentWidget(text: "아직 포스트가 없어요"));
+    return Obx(() =>
+        controller.postList.where((post) => post.userid == userId).isNotEmpty
+            ? CustomScrollView(slivers: [
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      primary: false,
+                      itemBuilder: (context, index) {
+                        if (controller.postList[index].user.userId == userId) {
+                          return PostingWidget(
+                            item: controller.postList[index],
+                            type: PostingWidgetType.normal,
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                      itemCount: controller.postList.length),
+                  // PostingWidget(
+                  //       item: controller.postList[index],
+                  //       type: PostingWidgetType.profile,
+                  //     ),
+                ]))
+              ])
+            : HomeController.to.myId == userId.toString()
+                ? GestureDetector(
+                    onTap: () {
+                      Get.to(() => PostingAddScreen(
+                            project_id: careerId,
+                            route: PostaddRoute.career,
+                          ));
+                    },
+                    child: EmptyPostWidget())
+                : EmptyContentWidget(text: "아직 포스트가 없어요"));
   }
 }
 

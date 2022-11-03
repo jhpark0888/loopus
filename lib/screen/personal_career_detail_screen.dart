@@ -85,6 +85,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         vertical: 24, horizontal: 16),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomPieChart(
                           career: career,
@@ -141,6 +142,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                           },
                           itemCount: careerDetailController.postList.length,
                         )
+                      // 비교 지점
                       : HomeController.to.myId ==
                               careerDetailController.career.value.user.userId
                                   .toString()

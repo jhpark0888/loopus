@@ -504,7 +504,9 @@ class MyProfileScreen extends StatelessWidget {
   Widget _careerView(BuildContext context) {
     return SafeArea(
         child: Obx(() => profileController.myProjectList.isEmpty
-            ? EmptyContentWidget(text: '아직 커리어가 없어요')
+            ? Center(
+                child: SingleChildScrollView(
+                    child: EmptyContentWidget(text: '아직 커리어가 없어요')))
             : Builder(
                 builder: (context) {
                   return CustomScrollView(
@@ -640,7 +642,9 @@ class MyProfileScreen extends StatelessWidget {
 
   Widget _postView() {
     return Obx(() => profileController.allPostList.isEmpty
-        ? EmptyContentWidget(text: '아직 포스팅이 없어요')
+        ? Center(
+            child: SingleChildScrollView(
+                child: EmptyContentWidget(text: '아직 포스팅이 없어요')))
         : sr.SmartRefresher(
             controller: profileController.postLoadingController,
             enablePullDown: false,

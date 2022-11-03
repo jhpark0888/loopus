@@ -650,18 +650,26 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
     return Obx(() => _controller.allPostList.isEmpty
         ? HomeController.to.myId ==
                 _controller.otherCompany.value.userId.toString()
-            ? Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: GestureDetector(
-                    onTap: () {
-                      Get.to(() => PostingAddScreen(
-                          project_id: companyCareerId,
-                          route: PostaddRoute.career));
-                    },
-                    child: EmptyPostWidget()))
-            : Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: EmptyContentWidget(text: '아직 포스팅이 없어요'),
+            ? Center(
+                child: SingleChildScrollView(
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: GestureDetector(
+                          onTap: () {
+                            Get.to(() => PostingAddScreen(
+                                project_id: companyCareerId,
+                                route: PostaddRoute.career));
+                          },
+                          child: EmptyPostWidget())),
+                ),
+              )
+            : Center(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: EmptyContentWidget(text: '아직 포스팅이 없어요'),
+                  ),
+                ),
               )
         : sr.SmartRefresher(
             controller: _otherpostLoadingController,
@@ -670,6 +678,8 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
             footer: const MyCustomFooter(),
             onLoading: onLoading,
             child: ListView.builder(
+                primary: false,
+                shrinkWrap: true,
                 // key: const PageStorageKey("postView"), 이거 넣으면 포스팅들이 마지막 사진이나 링크로 가게됨
                 itemBuilder: (context, index) => PostingWidget(
                       item: _controller.allPostList[index],

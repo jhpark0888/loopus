@@ -44,6 +44,10 @@ class _AlertScreenState extends State<AlertScreen> {
             title: "시스템 알림 설정",
           ),
           Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Divider(height: 1, thickness: 1, color: maingray),
+          ),
+          Padding(
             padding: EdgeInsets.symmetric(
               vertical: 8,
               horizontal: 16,
