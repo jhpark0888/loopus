@@ -56,15 +56,16 @@ class CareerBoardScreen extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               SizedBox(
-                height: 16,
-                width: 16,
+                height: 21,
+                width: 20,
                 child: IconButton(
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                    // padding: EdgeInsets.zero,
                     onPressed: () {
                       showPopUpDialog(
-                        '커리어보드',
-                        '루프어스에서 집계하는 점수를 통해\n커리어 상위권 프로필을 보여줘요\n최근 발전하고 있는 프로필과\n인기 포스트 등을 확인할 수 있어요',
-                      );
+                          '커리어보드',
+                          '루프어스에서 집계하는 점수를 통해\n커리어 상위권 프로필을 보여줘요\n최근 발전하고 있는 프로필과\n인기 포스트 등을 확인할 수 있어요',
+                          );
                     },
                     icon: SvgPicture.asset('assets/icons/information.svg')),
               )
@@ -296,7 +297,7 @@ class CareerBoardScreen extends StatelessWidget {
                                   ),
                                   const Padding(
                                     padding: EdgeInsets.only(left: 16),
-                                    child: Text('실시간 인기 포스트', style: kmainbold),
+                                    child: Text('인기 포스트', style: kmainbold),
                                   ),
                                   const SizedBox(height: 10),
                                   Obx(

@@ -76,10 +76,14 @@ class ProjectWidget extends StatelessWidget {
                       ),
                       Spacer(),
                       Obx(
-                        () => Text(
+                        () => project.value.updateDate != null ? Text(
                           '${lastPostCalculateDate(project.value.updateDate!)} 마지막 포스트',
                           style: kmain,
-                        ),
+                        ) :  Container(
+          color: mainblack,
+          height: 2,
+          width: 6,
+        ),
                         //  ~ ${project.value.endDate != null ? DateFormat("yy.MM.dd").format(project.value.endDate!) : ''
                         // }
                       ),
