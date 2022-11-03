@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/search_api.dart';
@@ -44,6 +45,11 @@ class SearchScreen extends StatelessWidget {
       child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
+            systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarColor: mainWhite,
+              statusBarIconBrightness: Brightness.dark,
+              statusBarBrightness: Brightness.dark,
+            ),
             automaticallyImplyLeading: false,
             toolbarHeight: 50,
             centerTitle: false,
