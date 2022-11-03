@@ -75,8 +75,10 @@ class ProjectAddTitleScreen extends StatelessWidget {
                               Get.put(GAController());
                           if (value.isError == false) {
                             await _gaController.logProjectCreated(true);
-
                             Project project = Project.fromJson(value.data);
+                            if(_controller.selectCompany.value.userId != 0){
+                            addCompany(project.id, _controller.selectCompany.value.userId);
+                          }
                             project.is_user = 1;
                             SelectProjectController.to.selectprojectlist
                                 .insert(0, project);

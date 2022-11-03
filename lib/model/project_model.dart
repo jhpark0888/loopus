@@ -78,7 +78,9 @@ class Project {
 
   factory Project.fromJson(Map<String, dynamic> json) {
     bool isProject = json["project"] != null;
-    bool isCompany = json['thumbnail'].runtimeType == String;
+    bool isCompany = 
+    isProject && json['project']['thumbnail'] != null ? 
+    json['project']['thumbnail'].runtimeType != String : false;
     return Project(
         id: isProject
             ? json["project"]['project_id'] != null
@@ -92,17 +94,17 @@ class Project {
             ? json["project"]["project_name"] ?? ""
             : json["project_name"] ?? "",
         thumbnail: isCompany
-            ? json['thumbnail']['company_logo'] ?? ""
+            ? json['project']['thumbnail']['company_logo'] ?? ""
             : isProject
                 ? json["project"]["thumbnail"] ?? ""
                 : json["thumbnail"] ?? "",
         updateDate: isProject
             ? json["project"]["post_update_date"] != null
                 ? DateTime.parse(json["project"]["post_update_date"])
-                : DateTime.now()
+                : null
             : json["post_update_date"] != null
                 ? DateTime.parse(json["post_update_date"])
-                : DateTime.now(),
+                : null,
         posts: json["post"] != null
             ? RxList<Post>.from(json["post"].map((x) => Post.fromJson(x)))
             : <Post>[].obs,
@@ -145,7 +147,7 @@ class Project {
                         .where((element) => element['is_manager'] != null))
                     .first['profile']['user_id']
                 : 0,
-        company: isCompany ? Company.fromJson(json['thumbnail']) : null);
+        company: isCompany ? Company.fromJson(json['project']['thumbnail']) : null);
   }
 
   Map<String, dynamic> toJson() => {

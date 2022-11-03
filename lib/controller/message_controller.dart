@@ -118,17 +118,16 @@ class MessageController extends GetxController with WidgetsBindingObserver {
               Map<String, List> allUserList =
                   Map<String, List>.from(usersList.data);
               List<int> none =
-                  allUserList['none']!.map((e) => int.parse(e)).toList();
-              List<Person> userList = allUserList['profile']!
-                  .map((e) => Person.fromJson(e))
+                  List.from(allUserList['none']!);
+              List<User> userList = allUserList['profile']!
+                  .map((e)=> User.fromJson(e))
                   .toList();
               print(userList);
               none.forEach(
-                  (userId) => temp.where((element) => element.user == userId));
+                  (userId) => SQLController.to.updateUser(null, '알수없음', userId));
               const FlutterSecureStorage().delete(key: 'newMsg');
               temp.forEach((element) async {
-                print(element.user);
-                Person? user =
+                User? user =
                     userList.where((user) => user.userId == element.user).first;
                 if (chattingRoomList
                     .where((messageRoom) =>
@@ -188,7 +187,7 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                           .value
                           .profileImage !=
                       user.profileImage) {
-                    SQLController.to.updateUser(user.profileImage, user.userId);
+                    SQLController.to.updateUser(user.profileImage,null, user.userId);
                   }
                   chattingRoomList
                       .where((messageRoom) =>

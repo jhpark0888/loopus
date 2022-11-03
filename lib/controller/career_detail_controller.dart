@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/api/project_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
@@ -28,6 +29,9 @@ class CareerDetailController extends GetxController
   void onInit() {
     tabController = TabController(length: 2, vsync: this);
     super.onInit();
+    getproject(career.value.id, HomeController.to.myProfile.value.userId).then((value){if(value.isError == false){
+      career.value = value.data;
+    }});
     members.value = career.value.members.toList();
     getPosting();
     scrollController.addListener(() {

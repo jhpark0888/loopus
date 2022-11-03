@@ -144,13 +144,13 @@ class PersonRankWidget extends StatelessWidget {
                 style: kmain,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
                 user.department,
                 style: kmain,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               RichText(
                 overflow: TextOverflow.ellipsis,
                 text: TextSpan(children: [

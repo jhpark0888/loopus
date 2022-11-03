@@ -76,11 +76,16 @@ class CareerWidget extends StatelessWidget {
                 ),
                 memberList(),
                 const Spacer(),
+                career.updateDate != null ?
                 Text(
                   "${lastPostCalculateDate(career.updateDate!)} 포스트",
                   style: kmain.copyWith(
                       color: career.thumbnail == "" ? mainblack : mainWhite),
-                ),
+                ) : Container(
+          color: mainblack,
+          height: 2,
+          width: 6,
+        ),
                 // const Spacer(),
                 // Row(
                 //   children: [

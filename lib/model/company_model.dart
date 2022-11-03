@@ -81,12 +81,12 @@ class Company extends User {
           itrCount: itrCount ?? 0);
 
   factory Company.fromJson(Map<String, dynamic> json) => Company(
-      userId: json['user_id'] ?? json['id'] ?? json['user'],
+      userId: json['user_id'] ?? json['id'] ?? json['user'] ?? 0,
       profileImage: json["company_logo"] != null
           ? json["company_logo"].runtimeType == String
               ? json["company_logo"]
               : json["company_logo"]["logo"] ?? ""
-          : "",
+          : json["logo"] != null ? json['logo'] : '',
       name: json['company_name'] != null
           ? json['company_name']
           : json["company_logo"] != null

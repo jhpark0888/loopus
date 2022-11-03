@@ -24,10 +24,12 @@ class MessageRoomWidget extends StatelessWidget {
       : super(key: key);
 
   Rx<ChatRoom> chatRoom;
-  Rx<Person> user;
+  Rx<User> user;
   MessageController messageController = Get.find<MessageController>();
   @override
   Widget build(BuildContext context) {
+    print(user.value.userType);
+    print(user.value.name);
     return GestureDetector(
       onTap: () async {
         chatRoom.value.notread.value = 0;
@@ -157,7 +159,7 @@ class MessageRoomWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(user.value.name, style: kmainbold),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 2),
                       Obx(
                         () => Row(
                           mainAxisSize: MainAxisSize.max,

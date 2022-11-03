@@ -80,6 +80,7 @@ Future<HTTPResponse> addproject() async {
         // String responsebody = await response.stream.bytesToString();
         // var responsemap = json.decode(responsebody);
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
+        // Project career = Project.fromJson(responseBody);
         print(responseBody);
         return HTTPResponse.success(responseBody);
       } else {
@@ -97,6 +98,68 @@ Future<HTTPResponse> addproject() async {
   }
 }
 
+Future<HTTPResponse> addCompany(int projectId, int companyId) async {
+  ConnectivityResult result = await initConnectivity();
+  final ProjectAddController projectAddController = Get.find();
+  if (result == ConnectivityResult.none) {
+    showdisconnectdialog();
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: "token");
+    Uri uri = Uri.parse('$serverUri/project_api/project?id=$projectId&company_id=$companyId&type=company&project_id=$projectId');
+    print(uri);
+    try {
+      print(projectAddController.selectCompany.value.userId);
+      final headers = {
+        'Authorization': 'Token $token',
+        'Content-Type': 'application/json',
+      };
+
+      http.Response response = await http.put(
+        uri,
+        headers: headers,
+      );
+
+      // var request = http.MultipartRequest('POST', uri);
+
+      // request.headers.addAll(headers);
+
+      // request.fields['project_name'] =
+      //     projectAddController.projectnamecontroller.text;
+
+      // request.fields['looper'] = json.encode(projectAddController
+      //     .selectedpersontaglist
+      //     .map((person) => person.id)
+      //     .toList());
+
+      // request.fields['is_public'] =
+      //     projectAddController.isPublic.value.toString();
+
+      // http.StreamedResponse response = await request.send();
+
+      print("활동 생성: ${response.statusCode}");
+      if (response.statusCode == 201) {
+        // String responsebody = await response.stream.bytesToString();
+        // var responsemap = json.decode(responsebody);
+        var responseBody = json.decode(utf8.decode(response.bodyBytes));
+        print(responseBody);
+        return HTTPResponse.success(responseBody);
+      } else {
+        //!GA
+        return HTTPResponse.apiError('fail', response.statusCode);
+      }
+    } on SocketException {
+      // ErrorController.to.isServerClosed(true);
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+      // ErrorController.to.isServerClosed(true);
+    }
+  }
+}
+
+
 Future<HTTPResponse> getproject(int projectId, int userId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
@@ -104,7 +167,7 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    try {
+    // try {
       final uri = Uri.parse(
           "$serverUri/project_api/project?project_id=$projectId&user_id=$userId");
       http.Response response =
@@ -114,7 +177,7 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         Project project = Project.fromJson(responseBody);
-
+        print(project.company);
         return HTTPResponse.success(project);
       } else if (response.statusCode == 404) {
         Get.back();
@@ -122,12 +185,12 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
         return HTTPResponse.success('');
       }
       return HTTPResponse.apiError('', response.statusCode);
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    // } on SocketException {
+    //   return HTTPResponse.serverError();
+    // } catch (e) {
+    //   print(e);
+    //   return HTTPResponse.unexpectedError(e);
+    // }
   }
 }
 

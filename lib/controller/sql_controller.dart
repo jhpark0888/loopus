@@ -44,7 +44,7 @@ class SQLController extends GetxController {
     );
   }
 
-  Future<void> insertUser(Person user) async {
+  Future<void> insertUser(User user) async {
     final Database db = await database!;
     await db.insert(
       'user',
@@ -291,10 +291,15 @@ class SQLController extends GetxController {
     }
   }
 
-  Future<void> updateUser(String image, int userId) async {
+  Future<void> updateUser(String? image,String? name, int userId) async {
     final Database db = await database!;
+    if(image != null){
     await db.rawUpdate(
-        'UPDATE user SET profile_image = ? WHERE user_id = ?', [image, userId]);
+        'UPDATE user SET profile_image = ? WHERE user_id = ?', [image, userId]);}
+    if(name != null){
+      await db.rawUpdate(
+        'UPDATE user SET real_name = ? WHERE user_id = ?', [name, userId]);
+    }
   }
 
   Future<void> updateMessage(String sendSuccess, int newMsgId, String isRead,
@@ -304,5 +309,10 @@ class SQLController extends GetxController {
     await db.rawQuery(
         'UPDATE chatting SET send_success = ?, msg_id = ?, is_read = ?, date = ? WHERE sender = ? and room_id = ? and msg_id = ?',
         [sendSuccess, newMsgId, isRead, date, userId, roomId, oldMsgId]);
+  }
+  Future<void> updateMessageRoom(String image, int userId) async {
+    final Database db = await database!;
+    await db.rawUpdate(
+        'UPDATE user SET profile_image = ? WHERE user_id = ?', [image, userId]);
   }
 }

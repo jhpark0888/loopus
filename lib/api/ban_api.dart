@@ -30,8 +30,8 @@ Future<HTTPResponse> getbanlist() async {
       print('차단 리스트 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
-
-        return HTTPResponse.success(responseBody);
+List<Person> banlist = List.from(responseBody['banlist']).map((e) => Person.fromJson(e)).toList();
+        return HTTPResponse.success(banlist);
       } else if (response.statusCode == 404) {
         return HTTPResponse.success(<Person>[]);
       } else {

@@ -46,6 +46,7 @@ class SelectProjectScreen extends StatelessWidget {
                     Column(
                       children: [
                         ListView.separated(
+                          padding: EdgeInsets.zero,
                           primary: false,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {

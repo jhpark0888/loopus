@@ -16,14 +16,14 @@ class BanPeopleController extends GetxController {
     banpeoplescreenstate(ScreenState.loading);
     HTTPResponse result = await getbanlist();
     if (result.isError == false) {
-      List<User> userlist = List.from(result.data['banlist'])
-          .map((banuser) => User.fromJson(banuser))
-          .toList();
+      List<Person> userlist = result.data;
+      if(userlist.isNotEmpty){
 
       for (var user in userlist) {
         user.banned(BanState.ban);
       }
       banlist(userlist);
+      }
       banpeoplescreenstate(ScreenState.success);
     } else {
       errorSituation(result, screenState: banpeoplescreenstate);

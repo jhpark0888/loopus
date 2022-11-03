@@ -140,20 +140,25 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                           },
                           itemCount: careerDetailController.postList.length,
                         )
-                      : career.members.where((e)=> e.userId == HomeController.to.myProfile.value.userId).isNotEmpty ?
-                      GestureDetector(
-                          onTap: () {
-                            Get.to(() => PostingAddScreen(
-                                  project_id: career.id,
-                                  route: PostaddRoute.career,
-                                ));
-                          },
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 24),
-                              EmptyPostWidget(),
-                            ],
-                          )) : const SizedBox.shrink())
+                      : career.members
+                              .where((e) =>
+                                  e.userId ==
+                                  HomeController.to.myProfile.value.userId)
+                              .isNotEmpty
+                          ? GestureDetector(
+                              onTap: () {
+                                Get.to(() => PostingAddScreen(
+                                      project_id: career.id,
+                                      route: PostaddRoute.career,
+                                    ));
+                              },
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 24),
+                                  EmptyPostWidget(),
+                                ],
+                              ))
+                          : const SizedBox.shrink())
                 ],
               ),
             ]),
@@ -164,16 +169,19 @@ class PersonalCareerDetailScreen extends StatelessWidget {
   }
 
   Widget joinCompany() {
-    return career.company != null
+    return Obx(() => careerDetailController.career.value.company != null
         ? Column(
             children: [
               GestureDetector(
                 onTap: () {
-                  if (career.company != null) {
-                    if (career.company!.userId != 0) {
+                  if (careerDetailController.career.value.company != null) {
+                    if (careerDetailController.career.value.company!.userId !=
+                        0) {
                       Get.to(() => OtherCompanyScreen(
-                          companyId: career.company!.userId,
-                          companyName: career.company!.name));
+                          companyId: careerDetailController
+                              .career.value.company!.userId,
+                          companyName: careerDetailController
+                              .career.value.company!.name));
                     }
                   }
                 },
@@ -183,9 +191,12 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         UserImageWidget(
-                          imageUrl: career.company != null
-                              ? career.company!.profileImage
-                              : '',
+                          imageUrl:
+                              careerDetailController.career.value.company !=
+                                      null
+                                  ? careerDetailController
+                                      .career.value.company!.profileImage
+                                  : '',
                           userType: UserType.company,
                           height: 36,
                           width: 36,
@@ -194,9 +205,8 @@ class PersonalCareerDetailScreen extends StatelessWidget {
                         RichText(
                             text: TextSpan(children: [
                           TextSpan(
-                              text: career.company != null
-                                  ? career.company!.name
-                                  : '네이버',
+                              text: careerDetailController
+                                  .career.value.company!.name,
                               style: kmainbold),
                           const TextSpan(text: '와 함께한 커리어에요', style: kmain)
                         ]))
@@ -208,7 +218,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
               ),
             ],
           )
-        : const SizedBox.shrink();
+        : const SizedBox.shrink());
   }
 }
 
@@ -277,11 +287,16 @@ class _MyAppSpace extends StatelessWidget {
                             const SizedBox(
                               height: 16,
                             ),
-                            if (career.value.updateDate != null)
-                              Text(
-                                '최근 포스트 ${calculateDate(career.value.updateDate!)}',
-                                style: kmain.copyWith(color: mainWhite),
-                              ),
+                            career.value.updateDate != null
+                                ? Text(
+                                    '최근 포스트 ${calculateDate(career.value.updateDate!)}',
+                                    style: kmain.copyWith(color: mainWhite),
+                                  )
+                                : Container(
+                                    color: mainWhite,
+                                    height: 2,
+                                    width: 6,
+                                  ),
                             const SizedBox(
                               height: 16,
                             ),
