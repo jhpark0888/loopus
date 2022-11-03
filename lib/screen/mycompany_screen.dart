@@ -619,7 +619,9 @@ class MyCompanyScreen extends StatelessWidget {
   Widget interestingUser(User user) {
     return Column(
       children: [
-        UserImageWidget(imageUrl: user.profileImage, userType: user.userType),
+        GestureDetector(
+            child: UserImageWidget(
+                imageUrl: user.profileImage, userType: user.userType)),
         const SizedBox(
           height: 4,
         ),

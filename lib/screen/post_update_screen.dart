@@ -43,6 +43,7 @@ class PostUpdateScreen extends StatelessWidget {
         appBar: AppBarWidget(
           bottomBorder: false,
           title: '포스트 수정',
+          actions: [updateButton()],
         ),
         body: Obx(
           () => ScrollNoneffectWidget(
@@ -203,8 +204,8 @@ class PostUpdateScreen extends StatelessWidget {
                                 child: Column(
                                     children:
                                         tagController.searchtaglist.value))),
-                            const SizedBox(height: 100),
-                            updateButton()
+                            // const SizedBox(height: 100),
+                            // updateButton()
                           ]),
                     )
                   ],
@@ -240,17 +241,26 @@ class PostUpdateScreen extends StatelessWidget {
           }
         });
       },
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(146.5, 13, 146.5, 13),
-        decoration: BoxDecoration(
-            color: checkContent() ? mainblue : maingray.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(8)),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 14, 0),
         child: Text(
-          '적용하기',
+          '적용',
           textAlign: ui.TextAlign.center,
-          style: kmain.copyWith(color: mainWhite),
+          style: kNavigationTitle.copyWith(
+              color: checkContent() ? mainblue : maingray.withOpacity(0.5)),
         ),
       ),
+      // Container(
+      //   padding: const EdgeInsets.fromLTRB(146.5, 13, 146.5, 13),
+      //   decoration: BoxDecoration(
+      //       color: checkContent() ? mainblue : maingray.withOpacity(0.5),
+      //       borderRadius: BorderRadius.circular(8)),
+      //   child: Text(
+      //     '적용하기',
+      //     textAlign: ui.TextAlign.center,
+      //     style: kNavigationTitle.copyWith(color: mainwhite),
+      //   ),
+      // ),
     );
   }
 

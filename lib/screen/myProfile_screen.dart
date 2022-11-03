@@ -529,10 +529,10 @@ class MyProfileScreen extends StatelessWidget {
                                       style: kmainbold),
                                   const SizedBox(width: 8),
                                   SizedBox(
-                                    width: 16,
-                                    height: 16,
+                                    width: 20,
+                                    height: 21,
                                     child: IconButton(
-                                      padding: EdgeInsets.zero,
+                                      padding: EdgeInsets.fromLTRB(0, 5, 0, 1),
                                       onPressed: () {
                                         showPopUpDialog(
                                             '관련있는 기업',
@@ -577,10 +577,10 @@ class MyProfileScreen extends StatelessWidget {
                                   ),
                                   // const SizedBox(width: 8),
                                   SizedBox(
-                                    width: 16,
-                                    height: 16,
+                                    width: 20,
+                                    height: 21,
                                     child: IconButton(
-                                      padding: EdgeInsets.zero,
+                                      padding: EdgeInsets.fromLTRB(0, 5, 0, 1),
                                       onPressed: () {
                                         showPopUpDialog(
                                             '커리어',

@@ -80,10 +80,10 @@ class ScoutScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       SizedBox(
-                          height: 16,
-                          width: 16,
+                          height: 21,
+                          width: 20,
                           child: IconButton(
-                              padding: EdgeInsets.zero,
+                              padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
                               onPressed: () {
                                 showPopUpDialog(
                                     '스카우트 중인 기업',

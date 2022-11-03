@@ -1557,7 +1557,7 @@ void showPopUpDialog(String title, String content, int duration) {
         textAlign: TextAlign.center,
       ),
     ),
-    barrierDismissible: false,
+    barrierDismissible: true,
     barrierColor: mainblack.withOpacity(0.3),
     transitionCurve: kAnimationCurve,
     transitionDuration: kAnimationDuration,

@@ -16,6 +16,7 @@ import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/comp_intro_edit_screen.dart';
 import 'package:loopus/screen/company_interesting_screen.dart';
 import 'package:loopus/screen/message_detail_screen.dart';
+import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/profile_image_change_screen.dart';
 import 'package:loopus/screen/setting_screen.dart';
@@ -193,7 +194,9 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                                         errorSituation(value);
                                       }
                                     });
-                                  });
+                                  },
+                                  leftBoxColor: maingray,
+                                  rightBoxColor: rankred);
                             },
                             value1: '계정 차단하기',
                             value2: '계정 신고하기',
@@ -691,17 +694,23 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
   }
 
   Widget interestingUser(User user) {
-    return Column(
-      children: [
-        UserImageWidget(imageUrl: user.profileImage, userType: user.userType),
-        const SizedBox(
-          height: 4,
-        ),
-        Text(
-          user.name,
-          style: kmain.copyWith(color: mainWhite),
-        )
-      ],
+    return GestureDetector(
+      onTap: () {
+        Get.to(
+            () => OtherProfileScreen(userid: user.userId, realname: user.name));
+      },
+      child: Column(
+        children: [
+          UserImageWidget(imageUrl: user.profileImage, userType: user.userType),
+          const SizedBox(
+            height: 4,
+          ),
+          Text(
+            user.name,
+            style: kmain.copyWith(color: mainWhite),
+          )
+        ],
+      ),
     );
   }
 }
