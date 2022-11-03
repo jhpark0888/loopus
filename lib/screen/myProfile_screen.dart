@@ -171,7 +171,7 @@ class MyProfileScreen extends StatelessWidget {
             ];
           },
           body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(),
+            // physics: const NeverScrollableScrollPhysics(),
             controller: profileController.tabController,
             children: [_careerView(context), _postView()],
           ),
@@ -504,7 +504,9 @@ class MyProfileScreen extends StatelessWidget {
   Widget _careerView(BuildContext context) {
     return SafeArea(
         child: Obx(() => profileController.myProjectList.isEmpty
-            ? EmptyContentWidget(text: '아직 커리어가 없어요')
+            ? Center(
+                child: SingleChildScrollView(
+                    child: EmptyContentWidget(text: '아직 커리어가 없어요')))
             : Builder(
                 builder: (context) {
                   return CustomScrollView(
@@ -533,9 +535,9 @@ class MyProfileScreen extends StatelessWidget {
                                       padding: EdgeInsets.zero,
                                       onPressed: () {
                                         showPopUpDialog(
-                                            '관련있는 기업',
-                                            '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요',
-                                            3000);
+                                          '관련있는 기업',
+                                          '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요',
+                                        );
                                       },
                                       icon: SvgPicture.asset(
                                         'assets/icons/information.svg',
@@ -581,9 +583,9 @@ class MyProfileScreen extends StatelessWidget {
                                       padding: EdgeInsets.zero,
                                       onPressed: () {
                                         showPopUpDialog(
-                                            '커리어',
-                                            '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요',
-                                            3000);
+                                          '커리어',
+                                          '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요',
+                                        );
                                       },
                                       icon: SvgPicture.asset(
                                         'assets/icons/information.svg',
@@ -612,9 +614,9 @@ class MyProfileScreen extends StatelessWidget {
                                     print(profileController
                                         .myProjectList[index].isPublic);
                                     goCareerScreen(
-                                        profileController.myProjectList[index],
-                                        profileController
-                                            .myUserInfo.value.name);
+                                      profileController.myProjectList[index],
+                                      profileController.myUserInfo.value.name,
+                                    );
                                   },
                                   child: CareerWidget(
                                       career: profileController
@@ -640,7 +642,9 @@ class MyProfileScreen extends StatelessWidget {
 
   Widget _postView() {
     return Obx(() => profileController.allPostList.isEmpty
-        ? EmptyContentWidget(text: '아직 포스팅이 없어요')
+        ? Center(
+            child: SingleChildScrollView(
+                child: EmptyContentWidget(text: '아직 포스팅이 없어요')))
         : sr.SmartRefresher(
             controller: profileController.postLoadingController,
             enablePullDown: false,

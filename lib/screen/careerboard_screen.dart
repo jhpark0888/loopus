@@ -59,9 +59,12 @@ class CareerBoardScreen extends StatelessWidget {
                 height: 16,
                 width: 16,
                 child: IconButton(
-                  padding: EdgeInsets.zero,
+                    padding: EdgeInsets.zero,
                     onPressed: () {
-                      showPopUpDialog('커리어보드', '루프어스에서 집계하는 점수를 통해\n커리어 상위권 프로필을 보여줘요\n최근 발전하고 있는 프로필과\n인기 포스트 등을 확인할 수 있어요', 3000);
+                      showPopUpDialog(
+                        '커리어보드',
+                        '루프어스에서 집계하는 점수를 통해\n커리어 상위권 프로필을 보여줘요\n최근 발전하고 있는 프로필과\n인기 포스트 등을 확인할 수 있어요',
+                      );
                     },
                     icon: SvgPicture.asset('assets/icons/information.svg')),
               )

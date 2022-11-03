@@ -46,6 +46,17 @@ class MyCompanyController extends GetxController
 
   // RxList<User> followerList = <User>[].obs;
 
+  @override
+  void onInit() async {
+    tabController = TabController(length: 3, vsync: this)
+      ..addListener(() {
+        currentIndex.value = tabController.index;
+      });
+
+    await loadmyProfile();
+    super.onInit();
+  }
+
   Future onRefresh() async {
     profileenablepullup.value = true;
     postPageNum = 1;
@@ -125,17 +136,6 @@ class MyCompanyController extends GetxController
         errorSituation(value);
       }
     });
-  }
-
-  @override
-  void onInit() async {
-    tabController = TabController(length: 3, vsync: this)
-      ..addListener(() {
-        currentIndex.value = tabController.index;
-      });
-
-    await loadmyProfile();
-    super.onInit();
   }
 
   // void tapLike(int careerId, int postId, int likeCount) {

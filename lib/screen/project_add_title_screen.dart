@@ -22,7 +22,6 @@ import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/project_add_company_screen.dart';
 import 'package:loopus/trash_bin/project_add_intro_screen.dart';
-import 'package:loopus/screen/project_add_period_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/company_widget.dart';
@@ -35,11 +34,15 @@ class ProjectAddTitleScreen extends StatelessWidget {
   ProjectAddTitleScreen({
     Key? key,
     // this.career,
+    this.careerId,
     required this.screenType,
   }) : super(key: key);
 
   final Screentype screenType;
   final ProjectAddController _controller = Get.put(ProjectAddController());
+
+  // 커리어 수정일 때는 커리어 아이디 받아야 함
+  int? careerId;
   // Rx<Project>? career;
 
   @override
@@ -61,14 +64,9 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 ? TextButton(
                     onPressed: () async {
                       if (_controller.onTitleButton.value) {
-                        _controller.selectedStartDateTime.value =
-                            DateTime.parse(DateTime.now().toString())
-                                .toString();
-                        _controller.isEndedProject(false);
                         loading();
 
                         await addproject().then((value) async {
-                          Get.back();
                           final LocalDataController _localDataController =
                               Get.put(LocalDataController());
                           final GAController _gaController =
@@ -86,11 +84,13 @@ class ProjectAddTitleScreen extends StatelessWidget {
                               ProfileController.to.myProjectList.add(project);
                               // ProfileController.to.careerPagenums.add(1);
                             }
-                            getbacks(2);
+                            getbacks(3);
                             Future.delayed(const Duration(milliseconds: 1000));
 
-                            goCareerScreen(project,
-                                HomeController.to.myProfile.value.name);
+                            goCareerScreen(
+                              project,
+                              HomeController.to.myProfile.value.name,
+                            );
 
                             Future.delayed(const Duration(milliseconds: 1000));
                             SchedulerBinding.instance!
@@ -110,6 +110,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                             _localDataController.firstProjectAdd();
                           } else {
                             await _gaController.logProjectCreated(false);
+                            Get.back();
                             errorSituation(value);
                           }
                         });
@@ -129,60 +130,58 @@ class ProjectAddTitleScreen extends StatelessWidget {
                         style: kNavigationTitle.copyWith(
                           color: _controller.onTitleButton.value
                               ? mainblue
-                              : mainblack.withOpacity(0.38),
+                              : maingray,
                         ),
                       ),
                     ),
                   )
-                : IconButton(
+                : TextButton(
                     onPressed: () {
                       if (_controller.onTitleButton.value) {
                         loading();
+                        CareerDetailController careerDetailController =
+                            Get.find<CareerDetailController>(
+                                tag: careerId.toString());
                         updateCareer(
-                                CareerDetailController.to.career.value.id,
+                                careerDetailController.career.value.id,
                                 null,
                                 _controller.projectnamecontroller.text,
                                 ProjectUpdateType.project_name)
                             .then((value) {
                           if (value.isError == false) {
-                            Get.back();
-                            CareerDetailController.to.career.value.careerName =
+                            careerDetailController.career.value.careerName =
                                 _controller.projectnamecontroller.text;
-                            CareerDetailController.to.career.refresh();
+                            careerDetailController.career.refresh();
                             if (Get.isRegistered<ProfileController>()) {
                               ProfileController.to.myProjectList
                                       .where(
                                           (p0) =>
                                               p0.id ==
-                                              CareerDetailController
-                                                  .to.career.value.id)
+                                              careerDetailController
+                                                  .career.value.id)
                                       .first
                                       .careerName =
                                   _controller.projectnamecontroller.text;
                               ProfileController.to.myProjectList.refresh();
                             }
-                            Get.back();
+                            getbacks(2);
                             showCustomDialog('커리어가 수정됐어요', 1400);
+                          } else {
+                            Get.back();
+                            errorSituation(value);
                           }
                         });
                       }
                     },
-                    icon: Obx(
+                    child: Obx(
                       () => Text('확인',
                           style: kNavigationTitle.copyWith(
                               color: _controller.onTitleButton.value
                                   ? mainblue
-                                  : mainblack.withOpacity(0.38))),
+                                  : maingray)),
                     ),
-                    padding: EdgeInsets.all(0),
                   )
           ],
-          // leading: IconButton(
-          //   onPressed: () {
-          //     Get.back();
-          //   },
-          //   icon: SvgPicture.asset('assets/icons/appbar_exit.svg'),
-          // ),
           title: screenType == Screentype.add ? '커리어 추가' : '커리어 수정',
         ),
         body: Column(
@@ -242,7 +241,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                 ),
               ),
             const SizedBox(
-              height: 18,
+              height: 16,
             ),
             Obx(() => _controller.selectCompany.value.name == ""
                 ? GestureDetector(
@@ -251,7 +250,9 @@ class ProjectAddTitleScreen extends StatelessWidget {
                       _controller.compSearchInit();
                     },
                     child: Text(
-                      "기업과 연계된 인턴/채용 커리어세요?",
+                      screenType == Screentype.add
+                          ? "기업과 연계된 인턴/채용 커리어세요?"
+                          : "연계된 기업 추가하기",
                       style: kmain.copyWith(color: mainblue),
                     ),
                   )

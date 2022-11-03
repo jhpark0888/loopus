@@ -43,7 +43,7 @@ class CheckValidate {
     }
   }
 
-  String? validatePassword(String value) {
+  static String? validatePassword(String value) {
     if (value.isEmpty) {
       return '비밀번호를 입력해주세요';
     } else {
@@ -51,7 +51,7 @@ class CheckValidate {
       //     r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,15}$';
       // RegExp regExp = new RegExp(pattern.toString());
       if (value.length < 6) {
-        return '6자 이상이어야해요';
+        return '비밀번호가 6자 이상이어야 해요';
       } else {
         return null;
       }

@@ -99,7 +99,7 @@ class MyApp extends StatelessWidget {
           statusBarIconBrightness: Brightness.dark,
         ),
 
-        backgroundColor: Colors.transparent,
+        backgroundColor: mainWhite,
         // foregroundColor: mainblack,
       ),
       canvasColor: mainWhite,
@@ -189,9 +189,6 @@ class _WelcomeScreenStete extends State<WelcomeScreen> {
         MaterialPageRoute(
           builder:
               token == null ? (context) => StartScreen() : (context) => App(),
-          //     (context) => ProjectAddTitleScreen(
-          //   screenType: Screentype.add,
-          // ),
         ),
       ),
     );

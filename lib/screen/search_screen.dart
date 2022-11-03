@@ -81,56 +81,63 @@ class SearchScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 16),
                   Obx(
-                    () => _searchController.recentSearchList.isNotEmpty
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                            ),
-                            child: Row(
-                              children: [
-                                const Text(
-                                  "최근 검색",
-                                  style: kmainbold,
-                                ),
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: () async {
-                                    if (_searchController
-                                        .recentSearchList.isNotEmpty) {
-                                      await deleteResentSearch("all", 0)
-                                          .then((value) {
-                                        if (value.isError == false) {
-                                          _searchController.recentSearchList
-                                              .clear();
-                                        } else {
-                                          errorSituation(value);
-                                        }
-                                      });
+                    () => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
+                      child: Row(
+                        children: [
+                          const Text(
+                            "최근 검색",
+                            style: kmainbold,
+                          ),
+                          const Spacer(),
+                          if (_searchController.recentSearchList.isNotEmpty)
+                            GestureDetector(
+                              onTap: () async {
+                                if (_searchController
+                                    .recentSearchList.isNotEmpty) {
+                                  await deleteResentSearch("all", 0)
+                                      .then((value) {
+                                    if (value.isError == false) {
+                                      _searchController.recentSearchList
+                                          .clear();
+                                    } else {
+                                      errorSituation(value);
                                     }
-                                  },
-                                  child: Text(
-                                    "기록 전체 삭제",
-                                    style: kmain.copyWith(color: mainblue),
-                                  ),
-                                ),
-                              ],
+                                  });
+                                }
+                              },
+                              child: Text(
+                                "기록 전체 삭제",
+                                style: kmain.copyWith(color: mainblue),
+                              ),
                             ),
-                          )
-                        : Container(),
+                        ],
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     height: 24,
                   ),
                   Obx(
-                    () => ListView.separated(
-                        primary: false,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) => RecentSearchWidget(
-                            recentSearch:
-                                _searchController.recentSearchList[index]),
-                        separatorBuilder: (content, index) =>
-                            const SizedBox(height: 24),
-                        itemCount: _searchController.recentSearchList.length),
+                    () => _searchController.recentSearchList.isNotEmpty
+                        ? ListView.separated(
+                            primary: false,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => RecentSearchWidget(
+                                recentSearch:
+                                    _searchController.recentSearchList[index]),
+                            separatorBuilder: (content, index) =>
+                                const SizedBox(height: 24),
+                            itemCount:
+                                _searchController.recentSearchList.length)
+                        : Center(
+                            child: Text(
+                              "검색한 기록이 없어요",
+                              style: kmain.copyWith(color: maingray),
+                            ),
+                          ),
                   ),
                   const SizedBox(height: 16),
                 ],
@@ -139,29 +146,4 @@ class SearchScreen extends StatelessWidget {
           )),
     );
   }
-}
-
-Widget searchloading() {
-  return Column(
-    children: [
-      SizedBox(
-        height: 10,
-      ),
-      Image.asset(
-        'assets/icons/loading.gif',
-        scale: 6,
-      ),
-      SizedBox(
-        height: 4,
-      ),
-      Text(
-        '검색중...',
-        style: TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
-          color: mainblue.withOpacity(0.6),
-        ),
-      ),
-    ],
-  );
 }

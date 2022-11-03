@@ -11,6 +11,7 @@ import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/screen/loading_screen.dart';
 import 'package:loopus/screen/signup_complete_screen.dart';
 import 'package:loopus/screen/signup_fail_screen.dart';
+import 'package:loopus/screen/signup_tutorial_screen.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/certfynum_textfield_widget.dart';
 import 'package:loopus/widget/custom_expanded_button.dart';
@@ -31,7 +32,7 @@ class SignupEmailcheckScreen extends StatelessWidget {
   Map<Emailcertification, String> rightButtonText = {
     Emailcertification.normal: "다시 보내기",
     Emailcertification.waiting: "인증 대기중",
-    Emailcertification.success: "다음",
+    Emailcertification.success: "다시 시도",
     Emailcertification.fail: "다시 보내기",
   };
 
@@ -136,7 +137,9 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                   }
                                 } else if (_signupController
                                         .signupcertification.value ==
-                                    Emailcertification.success) {}
+                                    Emailcertification.success) {
+                                  _certftNumSuccess(reTry: true);
+                                }
                               },
                               isBlue: true,
                               title: rightButtonText[
@@ -199,85 +202,10 @@ class SignupEmailcheckScreen extends StatelessWidget {
                                     if (value.isError == false) {
                                       isCertiftNumdiffer(false);
                                       _signupController.timer.timerClose();
+                                      _signupController.signupcertification
+                                          .value = Emailcertification.success;
 
-                                      if (_signupController.isReCertification ==
-                                          false) {
-                                        //회원가입
-                                        await signupRequest()
-                                            .then((value) async {
-                                          final GAController _gaController =
-                                              GAController();
-
-                                          if (value.isError == false) {
-                                            await _gaController.logSignup();
-                                            await _gaController
-                                                .setUserProperties(
-                                                    value.data['user_id'],
-                                                    _signupController.selectDept
-                                                        .value.deptname);
-                                            await _gaController
-                                                .logScreenView('signup_6');
-                                            Get.back();
-                                            Get.offAll(
-                                                () => SignupCompleteScreen(
-                                                      emailId: _signupController
-                                                              .emailidcontroller
-                                                              .text +
-                                                          "@" +
-                                                          _signupController
-                                                              .selectUniv
-                                                              .value
-                                                              .email,
-                                                      password: _signupController
-                                                          .passwordcontroller
-                                                          .text,
-                                                    ));
-                                          } else {
-                                            await _gaController
-                                                .logScreenView('signup_6');
-                                            // errorSituation(value);
-                                            Get.back();
-                                            Get.to(() => SignupFailScreen());
-                                          }
-                                        });
-                                      } else {
-                                        updateProfile(
-                                                updateType:
-                                                    ProfileUpdateType.profile,
-                                                email: _signupController
-                                                    .getEmail(),
-                                                name: _signupController
-                                                    .namecontroller.text
-                                                    .trim(),
-                                                deptId: _signupController
-                                                    .selectDept.value.id,
-                                                univId: _signupController
-                                                    .selectUniv.value.id,
-                                                admission: _signupController
-                                                    .admissioncontroller.text)
-                                            .then((value) {
-                                          if (value.isError == false) {
-                                            Get.back();
-                                            Get.offAll(
-                                                () => SignupCompleteScreen(
-                                                      emailId: _signupController
-                                                              .emailidcontroller
-                                                              .text +
-                                                          "@" +
-                                                          _signupController
-                                                              .selectUniv
-                                                              .value
-                                                              .email,
-                                                      password:
-                                                          _signupController
-                                                              .reCertPw!,
-                                                    ));
-                                          } else {
-                                            Get.back();
-                                            Get.to(() => SignupFailScreen());
-                                          }
-                                        });
-                                      }
+                                      _certftNumSuccess();
                                     } else {
                                       Get.back();
                                       if (value.errorData!["statusCode"] ==
@@ -312,7 +240,16 @@ class SignupEmailcheckScreen extends StatelessWidget {
                             ),
                           )
                         : Container(),
-                  )
+                  ),
+                  const SizedBox(height: 24),
+                  GestureDetector(
+                      onTap: () {
+                        showSignUpEmailHint();
+                      },
+                      child: Text(
+                        "인천대학교 메일이 오지 않는 경우 해결 방법",
+                        style: kmain.copyWith(color: mainblue),
+                      ))
                 ],
               ),
             ),
@@ -320,5 +257,63 @@ class SignupEmailcheckScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _certftNumSuccess({bool reTry = false}) async {
+    if (_signupController.isReCertification == false) {
+      //회원가입
+      await signupRequest().then((value) async {
+        final GAController _gaController = GAController();
+
+        if (value.isError == false) {
+          await _gaController.logSignup();
+          await _gaController.setUserProperties(value.data['user_id'],
+              _signupController.selectDept.value.deptname);
+          await _gaController.logScreenView('signup_6');
+          Get.back();
+          Get.offAll(() => TutorialScreen(
+                emailId: _signupController.emailidcontroller.text +
+                    "@" +
+                    _signupController.selectUniv.value.email,
+                password: _signupController.passwordcontroller.text,
+              ));
+        } else {
+          await _gaController.logScreenView('signup_6');
+          // errorSituation(value);
+          Get.back();
+          if (reTry) {
+            errorSituation(value);
+          } else {
+            showPopUpDialog("인증 완료", "다음 버튼을 눌러주세요");
+          }
+        }
+      });
+    } else {
+      updateProfile(
+              updateType: ProfileUpdateType.profile,
+              email: _signupController.getEmail(),
+              name: _signupController.namecontroller.text.trim(),
+              deptId: _signupController.selectDept.value.id,
+              univId: _signupController.selectUniv.value.id,
+              admission: _signupController.admissioncontroller.text)
+          .then((value) {
+        if (value.isError == false) {
+          Get.back();
+          Get.offAll(() => SignupCompleteScreen(
+                emailId: _signupController.emailidcontroller.text +
+                    "@" +
+                    _signupController.selectUniv.value.email,
+                password: _signupController.reCertPw!,
+              ));
+        } else {
+          Get.back();
+          if (reTry) {
+            errorSituation(value);
+          } else {
+            showPopUpDialog("인증 완료", "다음 버튼을 눌러주세요");
+          }
+        }
+      });
+    }
   }
 }

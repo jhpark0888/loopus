@@ -35,7 +35,6 @@ class HotUserWidget extends StatelessWidget {
               width: 2,
             ),
             borderRadius: BorderRadius.circular(8)),
-        width: 211,
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

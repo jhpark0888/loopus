@@ -69,15 +69,17 @@ class NotificationWidget extends StatelessWidget {
                 children: [
                   // SlidableAction(onPressed: (c){},label: '',),
                   // SlidableAction(onPressed: (c){},label: '',),
-                  SlidableAction(spacing: 0,
+                  SlidableAction(
+                    spacing: 0,
                     flex: 1,
                     onPressed: (context) {
                       deleteNotification(notification.id).then((value) {
-                  if (value.isError == false) {
-                    NotificationDetailController.to.removeNoti(notification);
-                    showCustomDialog('알림이 삭제되었어요.', 1400);
-                  }
-                });
+                        if (value.isError == false) {
+                          NotificationDetailController.to
+                              .removeNoti(notification);
+                          showCustomDialog('알림이 삭제되었어요.', 1400);
+                        }
+                      });
                     },
                     label: '삭제',
                     backgroundColor: rankred,
@@ -153,11 +155,12 @@ class NotificationWidget extends StatelessWidget {
                     flex: 1,
                     onPressed: (context) {
                       deleteNotification(notification.id).then((value) {
-                  if (value.isError == false) {
-                    NotificationDetailController.to.removeNoti(notification);
-                    showCustomDialog('알림이 삭제되었어요.', 1400);
-                  }
-                });
+                        if (value.isError == false) {
+                          NotificationDetailController.to
+                              .removeNoti(notification);
+                          showCustomDialog('알림이 삭제되었어요.', 1400);
+                        }
+                      });
                     },
                     label: '삭제',
                     backgroundColor: rankred,
@@ -279,7 +282,9 @@ class NotificationWidget extends StatelessWidget {
           career = value.data;
           Future.delayed(const Duration(milliseconds: 300));
           Get.to(() => GroupCareerDetailScreen(
-              career: career, name: (notification.user.name)));
+                career: career,
+                name: (notification.user.name),
+              ));
         }
       });
     } else if (notification.type == NotificationType.postLike) {

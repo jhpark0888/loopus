@@ -131,6 +131,8 @@ class SignupEmailPwScreen extends StatelessWidget {
                           hintText: "최소 6글자",
                           textController: _signupController.passwordcontroller,
                           obscureText: true,
+                          validator: (value) =>
+                              CheckValidate.validatePassword(value!),
                         ),
                         const SizedBox(
                           height: 24,

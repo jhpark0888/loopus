@@ -95,18 +95,7 @@ class SearchTagWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        addRecentSearch(SearchType.tag.index, tag.tagId.toString())
-            .then((value) {
-          if (value.isError == false && value.data != null) {
-            RecentSearch tempRecentSearch = RecentSearch.fromJson(value.data);
-            SearchController.to.recentSearchList.insert(0, tempRecentSearch);
-          }
-        });
-        Get.to(() => TagDetailScreen(
-              tag: tag,
-            ));
-      },
+      onTap: () => _onTap(),
       // splashColor: kSplashColor,
       behavior: HitTestBehavior.translucent,
       child: Padding(
@@ -115,6 +104,8 @@ class SearchTagWidget extends StatelessWidget {
           children: [
             Tagwidget(
               tag: tag,
+              isonTap: true,
+              isAddRecentSearch: true,
             ),
             const Spacer(),
             Text(
@@ -125,6 +116,18 @@ class SearchTagWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onTap() {
+    addRecentSearch(SearchType.tag.index, tag.tagId.toString()).then((value) {
+      if (value.isError == false && value.data != null) {
+        RecentSearch tempRecentSearch = RecentSearch.fromJson(value.data);
+        SearchController.to.recentSearchList.insert(0, tempRecentSearch);
+      }
+    });
+    Get.to(() => TagDetailScreen(
+          tag: tag,
+        ));
   }
 }
 
@@ -141,7 +144,7 @@ class RecentSearchWidget extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       // splashColor: kSplashColor,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.only(left: 16, right: 3),
         child: Row(
           children: [
             _imageView(),
@@ -156,9 +159,14 @@ class RecentSearchWidget extends StatelessWidget {
                   }
                 });
               },
-              child: SvgPicture.asset(
-                "assets/icons/widget_delete.svg",
-                color: iconcolor,
+              behavior: HitTestBehavior.translucent,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                child: SvgPicture.asset(
+                  "assets/icons/widget_delete.svg",
+                  color: iconcolor,
+                ),
               ),
             )
           ],

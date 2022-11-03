@@ -64,9 +64,11 @@ class GroupCareerDetailScreen extends StatelessWidget {
                       leading: true,
                     ),
                     actions: [
-                      _leading(
-                        leading: false,
-                        career: career,
+                      Obx(
+                        () => _leading(
+                          leading: false,
+                          career: careerDetailController.career.value,
+                        ),
                       )
                     ],
                     expandedHeight: 190,
@@ -214,20 +216,11 @@ class GroupCareerDetailScreen extends StatelessWidget {
                 children: [
                   MyCareerScreen(
                     name: name,
-                    id: career.id,
-                    myCareer: career.members
-                        .where((element) =>
-                            element.userId ==
-                            HomeController.to.myProfile.value.userId)
-                        .isNotEmpty,
+                    careerId: career.id,
+                    userId: career.userid!,
                   ),
                   GroupCareerScreen(
-                    id: career.id,
-                    myCareer: career.members
-                        .where((element) =>
-                            element.userId ==
-                            HomeController.to.myProfile.value.userId)
-                        .isNotEmpty,
+                    careerId: career.id,
                   )
                 ])));
   }
@@ -376,6 +369,26 @@ class GroupCareerDetailScreen extends StatelessWidget {
       ]),
     );
   }
+
+  Widget adapt(TabController tabController, String name) {
+    return Container(
+        width: Get.width,
+        decoration: const BoxDecoration(color: mainWhite),
+        child: TabBarWidget(tabController: tabController, tabs: [
+          Tab(
+              height: 48,
+              child: Text(
+                '$name님의 포스트',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              )),
+          const Tab(
+              height: 48,
+              child: Text(
+                '그룹 전체 포스트',
+              )),
+        ]));
+  }
 }
 
 class _MyAppSpace extends StatelessWidget {
@@ -516,38 +529,12 @@ class _MyAppSpace extends StatelessWidget {
   }
 }
 
-Widget adapt(TabController tabController, String name) {
-  return Container(
-      width: Get.width,
-      decoration: const BoxDecoration(color: mainWhite),
-      child: TabBarWidget(tabController: tabController, tabs: [
-        Tab(
-            height: 48,
-            child: Container(
-              child: Text(
-                '${name} 님의 포스트',
-                style: kmainbold,
-              ),
-            )),
-        Tab(
-            height: 48,
-            child: Container(
-              child: Text(
-                '그룹 전체 포스트',
-                style: kmainbold,
-              ),
-            ))
-      ]));
-}
-
 class GroupCareerScreen extends StatelessWidget {
-  GroupCareerScreen({Key? key, required this.id, required this.myCareer})
-      : super(key: key);
-  int id;
-  bool myCareer;
+  GroupCareerScreen({Key? key, required this.careerId}) : super(key: key);
+  int careerId;
   @override
   Widget build(BuildContext context) {
-    CareerDetailController controller = Get.find(tag: id.toString());
+    CareerDetailController controller = Get.find(tag: careerId.toString());
     // print(controller.postList.isNotEmpty);
     return Obx(() => controller.postList.isNotEmpty
         ? CustomScrollView(slivers: [
@@ -570,58 +557,71 @@ class GroupCareerScreen extends StatelessWidget {
               //     ),
             ]))
           ])
-        : myCareer
+        : controller.career.value.members.any(
+                (member) => member.userId == int.parse(HomeController.to.myId!))
             ? GestureDetector(
                 onTap: () {
                   Get.to(() => PostingAddScreen(
-                        project_id: id,
+                        project_id: careerId,
                         route: PostaddRoute.career,
                       ));
                 },
                 child: EmptyPostWidget(),
               )
-            : const SizedBox.shrink());
+            : EmptyContentWidget(text: "아직 포스트가 없어요"));
   }
 }
 
 class MyCareerScreen extends StatelessWidget {
-  MyCareerScreen(
-      {Key? key, required this.name, required this.id, required this.myCareer})
-      : super(key: key);
+  MyCareerScreen({
+    Key? key,
+    required this.name,
+    required this.careerId,
+    required this.userId,
+  }) : super(key: key);
+  int careerId;
   String name;
-  int id;
-  bool myCareer;
+  int userId;
   @override
   Widget build(BuildContext context) {
-    CareerDetailController controller = Get.find(tag: id.toString());
+    CareerDetailController controller = Get.find(tag: careerId.toString());
     // print(controller.postList.isNotEmpty);
-    return Obx(() => controller.postList.isNotEmpty
-        ? CustomScrollView(slivers: [
-            SliverList(
-                delegate: SliverChildListDelegate([
-              ListView.builder(
-                  shrinkWrap: true,
-                  primary: false,
-                  itemBuilder: (context, index) {
-                    if (controller.postList[index].user.name == name) {
-                      return PostingWidget(
-                        item: controller.postList[index],
-                        type: PostingWidgetType.normal,
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                  itemCount: controller.postList.length),
-              // PostingWidget(
-              //       item: controller.postList[index],
-              //       type: PostingWidgetType.profile,
-              //     ),
-            ]))
-          ])
-        : myCareer
-            ? Center(child: EmptyPostWidget())
-            : const SizedBox.shrink());
+    return Obx(() =>
+        controller.postList.where((post) => post.userid == userId).isNotEmpty
+            ? CustomScrollView(slivers: [
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      primary: false,
+                      itemBuilder: (context, index) {
+                        if (controller.postList[index].user.userId == userId) {
+                          return PostingWidget(
+                            item: controller.postList[index],
+                            type: PostingWidgetType.normal,
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                      itemCount: controller.postList.length),
+                  // PostingWidget(
+                  //       item: controller.postList[index],
+                  //       type: PostingWidgetType.profile,
+                  //     ),
+                ]))
+              ])
+            : HomeController.to.myId == userId.toString()
+                ? GestureDetector(
+                    onTap: () {
+                      Get.to(() => PostingAddScreen(
+                            project_id: careerId,
+                            route: PostaddRoute.career,
+                          ));
+                    },
+                    child: EmptyPostWidget())
+                : EmptyContentWidget(text: "아직 포스트가 없어요"));
   }
 }
 
@@ -652,10 +652,10 @@ class _leading extends StatelessWidget {
                 leftFunction: () {
                   Get.back();
                 },
-                rightFunction: () {
+                rightFunction: () async {
                   dialogBack(modalIOS: true);
                   loading();
-                  deleteProject(career!.id, DeleteType.del).then((value) {
+                  await deleteProject(career!.id, DeleteType.del).then((value) {
                     print(value.isError);
                     if (value.isError == false) {
                       // careerList!.remove(career);
@@ -672,8 +672,10 @@ class _leading extends StatelessWidget {
               );
             }, func1: () {
               Get.back();
-              Get.to(
-                  () => ProjectAddTitleScreen(screenType: Screentype.update));
+              Get.to(() => ProjectAddTitleScreen(
+                    screenType: Screentype.update,
+                    careerId: career!.id,
+                  ));
             },
                 value1: '커리어 수정하기',
                 value2: '커리어 삭제하기',
@@ -699,15 +701,17 @@ class _leading extends StatelessWidget {
                   leftFunction: () {
                     Get.back();
                   },
-                  rightFunction: () {
+                  rightFunction: () async {
                     dialogBack(modalIOS: true);
                     loading();
-                    deleteProject(career!.id, DeleteType.exit).then((value) {
+                    await deleteProject(career!.id, DeleteType.exit)
+                        .then((value) {
                       if (value.isError == false) {
                         deleteCareer(career!);
                         Get.back();
                         showCustomDialog("해당 커리어를 나갔어요", 1400);
                       } else {
+                        Get.back();
                         errorSituation(value);
                       }
                     });

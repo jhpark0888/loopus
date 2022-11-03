@@ -238,18 +238,21 @@ class NewsWidget extends StatelessWidget {
       return Text(
         newsIssue.corp,
         style: kmain.copyWith(color: isDark ? mainWhite : null),
+        overflow: TextOverflow.ellipsis,
       );
     } else if (issue is BrunchIssue) {
       BrunchIssue brunchIssue = issue as BrunchIssue;
       return Text(
         brunchIssue.writer,
         style: kmain.copyWith(color: isDark ? mainWhite : null),
+        overflow: TextOverflow.ellipsis,
       );
     } else {
       YoutubeIssue youtubeIssue = issue as YoutubeIssue;
       return Text(
         youtubeIssue.chName,
         style: kmain.copyWith(color: isDark ? mainWhite : null),
+        overflow: TextOverflow.ellipsis,
       );
     }
   }
@@ -307,7 +310,7 @@ class NewsWidget extends StatelessWidget {
                         const SizedBox(
                           width: 8,
                         ),
-                        _authorNameView()
+                        Expanded(child: _authorNameView())
                       ],
                     )
                   ],

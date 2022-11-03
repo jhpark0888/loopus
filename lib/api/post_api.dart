@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/controller/app_controller.dart';
 
 import 'package:loopus/controller/ga_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
@@ -357,9 +358,7 @@ Future<HTTPResponse> likepost(int id, contentType type) async {
     await const FlutterSecureStorage().read(key: 'token').then((value) {
       token = value;
     });
-    String? userType = await const FlutterSecureStorage().read(key: "type");
-    int isStudent = UserType.student.name == userType ? 1 : 0;
-    print(userType);
+    int isStudent = AppController.to.userType == UserType.student ? 1 : 0;
 
     final likeUri = Uri.parse(
         "$serverUri/post_api/like?id=$id&type=${type.name}&is_student=$isStudent");
@@ -455,8 +454,7 @@ Future<HTTPResponse> contentreport(int id, contentType type) async {
 Future<HTTPResponse> commentPost(
     int id, contentType type, String text, int? tagUserId) async {
   String? token = await const FlutterSecureStorage().read(key: 'token');
-  String? userType = await const FlutterSecureStorage().read(key: "type");
-  int isStudent = UserType.student.name == userType ? 1 : 0;
+  int isStudent = AppController.to.userType == UserType.student ? 1 : 0;
 
   final CommentUri = Uri.parse(
       "$serverUri/post_api/comment?id=$id&type=${type.name}&is_student=$isStudent");

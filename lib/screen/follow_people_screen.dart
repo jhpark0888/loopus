@@ -82,6 +82,7 @@ class FollowPeopleScreen extends StatelessWidget {
                                           itemBuilder: (context, index) {
                                             return UserTileWidget(
                                               user: _controller.userList[index],
+                                              isFollowButton: true,
                                             );
                                           },
                                           separatorBuilder: (context, index) =>

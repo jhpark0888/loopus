@@ -11,6 +11,7 @@ import 'package:loopus/api/rank_api.dart';
 import 'package:loopus/api/scout_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/contact_model.dart';
@@ -80,11 +81,10 @@ class ScoutReportController extends GetxController
   @override
   void onInit() async {
     screenState(ScreenState.loading);
-    String? userType = await FlutterSecureStorage().read(key: "type");
-    if (userType == "student") {
-      isCorp.value = 0;
-    } else {
+    if (AppController.to.userType == UserType.company) {
       isCorp.value = 1;
+    } else {
+      isCorp.value = 0;
     }
 
     getCompanyList("main");

@@ -39,43 +39,63 @@ import 'package:pull_to_refresh/pull_to_refresh.dart' as sr;
 
 import '../controller/hover_controller.dart';
 
-class OtherProfileScreen extends StatelessWidget {
+class OtherProfileScreen extends StatefulWidget {
   OtherProfileScreen({
     Key? key,
     this.user,
     required this.userid,
     required this.realname,
   }) : super(key: key);
-  late final OtherProfileController _controller = Get.put(
-      OtherProfileController(
-        userid: userid,
-        otherUser: user != null ? user!.obs : Person.defaultuser().obs,
-      ),
-      tag: userid.toString());
-
-  // final ImageController imageController = Get.put(ImageController());
-  final HoverController _hoverController = HoverController();
-
   Person? user;
   int userid;
   String realname;
 
+  @override
+  State<OtherProfileScreen> createState() => _OtherProfileScreenState();
+}
+
+class _OtherProfileScreenState extends State<OtherProfileScreen>
+    with SingleTickerProviderStateMixin {
+  late final OtherProfileController _controller = Get.put(
+      OtherProfileController(
+        userid: widget.userid,
+        otherUser:
+            widget.user != null ? widget.user!.obs : Person.defaultuser().obs,
+      ),
+      tag: widget.userid.toString());
+
+  // final ImageController imageController = Get.put(ImageController());
+  final HoverController _hoverController = HoverController();
+
   final sr.RefreshController _otherprofilerefreshController =
       sr.RefreshController(initialRefresh: false);
+
   final sr.RefreshController _otherpostLoadingController =
       sr.RefreshController(initialRefresh: false);
+
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _controller.currentIndex.value = 0;
+    _tabController.addListener(() {
+      _controller.currentIndex.value = _tabController.index;
+    });
+  }
 
   Future onRefresh() async {
     _controller.profileenablepullup.value = true;
     _controller.postPageNum = 1;
     _controller.allPostList.clear();
-    _controller.loadotherProfile(userid);
+    _controller.loadotherProfile(widget.userid);
     _otherprofilerefreshController.refreshCompleted();
   }
 
   void onLoading() async {
     // await Future.delayed(Duration(seconds: 2));
-    int statusCode = await _controller.getOtherPosting(userid);
+    int statusCode = await _controller.getOtherPosting(widget.userid);
     if (statusCode == 204) {
       _otherpostLoadingController.loadNoData();
     } else {
@@ -85,140 +105,138 @@ class OtherProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBarWidget(
-          titleSpacing: 0.0,
-          centetTitle: _controller.otherUser.value.isuser != 1,
-          title: '프로필',
-          actions: [
-            if (_controller.otherUser.value.isuser == 1)
-              IconButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    Get.to(() => BookmarkScreen());
-                  },
-                  icon: SvgPicture.asset('assets/icons/appbar_bookmark.svg')),
-            Obx(
-              () => _controller.otherprofilescreenstate.value !=
-                          ScreenState.success ||
-                      _controller.isBanned.value
-                  ? Container()
-                  : _controller.otherUser.value.isuser == 1
-                      ? GestureDetector(
-                          onTap: () {
-                            Get.to(() => SettingScreen());
-                          },
-                          child: SvgPicture.asset(
-                            'assets/icons/setting.svg',
-                          ),
-                        )
-                      : IconButton(
-                          onPressed: () {
-                            showBottomdialog(
-                              context,
-                              func1: () {
-                                showButtonDialog(
-                                    leftText: '취소',
-                                    rightText: '차단',
-                                    title: '계정 차단',
-                                    startContent: '$realname님을 차단하시겠어요?',
-                                    leftFunction: () => Get.back(),
-                                    rightFunction: () {
-                                      userban(_controller.userid).then((value) {
-                                        if (value.isError == false) {
-                                          dialogBack();
-                                          _controller.otherUser.value
-                                              .banned(BanState.ban);
+    return Scaffold(
+      appBar: AppBarWidget(
+        titleSpacing: 0.0,
+        centetTitle: _controller.otherUser.value.isuser != 1,
+        title: '프로필',
+        actions: [
+          if (_controller.otherUser.value.isuser == 1)
+            IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  Get.to(() => BookmarkScreen());
+                },
+                icon: SvgPicture.asset('assets/icons/appbar_bookmark.svg')),
+          Obx(
+            () => _controller.otherprofilescreenstate.value !=
+                        ScreenState.success ||
+                    _controller.isBanned.value
+                ? Container()
+                : _controller.otherUser.value.isuser == 1
+                    ? GestureDetector(
+                        onTap: () {
+                          Get.to(() => SettingScreen());
+                        },
+                        child: SvgPicture.asset(
+                          'assets/icons/setting.svg',
+                        ),
+                      )
+                    : IconButton(
+                        onPressed: () {
+                          showBottomdialog(
+                            context,
+                            func1: () {
+                              showButtonDialog(
+                                  leftText: '취소',
+                                  rightText: '차단',
+                                  title: '계정 차단',
+                                  startContent: '${widget.realname}님을 차단하시겠어요?',
+                                  leftFunction: () => Get.back(),
+                                  rightFunction: () {
+                                    userban(_controller.userid).then((value) {
+                                      if (value.isError == false) {
+                                        dialogBack();
+                                        _controller.otherUser.value
+                                            .banned(BanState.ban);
 
-                                          showCustomDialog(
-                                              "해당 유저가 차단 되었습니다", 1000);
-                                        } else {
-                                          errorSituation(value);
-                                        }
-                                      });
+                                        showCustomDialog(
+                                            "해당 유저가 차단 되었습니다", 1000);
+                                      } else {
+                                        errorSituation(value);
+                                      }
                                     });
-                              },
-                              func2: () {
-                                TextEditingController reportController =
-                                    TextEditingController();
-                                showTextFieldDialog(
-                                    title: '계정 신고',
-                                    hintText:
-                                        '신고 사유를 입력해주세요. 관리자 확인 \n 이후 해당 계정은 이용약관에 따라 제재를 \n받을 수 있습니다.',
-                                    rightText: '신고',
-                                    rightBoxColor: rankred,
-                                    textEditingController: reportController,
-                                    leftFunction: () {
-                                      Get.back();
-                                    },
-                                    rightFunction: () {
-                                      userreport(_controller.userid)
-                                          .then((value) {
-                                        if (value.isError == false) {
-                                          dialogBack(modalIOS: true);
-                                          showCustomDialog("신고가 접수되었습니다", 1000);
-                                        } else {
-                                          errorSituation(value);
-                                        }
-                                      });
+                                  });
+                            },
+                            func2: () {
+                              TextEditingController reportController =
+                                  TextEditingController();
+                              showTextFieldDialog(
+                                  title: '계정 신고',
+                                  hintText:
+                                      '신고 사유를 입력해주세요. 관리자 확인 \n 이후 해당 계정은 이용약관에 따라 제재를 \n받을 수 있습니다.',
+                                  rightText: '신고',
+                                  rightBoxColor: rankred,
+                                  textEditingController: reportController,
+                                  leftFunction: () {
+                                    Get.back();
+                                  },
+                                  rightFunction: () {
+                                    userreport(_controller.userid)
+                                        .then((value) {
+                                      if (value.isError == false) {
+                                        dialogBack(modalIOS: true);
+                                        showCustomDialog("신고가 접수되었습니다", 1000);
+                                      } else {
+                                        errorSituation(value);
+                                      }
                                     });
-                              },
-                              value1: '계정 차단하기',
-                              value2: '계정 신고하기',
-                              buttonColor1: mainWhite,
-                              buttonColor2: rankred,
-                              textColor1: rankred,
-                              isOne: false,
-                            );
-                          },
-                          icon: SvgPicture.asset(
-                            'assets/icons/more_option.svg',
-                          ),
+                                  });
+                            },
+                            value1: '계정 차단하기',
+                            value2: '계정 신고하기',
+                            buttonColor1: mainWhite,
+                            buttonColor2: rankred,
+                            textColor1: rankred,
+                            isOne: false,
+                          );
+                        },
+                        icon: SvgPicture.asset(
+                          'assets/icons/more_option.svg',
                         ),
-            ),
-          ],
-          bottomBorder: false,
-        ),
-        body: Obx(
-          () => _controller.isBanned.value
-              ? Container()
-              : RefreshIndicator(
-                  notificationPredicate: (notification) {
-                    return notification.depth == 2;
+                      ),
+          ),
+        ],
+        bottomBorder: false,
+      ),
+      body: Obx(
+        () => _controller.isBanned.value
+            ? Container()
+            : RefreshIndicator(
+                notificationPredicate: (notification) {
+                  return notification.depth == 2;
+                },
+                onRefresh: onRefresh,
+                child: ExtendedNestedScrollView(
+                  onlyOneScrollInBody: true,
+                  headerSliverBuilder: (context, value) {
+                    return [
+                      SliverToBoxAdapter(
+                        child: _profileView(context),
+                      ),
+                      // SliverOverlapAbsorber(
+                      //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      //       context),
+                      //   sliver:
+                      SliverAppBar(
+                        backgroundColor: mainWhite,
+                        toolbarHeight: 44,
+                        pinned: true,
+                        primary: false,
+                        elevation: 0,
+                        automaticallyImplyLeading: false,
+                        flexibleSpace: _tabView(),
+                      ),
+                      // ),
+                    ];
                   },
-                  onRefresh: onRefresh,
-                  child: ExtendedNestedScrollView(
-                    onlyOneScrollInBody: true,
-                    headerSliverBuilder: (context, value) {
-                      return [
-                        SliverToBoxAdapter(
-                          child: _profileView(context),
-                        ),
-                        // SliverOverlapAbsorber(
-                        //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        //       context),
-                        //   sliver:
-                        SliverAppBar(
-                          backgroundColor: mainWhite,
-                          toolbarHeight: 44,
-                          pinned: true,
-                          primary: false,
-                          elevation: 0,
-                          automaticallyImplyLeading: false,
-                          flexibleSpace: _tabView(),
-                        ),
-                        // ),
-                      ];
-                    },
-                    body: TabBarView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [_careerView(context), _postView()],
-                    ),
+                  body: TabBarView(
+                    // physics: const NeverScrollableScrollPhysics(),
+                    controller: _tabController,
+                    children: [_careerView(context), _postView()],
                   ),
                 ),
-        ),
+              ),
       ),
     );
   }
@@ -261,7 +279,7 @@ class OtherProfileScreen extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Get.to(() => FollowPeopleScreen(
-                      userId: userid,
+                      userId: widget.userid,
                       listType: FollowListType.follower,
                     ));
               },
@@ -349,7 +367,7 @@ class OtherProfileScreen extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Get.to(() => FollowPeopleScreen(
-                      userId: userid,
+                      userId: widget.userid,
                       listType: FollowListType.following,
                     ));
               },
@@ -578,6 +596,7 @@ class OtherProfileScreen extends StatelessWidget {
               ),
             ),
             TabBar(
+                controller: _tabController,
                 labelStyle: kmainbold,
                 labelColor: mainblack,
                 unselectedLabelStyle: kmainbold.copyWith(color: dividegray),
@@ -592,16 +611,6 @@ class OtherProfileScreen extends StatelessWidget {
                 },
                 isScrollable: false,
                 tabs: [
-                  // const Tab(
-                  //   height: 40,
-                  //   icon: Icon(
-                  //     Icons.format_list_bulleted_rounded,
-                  //   ),
-                  // ),
-                  // const Tab(
-                  //   height: 40,
-                  //   icon: Icon(Icons.line_weight_rounded),
-                  // ),
                   Obx(
                     () => Tab(
                       height: 40,
@@ -634,22 +643,29 @@ class OtherProfileScreen extends StatelessWidget {
   Widget _careerView(BuildContext context) {
     return SafeArea(
         child: Obx(() => _controller.otherProjectList.isEmpty
-            ? Column(
-                children: [
-                  Expanded(child: EmptyContentWidget(text: '아직 커리어가 없어요')),
-                  if (_controller.isOfficial.value == 2)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 24),
-                      child: Center(
-                        child: Text(
-                          "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
-                          "\n실제 서비스 가입 유무는 다를 수 있습니다.",
-                          style: kcaption.copyWith(color: popupGray),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    )
-                ],
+            ? Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      if (_controller.isOfficial.value == 2)
+                        Expanded(child: EmptyContentWidget(text: '아직 커리어가 없어요'))
+                      else
+                        EmptyContentWidget(text: '아직 커리어가 없어요'),
+                      if (_controller.isOfficial.value == 2)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          child: Center(
+                            child: Text(
+                              "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
+                              "\n실제 서비스 가입 유무는 다를 수 있습니다.",
+                              style: kcaption.copyWith(color: popupGray),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
+                ),
               )
             : Builder(
                 builder: (context) {
@@ -668,7 +684,7 @@ class OtherProfileScreen extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text('$realname님과 관련있는 기업',
+                                    Text('${widget.realname}님과 관련있는 기업',
                                         style: kmainbold),
                                     const SizedBox(width: 8),
                                     if (_controller.otherUser.value.isuser == 1)
@@ -679,9 +695,9 @@ class OtherProfileScreen extends StatelessWidget {
                                           padding: EdgeInsets.zero,
                                           onPressed: () {
                                             showPopUpDialog(
-                                                '관련있는 기업',
-                                                '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요',
-                                                3000);
+                                              '관련있는 기업',
+                                              '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요',
+                                            );
                                           },
                                           icon: SvgPicture.asset(
                                             'assets/icons/information.svg',
@@ -692,7 +708,7 @@ class OtherProfileScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  '아직 $realname님과 관련있는 기업이 없어요',
+                                  '아직 ${widget.realname}님과 관련있는 기업이 없어요',
                                   style: kmain.copyWith(color: maingray),
                                 ),
                                 // CareerAnalysisWidget(
@@ -742,9 +758,9 @@ class OtherProfileScreen extends StatelessWidget {
                                           padding: EdgeInsets.zero,
                                           onPressed: () {
                                             showPopUpDialog(
-                                                '커리어',
-                                                '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요',
-                                                3000);
+                                              '커리어',
+                                              '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요',
+                                            );
                                           },
                                           icon: SvgPicture.asset(
                                             'assets/icons/information.svg',
@@ -760,7 +776,7 @@ class OtherProfileScreen extends StatelessWidget {
                                           Get.to(() => CareerArrangeScreen());
                                         },
                                         child: Text(
-                                          "정렬 수정",
+                                          "수정하기",
                                           style:
                                               kmain.copyWith(color: mainblue),
                                         ),
@@ -775,8 +791,9 @@ class OtherProfileScreen extends StatelessWidget {
                                       GestureDetector(
                                     onTap: () {
                                       goCareerScreen(
-                                          _controller.otherProjectList[index],
-                                          _controller.otherUser.value.name);
+                                        _controller.otherProjectList[index],
+                                        _controller.otherUser.value.name,
+                                      );
                                     },
                                     child: CareerWidget(
                                         career: _controller
@@ -817,7 +834,9 @@ class OtherProfileScreen extends StatelessWidget {
 
   Widget _postView() {
     return Obx(() => _controller.allPostList.isEmpty
-        ? EmptyContentWidget(text: '아직 포스팅이 없어요')
+        ? Center(
+            child: SingleChildScrollView(
+                child: EmptyContentWidget(text: '아직 포스팅이 없어요')))
         : sr.SmartRefresher(
             controller: _otherpostLoadingController,
             enablePullDown: false,
@@ -832,72 +851,4 @@ class OtherProfileScreen extends StatelessWidget {
                 itemCount: _controller.allPostList.length),
           ));
   }
-
-  // Widget _tagView() {
-  //   return Column(
-  //     children: [
-  //       Row(
-  //         children: [
-  //           Text(
-  //             '상위 태그',
-  //             style: kmain.copyWith(color: maingray),
-  //           ),
-  //           const SizedBox(
-  //             width: 7,
-  //           ),
-  //           Obx(
-  //             () => Row(
-  //                 mainAxisAlignment: MainAxisAlignment.start,
-  //                 children: _controller.otherUser.value.profileTag
-  //                     .map((tag) => Row(children: [
-  //                           Tagwidget(
-  //                             tag: tag,
-  //                           ),
-  //                           _controller.otherUser.value.profileTag
-  //                                       .indexOf(tag) !=
-  //                                   _controller.otherUser.value
-  //                                           .profileTag.length -
-  //                                       1
-  //                               ? const SizedBox(
-  //                                   width: 8,
-  //                                 )
-  //                               : Container()
-  //                         ]))
-  //                     .toList()),
-  //           ),
-  //         ],
-  //       ),
-  //       const SizedBox(
-  //         height: 16,
-  //       ),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: [
-  //           Expanded(
-  //             child: CustomExpandedButton(
-  //               onTap: () {
-  //                 tagController.selectedtaglist.clear();
-  //                 tagController.tagsearchContoller.text = "";
-  //                 for (var tag
-  //                     in _controller.otherUser.value.profileTag) {
-  //                   tagController.selectedtaglist.add(SelectedTagWidget(
-  //                     id: tag.tagId,
-  //                     text: tag.tag,
-  //                     selecttagtype: SelectTagtype.interesting,
-  //                     tagtype: Tagtype.profile,
-  //                   ));
-  //                 }
-  //                 Get.to(() => ProfileTagChangeScreen());
-  //               },
-  //               isBlue: false,
-  //               isBig: false,
-  //               title: '관심 태그 변경하기',
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
-
 }

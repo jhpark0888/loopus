@@ -75,7 +75,7 @@ class NotificationController extends GetxController {
   }
 
   //푸쉬알림 클릭했을 때
-  void _backgroundMessage(RemoteMessage message) async{
+  void _backgroundMessage(RemoteMessage message) async {
     Map<String, dynamic> json = message.data;
 
     if (message.data["type"] == "msg") {
@@ -114,13 +114,21 @@ class NotificationController extends GetxController {
         Get.to(() => PostingScreen(postid: postId!));
       } else if (type == 2) {
         Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
-      } else if(type == 3){
+      } else if (type == 3) {
         String? userId = await FlutterSecureStorage().read(key: 'id');
-        getproject(id, int.parse(userId!)).then((value){if(value.isError != true){
-          Project career = value.data;
-          String name = career.members.where((element) => element.userId == int.parse(userId)).first.name;
-        Get.to(()=> GroupCareerDetailScreen(career: career, name: name));  
-        }});
+        getproject(id, int.parse(userId!)).then((value) {
+          if (value.isError != true) {
+            Project career = value.data;
+            String name = career.members
+                .where((element) => element.userId == int.parse(userId))
+                .first
+                .name;
+            Get.to(() => GroupCareerDetailScreen(
+                  career: career,
+                  name: name,
+                ));
+          }
+        });
       }
       isRead(id, convertType(type), senderId);
     }
@@ -171,11 +179,9 @@ class NotificationController extends GetxController {
                     Person person = Person.fromJson(value.data['profile'][0]);
                     await SQLController.to.insertUser(person);
                     MessageController.to.searchRoomList.add(MessageRoomWidget(
-                        chatRoom: chatRoom.obs,
-                        user: Rx<Person>(person)));
+                        chatRoom: chatRoom.obs, user: Rx<Person>(person)));
                     MessageController.to.chattingRoomList.add(MessageRoomWidget(
-                        chatRoom: chatRoom.obs,
-                        user: Rx<Person>(person)));
+                        chatRoom: chatRoom.obs, user: Rx<Person>(person)));
                   }
                 });
               } else {

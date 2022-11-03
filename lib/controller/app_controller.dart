@@ -16,6 +16,7 @@ import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/controller/share_intent_controller.dart';
 import 'package:loopus/controller/sql_controller.dart';
 import 'package:loopus/model/user_model.dart';
+import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/screen/select_project_screen.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
@@ -32,17 +33,20 @@ class AppController extends GetxService {
   final LocalDataController _localDataController =
       Get.put(LocalDataController());
   final HomeController _homeController = Get.put(HomeController());
-  RxBool ismyprofile = false.obs;
   RxInt currentIndex = 0.obs;
   GlobalKey<NavigatorState> searcnPageNaviationKey =
       GlobalKey<NavigatorState>();
   List<int> bottomHistory = [0];
   SQLController sqlcontroller = Get.put(SQLController());
+  UserType userType = UserType.student;
 
   @override
-  void onInit() {
+  void onInit() async {
     // TODO: implement onInit
-
+    String? tempUserType = await FlutterSecureStorage().read(key: "type");
+    if (tempUserType == UserType.company.name) {
+      userType = UserType.company;
+    }
     super.onInit();
   }
 
@@ -50,12 +54,14 @@ class AppController extends GetxService {
     var page = RouteName.values[value];
     switch (page) {
       case RouteName.upload:
-        Get.to(() => SelectProjectScreen());
-        // Navigator.of(Get.context!).push(
-        //   MaterialPageRoute<void>(
-        //     builder: (BuildContext context) => SelectProjectScreen(),
-        //   ),
-        // );
+        print(userType);
+        if (userType == UserType.student) {
+          Get.to(() => SelectProjectScreen());
+        } else if (userType == UserType.company) {
+          Get.to(() => PostingAddScreen(
+              project_id: companyCareerId, route: PostaddRoute.bottom));
+        }
+
         break;
       case RouteName.home:
         if (currentIndex.value == 0) {

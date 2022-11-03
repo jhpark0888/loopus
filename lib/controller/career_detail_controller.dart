@@ -28,6 +28,7 @@ class CareerDetailController extends GetxController
   @override
   void onInit() {
     tabController = TabController(length: 2, vsync: this);
+
     super.onInit();
     getproject(career.value.id, HomeController.to.myProfile.value.userId).then((value){if(value.isError == false){
       career.value = value.data;
