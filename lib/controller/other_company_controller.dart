@@ -28,8 +28,6 @@ class OtherCompanyController extends GetxController
 
   RxBool profileenablepullup = true.obs;
 
-  RxInt currentIndex = 0.obs;
-
   Rx<File> companyimage = File('').obs;
   Rx<Company> otherCompany = Company.defaultCompany().obs;
   RxList<Post> allPostList = <Post>[].obs;

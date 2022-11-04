@@ -130,7 +130,7 @@ class NotificationController extends GetxController {
           }
         });
       }
-      isRead(id, convertType(type), senderId);
+      isRead(id);
     }
     print("message: ${message.data["type"]}");
   }

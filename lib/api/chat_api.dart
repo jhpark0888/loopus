@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -75,11 +76,12 @@ Future<HTTPResponse> getChatroomlist(int id) async {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
     final url = Uri.parse("http://$chatServerUri/chat/chat_list?id=${id}");
-    try {
+
+    return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(
         url,
         headers: {'Content-Type': 'application/json'},
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print('채팅방 리스트 statuscode: ${response.statusCode}');
       if (response.statusCode == 200) {
@@ -95,15 +97,7 @@ Future<HTTPResponse> getChatroomlist(int id) async {
         MessageController.to.chatroomscreenstate(ScreenState.error);
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      print("서버에러 발생");
-      return HTTPResponse.serverError();
-      // ErrorController.to.isServerClosed(true);
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -118,14 +112,15 @@ Future<HTTPResponse> getUserProfile(List<int> membersId) async {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
     final url = Uri.parse("$serverUri/chat/get_profile?members=$membersId");
-    try {
+
+    return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(
         url,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': "Token $token"
         },
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print('유저들 프로필 리스트 statuscode: ${response.statusCode}');
       if (response.statusCode == 200) {
@@ -143,15 +138,7 @@ Future<HTTPResponse> getUserProfile(List<int> membersId) async {
         // MessageController.to.chatroomscreenstate(ScreenState.error);
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      print("서버에러 발생");
-      return HTTPResponse.serverError();
-      // ErrorController.to.isServerClosed(true);
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -166,7 +153,8 @@ Future<HTTPResponse> getPartnerToken(int memberId) async {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
     final url = Uri.parse("$serverUri/chat/get_token?id=$memberId");
-    try {
+
+    return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(
         url,
         headers: {
@@ -189,15 +177,7 @@ Future<HTTPResponse> getPartnerToken(int memberId) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      print("서버에러 발생");
-      return HTTPResponse.serverError();
-      // ErrorController.to.isServerClosed(true);
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -210,7 +190,8 @@ Future<HTTPResponse> deleteChatRoom(int roomId, int myId, int msgId) async {
     String? token = await const FlutterSecureStorage().read(key: 'token');
     String? myid = await const FlutterSecureStorage().read(key: 'id');
     final url = Uri.parse("http://$chatServerUri/chat/chat_list?id=$myId");
-    try {
+
+    return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.delete(
         url,
         body: jsonEncode({'room_id': roomId, 'msg_id': msgId}),
@@ -223,24 +204,7 @@ Future<HTTPResponse> deleteChatRoom(int roomId, int myId, int msgId) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      print("서버에러 발생");
-      return HTTPResponse.serverError();
-      // ErrorController.to.isServerClosed(true);
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.unexpectedError(e);
-    }
-    // } on SocketException {
-    //   print("서버에러 발생");
-    //   return HTTPResponse.serverError();
-    //   // ErrorController.to.isServerClosed(true);
-    // } catch (e) {
-    //   print(e);
-    //   // ErrorController.to.isServerClosed(true);
-    //   return HTTPResponse.unexpectedError(e);
-    // }
+    });
   }
 }
 
@@ -254,7 +218,7 @@ Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
 
     final uri = Uri.parse("$serverUri/post_api/posting?id=$postid");
 
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       http.Response response =
           await http.delete(uri, headers: {"Authorization": "Token $token"});
 
@@ -265,14 +229,7 @@ Future<HTTPResponse> deletemessageroom(int postid, int projectid) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
-    }
+    });
   }
 }
 
@@ -286,7 +243,7 @@ Future<HTTPResponse> updateNotreadMsg(int userId) async {
 
     final uri = Uri.parse("http://$chatServerUri/chat/check_msg?id=$userId");
 
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(uri);
 
       print("안읽은 메세지 개수 업데이트: ${response.statusCode}");
@@ -296,14 +253,7 @@ Future<HTTPResponse> updateNotreadMsg(int userId) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
-    }
+    });
   }
 }
 
@@ -321,7 +271,8 @@ Future<HTTPResponse> roomAlarmStatus(int userId, int roomId, int type) async {
       'room_id': roomId.toString(),
       'type': type.toString()
     };
-    try {
+
+    return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.put(uri, body: body);
 
       print("방 알람 활성화 여부 status: ${response.statusCode}");
@@ -330,14 +281,6 @@ Future<HTTPResponse> roomAlarmStatus(int userId, int roomId, int type) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print('에러 뜸');
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
-    }
+    });
   }
 }

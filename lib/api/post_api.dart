@@ -136,8 +136,6 @@ Future<HTTPResponse> getposting(int postingid) async {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         return HTTPResponse.success(responseBody);
       } else if (response.statusCode == 404) {
-        Get.back();
-        showCustomDialog('이미 삭제된 포스팅입니다', 1400);
         return HTTPResponse.apiError('이미 삭제된 포스팅입니다', response.statusCode);
       } else {
         controller.postscreenstate(ScreenState.error);

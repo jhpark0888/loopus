@@ -66,6 +66,9 @@ class SearchScreen extends StatelessWidget {
                     child: SearchTextFieldWidget(
                       hinttext: '검색',
                       ontap: () {
+                        _searchController.searchtextcontroller.clear();
+                        _searchController.tabController.index = 0;
+                        _searchController.searchInit();
                         Navigator.push(
                             context,
                             MaterialPageRoute(

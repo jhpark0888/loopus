@@ -25,9 +25,9 @@ class TagDetailScreen extends StatelessWidget {
 
   late final TagDetailController _controller =
       Get.put(TagDetailController(tag.tagId), tag: tag.tagId.toString())
-        ..postLoadFunction(refreshControllerList, tagBarGraph: tagBarGraph);
+        ..postLoadFunction(refreshControllerList);
 
-  TagBarGraph tagBarGraph = TagBarGraph();
+  // TagBarGraph tagBarGraph = TagBarGraph();
 
   List<RefreshController> refreshControllerList =
       List.generate(2, (index) => RefreshController()..loadNoData());
@@ -105,12 +105,12 @@ class TagDetailScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: tagBarGraph.tagUsageTrendNum.entries
+                                children: _controller.tagUsageTrendNum.entries
                                     .map((entry) => Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Text(
-                                              tagBarGraph.teptNumMap[entry.key]
+                                              _controller.teptNumMap[entry.key]
                                                   .toString(),
                                               style: kmain,
                                             ),
@@ -142,7 +142,7 @@ class TagDetailScreen extends StatelessWidget {
                           Obx(
                             () => Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: tagBarGraph.tagUsageTrendNum.keys
+                              children: _controller.tagUsageTrendNum.keys
                                   .map((month) => Text(
                                         '$month월',
                                         style: kmain,
@@ -202,7 +202,8 @@ class TagDetailScreen extends StatelessWidget {
                               physics: const BouncingScrollPhysics(),
                               primary: true,
                               enablePullDown: false,
-                              enablePullUp: true,
+                              enablePullUp:
+                                  _controller.enablePullUpList[0].value,
                               controller: refreshControllerList[0],
                               footer: const MyCustomFooter(),
                               onLoading: onLoading,
@@ -230,7 +231,8 @@ class TagDetailScreen extends StatelessWidget {
                               physics: const BouncingScrollPhysics(),
                               primary: true,
                               enablePullDown: false,
-                              enablePullUp: true,
+                              enablePullUp:
+                                  _controller.enablePullUpList[1].value,
                               controller: refreshControllerList[1],
                               footer: const MyCustomFooter(),
                               onLoading: onLoading,

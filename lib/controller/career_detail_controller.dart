@@ -26,14 +26,18 @@ class CareerDetailController extends GetxController
   late TabController tabController;
   RxList<Person> members = <Person>[].obs;
   @override
-  void onInit() {
+  void onInit() async {
     tabController = TabController(length: 2, vsync: this);
     super.onInit();
     print(career.value.company);
-    getproject(career.value.id, career.value.userid!).then((value){if(value.isError == false){
-      career.value.copyWith(value.data);
-      career.refresh();
-    }});
+    getproject(career.value.id, career.value.userid!).then((value) {
+      if (value.isError == false) {
+        career.value.copyWith(value.data);
+        career.refresh();
+      } else {
+        errorSituation(value);
+      }
+    });
     members.value = career.value.members.toList();
     getPosting();
     scrollController.addListener(() {

@@ -70,6 +70,7 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
       sr.RefreshController(initialRefresh: false);
 
   late TabController _tabController;
+  RxInt currentIndex = 0.obs;
 
   Future onRefresh() async {
     _controller.profileenablepullup.value = true;
@@ -94,7 +95,7 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
-      _controller.currentIndex.value = _tabController.index;
+      currentIndex.value = _tabController.index;
     });
   }
 
@@ -497,7 +498,7 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                   ),
                   isScrollable: false,
                   onTap: (index) {
-                    _controller.currentIndex(index);
+                    currentIndex(index);
                   },
                   tabs: [
                     Obx(
@@ -505,9 +506,8 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                         height: 40,
                         icon: SvgPicture.asset(
                           'assets/icons/company_intro.svg',
-                          color: _controller.currentIndex.value == 0
-                              ? mainWhite
-                              : dividegray,
+                          color:
+                              currentIndex.value == 0 ? mainWhite : dividegray,
                         ),
                       ),
                     ),
@@ -516,9 +516,8 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
                         height: 40,
                         icon: SvgPicture.asset(
                           'assets/icons/post_active.svg',
-                          color: _controller.currentIndex.value == 1
-                              ? mainWhite
-                              : dividegray,
+                          color:
+                              currentIndex.value == 1 ? mainWhite : dividegray,
                         ),
                       ),
                     ),
@@ -697,7 +696,12 @@ class _OtherCompanyScreenState extends State<OtherCompanyScreen>
     return GestureDetector(
       onTap: () {
         Get.to(
-            () => OtherProfileScreen(userid: user.userId, realname: user.name));
+            () => OtherProfileScreen(
+                  userid: user.userId,
+                  realname: user.name,
+                  user: user as Person,
+                ),
+            preventDuplicates: false);
       },
       child: Column(
         children: [

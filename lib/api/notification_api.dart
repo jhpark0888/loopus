@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -36,6 +37,8 @@ Future<HTTPResponse> getNotificationlist(String type, int lastindex) async {
       } else {
         return HTTPResponse.apiError("FAIL", response.statusCode);
       }
+    } on TimeoutException {
+      return HTTPResponse.serverError();
     } on SocketException {
       return HTTPResponse.serverError();
     } catch (e) {
@@ -100,40 +103,28 @@ Future<HTTPResponse> deleteNotification(int noticeid) async {
   }
 }
 
-Future<HTTPResponse> isRead(
-    int notiId, NotificationType type, int senderId) async {
+Future<HTTPResponse> isRead(int notiId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    late int type_id = type == NotificationType.follow
-        ? 2
-        : type == NotificationType.careerTag
-            ? 3
-            : type == NotificationType.postLike
-                ? 4
-                : type == NotificationType.commentLike
-                    ? 5
-                    : type == NotificationType.replyLike
-                        ? 6
-                        : type == NotificationType.comment
-                            ? 7
-                            : 8;
-    final isReadURI = Uri.parse(
-        "$serverUri/user_api/alarm?type=read&id=$notiId&type_id=$type_id&sender_id=$senderId");
+    final isReadURI =
+        Uri.parse("$serverUri/user_api/alarm?type=read&id=$notiId");
 
     try {
       http.Response response =
           await http.get(isReadURI, headers: {"Authorization": "Token $token"});
 
+      print("알림 읽기: ${response.statusCode}");
       if (response.statusCode == 200) {
-        print(response.statusCode);
         return HTTPResponse.success(null);
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
+    } on TimeoutException {
+      return HTTPResponse.serverError();
     } on SocketException {
       // ErrorController.to.isServerClosed(true);
       return HTTPResponse.serverError();

@@ -23,7 +23,7 @@ class NotificationModel {
   NotificationType type;
   int targetId;
   // String? content;
-  Content? contents;
+  String contents;
   DateTime date;
   RxBool isread;
   Rx<FollowState>? looped;
@@ -36,7 +36,7 @@ class NotificationModel {
           type: json["type"] == 2
               ? NotificationType.follow
               : json["type"] == 3
-                  ? NotificationType.careerTag
+                  ? NotificationType.careerTag // 타겟 아이디: 커리어
                   : json['type'] == 4
                       ? NotificationType.postLike
                       : json['type'] == 5
@@ -48,10 +48,15 @@ class NotificationModel {
                                   : json['type'] == 8
                                       ? NotificationType.reply
                                       : json['type'] == 9
-                                          ? NotificationType.schoolNoti
+                                          ? NotificationType
+                                              .schoolNoti // 타겟 아이디: 포스팅
                                           : json['type'] == 10
-                                              ? NotificationType.rankUpdate
-                                              : NotificationType.appNoti,
+                                              ? NotificationType
+                                                  .rankUpdate // 타겟 아이디: 포스팅
+                                              : json['type'] == 11
+                                                  ? NotificationType
+                                                      .groupCareerPost
+                                                  : NotificationType.empty1,
           targetId: json["target_id"],
           // content: json['type'] <= 4 ? json["content"] : '',
           // contents: json['type'] > 4
@@ -59,9 +64,11 @@ class NotificationModel {
           //         ? Content.fromJson(json["content"])
           //         : Content(content: '', postId: json["target_id"])
           //     : null,
-          contents: json['content'].runtimeType == String
-              ? Content.fromJson(json)
-              : Content.fromJson(json),
+          contents: json['content'] ?? "",
+          // ? Content.fromJson(json)
+          // : json['content'] != null
+          //     ? Content.fromJson(json['content'])
+          //     : null,
           date: DateTime.parse(json["date"]),
           isread: RxBool(json["is_read"]),
           looped: json["looped"] != null
@@ -72,16 +79,16 @@ class NotificationModel {
         "user_id": userId,
         "type": type,
         "target_id": targetId,
-        "content": contents!.content,
+        "content": contents,
         "date": date.toIso8601String(),
       };
 }
 
-class Content {
-  String content;
-  int postId;
-  Content({required this.content, required this.postId});
+// class Content {
+//   String content;
+//   int postId;
+//   Content({required this.content, required this.postId});
 
-  factory Content.fromJson(Map<String, dynamic> json) =>
-      Content(content: json['content'] ?? '', postId: json['post_id'] ?? 0);
-}
+//   factory Content.fromJson(Map<String, dynamic> json) =>
+//       Content(content: json['content'] ?? '', postId: json['post_id'] ?? 0);
+// }

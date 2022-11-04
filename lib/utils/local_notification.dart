@@ -93,7 +93,7 @@ class LocalNotificaition {
         } else if (type == 2) {
           Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
         }
-        isRead(id, convertType(type), senderId);
+        isRead(id);
       }
     } catch (e) {
       print(e);

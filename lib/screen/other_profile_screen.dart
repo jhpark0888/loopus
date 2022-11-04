@@ -76,14 +76,14 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
       sr.RefreshController(initialRefresh: false);
 
   late TabController _tabController;
+  RxInt currentIndex = 0.obs;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _controller.currentIndex.value = 0;
     _tabController.addListener(() {
-      _controller.currentIndex.value = _tabController.index;
+      currentIndex.value = _tabController.index;
     });
   }
 
@@ -125,7 +125,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                         ScreenState.success ||
                     _controller.isBanned.value
                 ? Container()
-                : _controller.otherUser.value.isuser == 1
+                : HomeController.to.myId == widget.userid.toString()
                     ? GestureDetector(
                         onTap: () {
                           Get.to(() => SettingScreen());
@@ -319,7 +319,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                 Obx(
                   () => GestureDetector(
                       onTap: () {
-                        if (_controller.otherUser.value.isuser == 1) {
+                        if (HomeController.to.myId ==
+                            widget.userid.toString()) {
                           showBottomdialog(context,
                               func1: changeDefaultImage,
                               func2: changeProfileImage,
@@ -337,7 +338,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                         userType: _controller.otherUser.value.userType,
                       )),
                 ),
-                if (_controller.otherUser.value.isuser == 1)
+                if (HomeController.to.myId == widget.userid.toString())
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.bottomRight,
@@ -462,8 +463,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
         const SizedBox(
           height: 8,
         ),
-        if (_controller.otherUser.value.userId !=
-            int.parse(HomeController.to.myId!))
+        if (HomeController.to.myId != widget.userid.toString())
           Column(
             children: [
               Padding(
@@ -531,8 +531,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
 
   Widget _snsView() {
     return Obx(
-      () => int.parse(HomeController.to.myId!) ==
-              _controller.otherUser.value.userId
+      () => HomeController.to.myId == widget.userid.toString()
           ? Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Row(
@@ -610,7 +609,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                   borderSide: BorderSide(width: 2, color: mainblack),
                 ),
                 onTap: (index) {
-                  _controller.currentIndex(index);
+                  currentIndex(index);
                 },
                 isScrollable: false,
                 tabs: [
@@ -619,9 +618,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                       height: 40,
                       child: SvgPicture.asset(
                         'assets/icons/list_active.svg',
-                        color: _controller.currentIndex.value == 0
-                            ? null
-                            : dividegray,
+                        color: currentIndex.value == 0 ? null : dividegray,
                       ),
                     ),
                   ),
@@ -630,9 +627,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                       height: 40,
                       child: SvgPicture.asset(
                         'assets/icons/post_active.svg',
-                        color: _controller.currentIndex.value == 1
-                            ? null
-                            : dividegray,
+                        color: currentIndex.value == 1 ? null : dividegray,
                       ),
                     ),
                   ),
@@ -800,9 +795,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                         ),
                                       ),
                                     const Spacer(),
-                                    if (_controller.otherUser.value.userId ==
-                                        HomeController
-                                            .to.myProfile.value.userId)
+                                    if (HomeController.to.myId ==
+                                        widget.userid.toString())
                                       GestureDetector(
                                         onTap: () {
                                           Get.to(() => CareerArrangeScreen());

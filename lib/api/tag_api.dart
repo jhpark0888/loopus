@@ -44,7 +44,7 @@ void getpopulartag() async {
         controller.populartaglist(tagmaplist
             .map((tag) => Tag(tagId: tag.tagId, tag: tag.tag, count: tag.count))
             .toList());
-        controller.topTagList.value = controller.populartaglist.sublist(0,5);
+        controller.topTagList.value = controller.populartaglist.sublist(0, 5);
         controller.populartagstate(ScreenState.success);
       } else if (response.statusCode == 401) {
         controller.populartagstate(ScreenState.error);
