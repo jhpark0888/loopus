@@ -36,7 +36,7 @@ Future<HTTPResponse> addproject() async {
     int userId = projectAddController.selectCompany.value.userId;
     String? token = await const FlutterSecureStorage().read(key: "token");
     Uri uri = Uri.parse('$serverUri/project_api/project${userId != 0 ?"?company_id=$userId":""}');
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       print(projectAddController.selectCompany.value.userId);
       var body = {
         'project_name': projectAddController.projectnamecontroller.text,
@@ -44,7 +44,6 @@ Future<HTTPResponse> addproject() async {
             .map((person) => person.id)
             .toList(),
         'is_public': projectAddController.isPublic.value,
-        // 'company': projectAddController.selectCompany.value.userId
       };
 
       final headers = {
@@ -56,25 +55,7 @@ Future<HTTPResponse> addproject() async {
         uri,
         headers: headers,
         body: json.encode(body),
-      );
-
-      // var request = http.MultipartRequest('POST', uri);
-
-      // request.headers.addAll(headers);
-
-      // request.fields['project_name'] =
-      //     projectAddController.projectnamecontroller.text;
-
-      // request.fields['looper'] = json.encode(projectAddController
-      //     .selectedpersontaglist
-      //     .map((person) => person.id)
-      //     .toList());
-
-      // request.fields['is_public'] =
-      //     projectAddController.isPublic.value.toString();
-
-      // http.StreamedResponse response = await request.send();
-
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
       print("활동 생성: ${response.statusCode}");
       if (response.statusCode == 201) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -85,12 +66,7 @@ Future<HTTPResponse> addproject() async {
         //!GA
         return HTTPResponse.apiError('fail', response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -101,11 +77,11 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       final uri = Uri.parse(
           "$serverUri/project_api/project?project_id=$projectId&user_id=$userId");
       http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"});
+          await http.get(uri, headers: {"Authorization": "Token $token"}).timeout(Duration(milliseconds: HTTPResponse.timeout));
       print(uri);
       print("활동 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -115,12 +91,7 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
         return HTTPResponse.apiError('', response.statusCode);
       }
       return HTTPResponse.apiError('', response.statusCode);
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -136,7 +107,7 @@ Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember,
     int companyId = ProjectAddController.to.selectCompany.value.userId;
     print(companyId);
     print(companyName);
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       final uri = Uri.parse(
           "$serverUri/project_api/project?type=${updateType.name}&id=$projectId${companyId != 0 ? "&company_id=$companyId" : ""}");
       var request = http.MultipartRequest('PUT', uri);
@@ -157,100 +128,16 @@ Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember,
         }
       }
       print(request.files);
-      http.StreamedResponse response = await request.send();
+      http.StreamedResponse response = await request.send().timeout(Duration(milliseconds: HTTPResponse.timeout));
       print("커리어 업데이트: ${response.statusCode}");
       if (response.statusCode == 200) {
         return HTTPResponse.success('');
       }
       return HTTPResponse.apiError('', response.statusCode);
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print("커리어 업데이트 에러: $e");
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
-// Future updateproject(int projectId, ProjectUpdateType updateType) async {
-//   ConnectivityResult result = await initConnectivity();
-//   ProjectDetailController controller =
-//       Get.find<ProjectDetailController>(tag: projectId.toString());
-//   if (result == ConnectivityResult.none) {
-//     showdisconnectdialog();
-//   } else {
-//     ProjectAddController projectAddController = Get.find();
-//     TagController tagController = Get.find(tag: Tagtype.Posting.toString());
-
-//     String? token = await const FlutterSecureStorage().read(key: "token");
-//     Uri uri = Uri.parse(
-//         '$serverUri/project_api/project?id=$projectId&type=${updateType.name}');
-//     try {
-//       var request = http.MultipartRequest('PUT', uri);
-
-//       final headers = {
-//         'Authorization': 'Token $token',
-//         'Content-Type': 'multipart/form-data',
-//       };
-
-//       request.headers.addAll(headers);
-
-//       if (updateType == ProjectUpdateType.project_name) {
-//         request.fields['project_name'] =
-//             projectAddController.projectnamecontroller.text;
-//         if (projectAddController.selectCompany.value.name != '') {
-//           request.fields['company'] =
-//               projectAddController.selectCompany.value.userId.toString();
-//         }
-//       } else if (updateType == ProjectUpdateType.date) {
-//         request.fields['start_date'] = DateFormat('yyyy-MM-dd').format(
-//             DateTime.parse(projectAddController.selectedStartDateTime.value));
-//         request.fields['end_date'] = projectAddController.isEndedProject.value
-//             ? DateFormat('yyyy-MM-dd').format(
-//                 DateTime.parse(projectAddController.selectedEndDateTime.value))
-//             : '';
-//       } else if (updateType == ProjectUpdateType.looper) {
-//         request.fields['looper'] = json.encode(projectAddController
-//             .selectedpersontaglist
-//             .map((person) => person.id)
-//             .toList());
-//       }
-
-//       http.StreamedResponse response = await request.send();
-//       print("활동 수정: ${response.statusCode}");
-//       if (response.statusCode == 200) {
-//         // late Project project;
-//         // await getproject(controller.project.value.id).then((value) {if(value.isError == false){
-//         //   project = value.data;
-//         // }});
-//         // if (project != null) {
-//         //   if (Get.isRegistered<ProfileController>()) {
-//         //     int projectindex = ProfileController.to.myProjectList
-//         //         .indexWhere((inproject) => inproject.id == project.id);
-//         //     ProfileController.to.myProjectList.removeAt(projectindex);
-//         //     ProfileController.to.myProjectList.insert(projectindex, project);
-//         //   }
-//         // }
-
-//         Get.back();
-//         showCustomDialog('변경이 완료되었어요', 1000);
-//         // String responsebody = await response.stream.bytesToString();
-//         // print(responsebody);
-//         // var responsemap = json.decode(responsebody);
-//         // print(responsemap);
-//         // Project project = Project.fromJson(responsemap);
-//         return;
-//       } else {
-//         return Future.error(response.statusCode);
-//       }
-//     } on SocketException {
-//       // ErrorController.to.isServerClosed(true);
-//     } catch (e) {
-//       print(e);
-//       // ErrorController.to.isServerClosed(true);
-//     }
-//   }
-// }
 
 enum DeleteType { exit, del }
 Future<HTTPResponse> deleteProject(int projectId, DeleteType type) async {
@@ -260,11 +147,11 @@ Future<HTTPResponse> deleteProject(int projectId, DeleteType type) async {
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       final uri = Uri.parse(
           "$serverUri/project_api/project?id=$projectId&type=${type.name}"); //type exit del
       http.Response response =
-          await http.delete(uri, headers: {"Authorization": "Token $token"});
+          await http.delete(uri, headers: {"Authorization": "Token $token"}).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("프로젝트(커리어) 삭제 : ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -275,11 +162,6 @@ Future<HTTPResponse> deleteProject(int projectId, DeleteType type) async {
         return HTTPResponse.success('');
       }
       return HTTPResponse.apiError('', response.statusCode);
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }

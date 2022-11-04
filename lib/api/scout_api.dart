@@ -25,10 +25,10 @@ Future<HTTPResponse> getScoutCompanySearch({
     // print(userid);
     final _url = Uri.parse(
         "$serverUri/scout_api/company_group?type=$fieldId&page=$page");
-
-    try {
-      http.Response response =
-          await http.get(_url, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(_url, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
       print("스카우트 리포트 기업 정보 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -37,12 +37,7 @@ Future<HTTPResponse> getScoutCompanySearch({
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print("스카우트 리포트 기업 정보 로드: $e");
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -58,10 +53,10 @@ Future<HTTPResponse> getRecommandCompanys(int isCorp) async {
     // final _url = Uri.parse("$serverUri/scout_api/recommendation_company");
     final _url =
         Uri.parse("$serverUri/scout_api/recommendation_company?type=$isCorp");
-
-    try {
-      http.Response response =
-          await http.get(_url, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(_url, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
       print("스카우트 리포트 추천 기업 정보 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -73,13 +68,6 @@ Future<HTTPResponse> getRecommandCompanys(int isCorp) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print("스카우트 리포트 추천 기업 정보 로드: $e");
-      return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
-    }
+    });
   }
 }

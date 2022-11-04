@@ -25,10 +25,10 @@ Future<HTTPResponse> getCareerBoardRequest(
 
     // print(userid);
     final topPostUrl = Uri.parse("$serverUri/rank/ranking?id=16&type=$type");
-
-    try {
-      http.Response response = await http
-          .get(topPostUrl, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(topPostUrl, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
       print("인기 포스팅 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -40,14 +40,7 @@ Future<HTTPResponse> getCareerBoardRequest(
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
-    }
+    });
   }
 }
 
@@ -62,10 +55,10 @@ Future<HTTPResponse> getPostingTrend(String id) async {
 
     // print(userid);
     final topPostUrl = Uri.parse("$serverUri/rank/posting_trends?id=$id");
-
-    try {
-      http.Response response = await http
-          .get(topPostUrl, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(topPostUrl, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseBody =
@@ -77,14 +70,7 @@ Future<HTTPResponse> getPostingTrend(String id) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
-    }
+    });
   }
 }
 
@@ -98,10 +84,10 @@ Future<HTTPResponse> getHotUsers() async {
 
     // print(userid);
     final url = Uri.parse("$serverUri/rank/hot_user?group=16");
-
-    try {
-      http.Response response =
-          await http.get(url, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(url, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -109,13 +95,6 @@ Future<HTTPResponse> getHotUsers() async {
       } else {
         return HTTPResponse.apiError('FAIL', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
-    }
+    });
   }
 }

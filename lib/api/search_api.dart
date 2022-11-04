@@ -30,14 +30,14 @@ Future<HTTPResponse> tagsearch(String searchWord) async {
 
     Uri uri = Uri.parse(
         'http://3.35.253.151:8000/tag_api/search_tag?query=${searchWord}');
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.get(
         uri,
         headers: <String, String>{
           'Content-Type': 'application/json',
           "Authorization": "Token $token"
         },
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("태그 검색: ${response.statusCode}");
 
@@ -56,13 +56,7 @@ Future<HTTPResponse> tagsearch(String searchWord) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -80,10 +74,10 @@ Future<HTTPResponse> search(
 
     final url = Uri.parse(
         "$serverUri/search_api/search/${searchType.name}?query=$searchword&page=$pagenumber");
-
-    try {
-      final response =
-          await http.get(url, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      final response = await http.get(url, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("${searchType.name} 검색 : ${response.statusCode}");
 
@@ -93,13 +87,7 @@ Future<HTTPResponse> search(
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -116,10 +104,10 @@ Future<HTTPResponse> companySearch(String searchtext, int pagenumber) async {
 
     final url = Uri.parse(
         "$serverUri/search_api/search_company?query=$searchword&page=$pagenumber");
-
-    try {
-      final response =
-          await http.get(url, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      final response = await http.get(url, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("기업 검색 : ${response.statusCode}");
 
@@ -129,13 +117,7 @@ Future<HTTPResponse> companySearch(String searchtext, int pagenumber) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -147,10 +129,10 @@ Future<HTTPResponse> getResentSearches() async {
     String? token = await FlutterSecureStorage().read(key: 'token');
 
     final url = Uri.parse("$serverUri/search_api/search_log");
-
-    try {
-      final response =
-          await http.get(url, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      final response = await http.get(url, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("최근 검색 로드 : ${response.statusCode}");
 
@@ -160,12 +142,7 @@ Future<HTTPResponse> getResentSearches() async {
       } else {
         return HTTPResponse.apiError("FAIL", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print("최근 검색 로드 : $e");
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -178,10 +155,10 @@ Future<HTTPResponse> addRecentSearch(int type, String query) async {
 
     final url =
         Uri.parse("$serverUri/search_api/search_log?type=$type&query=$query");
-
-    try {
-      final response =
-          await http.post(url, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      final response = await http.post(url, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("최근 검색 추가 : ${response.statusCode}");
 
@@ -193,12 +170,7 @@ Future<HTTPResponse> addRecentSearch(int type, String query) async {
       } else {
         return HTTPResponse.apiError("FAIL", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print("최근 검색 추가 : $e");
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -211,10 +183,10 @@ Future<HTTPResponse> deleteResentSearch(String type, int id) async {
     String? token = await FlutterSecureStorage().read(key: 'token');
 
     final url = Uri.parse("$serverUri/search_api/search_log?type=$type&id=$id");
-
-    try {
-      final response =
-          await http.delete(url, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      final response = await http.delete(url, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("최근 검색 삭제 : ${response.statusCode}");
 
@@ -223,12 +195,7 @@ Future<HTTPResponse> deleteResentSearch(String type, int id) async {
       } else {
         return HTTPResponse.apiError("FAIL", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print("최근 검색 삭제 : $e");
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 

@@ -116,14 +116,14 @@ Future<HTTPResponse> userResign(int userid, BanType type, int? otherId) async {
 
     final Uri uri = Uri.parse("$serverUri/user_api/ban?id=$userid&type=${type.name}&${otherId != null ?"other_id=$otherId":""}");
 
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       final response = await http.delete(
         uri,
         headers: {
           'Content-Type': 'application/json',
           "Authorization": "Token $token"
         },
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print('유저 차단 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
@@ -131,11 +131,8 @@ Future<HTTPResponse> userResign(int userid, BanType type, int? otherId) async {
       } else {
         return HTTPResponse.apiError("fail", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
+
+  
   }
 }

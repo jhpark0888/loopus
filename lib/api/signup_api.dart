@@ -39,8 +39,7 @@ Future<HTTPResponse> emailRequest(
       //TODO: 학교 도메인 확인
       "email": email,
     };
-
-    try {
+return HTTPResponse.httpErrorHandling(() async {
       emailcertification(Emailcertification.waiting);
       // showBottomSnackbar("$email로\n인증 메일을 보냈어요\n메일을 확인하고 인증을 완료해주세요");
 
@@ -50,7 +49,8 @@ Future<HTTPResponse> emailRequest(
           'Content-Type': 'application/json',
         },
         body: jsonEncode(checkemail),
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
+      
 
       // response.
       print("이메일 체크 : ${response.statusCode}");
@@ -59,12 +59,8 @@ Future<HTTPResponse> emailRequest(
       } else {
         return HTTPResponse.apiError("FAIL", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
+   
   }
 }
 
@@ -79,15 +75,15 @@ Future<HTTPResponse> certfyNumRequest(String email, String number) async {
       "email": email,
       "certify_num": number,
     };
-
-    try {
+    
+    return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.post(
         uri,
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
         body: jsonEncode(_body),
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       // response.
       print("인증번호 체크 : ${response.statusCode}");
@@ -96,12 +92,8 @@ Future<HTTPResponse> certfyNumRequest(String email, String number) async {
       } else {
         return HTTPResponse.apiError("FAIL", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
+  
   }
 }
 
@@ -145,6 +137,7 @@ Future<HTTPResponse> certfyNumRequest(String email, String number) async {
 //   }
 // }
 
+
 Future<HTTPResponse> signupRequest() async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
@@ -168,14 +161,14 @@ Future<HTTPResponse> signupRequest() async {
       "school": signupController.selectUniv.value.id,
       "department": signupController.selectDept.value.id,
     };
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.post(
         uri,
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
         body: json.encode(user),
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("회원가입: ${response.statusCode}");
       if (response.statusCode == 201) {
@@ -185,12 +178,8 @@ Future<HTTPResponse> signupRequest() async {
       } else {
         return HTTPResponse.apiError("fail", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
+   
   }
 }
 
@@ -202,11 +191,10 @@ Future<HTTPResponse> searchUniv(String text) async {
     // print(userid);
     final searchUnivUri =
         Uri.parse("$serverUri/search_api/search_uni?type=school&query=$text");
-
-    try {
-      http.Response response = await http.get(
+    return HTTPResponse.httpErrorHandling(() async {
+       http.Response response = await http.get(
         searchUnivUri,
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -215,12 +203,8 @@ Future<HTTPResponse> searchUniv(String text) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
+    
   }
 }
 
@@ -232,11 +216,10 @@ Future<HTTPResponse> searchDept(int univId, String text) async {
     // print(userid);
     final searchDeptUri = Uri.parse(
         "$serverUri/search_api/search_uni?type=department&id=$univId&query=$text");
-
-    try {
-      http.Response response = await http.get(
+    return HTTPResponse.httpErrorHandling(() async {
+        http.Response response = await http.get(
         searchDeptUri,
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -245,11 +228,6 @@ Future<HTTPResponse> searchDept(int univId, String text) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
