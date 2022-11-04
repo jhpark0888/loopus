@@ -98,11 +98,7 @@ class ReplyWidget extends StatelessWidget {
                       GestureDetector(
                         onTap: reply.user.userId ==
                                 HomeController.to.myProfile.value.userId
-                            ? () {
-                                showModalIOS(
-                                  context,
-                                  cancleButton: false,
-                                  func1: () {
+                            ? () {showBottomdialog(context, func1: () {
                                     showButtonDialog(
                                         leftText: '취소',
                                         rightText: '삭제',
@@ -133,14 +129,49 @@ class ReplyWidget extends StatelessWidget {
                                             }
                                           });
                                         });
-                                  },
-                                  func2: () {},
-                                  value1: '답글 삭제하기',
-                                  value2: '',
-                                  isValue1Red: true,
-                                  isValue2Red: false,
-                                  isOne: true,
-                                );
+                                  }, func2: (){}, value1: '답글 삭제하기', value2: '', isOne: true, buttonColor1: mainWhite,textColor1: mainblack);
+                                // showModalIOS(
+                                //   context,
+                                //   cancleButton: false,
+                                //   func1: () {
+                                //     showButtonDialog(
+                                //         leftText: '취소',
+                                //         rightText: '삭제',
+                                //         title: '답글을 삭제하시겠어요?',
+                                //         startContent: '삭제한 답글은 복구할 수 없어요',
+                                //         leftFunction: () => Get.back(),
+                                //         rightFunction: () async {
+                                //           dialogBack(modalIOS: true);
+
+                                //           await commentDelete(reply.id,
+                                //                   contentType.cocomment)
+                                //               .then((value) {
+                                //             if (value.isError == false) {
+                                //               Comment? comment = postController
+                                //                   .post!.value.comments
+                                //                   .firstWhereOrNull((element) =>
+                                //                       element.id ==
+                                //                       reply.commentId);
+                                //               if (comment != null) {
+                                //                 comment.replyList.removeWhere(
+                                //                     (element) =>
+                                //                         element.id == reply.id);
+                                //                 comment.replycount.value -= 1;
+                                //               }
+                                //             } else {
+                                //               showCustomDialog(
+                                //                   "답글 삭제에 실패하였습니다", 1000);
+                                //             }
+                                //           });
+                                //         });
+                                //   },
+                                //   func2: () {},
+                                //   value1: '답글 삭제하기',
+                                //   value2: '',
+                                //   isValue1Red: true,
+                                //   isValue2Red: false,
+                                //   isOne: true,
+                                // );
                               }
                             : () {
                                 showModalIOS(

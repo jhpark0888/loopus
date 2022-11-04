@@ -134,19 +134,24 @@ class CareerBoardPostWidget extends StatelessWidget {
             // const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Text('좋아요 ', style: kmain.copyWith(color: maingray)),
-                  Text('${post.likeCount}개', style: kmain),
-                  const SizedBox(width: 7),
-                  Text('댓글 ', style: kmain.copyWith(color: maingray)),
-                  Text(
-                    '${(post.comments.length + 1).toString()}개',
-                    style: kmain,
-                  ),
-                  const Spacer(),
-                  // Text('교내추천', style: kmain.copyWith(color: maingray))
-                ],
+              child: Obx(
+                ()=> Row(
+                  children: [
+                    Text('좋아요 ', style: kmain.copyWith(color: maingray)),
+                    Text('${post.likeCount}개', style: kmain),
+                    
+                    const SizedBox(width: 7),
+                    if(post.comments.isNotEmpty)
+                    Text('댓글 ', style: kmain.copyWith(color: maingray)),
+                    if(post.comments.isNotEmpty)
+                    Text(
+                      '${(post.comments.length).toString()}개',
+                      style: kmain,
+                    ),
+                    const Spacer(),
+                    // Text('교내추천', style: kmain.copyWith(color: maingray))
+                  ],
+                ),
               ),
             )
           ],

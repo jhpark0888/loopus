@@ -283,7 +283,7 @@ class NotificationWidget extends StatelessWidget {
     if (notification.user.userType == UserType.student) {
       Get.to(
           () => OtherProfileScreen(
-              userid: notification.targetId, realname: notification.user.name),
+              userid: notification.user.userId, realname: notification.user.name),
           preventDuplicates: false);
     } else {
       Get.to(
