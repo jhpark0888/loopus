@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:loopus/model/message_model.dart';
 
 class HTTPResponse {
@@ -6,6 +9,7 @@ class HTTPResponse {
   bool isError = false;
   Map? errorData = {"message": String, "statusCode": int};
   dynamic data;
+  static int timeout = 10000;
 
   factory HTTPResponse.success(data) =>
       HTTPResponse(isError: false, data: data);
@@ -21,4 +25,18 @@ class HTTPResponse {
 
   factory HTTPResponse.unexpectedError(e) =>
       HTTPResponse(isError: true, errorData: {"message": e, "statusCode": 600});
+
+  static Future<HTTPResponse> httpErrorHandling(
+      Future<HTTPResponse> Function() httpFt) async {
+    try {
+      return await httpFt();
+    } on TimeoutException {
+      return HTTPResponse.serverError();
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
 }

@@ -101,7 +101,8 @@ Future<HTTPResponse> addCompany(int projectId, int companyId) async {
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    Uri uri = Uri.parse('$serverUri/project_api/project?id=$projectId&company_id=$companyId&type=company&project_id=$projectId');
+    Uri uri = Uri.parse(
+        '$serverUri/project_api/project?id=$projectId&company_id=$companyId&type=company&project_id=$projectId');
     print(uri);
     try {
       print(projectAddController.selectCompany.value.userId);
@@ -154,15 +155,13 @@ Future<HTTPResponse> addCompany(int projectId, int companyId) async {
   }
 }
 
-
 Future<HTTPResponse> getproject(int projectId, int userId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    // try {
+    try {
       final uri = Uri.parse(
           "$serverUri/project_api/project?project_id=$projectId&user_id=$userId");
       http.Response response =
@@ -171,21 +170,18 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
       print("활동 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
-        Project project = Project.fromJson(responseBody);
-        print(project.company);
-        return HTTPResponse.success(project);
+
+        return HTTPResponse.success(responseBody);
       } else if (response.statusCode == 404) {
-        Get.back();
-        showCustomDialog('이미 삭제된 활동입니다', 1400);
-        return HTTPResponse.success('');
+        return HTTPResponse.apiError('', response.statusCode);
       }
       return HTTPResponse.apiError('', response.statusCode);
-    // } on SocketException {
-    //   return HTTPResponse.serverError();
-    // } catch (e) {
-    //   print(e);
-    //   return HTTPResponse.unexpectedError(e);
-    // }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
   }
 }
 

@@ -32,8 +32,6 @@ class OtherProfileController extends GetxController
 
   RxBool profileenablepullup = true.obs;
 
-  RxInt currentIndex = 0.obs;
-
   RxList<Project> otherProjectList = <Project>[].obs;
 
   Rx<File> profileimage = File('').obs;

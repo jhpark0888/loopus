@@ -52,6 +52,34 @@ class NotificationWidget extends StatelessWidget {
   //                     : 1),
   //     tag: notification.targetId.toString());
 
+  String notiText() {
+    switch (notification.type) {
+      case NotificationType.follow:
+        return "님이 회원님을 팔로우합니다.";
+      case NotificationType.careerTag:
+        return " '${notification.contents}' 커리어에 회원님을 초대했습니다.";
+      case NotificationType.postLike:
+        return "회원님의 포스트를 좋아합니다.";
+      case NotificationType.commentLike:
+        return "회원님의 댓글을 좋아합니다.";
+      case NotificationType.replyLike:
+        return "회원님의 답변을 좋아합니다.";
+      case NotificationType.comment:
+        return "회원님의 포스트에 댓글을 남겼습니다.";
+      case NotificationType.reply:
+        return "회원님의 댓글에 답변을 남겼습니다.";
+      case NotificationType.schoolNoti:
+        return "에서 '${notification.contents}'에 공지를 업로드 했습니다.";
+      case NotificationType.rankUpdate:
+        return "사용자 랭킹이 업데이트 되었습니다.";
+      case NotificationType.groupCareerPost:
+        return " '${notification.contents}' 커리어에 새로운 포스트를 작성했습니다.";
+      case NotificationType.empty1:
+      case NotificationType.empty2:
+        return "";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return notification.type == NotificationType.follow
@@ -107,7 +135,7 @@ class NotificationWidget extends StatelessWidget {
                         TextSpan(
                             text: notification.user.name, style: kmainbold),
                         TextSpan(
-                          text: "님이 회원님을 팔로우합니다.",
+                          text: notiText(),
                           style:
                               kmainheight.copyWith(fontWeight: FontWeight.w400),
                         ),
@@ -207,26 +235,13 @@ class NotificationWidget extends StatelessWidget {
                         //     text: notification.content,
                         //     style: kSubTitle1Style),
                         TextSpan(
-                          text: notification.type == NotificationType.careerTag
-                              ? " '${notification.contents!.content}' 커리어에 회원님을 초대했습니다."
-                              : notification.type == NotificationType.postLike
-                                  ? '회원님의 포스트를 좋아합니다.'
-                                  : notification.type ==
-                                          NotificationType.commentLike
-                                      ? '회원님의 댓글을 좋아합니다.'
-                                      : notification.type ==
-                                              NotificationType.reply
-                                          ? '회원님의 답변을 좋아합니다.'
-                                          : notification.type ==
-                                                  NotificationType.comment
-                                              ? "회원님의 포스트에 댓글을 남겼습니다."
-                                              : "회원님의 댓글에 답변을 남겼습니다.",
+                          text: notiText(),
                           style:
                               kmainheight.copyWith(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(
-                            text: ' · ${commentCalculateDate(
-                              notification.date,
+                            text: ' · ${alarmDurationCaculate(
+                              startDate: notification.date,
                             )}',
                             style: kmainheight.copyWith(color: maingray))
                       ])),
@@ -264,11 +279,16 @@ class NotificationWidget extends StatelessWidget {
 
   void clickprofile(NotificationType type) async {
     if (type == NotificationType.follow) {
-      Get.to(() => OtherProfileScreen(
-          userid: notification.targetId, realname: notification.user.name));
+      Get.to(
+          () => OtherProfileScreen(
+              userid: notification.targetId, realname: notification.user.name),
+          preventDuplicates: false);
     } else {
-      Get.to(() => OtherProfileScreen(
-          userid: notification.user.userId, realname: notification.user.name));
+      Get.to(
+          () => OtherProfileScreen(
+              userid: notification.user.userId,
+              realname: notification.user.name),
+          preventDuplicates: false);
     }
   }
 
@@ -281,13 +301,21 @@ class NotificationWidget extends StatelessWidget {
           Get.back();
           career = value.data;
           Future.delayed(const Duration(milliseconds: 300));
-          Get.to(() => GroupCareerDetailScreen(
-                career: career,
-                name: (notification.user.name),
-              ));
+          Get.to(
+              () => GroupCareerDetailScreen(
+                    career: career,
+                    name: (notification.user.name),
+                  ),
+              preventDuplicates: false);
         }
       });
-    } else if (notification.type == NotificationType.postLike) {
+    } else if (notification.type == NotificationType.postLike ||
+        notification.type == NotificationType.commentLike ||
+        notification.type == NotificationType.replyLike ||
+        notification.type == NotificationType.comment ||
+        notification.type == NotificationType.reply ||
+        notification.type == NotificationType.groupCareerPost ||
+        notification.type == NotificationType.schoolNoti) {
       Get.to(
           () => PostingScreen(
                 post: null,
@@ -295,27 +323,28 @@ class NotificationWidget extends StatelessWidget {
                 // likecount: 0.obs,
                 // isLiked: 0.obs,
               ),
+          preventDuplicates: false,
           opaque: false);
     } else if (notification.type == NotificationType.follow) {
-      Get.to(() => OtherProfileScreen(
-          userid: notification.targetId, realname: notification.user.name));
-    } else if (notification.type.name.contains('reply')) {
-      //다른 화면으로 이동함
-      //서버에서 잘못 주는 듯
-      Get.to(() => PostingScreen(
-            postid: notification.contents!.postId,
-            post: null,
-          ));
-    } else if (notification.type.name.contains('comment')) {
-      Get.to(() => PostingScreen(postid: notification.targetId));
+      Get.to(
+          () => OtherProfileScreen(
+              userid: notification.targetId, realname: notification.user.name),
+          preventDuplicates: false);
     }
 
     if (notification.isread.value == false) {
       notification.isread.value = true;
+      if (NotificationDetailController.to.newalarmList
+          .any((noti) => noti.id == notification.id)) {
+        NotificationModel readNoti = NotificationDetailController
+            .to.newalarmList
+            .firstWhere((noti) => noti.id == notification.id);
+
+        NotificationDetailController.to.newalarmList.remove(readNoti);
+        NotificationDetailController.to.weekalarmList.insert(0, readNoti);
+      }
       isRead(
-        notification.targetId,
-        notification.type,
-        notification.user.userId,
+        notification.id,
       ).then((value) {
         if (value.isError == false) {
           if (NotificationDetailController.to.newalarmList

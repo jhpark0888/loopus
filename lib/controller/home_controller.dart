@@ -8,6 +8,7 @@ import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:loopus/api/chat_api.dart';
 import 'package:loopus/api/post_api.dart';
 import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/controller/career_board_controller.dart';
 import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/issue_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
@@ -263,18 +264,12 @@ class HomeController extends GetxController
       Post post = posts.where((post) => post.id == postid).first;
       post.isMarked(1);
     }
-    if (Get.isRegistered<BookmarkController>()) {
-      BookmarkController.to.tapBookmark(postid);
-    }
   }
 
   void tapunBookmark(int postid) {
     if (posts.where((post) => post.id == postid).isNotEmpty) {
       Post post = posts.where((post) => post.id == postid).first;
       post.isMarked(0);
-    }
-    if (Get.isRegistered<BookmarkController>()) {
-      BookmarkController.to.tapunBookmark(postid);
     }
   }
 

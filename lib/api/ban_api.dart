@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -23,28 +24,24 @@ Future<HTTPResponse> getbanlist() async {
 
     final uri = Uri.parse("$serverUri/user_api/ban");
 
-    try {
-      http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print('차단 리스트 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
-List<Person> banlist = List.from(responseBody['banlist']).map((e) => Person.fromJson(e)).toList();
+        List<Person> banlist = List.from(responseBody['banlist'])
+            .map((e) => Person.fromJson(e))
+            .toList();
         return HTTPResponse.success(banlist);
       } else if (response.statusCode == 404) {
         return HTTPResponse.success(<Person>[]);
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -57,14 +54,14 @@ Future<HTTPResponse> userban(int userid) async {
 
     final Uri uri = Uri.parse("$serverUri/user_api/ban?id=$userid");
 
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       final response = await http.post(
         uri,
         headers: {
           'Content-Type': 'application/json',
           "Authorization": "Token $token"
         },
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print('유저 차단 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
@@ -72,12 +69,7 @@ Future<HTTPResponse> userban(int userid) async {
       } else {
         return HTTPResponse.apiError("fail", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -92,15 +84,14 @@ Future<HTTPResponse> userbancancel(int userid) async {
     });
 
     final Uri uri = Uri.parse("$serverUri/user_api/ban?id=$userid");
-
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       final response = await http.delete(
         uri,
         headers: {
           'Content-Type': 'application/json',
           "Authorization": "Token $token"
         },
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print('유저 차단해제 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
@@ -110,11 +101,6 @@ Future<HTTPResponse> userbancancel(int userid) async {
       } else {
         return HTTPResponse.apiError("FAIL", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }

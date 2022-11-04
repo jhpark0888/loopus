@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:loopus/api/rank_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/bookmark_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/model/comment_model.dart';
 import 'package:loopus/model/company_model.dart';
@@ -19,6 +20,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class CareerBoardController extends GetxController
     with GetTickerProviderStateMixin {
+  static CareerBoardController get to => Get.find();
   Map<String, String> careerField = {
     for (var entry in fieldList.entries)
       if (entry.key != "10") entry.key: entry.value
@@ -220,6 +222,28 @@ class CareerBoardController extends GetxController
       postUsageTrendNum[i.key] = i.value == 0
           ? 1
           : double.parse(((i.value / maxNum) * 100).toString());
+    }
+  }
+
+  void tapBookmark(int postid) {
+    if (popPostMap[currentFieldMap.keys.first]!
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      Post post = popPostMap[currentFieldMap.keys.first]!
+          .where((post) => post.id == postid)
+          .first;
+      post.isMarked(1);
+    }
+  }
+
+  void tapunBookmark(int postid) {
+    if (popPostMap[currentFieldMap.keys.first]!
+        .where((post) => post.id == postid)
+        .isNotEmpty) {
+      Post post = popPostMap[currentFieldMap.keys.first]!
+          .where((post) => post.id == postid)
+          .first;
+      post.isMarked(0);
     }
   }
 }

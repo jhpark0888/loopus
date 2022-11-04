@@ -155,10 +155,15 @@ class NotificationDetailController extends GetxController {
     // }
     alarmList.forEach((noti) {
       String strDateDiffer = notiDurationCaculate(startDate: noti.date);
-      if (strDateDiffer == 'today') {
-        newalarmList.add(noti);
-      } else if (strDateDiffer == 'week') {
-        weekalarmList.add(noti);
+      // if (strDateDiffer == 'today') {
+      //   newalarmList.add(noti);
+      // } else
+      if (strDateDiffer == 'week') {
+        if (noti.isread.value == false) {
+          newalarmList.add(noti);
+        } else {
+          weekalarmList.add(noti);
+        }
       } else if (strDateDiffer == 'month') {
         monthalarmList.add(noti);
       } else {
@@ -174,7 +179,7 @@ class NotificationDetailController extends GetxController {
       weekalarmList.remove(noti);
     } else if (monthalarmList.contains(noti) == true) {
       monthalarmList.remove(noti);
-    } else{
+    } else {
       oldalarmList.remove(noti);
     }
   }
@@ -192,9 +197,10 @@ class NotificationDetailController extends GetxController {
         (endDateOnlyDay.difference(startDateOnlyDay).inDays).toInt();
     int _dateDiffence = (endDate.difference(startDate).inDays).toInt();
 
-    if (_dateOnlyDiffence <= 1) {
-      durationResult.value = 'today';
-    } else if (_dateOnlyDiffence <= 7) {
+    // if (_dateOnlyDiffence <= 1) {
+    //   durationResult.value = 'today';
+    // } else
+    if (_dateOnlyDiffence <= 7) {
       durationResult.value = 'week';
     } else if ((_dateOnlyDiffence / 30).floor() < 1) {
       durationResult.value = 'month';

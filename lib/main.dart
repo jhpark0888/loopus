@@ -23,6 +23,7 @@ import 'package:loopus/firebase_options.dart';
 import 'package:loopus/screen/start_screen.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loopus/utils/local_notification.dart';
+import 'package:loopus/utils/no_scroll_behavior.dart';
 import 'controller/notification_controller.dart';
 
 //백그라운드 메세지 왔을 때
@@ -148,8 +149,9 @@ class MyApp extends StatelessWidget {
       title: "루프어스",
       theme: themeData,
       // themeMode: ThemeMode.system,
-      scrollBehavior: const ScrollBehavior(
-          androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
+      scrollBehavior: NoGlowScrollBehavior(),
+      // const ScrollBehavior(
+      //     androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
       // initialBinding: InitBinding(),
       getPages: [
         GetPage(
