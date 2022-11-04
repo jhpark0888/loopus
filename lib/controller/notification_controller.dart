@@ -118,7 +118,7 @@ class NotificationController extends GetxController {
         String? userId = await FlutterSecureStorage().read(key: 'id');
         getproject(id, int.parse(userId!)).then((value) {
           if (value.isError != true) {
-            Project career = value.data;
+            Project career = Project.fromJson(value.data);
             String name = career.members
                 .where((element) => element.userId == int.parse(userId))
                 .first

@@ -13,6 +13,7 @@ import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/controller/search_controller.dart';
 import 'package:loopus/model/company_model.dart';
+import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/search_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
@@ -299,8 +300,9 @@ class PostingWidget extends StatelessWidget {
     await getproject(item.project!.id, item.userid).then(
       (value) {
         if (value.isError == false) {
+          Project project = Project.fromJson(value.data);
           goCareerScreen(
-            value.data,
+            project,
             item.user.name,
           );
         }

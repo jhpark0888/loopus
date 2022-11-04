@@ -47,7 +47,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     careerDetailController = Get.put(
         CareerDetailController(
-          career: Rx(career),
+          career: career.obs,
         ),
         tag: career.id.toString());
     return Scaffold(
@@ -64,11 +64,9 @@ class GroupCareerDetailScreen extends StatelessWidget {
                       leading: true,
                     ),
                     actions: [
-                      Obx(
-                        () => _leading(
-                          leading: false,
-                          career: careerDetailController.career.value,
-                        ),
+                      _leading(
+                        leading: false,
+                        career: careerDetailController.career.value,
                       )
                     ],
                     expandedHeight: 190,
@@ -226,7 +224,7 @@ class GroupCareerDetailScreen extends StatelessWidget {
   }
 
   Widget joinCompany() {
-    return Obx(() => careerDetailController.career.value.company != null
+    return Obx(()=>careerDetailController.career.value.company != null
         ? Column(
             children: [
               GestureDetector(
@@ -248,12 +246,9 @@ class GroupCareerDetailScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         UserImageWidget(
-                          imageUrl:
-                              careerDetailController.career.value.company !=
-                                      null
-                                  ? careerDetailController
-                                      .career.value.company!.profileImage
-                                  : '',
+                          imageUrl: career.company != null
+                              ? career.company!.profileImage
+                              : '',
                           userType: UserType.company,
                           height: 36,
                           width: 36,
@@ -262,12 +257,9 @@ class GroupCareerDetailScreen extends StatelessWidget {
                         RichText(
                             text: TextSpan(children: [
                           TextSpan(
-                              text:
-                                  careerDetailController.career.value.company !=
-                                          null
-                                      ? careerDetailController
-                                          .career.value.company!.name
-                                      : '네이버',
+                              text: career.company != null
+                                  ? career.company!.name
+                                  : '네이버',
                               style: kmainbold),
                           const TextSpan(text: '와 함께한 커리어에요', style: kmain)
                         ]))
@@ -467,7 +459,7 @@ class _MyAppSpace extends StatelessWidget {
                             ),
                             career.updateDate != null
                                 ? Text(
-                                    '최근 포스트 ${calculateDate(career.updateDate!)}',
+                                    '최근 포스트 ${calculateDate(Get.find<CareerDetailController>(tag: career.id.toString()).career.value.updateDate!)}',
                                     style: kmain.copyWith(color: mainWhite),
                                   )
                                 : Container(
@@ -487,7 +479,10 @@ class _MyAppSpace extends StatelessWidget {
                                     style: kmain.copyWith(color: mainWhite)),
                                 const Spacer(),
                                 Text(
-                                  '포스트 ${career.post_count}',
+                                  '포스트 ${ Get.find<CareerDetailController>(
+                              tag: career.id.toString())
+                          .career
+                        .value.post_count}',
                                   style: kmain.copyWith(color: mainWhite),
                                 )
                               ],

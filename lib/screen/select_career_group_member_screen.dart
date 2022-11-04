@@ -47,7 +47,7 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                                 .value
                                 .id,
                             controller.selectList,
-                            null,
+                            null,null,
                             ProjectUpdateType.looper)
                         .then((value) {
                       if (value.isError == false) {

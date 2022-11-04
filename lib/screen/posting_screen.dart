@@ -347,6 +347,12 @@ class PostingScreen extends StatelessWidget {
                                                                         .post!
                                                                         .value
                                                                         .id);
+                                                        project.post_count!.value -= 1;
+                                                        if(project.post_count!.value ==0){
+                                                          project.thumbnail = '';
+                                                        }else{
+                                                          // project.thumbnail = project.thumbnail.
+                                                        }
                                                       }
                                                       HomeController.to
                                                           .postingRemove(

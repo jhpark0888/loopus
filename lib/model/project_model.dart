@@ -75,12 +75,86 @@ class Project {
           isPublic: isPublic ?? false,
           managerId: managerId ?? 0,
           company: company);
+  void copyWith(Map<String, dynamic> json) {
+    bool isProject = json["project"] != null;
+    bool isCompany = isProject && json['project']['thumbnail'] != null
+        ? json['project']['thumbnail'].runtimeType != String
+        : false;
+
+    id = isProject
+        ? json["project"]['project_id'] != null
+            ? json["project"]["project_id"]
+            : json["project"]['id'] != null
+                ? json["project"]["id"]
+                : id
+        : json["id"] ?? id;
+    userid = json["user_id"] ?? userid;
+    careerName = isProject
+        ? json["project"]["project_name"] ?? careerName
+        : json["project_name"] ?? careerName;
+    thumbnail = isCompany
+        ? json['project']['thumbnail']['company_logo'] ?? thumbnail
+        : isProject
+            ? json["project"]["thumbnail"] ?? thumbnail
+            : json["thumbnail"] ?? thumbnail;
+    updateDate = isProject
+        ? json["project"]["post_update_date"] != null
+            ? DateTime.parse(json["project"]["post_update_date"])
+            : updateDate
+        : json["post_update_date"] != null
+            ? DateTime.parse(json["post_update_date"])
+            : updateDate;
+    posts = json["post"] != null
+        ? RxList<Post>.from(json["post"].map((x) => Post.fromJson(x)))
+        : posts;
+    fieldId = isProject
+        ? json["project"]["group"] != null
+            ? json["project"]["group"].toString()
+            : fieldId
+        // SplayTreeMap<String, int>.from(
+        //             (json["group"] as Map<String, dynamic>),
+        //             (keys1, keys2) => keys1.compareTo(keys2))
+        //         .keys
+        //         .toList()
+        //         .isNotEmpty
+        //     ? SplayTreeMap<String, int>.from(
+        //         (json["group"] as Map<String, dynamic>),
+        //         (keys1, keys2) => keys1.compareTo(keys2)).keys.toList()
+        //     : ["10"]
+
+        : json["group"] != null
+            ? json["group"].toString()
+            : fieldId;
+    members = json["member"] != null
+        ? List<Person>.from(json["member"].map((x) => x['profile'] != null
+            ? Person.fromJson(x["profile"])
+            : Person.fromJson(x)))
+        : members;
+    postRatio = json['ratio'] != null
+        ? double.parse(json['ratio'].toString())
+        : postRatio;
+    post_count =
+        json["post_count"] != null ? RxInt(json["post_count"]) : post_count;
+    is_user = json['is_user'] ?? is_user;
+    user = json["profile"] != null ? Person.fromJson(json["profile"]) : user;
+    isPublic =
+        json["project"] != null ? json["project"]["is_public"] : isPublic;
+    managerId = isProject
+        ? json['manager']
+        : json['member'] != null
+            ? (List.from(json['member'])
+                    .where((element) => element['is_manager'] != null))
+                .first['profile']['user_id']
+            : managerId;
+    company =
+        isCompany ? Company.fromJson(json['project']['thumbnail']) : company;
+  }
 
   factory Project.fromJson(Map<String, dynamic> json) {
     bool isProject = json["project"] != null;
-    bool isCompany = 
-    isProject && json['project']['thumbnail'] != null ? 
-    json['project']['thumbnail'].runtimeType != String : false;
+    bool isCompany = isProject && json['project']['thumbnail'] != null
+        ? json['project']['thumbnail'].runtimeType != String
+        : false;
     return Project(
         id: isProject
             ? json["project"]['project_id'] != null
@@ -149,7 +223,8 @@ class Project {
                         .where((element) => element['is_manager'] != null))
                     .first['profile']['user_id']
                 : 0,
-        company: isCompany ? Company.fromJson(json['project']['thumbnail']) : null);
+        company:
+            isCompany ? Company.fromJson(json['project']['thumbnail']) : null);
   }
 
   Map<String, dynamic> toJson() => {

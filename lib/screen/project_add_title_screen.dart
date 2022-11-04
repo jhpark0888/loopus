@@ -40,9 +40,10 @@ class ProjectAddTitleScreen extends StatelessWidget {
 
   final Screentype screenType;
   final ProjectAddController _controller = Get.put(ProjectAddController());
-
+  late CareerDetailController careerDetailController;
   // 커리어 수정일 때는 커리어 아이디 받아야 함
   int? careerId;
+
   // Rx<Project>? career;
 
   @override
@@ -75,7 +76,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                             await _gaController.logProjectCreated(true);
                             Project project = Project.fromJson(value.data);
                             if(_controller.selectCompany.value.userId != 0){
-                            addCompany(project.id, _controller.selectCompany.value.userId);
+                            // addCompany(project.id, _controller.selectCompany.value.userId);
                           }
                             project.is_user = 1;
                             SelectProjectController.to.selectprojectlist
@@ -145,12 +146,13 @@ class ProjectAddTitleScreen extends StatelessWidget {
                         updateCareer(
                                 careerDetailController.career.value.id,
                                 null,
-                                _controller.projectnamecontroller.text,
+                                _controller.projectnamecontroller.text,careerDetailController.career.value.company!.name,
                                 ProjectUpdateType.project_name)
                             .then((value) {
                           if (value.isError == false) {
                             careerDetailController.career.value.careerName =
                                 _controller.projectnamecontroller.text;
+                            careerDetailController.career.value.company = _controller.selectCompany.value;
                             careerDetailController.career.refresh();
                             if (Get.isRegistered<ProfileController>()) {
                               ProfileController.to.myProjectList
@@ -162,6 +164,20 @@ class ProjectAddTitleScreen extends StatelessWidget {
                                       .first
                                       .careerName =
                                   _controller.projectnamecontroller.text;
+                              ProfileController.to.myProjectList
+                                      .where(
+                                          (p0) =>
+                                              p0.id ==
+                                              careerDetailController
+                                                  .career.value.id)
+                                      .first.company = _controller.selectCompany.value;
+                              ProfileController.to.myProjectList
+                                      .where(
+                                          (p0) =>
+                                              p0.id ==
+                                              careerDetailController
+                                                  .career.value.id)
+                                      .first.thumbnail = _controller.selectCompany.value.profileImage;
                               ProfileController.to.myProjectList.refresh();
                             }
                             getbacks(2);

@@ -359,6 +359,23 @@ class PostingAddScreen extends StatelessWidget {
                   Get.find(tag: project_id.toString());
                 careerController.postList.add(post);
                 careerController.postList.refresh();
+                careerController.career.value.post_count!.value += 1;
+                careerController.career.value.updateDate = DateTime.now();
+                ProfileController.to.myProjectList
+                                      .where(
+                                          (p0) =>
+                                              p0.id ==
+                                              project_id
+                                                 )
+                                      .first.updateDate = DateTime.now();
+                ProfileController.to.myProjectList
+                                      .where(
+                                          (p0) =>
+                                              p0.id ==
+                                              project_id
+                                                 )
+                                      .first.thumbnail = post.images.isEmpty ? "" : post.images.first;
+                ProfileController.to.myProjectList.refresh();
               }
 
               showCustomDialog('포스팅을 업로드했어요', 1000);

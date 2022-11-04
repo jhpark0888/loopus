@@ -516,144 +516,157 @@ class MyProfileScreen extends StatelessWidget {
                       // SliverOverlapInjector(
                       //     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                       //         context)),
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        sliver: SliverToBoxAdapter(
+                      // SliverPadding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                        // sliver: 
+                        SliverToBoxAdapter(
                           child: Column(
                             children: [
                               const SizedBox(height: 24),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      '${profileController.myUserInfo.value.name}님과 관련있는 기업',
-                                      style: kmainbold),
-                                  const SizedBox(width: 8),
-                                  SizedBox(
-                                    width: 20,
-                                    height: 21,
-                                    child: IconButton(
-                                      padding: EdgeInsets.fromLTRB(0, 5, 0, 1),
-                                      onPressed: () {
-                                        showPopUpDialog(
-                                          '관련있는 기업',
-                                          '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요',
-                                        );
-                                      },
-                                      icon: SvgPicture.asset(
-                                        'assets/icons/information.svg',
-                                        width: 16,
-                                        height: 16,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        '${profileController.myUserInfo.value.name}님과 관련있는 기업',
+                                        style: kmainbold),
+                                    const SizedBox(width: 8),
+                                    SizedBox(
+                                      width: 20,
+                                      height: 21,
+                                      child: IconButton(
+                                        padding: EdgeInsets.fromLTRB(0, 5, 0, 1),
+                                        onPressed: () {
+                                          showPopUpDialog(
+                                            '관련있는 기업',
+                                            '루프어스에서 활동하는 기업이\n관심을 보이는 경우, 또는\n프로필과 분야 연관성이 높은\n기업을 추천하여 보여줘요',
+                                          );
+                                        },
+                                        icon: SvgPicture.asset(
+                                          'assets/icons/information.svg',
+                                          width: 16,
+                                          height: 16,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                               const SizedBox(height: 16),
-                              profileController.interestedCompanies.isNotEmpty
+                              Obx(()=>profileController.interestedCompanies.isNotEmpty
                                   ? SizedBox(
-                                        width: Get.width,
-                                        height: 44,
-                                        child: ListView.builder(
-                                          padding: EdgeInsets.zero,
-                                          shrinkWrap: true,
-                                          primary: false,
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (context, index) {
-                                            return companyTile(profileController
+                                      width: Get.width,
+                                      height: 44,
+                                      child: ListView.separated(
+                                        padding: EdgeInsets.only(left: 16),
+                                        shrinkWrap: true,
+                                        primary: false,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) {
+                                          return companyTile(profileController
                                               .interestedCompanies[index]);
-                                          },
-                                          itemCount: profileController
-                                              .interestedCompanies.length,
-                                        ),
-                                      )
+                                        },
+                                        itemCount: profileController
+                                            .interestedCompanies.length,
+                                        separatorBuilder: (context, index) {
+                                          return const SizedBox(width: 16);
+                                        },
+                                      ),
+                                    )
                                   : Text(
                                       '아직 ${profileController.myUserInfo.value.name} 관련있는 기업이 없어요',
                                       style: kmain.copyWith(color: maingray),
-                                    ),
+                                    )),
                               const SizedBox(height: 16),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const Text('커리어', style: kmainbold),
-                                  const SizedBox(width: 8),
-                                  CareerAnalysisWidget(
-                                    field: fieldList[profileController
-                                        .myUserInfo.value.fieldId]!,
-                                    groupRatio: profileController
-                                        .myUserInfo.value.groupRatio,
-                                    // schoolRatio: profileController
-                                    //     .myUserInfo.value.schoolRatio,
-                                    lastgroupRatio: profileController
-                                            .myUserInfo.value.groupRatio +
-                                        profileController.myUserInfo.value
-                                            .groupRatioVariance,
-                                    // lastschoolRatio: profileController
-                                    //         .myUserInfo.value.schoolRatio +
-                                    //     profileController
-                                    //         .myUserInfo.value.schoolRatioVariance,
-                                  ),
-                                  // const SizedBox(width: 8),
-                                  SizedBox(
-                                    width: 20,
-                                    height: 21,
-                                    child: IconButton(
-                                      padding: EdgeInsets.fromLTRB(0, 5, 0, 1),
-                                      onPressed: () {
-                                        showPopUpDialog(
-                                          '커리어',
-                                          '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요',
-                                        );
-                                      },
-                                      icon: SvgPicture.asset(
-                                        'assets/icons/information.svg',
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Text('커리어', style: kmainbold),
+                                    const SizedBox(width: 8),
+                                    CareerAnalysisWidget(
+                                      field: fieldList[profileController
+                                          .myUserInfo.value.fieldId]!,
+                                      groupRatio: profileController
+                                          .myUserInfo.value.groupRatio,
+                                      // schoolRatio: profileController
+                                      //     .myUserInfo.value.schoolRatio,
+                                      lastgroupRatio: profileController
+                                              .myUserInfo.value.groupRatio +
+                                          profileController.myUserInfo.value
+                                              .groupRatioVariance,
+                                      // lastschoolRatio: profileController
+                                      //         .myUserInfo.value.schoolRatio +
+                                      //     profileController
+                                      //         .myUserInfo.value.schoolRatioVariance,
+                                    ),
+                                    // const SizedBox(width: 8),
+                                    SizedBox(
+                                      width: 20,
+                                      height: 21,
+                                      child: IconButton(
+                                        padding: EdgeInsets.fromLTRB(0, 5, 0, 1),
+                                        onPressed: () {
+                                          showPopUpDialog(
+                                            '커리어',
+                                            '루프어스 자체 점수 체계를 통해\n가입된 전체 프로필 중 상위 몇 퍼센트\n커리어 수준을 가지고 있는지 알려줘요',
+                                          );
+                                        },
+                                        icon: SvgPicture.asset(
+                                          'assets/icons/information.svg',
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const Spacer(),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.to(() => CareerArrangeScreen());
-                                    },
-                                    child: Text(
-                                      "수정하기",
-                                      style: kmain.copyWith(color: mainblue),
-                                    ),
-                                  )
-                                ],
+                                    const Spacer(),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => CareerArrangeScreen());
+                                      },
+                                      child: Text(
+                                        "수정하기",
+                                        style: kmain.copyWith(color: mainblue),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                               const SizedBox(height: 16),
-                              ListView.separated(
-                                primary: false,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) =>
-                                    GestureDetector(
-                                  onTap: () {
-                                    print(profileController
-                                        .myProjectList[index].isPublic);
-                                    goCareerScreen(
-                                      profileController.myProjectList[index],
-                                      profileController.myUserInfo.value.name,
-                                    );
-                                  },
-                                  child: CareerWidget(
-                                      career: profileController
-                                          .myProjectList[index]),
+                              Padding(
+                               padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: ListView.separated(
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) =>
+                                      GestureDetector(
+                                    onTap: () {
+                                      print(profileController
+                                          .myProjectList[index].isPublic);
+                                      goCareerScreen(
+                                        profileController.myProjectList[index],
+                                        profileController.myUserInfo.value.name,
+                                      );
+                                    },
+                                    child: CareerWidget(
+                                        career: profileController
+                                            .myProjectList[index]),
+                                  ),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                    height: 16,
+                                  ),
+                                  itemCount:
+                                      profileController.myProjectList.length,
                                 ),
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                  height: 16,
-                                ),
-                                itemCount:
-                                    profileController.myProjectList.length,
                               ),
                               const SizedBox(height: 24),
                             ],
                           ),
-                        ),
-                      )
-                    ],
-                  );
+                        ),]
+                      );
+                    // ],
+                  // );
                 },
               )));
   }
@@ -746,10 +759,12 @@ class MyProfileScreen extends StatelessWidget {
   }
 
   Widget companyTile(Company company) {
-    return Row(crossAxisAlignment: CrossAxisAlignment.center,children: [
+    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
       UserImageWidget(
-        width: 36,height: 36,
-          imageUrl: company.profileImage, userType: company.userType),
+          width: 36,
+          height: 36,
+          imageUrl: company.profileImage,
+          userType: company.userType),
       const SizedBox(width: 8),
       Container(
         constraints: const BoxConstraints(minWidth: 30),

@@ -40,7 +40,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
   ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    careerDetailController = Get.put(CareerDetailController(career: Rx(career)),
+    careerDetailController = Get.put(CareerDetailController(career: career.obs),
         tag: career.id.toString());
     // copyList = careerList;
     return Scaffold(
@@ -62,16 +62,15 @@ class PersonalCareerDetailScreen extends StatelessWidget {
             backgroundColor: Colors.white,
             leading: _leading(leading: true),
             actions: [
-              Obx(
-                () => _leading(
+              _leading(
                   leading: false,
                   career: careerDetailController.career.value,
                 ),
-              )
+              
             ],
             pinned: true,
             flexibleSpace: _MyAppSpace(
-              career: careerDetailController.career,
+              career: careerDetailController.career.value,
             ),
             expandedHeight: 190,
           ),
@@ -226,7 +225,7 @@ class PersonalCareerDetailScreen extends StatelessWidget {
 
 class _MyAppSpace extends StatelessWidget {
   _MyAppSpace({Key? key, required this.career}) : super(key: key);
-  Rx<Project> career;
+  Project career;
   @override
   Widget build(
     BuildContext context,
@@ -251,7 +250,7 @@ class _MyAppSpace extends StatelessWidget {
                   child: Opacity(
                     opacity: 1 - opacity2,
                     child: getCollapseTitle(
-                      career.value.careerName,
+                      career.careerName,
                     ),
                   ),
                 ),
@@ -259,14 +258,14 @@ class _MyAppSpace extends StatelessWidget {
               Opacity(
                 opacity: opacity1,
                 child: Hero(
-                  tag: career.value.id.toString(),
+                  tag: career.id.toString(),
                   child: Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: career.value.thumbnail == ""
+                            image: career.thumbnail == ""
                                 ? const AssetImage(
                                     'assets/illustrations/default_image.png')
-                                : NetworkImage(career.value.thumbnail)
+                                : NetworkImage(career.thumbnail)
                                     as ImageProvider,
                             fit: BoxFit.cover,
                             colorFilter: ColorFilter.mode(
@@ -284,14 +283,14 @@ class _MyAppSpace extends StatelessWidget {
                           children: [
                             const SizedBox(height: 44),
                             getExpendTitle(
-                              career.value.careerName,
+                              career.careerName,
                             ),
                             const SizedBox(
                               height: 16,
                             ),
-                            career.value.updateDate != null
+                            career.updateDate != null
                                 ? Text(
-                                    '최근 포스트 ${calculateDate(career.value.updateDate!)}',
+                                    '최근 포스트 ${calculateDate(career.updateDate!)}',
                                     style: kmain.copyWith(color: mainWhite),
                                   )
                                 : Container(
@@ -311,7 +310,7 @@ class _MyAppSpace extends StatelessWidget {
                                     style: kmain.copyWith(color: mainWhite)),
                                 const Spacer(),
                                 Text(
-                                  '포스트 ${career.value.post_count}',
+                                  '포스트 ${career.post_count}',
                                   style: kmain.copyWith(color: mainWhite),
                                 ),
                               ],
@@ -338,7 +337,7 @@ class _MyAppSpace extends StatelessWidget {
         opacity: thumbnail != '' ? 0.25 : 1,
         child: thumbnail != ''
             ? Hero(
-                tag: career.value.id.toString(),
+                tag: career.id.toString(),
                 child: Image.network(
                   thumbnail!,
                   fit: BoxFit.cover,
@@ -443,6 +442,7 @@ class _leading extends StatelessWidget {
                         errorSituation(value);
                       }
                     });
+                    userResign(HomeController.to.myProfile.value.userId, BanType.ban, career!.userid);
                   });
             }, func2: () {
               TextEditingController reportController = TextEditingController();

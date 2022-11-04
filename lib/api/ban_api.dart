@@ -118,3 +118,38 @@ Future<HTTPResponse> userbancancel(int userid) async {
     }
   }
 }
+
+enum BanType {ban,resign}
+
+Future<HTTPResponse> userResign(int userid, BanType type, int? otherId) async {
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    String? token = await const FlutterSecureStorage().read(key: 'token');
+
+    final Uri uri = Uri.parse("$serverUri/user_api/ban?id=$userid&type=${type.name}&${otherId != null ?"other_id=$otherId":""}");
+
+    try {
+      final response = await http.delete(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Token $token"
+        },
+      );
+
+      print('유저 차단 statusCode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        return HTTPResponse.success("success");
+      } else {
+        return HTTPResponse.apiError("fail", response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}

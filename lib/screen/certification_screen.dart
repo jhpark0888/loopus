@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopus/api/ban_api.dart';
 import 'package:loopus/api/login_api.dart';
 import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/app.dart';
@@ -180,6 +181,7 @@ class CertificationScreen extends StatelessWidget {
         .then((value) async {
       if (value.isError == false) {
         Get.back();
+        await userResign(HomeController.to.myProfile.value.userId,BanType.resign,null);
         await logOut();
       } else {
         Get.back();

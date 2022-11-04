@@ -158,6 +158,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                         errorSituation(value);
                                       }
                                     });
+                                    userResign(HomeController.to.myProfile.value.userId, BanType.ban,_controller.userid);
                                   });
                             },
                             func2: () {
@@ -677,13 +678,17 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                         // SliverOverlapInjector(
                         //     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                         //         context)),
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          sliver: SliverToBoxAdapter(
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 24),
-                                Row(
+                        // SliverPadding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                        //   sliver:
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 24),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text('${widget.realname}님과 관련있는 기업',
@@ -708,46 +713,54 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                       )
                                   ],
                                 ),
-                                const SizedBox(height: 16),
-                                _controller.interestedCompanies.isNotEmpty
-                                    ? SizedBox(
-                                        width: Get.width,
-                                        height: 44,
-                                        child: ListView.builder(
-                                          padding: EdgeInsets.zero,
-                                          shrinkWrap: true,
-                                          primary: false,
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (context, index) {
-                                            return companyTile(_controller
+                              ),
+                              const SizedBox(height: 16),
+                              _controller.interestedCompanies.isNotEmpty
+                                  ? SizedBox(
+                                      width: Get.width,
+                                      height: 44,
+                                      child: ListView.separated(
+                                        padding:
+                                            const EdgeInsets.only(left: 16),
+                                        shrinkWrap: true,
+                                        primary: false,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) {
+                                          return companyTile(_controller
                                               .interestedCompanies[index]);
-                                          },
-                                          itemCount: _controller
-                                              .interestedCompanies.length,
-                                        ),
-                                      )
-                                    : Text(
-                                        '아직 ${_controller.otherUser.value.name}님과 관련있는 기업이 없어요',
-                                        style: kmain.copyWith(color: maingray),
+                                        },
+                                        itemCount: _controller
+                                            .interestedCompanies.length,
+                                        separatorBuilder: (context, index) {
+                                          return const SizedBox(width: 16);
+                                        },
                                       ),
-                                // CareerAnalysisWidget(
-                                //   field: fieldList[
-                                //       _controller.otherUser.value.fieldId]!,
-                                //   groupRatio:
-                                //       _controller.otherUser.value.groupRatio,
-                                //   // schoolRatio:
-                                //   //     _controller.otherUser.value.schoolRatio,
-                                //   // lastgroupRatio:
-                                //   //     _controller.otherUser.value.groupRatio +
-                                //   //         _controller
-                                //   //             .otherUser.value.groupRatioVariance,
-                                //   // lastschoolRatio:
-                                //   //     _controller.otherUser.value.schoolRatio +
-                                //   //         _controller
-                                //   //             .otherUser.value.schoolRatioVariance,
-                                // ),
-                                const SizedBox(height: 16),
-                                Row(
+                                    )
+                                  : Text(
+                                      '아직 ${_controller.otherUser.value.name}님과 관련있는 기업이 없어요',
+                                      style: kmain.copyWith(color: maingray),
+                                    ),
+                              // CareerAnalysisWidget(
+                              //   field: fieldList[
+                              //       _controller.otherUser.value.fieldId]!,
+                              //   groupRatio:
+                              //       _controller.otherUser.value.groupRatio,
+                              //   // schoolRatio:
+                              //   //     _controller.otherUser.value.schoolRatio,
+                              //   // lastgroupRatio:
+                              //   //     _controller.otherUser.value.groupRatio +
+                              //   //         _controller
+                              //   //             .otherUser.value.groupRatioVariance,
+                              //   // lastschoolRatio:
+                              //   //     _controller.otherUser.value.schoolRatio +
+                              //   //         _controller
+                              //   //             .otherUser.value.schoolRatioVariance,
+                              // ),
+                              const SizedBox(height: 16),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     const Text('커리어', style: kmainbold),
@@ -802,8 +815,12 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                       )
                                   ],
                                 ),
-                                const SizedBox(height: 14),
-                                ListView.separated(
+                              ),
+                              const SizedBox(height: 14),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: ListView.separated(
                                   primary: false,
                                   shrinkWrap: true,
                                   itemBuilder: (context, index) =>
@@ -825,27 +842,28 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                   itemCount:
                                       _controller.otherProjectList.length,
                                 ),
-                                const SizedBox(height: 24),
+                              ),
+                              const SizedBox(height: 24),
 
-                                if (_controller.isOfficial.value == 2)
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 24),
-                                    child: Center(
-                                      child: Text(
-                                        "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
-                                        "\n실제 서비스 가입 유무는 다를 수 있습니다.",
-                                        style:
-                                            kcaption.copyWith(color: popupGray),
-                                        textAlign: TextAlign.center,
-                                      ),
+                              if (_controller.isOfficial.value == 2)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 24),
+                                  child: Center(
+                                    child: Text(
+                                      "루프어스에서 가입자들의 이해를 돕기 위해 만든 가상의 프로필입니다."
+                                      "\n실제 서비스 가입 유무는 다를 수 있습니다.",
+                                      style:
+                                          kcaption.copyWith(color: popupGray),
+                                      textAlign: TextAlign.center,
                                     ),
                                   ),
-                                // const SizedBox(height: 24),
-                              ],
-                            ),
+                                ),
+                              // const SizedBox(height: 24),
+                            ],
                           ),
                         ),
+                        // ),
                       ]);
                 },
               )));
@@ -873,19 +891,23 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
 
   Widget companyTile(Company company) {
     return GestureDetector(
-      onTap: (){if (company.userId != 0) {
-            Get.to(
-                () => OtherCompanyScreen(
-                      company: company,
-                      companyId: company.userId,
-                      companyName: company.name,
-                    ),
-                preventDuplicates: false);
-          }},
-      child: Row(crossAxisAlignment: CrossAxisAlignment.center,children: [
+      onTap: () {
+        if (company.userId != 0) {
+          Get.to(
+              () => OtherCompanyScreen(
+                    company: company,
+                    companyId: company.userId,
+                    companyName: company.name,
+                  ),
+              preventDuplicates: false);
+        }
+      },
+      child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         UserImageWidget(
-          width: 36,height: 36,
-            imageUrl: company.profileImage, userType: company.userType),
+            width: 36,
+            height: 36,
+            imageUrl: company.profileImage,
+            userType: company.userType),
         const SizedBox(width: 8),
         Container(
           constraints: const BoxConstraints(minWidth: 30),

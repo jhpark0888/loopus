@@ -279,7 +279,7 @@ class NotificationWidget extends StatelessWidget {
       getproject(notification.targetId, notification.userId).then((value) {
         if (value.isError == false) {
           Get.back();
-          career = value.data;
+          career =Project.fromJson(value.data);
           Future.delayed(const Duration(milliseconds: 300));
           Get.to(() => GroupCareerDetailScreen(
                 career: career,

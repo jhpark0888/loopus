@@ -111,24 +111,23 @@ class MessageController extends GetxController with WidgetsBindingObserver {
         List<ChatRoom> temp = chatroom.data;
         List<int> membersId =
             List.generate(temp.length, (index) => temp[index].user);
-        print(membersId);
+
         if (membersId.isNotEmpty) {
           await getUserProfile(membersId).then((usersList) {
             if (usersList.isError == false) {
               Map<String, List> allUserList =
                   Map<String, List>.from(usersList.data);
-              List<int> none =
-                  List.from(allUserList['none']!);
-              List<User> userList = allUserList['profile']!
-                  .map((e)=> User.fromJson(e))
-                  .toList();
-              print(userList);
-              none.forEach(
-                  (userId) => SQLController.to.updateUser(null, '알수없음', userId));
+              List<int> none = List.from(allUserList['none']!);
+              List<User> userList =
+                  allUserList['profile']!.map((e) => User.fromJson(e)).toList();
+
+              none.forEach((userId) =>
+                  SQLController.to.updateUser(null, '알수없음', userId));
               const FlutterSecureStorage().delete(key: 'newMsg');
               temp.forEach((element) async {
                 User? user =
                     userList.where((user) => user.userId == element.user).first;
+                print("${user.userType}이 유저 타입");
                 if (chattingRoomList
                     .where((messageRoom) =>
                         messageRoom.user.value.userId == user.userId)
@@ -151,11 +150,7 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                         .first
                         .user
                         .value = user;
-                    print(chattingRoomList
-                        .where((messageRoom) =>
-                            messageRoom.chatRoom.value.user == user.userId)
-                        .first
-                        .user);
+
                     chattingRoomList
                         .where((messageRoom) =>
                             messageRoom.chatRoom.value.user == user.userId)
@@ -187,34 +182,74 @@ class MessageController extends GetxController with WidgetsBindingObserver {
                           .value
                           .profileImage !=
                       user.profileImage) {
-                    SQLController.to.updateUser(user.profileImage,null, user.userId);
+                    SQLController.to
+                        .updateUser(user.profileImage, null, user.userId);
+                  }
+                  if (chattingRoomList
+                      .where((messageRoom) =>
+                          messageRoom.chatRoom.value.roomId == element.roomId)
+                      .isNotEmpty) {
+                    chattingRoomList
+                        .where((messageRoom) =>
+                            messageRoom.chatRoom.value.roomId == element.roomId)
+                        .first
+                        .chatRoom
+                        .value = element;
+                    searchRoomList
+                        .where((messageRoom) =>
+                            messageRoom.chatRoom.value.roomId == element.roomId)
+                        .first
+                        .chatRoom
+                        .value = element;
+                  }
+                  if (chattingRoomList
+                      .where((messageRoom) =>
+                          messageRoom.chatRoom.value.roomId == element.roomId)
+                      .isNotEmpty) {
+                    chattingRoomList
+                        .where((messageRoom) =>
+                            messageRoom.user.value.userId == user.userId)
+                        .first
+                        .user
+                        .value
+                        .profileImage = user.profileImage;
+
+                    searchRoomList
+                        .where((messageRoom) =>
+                            messageRoom.user.value.userId == user.userId)
+                        .first
+                        .user
+                        .value
+                        .profileImage = user.profileImage;
                   }
                   chattingRoomList
                       .where((messageRoom) =>
-                          messageRoom.chatRoom.value.roomId == element.roomId)
+                          messageRoom.chatRoom.value.user == user.userId)
                       .first
-                      .chatRoom
-                      .value = element;
+                      .user
+                      .value
+                      .userType = user.userType;
+                  searchRoomList
+                      .where((messageRoom) =>
+                          messageRoom.chatRoom.value.user == user.userId)
+                      .first
+                      .user
+                      .value
+                      .userType = user.userType;
                   chattingRoomList
                       .where((messageRoom) =>
-                          messageRoom.user.value.userId == user.userId)
+                          messageRoom.chatRoom.value.user == user.userId)
                       .first
                       .user
                       .value
-                      .profileImage = user.profileImage;
+                      .userId = user.userId;
                   searchRoomList
                       .where((messageRoom) =>
-                          messageRoom.chatRoom.value.roomId == element.roomId)
-                      .first
-                      .chatRoom
-                      .value = element;
-                  searchRoomList
-                      .where((messageRoom) =>
-                          messageRoom.user.value.userId == user.userId)
+                          messageRoom.chatRoom.value.user == user.userId)
                       .first
                       .user
                       .value
-                      .profileImage = user.profileImage;
+                      .userId = user.userId;
                 }
               });
 

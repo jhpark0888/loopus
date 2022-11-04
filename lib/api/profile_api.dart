@@ -376,6 +376,7 @@ Future<HTTPResponse> getInterestedCompany(int userId, int page) async {
       if (response.statusCode == 200) {
         List responseBody = json.decode(utf8.decode(response.bodyBytes));
         
+        print(responseBody);
         
         return HTTPResponse.success(responseBody);
       }else {

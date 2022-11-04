@@ -33,8 +33,9 @@ Future<HTTPResponse> addproject() async {
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
+    int userId = projectAddController.selectCompany.value.userId;
     String? token = await const FlutterSecureStorage().read(key: "token");
-    Uri uri = Uri.parse('$serverUri/project_api/project');
+    Uri uri = Uri.parse('$serverUri/project_api/project${userId != 0 ?"?company_id=$userId":""}');
     try {
       print(projectAddController.selectCompany.value.userId);
       var body = {
@@ -43,7 +44,7 @@ Future<HTTPResponse> addproject() async {
             .map((person) => person.id)
             .toList(),
         'is_public': projectAddController.isPublic.value,
-        'company': projectAddController.selectCompany.value.userId
+        // 'company': projectAddController.selectCompany.value.userId
       };
 
       final headers = {
@@ -93,66 +94,66 @@ Future<HTTPResponse> addproject() async {
   }
 }
 
-Future<HTTPResponse> addCompany(int projectId, int companyId) async {
-  ConnectivityResult result = await initConnectivity();
-  final ProjectAddController projectAddController = Get.find();
-  if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
-    return HTTPResponse.networkError();
-  } else {
-    String? token = await const FlutterSecureStorage().read(key: "token");
-    Uri uri = Uri.parse('$serverUri/project_api/project?id=$projectId&company_id=$companyId&type=company&project_id=$projectId');
-    print(uri);
-    try {
-      print(projectAddController.selectCompany.value.userId);
-      final headers = {
-        'Authorization': 'Token $token',
-        'Content-Type': 'application/json',
-      };
+// Future<HTTPResponse> addCompany(int projectId, int companyId) async {
+//   ConnectivityResult result = await initConnectivity();
+//   final ProjectAddController projectAddController = Get.find();
+//   if (result == ConnectivityResult.none) {
+//     showdisconnectdialog();
+//     return HTTPResponse.networkError();
+//   } else {
+//     String? token = await const FlutterSecureStorage().read(key: "token");
+//     Uri uri = Uri.parse('$serverUri/project_api/project?id=$projectId&company_id=$companyId&type=company&project_id=$projectId');
+//     print(uri);
+//     try {
+//       print(projectAddController.selectCompany.value.userId);
+//       final headers = {
+//         'Authorization': 'Token $token',
+//         'Content-Type': 'application/json',
+//       };
 
-      http.Response response = await http.put(
-        uri,
-        headers: headers,
-      );
+//       http.Response response = await http.put(
+//         uri,
+//         headers: headers,
+//       );
 
-      // var request = http.MultipartRequest('POST', uri);
+//       // var request = http.MultipartRequest('POST', uri);
 
-      // request.headers.addAll(headers);
+//       // request.headers.addAll(headers);
 
-      // request.fields['project_name'] =
-      //     projectAddController.projectnamecontroller.text;
+//       // request.fields['project_name'] =
+//       //     projectAddController.projectnamecontroller.text;
 
-      // request.fields['looper'] = json.encode(projectAddController
-      //     .selectedpersontaglist
-      //     .map((person) => person.id)
-      //     .toList());
+//       // request.fields['looper'] = json.encode(projectAddController
+//       //     .selectedpersontaglist
+//       //     .map((person) => person.id)
+//       //     .toList());
 
-      // request.fields['is_public'] =
-      //     projectAddController.isPublic.value.toString();
+//       // request.fields['is_public'] =
+//       //     projectAddController.isPublic.value.toString();
 
-      // http.StreamedResponse response = await request.send();
+//       // http.StreamedResponse response = await request.send();
 
-      print("활동 생성: ${response.statusCode}");
-      if (response.statusCode == 201) {
-        // String responsebody = await response.stream.bytesToString();
-        // var responsemap = json.decode(responsebody);
-        var responseBody = json.decode(utf8.decode(response.bodyBytes));
-        print(responseBody);
-        return HTTPResponse.success(responseBody);
-      } else {
-        //!GA
-        return HTTPResponse.apiError('fail', response.statusCode);
-      }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
-    }
-  }
-}
+//       print("활동 생성: ${response.statusCode}");
+//       if (response.statusCode == 201) {
+//         // String responsebody = await response.stream.bytesToString();
+//         // var responsemap = json.decode(responsebody);
+//         var responseBody = json.decode(utf8.decode(response.bodyBytes));
+//         print(responseBody);
+//         return HTTPResponse.success(responseBody);
+//       } else {
+//         //!GA
+//         return HTTPResponse.apiError('fail', response.statusCode);
+//       }
+//     } on SocketException {
+//       // ErrorController.to.isServerClosed(true);
+//       return HTTPResponse.serverError();
+//     } catch (e) {
+//       print(e);
+//       return HTTPResponse.unexpectedError(e);
+//       // ErrorController.to.isServerClosed(true);
+//     }
+//   }
+// }
 
 
 Future<HTTPResponse> getproject(int projectId, int userId) async {
@@ -167,13 +168,13 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
           "$serverUri/project_api/project?project_id=$projectId&user_id=$userId");
       http.Response response =
           await http.get(uri, headers: {"Authorization": "Token $token"});
-
+      print(uri);
       print("활동 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         Project project = Project.fromJson(responseBody);
         print(project.company);
-        return HTTPResponse.success(project);
+        return HTTPResponse.success(responseBody);
       } else if (response.statusCode == 404) {
         Get.back();
         showCustomDialog('이미 삭제된 활동입니다', 1400);
@@ -192,16 +193,18 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
 enum ProjectUpdateType { project_name, date, looper }
 
 Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember,
-    String? title, ProjectUpdateType updateType) async {
+    String? title,String? companyName, ProjectUpdateType updateType) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-
+    int companyId = ProjectAddController.to.selectCompany.value.userId;
+    print(companyId);
+    print(companyName);
     try {
       final uri = Uri.parse(
-          "$serverUri/project_api/project?type=${updateType.name}&id=$projectId");
+          "$serverUri/project_api/project?type=${updateType.name}&id=$projectId${companyId != 0 ? "&company_id=$companyId" : ""}");
       var request = http.MultipartRequest('PUT', uri);
       request.headers.addAll({
         "Authorization": "Token $token",
@@ -215,6 +218,9 @@ Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember,
         }
       } else if (updateType == ProjectUpdateType.project_name) {
         request.fields['project_name'] = title!;
+        if(companyId != 0){
+          request.fields['company_name'] = companyName!;
+        }
       }
       print(request.files);
       http.StreamedResponse response = await request.send();
