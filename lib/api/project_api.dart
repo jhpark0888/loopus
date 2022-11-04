@@ -35,7 +35,8 @@ Future<HTTPResponse> addproject() async {
   } else {
     int userId = projectAddController.selectCompany.value.userId;
     String? token = await const FlutterSecureStorage().read(key: "token");
-    Uri uri = Uri.parse('$serverUri/project_api/project${userId != 0 ?"?company_id=$userId":""}');
+    Uri uri = Uri.parse(
+        '$serverUri/project_api/project${userId != 0 ? "?company_id=$userId" : ""}');
     return HTTPResponse.httpErrorHandling(() async {
       print(projectAddController.selectCompany.value.userId);
       var body = {
@@ -51,11 +52,13 @@ Future<HTTPResponse> addproject() async {
         'Content-Type': 'application/json',
       };
 
-      http.Response response = await http.post(
-        uri,
-        headers: headers,
-        body: json.encode(body),
-      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
+      http.Response response = await http
+          .post(
+            uri,
+            headers: headers,
+            body: json.encode(body),
+          )
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
       print("활동 생성: ${response.statusCode}");
       if (response.statusCode == 201) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -70,7 +73,6 @@ Future<HTTPResponse> addproject() async {
   }
 }
 
-
 Future<HTTPResponse> getproject(int projectId, int userId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
@@ -80,8 +82,9 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
     return HTTPResponse.httpErrorHandling(() async {
       final uri = Uri.parse(
           "$serverUri/project_api/project?project_id=$projectId&user_id=$userId");
-      http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"}).timeout(Duration(milliseconds: HTTPResponse.timeout));
+      http.Response response = await http.get(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
       print(uri);
       print("활동 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -96,20 +99,19 @@ Future<HTTPResponse> getproject(int projectId, int userId) async {
 }
 
 enum ProjectUpdateType { project_name, date, looper }
-
-Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember,
-    String? title,String? companyName, ProjectUpdateType updateType) async {
+Future<HTTPResponse> updateCareer(int projectId, ProjectUpdateType updateType,
+    {List<User>? selectedMember,
+    String? title,
+    String? companyName,
+    int? companyId}) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    int companyId = ProjectAddController.to.selectCompany.value.userId;
-    print(companyId);
-    print(companyName);
     return HTTPResponse.httpErrorHandling(() async {
       final uri = Uri.parse(
-          "$serverUri/project_api/project?type=${updateType.name}&id=$projectId${companyId != 0 ? "&company_id=$companyId" : ""}");
+          "$serverUri/project_api/project?type=${updateType.name}&id=$projectId${companyId != null ? "&company_id=$companyId" : ""}");
       var request = http.MultipartRequest('PUT', uri);
       request.headers.addAll({
         "Authorization": "Token $token",
@@ -123,12 +125,14 @@ Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember,
         }
       } else if (updateType == ProjectUpdateType.project_name) {
         request.fields['project_name'] = title!;
-        if(companyId != 0){
+        if (companyId != 0) {
           request.fields['company_name'] = companyName!;
         }
       }
       print(request.files);
-      http.StreamedResponse response = await request.send().timeout(Duration(milliseconds: HTTPResponse.timeout));
+      http.StreamedResponse response = await request
+          .send()
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
       print("커리어 업데이트: ${response.statusCode}");
       if (response.statusCode == 200) {
         return HTTPResponse.success('');
@@ -137,7 +141,6 @@ Future<HTTPResponse> updateCareer(int projectId, List<User>? selectedMember,
     });
   }
 }
-
 
 enum DeleteType { exit, del }
 Future<HTTPResponse> deleteProject(int projectId, DeleteType type) async {
@@ -150,8 +153,9 @@ Future<HTTPResponse> deleteProject(int projectId, DeleteType type) async {
     return HTTPResponse.httpErrorHandling(() async {
       final uri = Uri.parse(
           "$serverUri/project_api/project?id=$projectId&type=${type.name}"); //type exit del
-      http.Response response =
-          await http.delete(uri, headers: {"Authorization": "Token $token"}).timeout(Duration(milliseconds: HTTPResponse.timeout));
+      http.Response response = await http.delete(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("프로젝트(커리어) 삭제 : ${response.statusCode}");
       if (response.statusCode == 200) {

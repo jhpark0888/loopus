@@ -195,15 +195,22 @@ void login(
       String token = jsonDecode(response.body)['token'];
       String userid = jsonDecode(response.body)['user_id'];
       int isStudent = jsonDecode(response.body)['is_student'];
+
       if (isStudent == 1) {
         String strSchoolId = jsonDecode(response.body)['school_id'];
         String strDeptId = jsonDecode(response.body)['department_id'];
+        List<int> groupTpList =
+            List.from(jsonDecode(response.body)['topic_list']);
 
         storage.write(key: 'strSchoolId', value: strSchoolId);
         storage.write(key: 'strDeptId', value: strDeptId);
+        storage.write(key: 'groupTpList', value: jsonEncode(groupTpList));
 
         await FirebaseMessaging.instance.subscribeToTopic(strSchoolId);
         await FirebaseMessaging.instance.subscribeToTopic(strDeptId);
+        for (int careerId in groupTpList) {
+          await FirebaseMessaging.instance.subscribeToTopic("project$careerId");
+        }
       }
 
       //! GA
@@ -212,6 +219,7 @@ void login(
       storage.write(key: 'token', value: token);
       storage.write(key: 'id', value: userid);
       storage.write(key: 'type', value: UserType.values[isStudent].name);
+
       await FirebaseMessaging.instance.subscribeToTopic(userid);
 
       Get.offAll(() => App());
@@ -237,16 +245,29 @@ Future<void> logOut() async {
   if (type == UserType.student.name) {
     String? strSchoolId = await secureStorage.read(key: "strSchoolId");
     String? strDeptId = await secureStorage.read(key: "strDeptId");
+    String? strGroupTpList = await secureStorage.read(key: "groupTpList");
+    List<int> groupTpList = [];
 
-    await FirebaseMessaging.instance.unsubscribeFromTopic("school");
-    await FirebaseMessaging.instance.unsubscribeFromTopic(userid);
+    if (strGroupTpList != null) {
+      groupTpList = json.decode(strGroupTpList).cast<int>();
+
+      secureStorage.delete(key: "groupTpList");
+
+      for (int careerId in groupTpList) {
+        await FirebaseMessaging.instance
+            .unsubscribeFromTopic("project$careerId");
+      }
+    }
 
     if (strSchoolId != null) {
-      secureStorage.delete(key: strSchoolId);
+      await FirebaseMessaging.instance.unsubscribeFromTopic(strSchoolId);
+      secureStorage.delete(key: "strSchoolId");
     }
     if (strDeptId != null) {
-      secureStorage.delete(key: strDeptId);
+      await FirebaseMessaging.instance.unsubscribeFromTopic(strDeptId);
+      secureStorage.delete(key: "strDeptId");
     }
+    if (strGroupTpList != null) {}
   }
 
   secureStorage.delete(key: "token");

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_preview/device_preview.dart';
@@ -38,6 +39,20 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     if (newMsg == '') {
       const FlutterSecureStorage().write(key: 'newMsg', value: 'true');
     }
+  } else if (message.data["type"] ==
+      NotificationType.careerTag.index.toString()) {
+    FlutterSecureStorage secureStorage = FlutterSecureStorage();
+    int careerId = message.data["id"];
+    String? strGroupTpList = await secureStorage.read(key: "groupTpList");
+    List<int> groupTpList = [];
+
+    if (strGroupTpList != null) {
+      groupTpList = json.decode(strGroupTpList).cast<int>();
+    }
+    groupTpList.add(careerId);
+
+    secureStorage.write(key: "groupTpList", value: json.encode(groupTpList));
+    await FirebaseMessaging.instance.subscribeToTopic("project$careerId");
   }
   print('백그라운드 알림 데이터 : ${message.data}');
 }

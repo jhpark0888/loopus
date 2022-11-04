@@ -41,15 +41,13 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                     controller.selectList
                         .sort((a, b) => a.name.compareTo(b.name));
                     updateCareer(
-                            Get.find<CareerDetailController>(
-                                    tag: careerId.toString())
-                                .career
-                                .value
-                                .id,
-                            controller.selectList,
-                            null,null,
-                            ProjectUpdateType.looper)
-                        .then((value) {
+                      Get.find<CareerDetailController>(tag: careerId.toString())
+                          .career
+                          .value
+                          .id,
+                      ProjectUpdateType.looper,
+                      selectedMember: controller.selectList,
+                    ).then((value) {
                       if (value.isError == false) {
                         Get.find<CareerDetailController>(
                                 tag: careerId.toString())

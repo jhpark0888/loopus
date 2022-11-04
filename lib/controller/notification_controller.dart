@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -106,14 +107,15 @@ class NotificationController extends GetxController {
       int id = int.parse(json['id']);
       int type = int.parse(json['type'].toString());
       int senderId = int.parse(json['sender_id']);
-      if (type == 4 || type == 7) {
-        Get.to(() => PostingScreen(postid: id));
+      if (type == 4 || type == 7 || type == 9 || type == 11) {
+        Get.to(() => PostingScreen(postid: id), preventDuplicates: false);
       } else if (type == 5 || type == 6 || type == 8) {
         int? postId =
             json['post_id'] != null ? int.parse(json['post_id']) : null;
-        Get.to(() => PostingScreen(postid: postId!));
+        Get.to(() => PostingScreen(postid: postId!), preventDuplicates: false);
       } else if (type == 2) {
-        Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
+        Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'),
+            preventDuplicates: false);
       } else if (type == 3) {
         String? userId = await FlutterSecureStorage().read(key: 'id');
         getproject(id, int.parse(userId!)).then((value) {
@@ -123,12 +125,16 @@ class NotificationController extends GetxController {
                 .where((element) => element.userId == int.parse(userId))
                 .first
                 .name;
-            Get.to(() => GroupCareerDetailScreen(
-                  career: career,
-                  name: name,
-                ));
+            Get.to(
+                () => GroupCareerDetailScreen(
+                      career: career,
+                      name: name,
+                    ),
+                preventDuplicates: false);
           }
         });
+      } else if (type == 10) {
+        AppController.to.changeBottomNav(4);
       }
       isNotiRead(id);
     }
@@ -223,6 +229,28 @@ class NotificationController extends GetxController {
             });
           }
         } else {
+          if (event.data["type"] ==
+              NotificationType.careerTag.index.toString()) {
+            FlutterSecureStorage secureStorage = FlutterSecureStorage();
+            int careerId = event.data["id"];
+            String? strGroupTpList =
+                await secureStorage.read(key: "groupTpList");
+            List<int> groupTpList = [];
+
+            if (strGroupTpList != null) {
+              groupTpList = jsonDecode(strGroupTpList).cast<int>();
+            }
+            groupTpList.add(careerId);
+
+            secureStorage.write(
+                key: "groupTpList", value: jsonEncode(groupTpList));
+            await FirebaseMessaging.instance
+                .subscribeToTopic("project$careerId");
+
+            // if (event.data["sender_id"] != HomeController.to.myId) {
+
+            // }
+          }
           HomeController.to.isNewAlarm(true);
           // int type = int.parse(event.data['type']);
           // int id = int.parse(event.data['id']);

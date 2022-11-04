@@ -75,9 +75,9 @@ class ProjectAddTitleScreen extends StatelessWidget {
                           if (value.isError == false) {
                             await _gaController.logProjectCreated(true);
                             Project project = Project.fromJson(value.data);
-                            if(_controller.selectCompany.value.userId != 0){
-                            // addCompany(project.id, _controller.selectCompany.value.userId);
-                          }
+                            if (_controller.selectCompany.value.userId != 0) {
+                              // addCompany(project.id, _controller.selectCompany.value.userId);
+                            }
                             project.is_user = 1;
                             SelectProjectController.to.selectprojectlist
                                 .insert(0, project);
@@ -143,16 +143,19 @@ class ProjectAddTitleScreen extends StatelessWidget {
                         CareerDetailController careerDetailController =
                             Get.find<CareerDetailController>(
                                 tag: careerId.toString());
-                        updateCareer(
-                                careerDetailController.career.value.id,
-                                null,
-                                _controller.projectnamecontroller.text,careerDetailController.career.value.company!.name,
-                                ProjectUpdateType.project_name)
+                        updateCareer(careerDetailController.career.value.id,
+                                ProjectUpdateType.project_name,
+                                title: _controller.projectnamecontroller.text,
+                                companyName: careerDetailController
+                                    .career.value.company!.name,
+                                companyId:
+                                    _controller.selectCompany.value.userId)
                             .then((value) {
                           if (value.isError == false) {
                             careerDetailController.career.value.careerName =
                                 _controller.projectnamecontroller.text;
-                            careerDetailController.career.value.company = _controller.selectCompany.value;
+                            careerDetailController.career.value.company =
+                                _controller.selectCompany.value;
                             careerDetailController.career.refresh();
                             if (Get.isRegistered<ProfileController>()) {
                               ProfileController.to.myProjectList
@@ -165,19 +168,20 @@ class ProjectAddTitleScreen extends StatelessWidget {
                                       .careerName =
                                   _controller.projectnamecontroller.text;
                               ProfileController.to.myProjectList
-                                      .where(
-                                          (p0) =>
-                                              p0.id ==
-                                              careerDetailController
-                                                  .career.value.id)
-                                      .first.company = _controller.selectCompany.value;
+                                  .where((p0) =>
+                                      p0.id ==
+                                      careerDetailController.career.value.id)
+                                  .first
+                                  .company = _controller.selectCompany.value;
                               ProfileController.to.myProjectList
                                       .where(
                                           (p0) =>
                                               p0.id ==
                                               careerDetailController
                                                   .career.value.id)
-                                      .first.thumbnail = _controller.selectCompany.value.profileImage;
+                                      .first
+                                      .thumbnail =
+                                  _controller.selectCompany.value.profileImage;
                               ProfileController.to.myProjectList.refresh();
                             }
                             getbacks(2);
