@@ -9,10 +9,12 @@ import 'package:loopus/api/profile_api.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/other_profile_controller.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
 import 'package:loopus/screen/group_career_detail_screen.dart';
 import 'package:loopus/screen/career_arrange_screen.dart';
+import 'package:loopus/screen/other_company_screen.dart';
 import 'package:loopus/screen/profile_sns_add_screen.dart';
 import 'package:loopus/widget/Link_widget.dart';
 import 'package:loopus/widget/follow_button_widget.dart';
@@ -707,10 +709,27 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                   ],
                                 ),
                                 const SizedBox(height: 16),
-                                Text(
-                                  '아직 ${widget.realname}님과 관련있는 기업이 없어요',
-                                  style: kmain.copyWith(color: maingray),
-                                ),
+                                _controller.interestedCompanies.isNotEmpty
+                                    ? SizedBox(
+                                        width: Get.width,
+                                        height: 44,
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.zero,
+                                          shrinkWrap: true,
+                                          primary: false,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) {
+                                            return companyTile(_controller
+                                              .interestedCompanies[index]);
+                                          },
+                                          itemCount: _controller
+                                              .interestedCompanies.length,
+                                        ),
+                                      )
+                                    : Text(
+                                        '아직 ${_controller.otherUser.value.name}님과 관련있는 기업이 없어요',
+                                        style: kmain.copyWith(color: maingray),
+                                      ),
                                 // CareerAnalysisWidget(
                                 //   field: fieldList[
                                 //       _controller.otherUser.value.fieldId]!,
@@ -727,7 +746,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                 //   //         _controller
                                 //   //             .otherUser.value.schoolRatioVariance,
                                 // ),
-                                const SizedBox(height: 24),
+                                const SizedBox(height: 16),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -850,5 +869,40 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                     type: PostingWidgetType.normal),
                 itemCount: _controller.allPostList.length),
           ));
+  }
+
+  Widget companyTile(Company company) {
+    return GestureDetector(
+      onTap: (){if (company.userId != 0) {
+            Get.to(
+                () => OtherCompanyScreen(
+                      company: company,
+                      companyId: company.userId,
+                      companyName: company.name,
+                    ),
+                preventDuplicates: false);
+          }},
+      child: Row(crossAxisAlignment: CrossAxisAlignment.center,children: [
+        UserImageWidget(
+          width: 36,height: 36,
+            imageUrl: company.profileImage, userType: company.userType),
+        const SizedBox(width: 8),
+        Container(
+          constraints: const BoxConstraints(minWidth: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(company.name, style: kmain),
+              const SizedBox(height: 4),
+              Text(
+                fieldList[company.fieldId]!,
+                style: kmain.copyWith(color: maingray),
+              )
+            ],
+          ),
+        )
+      ]),
+    );
   }
 }

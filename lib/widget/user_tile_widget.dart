@@ -31,13 +31,15 @@ class UserTileWidget extends StatelessWidget {
             preventDuplicates: false,
           );
         } else {
-          Get.to(
-              () => OtherCompanyScreen(
-                    company: user as Company,
-                    companyId: user.userId,
-                    companyName: user.name,
-                  ),
-              preventDuplicates: false);
+          if (user.userId != 0) {
+            Get.to(
+                () => OtherCompanyScreen(
+                      company: user as Company,
+                      companyId: user.userId,
+                      companyName: user.name,
+                    ),
+                preventDuplicates: false);
+          }
         }
       },
       behavior: HitTestBehavior.translucent,

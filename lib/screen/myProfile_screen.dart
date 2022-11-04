@@ -18,6 +18,7 @@ import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/tag_controller.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/project_model.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/bookmark_screen.dart';
@@ -549,11 +550,28 @@ class MyProfileScreen extends StatelessWidget {
                                 ],
                               ),
                               const SizedBox(height: 16),
-                              Text(
-                                '아직 ${profileController.myUserInfo.value.name} 관련있는 기업이 없어요',
-                                style: kmain.copyWith(color: maingray),
-                              ),
-                              const SizedBox(height: 24),
+                              profileController.interestedCompanies.isNotEmpty
+                                  ? SizedBox(
+                                        width: Get.width,
+                                        height: 44,
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.zero,
+                                          shrinkWrap: true,
+                                          primary: false,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) {
+                                            return companyTile(profileController
+                                              .interestedCompanies[index]);
+                                          },
+                                          itemCount: profileController
+                                              .interestedCompanies.length,
+                                        ),
+                                      )
+                                  : Text(
+                                      '아직 ${profileController.myUserInfo.value.name} 관련있는 기업이 없어요',
+                                      style: kmain.copyWith(color: maingray),
+                                    ),
+                              const SizedBox(height: 16),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -725,6 +743,30 @@ class MyProfileScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget companyTile(Company company) {
+    return Row(crossAxisAlignment: CrossAxisAlignment.center,children: [
+      UserImageWidget(
+        width: 36,height: 36,
+          imageUrl: company.profileImage, userType: company.userType),
+      const SizedBox(width: 8),
+      Container(
+        constraints: const BoxConstraints(minWidth: 30),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(company.name, style: kmain),
+            const SizedBox(height: 4),
+            Text(
+              fieldList[company.fieldId]!,
+              style: kmain.copyWith(color: maingray),
+            )
+          ],
+        ),
+      )
+    ]);
   }
 }
 

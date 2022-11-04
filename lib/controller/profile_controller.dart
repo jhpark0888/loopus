@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/tag_model.dart';
 import 'package:loopus/model/career_model.dart';
@@ -39,9 +40,10 @@ class ProfileController extends GetxController
   Rx<Person> myUserInfo = Person.defaultuser().obs;
   RxList<Post> allPostList = <Post>[].obs;
   int postPageNum = 1;
+  int companyPageNum = 1;
 
   RxList<Person> mylooplist = <Person>[].obs;
-
+  RxList<Company> interestedCompanies = <Company>[].obs;
   RxBool isnewalarm = false.obs;
   // RxBool isnewmessage = false.obs;
 
@@ -57,6 +59,7 @@ class ProfileController extends GetxController
   Future onRefresh() async {
     profileenablepullup.value = true;
     postPageNum = 1;
+    companyPageNum = 1;
     allPostList.clear();
     loadmyProfile();
     profilerefreshController.refreshCompleted();
@@ -97,6 +100,7 @@ class ProfileController extends GetxController
           errorSituation(value, screenState: myprofilescreenstate);
         }
       });
+      _getinterestedCompany(int.parse(userId));
       _getPosting(int.parse(userId));
     }
   }
@@ -119,6 +123,17 @@ class ProfileController extends GetxController
           errorSituation(value, screenState: myprofilescreenstate);
           postLoadingController.loadComplete();
         }
+      }
+    });
+  }
+  void _getinterestedCompany(int userId)async{
+    await getInterestedCompany(userId, companyPageNum).then((value){
+      if(value.isError != true){
+        List<Company> temp = List.from(value.data).map((e) => Company.fromJson(e)).toList();
+        companyPageNum += 1;
+        interestedCompanies.addAll(temp);
+      }else{
+        errorSituation(value, screenState: myprofilescreenstate);
       }
     });
   }

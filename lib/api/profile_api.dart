@@ -16,6 +16,7 @@ import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/controller/signup_controller.dart';
 import 'package:loopus/controller/withdrawal_controller.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/notification_model.dart';
 import 'package:loopus/model/post_model.dart';
@@ -349,6 +350,36 @@ Future<HTTPResponse> updateProfile(
           print("profile status code : ${response.statusCode}");
         }
         return HTTPResponse.apiError("fail", response.statusCode);
+      }
+    } on SocketException {
+      return HTTPResponse.serverError();
+    } catch (e) {
+      print(e);
+      return HTTPResponse.unexpectedError(e);
+    }
+  }
+}
+Future<HTTPResponse> getInterestedCompany(int userId, int page) async {
+  String? token = await const FlutterSecureStorage().read(key: "token");
+
+  var uri = Uri.parse(
+      "$serverUri/user_api/interest_companies?id=$userId&page=$page");
+  ConnectivityResult result = await initConnectivity();
+  if (result == ConnectivityResult.none) {
+    return HTTPResponse.networkError();
+  } else {
+    try {
+      http.Response response =
+          await http.get(uri, headers: {"Authorization": "Token $token"});
+
+      print("관심 기업 get: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        List responseBody = json.decode(utf8.decode(response.bodyBytes));
+        
+        
+        return HTTPResponse.success(responseBody);
+      }else {
+        return HTTPResponse.apiError('', response.statusCode);
       }
     } on SocketException {
       return HTTPResponse.serverError();

@@ -45,8 +45,7 @@ class PostUpdateScreen extends StatelessWidget {
           title: '포스트 수정',
           actions: [updateButton()],
         ),
-        body: Obx(
-          () => ScrollNoneffectWidget(
+        body: ScrollNoneffectWidget(
             child: SingleChildScrollView(
               controller: postingUpdateController.scrollController,
               child: Padding(
@@ -214,7 +213,7 @@ class PostUpdateScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
+      
     );
   }
 
@@ -232,7 +231,12 @@ class PostUpdateScreen extends StatelessWidget {
                 .map((tagwidget) =>
                     Tag(tagId: tagwidget.id!, tag: tagwidget.text, count: 0))
                 .toList());
-
+            post.tags.value = tagController
+                .selectedtaglist
+                .map((tagwidget) =>
+                    Tag(tagId: tagwidget.id!, tag: tagwidget.text, count: 0))
+                .toList();
+              
             Get.back();
             dialogBack(modalIOS: true);
             showCustomDialog('포스팅 수정이 완료됐어요', 1000);

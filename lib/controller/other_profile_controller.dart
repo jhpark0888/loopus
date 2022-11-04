@@ -12,6 +12,7 @@ import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 
 import 'package:loopus/api/profile_api.dart';
+import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/httpresponse_model.dart';
 import 'package:loopus/model/post_model.dart';
 import 'package:loopus/model/project_model.dart';
@@ -40,9 +41,9 @@ class OtherProfileController extends GetxController
   Rx<Person> otherUser = Person.defaultuser().obs;
   RxList<Post> allPostList = <Post>[].obs;
   int postPageNum = 1;
-
+   int companyPageNum = 1;
   RxList<Person> otherlooplist = <Person>[].obs;
-
+ RxList<Company> interestedCompanies = <Company>[].obs;
   Rx<ScreenState> otherprofilescreenstate = ScreenState.loading.obs;
 
   KeyController keycontroller = Get.put(KeyController(isTextField: false.obs));
@@ -77,6 +78,7 @@ class OtherProfileController extends GetxController
           errorSituation(value, screenState: otherprofilescreenstate);
         }
       });
+      _getinterestedCompany(userid);
       getOtherPosting(userid);
     }
   }
@@ -103,6 +105,19 @@ class OtherProfileController extends GetxController
     } else {
       return httpResponse.errorData!["statusCode"];
     }
+  }
+
+  void _getinterestedCompany(int userId)async{
+    await getInterestedCompany(userId, companyPageNum).then((value){
+      if(value.isError != true){
+        print(value.data);
+        List<Company> temp = List.from(value.data).map((e) => Company.fromJson(e)).toList();
+        companyPageNum += 1;
+        interestedCompanies.addAll(temp);
+      }else{
+        errorSituation(value, screenState: otherprofilescreenstate);
+      }
+    });
   }
 
   @override

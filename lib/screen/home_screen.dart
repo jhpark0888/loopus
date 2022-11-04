@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
            systemOverlayStyle: const SystemUiOverlayStyle(
-        //     statusBarColor: mainWhite,
+            statusBarColor: mainWhite,
             statusBarIconBrightness:
                 Brightness.dark, // For Android (dark icons)
             statusBarBrightness: Brightness.dark // For iOS (dark icons),
