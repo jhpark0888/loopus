@@ -44,9 +44,11 @@ Future<HTTPResponse> getProfile(int userId) async {
 
     var uri = Uri.parse(
         "$serverUri/user_api/profile?id=$userId&is_student=$isStudent");
-    try {
-      http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"});
+
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("프로필 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -58,13 +60,7 @@ Future<HTTPResponse> getProfile(int userId) async {
         // showCustomDialog('이미 삭제된 유저입니다', 1400);
         return HTTPResponse.apiError("", response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -79,9 +75,11 @@ Future<HTTPResponse> getCorpProfile(int userId) async {
 
     var uri = Uri.parse(
         "$serverUri/user_api/corp_profile?id=$userId&is_student=$isStudent");
-    try {
-      http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"});
+
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("기업 프로필 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -93,13 +91,7 @@ Future<HTTPResponse> getCorpProfile(int userId) async {
         // showCustomDialog('이미 삭제된 유저입니다', 1400);
         return HTTPResponse.apiError("", response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -113,9 +105,11 @@ Future<HTTPResponse> getCompShowUsers(String type, int page) async {
     print('user token: $token');
 
     var uri = Uri.parse("$serverUri/user_api/view_list?type=$type&page=$page");
-    try {
-      http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"});
+
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("기업 조회 $type 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -125,12 +119,7 @@ Future<HTTPResponse> getCompShowUsers(String type, int page) async {
       } else {
         return HTTPResponse.apiError("", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -144,9 +133,10 @@ Future<HTTPResponse> getProjectlist(int userId) async {
 
     var uri = Uri.parse("$serverUri/user_api/project?id=$userId");
 
-    try {
-      http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("프로젝트 리스트 get: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -162,27 +152,24 @@ Future<HTTPResponse> getProjectlist(int userId) async {
         // }
         return HTTPResponse.apiError("", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
 Future<HTTPResponse> getCareerPosting(int careerId, int page) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  var uri = Uri.parse(
-      "$serverUri/user_api/posting?id=$careerId&page=$page&type=career");
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    try {
-      http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"});
+    var uri = Uri.parse(
+        "$serverUri/user_api/posting?id=$careerId&page=$page&type=career");
+
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("커리어 안 포스팅 리스트 get: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -197,27 +184,24 @@ Future<HTTPResponse> getCareerPosting(int careerId, int page) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
 Future<HTTPResponse> getAllPosting(int userId, int page) async {
   String? token = await const FlutterSecureStorage().read(key: "token");
 
-  var uri =
-      Uri.parse("$serverUri/user_api/posting?id=$userId&page=$page&type=all");
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    try {
-      http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"});
+    var uri =
+        Uri.parse("$serverUri/user_api/posting?id=$userId&page=$page&type=all");
+
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("프로필 모든 포스팅 리스트 get: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -227,12 +211,7 @@ Future<HTTPResponse> getAllPosting(int userId, int page) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -245,18 +224,20 @@ Future<HTTPResponse> postProjectArrange(List<Project> careerList) async {
 
     var uri = Uri.parse("$serverUri/user_api/project");
 
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       Map<String, int> body = {};
       careerList.asMap().entries.forEach((entry) {
         body[entry.value.id.toString()] = entry.key;
       });
 
-      http.Response response = await http.post(uri,
-          headers: {
-            "Authorization": "Token $token",
-            'Content-Type': 'application/json',
-          },
-          body: json.encode(body));
+      http.Response response = await http
+          .post(uri,
+              headers: {
+                "Authorization": "Token $token",
+                'Content-Type': 'application/json',
+              },
+              body: json.encode(body))
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("커리어 정렬: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -266,12 +247,7 @@ Future<HTTPResponse> postProjectArrange(List<Project> careerList) async {
       } else {
         return HTTPResponse.apiError("", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -328,8 +304,10 @@ Future<HTTPResponse> updateProfile(
       request.fields['admission'] = admission!;
     }
 
-    try {
-      http.StreamedResponse response = await request.send();
+    return HTTPResponse.httpErrorHandling(() async {
+      http.StreamedResponse response = await request
+          .send()
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
       print(response.statusCode);
       if (response.statusCode == 200) {
         String responsebody = await response.stream.bytesToString();
@@ -351,43 +329,36 @@ Future<HTTPResponse> updateProfile(
         }
         return HTTPResponse.apiError("fail", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
-Future<HTTPResponse> getInterestedCompany(int userId, int page) async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
 
-  var uri = Uri.parse(
-      "$serverUri/user_api/interest_companies?id=$userId&page=$page");
+Future<HTTPResponse> getInterestedCompany(int userId, int page) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     return HTTPResponse.networkError();
   } else {
-    try {
-      http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"});
+    String? token = await const FlutterSecureStorage().read(key: "token");
+
+    var uri = Uri.parse(
+        "$serverUri/user_api/interest_companies?id=$userId&page=$page");
+
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("관심 기업 get: ${response.statusCode}");
       if (response.statusCode == 200) {
         List responseBody = json.decode(utf8.decode(response.bodyBytes));
-        
+
         print(responseBody);
-        
+
         return HTTPResponse.success(responseBody);
-      }else {
+      } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -400,14 +371,14 @@ Future<HTTPResponse> deleteSNS(int snsId) async {
 
     Uri uri = Uri.parse('$serverUri/user_api/profile?type=sns&id=$snsId');
 
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       http.Response response = await http.delete(
         uri,
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Token $token',
         },
-      );
+      ).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("SNS 삭제 : ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -415,12 +386,7 @@ Future<HTTPResponse> deleteSNS(int snsId) async {
       } else {
         return HTTPResponse.apiError("fail", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -440,13 +406,15 @@ Future<HTTPResponse> putpwchange() async {
       'new_pw': pwChangeController.newpwcontroller.text,
     };
 
-    try {
-      http.Response response = await http.put(uri,
-          headers: <String, String>{
-            'Content-Type': 'application/json',
-            'Authorization': 'Token $token',
-          },
-          body: json.encode(password));
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http
+          .put(uri,
+              headers: <String, String>{
+                'Content-Type': 'application/json',
+                'Authorization': 'Token $token',
+              },
+              body: json.encode(password))
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("비밀번호 변경 : ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -454,12 +422,7 @@ Future<HTTPResponse> putpwchange() async {
       } else {
         return HTTPResponse.apiError("fail", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -488,13 +451,15 @@ Future<HTTPResponse> deleteuser(String pw, String reason) async {
           : ""
     };
 
-    try {
-      http.Response response = await http.post(uri,
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": "Token $token"
-          },
-          body: json.encode(password));
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http
+          .post(uri,
+              headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Token $token"
+              },
+              body: json.encode(password))
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("회원탈퇴: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -506,12 +471,7 @@ Future<HTTPResponse> deleteuser(String pw, String reason) async {
         return HTTPResponse.apiError('', response.statusCode);
         ;
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -526,13 +486,15 @@ Future<HTTPResponse> userreport(int userid) async {
 
     var body = {"id": userid, "reason": ""};
 
-    try {
-      final response = await http.post(uri,
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": "Token $token"
-          },
-          body: json.encode(body));
+    return HTTPResponse.httpErrorHandling(() async {
+      final response = await http
+          .post(uri,
+              headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Token $token"
+              },
+              body: json.encode(body))
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print('유저 신고 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
@@ -540,12 +502,7 @@ Future<HTTPResponse> userreport(int userid) async {
       } else {
         return HTTPResponse.apiError("fail", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -602,12 +559,14 @@ Future<HTTPResponse> inquiryRequest(
       };
     }
 
-    try {
-      final response = await http.post(uri,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: json.encode(body));
+    return HTTPResponse.httpErrorHandling(() async {
+      final response = await http
+          .post(uri,
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: json.encode(body))
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print('문의하기 statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
@@ -615,11 +574,6 @@ Future<HTTPResponse> inquiryRequest(
       } else {
         return HTTPResponse.apiError("fail", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }

@@ -301,7 +301,7 @@ class NotificationWidget extends StatelessWidget {
       getproject(notification.targetId, notification.userId).then((value) {
         if (value.isError == false) {
           Get.back();
-          career =Project.fromJson(value.data);
+          career = Project.fromJson(value.data);
           Future.delayed(const Duration(milliseconds: 300));
           Get.to(
               () => GroupCareerDetailScreen(
@@ -331,17 +331,18 @@ class NotificationWidget extends StatelessWidget {
           opaque: false);
     } else if (notification.type == NotificationType.follow) {
       if (notification.user.userType == UserType.student) {
-      Get.to(
-          () => OtherProfileScreen(
-              userid: notification.targetId, realname: notification.user.name),
-          preventDuplicates: false);
-    } else {
-      Get.to(
-          () => OtherCompanyScreen(
-              companyId: notification.user.userId,
-              companyName: notification.user.name),
-          preventDuplicates: false);
-    }
+        Get.to(
+            () => OtherProfileScreen(
+                userid: notification.targetId,
+                realname: notification.user.name),
+            preventDuplicates: false);
+      } else {
+        Get.to(
+            () => OtherCompanyScreen(
+                companyId: notification.user.userId,
+                companyName: notification.user.name),
+            preventDuplicates: false);
+      }
     }
 
     if (notification.isread.value == false) {
@@ -355,7 +356,7 @@ class NotificationWidget extends StatelessWidget {
         NotificationDetailController.to.newalarmList.remove(readNoti);
         NotificationDetailController.to.weekalarmList.insert(0, readNoti);
       }
-      isRead(
+      isNotiRead(
         notification.id,
       ).then((value) {
         if (value.isError == false) {

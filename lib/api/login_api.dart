@@ -32,17 +32,19 @@ Future<HTTPResponse> loginRequest(String email, String pw) async {
       // 'fcm_token': await NotificationController.getToken(),
     };
 
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       print(uri);
       print(email.trim());
       print(pw);
-      http.Response response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(user),
-      );
+      http.Response response = await http
+          .post(
+            uri,
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode(user),
+          )
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print('로그인 : ${response.statusCode}');
 
@@ -53,14 +55,7 @@ Future<HTTPResponse> loginRequest(String email, String pw) async {
       } else {
         return HTTPResponse.apiError('fail', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
-    }
+    });
   }
 }
 
@@ -76,14 +71,16 @@ Future<HTTPResponse> postpwfindemailcheck(
       'email': email.trim(),
     };
 
-    try {
+    return HTTPResponse.httpErrorHandling(() async {
       emailcertification(Emailcertification.waiting);
 
-      http.Response response = await http.post(uri,
-          headers: <String, String>{
-            'Content-Type': 'application/json',
-          },
-          body: json.encode(checkemail));
+      http.Response response = await http
+          .post(uri,
+              headers: <String, String>{
+                'Content-Type': 'application/json',
+              },
+              body: json.encode(checkemail))
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("비밀번호 찾기 이메일 체크 : ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -91,12 +88,7 @@ Future<HTTPResponse> postpwfindemailcheck(
       } else {
         return HTTPResponse.apiError("FAIL", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
 
@@ -115,12 +107,14 @@ Future<HTTPResponse> putpwfindchange() async {
       'password': pwChangeController.newpwcontroller.text,
     };
 
-    try {
-      http.Response response = await http.put(uri,
-          headers: <String, String>{
-            'Content-Type': 'application/json',
-          },
-          body: json.encode(user));
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http
+          .put(uri,
+              headers: <String, String>{
+                'Content-Type': 'application/json',
+              },
+              body: json.encode(user))
+          .timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("비밀번호 찾기 : ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -128,35 +122,6 @@ Future<HTTPResponse> putpwfindchange() async {
       } else {
         return HTTPResponse.apiError("fail", response.statusCode);
       }
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
-
-
-
-// Future<void> postconnect() async {
-//   String? token = await const FlutterSecureStorage().read(key: "token");
-
-//   Uri uri = Uri.parse('http://3.35.253.151:8000/search_api/connect');
-
-//   http.Response response = await http.post(
-//     uri,
-//     headers: <String, String>{
-//       'Content-Type': 'application/json',
-//       "Authorization": "Token $token"
-//     },
-//   );
-
-//   if (response.statusCode == 200) {
-//     print('postconnect :연결 성공');
-//   } else if (response.statusCode == 401) {
-//     print('postconnect :연결 실패');
-//   } else {
-//     print('postconnect :연결 실패');
-//   }
-// }
