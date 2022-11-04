@@ -337,6 +337,7 @@ class MyCompanyScreen extends StatelessWidget {
                   primary: false,
                   shrinkWrap: true,
                   itemBuilder: (context, index) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CachedNetworkImage(
                             imageUrl: _controller
@@ -356,24 +357,29 @@ class MyCompanyScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           if (index == 0)
-                            Column(
-                              children: [
-                                Text(
-                                  "기업소개",
-                                  style: kmainbold.copyWith(color: mainWhite),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Text(
-                                  "\"${_controller.myCompanyInfo.value.slogan}\"",
-                                  style: kmainboldHeight.copyWith(
-                                      color: mainWhite),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                              ],
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "기업소개",
+                                    style: kmainbold.copyWith(color: mainWhite),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Text(
+                                    "\"${_controller.myCompanyInfo.value.slogan}\"",
+                                    style: kmainboldHeight.copyWith(
+                                        color: mainWhite),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                ],
+                              ),
                             ),
                           if (_controller.myCompanyInfo.value.images[index]
                                   .imageInfo !=

@@ -12,6 +12,7 @@ import 'package:loopus/model/user_model.dart' as person;
 import 'package:loopus/screen/message_detail_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/screen/posting_screen.dart';
+
 LocalNotificaition localNotificaition = LocalNotificaition();
 
 class LocalNotificaition {
@@ -31,8 +32,7 @@ class LocalNotificaition {
             iOS: darwinInitializationSettings,
             macOS: darwinInitializationSettings);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-    onDidReceiveNotificationResponse: onSelectNotification
-        );
+        onDidReceiveNotificationResponse: onSelectNotification);
 
     const AndroidNotificationChannel androidNotificationChannel =
         AndroidNotificationChannel(
@@ -56,10 +56,9 @@ class LocalNotificaition {
   }
 
   void onSelectNotification(NotificationResponse? payload) {
-    
     try {
       print('눌림');
-    print(payload!.payload);
+      print(payload!.payload);
       Map<String, dynamic> json = jsonDecode(payload.payload!);
       if (json['type'] == 'msg') {
         print('눌림');
@@ -93,7 +92,7 @@ class LocalNotificaition {
         } else if (type == 2) {
           Get.to(() => OtherProfileScreen(userid: senderId, realname: '김원우'));
         }
-        isRead(id);
+        isNotiRead(id);
       }
     } catch (e) {
       print(e);

@@ -26,9 +26,10 @@ Future<HTTPResponse> getNotificationlist(String type, int lastindex) async {
 
     var uri = Uri.parse("$serverUri/user_api/alarm?type=$type&last=$lastindex");
 
-    try {
-      http.Response response =
-          await http.get(uri, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("알림 $type 리스트 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -37,53 +38,23 @@ Future<HTTPResponse> getNotificationlist(String type, int lastindex) async {
       } else {
         return HTTPResponse.apiError("FAIL", response.statusCode);
       }
-    } on TimeoutException {
-      return HTTPResponse.serverError();
-    } on SocketException {
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print("알림 $type 리스트 로드: $e");
-      return HTTPResponse.unexpectedError(e);
-    }
+    });
   }
 }
-
-// Future deleteNotification(int noticeid) async {
-//   String? token = await const FlutterSecureStorage().read(key: "token");
-
-//   var uri = Uri.parse("$serverUri/user_api/alarm?id=$noticeid");
-
-//   try {
-//     http.Response response =
-//         await http.delete(uri, headers: {"Authorization": "Token $token"});
-
-//     print("알림 삭제: ${response.statusCode}");
-//     if (response.statusCode == 200) {
-//       return;
-//     } else {
-//       return Future.error(response.statusCode);
-//     }
-//   } on SocketException {
-//     // ErrorController.to.isServerClosed(true);
-//   } catch (e) {
-//     print(e);
-//     // ErrorController.to.isServerClosed(true);
-//   }
-// }
 
 Future<HTTPResponse> deleteNotification(int noticeid) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
-    showdisconnectdialog();
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
 
     var uri = Uri.parse("$serverUri/user_api/alarm?id=$noticeid");
 
-    try {
-      http.Response response =
-          await http.delete(uri, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.delete(uri, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("알림 삭제: ${response.statusCode}");
 
@@ -92,18 +63,11 @@ Future<HTTPResponse> deleteNotification(int noticeid) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
-    }
+    });
   }
 }
 
-Future<HTTPResponse> isRead(int notiId) async {
+Future<HTTPResponse> isNotiRead(int notiId) async {
   ConnectivityResult result = await initConnectivity();
   if (result == ConnectivityResult.none) {
     showdisconnectdialog();
@@ -113,9 +77,10 @@ Future<HTTPResponse> isRead(int notiId) async {
     final isReadURI =
         Uri.parse("$serverUri/user_api/alarm?type=read&id=$notiId");
 
-    try {
-      http.Response response =
-          await http.get(isReadURI, headers: {"Authorization": "Token $token"});
+    return HTTPResponse.httpErrorHandling(() async {
+      http.Response response = await http.get(isReadURI, headers: {
+        "Authorization": "Token $token"
+      }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
       print("알림 읽기: ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -123,15 +88,6 @@ Future<HTTPResponse> isRead(int notiId) async {
       } else {
         return HTTPResponse.apiError('', response.statusCode);
       }
-    } on TimeoutException {
-      return HTTPResponse.serverError();
-    } on SocketException {
-      // ErrorController.to.isServerClosed(true);
-      return HTTPResponse.serverError();
-    } catch (e) {
-      print(e);
-      return HTTPResponse.unexpectedError(e);
-      // ErrorController.to.isServerClosed(true);
-    }
+    });
   }
 }
