@@ -264,6 +264,7 @@ Future<HTTPResponse> bookmarklist(int pageNumber) async {
         "Authorization": "Token $token"
       }).timeout(Duration(milliseconds: HTTPResponse.timeout));
 
+      print("북마크 로드: ${response.statusCode}");
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
 

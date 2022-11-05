@@ -135,19 +135,19 @@ class CareerBoardPostWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Obx(
-                ()=> Row(
+                () => Row(
                   children: [
                     Text('좋아요 ', style: kmain.copyWith(color: maingray)),
                     Text('${post.likeCount}개', style: kmain),
-                    
+
                     const SizedBox(width: 7),
-                    if(post.comments.isNotEmpty)
-                    Text('댓글 ', style: kmain.copyWith(color: maingray)),
-                    if(post.comments.isNotEmpty)
-                    Text(
-                      '${(post.comments.length).toString()}개',
-                      style: kmain,
-                    ),
+                    if (post.comments.isNotEmpty)
+                      Text('댓글 ', style: kmain.copyWith(color: maingray)),
+                    if (post.comments.isNotEmpty)
+                      Text(
+                        '${(post.comments.length).toString()}개',
+                        style: kmain,
+                      ),
                     const Spacer(),
                     // Text('교내추천', style: kmain.copyWith(color: maingray))
                   ],
@@ -183,11 +183,12 @@ class CareerBoardPostWidget extends StatelessWidget {
     if (marknum == 0) {
       lastIsMaked = post.isMarked.value;
     }
-    if (post.isMarked.value == 0) {
-      post.isMarked(1);
-    } else {
-      post.isMarked(0);
-    }
+    post.otherPageLikeOrBookMark(false);
+    // if (post.isMarked.value == 0) {
+    //   post.isMarked(1);
+    // } else {
+    //   post.isMarked(0);
+    // }
     marknum += 1;
 
     _debouncer.run(() {
@@ -198,14 +199,14 @@ class CareerBoardPostWidget extends StatelessWidget {
             marknum = 0;
 
             if (post.isMarked.value == 1) {
-              HomeController.to.tapBookmark(post.id);
+              // HomeController.to.tapBookmark(post.id);
               showCustomDialog("북마크에 추가되었습니다", 1000);
             } else {
-              HomeController.to.tapunBookmark(post.id);
+              // HomeController.to.tapunBookmark(post.id);
             }
           } else {
             errorSituation(value);
-            post.isMarked(lastIsMaked);
+            post.otherPageLikeOrBookMark(false);
           }
         });
       }

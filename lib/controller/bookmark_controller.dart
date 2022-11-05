@@ -14,7 +14,7 @@ class BookmarkController extends GetxController {
   Rx<ScreenState> bookmarkScreenState = ScreenState.loading.obs;
   int pageNumber = 1;
 
-  RxList posts = <Post>[].obs;
+  RxList<Post> posts = <Post>[].obs;
 
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
@@ -49,6 +49,8 @@ class BookmarkController extends GetxController {
             posts.addAll(postList);
           }
           pageNumber += 1;
+        } else if (templist.isEmpty && pageNumber == 1) {
+          posts.clear();
         }
 
         refreshController.loadComplete();
@@ -65,30 +67,30 @@ class BookmarkController extends GetxController {
     });
   }
 
-  void tapBookmark(int postid) {
-    if (posts.where((post) => post.id == postid).isNotEmpty) {
-      Post post = posts.where((post) => post.id == postid).first;
-      post.isMarked(1);
-    }
-  }
+  // void tapBookmark(int postid) {
+  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
+  //     Post post = posts.where((post) => post.id == postid).first;
+  //     post.isMarked(1);
+  //   }
+  // }
 
-  void tapunBookmark(int postid) {
-    posts.removeWhere((post) => post.id == postid);
-  }
+  // void tapunBookmark(int postid) {
+  //   posts.removeWhere((post) => post.id == postid);
+  // }
 
-  void tapLike(int postid, int likecount) {
-    if (posts.where((post) => post.id == postid).isNotEmpty) {
-      Post post = posts.where((post) => post.id == postid).first;
-      post.isLiked(1);
-      post.likeCount(likecount);
-    }
-  }
+  // void tapLike(int postid, int likecount) {
+  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
+  //     Post post = posts.where((post) => post.id == postid).first;
+  //     post.isLiked(1);
+  //     post.likeCount(likecount);
+  //   }
+  // }
 
-  void tapunLike(int postid, int likecount) {
-    if (posts.where((post) => post.id == postid).isNotEmpty) {
-      Post post = posts.where((post) => post.id == postid).first;
-      post.isLiked(0);
-      post.likeCount(likecount);
-    }
-  }
+  // void tapunLike(int postid, int likecount) {
+  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
+  //     Post post = posts.where((post) => post.id == postid).first;
+  //     post.isLiked(0);
+  //     post.likeCount(likecount);
+  //   }
+  // }
 }

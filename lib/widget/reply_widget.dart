@@ -98,38 +98,45 @@ class ReplyWidget extends StatelessWidget {
                       GestureDetector(
                         onTap: reply.user.userId ==
                                 HomeController.to.myProfile.value.userId
-                            ? () {showBottomdialog(context, func1: () {
-                                    showButtonDialog(
-                                        leftText: '취소',
-                                        rightText: '삭제',
-                                        title: '답글을 삭제하시겠어요?',
-                                        startContent: '삭제한 답글은 복구할 수 없어요',
-                                        leftFunction: () => Get.back(),
-                                        rightFunction: () async {
-                                          dialogBack(modalIOS: true);
+                            ? () {
+                                showBottomdialog(context, func1: () {
+                                  showButtonDialog(
+                                      leftText: '취소',
+                                      rightText: '삭제',
+                                      title: '답글을 삭제하시겠어요?',
+                                      startContent: '삭제한 답글은 복구할 수 없어요',
+                                      leftFunction: () => Get.back(),
+                                      rightFunction: () async {
+                                        dialogBack(modalIOS: true);
 
-                                          await commentDelete(reply.id,
-                                                  contentType.cocomment)
-                                              .then((value) {
-                                            if (value.isError == false) {
-                                              Comment? comment = postController
-                                                  .post!.value.comments
-                                                  .firstWhereOrNull((element) =>
-                                                      element.id ==
-                                                      reply.commentId);
-                                              if (comment != null) {
-                                                comment.replyList.removeWhere(
-                                                    (element) =>
-                                                        element.id == reply.id);
-                                                comment.replycount.value -= 1;
-                                              }
-                                            } else {
-                                              showCustomDialog(
-                                                  "답글 삭제에 실패하였습니다", 1000);
+                                        await commentDelete(
+                                                reply.id, contentType.cocomment)
+                                            .then((value) {
+                                          if (value.isError == false) {
+                                            Comment? comment = postController
+                                                .post.value.comments
+                                                .firstWhereOrNull((element) =>
+                                                    element.id ==
+                                                    reply.commentId);
+                                            if (comment != null) {
+                                              comment.replyList.removeWhere(
+                                                  (element) =>
+                                                      element.id == reply.id);
+                                              comment.replycount.value -= 1;
                                             }
-                                          });
+                                          } else {
+                                            showCustomDialog(
+                                                "답글 삭제에 실패하였습니다", 1000);
+                                          }
                                         });
-                                  }, func2: (){}, value1: '답글 삭제하기', value2: '', isOne: true, buttonColor1: mainWhite,textColor1: mainblack);
+                                      });
+                                },
+                                    func2: () {},
+                                    value1: '답글 삭제하기',
+                                    value2: '',
+                                    isOne: true,
+                                    buttonColor1: mainWhite,
+                                    textColor1: mainblack);
                                 // showModalIOS(
                                 //   context,
                                 //   cancleButton: false,
@@ -174,43 +181,42 @@ class ReplyWidget extends StatelessWidget {
                                 // );
                               }
                             : () {
-                                showModalIOS(
-                                  context,
-                                  func1: () {
-                                    showButtonDialog(
-                                        leftText: '취소',
-                                        rightText: '신고',
-                                        title: '정말 답글을 신고하시겠어요?',
-                                        startContent: '관리자가 검토 절차를 거칩니다',
-                                        leftFunction: () => Get.back(),
-                                        rightFunction: () {
-                                          contentreport(reply.id,
-                                                  contentType.cocomment)
-                                              .then((value) {
-                                            if (value.isError == false) {
-                                              getbacks(2);
-                                              showCustomDialog(
-                                                  "신고가 접수되었습니다", 1000);
-                                            } else {
-                                              errorSituation(value);
-                                            }
-                                          });
+                                showModalIOS(context, func1: () {
+                                  showButtonDialog(
+                                      leftText: '취소',
+                                      rightText: '신고',
+                                      title: '정말 답글을 신고하시겠어요?',
+                                      startContent: '관리자가 검토 절차를 거칩니다',
+                                      leftFunction: () => Get.back(),
+                                      rightFunction: () {
+                                        contentreport(
+                                                reply.id, contentType.cocomment)
+                                            .then((value) {
+                                          if (value.isError == false) {
+                                            getbacks(2);
+                                            showCustomDialog(
+                                                "신고가 접수되었습니다", 1000);
+                                          } else {
+                                            errorSituation(value);
+                                          }
                                         });
-                                  },
-                                  func2: () {},
-                                  value1: '답글 신고하기',
-                                  value2: '',
-                                  isValue1Red: true,
-                                  isValue2Red: false,
-                                  isOne: true,
-                                  cancleButton: false
-                                );
+                                      });
+                                },
+                                    func2: () {},
+                                    value1: '답글 신고하기',
+                                    value2: '',
+                                    isValue1Red: true,
+                                    isValue2Red: false,
+                                    isOne: true,
+                                    cancleButton: false);
                               },
                         behavior: HitTestBehavior.translucent,
                         child: SizedBox(
                             height: 16,
                             child: SvgPicture.asset(
-                                'assets/icons/more_option.svg',color: maingray,)),
+                              'assets/icons/more_option.svg',
+                              color: maingray,
+                            )),
                       ),
                     ],
                   ),
@@ -249,10 +255,10 @@ class ReplyWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                        '${commentCalculateDate(reply.date)} 전',
-                        style: kmain.copyWith(color: maingray),
-                      ),
-                      const Spacer(),
+                          '${commentCalculateDate(reply.date)} 전',
+                          style: kmain.copyWith(color: maingray),
+                        ),
+                        const Spacer(),
                         GestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: () {
@@ -273,8 +279,17 @@ class ReplyWidget extends StatelessWidget {
                         InkWell(
                           onTap: tapLike,
                           child: reply.isLiked.value == 0
-                              ? SvgPicture.asset("assets/icons/unlike.svg",width: 16,height: 16,color: maingray ,)
-                              : SvgPicture.asset("assets/icons/like.svg",width: 16,height: 16,),
+                              ? SvgPicture.asset(
+                                  "assets/icons/unlike.svg",
+                                  width: 16,
+                                  height: 16,
+                                  color: maingray,
+                                )
+                              : SvgPicture.asset(
+                                  "assets/icons/like.svg",
+                                  width: 16,
+                                  height: 16,
+                                ),
                         ),
                         const SizedBox(
                           width: 16,

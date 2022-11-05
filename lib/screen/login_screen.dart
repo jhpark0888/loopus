@@ -281,5 +281,6 @@ Future<void> logOut() async {
   Get.delete<ScoutReportController>();
   Get.delete<CareerBoardController>();
   Get.delete<SQLController>();
+
   Get.offAll(() => StartScreen());
 }

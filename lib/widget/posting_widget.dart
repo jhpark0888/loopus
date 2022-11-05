@@ -160,10 +160,10 @@ class PostingWidget extends StatelessWidget {
                       ]),
                     Column(
                       children: [
-                        Obx(
-                          () => Row(
-                            children: [
-                              InkWell(
+                        Row(
+                          children: [
+                            Obx(
+                              () => InkWell(
                                 onTap: tapLike,
                                 child: item.isLiked.value == 0
                                     ? SvgPicture.asset(
@@ -172,23 +172,25 @@ class PostingWidget extends StatelessWidget {
                                       )
                                     : SvgPicture.asset("assets/icons/like.svg"),
                               ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              // Obx(
-                              //   () => SizedBox(
-                              //     width: item.likeCount.value != 0 ? 0 : 8,
-                              //   ),
-                              // ),
-                              InkWell(
-                                  onTap: type != PostingWidgetType.detail
-                                      ? () => tapPosting(autoFocus: true)
-                                      : null,
-                                  child: SvgPicture.asset(
-                                      "assets/icons/comment.svg",
-                                      color: isDark ? mainWhite : null)),
-                              const Spacer(),
-                              InkWell(
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            // Obx(
+                            //   () => SizedBox(
+                            //     width: item.likeCount.value != 0 ? 0 : 8,
+                            //   ),
+                            // ),
+                            InkWell(
+                                onTap: type != PostingWidgetType.detail
+                                    ? () => tapPosting(autoFocus: true)
+                                    : null,
+                                child: SvgPicture.asset(
+                                    "assets/icons/comment.svg",
+                                    color: isDark ? mainWhite : null)),
+                            const Spacer(),
+                            Obx(
+                              () => InkWell(
                                 onTap: tapBookmark,
                                 child: (item.isMarked.value == 0)
                                     ? SvgPicture.asset(
@@ -198,8 +200,8 @@ class PostingWidget extends StatelessWidget {
                                     : SvgPicture.asset(
                                         "assets/icons/post_bookmark_active.svg"),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         // postingTag(),
                         const SizedBox(
@@ -252,6 +254,7 @@ class PostingWidget extends StatelessWidget {
                                         item.comments.first.content,
                                         style: kmain.copyWith(
                                             color: isDark ? mainWhite : null),
+                                        maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     )
@@ -314,11 +317,12 @@ class PostingWidget extends StatelessWidget {
     if (marknum == 0) {
       lastIsMaked = item.isMarked.value;
     }
-    if (item.isMarked.value == 0) {
-      item.isMarked(1);
-    } else {
-      item.isMarked(0);
-    }
+    item.otherPageLikeOrBookMark(false);
+    // if (item.isMarked.value == 0) {
+    //   item.isMarked(1);
+    // } else {
+    //   item.isMarked(0);
+    // }
     marknum += 1;
 
     _debouncer.run(() {
@@ -329,10 +333,10 @@ class PostingWidget extends StatelessWidget {
             marknum = 0;
 
             if (item.isMarked.value == 1) {
-              HomeController.to.tapBookmark(item.id);
+              // HomeController.to.tapBookmark(item.id);
               showCustomDialog("북마크에 추가되었습니다", 1000);
             } else {
-              HomeController.to.tapunBookmark(item.id);
+              // HomeController.to.tapunBookmark(item.id);
             }
           } else {
             errorSituation(value);
@@ -347,26 +351,29 @@ class PostingWidget extends StatelessWidget {
     if (likenum == 0) {
       lastIsLiked = item.isLiked.value;
     }
-    if (item.isLiked.value == 0) {
-      item.isLiked(1);
-      item.likeCount += 1;
+    item.otherPageLikeOrBookMark(true);
 
-      HomeController.to.tapLike(item.id, item.likeCount.value);
-      // ProfileController.to
-      //     .tapLike(item.project!.id, item.id, item.likeCount.value);
-    } else {
-      item.isLiked(0);
-      item.likeCount -= 1;
-
-      HomeController.to.tapunLike(item.id, item.likeCount.value);
-      // ProfileController.to
-      //     .tapunLike(item.project!.id, item.id, item.likeCount.value);
-    }
+    // if (item.isLiked.value == 0) {
+    //   item.isLiked(1);
+    //   item.likeCount += 1;
+    //   print("좋아요");
+    //   // HomeController.to.tapLike(item.id, item.likeCount.value);
+    //   // ProfileController.to
+    //   //     .tapLike(item.project!.id, item.id, item.likeCount.value);
+    // } else {
+    //   item.isLiked(0);
+    //   item.likeCount -= 1;
+    //   print("좋아요 취소");
+    //   // HomeController.to.tapunLike(item.id, item.likeCount.value);
+    //   // ProfileController.to
+    //   //     .tapunLike(item.project!.id, item.id, item.likeCount.value);
+    // }
     likenum += 1;
 
     _debouncer.run(() {
       if (lastIsLiked != item.isLiked.value) {
         likepost(item.id, contentType.post);
+
         lastIsLiked = item.isLiked.value;
         likenum = 0;
       }

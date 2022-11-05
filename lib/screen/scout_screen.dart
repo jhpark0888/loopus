@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/retry.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/scout_report_controller.dart';
@@ -298,13 +299,11 @@ class ScoutScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Obx(
-              () => Text(
-                  _scontroller.isCorp.value == 1
-                      ? "회원님의 기업과 유사한 기업"
-                      : "당신에게 '집중'하고 있는 추천 기업",
-                  style: kmainbold.copyWith(color: mainWhite)),
-            ),
+            child: Text(
+                AppController.to.userType == UserType.company
+                    ? "회원님의 기업과 유사한 기업"
+                    : "당신에게 '집중'하고 있는 추천 기업",
+                style: kmainbold.copyWith(color: mainWhite)),
           ),
           const SizedBox(height: 8),
           Padding(

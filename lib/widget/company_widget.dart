@@ -70,6 +70,8 @@ class CompanyWidget extends StatelessWidget {
                     Text(
                       company.name,
                       style: kmain,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
                     Row(
