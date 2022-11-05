@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
@@ -44,11 +46,17 @@ class CareerBoardScreen extends StatelessWidget {
     print(_controller.careerFieldList);
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: mainWhite,
-          statusBarIconBrightness: Brightness.light,
-          statusBarBrightness: Brightness.light,
-        ),
+        systemOverlayStyle: Platform.isAndroid
+            ? SystemUiOverlayStyle(
+                statusBarColor: mainWhite,
+                statusBarIconBrightness: Brightness.dark,
+                statusBarBrightness: Brightness.dark,
+              )
+            : SystemUiOverlayStyle(
+                statusBarColor: mainWhite,
+                statusBarIconBrightness: Brightness.light,
+                statusBarBrightness: Brightness.light,
+              ),
         elevation: 0,
         centerTitle: false,
         titleSpacing: 16,

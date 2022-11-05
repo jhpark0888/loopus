@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
@@ -57,14 +58,25 @@ class ScoutScreen extends StatelessWidget {
               ),
               Scaffold(
                 appBar: AppBar(
-                  systemOverlayStyle: SystemUiOverlayStyle(
-                    statusBarColor: _scontroller.colors.isNotEmpty
-                        ? _scontroller
-                            .colors[_scontroller.curRcmdCompIndex.value].color
-                        : mainblue,
-                    statusBarIconBrightness: Brightness.dark,
-                    statusBarBrightness: Brightness.dark,
-                  ),
+                  systemOverlayStyle: Platform.isAndroid
+                      ? SystemUiOverlayStyle(
+                          statusBarColor: _scontroller.colors.isNotEmpty
+                              ? _scontroller
+                                  .colors[_scontroller.curRcmdCompIndex.value]
+                                  .color
+                              : mainblue,
+                          statusBarIconBrightness: Brightness.light,
+                          statusBarBrightness: Brightness.light,
+                        )
+                      : SystemUiOverlayStyle(
+                          statusBarColor: _scontroller.colors.isNotEmpty
+                              ? _scontroller
+                                  .colors[_scontroller.curRcmdCompIndex.value]
+                                  .color
+                              : mainblue,
+                          statusBarIconBrightness: Brightness.dark,
+                          statusBarBrightness: Brightness.dark,
+                        ),
                   elevation: 0,
                   centerTitle: false,
                   titleSpacing: 16,

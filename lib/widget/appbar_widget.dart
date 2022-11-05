@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,11 +29,17 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: preferredSize,
       child: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: mainWhite,
-          statusBarIconBrightness: Brightness.light,
-          statusBarBrightness: Brightness.light,
-        ),
+        systemOverlayStyle: Platform.isAndroid
+            ? SystemUiOverlayStyle(
+                statusBarColor: mainWhite,
+                statusBarIconBrightness: Brightness.dark,
+                statusBarBrightness: Brightness.dark,
+              )
+            : SystemUiOverlayStyle(
+                statusBarColor: mainWhite,
+                statusBarIconBrightness: Brightness.light,
+                statusBarBrightness: Brightness.light,
+              ),
         title: Text(
           title ?? '',
           style: kNavigationTitle,

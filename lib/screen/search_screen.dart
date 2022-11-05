@@ -45,11 +45,17 @@ class SearchScreen extends StatelessWidget {
       child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
-            systemOverlayStyle: SystemUiOverlayStyle(
-              statusBarColor: mainWhite,
-              statusBarIconBrightness: Brightness.light,
-              statusBarBrightness: Brightness.light,
-            ),
+            systemOverlayStyle: Platform.isAndroid
+                ? SystemUiOverlayStyle(
+                    statusBarColor: mainWhite,
+                    statusBarIconBrightness: Brightness.dark,
+                    statusBarBrightness: Brightness.dark,
+                  )
+                : SystemUiOverlayStyle(
+                    statusBarColor: mainWhite,
+                    statusBarIconBrightness: Brightness.light,
+                    statusBarBrightness: Brightness.light,
+                  ),
             automaticallyImplyLeading: false,
             toolbarHeight: 50,
             centerTitle: false,
