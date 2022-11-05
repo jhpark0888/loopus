@@ -35,7 +35,7 @@ class CareerAnalysisWidget extends StatelessWidget {
           children: [
             Text('상위 ${(groupRatio * 100).toInt()}%', style: kmain),
             const SizedBox(width: 8),
-            rate(((groupRatio - lastgroupRatio) * 100).toInt()),
+            rate(((lastgroupRatio) * 100).toInt()),
           ],
         );
         // Expanded(

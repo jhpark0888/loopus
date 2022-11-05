@@ -40,7 +40,7 @@ class ReplyWidget extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onDoubleTap: () => tapLike(),
       child: Container(
-        padding: const EdgeInsets.only(left: 60, right: 20),
+        padding: const EdgeInsets.only(left: 60, right: 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -59,8 +59,11 @@ class ReplyWidget extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       GestureDetector(
                         onTap: tapProfile,
@@ -95,158 +98,163 @@ class ReplyWidget extends StatelessWidget {
                       //   )
                       // ])),
                       const Spacer(),
-                      GestureDetector(
-                        onTap: reply.user.userId ==
-                                HomeController.to.myProfile.value.userId
-                            ? () {
-                                showBottomdialog(context, func1: () {
-                                  showButtonDialog(
-                                      leftText: '취소',
-                                      rightText: '삭제',
-                                      title: '답글을 삭제하시겠어요?',
-                                      startContent: '삭제한 답글은 복구할 수 없어요',
-                                      leftFunction: () => Get.back(),
-                                      rightFunction: () async {
-                                        dialogBack(modalIOS: true);
+                      SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: reply.user.userId ==
+                                  HomeController.to.myProfile.value.userId
+                              ? () {
+                                  showBottomdialog(context, func1: () {
+                                    showButtonDialog(
+                                        leftText: '취소',
+                                        rightText: '삭제',
+                                        title: '답글을 삭제하시겠어요?',
+                                        startContent: '삭제한 답글은 복구할 수 없어요',
+                                        leftFunction: () => Get.back(),
+                                        rightFunction: () async {
+                                          dialogBack(modalIOS: true);
 
-                                        await commentDelete(
-                                                reply.id, contentType.cocomment)
-                                            .then((value) {
-                                          if (value.isError == false) {
-                                            Comment? comment = postController
-                                                .post.value.comments
-                                                .firstWhereOrNull((element) =>
-                                                    element.id ==
-                                                    reply.commentId);
-                                            if (comment != null) {
-                                              comment.replyList.removeWhere(
-                                                  (element) =>
-                                                      element.id == reply.id);
-                                              comment.replycount.value -= 1;
+                                          await commentDelete(reply.id,
+                                                  contentType.cocomment)
+                                              .then((value) {
+                                            if (value.isError == false) {
+                                              Comment? comment = postController
+                                                  .post.value.comments
+                                                  .firstWhereOrNull((element) =>
+                                                      element.id ==
+                                                      reply.commentId);
+                                              if (comment != null) {
+                                                comment.replyList.removeWhere(
+                                                    (element) =>
+                                                        element.id == reply.id);
+                                                comment.replycount.value -= 1;
+                                              }
+                                            } else {
+                                              showCustomDialog(
+                                                  "답글 삭제에 실패하였습니다", 1000);
                                             }
-                                          } else {
-                                            showCustomDialog(
-                                                "답글 삭제에 실패하였습니다", 1000);
-                                          }
+                                          });
                                         });
-                                      });
-                                },
-                                    func2: () {},
-                                    value1: '답글 삭제하기',
-                                    value2: '',
-                                    isOne: true,
-                                    buttonColor1: mainWhite,
-                                    textColor1: mainblack);
-                                // showModalIOS(
-                                //   context,
-                                //   cancleButton: false,
-                                //   func1: () {
-                                //     showButtonDialog(
-                                //         leftText: '취소',
-                                //         rightText: '삭제',
-                                //         title: '답글을 삭제하시겠어요?',
-                                //         startContent: '삭제한 답글은 복구할 수 없어요',
-                                //         leftFunction: () => Get.back(),
-                                //         rightFunction: () async {
-                                //           dialogBack(modalIOS: true);
+                                  },
+                                      func2: () {},
+                                      value1: '답글 삭제하기',
+                                      value2: '',
+                                      isOne: true,
+                                      buttonColor1: mainWhite,
+                                      textColor1: mainblack);
+                                  // showModalIOS(
+                                  //   context,
+                                  //   cancleButton: false,
+                                  //   func1: () {
+                                  //     showButtonDialog(
+                                  //         leftText: '취소',
+                                  //         rightText: '삭제',
+                                  //         title: '답글을 삭제하시겠어요?',
+                                  //         startContent: '삭제한 답글은 복구할 수 없어요',
+                                  //         leftFunction: () => Get.back(),
+                                  //         rightFunction: () async {
+                                  //           dialogBack(modalIOS: true);
 
-                                //           await commentDelete(reply.id,
-                                //                   contentType.cocomment)
-                                //               .then((value) {
-                                //             if (value.isError == false) {
-                                //               Comment? comment = postController
-                                //                   .post!.value.comments
-                                //                   .firstWhereOrNull((element) =>
-                                //                       element.id ==
-                                //                       reply.commentId);
-                                //               if (comment != null) {
-                                //                 comment.replyList.removeWhere(
-                                //                     (element) =>
-                                //                         element.id == reply.id);
-                                //                 comment.replycount.value -= 1;
-                                //               }
-                                //             } else {
-                                //               showCustomDialog(
-                                //                   "답글 삭제에 실패하였습니다", 1000);
-                                //             }
-                                //           });
-                                //         });
-                                //   },
-                                //   func2: () {},
-                                //   value1: '답글 삭제하기',
-                                //   value2: '',
-                                //   isValue1Red: true,
-                                //   isValue2Red: false,
-                                //   isOne: true,
-                                // );
-                              }
-                            : () {
-                                showModalIOS(context, func1: () {
-                                  showButtonDialog(
-                                      leftText: '취소',
-                                      rightText: '신고',
-                                      title: '정말 답글을 신고하시겠어요?',
-                                      startContent: '관리자가 검토 절차를 거칩니다',
-                                      leftFunction: () => Get.back(),
-                                      rightFunction: () {
-                                        contentreport(
-                                                reply.id, contentType.cocomment)
-                                            .then((value) {
-                                          if (value.isError == false) {
-                                            getbacks(2);
-                                            showCustomDialog(
-                                                "신고가 접수되었습니다", 1000);
-                                          } else {
-                                            errorSituation(value);
-                                          }
+                                  //           await commentDelete(reply.id,
+                                  //                   contentType.cocomment)
+                                  //               .then((value) {
+                                  //             if (value.isError == false) {
+                                  //               Comment? comment = postController
+                                  //                   .post!.value.comments
+                                  //                   .firstWhereOrNull((element) =>
+                                  //                       element.id ==
+                                  //                       reply.commentId);
+                                  //               if (comment != null) {
+                                  //                 comment.replyList.removeWhere(
+                                  //                     (element) =>
+                                  //                         element.id == reply.id);
+                                  //                 comment.replycount.value -= 1;
+                                  //               }
+                                  //             } else {
+                                  //               showCustomDialog(
+                                  //                   "답글 삭제에 실패하였습니다", 1000);
+                                  //             }
+                                  //           });
+                                  //         });
+                                  //   },
+                                  //   func2: () {},
+                                  //   value1: '답글 삭제하기',
+                                  //   value2: '',
+                                  //   isValue1Red: true,
+                                  //   isValue2Red: false,
+                                  //   isOne: true,
+                                  // );
+                                }
+                              : () {
+                                  showModalIOS(context, func1: () {
+                                    showButtonDialog(
+                                        leftText: '취소',
+                                        rightText: '신고',
+                                        title: '정말 답글을 신고하시겠어요?',
+                                        startContent: '관리자가 검토 절차를 거칩니다',
+                                        leftFunction: () => Get.back(),
+                                        rightFunction: () {
+                                          contentreport(reply.id,
+                                                  contentType.cocomment)
+                                              .then((value) {
+                                            if (value.isError == false) {
+                                              getbacks(2);
+                                              showCustomDialog(
+                                                  "신고가 접수되었습니다", 1000);
+                                            } else {
+                                              errorSituation(value);
+                                            }
+                                          });
                                         });
-                                      });
+                                  },
+                                      func2: () {},
+                                      value1: '답글 신고하기',
+                                      value2: '',
+                                      isValue1Red: true,
+                                      isValue2Red: false,
+                                      isOne: true,
+                                      cancleButton: false);
                                 },
-                                    func2: () {},
-                                    value1: '답글 신고하기',
-                                    value2: '',
-                                    isValue1Red: true,
-                                    isValue2Red: false,
-                                    isOne: true,
-                                    cancleButton: false);
-                              },
-                        behavior: HitTestBehavior.translucent,
-                        child: SizedBox(
-                            height: 16,
-                            child: SvgPicture.asset(
-                              'assets/icons/more_option.svg',
-                              color: maingray,
-                            )),
+                          // behavior: HitTestBehavior.translucent,
+                          icon: SvgPicture.asset(
+                            'assets/icons/comment_option_icon.svg',
+                            color: maingray,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                   // const SizedBox(
-                  //   height: 8,
+                  //   height: 4,
                   // ),
-                  RichText(
-                      text: TextSpan(children: [
-                    // TextSpan(
-                    //   recognizer: TapGestureRecognizer()
-                    //     ..onTap = () {
-                    //       Get.to(
-                    //           () => OtherProfileScreen(
-                    //               user: reply.taggedUser,
-                    //               userid: reply.taggedUser.userId,
-                    //               realname: reply.taggedUser.name),
-                    //           preventDuplicates: false);
-                    //     },
-                    //   text: '@${reply.taggedUser.name}',
-                    //   style: kmainbold.copyWith(
-                    //       height: 1.5,
-                    //       color: Color.fromARGB(255, 71, 155, 224),
-                    //       fontSize: 14,
-                    //       fontWeight: FontWeight.w400),
-                    // ),
-                    TextSpan(
-                      text: reply.content,
-                      style: kmainheight,
-                    )
-                  ])),
+                  Text(reply.content, style: kmainheight),
+                  // RichText(
+                  //   textAlign: TextAlign.start,
+                  //     text: TextSpan(children: [
+                  //   // TextSpan(
+                  //   //   recognizer: TapGestureRecognizer()
+                  //   //     ..onTap = () {
+                  //   //       Get.to(
+                  //   //           () => OtherProfileScreen(
+                  //   //               user: reply.taggedUser,
+                  //   //               userid: reply.taggedUser.userId,
+                  //   //               realname: reply.taggedUser.name),
+                  //   //           preventDuplicates: false);
+                  //   //     },
+                  //   //   text: '@${reply.taggedUser.name}',
+                  //   //   style: kmainbold.copyWith(
+                  //   //       height: 1.5,
+                  //   //       color: Color.fromARGB(255, 71, 155, 224),
+                  //   //       fontSize: 14,
+                  //   //       fontWeight: FontWeight.w400),
+                  //   // ),
+                  //   TextSpan(
+                  //     text: reply.content,
+                  //     style: kmainheight,
+                  //   )
+                  // ])),
                   const SizedBox(
                     height: 8,
                   ),

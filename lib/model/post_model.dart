@@ -178,8 +178,7 @@ class Post {
         "is_marked": isMarked,
       };
 
-  void _tapLikeOrBookMark(Post? post, bool isTapLike,
-      {bool hashCodeCheck = true}) {
+  void _tapLikeOrBookMark(Post? post, bool isTapLike) {
     if (post != null && hashCode != post.hashCode) {
       if (isTapLike) {
         if (post.isLiked.value == 0) {
@@ -219,31 +218,16 @@ class Post {
 
     Post? homePost =
         HomeController.to.posts.firstWhereOrNull((post) => post.id == id);
-    _tapLikeOrBookMark(homePost, isTapLike, hashCodeCheck: false);
-
-    // if (homePost != null) {
-    //   homePost.isLiked.value = 1;
-    //   homePost.likeCount.value += 1;
-    // }
+    _tapLikeOrBookMark(homePost, isTapLike);
 
     Post? searchPost = SearchController.to.searchPostList
         .firstWhereOrNull((post) => post.id == id);
-    _tapLikeOrBookMark(searchPost, isTapLike, hashCodeCheck: false);
-
-    // if (searchPost != null) {
-    //   searchPost.isLiked.value = 1;
-    //   searchPost.likeCount.value += 1;
-    // }
+    _tapLikeOrBookMark(searchPost, isTapLike);
 
     Post? careerBoardPost = CareerBoardController
         .to.popPostMap[CareerBoardController.to.currentFieldMap.keys.first]!
         .firstWhereOrNull((post) => post.id == id);
-    _tapLikeOrBookMark(careerBoardPost, isTapLike, hashCodeCheck: false);
-
-    // if (careerBoardPost != null) {
-    //   careerBoardPost.isLiked.value = 1;
-    //   careerBoardPost.likeCount.value += 1;
-    // }
+    _tapLikeOrBookMark(careerBoardPost, isTapLike);
 
     if (Get.isRegistered<BookmarkController>()) {
       Post? bookMarkPost =
@@ -259,10 +243,6 @@ class Post {
               .postList
               .firstWhereOrNull((post) => post.id == id);
       _tapLikeOrBookMark(careerPost, isTapLike);
-      // if (careerPost != null) {
-      //   careerPost.isLiked.value = 1;
-      //   careerPost.likeCount.value += 1;
-      // }
     }
 
     if (user.userType == UserType.student) {
@@ -270,11 +250,7 @@ class Post {
         Post? myProfilePost = ProfileController.to.allPostList
             .firstWhereOrNull((post) => post.id == id);
         print(hashCode == myProfilePost.hashCode);
-        _tapLikeOrBookMark(myProfilePost, isTapLike, hashCodeCheck: false);
-        // if (myProfilePost != null) {
-        //   myProfilePost.isLiked.value = 1;
-        //   myProfilePost.likeCount.value += 1;
-        // }
+        _tapLikeOrBookMark(myProfilePost, isTapLike);
       }
 
       if (Get.isRegistered<OtherProfileController>(tag: userid.toString())) {
@@ -283,20 +259,12 @@ class Post {
                 .allPostList
                 .firstWhereOrNull((post) => post.id == id);
         _tapLikeOrBookMark(otherProfilePost, isTapLike);
-        // if (otherProfilePost != null) {
-        //   otherProfilePost.isLiked.value = 1;
-        //   otherProfilePost.likeCount.value += 1;
-        // }
       }
     } else if (user.userType == UserType.company) {
       if (Get.isRegistered<MyCompanyController>()) {
         Post? myCompProfilePost = MyCompanyController.to.allPostList
             .firstWhereOrNull((post) => post.id == id);
         _tapLikeOrBookMark(myCompProfilePost, isTapLike);
-        // if (myCompProfilePost != null) {
-        //   myCompProfilePost.isLiked.value = 1;
-        //   myCompProfilePost.likeCount.value += 1;
-        // }
       }
 
       if (Get.isRegistered<OtherCompanyController>(tag: userid.toString())) {
@@ -305,10 +273,6 @@ class Post {
                 .allPostList
                 .firstWhereOrNull((post) => post.id == id);
         _tapLikeOrBookMark(otherCompProfilePost, isTapLike);
-        // if (otherCompProfilePost != null) {
-        //   otherCompProfilePost.isLiked.value = 1;
-        //   otherCompProfilePost.likeCount.value += 1;
-        // }
       }
     }
 
@@ -320,19 +284,12 @@ class Post {
                 .firstWhereOrNull((post) => post.id == id);
 
         _tapLikeOrBookMark(tagNewPost, isTapLike);
-        // if (tagNewPost != null) {
-        //   tagNewPost.isLiked.value = 1;
-        //   tagNewPost.likeCount.value += 1;
-        // }
+
         Post? tagPopPost =
             Get.find<TagDetailController>(tag: tag.tagId.toString())
                 .tagPopPostList
                 .firstWhereOrNull((post) => post.id == id);
         _tapLikeOrBookMark(tagPopPost, isTapLike);
-        // if (tagPopPost != null) {
-        //   tagPopPost.isLiked.value = 1;
-        //   tagPopPost.likeCount.value += 1;
-        // }
       }
     }
 

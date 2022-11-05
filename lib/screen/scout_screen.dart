@@ -63,8 +63,8 @@ class ScoutScreen extends StatelessWidget {
                         ? _scontroller
                             .colors[_scontroller.curRcmdCompIndex.value].color
                         : mainblue,
-                    statusBarIconBrightness: Brightness.light,
-                    statusBarBrightness: Brightness.light,
+                    statusBarIconBrightness: Brightness.dark,
+                    statusBarBrightness: Brightness.dark,
                   ),
                   elevation: 0,
                   centerTitle: false,

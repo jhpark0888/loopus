@@ -111,7 +111,7 @@ Future<HTTPResponse> updateCareer(int projectId, ProjectUpdateType updateType,
     String? token = await const FlutterSecureStorage().read(key: "token");
     return HTTPResponse.httpErrorHandling(() async {
       final uri = Uri.parse(
-          "$serverUri/project_api/project?type=${updateType.name}&id=$projectId${companyId != null ? "&company_id=$companyId" : ""}");
+          "$serverUri/project_api/project?type=${updateType.name}&id=$projectId${companyId != 0 ? "&company_id=$companyId" : ""}");
       var request = http.MultipartRequest('PUT', uri);
       request.headers.addAll({
         "Authorization": "Token $token",

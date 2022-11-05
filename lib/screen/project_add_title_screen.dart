@@ -152,6 +152,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
                                     _controller.selectCompany.value.userId)
                             .then((value) {
                           if (value.isError == false) {
+                            print(value.data);
                             careerDetailController.career.value.careerName =
                                 _controller.projectnamecontroller.text;
                             careerDetailController.career.value.company =
