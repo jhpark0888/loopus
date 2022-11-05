@@ -597,8 +597,9 @@ class MyProfileScreen extends StatelessWidget {
                                           .myUserInfo.value.groupRatio,
                                       // schoolRatio: profileController
                                       //     .myUserInfo.value.schoolRatio,
-                                      lastgroupRatio: profileController
-                                              .myUserInfo.value.groupRatio +
+                                      lastgroupRatio: 
+                                      // profileController
+                                      //         .myUserInfo.value.groupRatio +
                                           profileController.myUserInfo.value
                                               .groupRatioVariance,
                                       // lastschoolRatio: profileController

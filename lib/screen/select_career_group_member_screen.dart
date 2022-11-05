@@ -6,6 +6,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/career_detail_controller.dart';
 import 'package:loopus/controller/home_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
+import 'package:loopus/controller/profile_controller.dart';
 import 'package:loopus/controller/select_career_group_member_controller.dart';
 import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/loading_screen.dart';
@@ -57,6 +58,13 @@ class SelectCareerGroupMemberScreen extends StatelessWidget {
                                 tag: careerId.toString())
                             .members
                             .refresh();
+                        ProfileController.to.myProjectList
+                                      .where(
+                                          (p0) =>
+                                              p0.id ==
+                                              careerId)
+                                      .first.members.addAll(controller.selectList);
+                        ProfileController.to.myProjectList.refresh();
                         getbacks(2);
                         showCustomDialog('추가되었습니다.', 1200);
                       } else {

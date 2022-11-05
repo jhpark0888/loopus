@@ -767,10 +767,10 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                           .otherUser.value.groupRatio,
                                       // schoolRatio:
                                       //     _controller.otherUser.value.schoolRatio,
-                                      // lastgroupRatio:
-                                      //     _controller.otherUser.value.groupRatio +
-                                      //         _controller
-                                      //             .otherUser.value.groupRatioVariance,
+                                      lastgroupRatio:
+                                          // _controller.otherUser.value.groupRatio +
+                                              _controller
+                                                  .otherUser.value.groupRatioVariance,
                                       // lastschoolRatio:
                                       //     _controller.otherUser.value.schoolRatio +
                                       //         _controller
