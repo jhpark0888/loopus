@@ -5,6 +5,7 @@ import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/loop_api.dart';
@@ -70,6 +71,11 @@ class MyProfileScreen extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(44),
         child: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: mainWhite,
+            statusBarIconBrightness: Brightness.light,
+            statusBarBrightness: Brightness.light,
+          ),
           titleSpacing: 0,
           elevation: 0,
           centerTitle: false,
@@ -597,9 +603,9 @@ class MyProfileScreen extends StatelessWidget {
                                           .myUserInfo.value.groupRatio,
                                       // schoolRatio: profileController
                                       //     .myUserInfo.value.schoolRatio,
-                                      lastgroupRatio: 
-                                      // profileController
-                                      //         .myUserInfo.value.groupRatio +
+                                      lastgroupRatio:
+                                          // profileController
+                                          //         .myUserInfo.value.groupRatio +
                                           profileController.myUserInfo.value
                                               .groupRatioVariance,
                                       // lastschoolRatio: profileController

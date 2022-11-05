@@ -47,12 +47,11 @@ class HomeScreen extends StatelessWidget {
     _homeController.scrollController = PrimaryScrollController.of(context)!.obs;
     return Scaffold(
         appBar: AppBar(
-           systemOverlayStyle: const SystemUiOverlayStyle(
+          systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: mainWhite,
-            statusBarIconBrightness:
-                Brightness.dark, // For Android (dark icons)
-            statusBarBrightness: Brightness.dark // For iOS (dark icons),
-            ),
+            statusBarIconBrightness: Brightness.light,
+            statusBarBrightness: Brightness.light,
+          ),
           toolbarHeight: 58,
           elevation: 0,
           titleSpacing: 20,

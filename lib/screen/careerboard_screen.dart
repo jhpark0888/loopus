@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/controller/career_board_controller.dart';
@@ -43,6 +44,11 @@ class CareerBoardScreen extends StatelessWidget {
     print(_controller.careerFieldList);
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: mainWhite,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.light,
+        ),
         elevation: 0,
         centerTitle: false,
         titleSpacing: 16,
@@ -63,9 +69,9 @@ class CareerBoardScreen extends StatelessWidget {
                     // padding: EdgeInsets.zero,
                     onPressed: () {
                       showPopUpDialog(
-                          '커리어보드',
-                          '루프어스에서 집계하는 점수를 통해\n커리어 상위권 프로필을 보여줘요\n최근 발전하고 있는 프로필과\n인기 포스트 등을 확인할 수 있어요',
-                          );
+                        '커리어보드',
+                        '루프어스에서 집계하는 점수를 통해\n커리어 상위권 프로필을 보여줘요\n최근 발전하고 있는 프로필과\n인기 포스트 등을 확인할 수 있어요',
+                      );
                     },
                     icon: SvgPicture.asset('assets/icons/information.svg')),
               )

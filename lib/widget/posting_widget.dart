@@ -167,10 +167,11 @@ class PostingWidget extends StatelessWidget {
                                 onTap: tapLike,
                                 child: item.isLiked.value == 0
                                     ? SvgPicture.asset(
-                                        "assets/icons/unlike.svg",
+                                        "assets/icons/postunlike.svg",
                                         color: isDark ? mainWhite : null,
                                       )
-                                    : SvgPicture.asset("assets/icons/like.svg"),
+                                    : SvgPicture.asset(
+                                        "assets/icons/postlike.svg"),
                               ),
                               const SizedBox(
                                 width: 10,
