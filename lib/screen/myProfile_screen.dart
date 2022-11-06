@@ -568,7 +568,8 @@ class MyProfileScreen extends StatelessWidget {
                                       width: Get.width,
                                       height: 44,
                                       child: ListView.separated(
-                                        padding: EdgeInsets.only(left: 16),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
                                         shrinkWrap: true,
                                         primary: false,
                                         scrollDirection: Axis.horizontal,

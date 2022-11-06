@@ -90,7 +90,9 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
   Future onRefresh() async {
     _controller.profileenablepullup.value = true;
     _controller.postPageNum = 1;
+    _controller.companyPageNum = 1;
     _controller.allPostList.clear();
+    _controller.interestedCompanies.clear();
     _controller.loadotherProfile(widget.userid);
     _otherprofilerefreshController.refreshCompleted();
   }
@@ -158,7 +160,11 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                         errorSituation(value);
                                       }
                                     });
-                                    userResign(HomeController.to.myProfile.value.userId, BanType.ban,_controller.userid);
+                                    userResign(
+                                        HomeController
+                                            .to.myProfile.value.userId,
+                                        BanType.ban,
+                                        _controller.userid);
                                   });
                             },
                             func2: () {
@@ -715,8 +721,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                       width: Get.width,
                                       height: 44,
                                       child: ListView.separated(
-                                        padding:
-                                            const EdgeInsets.only(left: 16),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
                                         shrinkWrap: true,
                                         primary: false,
                                         scrollDirection: Axis.horizontal,
@@ -769,8 +775,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen>
                                       //     _controller.otherUser.value.schoolRatio,
                                       lastgroupRatio:
                                           // _controller.otherUser.value.groupRatio +
-                                              _controller
-                                                  .otherUser.value.groupRatioVariance,
+                                          _controller.otherUser.value
+                                              .groupRatioVariance,
                                       // lastschoolRatio:
                                       //     _controller.otherUser.value.schoolRatio +
                                       //         _controller
