@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,11 +49,17 @@ class HomeScreen extends StatelessWidget {
     _homeController.scrollController = PrimaryScrollController.of(context)!.obs;
     return Scaffold(
         appBar: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: mainWhite,
-            statusBarIconBrightness: Brightness.light,
-            statusBarBrightness: Brightness.light,
-          ),
+          systemOverlayStyle: Platform.isAndroid
+              ? SystemUiOverlayStyle(
+                  statusBarColor: mainWhite,
+                  statusBarIconBrightness: Brightness.dark,
+                  statusBarBrightness: Brightness.dark,
+                )
+              : SystemUiOverlayStyle(
+                  statusBarColor: mainWhite,
+                  statusBarIconBrightness: Brightness.light,
+                  statusBarBrightness: Brightness.light,
+                ),
           toolbarHeight: 58,
           elevation: 0,
           titleSpacing: 20,
