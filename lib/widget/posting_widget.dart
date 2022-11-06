@@ -236,35 +236,42 @@ class PostingWidget extends StatelessWidget {
                                     type == PostingWidgetType.search)
                                 ? 16
                                 : 10),
-                        if (item.comments.isNotEmpty &&
-                            !(type == PostingWidgetType.detail ||
-                                type == PostingWidgetType.search))
-                          Column(
-                            children: [
-                              Obx(
-                                () => Row(
+
+                        Obx(
+                          () => item.comments.isNotEmpty &&
+                                  !(type == PostingWidgetType.detail ||
+                                      type == PostingWidgetType.search)
+                              ? Column(
                                   children: [
-                                    Text(
-                                      item.comments.first.user.name,
-                                      style: kmainbold.copyWith(
-                                          color: isDark ? mainWhite : null),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        item.comments.first.content,
-                                        style: kmain.copyWith(
-                                            color: isDark ? mainWhite : null),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                    Obx(
+                                      () => Row(
+                                        children: [
+                                          Text(
+                                            item.comments.first.user.name,
+                                            style: kmainbold.copyWith(
+                                                color:
+                                                    isDark ? mainWhite : null),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: Text(
+                                              item.comments.first.content,
+                                              style: kmain.copyWith(
+                                                  color: isDark
+                                                      ? mainWhite
+                                                      : null),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    )
+                                    ),
+                                    const SizedBox(height: 16),
                                   ],
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                            ],
-                          ),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
                       ],
                     ),
                   ],
