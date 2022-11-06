@@ -159,9 +159,14 @@ class NotificationController extends GetxController {
         // certificationFunction();
       } else {
         Map<String, dynamic> json = event.data;
+        if (Platform.isAndroid) {
+          localNotificaition.sampleNotification(
+              event.notification!.title!, event.notification!.body!, json);
+        }
+
         // if (event.data['type'] != 'no_msg') {
-        localNotificaition.sampleNotification(
-            event.notification!.title!, event.notification!.body!, json);
+        // localNotificaition.sampleNotification(
+        //     event.notification!.title!, event.notification!.body!, json);
         // }
 
         if (event.data["type"] == "msg" || event.data['type'] == 'no_msg') {
