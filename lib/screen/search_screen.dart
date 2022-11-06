@@ -48,11 +48,7 @@ class SearchScreen extends StatelessWidget {
             systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarColor: mainWhite,
               statusBarIconBrightness: Brightness.dark,
-<<<<<<< HEAD
               statusBarBrightness: Brightness.light,
-=======
-              statusBarBrightness: Brightness.dark,
->>>>>>> origin/wonwoo
             ),
             automaticallyImplyLeading: false,
             toolbarHeight: 50,

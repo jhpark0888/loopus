@@ -52,11 +52,7 @@ class HomeScreen extends StatelessWidget {
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: mainWhite,
             statusBarIconBrightness: Brightness.dark,
-<<<<<<< HEAD
             statusBarBrightness: Brightness.light,
-=======
-            statusBarBrightness: Brightness.dark,
->>>>>>> origin/wonwoo
           ),
           toolbarHeight: 58,
           elevation: 0,
@@ -275,7 +271,7 @@ class HomeScreen extends StatelessWidget {
                                                     height: 10,
                                                   ),
                                                   Divider(
-                                                    height: 1,
+                                                      height: 1,
                                                       thickness: 1,
                                                       color: maingray),
                                                 ],
