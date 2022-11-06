@@ -88,7 +88,7 @@ class ScoutScreen extends StatelessWidget {
                               onPressed: () {
                                 showPopUpDialog(
                                   '스카우트 중인 기업',
-                                  '채용을 진행중이거나\n루프어스에서 활동중인 기업 정보를 보여줘요\n수많은 기업의 정보를 확인하고,\n본인만의 커리어를 통해\n채용의 기회를 얻어보세요',
+                                  '채용을 진행중이거나\n루프어스에서 활동중인 기업 정보를 보여줘요\n수많은 기업의 정보를 확인하고,\n본인만의 커리어를 통해\n 스카우트 채용의 기회를 얻어보세요',
                                 );
                               },
                               icon: SvgPicture.asset(

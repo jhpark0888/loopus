@@ -109,9 +109,9 @@ Future<HTTPResponse> updateCareer(int projectId, ProjectUpdateType updateType,
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-    return HTTPResponse.httpErrorHandling(() async {
+    
       final uri = Uri.parse(
-          "$serverUri/project_api/project?type=${updateType.name}&id=$projectId${companyId != 0 ? "&company_id=$companyId" : ""}");
+          "$serverUri/project_api/project?type=${updateType.name}&id=$projectId${companyId != 0 && companyName != null? "&company_id=$companyId" : ""}");
       var request = http.MultipartRequest('PUT', uri);
       request.headers.addAll({
         "Authorization": "Token $token",
@@ -125,11 +125,13 @@ Future<HTTPResponse> updateCareer(int projectId, ProjectUpdateType updateType,
         }
       } else if (updateType == ProjectUpdateType.project_name) {
         request.fields['project_name'] = title!;
-        if (companyId != 0) {
-          request.fields['company_name'] = companyName!;
+        if (companyId != 0 && companyName != null) {
+          print('s');
+          request.fields['company_name'] = companyName;
         }
       }
       print(request.files);
+      return HTTPResponse.httpErrorHandling(() async {
       http.StreamedResponse response = await request
           .send()
           .timeout(Duration(milliseconds: HTTPResponse.timeout));
@@ -156,7 +158,7 @@ Future<HTTPResponse> deleteProject(int projectId, DeleteType type) async {
       http.Response response = await http.delete(uri, headers: {
         "Authorization": "Token $token"
       }).timeout(Duration(milliseconds: HTTPResponse.timeout));
-
+      print(uri);
       print("프로젝트(커리어) 삭제 : ${response.statusCode}");
       if (response.statusCode == 200) {
         return HTTPResponse.success('');

@@ -47,8 +47,8 @@ class SearchScreen extends StatelessWidget {
           appBar: AppBar(
             systemOverlayStyle: SystemUiOverlayStyle(
               statusBarColor: mainWhite,
-              statusBarIconBrightness: Brightness.light,
-              statusBarBrightness: Brightness.light,
+              statusBarIconBrightness: Brightness.dark,
+              statusBarBrightness: Brightness.dark,
             ),
             automaticallyImplyLeading: false,
             toolbarHeight: 50,

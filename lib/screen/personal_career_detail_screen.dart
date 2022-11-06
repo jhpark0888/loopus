@@ -69,8 +69,10 @@ class PersonalCareerDetailScreen extends StatelessWidget {
               
             ],
             pinned: true,
-            flexibleSpace: _MyAppSpace(
-              career: careerDetailController.career.value,
+            flexibleSpace: Obx(
+              ()=> _MyAppSpace(
+                career: careerDetailController.career.value,
+              ),
             ),
             expandedHeight: 190,
           ),
