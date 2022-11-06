@@ -59,25 +59,14 @@ class ScoutScreen extends StatelessWidget {
               ),
               Scaffold(
                 appBar: AppBar(
-                  systemOverlayStyle: Platform.isAndroid
-                      ? SystemUiOverlayStyle(
-                          statusBarColor: _scontroller.colors.isNotEmpty
-                              ? _scontroller
-                                  .colors[_scontroller.curRcmdCompIndex.value]
-                                  .color
-                              : mainblue,
-                          statusBarIconBrightness: Brightness.light,
-                          statusBarBrightness: Brightness.light,
-                        )
-                      : SystemUiOverlayStyle(
-                          statusBarColor: _scontroller.colors.isNotEmpty
-                              ? _scontroller
-                                  .colors[_scontroller.curRcmdCompIndex.value]
-                                  .color
-                              : mainblue,
-                          statusBarIconBrightness: Brightness.dark,
-                          statusBarBrightness: Brightness.dark,
-                        ),
+                  systemOverlayStyle: SystemUiOverlayStyle(
+                    statusBarColor: _scontroller.colors.isNotEmpty
+                        ? _scontroller
+                            .colors[_scontroller.curRcmdCompIndex.value].color
+                        : mainblue,
+                    statusBarIconBrightness: Brightness.light,
+                    statusBarBrightness: Brightness.dark,
+                  ),
                   elevation: 0,
                   centerTitle: false,
                   titleSpacing: 16,

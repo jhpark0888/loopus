@@ -32,13 +32,13 @@ class CareerBoardPostWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.to(
-            () => PostingScreen(
-                  post: post,
-                  postid: post.id,
-                ),
-            opaque: false,
-            preventDuplicates: false,
-            transition: Transition.noTransition);
+          () => PostingScreen(
+            post: post,
+            postid: post.id,
+          ),
+          opaque: false,
+          preventDuplicates: false,
+        );
       },
       child: Container(
         height: 345,
