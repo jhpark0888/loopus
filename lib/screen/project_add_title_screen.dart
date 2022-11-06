@@ -40,7 +40,7 @@ class ProjectAddTitleScreen extends StatelessWidget {
 
   final Screentype screenType;
   final ProjectAddController _controller = Get.put(ProjectAddController());
-  late CareerDetailController careerDetailController;
+
   // 커리어 수정일 때는 커리어 아이디 받아야 함
   int? careerId;
 
@@ -147,7 +147,11 @@ class ProjectAddTitleScreen extends StatelessWidget {
                                 ProjectUpdateType.project_name,
                                 title: _controller.projectnamecontroller.text,
                                 companyName: careerDetailController
-                                    .career.value.company!.name,
+                                            .career.value.company !=
+                                        null
+                                    ? careerDetailController
+                                        .career.value.company!.name
+                                    : null,
                                 companyId:
                                     _controller.selectCompany.value.userId)
                             .then((value) {
@@ -155,8 +159,10 @@ class ProjectAddTitleScreen extends StatelessWidget {
                             print(value.data);
                             careerDetailController.career.value.careerName =
                                 _controller.projectnamecontroller.text;
+                                if(_controller.selectCompany.value.name != ''){
                             careerDetailController.career.value.company =
                                 _controller.selectCompany.value;
+                                }
                             careerDetailController.career.refresh();
                             if (Get.isRegistered<ProfileController>()) {
                               ProfileController.to.myProjectList
@@ -168,21 +174,24 @@ class ProjectAddTitleScreen extends StatelessWidget {
                                       .first
                                       .careerName =
                                   _controller.projectnamecontroller.text;
-                              ProfileController.to.myProjectList
-                                  .where((p0) =>
-                                      p0.id ==
-                                      careerDetailController.career.value.id)
-                                  .first
-                                  .company = _controller.selectCompany.value;
-                              ProfileController.to.myProjectList
-                                      .where(
-                                          (p0) =>
-                                              p0.id ==
-                                              careerDetailController
-                                                  .career.value.id)
-                                      .first
-                                      .thumbnail =
-                                  _controller.selectCompany.value.profileImage;
+                              if (_controller.selectCompany.value.name != '') {
+                                ProfileController.to.myProjectList
+                                    .where((p0) =>
+                                        p0.id ==
+                                        careerDetailController.career.value.id)
+                                    .first
+                                    .company = _controller.selectCompany.value;
+                                ProfileController.to.myProjectList
+                                        .where(
+                                            (p0) =>
+                                                p0.id ==
+                                                careerDetailController
+                                                    .career.value.id)
+                                        .first
+                                        .thumbnail =
+                                    _controller
+                                        .selectCompany.value.profileImage;
+                              }
                               ProfileController.to.myProjectList.refresh();
                             }
                             getbacks(2);

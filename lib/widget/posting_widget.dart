@@ -256,6 +256,7 @@ class PostingWidget extends StatelessWidget {
                                         item.comments.first.content,
                                         style: kmain.copyWith(
                                             color: isDark ? mainWhite : null),
+                                        maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     )

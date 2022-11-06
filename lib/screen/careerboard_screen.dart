@@ -49,7 +49,11 @@ class CareerBoardScreen extends StatelessWidget {
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: mainWhite,
           statusBarIconBrightness: Brightness.dark,
+<<<<<<< HEAD
           statusBarBrightness: Brightness.light,
+=======
+          statusBarBrightness: Brightness.dark,
+>>>>>>> origin/wonwoo
         ),
         elevation: 0,
         centerTitle: false,

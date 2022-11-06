@@ -53,6 +53,7 @@ Future<HTTPResponse> getRecommandCompanys() async {
     int isCorp = AppController.to.userType == UserType.company ? 1 : 0;
 
     // final _url = Uri.parse("$serverUri/scout_api/recommendation_company");
+    // int isCorp = AppController.to.userType == UserType.company ? 1 : 0;
     final _url =
         Uri.parse("$serverUri/scout_api/recommendation_company?type=$isCorp");
     print(_url);

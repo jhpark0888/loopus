@@ -78,6 +78,7 @@ class BookmarkController extends GetxController {
   //   posts.removeWhere((post) => post.id == postid);
   // }
 
+<<<<<<< HEAD
 //   void tapLike(int postid, int likecount) {
 //     if (posts.where((post) => post.id == postid).isNotEmpty) {
 //       Post post = posts.where((post) => post.id == postid).first;
@@ -93,4 +94,21 @@ class BookmarkController extends GetxController {
 //       post.likeCount(likecount);
 //     }
 //   }
+=======
+  // void tapLike(int postid, int likecount) {
+  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
+  //     Post post = posts.where((post) => post.id == postid).first;
+  //     post.isLiked(1);
+  //     post.likeCount(likecount);
+  //   }
+  // }
+
+  // void tapunLike(int postid, int likecount) {
+  //   if (posts.where((post) => post.id == postid).isNotEmpty) {
+  //     Post post = posts.where((post) => post.id == postid).first;
+  //     post.isLiked(0);
+  //     post.likeCount(likecount);
+  //   }
+  // }
+>>>>>>> origin/wonwoo
 }
