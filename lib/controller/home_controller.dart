@@ -13,6 +13,7 @@ import 'package:loopus/model/company_model.dart';
 import 'package:loopus/model/issue_model.dart';
 import 'package:loopus/screen/myProfile_screen.dart';
 import 'package:loopus/screen/mycompany_screen.dart';
+import 'package:loopus/screen/posting_add_screen.dart';
 import 'package:loopus/trash_bin/question_api.dart';
 import 'package:loopus/api/tag_api.dart';
 import 'package:loopus/constant.dart';
@@ -35,17 +36,6 @@ import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/posting_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-
-// news = [{
-//   "urls": url,
-//   "corp": String name
-// }]
-
-// brunch = [{
-//   "url" : url,
-//   "writer": "name",
-//   "profile_url" : String,
-// }]
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -105,7 +95,12 @@ class HomeController extends GetxController
     _dataStreamSubscription =
         ReceiveSharingIntent.getTextStream().listen((String text) {
       Get.put(ShareIntentController()).shareText = text;
-      Get.to(() => SelectProjectScreen());
+      if (AppController.to.userType == UserType.student) {
+        Get.to(() => SelectProjectScreen());
+      } else if (AppController.to.userType == UserType.company) {
+        Get.to(() => PostingAddScreen(
+            project_id: companyCareerId, route: PostaddRoute.bottom));
+      }
     });
 
     //Receive text data when app is closed

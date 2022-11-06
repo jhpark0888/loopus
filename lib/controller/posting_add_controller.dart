@@ -4,6 +4,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:loopus/constant.dart';
+import 'package:loopus/controller/app_controller.dart';
 import 'package:loopus/controller/key_controller.dart';
 import 'package:loopus/controller/share_intent_controller.dart';
 import 'package:loopus/screen/posting_add_link_screen.dart';
@@ -101,5 +102,17 @@ class PostingAddController extends GetxController {
     }));
 
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+
+    if (AppController.to.userType == UserType.company) {
+      if (Get.isRegistered<ShareIntentController>()) {
+        Get.delete<ShareIntentController>();
+      }
+    }
+    super.onClose();
   }
 }
