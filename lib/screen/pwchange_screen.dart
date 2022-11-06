@@ -6,6 +6,7 @@ import 'package:loopus/constant.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/pwchange_controller.dart';
 import 'package:loopus/screen/loading_screen.dart';
+import 'package:loopus/screen/pw_find_screen.dart';
 import 'package:loopus/utils/check_form_validate.dart';
 import 'package:loopus/utils/error_control.dart';
 import 'package:loopus/widget/appbar_widget.dart';
@@ -166,6 +167,21 @@ class PwChangeScreen extends StatelessWidget {
                     },
                     obscureText: true,
                   ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  GestureDetector(
+                      onTap: () {
+                        Get.to(() => PwFindScreen());
+                      },
+                      child: Center(
+                        child: Text(
+                          "비밀번호를 잊으셨나요?",
+                          style: kmain.copyWith(
+                            color: maingray,
+                          ),
+                        ),
+                      )),
                 ],
               ),
             ),

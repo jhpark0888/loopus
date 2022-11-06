@@ -40,7 +40,7 @@ class ContactContentScreen extends StatelessWidget {
             child: Text(
               '확인',
               style: kNavigationTitle.copyWith(
-                  color: isBlue ? rankblue : maingray),
+                  color: isBlue ? mainblue : maingray),
             ),
           ),
         ],

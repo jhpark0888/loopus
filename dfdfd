@@ -1,0 +1,32 @@
+Merge remote-tracking branch 'origin/wonwoo' into gyu
+# Please enter a commit message to explain why this merge is necessary,
+# especially if it merges an updated upstream into a topic branch.
+#
+# Lines starting with '#' will be ignored, and an empty message aborts
+# the commit.
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please run
+#	git update-ref -d MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch gyu
+# Your branch is up to date with 'origin/gyu'.
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	renamed:    assets/illustrations/nolinkImage.png -> assets/illustrations/link_noimage.png
+#	modified:   lib/controller/post_detail_controller.dart
+#	modified:   lib/model/comment_model.dart
+#	modified:   lib/model/post_model.dart
+#	modified:   lib/screen/project_add_company_screen.dart
+#	modified:   lib/widget/Link_widget.dart
+#	modified:   lib/widget/comment_widget.dart
+#	modified:   lib/widget/news_widget.dart
+#	modified:   lib/widget/reply_widget.dart
+i error#

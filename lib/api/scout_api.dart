@@ -50,9 +50,9 @@ Future<HTTPResponse> getRecommandCompanys() async {
     return HTTPResponse.networkError();
   } else {
     String? token = await const FlutterSecureStorage().read(key: "token");
-
-    // final _url = Uri.parse("$serverUri/scout_api/recommendation_company");
     int isCorp = AppController.to.userType == UserType.company ? 1 : 0;
+    // final _url = Uri.parse("$serverUri/scout_api/recommendation_company");
+    // int isCorp = AppController.to.userType == UserType.company ? 1 : 0;
     final _url =
         Uri.parse("$serverUri/scout_api/recommendation_company?type=$isCorp");
     print(_url);

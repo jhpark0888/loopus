@@ -27,7 +27,6 @@ import 'package:loopus/widget/appbar_widget.dart';
 import 'package:loopus/widget/company_widget.dart';
 import 'package:loopus/widget/custom_textfield.dart';
 import 'package:loopus/widget/label_textfield_widget.dart';
-
 import '../utils/check_form_validate.dart';
 
 class ProjectAddTitleScreen extends StatelessWidget {
@@ -159,10 +158,10 @@ class ProjectAddTitleScreen extends StatelessWidget {
                             print(value.data);
                             careerDetailController.career.value.careerName =
                                 _controller.projectnamecontroller.text;
-                                if(_controller.selectCompany.value.name != ''){
-                            careerDetailController.career.value.company =
-                                _controller.selectCompany.value;
-                                }
+                            if (_controller.selectCompany.value.name != '') {
+                              careerDetailController.career.value.company =
+                                  _controller.selectCompany.value;
+                            }
                             careerDetailController.career.refresh();
                             if (Get.isRegistered<ProfileController>()) {
                               ProfileController.to.myProjectList

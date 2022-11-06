@@ -1363,7 +1363,7 @@ void showBottomSnackbar(String message) {
     snackPosition: SnackPosition.BOTTOM,
     backgroundColor: mainblue,
     padding: const EdgeInsets.fromLTRB(0, 14, 0, 14),
-    margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+    margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
     borderRadius: 8,
   );
 }
@@ -1451,8 +1451,8 @@ void showPopUpDialog(String title, String content) {
         style: kmainbold,
         textAlign: TextAlign.center,
       ),
-      titlePadding: const EdgeInsets.fromLTRB(16, 30, 16, 0),
-      contentPadding: const EdgeInsets.all(16),
+      titlePadding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+      contentPadding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
       backgroundColor: Colors.white,
       content: Text(
         content,

@@ -316,7 +316,7 @@ class LinkSmallWidget extends StatelessWidget {
                             fit: BoxFit.cover,
                             errorWidget: (context, string, widget) {
                               return Image.asset(
-                                "assets/illustrations/link_noimage.png",
+                                "assets/illustrations/link_noimag.png",
                                 height: 120,
                                 width: width,
                                 fit: BoxFit.cover,
@@ -325,7 +325,7 @@ class LinkSmallWidget extends StatelessWidget {
                           )
                         else
                           Image.asset(
-                            "assets/illustrations/link_noimage.png",
+                            "assets/illustrations/link_noimag.png",
                             height: 120,
                             width: width,
                             fit: BoxFit.cover,
