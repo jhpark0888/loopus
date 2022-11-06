@@ -125,33 +125,33 @@ class ProjectAddCompanyScreen extends StatelessWidget {
                                               primary: false,
                                               shrinkWrap: true,
                                               itemBuilder: (context, index) {
-                                                if (_controller.onRegisterButton
-                                                        .value &&
-                                                    index ==
-                                                        _controller
-                                                            .searchCompanyList
-                                                            .length) {
-                                                  return Center(
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        _controller.selectCompany(
-                                                            Company.defaultCompany(
-                                                                name: _controller
-                                                                    .companyController
-                                                                    .text
-                                                                    .trim()));
-                                                        _controller
-                                                            .companyController
-                                                            .clear();
-                                                        Get.back();
-                                                      },
-                                                      child: Text(
-                                                          "입력한 기업으로 등록하기",
-                                                          style: kmain.copyWith(
-                                                              color: mainblue)),
-                                                    ),
-                                                  );
-                                                }
+                                                // if (_controller.onRegisterButton
+                                                //         .value &&
+                                                //     index ==
+                                                //         _controller
+                                                //             .searchCompanyList
+                                                //             .length) {
+                                                //   return Center(
+                                                //     child: GestureDetector(
+                                                //       onTap: () {
+                                                //         _controller.selectCompany(
+                                                //             Company.defaultCompany(
+                                                //                 name: _controller
+                                                //                     .companyController
+                                                //                     .text
+                                                //                     .trim()));
+                                                //         _controller
+                                                //             .companyController
+                                                //             .clear();
+                                                //         Get.back();
+                                                //       },
+                                                //       child: Text(
+                                                //           "입력한 기업으로 등록하기",
+                                                //           style: kmain.copyWith(
+                                                //               color: mainblue)),
+                                                //     ),
+                                                //   );
+                                                // }
                                                 return GestureDetector(
                                                   onTap: () {
                                                     _controller.selectCompany(
