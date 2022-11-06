@@ -9,7 +9,10 @@ import 'package:loopus/controller/like_controller.dart';
 import 'package:loopus/controller/modal_controller.dart';
 import 'package:loopus/controller/post_detail_controller.dart';
 import 'package:loopus/model/comment_model.dart';
+import 'package:loopus/model/company_model.dart';
+import 'package:loopus/model/user_model.dart';
 import 'package:loopus/screen/likepeople_screen.dart';
+import 'package:loopus/screen/other_company_screen.dart';
 import 'package:loopus/screen/other_profile_screen.dart';
 import 'package:loopus/utils/debouncer.dart';
 import 'package:loopus/utils/duration_calculate.dart';
@@ -336,12 +339,21 @@ class ReplyWidget extends StatelessWidget {
   }
 
   void tapProfile() {
-    Get.to(
-        () => OtherProfileScreen(
-            user: reply.user,
-            userid: reply.user.userId,
-            realname: reply.user.name),
-        preventDuplicates: false);
+    if (reply.user.userType == UserType.student) {
+      Get.to(
+          () => OtherProfileScreen(
+              user: reply.user as Person,
+              userid: reply.user.userId,
+              realname: reply.user.name),
+          preventDuplicates: false);
+    } else {
+      Get.to(
+          () => OtherCompanyScreen(
+              company: reply.user as Company,
+              companyId: reply.user.userId,
+              companyName: reply.user.name),
+          preventDuplicates: false);
+    }
   }
 
   void tapLike() {
