@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loopus/api/search_api.dart';
@@ -33,6 +34,10 @@ class SearchFocusScreen extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: mainWhite,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,),
           automaticallyImplyLeading: false,
           toolbarHeight: 50,
           centerTitle: false,
